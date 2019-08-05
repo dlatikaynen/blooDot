@@ -105,6 +105,8 @@
   <PropertyGroup>
     <!-- <PackageCertificateKeyFile>blueDot_TemporaryKey.pfx</PackageCertificateKeyFile> -->
     <!-- <PackageCertificateThumbprint>B02D54DB942A9048219D95F3CE0E8997F1E80476</PackageCertificateThumbprint> -->
+    <PackageCertificateThumbprint>5F46784090D3C50B2BA55674704215CA062F2EE0</PackageCertificateThumbprint>
+    <PackageCertificateKeyFile>blueDot_TemporaryKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <Link>
@@ -179,7 +181,11 @@
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
@@ -209,15 +215,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\Shared\mediumtile-sdk.png" />
-    <Image Include="..\Shared\smalltile-phone-sdk.png" />
-    <Image Include="..\Shared\smalltile-windows-sdk.png" />
-    <Image Include="..\Shared\splash-phone-sdk.png" />
-    <Image Include="..\Shared\splash-windows-sdk.png" />
-    <Image Include="..\Shared\squareTile-sdk.png" />
-    <Image Include="..\Shared\storeLogo-sdk.png" />
-    <Image Include="..\Shared\tile-sdk.png" />
-    <Image Include="..\Shared\windowstitle-sdk.png" />
+    <Image Include="..\src\mediumtile-sdk.png" />
+    <Image Include="..\src\smalltile-phone-sdk.png" />
+    <Image Include="..\src\smalltile-windows-sdk.png" />
+    <Image Include="..\src\splash-phone-sdk.png" />
+    <Image Include="..\src\splash-windows-sdk.png" />
+    <Image Include="..\src\squareTile-sdk.png" />
+    <Image Include="..\src\storeLogo-sdk.png" />
+    <Image Include="..\src\tile-sdk.png" />
+    <Image Include="..\src\windowstitle-sdk.png" />
     <Image Include="Assets\LockScreenLogo.scale-200.png" />
     <Image Include="Assets\SplashScreen.scale-200.png" />
     <Image Include="Assets\Square150x150Logo.scale-200.png" />
@@ -236,49 +242,49 @@
     <Image Include="Media\Textures\walllevel1.dds" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Shared\App.cpp" />
-    <ClCompile Include="..\Shared\Audio.cpp" />
-    <ClCompile Include="..\Shared\BasicLoader.cpp" />
-    <ClCompile Include="..\Shared\BasicReaderWriter.cpp" />
-    <ClCompile Include="..\Shared\BasicShapes.cpp" />
-    <ClCompile Include="..\Shared\Camera.cpp" />
-    <ClCompile Include="..\Shared\Collision.cpp" />
-    <ClCompile Include="..\Shared\DDSTextureLoader.cpp" />
-    <ClCompile Include="..\Shared\DeviceResources.cpp" />
-    <ClCompile Include="..\Shared\LoadScreen.cpp" />
-    <ClCompile Include="..\Shared\blueDot.cpp" />
-    <ClCompile Include="..\Shared\MediaStreamer.cpp" />
-    <ClCompile Include="..\Shared\PersistentState.cpp" />
-    <ClCompile Include="..\Shared\Physics.cpp" />
-    <ClCompile Include="..\Shared\SampleOverlay.cpp" />
-    <ClCompile Include="..\Shared\SDKMesh.cpp" />
-    <ClCompile Include="..\Shared\UserInterface.cpp" />
+    <ClCompile Include="..\src\app\App.cpp" />
+    <ClCompile Include="..\src\sound\Audio.cpp" />
+    <ClCompile Include="..\src\io\BasicLoader.cpp" />
+    <ClCompile Include="..\src\io\BasicReaderWriter.cpp" />
+    <ClCompile Include="..\src\dx\BasicShapes.cpp" />
+    <ClCompile Include="..\src\dx\Camera.cpp" />
+    <ClCompile Include="..\src\physics\Collision.cpp" />
+    <ClCompile Include="..\src\io\DDSTextureLoader.cpp" />
+    <ClCompile Include="..\src\dx\DeviceResources.cpp" />
+    <ClCompile Include="..\src\ui\LoadScreen.cpp" />
+    <ClCompile Include="..\src\app\blueDot.cpp" />
+    <ClCompile Include="..\src\io\MediaStreamer.cpp" />
+    <ClCompile Include="..\src\io\PersistentState.cpp" />
+    <ClCompile Include="..\src\physics\Physics.cpp" />
+    <ClCompile Include="..\src\ui\SampleOverlay.cpp" />
+    <ClCompile Include="..\src\dx\SDKMesh.cpp" />
+    <ClCompile Include="..\src\ui\UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Shared\App.h" />
-    <ClInclude Include="..\Shared\Audio.h" />
-    <ClInclude Include="..\Shared\BasicLoader.h" />
-    <ClInclude Include="..\Shared\BasicMath.h" />
-    <ClInclude Include="..\Shared\BasicReaderWriter.h" />
-    <ClInclude Include="..\Shared\BasicShapes.h" />
-    <ClInclude Include="..\Shared\Camera.h" />
-    <ClInclude Include="..\Shared\Collision.h" />
-    <ClInclude Include="..\Shared\DDSTextureLoader.h" />
-    <ClInclude Include="..\Shared\DeviceResources.h" />
-    <ClInclude Include="..\Shared\DirectXHelper.h" />
-    <ClInclude Include="..\Shared\LoadScreen.h" />
-    <ClInclude Include="..\Shared\blueDot.h" />
-    <ClInclude Include="..\Shared\MediaStreamer.h" />
-    <ClInclude Include="..\Shared\PersistentState.h" />
-    <ClInclude Include="..\Shared\Physics.h" />
-    <ClInclude Include="..\Shared\Primitives.h" />
-    <ClInclude Include="..\Shared\SampleOverlay.h" />
-    <ClInclude Include="..\Shared\SDKMesh.h" />
-    <ClInclude Include="..\Shared\StepTimer.h" />
-    <ClInclude Include="..\Shared\UserInterface.h" />
+    <ClInclude Include="..\src\app\App.h" />
+    <ClInclude Include="..\src\sound\Audio.h" />
+    <ClInclude Include="..\src\io\BasicLoader.h" />
+    <ClInclude Include="..\src\physics\BasicMath.h" />
+    <ClInclude Include="..\src\io\BasicReaderWriter.h" />
+    <ClInclude Include="..\src\dx\BasicShapes.h" />
+    <ClInclude Include="..\src\dx\Camera.h" />
+    <ClInclude Include="..\src\physics\Collision.h" />
+    <ClInclude Include="..\src\io\DDSTextureLoader.h" />
+    <ClInclude Include="..\src\dx\DeviceResources.h" />
+    <ClInclude Include="..\src\dx\DirectXHelper.h" />
+    <ClInclude Include="..\src\io\LoadScreen.h" />
+    <ClInclude Include="..\src\app\blueDot.h" />
+    <ClInclude Include="..\src\io\MediaStreamer.h" />
+    <ClInclude Include="..\src\io\PersistentState.h" />
+    <ClInclude Include="..\src\physics\Physics.h" />
+    <ClInclude Include="..\src\physics\Primitives.h" />
+    <ClInclude Include="..\src\ui\SampleOverlay.h" />
+    <ClInclude Include="..\src\physics\SDKMesh.h" />
+    <ClInclude Include="..\src\app\StepTimer.h" />
+    <ClInclude Include="..\src\ui\UserInterface.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\Shared\BasicPixelShader.hlsl">
+    <FxCompile Include="..\src\BasicPixelShader.hlsl">
       <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableOptimizations>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -295,7 +301,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="..\Shared\BasicVertexShader.hlsl">
+    <FxCompile Include="..\src\BasicVertexShader.hlsl">
       <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableOptimizations>
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
