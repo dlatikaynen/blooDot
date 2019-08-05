@@ -1,4 +1,4 @@
-#include "..\pch.h"
+#include "..\PreCompiledHeaders.h"
 
 using namespace DirectX;
 

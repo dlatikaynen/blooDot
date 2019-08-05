@@ -1,4 +1,4 @@
-﻿#include "..\pch.h"
+﻿#include "..\PreCompiledHeaders.h"
 #include "blueDot.h"
 #include <DirectXColors.h> // For named colors
 #include "..\dx\DirectXHelper.h" // For ThrowIfFailed

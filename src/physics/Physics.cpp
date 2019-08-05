@@ -1,4 +1,4 @@
-#include "..\pch.h"
+#include "..\PreCompiledHeaders.h"
 
 using namespace Microsoft::WRL;
 using namespace DirectX;

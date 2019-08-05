@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskName": "Task-x64",
+      "appliesTo": "x64/",
+      "type": "launch"
+    }
+  ]
+}

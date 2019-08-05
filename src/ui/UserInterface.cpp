@@ -1,4 +1,4 @@
-#include "..\pch.h"
+#include "..\PreCompiledHeaders.h"
 #include "UserInterface.h"
 #include "..\dx\DirectXHelper.h"
 

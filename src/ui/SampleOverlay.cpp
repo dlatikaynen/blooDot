@@ -1,4 +1,4 @@
-#include "..\pch.h"
+#include "..\PreCompiledHeaders.h"
 #include "SampleOverlay.h"
 
 using namespace blueDot;

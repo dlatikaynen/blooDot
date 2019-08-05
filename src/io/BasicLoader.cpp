@@ -1,4 +1,4 @@
-#include "..\pch.h"
+#include "..\PreCompiledHeaders.h"
 #include "BasicLoader.h"
 #include "..\dx\BasicShapes.h"
 #include "DDSTextureLoader.h"

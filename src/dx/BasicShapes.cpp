@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\pch.h"
+#include "..\PreCompiledHeaders.h"
 #include "BasicShapes.h"
 #include "DirectXHelper.h"
 #include <memory>

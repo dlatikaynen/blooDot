@@ -1,4 +1,4 @@
-#include "..\pch.h"
+#include "..\PreCompiledHeaders.h"
 #include "..\dx\DirectXHelper.h"
 #include "MediaStreamer.h"
 

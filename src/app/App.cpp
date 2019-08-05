@@ -1,4 +1,4 @@
-﻿#include "..\pch.h"
+﻿#include "..\PreCompiledHeaders.h"
 #include "App.h"
 #include <Initguid.h>
 #include <dxgi1_3.h>

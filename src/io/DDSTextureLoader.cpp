@@ -1,4 +1,4 @@
-#include "..\pch.h"
+#include "..\PreCompiledHeaders.h"
 #include <dxgiformat.h>
 #include <assert.h>
 #include <memory>

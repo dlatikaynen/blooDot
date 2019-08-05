@@ -1,4 +1,4 @@
-#include "..\pch.h"
+#include "..\PreCompiledHeaders.h"
 #include "Camera.h"
 
 void Camera::GetViewMatrix(_Out_ XMFLOAT4X4 *viewMatrix)

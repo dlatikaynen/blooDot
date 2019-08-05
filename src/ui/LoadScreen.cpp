@@ -1,4 +1,4 @@
-#include "..\pch.h"
+#include "..\PreCompiledHeaders.h"
 #include "LoadScreen.h"
 
 using namespace Windows::UI::Core;

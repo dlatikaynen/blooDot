@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "..\pch.h"
+#include "..\PreCompiledHeaders.h"
 #include "..\dx\DeviceResources.h"
 #include "blueDot.h"
 

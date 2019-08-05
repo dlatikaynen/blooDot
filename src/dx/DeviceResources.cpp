@@ -1,4 +1,4 @@
-﻿#include "..\pch.h"
+﻿#include "..\PreCompiledHeaders.h"
 #include "DeviceResources.h"
 #include "DirectXHelper.h"
 #include <windows.ui.xaml.media.dxinterop.h>
