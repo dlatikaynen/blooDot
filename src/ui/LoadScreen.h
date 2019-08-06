@@ -2,6 +2,7 @@
 
 #include "..\dx\DirectXHelper.h"
 #include "..\dx\DeviceResources.h"
+#include "..\algo\GameOfLifeCell.h"
 
 class LoadScreen
 {
@@ -30,6 +31,7 @@ private:
     Microsoft::WRL::ComPtr<ID2D1DeviceContext>      m_d2dContext;
     Microsoft::WRL::ComPtr<ID2D1DrawingStateBlock>  m_stateBlock;
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_GoLBrush;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_GoLBrushRaindrop;
 
     Microsoft::WRL::ComPtr<IWICImagingFactory>      m_wicFactory;
     Microsoft::WRL::ComPtr<ID2D1Bitmap>             m_bitmap;
@@ -39,8 +41,8 @@ private:
 	D2D1_SIZE_F                                     m_moved;
 	D2D1_SIZE_F                                     m_totalSize;
 
-	bool m_GoL[100][60];
-	bool m_GoL2[100][60];
+	GameOfLifeCell m_GoL[100][60];
+	GameOfLifeCell m_GoL2[100][60];
 	bool LoadScreen::NeighborN(int i, int j);
 	bool LoadScreen::NeighborS(int i, int j);
 	bool LoadScreen::NeighborE(int i, int j);

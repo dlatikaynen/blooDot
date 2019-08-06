@@ -33,7 +33,7 @@ void LoadScreen::Initialize(
 
 	srand(static_cast<unsigned int>(time(NULL)));
 
-	for (int i = 0; i < 100; ++i) for (int j = 0; j < 60; ++j) m_GoL[i][j] = !((rand() % (rand() % 4 + 1)) == 0);
+	for (int i = 0; i < 100; ++i) for (int j = 0; j < 60; ++j) m_GoL[i][j].SetAlive(!((rand() % (rand() % 4 + 1)) == 0));
 	
 	CreateDeviceDependentResources();
 	ResetDirectXResources();
@@ -43,6 +43,10 @@ void LoadScreen::CreateDeviceDependentResources()
 {
 	DX::ThrowIfFailed(
 		m_d2dContext->CreateSolidColorBrush(ColorF(ColorF::Goldenrod), &m_GoLBrush)
+	);
+
+	DX::ThrowIfFailed(
+		m_d2dContext->CreateSolidColorBrush(ColorF(ColorF::DarkSlateBlue), &m_GoLBrushRaindrop)
 	);
 }
 
@@ -106,6 +110,7 @@ void LoadScreen::ReleaseDeviceDependentResources()
     m_stateBlock.Reset();
     m_wicFactory.Reset();
 	m_GoLBrush.Reset();
+	m_GoLBrushRaindrop.Reset();
 	m_moved.width = m_moved.height = 0;
 }
 
@@ -132,30 +137,30 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 	*/
 	for (int i = 0; i < 100; ++i) for (int j = 0; j < 60; ++j)
 	{
-		bool curState = m_GoL[i][j];
+		bool curState = m_GoL[i][j].IsAlive();
 		int NAl = NeighborsAlive(i, j);
 		if (curState)
 		{
 			if (NAl == 2 || NAl == 3)
 			{
 				/* survives */
-				m_GoL2[i][j] = true;
+				m_GoL2[i][j].SetAlive(true);
 			}
 			else if (NAl < 2)
 			{
 				/* starvation */
-				m_GoL2[i][j] = false;
+				m_GoL2[i][j].SetAlive(false);
 			}
 			else if (NAl > 3)
 			{
 				/* overcrowded */
-				m_GoL2[i][j] = false;
+				m_GoL2[i][j].SetAlive(false);
 			}
 		}
 		else
 		{
 			/* birth */
-			m_GoL2[i][j] = NAl == 3;
+			m_GoL2[i][j].SetAlive(NAl == 3);
 		}
 	}
 
@@ -164,9 +169,9 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 	for (int z = 0; z < 100; ++z) {
 		int i = rand() % 100;
 		int j = rand() % 60;
-		if (!m_GoL2[i][j])
+		if (!m_GoL2[i][j].IsAlive())
 		{
-			m_GoL2[i][j] = true;
+			m_GoL2[i][j].MakeRaindrop();
 			++k;
 		}
 		if (k == 9) break;
@@ -177,42 +182,42 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 
 bool LoadScreen::NeighborN(int i, int j)
 {
-	return m_GoL[i][IndexUp(j)];
+	return m_GoL[i][IndexUp(j)].IsAlive();
 }
 
 bool LoadScreen::NeighborS(int i, int j)
 {
-	return m_GoL[i][IndexDown(j)];
+	return m_GoL[i][IndexDown(j)].IsAlive();
 }
 
 bool LoadScreen::NeighborE(int i, int j)
 {
-	return m_GoL[IndexRight(i)][j];
+	return m_GoL[IndexRight(i)][j].IsAlive();
 }
 
 bool LoadScreen::NeighborNE(int i, int j)
 {
-	return m_GoL[IndexRight(i)][IndexUp(j)];
+	return m_GoL[IndexRight(i)][IndexUp(j)].IsAlive();
 }
 
 bool LoadScreen::NeighborSE(int i, int j)
 {
-	return m_GoL[IndexRight(i)][IndexDown(j)];
+	return m_GoL[IndexRight(i)][IndexDown(j)].IsAlive();
 }
 
 bool LoadScreen::NeighborW(int i, int j)
 {
-	return m_GoL[IndexLeft(i)][j];
+	return m_GoL[IndexLeft(i)][j].IsAlive();
 }
 
 bool LoadScreen::NeighborSW(int i, int j)
 {
-	return m_GoL[IndexLeft(i)][IndexDown(j)];
+	return m_GoL[IndexLeft(i)][IndexDown(j)].IsAlive();
 }
 
 bool LoadScreen::NeighborNW(int i, int j)
 {
-	return m_GoL[IndexLeft(i)][IndexUp(j)];
+	return m_GoL[IndexLeft(i)][IndexUp(j)].IsAlive();
 }
 
 int LoadScreen::NeighborsAlive(int i, int j) 
@@ -270,7 +275,7 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D)
 	//	)
  //   );
 
-	for (int i = 0; i < 100; ++i) for (int j = 0; j < 60; ++j) if (m_GoL[i][j]) DrawCell(i, j);
+	for (int i = 0; i < 100; ++i) for (int j = 0; j < 60; ++j) if (m_GoL[i][j].IsAlive()) DrawCell(i, j);
 
     // We ignore D2DERR_RECREATE_TARGET here. This error indicates that the device
     // is lost. It will be handled during the next call to Present.
@@ -288,15 +293,17 @@ void LoadScreen::DrawCell(int x, int y)
 	D2D1_RECT_F rect;
 	rect.left = static_cast<float>(11*x);
 	rect.top = static_cast<float>(11*y);
-	rect.right = rect.left+10;
+	rect.right = rect.left + 10;
 	rect.bottom = rect.top + 10;
 	D2D1_ROUNDED_RECT rrect;
 	rrect.rect = rect;
 	rrect.radiusX = 2;
 	rrect.radiusY = 2;
 
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = m_GoL[x][y].IsRaindrop() ? m_GoLBrushRaindrop : m_GoLBrush;
+
 	m_d2dContext->FillRoundedRectangle(
 		&rrect,
-		m_GoLBrush.Get()
+		brush.Get()
 	);
 }
