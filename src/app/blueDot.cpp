@@ -1319,7 +1319,7 @@ void blueDotMain::OnFocusChange(bool active)
     }
 }
 
-FORCEINLINE int FindMeshIndexByName(SDKMesh &mesh, const char *meshName)
+FORCEINLINE int FindMeshIndexByName(Mesh &mesh, const char *meshName)
 {
     UINT meshCount = mesh.GetNumMeshes();
     for (UINT i = 0; i < meshCount; ++i)
@@ -1339,7 +1339,7 @@ void blueDot::blueDotMain::LogMessage(Platform::Object^ obj)
 }
 
 HRESULT blueDotMain::ExtractTrianglesFromMesh(
-    SDKMesh& mesh,
+    Mesh& mesh,
     const char* meshName,
     std::vector<Triangle>& triangles
     )
@@ -1351,11 +1351,11 @@ HRESULT blueDotMain::ExtractTrianglesFromMesh(
     {
         return E_FAIL;
     }
-    SDKMESH_MESH *currentmesh = mesh.GetMesh(meshIndex);
+    MESH_MESH *currentmesh = mesh.GetMesh(meshIndex);
 
     for (UINT i = 0; i < currentmesh->NumSubsets; ++i)
     {
-        SDKMESH_SUBSET *subsetmesh = mesh.GetSubset(meshIndex, i);
+        MESH_SUBSET *subsetmesh = mesh.GetSubset(meshIndex, i);
 
         USHORT *indices = (USHORT*) mesh.GetRawIndicesAt(currentmesh->IndexBuffer) + subsetmesh->IndexStart;
         BYTE *vertices = mesh.GetRawVerticesAt(currentmesh->VertexBuffers[0]) + (subsetmesh->VertexStart * m_vertexStride);

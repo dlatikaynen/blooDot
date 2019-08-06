@@ -4,8 +4,8 @@
 #include "..\io\PersistentState.h"
 #include "..\dx\DeviceResources.h"
 #include "..\dx\Camera.h"
-#include "..\dx\SDKMesh.h"
-#include "..\physics\Primitives.h"
+#include "..\dx\Mesh.h"
+#include "..\dx\Primitives.h"
 #include "..\physics\Collision.h"
 #include "..\physics\Physics.h"
 #include "..\sound\Audio.h"
@@ -99,9 +99,9 @@ namespace blueDot
 
         std::unique_ptr<Camera> m_camera;
         ConstantBuffer  m_mazeConstantBufferData;
-        SDKMesh         m_mazeMesh;
+        Mesh			m_mazeMesh;
         ConstantBuffer  m_marbleConstantBufferData;
-        SDKMesh         m_marbleMesh;
+        Mesh			m_marbleMesh;
         unsigned int    m_vertexStride;
         float           m_lightStrength;
         float           m_targetLightStrength;
@@ -149,7 +149,7 @@ namespace blueDot
 		const float															m_accelerometerScaleFactor = 3.5f;
 
         HRESULT ExtractTrianglesFromMesh(
-            SDKMesh& mesh,
+            Mesh& mesh,
             const char* meshName,
             std::vector<Triangle>& triangles
             );

@@ -3,7 +3,7 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-#include "Primitives.h"
+#include "..\dx\Primitives.h"
 #include "Collision.h"
 #include "Physics.h"
 

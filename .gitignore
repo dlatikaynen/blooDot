@@ -2,6 +2,9 @@
 # Diese .gitignore-Datei wurde von Microsoft(R) Visual Studio automatisch erstellt.
 ################################################################################
 
-/.vs/blueDot/v15
-/ARM/Debug/blueDot
-/x64/Debug/blueDot
+/.vs
+/ARM
+/x64
+/Win32
+/Debug
+/Release
