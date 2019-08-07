@@ -21,7 +21,7 @@ public:
     void UpdateForWindowSizeChange();
 
 	void Update(float timeTotal, float timeDelta);
-	void Render(D2D1::Matrix3x2F orientation2D);
+	void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
 
 private:
 	std::shared_ptr<DX::DeviceResources>			m_deviceResources;

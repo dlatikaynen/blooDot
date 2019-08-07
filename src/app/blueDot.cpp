@@ -438,7 +438,7 @@ bool blueDotMain::Render()
     {
         // Only render the loading screen for now.
         m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Loading Screen",0);
-        m_loadScreen->Render(m_deviceResources->GetOrientationTransform2D());
+        m_loadScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
         m_deviceResources->GetD3DDeviceContext()->EndEvent();
         return true;
     }
@@ -1226,6 +1226,12 @@ void blueDotMain::UpdateTouch(int id, Windows::Foundation::Point point)
 {
     if (m_touches.find(id) != m_touches.end())
         m_touches[id] = PointToTouch(point, m_deviceResources->GetLogicalSize());
+}
+
+void blueDotMain::PointerMove(int id, Windows::Foundation::Point point)
+{
+	//m_pointerPosition = PointToTouch(point, m_deviceResources->GetLogicalSize());
+	m_pointerPosition = XMFLOAT2(point.X, point.Y);
 }
 
 void blueDotMain::RemoveTouch(int id)

@@ -132,7 +132,7 @@ void App::Run()
             m_main->Update();
 
             if (m_main->Render())
-            {
+            {				
                 m_deviceResources->Present();
             }
         }
@@ -255,6 +255,7 @@ void App::OnPointerReleased(Windows::UI::Core::CoreWindow^ sender, Windows::UI::
 void App::OnPointerMoved(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::PointerEventArgs^ args)
 {
     m_main->UpdateTouch(args->CurrentPoint->PointerId, args->CurrentPoint->Position);
+	m_main->PointerMove(args->CurrentPoint->PointerId, args->CurrentPoint->Position);
 }
 
 void App::OnKeyDown(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::KeyEventArgs^ args)

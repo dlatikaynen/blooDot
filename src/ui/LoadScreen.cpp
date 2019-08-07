@@ -258,7 +258,7 @@ int LoadScreen::IndexDown(int j)
 	return j + 1;
 }
 
-void LoadScreen::Render(D2D1::Matrix3x2F orientation2D)
+void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)
 {
     m_d2dContext->SaveDrawingState(m_stateBlock.Get());
 
@@ -276,6 +276,22 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D)
  //   );
 
 	for (int i = 0; i < 100; ++i) for (int j = 0; j < 60; ++j) if (m_GoL[i][j].IsAlive()) DrawCell(i, j);
+
+	D2D1_POINT_2F pos;
+	pos.x = pointerPosition.x;
+	pos.y = pointerPosition.y;
+
+	//ComPtr<ID2D1Effect> scaleEffect;
+	//m_d2dContext->CreateEffect(CLSID_D2D1Scale, &scaleEffect);
+	//scaleEffect->SetInput(0, bitmap);
+	//scaleEffect->SetValue(D2D1_SCALE_PROP_CENTER_POINT, D2D1::Vector2F(256.0f, 192.0f));
+	//scaleEffect->SetValue(D2D1_SCALE_PROP_SCALE, D2D1::Vector2F(2.0f, 2.0f));
+	//m_d2dContext->DrawImage(scaleEffect.Get());
+
+	m_d2dContext->FillEllipse(
+		D2D1::Ellipse(pos, 70, 70),
+		m_GoLBrushRaindrop.Get()
+	);
 
     // We ignore D2DERR_RECREATE_TARGET here. This error indicates that the device
     // is lost. It will be handled during the next call to Present.

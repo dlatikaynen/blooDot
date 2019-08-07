@@ -71,7 +71,8 @@ namespace blueDot
 
         void AddTouch(int id, Windows::Foundation::Point point);
         void UpdateTouch(int id, Windows::Foundation::Point point);
-        void RemoveTouch(int id);
+		void PointerMove(int id, Windows::Foundation::Point point);
+		void RemoveTouch(int id);
         void KeyDown(Windows::System::VirtualKey key);
         void KeyUp(Windows::System::VirtualKey key);
         void OnFocusChange(bool active);
@@ -125,6 +126,7 @@ namespace blueDot
         HighScoreEntry  m_newHighScore;
         typedef std::map<int, XMFLOAT2> TouchMap;
         TouchMap        m_touches;
+		XMFLOAT2		m_pointerPosition;
         typedef std::queue<D2D1_POINT_2F> PointQueue;
         PointQueue      m_pointQueue;
         bool            m_pauseKeyActive;
