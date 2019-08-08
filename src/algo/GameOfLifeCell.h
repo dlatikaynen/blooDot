@@ -10,7 +10,8 @@ public:
 	GameOfLifeCell::GameOfLifeCell(const bool rainedDown);
 	bool IsAlive();
 	void SetAlive(bool isAlive);
-	void MakeRaindrop();
+	void SetRaindrop(bool isRaindrop);
+	void MakeRaindrop(bool isRaindrop);
 	bool IsRaindrop();
 	bool IsPromotedRaindrop();
 

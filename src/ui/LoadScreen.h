@@ -3,6 +3,7 @@
 #include "..\dx\DirectXHelper.h"
 #include "..\dx\DeviceResources.h"
 #include "..\algo\GameOfLifeCell.h"
+#include "..\algo\GameOfLifePlane.h"
 
 class LoadScreen
 {
@@ -24,6 +25,9 @@ public:
 	void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
 
 private:
+	const float										GoLCellSizePerc = 0.0105f;
+	const float										GoLSprinklerRadiusPerc = 0.1f;
+
 	std::shared_ptr<DX::DeviceResources>			m_deviceResources;
 	
 	Microsoft::WRL::ComPtr<ID2D1Factory1>           m_d2dFactory;
@@ -41,8 +45,10 @@ private:
 	D2D1_SIZE_F                                     m_moved;
 	D2D1_SIZE_F                                     m_totalSize;
 
-	GameOfLifeCell m_GoL[100][60];
-	GameOfLifeCell m_GoL2[100][60];
+	GameOfLifePlane*								m_GoL;
+	GameOfLifePlane*								m_GoL2;
+	GameOfLifePlane*								m_Sprinkler;
+
 	bool LoadScreen::NeighborN(int i, int j);
 	bool LoadScreen::NeighborS(int i, int j);
 	bool LoadScreen::NeighborE(int i, int j);

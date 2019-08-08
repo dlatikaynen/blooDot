@@ -244,6 +244,7 @@
   <ItemGroup>
     <ClCompile Include="..\src\app\App.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeCell.cpp" />
+    <ClCompile Include="..\src\algo\GameOfLifePlane.cpp" />
     <ClCompile Include="..\src\sound\Audio.cpp" />
     <ClCompile Include="..\src\io\BasicLoader.cpp" />
     <ClCompile Include="..\src\io\BasicReaderWriter.cpp" />
@@ -264,6 +265,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\app\App.h" />
     <ClInclude Include="..\src\algo\GameOfLifeCell.h" />
+    <ClInclude Include="..\src\algo\GameOfLifePlane.h" />
     <ClInclude Include="..\src\sound\Audio.h" />
     <ClInclude Include="..\src\io\BasicLoader.h" />
     <ClInclude Include="..\src\physics\BasicMath.h" />

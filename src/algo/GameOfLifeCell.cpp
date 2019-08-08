@@ -33,7 +33,7 @@ GameOfLifeCell::GameOfLifeCell(const bool rainedDown) :
 	m_slightlyOffY = 0;
 	if (rainedDown) 
 	{
-		MakeRaindrop();
+		MakeRaindrop(true);
 	}
 }
 
@@ -59,8 +59,17 @@ void GameOfLifeCell::SetAlive(bool isAlive)
 	m_isAlive = isAlive;
 }
 
-void GameOfLifeCell::MakeRaindrop()
+void GameOfLifeCell::SetRaindrop(bool isRaindrop)
 {
-	m_isRaindrop = true;
-	m_isAlive = true;
+	m_isRaindrop = isRaindrop;
+}
+
+void GameOfLifeCell::MakeRaindrop(bool isRaindrop)
+{
+	if (isRaindrop)
+	{
+		m_isAlive = true;
+	}
+
+	m_isRaindrop = isRaindrop;
 }

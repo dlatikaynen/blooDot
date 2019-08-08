@@ -29,11 +29,7 @@ void LoadScreen::Initialize(
 
     DX::ThrowIfFailed(
         factory.As(&m_d2dFactory)
-        );
-
-	srand(static_cast<unsigned int>(time(NULL)));
-
-	for (int i = 0; i < 100; ++i) for (int j = 0; j < 60; ++j) m_GoL[i][j].SetAlive(!((rand() % (rand() % 4 + 1)) == 0));
+    );
 	
 	CreateDeviceDependentResources();
 	ResetDirectXResources();
@@ -46,8 +42,26 @@ void LoadScreen::CreateDeviceDependentResources()
 	);
 
 	DX::ThrowIfFailed(
-		m_d2dContext->CreateSolidColorBrush(ColorF(ColorF::DarkSlateBlue), &m_GoLBrushRaindrop)
+		m_d2dContext->CreateSolidColorBrush(ColorF(ColorF::OrangeRed), &m_GoLBrushRaindrop)
 	);
+
+	/* we have the screen size here, so we use this opportunity to compute the GoL dimensions 
+	 * and also precompute the sprinkler circle dot matrix */
+	srand(static_cast<unsigned int>(time(NULL)));
+
+	m_GoL = new GameOfLifePlane(100, 60);
+	bool isAlive;
+	for (int i = 0; i < m_GoL->GetWidth(); ++i)
+	{
+		for (int j = 0; j < m_GoL->GetHeight(); ++j)
+		{
+			isAlive = !((rand() % (rand() % 4 + 1)) == 0);
+			m_GoL->CellAt(i, j)->SetAlive(isAlive);
+		}
+	}
+
+	/* the swap plane */
+	m_GoL2 = new GameOfLifePlane(m_GoL->GetWidth(), m_GoL->GetHeight());
 }
 
 void LoadScreen::ResetDirectXResources()
@@ -60,18 +74,18 @@ void LoadScreen::ResetDirectXResources()
             GENERIC_READ,
             WICDecodeMetadataCacheOnDemand,
             &wicBitmapDecoder
-            )
-        );
+        )
+    );
 
     ComPtr<IWICBitmapFrameDecode> wicBitmapFrame;
     DX::ThrowIfFailed(
         wicBitmapDecoder->GetFrame(0, &wicBitmapFrame)
-        );
+    );
 
     ComPtr<IWICFormatConverter> wicFormatConverter;
     DX::ThrowIfFailed(
         m_wicFactory->CreateFormatConverter(&wicFormatConverter)
-        );
+    );
 
     DX::ThrowIfFailed(
         wicFormatConverter->Initialize(
@@ -81,22 +95,22 @@ void LoadScreen::ResetDirectXResources()
             nullptr,
             0.0,
             WICBitmapPaletteTypeCustom  // the BGRA format has no palette so this value is ignored
-            )
-        );
+        )
+    );
 
     DX::ThrowIfFailed(
         m_d2dContext->CreateBitmapFromWicBitmap(
             wicFormatConverter.Get(),
             BitmapProperties(PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)),
             &m_bitmap
-            )
-        );
+        )
+    );
 
     m_imageSize = m_bitmap->GetSize();
 
     DX::ThrowIfFailed(
         m_d2dFactory->CreateDrawingStateBlock(&m_stateBlock)
-        );
+    );
 
     UpdateForWindowSizeChange();
 }
@@ -112,6 +126,10 @@ void LoadScreen::ReleaseDeviceDependentResources()
 	m_GoLBrush.Reset();
 	m_GoLBrushRaindrop.Reset();
 	m_moved.width = m_moved.height = 0;
+
+	delete m_GoL;
+	delete m_GoL2;
+	delete m_Sprinkler;
 }
 
 void LoadScreen::UpdateForWindowSizeChange()
@@ -137,87 +155,95 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 	*/
 	for (int i = 0; i < 100; ++i) for (int j = 0; j < 60; ++j)
 	{
-		bool curState = m_GoL[i][j].IsAlive();
+		bool curState = m_GoL->CellAt(i, j)->IsAlive();
 		int NAl = NeighborsAlive(i, j);
 		if (curState)
 		{
 			if (NAl == 2 || NAl == 3)
 			{
 				/* survives */
-				m_GoL2[i][j].SetAlive(true);
+				m_GoL2->CellAt(i, j)->SetAlive(true);
 			}
 			else if (NAl < 2)
 			{
 				/* starvation */
-				m_GoL2[i][j].SetAlive(false);
+				m_GoL2->CellAt(i, j)->SetAlive(false);
 			}
 			else if (NAl > 3)
 			{
 				/* overcrowded */
-				m_GoL2[i][j].SetAlive(false);
+				m_GoL2->CellAt(i, j)->SetAlive(false);
 			}
 		}
 		else
 		{
 			/* birth */
-			m_GoL2[i][j].SetAlive(NAl == 3);
+			m_GoL2->CellAt(i, j)->SetAlive(NAl == 3);
 		}
 	}
 
 	/* and then the rain set in */
 	int k = 0;
-	for (int z = 0; z < 100; ++z) {
+	for (int z = 0; z < 100; ++z) 
+	{
 		int i = rand() % 100;
 		int j = rand() % 60;
-		if (!m_GoL2[i][j].IsAlive())
+		if (!m_GoL2->CellAt(i, j)->IsAlive())
 		{
-			m_GoL2[i][j].MakeRaindrop();
+			m_GoL2->CellAt(i, j)->MakeRaindrop(true);
 			++k;
 		}
 		if (k == 9) break;
 	}
 
-	std::copy(&m_GoL2[0][0], &m_GoL2[0][0]+100*60, &m_GoL[0][0]);
+	for (int x = 0; x < m_GoL2->GetWidth(); ++x)
+	{
+		for (int y = 0; y < m_GoL2->GetHeight(); ++y)
+		{
+			m_GoL->CellAt(x, y)->SetAlive(m_GoL2->CellAt(x, y)->IsAlive());
+			m_GoL->CellAt(x, y)->SetRaindrop(m_GoL2->CellAt(x, y)->IsRaindrop());
+		}
+	}
 }
 
 bool LoadScreen::NeighborN(int i, int j)
 {
-	return m_GoL[i][IndexUp(j)].IsAlive();
+	return m_GoL->CellAt(i, IndexUp(j))->IsAlive();
 }
 
 bool LoadScreen::NeighborS(int i, int j)
 {
-	return m_GoL[i][IndexDown(j)].IsAlive();
+	return m_GoL->CellAt(i, IndexDown(j))->IsAlive();
 }
 
 bool LoadScreen::NeighborE(int i, int j)
 {
-	return m_GoL[IndexRight(i)][j].IsAlive();
+	return m_GoL->CellAt(IndexRight(i), j)->IsAlive();
 }
 
 bool LoadScreen::NeighborNE(int i, int j)
 {
-	return m_GoL[IndexRight(i)][IndexUp(j)].IsAlive();
+	return m_GoL->CellAt(IndexRight(i), IndexUp(j))->IsAlive();
 }
 
 bool LoadScreen::NeighborSE(int i, int j)
 {
-	return m_GoL[IndexRight(i)][IndexDown(j)].IsAlive();
+	return m_GoL->CellAt(IndexRight(i), IndexDown(j))->IsAlive();
 }
 
 bool LoadScreen::NeighborW(int i, int j)
 {
-	return m_GoL[IndexLeft(i)][j].IsAlive();
+	return m_GoL->CellAt(IndexLeft(i), j)->IsAlive();
 }
 
 bool LoadScreen::NeighborSW(int i, int j)
 {
-	return m_GoL[IndexLeft(i)][IndexDown(j)].IsAlive();
+	return m_GoL->CellAt(IndexLeft(i), IndexDown(j))->IsAlive();
 }
 
 bool LoadScreen::NeighborNW(int i, int j)
 {
-	return m_GoL[IndexLeft(i)][IndexUp(j)].IsAlive();
+	return m_GoL->CellAt(IndexLeft(i), IndexUp(j))->IsAlive();
 }
 
 int LoadScreen::NeighborsAlive(int i, int j) 
@@ -275,7 +301,7 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 	//	)
  //   );
 
-	for (int i = 0; i < 100; ++i) for (int j = 0; j < 60; ++j) if (m_GoL[i][j].IsAlive()) DrawCell(i, j);
+	for (int i = 0; i < 100; ++i) for (int j = 0; j < 60; ++j) if (m_GoL->CellAt(i, j)->IsAlive()) DrawCell(i, j);
 
 	D2D1_POINT_2F pos;
 	pos.x = pointerPosition.x;
@@ -289,7 +315,7 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 	//m_d2dContext->DrawImage(scaleEffect.Get());
 
 	m_d2dContext->FillEllipse(
-		D2D1::Ellipse(pos, 70, 70),
+		D2D1::Ellipse(pos, 30, 30),
 		m_GoLBrushRaindrop.Get()
 	);
 
@@ -316,7 +342,7 @@ void LoadScreen::DrawCell(int x, int y)
 	rrect.radiusX = 2;
 	rrect.radiusY = 2;
 
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = m_GoL[x][y].IsRaindrop() ? m_GoLBrushRaindrop : m_GoLBrush;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = m_GoL->CellAt(x, y)->IsRaindrop() ? m_GoLBrushRaindrop : m_GoLBrush;
 
 	m_d2dContext->FillRoundedRectangle(
 		&rrect,
