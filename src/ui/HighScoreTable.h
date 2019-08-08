@@ -1,5 +1,8 @@
 #pragma once
 
+#include "TextElement.h"
+#include "StopwatchTimer.h"
+
 struct HighScoreEntry
 {
 	Platform::String^ tag;

@@ -44,24 +44,6 @@ void LoadScreen::CreateDeviceDependentResources()
 	DX::ThrowIfFailed(
 		m_d2dContext->CreateSolidColorBrush(ColorF(ColorF::OrangeRed), &m_GoLBrushRaindrop)
 	);
-
-	/* we have the screen size here, so we use this opportunity to compute the GoL dimensions 
-	 * and also precompute the sprinkler circle dot matrix */
-	srand(static_cast<unsigned int>(time(NULL)));
-
-	m_GoL = new GameOfLifePlane(100, 60);
-	bool isAlive;
-	for (int i = 0; i < m_GoL->GetWidth(); ++i)
-	{
-		for (int j = 0; j < m_GoL->GetHeight(); ++j)
-		{
-			isAlive = !((rand() % (rand() % 4 + 1)) == 0);
-			m_GoL->CellAt(i, j)->SetAlive(isAlive);
-		}
-	}
-
-	/* the swap plane */
-	m_GoL2 = new GameOfLifePlane(m_GoL->GetWidth(), m_GoL->GetHeight());
 }
 
 void LoadScreen::ResetDirectXResources()
@@ -134,6 +116,10 @@ void LoadScreen::ReleaseDeviceDependentResources()
 
 void LoadScreen::UpdateForWindowSizeChange()
 {
+	bool isAlive;
+
+	m_isResizing = true;
+
     Windows::Foundation::Rect windowBounds = CoreWindow::GetForCurrentThread()->Bounds;
 
     m_offset.width = (windowBounds.Width - m_imageSize.width) / 2.0f;
@@ -141,10 +127,40 @@ void LoadScreen::UpdateForWindowSizeChange()
 
     m_totalSize.width = m_offset.width + m_imageSize.width;
     m_totalSize.height = m_offset.height + m_imageSize.height;
+
+	/* we have the screen size here, so we use this opportunity to compute the GoL dimensions
+	 * and also precompute the sprinkler circle dot matrix */
+	D2D1_SIZE_F canvasSize = m_d2dContext->GetSize();
+	int gridWidth = static_cast<int>(canvasSize.width / 11 + 1);
+	int gridHeight = static_cast<int>(canvasSize.height / 11 + 1);
+	int pixWidth = 10;
+	int pixHeight = 10;
+
+	m_GoL = new GameOfLifePlane(gridWidth, gridHeight);
+
+	srand(static_cast<unsigned int>(time(NULL)));
+	for (int i = 0; i < m_GoL->GetWidth(); ++i)
+	{
+		for (int j = 0; j < m_GoL->GetHeight(); ++j)
+		{
+			isAlive = !((rand() % (rand() % 4 + 1)) == 0);
+			m_GoL->CellAt(i, j)->SetAlive(isAlive);
+		}
+	}
+
+	/* the swap plane */
+	m_GoL2 = new GameOfLifePlane(m_GoL->GetWidth(), m_GoL->GetHeight());
+
+	m_isResizing = false;
 }
 
 void LoadScreen::Update(float timeTotal, float timeDelta)
 {
+	if (m_isResizing) 
+	{
+		return;
+	}
+
 	//m_moved.width++;
 
 	/*
@@ -153,7 +169,7 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 		Death by overcrowding: Each live cell with four or more live neighbors will die in the next generation.
 		Survival: Each live cell with either two or three live neighbors will remain alive for the next generation.
 	*/
-	for (int i = 0; i < 100; ++i) for (int j = 0; j < 60; ++j)
+	for (int i = 0; i < m_GoL->GetWidth(); ++i) for (int j = 0; j < m_GoL->GetHeight(); ++j)
 	{
 		bool curState = m_GoL->CellAt(i, j)->IsAlive();
 		int NAl = NeighborsAlive(i, j);
@@ -184,10 +200,10 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 
 	/* and then the rain set in */
 	int k = 0;
-	for (int z = 0; z < 100; ++z) 
+	for (int z = 0; z < m_GoL->GetWidth(); ++z) 
 	{
-		int i = rand() % 100;
-		int j = rand() % 60;
+		int i = rand() % m_GoL->GetWidth();
+		int j = rand() % m_GoL->GetHeight();
 		if (!m_GoL2->CellAt(i, j)->IsAlive())
 		{
 			m_GoL2->CellAt(i, j)->MakeRaindrop(true);
@@ -262,25 +278,25 @@ int LoadScreen::NeighborsAlive(int i, int j)
 
 int LoadScreen::IndexLeft(int i) 
 {
-	if (i == 0) return 99;
+	if (i == 0) return m_GoL->GetWidth() - 1;
 	return i - 1;
 }
 
 int LoadScreen::IndexRight(int i)
 {
-	if (i == 99) return 0;
+	if (i == m_GoL->GetWidth() - 1) return 0;
 	return i + 1;
 }
 
 int LoadScreen::IndexUp(int j) 
 {
-	if (j == 0) return 59;
+	if (j == 0) return m_GoL->GetHeight() - 1;
 	return j - 1;
 }
 
 int LoadScreen::IndexDown(int j)
 {
-	if (j == 59) return 0;
+	if (j == m_GoL->GetHeight() - 1) return 0;
 	return j + 1;
 }
 
@@ -301,7 +317,9 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 	//	)
  //   );
 
-	for (int i = 0; i < 100; ++i) for (int j = 0; j < 60; ++j) if (m_GoL->CellAt(i, j)->IsAlive()) DrawCell(i, j);
+	for (int i = 0; i < m_GoL->GetWidth(); ++i) for (int j = 0; j < m_GoL->GetHeight(); ++j) 
+		if (m_GoL->CellAt(i, j)->IsAlive()) 
+			DrawCell(i, j);
 
 	D2D1_POINT_2F pos;
 	pos.x = pointerPosition.x;

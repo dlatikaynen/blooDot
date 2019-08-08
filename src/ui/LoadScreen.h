@@ -44,6 +44,7 @@ private:
     D2D1_SIZE_F                                     m_offset;
 	D2D1_SIZE_F                                     m_moved;
 	D2D1_SIZE_F                                     m_totalSize;
+	bool											m_isResizing;
 
 	GameOfLifePlane*								m_GoL;
 	GameOfLifePlane*								m_GoL2;

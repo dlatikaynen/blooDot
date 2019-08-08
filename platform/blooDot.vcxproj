@@ -261,6 +261,13 @@
     <ClCompile Include="..\src\ui\SampleOverlay.cpp" />
     <ClCompile Include="..\src\dx\Mesh.cpp" />
     <ClCompile Include="..\src\ui\UserInterface.cpp" />
+    <ClCompile Include="..\src\ui\ElementBase.cpp" />
+    <ClCompile Include="..\src\ui\HighScoreTable.cpp" />
+    <ClCompile Include="..\src\ui\StopwatchTimer.cpp" />
+    <ClCompile Include="..\src\ui\TextButton.cpp" />
+    <ClCompile Include="..\src\ui\TextElement.cpp" />
+    <ClCompile Include="..\src\ui\TextStyle.cpp" />
+    <ClCompile Include="..\src\ui\CountdownTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\app\App.h" />
@@ -283,9 +290,16 @@
     <ClInclude Include="..\src\physics\Physics.h" />
     <ClInclude Include="..\src\dx\Primitives.h" />
     <ClInclude Include="..\src\ui\SampleOverlay.h" />
-    <ClInclude Include="..\src\physics\Mesh.h" />
+    <ClInclude Include="..\src\dx\Mesh.h" />
     <ClInclude Include="..\src\app\StepTimer.h" />
     <ClInclude Include="..\src\ui\UserInterface.h" />
+    <ClInclude Include="..\src\ui\ElementBase.h" />
+    <ClInclude Include="..\src\ui\HighScoreTable.h" />
+    <ClInclude Include="..\src\ui\StopwatchTimer.h" />
+    <ClInclude Include="..\src\ui\TextButton.h" />
+    <ClInclude Include="..\src\ui\TextElement.h" />
+    <ClInclude Include="..\src\ui\TextStyle.h" />
+    <ClInclude Include="..\src\ui\CountdownTimer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\src\BasicPixelShader.hlsl">
