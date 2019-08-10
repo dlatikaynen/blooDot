@@ -1,5 +1,5 @@
 ﻿#include "..\PreCompiledHeaders.h"
-#include "blueDot.h"
+#include "blooDot.h"
 #include <DirectXColors.h> // For named colors
 #include "..\dx\DirectXHelper.h" // For ThrowIfFailed
 

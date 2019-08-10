@@ -44,6 +44,10 @@ void LoadScreen::CreateDeviceDependentResources()
 	DX::ThrowIfFailed(
 		m_d2dContext->CreateSolidColorBrush(ColorF(ColorF::OrangeRed), &m_GoLBrushRaindrop)
 	);
+
+	DX::ThrowIfFailed(
+		m_d2dContext->CreateSolidColorBrush(ColorF(ColorF::White, 0.2F), &m_GoLBrushSprinkler)
+	);
 }
 
 void LoadScreen::ResetDirectXResources()
@@ -107,6 +111,7 @@ void LoadScreen::ReleaseDeviceDependentResources()
     m_wicFactory.Reset();
 	m_GoLBrush.Reset();
 	m_GoLBrushRaindrop.Reset();
+	m_GoLBrushSprinkler.Reset();
 	m_moved.width = m_moved.height = 0;
 
 	delete m_GoL;
@@ -131,10 +136,11 @@ void LoadScreen::UpdateForWindowSizeChange()
 	/* we have the screen size here, so we use this opportunity to compute the GoL dimensions
 	 * and also precompute the sprinkler circle dot matrix */
 	D2D1_SIZE_F canvasSize = m_d2dContext->GetSize();
-	int gridWidth = static_cast<int>(canvasSize.width / 11 + 1);
-	int gridHeight = static_cast<int>(canvasSize.height / 11 + 1);
-	int pixWidth = 10;
-	int pixHeight = 10;
+	int scaleFactor = (LoadScreen::GoLCellSideLength + 1) + 1;
+	int gridWidth = static_cast<int>(canvasSize.width / scaleFactor);
+	int gridHeight = static_cast<int>(canvasSize.height / scaleFactor);
+	int pixWidth = LoadScreen::GoLCellSideLength;
+	int pixHeight = LoadScreen::GoLCellSideLength;
 
 	m_GoL = new GameOfLifePlane(gridWidth, gridHeight);
 
@@ -150,6 +156,10 @@ void LoadScreen::UpdateForWindowSizeChange()
 
 	/* the swap plane */
 	m_GoL2 = new GameOfLifePlane(m_GoL->GetWidth(), m_GoL->GetHeight());
+
+	/* the sprinkler */
+	m_Sprinkler = new GameOfLifeSprinkler();
+	m_Sprinkler->Create(7);
 
 	m_isResizing = false;
 }
@@ -317,13 +327,27 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 	//	)
  //   );
 
-	for (int i = 0; i < m_GoL->GetWidth(); ++i) for (int j = 0; j < m_GoL->GetHeight(); ++j) 
-		if (m_GoL->CellAt(i, j)->IsAlive()) 
-			DrawCell(i, j);
+	int planeWidth = m_GoL->GetWidth();
+	int planeHeight = m_GoL->GetHeight();
+	for (int i = 0; i < planeWidth; ++i) for (int j = 0; j < planeHeight; ++j)
+	{
+		GameOfLifeCell* cell = m_GoL->CellAt(i, j);
+		if (cell->IsAlive())
+		{
+			cell->DrawCell(m_d2dContext, i, j, LoadScreen::GoLCellSideLength, m_GoLBrush, m_GoLBrushRaindrop);
+		}
+	}
 
-	D2D1_POINT_2F pos;
-	pos.x = pointerPosition.x;
-	pos.y = pointerPosition.y;
+	D2D1_POINT_2L pos;
+	pos.x = static_cast<int>(pointerPosition.x);
+	pos.y = static_cast<int>(pointerPosition.y);
+
+	//m_d2dContext->FillEllipse(
+	//	D2D1::Ellipse(pos, 30, 30),
+	//	m_GoLBrushRaindrop.Get()
+	//);
+
+	m_Sprinkler->Render(m_d2dContext, pos.x, pos.y, LoadScreen::GoLCellSideLength, m_GoLBrushSprinkler);
 
 	//ComPtr<ID2D1Effect> scaleEffect;
 	//m_d2dContext->CreateEffect(CLSID_D2D1Scale, &scaleEffect);
@@ -332,10 +356,6 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 	//scaleEffect->SetValue(D2D1_SCALE_PROP_SCALE, D2D1::Vector2F(2.0f, 2.0f));
 	//m_d2dContext->DrawImage(scaleEffect.Get());
 
-	m_d2dContext->FillEllipse(
-		D2D1::Ellipse(pos, 30, 30),
-		m_GoLBrushRaindrop.Get()
-	);
 
     // We ignore D2DERR_RECREATE_TARGET here. This error indicates that the device
     // is lost. It will be handled during the next call to Present.
@@ -346,24 +366,4 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
     }
 
     m_d2dContext->RestoreDrawingState(m_stateBlock.Get());
-}
-
-void LoadScreen::DrawCell(int x, int y) 
-{
-	D2D1_RECT_F rect;
-	rect.left = static_cast<float>(11*x);
-	rect.top = static_cast<float>(11*y);
-	rect.right = rect.left + 10;
-	rect.bottom = rect.top + 10;
-	D2D1_ROUNDED_RECT rrect;
-	rrect.rect = rect;
-	rrect.radiusX = 2;
-	rrect.radiusY = 2;
-
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = m_GoL->CellAt(x, y)->IsRaindrop() ? m_GoLBrushRaindrop : m_GoLBrush;
-
-	m_d2dContext->FillRoundedRectangle(
-		&rrect,
-		brush.Get()
-	);
 }

@@ -14,6 +14,7 @@ public:
 	void MakeRaindrop(bool isRaindrop);
 	bool IsRaindrop();
 	bool IsPromotedRaindrop();
+	void DrawCell(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int x, int y, int cellSideLength, Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushCell, Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushRaindrop);
 
 private:
 	bool m_isAlive;

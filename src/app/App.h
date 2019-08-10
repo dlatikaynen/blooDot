@@ -2,7 +2,7 @@
 
 #include "..\PreCompiledHeaders.h"
 #include "..\dx\DeviceResources.h"
-#include "blueDot.h"
+#include "blooDot.h"
 
 namespace blueDot
 {
