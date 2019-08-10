@@ -317,9 +317,9 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 
 	int planeWidth = m_GoL->GetWidth();
 	int planeHeight = m_GoL->GetHeight();
-	MFARGB colorCell = { 127,250,19,0 };
-	MFARGB colorRaindrop = { 200,0,0,0 };
-	MFARGB colorSprinkler = { 10, 212,23,0 };
+	MFARGB colorCell = { 127,250,19,255 };
+	MFARGB colorRaindrop = { 200,0,0,255 };
+	MFARGB colorSprinkler = { 192, 192, 192, 96 };
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushCell = m_Brushes.WannaHave(m_d2dContext, colorCell);
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushRaindrop = m_Brushes.WannaHave(m_d2dContext, colorRaindrop);
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushSprinkler = m_Brushes.WannaHave(m_d2dContext, colorSprinkler);

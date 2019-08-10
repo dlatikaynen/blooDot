@@ -21,10 +21,20 @@ BrushRegistry::~BrushRegistry()
 
 Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> BrushRegistry::WannaHave(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, MFARGB color)
 {
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = m_Registry.at(color);
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = NULL;
+	if (m_Registry.size() != 0)
+	{	
+		brush = m_Registry[color];
+	}
+
 	if (brush == NULL) 
 	{
-		D2D1_COLOR_F brushColor = D2D1::ColorF(color.rgbRed, color.rgbGreen, color.rgbBlue, color.rgbAlpha);
+		D2D1_COLOR_F brushColor = D2D1::ColorF(
+			static_cast<float>(color.rgbRed) / 255.0F, 
+			static_cast<float>(color.rgbGreen) / 255.0F,
+			static_cast<float>(color.rgbBlue) / 255.0F,
+			static_cast<float>(color.rgbAlpha) / 255.0F
+		);
 		DX::ThrowIfFailed(
 			dxDC->CreateSolidColorBrush(brushColor, &brush)
 		);
