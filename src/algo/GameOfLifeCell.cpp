@@ -73,3 +73,24 @@ void GameOfLifeCell::MakeRaindrop(bool isRaindrop)
 
 	m_isRaindrop = isRaindrop;
 }
+
+void GameOfLifeCell::DrawCell(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int x, int y, int cellSideLength, Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushCell, Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushRaindrop)
+{
+	D2D1_RECT_F rect;
+	int cellStride = cellSideLength + 1;
+	rect.left = static_cast<float>(cellStride * x);
+	rect.top = static_cast<float>(cellStride * y);
+	rect.right = rect.left + cellSideLength;
+	rect.bottom = rect.top + cellSideLength;
+	D2D1_ROUNDED_RECT rrect;
+	rrect.rect = rect;
+	rrect.radiusX = 2;
+	rrect.radiusY = 2;
+
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = this->IsRaindrop() ? brushRaindrop : brushCell;
+
+	dxDC->FillRoundedRectangle(
+		&rrect,
+		brush.Get()
+	);
+}

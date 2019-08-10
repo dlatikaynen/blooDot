@@ -174,7 +174,7 @@ void Audio::CreateResources()
         m_musicStreamer.Initialize(L"Media\\Audio\\background.mp3");		
         DX::ThrowIfFailed(
             XAudio2Create(&m_musicEngine)
-            );
+        );
 
 #if defined(_DEBUG)
         XAUDIO2_DEBUG_CONFIGURATION debugConfig = {0};

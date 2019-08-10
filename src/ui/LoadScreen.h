@@ -4,6 +4,7 @@
 #include "..\dx\DeviceResources.h"
 #include "..\algo\GameOfLifeCell.h"
 #include "..\algo\GameOfLifePlane.h"
+#include "..\algo\GameOfLifeSprinkler.h"
 
 class LoadScreen
 {
@@ -27,6 +28,7 @@ public:
 private:
 	const float										GoLCellSizePerc = 0.0105f;
 	const float										GoLSprinklerRadiusPerc = 0.1f;
+	const int										GoLCellSideLength = 10;
 
 	std::shared_ptr<DX::DeviceResources>			m_deviceResources;
 	
@@ -36,6 +38,7 @@ private:
     Microsoft::WRL::ComPtr<ID2D1DrawingStateBlock>  m_stateBlock;
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_GoLBrush;
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_GoLBrushRaindrop;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>	m_GoLBrushSprinkler;
 
     Microsoft::WRL::ComPtr<IWICImagingFactory>      m_wicFactory;
     Microsoft::WRL::ComPtr<ID2D1Bitmap>             m_bitmap;
@@ -48,7 +51,7 @@ private:
 
 	GameOfLifePlane*								m_GoL;
 	GameOfLifePlane*								m_GoL2;
-	GameOfLifePlane*								m_Sprinkler;
+	GameOfLifeSprinkler*							m_Sprinkler;
 
 	bool LoadScreen::NeighborN(int i, int j);
 	bool LoadScreen::NeighborS(int i, int j);
@@ -63,5 +66,4 @@ private:
 	int LoadScreen::IndexRight(int i);
 	int LoadScreen::IndexUp(int j);
 	int LoadScreen::IndexDown(int j);
-	void DrawCell(int x, int y);
 };

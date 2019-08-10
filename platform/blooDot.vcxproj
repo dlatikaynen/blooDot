@@ -29,7 +29,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1fef1241-e4e9-40ac-af29-51b8f7c6f932}</ProjectGuid>
     <Keyword>DirectXApp</Keyword>
-    <RootNamespace>blueDot</RootNamespace>
+    <RootNamespace>blooDot</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>
@@ -244,6 +244,7 @@
     <ClCompile Include="..\src\app\App.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeCell.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifePlane.cpp" />
+    <ClCompile Include="..\src\algo\GameOfLifeSprinkler.cpp" />
     <ClCompile Include="..\src\sound\Audio.cpp" />
     <ClCompile Include="..\src\io\BasicLoader.cpp" />
     <ClCompile Include="..\src\io\BasicReaderWriter.cpp" />
@@ -253,7 +254,7 @@
     <ClCompile Include="..\src\io\DDSTextureLoader.cpp" />
     <ClCompile Include="..\src\dx\DeviceResources.cpp" />
     <ClCompile Include="..\src\ui\LoadScreen.cpp" />
-    <ClCompile Include="..\src\app\blueDot.cpp" />
+    <ClCompile Include="..\src\app\blooDot.cpp" />
     <ClCompile Include="..\src\io\MediaStreamer.cpp" />
     <ClCompile Include="..\src\io\PersistentState.cpp" />
     <ClCompile Include="..\src\physics\Physics.cpp" />
@@ -272,6 +273,7 @@
     <ClInclude Include="..\src\app\App.h" />
     <ClInclude Include="..\src\algo\GameOfLifeCell.h" />
     <ClInclude Include="..\src\algo\GameOfLifePlane.h" />
+    <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h" />
     <ClInclude Include="..\src\sound\Audio.h" />
     <ClInclude Include="..\src\io\BasicLoader.h" />
     <ClInclude Include="..\src\physics\BasicMath.h" />
@@ -283,7 +285,7 @@
     <ClInclude Include="..\src\dx\DeviceResources.h" />
     <ClInclude Include="..\src\dx\DirectXHelper.h" />
     <ClInclude Include="..\src\io\LoadScreen.h" />
-    <ClInclude Include="..\src\app\blueDot.h" />
+    <ClInclude Include="..\src\app\blooDot.h" />
     <ClInclude Include="..\src\io\MediaStreamer.h" />
     <ClInclude Include="..\src\io\PersistentState.h" />
     <ClInclude Include="..\src\physics\Physics.h" />
