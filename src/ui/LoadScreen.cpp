@@ -37,17 +37,7 @@ void LoadScreen::Initialize(
 
 void LoadScreen::CreateDeviceDependentResources()
 {
-	DX::ThrowIfFailed(
-		m_d2dContext->CreateSolidColorBrush(ColorF(ColorF::Goldenrod), &m_GoLBrush)
-	);
 
-	DX::ThrowIfFailed(
-		m_d2dContext->CreateSolidColorBrush(ColorF(ColorF::OrangeRed), &m_GoLBrushRaindrop)
-	);
-
-	DX::ThrowIfFailed(
-		m_d2dContext->CreateSolidColorBrush(ColorF(ColorF::White, 0.2F), &m_GoLBrushSprinkler)
-	);
 }
 
 void LoadScreen::ResetDirectXResources()
@@ -109,9 +99,7 @@ void LoadScreen::ReleaseDeviceDependentResources()
     m_d2dFactory.Reset();
     m_stateBlock.Reset();
     m_wicFactory.Reset();
-	m_GoLBrush.Reset();
-	m_GoLBrushRaindrop.Reset();
-	m_GoLBrushSprinkler.Reset();
+	m_Brushes.Reset();
 	m_moved.width = m_moved.height = 0;
 
 	delete m_GoL;
@@ -159,7 +147,7 @@ void LoadScreen::UpdateForWindowSizeChange()
 
 	/* the sprinkler */
 	m_Sprinkler = new GameOfLifeSprinkler();
-	m_Sprinkler->Create(7);
+	m_Sprinkler->Create(LoadScreen::GoLSprinklerRadius);
 
 	m_isResizing = false;
 }
@@ -329,12 +317,18 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 
 	int planeWidth = m_GoL->GetWidth();
 	int planeHeight = m_GoL->GetHeight();
+	MFARGB colorCell = { 127,250,19,0 };
+	MFARGB colorRaindrop = { 200,0,0,0 };
+	MFARGB colorSprinkler = { 10, 212,23,0 };
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushCell = m_Brushes.WannaHave(m_d2dContext, colorCell);
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushRaindrop = m_Brushes.WannaHave(m_d2dContext, colorRaindrop);
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushSprinkler = m_Brushes.WannaHave(m_d2dContext, colorSprinkler);
 	for (int i = 0; i < planeWidth; ++i) for (int j = 0; j < planeHeight; ++j)
 	{
 		GameOfLifeCell* cell = m_GoL->CellAt(i, j);
 		if (cell->IsAlive())
 		{
-			cell->DrawCell(m_d2dContext, i, j, LoadScreen::GoLCellSideLength, m_GoLBrush, m_GoLBrushRaindrop);
+			cell->DrawCell(m_d2dContext, i, j, LoadScreen::GoLCellSideLength, brushCell, brushRaindrop);
 		}
 	}
 
@@ -347,7 +341,7 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 	//	m_GoLBrushRaindrop.Get()
 	//);
 
-	m_Sprinkler->Render(m_d2dContext, pos.x, pos.y, LoadScreen::GoLCellSideLength, m_GoLBrushSprinkler);
+	m_Sprinkler->Render(m_d2dContext, pos.x, pos.y, LoadScreen::GoLCellSideLength, brushSprinkler);
 
 	//ComPtr<ID2D1Effect> scaleEffect;
 	//m_d2dContext->CreateEffect(CLSID_D2D1Scale, &scaleEffect);

@@ -275,6 +275,7 @@
     <ClCompile Include="..\src\ui\TextElement.cpp" />
     <ClCompile Include="..\src\ui\TextStyle.cpp" />
     <ClCompile Include="..\src\ui\CountdownTimer.cpp" />
+    <ClCompile Include="..\src\dx\BrushRegistry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\app\App.h" />
@@ -291,7 +292,7 @@
     <ClInclude Include="..\src\io\DDSTextureLoader.h" />
     <ClInclude Include="..\src\dx\DeviceResources.h" />
     <ClInclude Include="..\src\dx\DirectXHelper.h" />
-    <ClInclude Include="..\src\io\LoadScreen.h" />
+    <ClInclude Include="..\src\ui\LoadScreen.h" />
     <ClInclude Include="..\src\app\blooDot.h" />
     <ClInclude Include="..\src\io\MediaStreamer.h" />
     <ClInclude Include="..\src\io\PersistentState.h" />
@@ -308,6 +309,7 @@
     <ClInclude Include="..\src\ui\TextElement.h" />
     <ClInclude Include="..\src\ui\TextStyle.h" />
     <ClInclude Include="..\src\ui\CountdownTimer.h" />
+    <ClInclude Include="..\src\dx\BrushRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\src\BasicPixelShader.hlsl">

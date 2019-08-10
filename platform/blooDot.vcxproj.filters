@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <FxCompile Include="..\src\BasicPixelShader.hlsl" />
+    <FxCompile Include="..\src\BasicVertexShader.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\sound\Audio.cpp" />
+    <ClCompile Include="..\src\dx\BasicShapes.cpp" />
+    <ClCompile Include="..\src\dx\Camera.cpp" />
+    <ClCompile Include="..\src\physics\Collision.cpp" />
+    <ClCompile Include="..\src\app\blooDot.cpp" />
+    <ClCompile Include="..\src\io\MediaStreamer.cpp" />
+    <ClCompile Include="..\src\physics\Physics.cpp" />
+    <ClCompile Include="..\src\dx\Mesh.cpp" />
+    <ClCompile Include="..\src\algo\GameOfLifeSprinkler.cpp">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\algo\GameOfLifePlane.cpp">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\algo\GameOfLifeCell.cpp">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\app\App.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\io\BasicLoader.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\io\BasicReaderWriter.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\UserInterface.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\TextStyle.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\TextElement.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\TextButton.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\SampleOverlay.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\HighScoreTable.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\ElementBase.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\LoadScreen.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dx\DeviceResources.cpp">
+      <Filter>dx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\io\DDSTextureLoader.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\CountdownTimer.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\io\PersistentState.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\StopwatchTimer.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dx\BrushRegistry.cpp">
+      <Filter>dx</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\sound\Audio.h" />
+    <ClInclude Include="..\src\physics\BasicMath.h" />
+    <ClInclude Include="..\src\dx\BasicShapes.h" />
+    <ClInclude Include="..\src\dx\Camera.h" />
+    <ClInclude Include="..\src\physics\Collision.h" />
+    <ClInclude Include="..\src\app\blooDot.h" />
+    <ClInclude Include="..\src\io\MediaStreamer.h" />
+    <ClInclude Include="..\src\physics\Physics.h" />
+    <ClInclude Include="..\src\dx\Primitives.h" />
+    <ClInclude Include="..\src\dx\Mesh.h" />
+    <ClInclude Include="..\src\app\StepTimer.h" />
+    <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\algo\GameOfLifePlane.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\algo\GameOfLifeCell.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\app\App.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\io\BasicLoader.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\io\BasicReaderWriter.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\UserInterface.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\TextStyle.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\TextElement.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\TextButton.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\SampleOverlay.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\HighScoreTable.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\ElementBase.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\LoadScreen.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dx\DeviceResources.h">
+      <Filter>dx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dx\DirectXHelper.h">
+      <Filter>dx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\io\DDSTextureLoader.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\CountdownTimer.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\io\PersistentState.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\StopwatchTimer.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dx\BrushRegistry.h">
+      <Filter>dx</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Media\Audio\background.mp3" />
+    <Media Include="Media\Audio\Checkpoint.wav" />
+    <Media Include="Media\Audio\MarbleFall.wav" />
+    <Media Include="Media\Audio\MarbleHit.wav" />
+    <Media Include="Media\Audio\MarbleRoll.wav" />
+    <Media Include="Media\Audio\MenuChange.wav" />
+    <Media Include="Media\Audio\MenuSelect.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\src\mediumtile-sdk.png" />
+    <Image Include="..\src\smalltile-phone-sdk.png" />
+    <Image Include="..\src\smalltile-windows-sdk.png" />
+    <Image Include="..\src\splash-phone-sdk.png" />
+    <Image Include="..\src\splash-windows-sdk.png" />
+    <Image Include="..\src\squareTile-sdk.png" />
+    <Image Include="..\src\storeLogo-sdk.png" />
+    <Image Include="..\src\tile-sdk.png" />
+    <Image Include="..\src\windowstitle-sdk.png" />
+    <Image Include="Assets\LockScreenLogo.scale-200.png" />
+    <Image Include="Assets\SplashScreen.scale-200.png" />
+    <Image Include="Assets\Square150x150Logo.scale-200.png" />
+    <Image Include="Assets\Square44x44Logo.scale-200.png" />
+    <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Image Include="Assets\StoreLogo.png" />
+    <Image Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Image Include="Media\Textures\bridge.dds" />
+    <Image Include="Media\Textures\bridge_bump.dds" />
+    <Image Include="Media\Textures\cliff_sides.dds" />
+    <Image Include="Media\Textures\floor_section1.dds" />
+    <Image Include="Media\Textures\floor_section2.dds" />
+    <Image Include="Media\Textures\loadscreen.png" />
+    <Image Include="Media\Textures\Marble.dds" />
+    <Image Include="Media\Textures\topwall_color.dds" />
+    <Image Include="Media\Textures\walllevel1.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="blooDot_TemporaryKey.pfx" />
+    <None Include="Media\Audio\background.wma" />
+    <None Include="Media\Models\marble2.sdkmesh" />
+    <None Include="Media\Models\maze1.sdkmesh" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="algo">
+      <UniqueIdentifier>{386ce5bd-1151-40f4-8c08-91b9017fd78a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{78d8af4c-0a7d-4f18-892e-de9d1ef9cd32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io">
+      <UniqueIdentifier>{5044b399-3ffe-4d41-81a9-a093c1c497c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app">
+      <UniqueIdentifier>{871ee281-c96a-4e4c-82d8-0ea58baf2bfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dx">
+      <UniqueIdentifier>{a3e6f8e5-e6e3-4cd6-81ed-51b6c990a7fb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
