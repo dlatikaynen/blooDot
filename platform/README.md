@@ -1,2 +1,0 @@
-# blooDot
-Lukas Game Development
