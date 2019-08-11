@@ -95,7 +95,22 @@ void GameOfLifePlane::SetDefaultColors(MFARGB cellColor, MFARGB rainColor)
 	m_defaultColorRain = rainColor;
 }
 
+MFARGB GameOfLifePlane::GetColorCell()
+{
+	return m_defaultColorCell;
+}
+
+MFARGB GameOfLifePlane::GetColorRain()
+{
+	return m_defaultColorRain;
+}
+
 MFARGB GameOfLifePlane::GetColorSprinkler()
 {
 	return m_defaultColorSprinkler;
+}
+
+void GameOfLifePlane::CopyTo(GameOfLifePlane* destPlane)
+{
+	destPlane->SetDefaultColors(m_defaultColorCell, m_defaultColorRain);
 }

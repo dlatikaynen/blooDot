@@ -81,6 +81,13 @@
     <ClCompile Include="..\src\algo\GameOfLifeAnimation.cpp">
       <Filter>algo</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\algo\GameOfLifeStep.cpp">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\algo\GameOfLifeTransition.cpp">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\algo\GameOfLife.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\sound\Audio.h" />

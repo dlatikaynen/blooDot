@@ -47,8 +47,11 @@ public:
 	void SetRaindrop(int x, int y, bool isRaindrop);
 	void Wipe();
 	void ForAll(void(*action)(GameOfLifeCell*));
+	MFARGB GetColorCell();
+	MFARGB GetColorRain();
 	MFARGB GetColorSprinkler();
 	void SetDefaultColors(MFARGB cellColor, MFARGB rainColor);
+	void CopyTo(GameOfLifePlane* destPlane);
 
 private:
 	int m_Width;
@@ -59,48 +62,77 @@ private:
 	MFARGB m_defaultColorSprinkler = { 192, 192, 192, 96 };
 };
 
-class GameOfLifeTransition 
+enum Transition
+{
+	ComeToLife = 1,
+	DeceaseStarved = 2,
+	DeceaseOvercrowded = 3,
+	RainedDown = 4,
+	ManuallySpawned = 5,
+	ManuallyRemoved = 6
+};
+
+enum TransitionEffective
+{
+	GoNotAlive = 0,
+	GoAlive = 1
+};
+
+typedef struct
+{
+	POINT Point;
+	MFARGB Color;
+} TransitionAtom;
+
+typedef std::vector<TransitionAtom> GameOfLifeTransitionAtoms;
+
+class GameOfLifeTransition
 {
 public:
 	GameOfLifeTransition::GameOfLifeTransition();
 
-	typedef std::vector<GameOfLifeTransition> GameOfLifeTransitions;
-
-	uint32 FromBytes(byte* inBytes, _Out_ GameOfLifeTransition* transition);
+	static int FromBytes(byte* inBytes, unsigned long long offset, _Out_ GameOfLifeTransition* transition);
+	void AddAtom(int x, int y, MFARGB color);
+	GameOfLifeTransitionAtoms GetAtoms();
 	byte* ToBytes();
 
-	enum Transition
-	{
-		ComeToLife = 1,
-		DeceaseStarved = 2,
-		DeceaseOvercrowded = 3,
-		ManuallySpawned = 4,
-		ManuallyRemoved = 5
-	};
+private:
+	GameOfLifeTransitionAtoms m_Coordinates;
+};
 
-	enum TransitionEffective
-	{
-		GoNotAlive = 0,
-		GoAlive = 1
-	};
+typedef std::unordered_map<Transition, GameOfLifeTransition> GameOfLifeTransitions;
+
+class GameOfLifeStep
+{
+public:
+	GameOfLifeStep::GameOfLifeStep();
+	static int FromBytes(byte* srcData, unsigned long long offset, _Out_ GameOfLifeStep* decodedStep, _Out_ int* numberOfTransitionsInStep);
+	void AddTransition(Transition transition, int x, int y, MFARGB color);
+	void SetTransition(Transition transition, GameOfLifeTransition transitionToAdd);
+	GameOfLifeTransitions GetTransitions();
+	void ApplyStepTo(GameOfLifePlane* targetPlane);
+	void ToFile(Microsoft::WRL::Wrappers::FileHandle* fileHandle);
 
 private:
-	Transition m_Transition;
-	bool m_cameAliveAsRaindrop;
-	MFARGB m_cameAliveInColor;
-	int m_planeX;
-	int m_planeY;
+	GameOfLifeTransitions m_Transitions;
 };
+
+typedef std::vector<GameOfLifeStep> GameOfLifeSteps;
 
 class GameOfLifeAnimation
 {
 public:
 	GameOfLifeAnimation::GameOfLifeAnimation();
+	GameOfLifeAnimation::~GameOfLifeAnimation();
 	void Reset(int matrixWidth, int matrixHeight);
-	void LoadFromFile(Platform::String^ fileName);
+	void LoadRecording(Platform::String^ fileName);
+	void SetInitialMatrix(GameOfLifePlane* fromMatrix);
 	GameOfLifePlane* GetCurrentMatrix();
+	void StartRecording();
+	void CancelRecording();
 	void SinlgeStep();
-	void SaveToFile(Platform::String^ fileName);
+	void EndRecording();
+	void SaveRecording(Platform::String^ fileName);
 
 	enum PlaybackDirection
 	{
@@ -115,7 +147,13 @@ private:
 	BasicReaderWriter^ m_basicReaderWriter;
 	GameOfLifePlane* m_initialMatrix;
 	GameOfLifePlane* m_currentMatrix;
-	GameOfLifeTransition::GameOfLifeTransitions m_Transitions;
+	GameOfLifePlane* m_recordingStartSnapshot;
+	GameOfLifeSteps m_Steps;
 	PlaybackDirection m_playbackDirection;
-	int currentTransition;
+	bool m_IsRecording;
+	int m_currentStepIndex;
+	int m_startedRecordingAtStepIndex;
+	int m_endedRecordingAtStepIndex;
+	bool StepIsPlaybackFromRecording();
+	GameOfLifeTransitions ComputeFromCurrent();
 };

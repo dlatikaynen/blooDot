@@ -115,7 +115,7 @@ uint32 BasicReaderWriter::WriteData(
     extendedParams.dwSecurityQosFlags = SECURITY_ANONYMOUS;
     extendedParams.lpSecurityAttributes = nullptr;
     extendedParams.hTemplateFile = nullptr;
-
+	
     Wrappers::FileHandle file(
         CreateFile2(
             filename->Data(),
