@@ -8,7 +8,6 @@
     <ClCompile Include="..\src\sound\Audio.cpp" />
     <ClCompile Include="..\src\dx\BasicShapes.cpp" />
     <ClCompile Include="..\src\dx\Camera.cpp" />
-    <ClCompile Include="..\src\physics\Collision.cpp" />
     <ClCompile Include="..\src\app\blooDot.cpp" />
     <ClCompile Include="..\src\io\MediaStreamer.cpp" />
     <ClCompile Include="..\src\physics\Physics.cpp" />
@@ -73,13 +72,18 @@
     <ClCompile Include="..\src\dx\BrushRegistry.cpp">
       <Filter>dx</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\physics\Collision.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\algo\BitmapPixelator.cpp">
+      <Filter>algo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\sound\Audio.h" />
     <ClInclude Include="..\src\physics\BasicMath.h" />
     <ClInclude Include="..\src\dx\BasicShapes.h" />
     <ClInclude Include="..\src\dx\Camera.h" />
-    <ClInclude Include="..\src\physics\Collision.h" />
     <ClInclude Include="..\src\app\blooDot.h" />
     <ClInclude Include="..\src\io\MediaStreamer.h" />
     <ClInclude Include="..\src\physics\Physics.h" />
@@ -87,12 +91,6 @@
     <ClInclude Include="..\src\dx\Mesh.h" />
     <ClInclude Include="..\src\app\StepTimer.h" />
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
-      <Filter>algo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\algo\GameOfLifePlane.h">
-      <Filter>algo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\algo\GameOfLifeCell.h">
       <Filter>algo</Filter>
     </ClInclude>
     <ClInclude Include="..\src\app\App.h">
@@ -148,6 +146,15 @@
     </ClInclude>
     <ClInclude Include="..\src\dx\BrushRegistry.h">
       <Filter>dx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\physics\Collision.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\algo\BitmapPixelator.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\algo\GameOfLife.h">
+      <Filter>algo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +217,9 @@
     </Filter>
     <Filter Include="dx">
       <UniqueIdentifier>{a3e6f8e5-e6e3-4cd6-81ed-51b6c990a7fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="physics">
+      <UniqueIdentifier>{80d370da-3609-4d8b-8635-a95217136445}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

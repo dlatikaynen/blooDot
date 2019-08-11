@@ -276,11 +276,11 @@
     <ClCompile Include="..\src\ui\TextStyle.cpp" />
     <ClCompile Include="..\src\ui\CountdownTimer.cpp" />
     <ClCompile Include="..\src\dx\BrushRegistry.cpp" />
+    <ClCompile Include="..\src\algo\BitmapPixelator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\app\App.h" />
-    <ClInclude Include="..\src\algo\GameOfLifeCell.h" />
-    <ClInclude Include="..\src\algo\GameOfLifePlane.h" />
+    <ClInclude Include="..\src\algo\GameOfLife.h" />
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h" />
     <ClInclude Include="..\src\sound\Audio.h" />
     <ClInclude Include="..\src\io\BasicLoader.h" />
@@ -310,6 +310,7 @@
     <ClInclude Include="..\src\ui\TextStyle.h" />
     <ClInclude Include="..\src\ui\CountdownTimer.h" />
     <ClInclude Include="..\src\dx\BrushRegistry.h" />
+    <ClInclude Include="..\src\algo\BitmapPixelator.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\src\BasicPixelShader.hlsl">

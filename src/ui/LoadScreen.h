@@ -3,8 +3,7 @@
 #include "..\dx\DirectXHelper.h"
 #include "..\dx\DeviceResources.h"
 #include "..\dx\BrushRegistry.h"
-#include "..\algo\GameOfLifeCell.h"
-#include "..\algo\GameOfLifePlane.h"
+#include "..\algo\GameOfLife.h"
 #include "..\algo\GameOfLifeSprinkler.h"
 
 class LoadScreen

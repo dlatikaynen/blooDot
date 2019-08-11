@@ -1,6 +1,6 @@
 #include "..\PreCompiledHeaders.h"
 #include <DirectXColors.h> // For named colors
-#include "GameOfLifeCell.h"
+#include "GameOfLife.h"
 
 using namespace Windows::UI::Core;
 using namespace Windows::Foundation;
@@ -16,25 +16,10 @@ GameOfLifeCell::GameOfLifeCell() :
 	m_isPromotedRaindrop(false),
 	m_birthCountdown(0),
 	m_demiseCountdown(0),
-	m_isAlive(true)
+	m_isAlive(true),
+	m_slightlyOffX(0),
+	m_slightlyOffY(0)
 {
-	m_slightlyOffX = 0;
-	m_slightlyOffY = 0;
-}
-
-GameOfLifeCell::GameOfLifeCell(const bool rainedDown) :
-	m_isRaindrop(rainedDown),
-	m_isPromotedRaindrop(false),
-	m_birthCountdown(0),
-	m_demiseCountdown(0),
-	m_isAlive(true)
-{
-	m_slightlyOffX = 0;
-	m_slightlyOffY = 0;
-	if (rainedDown) 
-	{
-		MakeRaindrop(true);
-	}
 }
 
 bool GameOfLifeCell::IsAlive()
@@ -54,9 +39,21 @@ bool GameOfLifeCell::IsPromotedRaindrop()
 
 void GameOfLifeCell::SetAlive(bool isAlive)
 {
+	SetAlive(isAlive, MFARGB{ 255,255,255,255 });
+}
+
+void GameOfLifeCell::SetAlive(bool isAlive, MFARGB color)
+{
 	m_demiseCountdown = isAlive ? 0 : GAMEOFLIFECELL_TRANSITION_FRAMES;
 	m_birthCountdown = isAlive ? GAMEOFLIFECELL_TRANSITION_FRAMES : 0;
+	m_Color = color;
 	m_isAlive = isAlive;
+
+}
+
+void GameOfLifeCell::SetColor(MFARGB color)
+{
+	m_Color = color;
 }
 
 void GameOfLifeCell::SetRaindrop(bool isRaindrop)
@@ -74,7 +71,7 @@ void GameOfLifeCell::MakeRaindrop(bool isRaindrop)
 	m_isRaindrop = isRaindrop;
 }
 
-void GameOfLifeCell::DrawCell(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int x, int y, int cellSideLength, Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushCell, Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushRaindrop)
+void GameOfLifeCell::DrawCell(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int x, int y, int cellSideLength, BrushRegistry* brushRegistry)
 {
 	D2D1_RECT_F rect;
 	int cellStride = cellSideLength + 1;
@@ -87,10 +84,16 @@ void GameOfLifeCell::DrawCell(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, i
 	rrect.radiusX = 2;
 	rrect.radiusY = 2;
 
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = this->IsRaindrop() ? brushRaindrop : brushCell;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = brushRegistry->WannaHave(dxDC, m_Color);
 
 	dxDC->FillRoundedRectangle(
 		&rrect,
 		brush.Get()
 	);
+}
+
+void GameOfLifeCell::Wipe(GameOfLifeCell* cell)
+{
+	cell->SetAlive(false);
+	cell->SetRaindrop(false);
 }

@@ -4,7 +4,8 @@
 #include <DirectXColors.h> // For named colors
 #include "..\dx\DeviceResources.h"
 #include "..\dx\DirectXHelper.h" // For ThrowIfFailed
-#include "GameOfLifePlane.h"
+#include "..\dx\BrushRegistry.h" 
+#include "GameOfLife.h"
 
 using namespace Windows::Gaming::Input;
 using namespace Platform::Collections;
@@ -18,7 +19,7 @@ public:
 	GameOfLifeSprinkler::~GameOfLifeSprinkler();
 
 	void Create(int radius);
-	void Render(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int midPointX, int midPointY, int cellSideLength, Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush);
+	void Render(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int midPointX, int midPointY, int cellSideLength, BrushRegistry* brushRegistry);
 
 protected:
 	bool PointInCircle(D2D1_POINT_2L point);

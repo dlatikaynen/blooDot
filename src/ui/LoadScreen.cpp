@@ -138,7 +138,7 @@ void LoadScreen::UpdateForWindowSizeChange()
 		for (int j = 0; j < m_GoL->GetHeight(); ++j)
 		{
 			isAlive = !((rand() % (rand() % 4 + 1)) == 0);
-			m_GoL->CellAt(i, j)->SetAlive(isAlive);
+			m_GoL->SetAlive(i, j, isAlive);
 		}
 	}
 
@@ -176,23 +176,26 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 			if (NAl == 2 || NAl == 3)
 			{
 				/* survives */
-				m_GoL2->CellAt(i, j)->SetAlive(true);
+				m_GoL2->SetAlive(i, j);
 			}
 			else if (NAl < 2)
 			{
 				/* starvation */
-				m_GoL2->CellAt(i, j)->SetAlive(false);
+				m_GoL2->SetAlive(i, j, false);
 			}
 			else if (NAl > 3)
 			{
 				/* overcrowded */
-				m_GoL2->CellAt(i, j)->SetAlive(false);
+				m_GoL2->SetAlive(i, j, false);
 			}
 		}
 		else
 		{
-			/* birth */
-			m_GoL2->CellAt(i, j)->SetAlive(NAl == 3);
+			/* birth out of thin air */
+			if (NAl == 3)
+			{
+				m_GoL2->SetAlive(i, j);
+			}
 		}
 	}
 
@@ -214,8 +217,8 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 	{
 		for (int y = 0; y < m_GoL2->GetHeight(); ++y)
 		{
-			m_GoL->CellAt(x, y)->SetAlive(m_GoL2->CellAt(x, y)->IsAlive());
-			m_GoL->CellAt(x, y)->SetRaindrop(m_GoL2->CellAt(x, y)->IsRaindrop());
+			m_GoL->SetAlive(x, y, m_GoL2->CellAt(x, y)->IsAlive());
+			m_GoL->SetRaindrop(x, y, m_GoL2->CellAt(x, y)->IsRaindrop());
 		}
 	}
 }
@@ -317,18 +320,12 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 
 	int planeWidth = m_GoL->GetWidth();
 	int planeHeight = m_GoL->GetHeight();
-	MFARGB colorCell = { 127,250,19,255 };
-	MFARGB colorRaindrop = { 200,0,0,255 };
-	MFARGB colorSprinkler = { 192, 192, 192, 96 };
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushCell = m_Brushes.WannaHave(m_d2dContext, colorCell);
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushRaindrop = m_Brushes.WannaHave(m_d2dContext, colorRaindrop);
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brushSprinkler = m_Brushes.WannaHave(m_d2dContext, colorSprinkler);
 	for (int i = 0; i < planeWidth; ++i) for (int j = 0; j < planeHeight; ++j)
 	{
 		GameOfLifeCell* cell = m_GoL->CellAt(i, j);
 		if (cell->IsAlive())
 		{
-			cell->DrawCell(m_d2dContext, i, j, LoadScreen::GoLCellSideLength, brushCell, brushRaindrop);
+			cell->DrawCell(m_d2dContext, i, j, LoadScreen::GoLCellSideLength, &m_Brushes);
 		}
 	}
 
@@ -341,7 +338,7 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 	//	m_GoLBrushRaindrop.Get()
 	//);
 
-	m_Sprinkler->Render(m_d2dContext, pos.x, pos.y, LoadScreen::GoLCellSideLength, brushSprinkler);
+	m_Sprinkler->Render(m_d2dContext, pos.x, pos.y, LoadScreen::GoLCellSideLength, &m_Brushes);
 
 	//ComPtr<ID2D1Effect> scaleEffect;
 	//m_d2dContext->CreateEffect(CLSID_D2D1Scale, &scaleEffect);

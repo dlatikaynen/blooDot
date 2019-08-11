@@ -1,6 +1,6 @@
 #include "..\PreCompiledHeaders.h"
 #include <DirectXColors.h> // For named colors
-#include "GameOfLifePlane.h"
+#include "GameOfLife.h"
 
 using namespace Windows::UI::Core;
 using namespace Windows::Foundation;
@@ -40,4 +40,56 @@ int GameOfLifePlane::GetHeight()
 GameOfLifeCell* GameOfLifePlane::CellAt(int x, int y)
 {
 	return &m_Matrix[y*GetWidth() + x];
+}
+
+void GameOfLifePlane::SetAlive(int x, int y)
+{
+	SetAlive(x, y, true);
+}
+
+void GameOfLifePlane::SetAlive(int x, int y, bool isAlive)
+{
+	GameOfLifeCell* cell = CellAt(x, y);
+	if (isAlive) 
+	{
+		cell->SetAlive(true, m_defaultColorCell);
+	}
+	else
+	{
+		cell->SetAlive(false);
+	}
+}
+
+void GameOfLifePlane::SetRaindrop(int x, int y, bool isRaindrop)
+{
+	GameOfLifeCell* cell = CellAt(x, y);
+	if (isRaindrop)
+	{
+		cell->SetColor(m_defaultColorRain);
+	}
+
+	cell->SetRaindrop(isRaindrop);
+}
+
+void GameOfLifePlane::Wipe() 
+{
+	ForAll(GameOfLifeCell::Wipe);
+}
+
+void GameOfLifePlane::ForAll(void(*action)(GameOfLifeCell *))
+{
+	int width = GetWidth();
+	int height = GetHeight();
+	for (int x = 0; x < width; ++x)
+	{
+		for (int y = 0; y < height; ++y)
+		{
+			action(CellAt(x, y));
+		}
+	}
+}
+
+MFARGB GameOfLifePlane::GetColorSprinkler()
+{
+	return m_defaultColorSprinkler;
 }

@@ -1,4 +1,5 @@
 #include "..\PreCompiledHeaders.h"
+#include "..\dx\BrushRegistry.h"
 #include <DirectXColors.h> // For named colors
 #include "GameOfLifeSprinkler.h"
 
@@ -42,11 +43,13 @@ void GameOfLifeSprinkler::Create(int radius)
 	D2D1_POINT_2L midPoint = D2D1::Point2<int>(m_sideLength / 2 + 1, m_sideLength / 2 + 1);
 	D2D1_POINT_2L point;
 	m_radiusSquared = m_Radius * m_Radius;
-	m_Square = new GameOfLifePlane(m_sideLength, m_sideLength);
+	m_Square = new GameOfLifePlane(m_sideLength, m_sideLength);	
 	for (int x = 0; x < m_sideLength; ++x)
 	{
 		for (int y = 0; y < m_sideLength; ++y)
 		{
+			GameOfLifeCell* cell = m_Square->CellAt(x, y);
+			cell->SetColor(m_Square->GetColorSprinkler());
 			point.x = x - m_Radius;
 			point.y = y - m_Radius;
 			if (PointInCircle(point) == false)
@@ -57,7 +60,7 @@ void GameOfLifeSprinkler::Create(int radius)
 	}
 }
 
-void GameOfLifeSprinkler::Render(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int midPointX, int midPointY, int cellSideLength, Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush)
+void GameOfLifeSprinkler::Render(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int midPointX, int midPointY, int cellSideLength, BrushRegistry* brushRegistry)
 {
 	int cellStride = cellSideLength + 1;
 
@@ -73,8 +76,7 @@ void GameOfLifeSprinkler::Render(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC
 					(midPointX / cellStride) + x - m_Radius,
 					(midPointY / cellStride) + y - m_Radius,
 					cellSideLength,
-					brush,
-					brush
+					brushRegistry
 				);
 			}
 		}
