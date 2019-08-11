@@ -78,6 +78,9 @@
     <ClCompile Include="..\src\algo\BitmapPixelator.cpp">
       <Filter>algo</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\algo\GameOfLifeAnimation.cpp">
+      <Filter>algo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\sound\Audio.h" />

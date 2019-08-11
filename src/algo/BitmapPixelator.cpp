@@ -15,6 +15,7 @@ BitmapPixelator::BitmapPixelator()
 
 BitmapPixelator::~BitmapPixelator()
 {
+	delete m_Plane;
 }
 
 void BitmapPixelator::Load(std::string fileName)

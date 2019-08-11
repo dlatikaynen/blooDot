@@ -12,6 +12,7 @@ using namespace D2D1;
 
 GameOfLifeSprinkler::GameOfLifeSprinkler()
 {
+	m_Square = NULL;
 }
 
 GameOfLifeSprinkler::~GameOfLifeSprinkler()

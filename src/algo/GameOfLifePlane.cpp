@@ -89,6 +89,12 @@ void GameOfLifePlane::ForAll(void(*action)(GameOfLifeCell *))
 	}
 }
 
+void GameOfLifePlane::SetDefaultColors(MFARGB cellColor, MFARGB rainColor)
+{
+	m_defaultColorCell = cellColor;
+	m_defaultColorRain = rainColor;
+}
+
 MFARGB GameOfLifePlane::GetColorSprinkler()
 {
 	return m_defaultColorSprinkler;
