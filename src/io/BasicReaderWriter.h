@@ -23,12 +23,7 @@ internal:
         _In_ Platform::String^ filename
     );
 
-	/*template <typename T>
-    uint32 WriteData(
-        _In_ Microsoft::WRL::Wrappers::FileHandle* fileHandle,
-        _In_ const T fileData
-    );
-*/
+	/* implementatio here, lacking a better idea https://stackoverflow.com/q/21468737/1132334 */
 	template<typename T>
 	uint32 WriteData(Microsoft::WRL::Wrappers::FileHandle* fileHandle, const T fileData)
 	{
