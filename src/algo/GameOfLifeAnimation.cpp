@@ -158,8 +158,9 @@ void GameOfLifeAnimation::SinlgeStep()
 	}
 	else
 	{
-		//GameOfLifeTransitions transItems = ComputeFromCurrent();
-		
+		GameOfLifeStep step = ComputeFromCurrent();
+		step.ApplyStepTo(m_currentMatrix);
+		m_Steps.push_back(step);
 	}
 
 	stepItem.ApplyStepTo(m_currentMatrix);
@@ -177,17 +178,12 @@ bool GameOfLifeAnimation::StepIsPlaybackFromRecording()
 	return m_currentStepIndex >= m_startedRecordingAtStepIndex && m_currentStepIndex <= m_endedRecordingAtStepIndex;
 }
 
-GameOfLifeTransitions GameOfLifeAnimation::ComputeFromCurrent()
+GameOfLifeStep GameOfLifeAnimation::ComputeFromCurrent()
 {
-	return GameOfLifeTransitions();
-}
+	GameOfLifeStep step;
+	
+	//transitions[Transition::ComeToLife].AddAtom(1, 1, m_currentMatrix->GetColorCell());
 
-//GameOfLifeTransitions GameOfLifeAnimation::ComputeFromCurrent()
-//{
-//	GameOfLifeTransitions transitions;
-//
-//	transitions[Transition::ComeToLife].AddAtom(1, 1, m_currentMatrix->GetColorCell());
-//
-//	return transitions;
-//}
+	return step;
+}
 

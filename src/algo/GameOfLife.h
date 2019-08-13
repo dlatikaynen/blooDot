@@ -155,5 +155,5 @@ private:
 	int m_startedRecordingAtStepIndex;
 	int m_endedRecordingAtStepIndex;
 	bool StepIsPlaybackFromRecording();
-	GameOfLifeTransitions ComputeFromCurrent();
+	GameOfLifeStep ComputeFromCurrent();
 };

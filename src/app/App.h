@@ -6,7 +6,7 @@
 
 namespace blueDot
 {
-    // Main entry point for our app. Connects the app with the Windows shell and handles application lifecycle events.
+    // On their planet, they eat the reproductive capsules of their voatiles for breakfast.
     ref class App sealed : public Windows::ApplicationModel::Core::IFrameworkView
     {
     public:
