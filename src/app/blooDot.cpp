@@ -9,6 +9,8 @@ using namespace Platform::Collections;
 using namespace Windows::Foundation;
 using namespace Windows::System::Diagnostics;
 
+const byte blueDotMain::BLUEDOTFILE_SIGNATURE[8] { 0x03, 'L','S','L', 0x04, 'J','M','L' };
+
 inline D2D1_RECT_F ConvertRect(Windows::Foundation::Size source)
 {
     // ignore the source.X and source.Y  These are the location on the screen

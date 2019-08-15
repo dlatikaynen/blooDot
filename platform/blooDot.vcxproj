@@ -248,7 +248,6 @@
     <Image Include="Media\Textures\walllevel1.dds" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\algo\GameOfLife.cpp" />
     <ClCompile Include="..\src\app\App.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeCell.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifePlane.cpp" />

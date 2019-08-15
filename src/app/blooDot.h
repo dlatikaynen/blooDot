@@ -56,6 +56,8 @@ namespace blueDot
 		blueDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResources);
         ~blueDotMain();
 
+		static const byte BLUEDOTFILE_SIGNATURE[8];
+
         // IDeviceNotify
         virtual void OnDeviceLost();
         virtual void OnDeviceRestored();

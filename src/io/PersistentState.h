@@ -8,7 +8,7 @@ internal:
     void Initialize(
         _In_ Windows::Foundation::Collections::IPropertySet^ settingsValues,
         _In_ Platform::String^ key
-        );
+    );
 
     void SaveBool(Platform::String^ key, bool value);
     void SaveInt32(Platform::String^ key, int value);

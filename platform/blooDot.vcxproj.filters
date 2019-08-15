@@ -6,12 +6,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\sound\Audio.cpp" />
-    <ClCompile Include="..\src\dx\BasicShapes.cpp" />
-    <ClCompile Include="..\src\dx\Camera.cpp" />
-    <ClCompile Include="..\src\app\blooDot.cpp" />
-    <ClCompile Include="..\src\io\MediaStreamer.cpp" />
-    <ClCompile Include="..\src\physics\Physics.cpp" />
-    <ClCompile Include="..\src\dx\Mesh.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeSprinkler.cpp">
       <Filter>algo</Filter>
     </ClCompile>
@@ -87,19 +81,29 @@
     <ClCompile Include="..\src\algo\GameOfLifeTransition.cpp">
       <Filter>algo</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\algo\GameOfLife.cpp" />
+    <ClCompile Include="..\src\dx\BasicShapes.cpp">
+      <Filter>dx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dx\Mesh.cpp">
+      <Filter>dx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\io\MediaStreamer.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\physics\Physics.cpp">
+      <Filter>physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dx\Camera.cpp">
+      <Filter>dx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\app\blooDot.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\sound\Audio.h" />
     <ClInclude Include="..\src\physics\BasicMath.h" />
-    <ClInclude Include="..\src\dx\BasicShapes.h" />
-    <ClInclude Include="..\src\dx\Camera.h" />
-    <ClInclude Include="..\src\app\blooDot.h" />
-    <ClInclude Include="..\src\io\MediaStreamer.h" />
-    <ClInclude Include="..\src\physics\Physics.h" />
     <ClInclude Include="..\src\dx\Primitives.h" />
-    <ClInclude Include="..\src\dx\Mesh.h" />
-    <ClInclude Include="..\src\app\StepTimer.h" />
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
       <Filter>algo</Filter>
     </ClInclude>
@@ -165,6 +169,27 @@
     </ClInclude>
     <ClInclude Include="..\src\algo\GameOfLife.h">
       <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dx\BasicShapes.h">
+      <Filter>dx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dx\Mesh.h">
+      <Filter>dx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\io\MediaStreamer.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\physics\Physics.h">
+      <Filter>physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\app\StepTimer.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dx\Camera.h">
+      <Filter>dx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\app\blooDot.h">
+      <Filter>app</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

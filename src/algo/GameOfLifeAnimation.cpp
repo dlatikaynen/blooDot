@@ -1,7 +1,9 @@
 #include "..\PreCompiledHeaders.h"
 #include <DirectXColors.h> // For named colors
+#include "..\app\blooDot.h"
 #include "GameOfLife.h"
 #include <memory>
+#include <fstream>
 
 using namespace Windows::Storage;
 using namespace Windows::Storage::Streams;
@@ -168,7 +170,11 @@ void GameOfLifeAnimation::SinlgeStep()
 
 void GameOfLifeAnimation::SaveRecording(Platform::String^ fileName)
 {
+	std::ofstream oF(fileName->Data());
+	oF << blueDot::blueDotMain::BLUEDOTFILE_SIGNATURE;
 
+	oF.flush();
+	oF.close();	
 }
 
 // private

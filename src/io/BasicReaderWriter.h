@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ppltasks.h>
+#include <minwindef.h>
 
 // A simple reader/writer class that provides support for reading and writing
 // files on disk. Provides synchronous and asynchronous methods.
