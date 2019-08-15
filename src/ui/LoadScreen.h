@@ -50,18 +50,4 @@ private:
 	GameOfLifePlane*								m_GoL;
 	GameOfLifePlane*								m_GoL2;
 	GameOfLifeSprinkler*							m_Sprinkler;
-
-	bool LoadScreen::NeighborN(int i, int j);
-	bool LoadScreen::NeighborS(int i, int j);
-	bool LoadScreen::NeighborE(int i, int j);
-	bool LoadScreen::NeighborNE(int i, int j);
-	bool LoadScreen::NeighborSE(int i, int j);
-	bool LoadScreen::NeighborW(int i, int j);
-	bool LoadScreen::NeighborNW(int i, int j);
-	bool LoadScreen::NeighborSW(int i, int j);
-	int LoadScreen::NeighborsAlive(int i, int j);
-	int LoadScreen::IndexLeft(int i);
-	int LoadScreen::IndexRight(int i);
-	int LoadScreen::IndexUp(int j);
-	int LoadScreen::IndexDown(int j);
 };

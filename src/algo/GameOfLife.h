@@ -42,6 +42,7 @@ public:
 	int GetWidth();
 	int GetHeight();
 	GameOfLifeCell* CellAt(int x, int y);
+	int NeighborsAlive(int i, int j);
 	void SetAlive(int x, int y);
 	void SetAlive(int x, int y, bool isAlive);
 	void SetRaindrop(int x, int y, bool isRaindrop);
@@ -60,6 +61,20 @@ private:
 	MFARGB m_defaultColorCell = { 127,250,19,255 };
 	MFARGB m_defaultColorRain = { 200,0,0,255 };
 	MFARGB m_defaultColorSprinkler = { 192, 192, 192, 96 };
+
+	int IndexLeft(int i);
+	int IndexRight(int i);
+	int IndexUp(int j);
+	int IndexDown(int j);
+
+	bool NeighborN(int i, int j);
+	bool NeighborS(int i, int j);
+	bool NeighborE(int i, int j);
+	bool NeighborNE(int i, int j);
+	bool NeighborSE(int i, int j);
+	bool NeighborW(int i, int j);
+	bool NeighborNW(int i, int j);
+	bool NeighborSW(int i, int j);
 };
 
 enum Transition

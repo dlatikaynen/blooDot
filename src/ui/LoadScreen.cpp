@@ -170,7 +170,7 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 	for (int i = 0; i < m_GoL->GetWidth(); ++i) for (int j = 0; j < m_GoL->GetHeight(); ++j)
 	{
 		bool curState = m_GoL->CellAt(i, j)->IsAlive();
-		int NAl = NeighborsAlive(i, j);
+		int NAl = m_GoL->NeighborsAlive(i, j);
 		if (curState)
 		{
 			if (NAl == 2 || NAl == 3)
@@ -221,84 +221,6 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 			m_GoL->SetRaindrop(x, y, m_GoL2->CellAt(x, y)->IsRaindrop());
 		}
 	}
-}
-
-bool LoadScreen::NeighborN(int i, int j)
-{
-	return m_GoL->CellAt(i, IndexUp(j))->IsAlive();
-}
-
-bool LoadScreen::NeighborS(int i, int j)
-{
-	return m_GoL->CellAt(i, IndexDown(j))->IsAlive();
-}
-
-bool LoadScreen::NeighborE(int i, int j)
-{
-	return m_GoL->CellAt(IndexRight(i), j)->IsAlive();
-}
-
-bool LoadScreen::NeighborNE(int i, int j)
-{
-	return m_GoL->CellAt(IndexRight(i), IndexUp(j))->IsAlive();
-}
-
-bool LoadScreen::NeighborSE(int i, int j)
-{
-	return m_GoL->CellAt(IndexRight(i), IndexDown(j))->IsAlive();
-}
-
-bool LoadScreen::NeighborW(int i, int j)
-{
-	return m_GoL->CellAt(IndexLeft(i), j)->IsAlive();
-}
-
-bool LoadScreen::NeighborSW(int i, int j)
-{
-	return m_GoL->CellAt(IndexLeft(i), IndexDown(j))->IsAlive();
-}
-
-bool LoadScreen::NeighborNW(int i, int j)
-{
-	return m_GoL->CellAt(IndexLeft(i), IndexUp(j))->IsAlive();
-}
-
-int LoadScreen::NeighborsAlive(int i, int j) 
-{
-	int na = 0
-		+ (NeighborN(i, j) ? 1 : 0)
-		+ (NeighborNE(i, j) ? 1 : 0)
-		+ (NeighborE(i, j) ? 1 : 0)
-		+ (NeighborSE(i, j) ? 1 : 0)
-		+ (NeighborS(i, j) ? 1 : 0)
-		+ (NeighborSW(i, j) ? 1 : 0)
-		+ (NeighborW(i, j) ? 1 : 0)
-		+ (NeighborNW(i, j) ? 1 : 0);
-	return na;
-}
-
-int LoadScreen::IndexLeft(int i) 
-{
-	if (i == 0) return m_GoL->GetWidth() - 1;
-	return i - 1;
-}
-
-int LoadScreen::IndexRight(int i)
-{
-	if (i == m_GoL->GetWidth() - 1) return 0;
-	return i + 1;
-}
-
-int LoadScreen::IndexUp(int j) 
-{
-	if (j == 0) return m_GoL->GetHeight() - 1;
-	return j - 1;
-}
-
-int LoadScreen::IndexDown(int j)
-{
-	if (j == m_GoL->GetHeight() - 1) return 0;
-	return j + 1;
 }
 
 void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)

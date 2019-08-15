@@ -114,3 +114,106 @@ void GameOfLifePlane::CopyTo(GameOfLifePlane* destPlane)
 {
 	destPlane->SetDefaultColors(m_defaultColorCell, m_defaultColorRain);
 }
+
+bool GameOfLifePlane::NeighborN(int i, int j)
+{
+	return CellAt(i, IndexUp(j))->IsAlive();
+}
+
+bool GameOfLifePlane::NeighborS(int i, int j)
+{
+	return CellAt(i, IndexDown(j))->IsAlive();
+}
+
+bool GameOfLifePlane::NeighborE(int i, int j)
+{
+	return CellAt(IndexRight(i), j)->IsAlive();
+}
+
+bool GameOfLifePlane::NeighborNE(int i, int j)
+{
+	return CellAt(IndexRight(i), IndexUp(j))->IsAlive();
+}
+
+bool GameOfLifePlane::NeighborSE(int i, int j)
+{
+	return CellAt(IndexRight(i), IndexDown(j))->IsAlive();
+}
+
+bool GameOfLifePlane::NeighborW(int i, int j)
+{
+	return CellAt(IndexLeft(i), j)->IsAlive();
+}
+
+bool GameOfLifePlane::NeighborSW(int i, int j)
+{
+	return CellAt(IndexLeft(i), IndexDown(j))->IsAlive();
+}
+
+bool GameOfLifePlane::NeighborNW(int i, int j)
+{
+	return CellAt(IndexLeft(i), IndexUp(j))->IsAlive();
+}
+
+int GameOfLifePlane::NeighborsAlive(int i, int j)
+{
+	int na = 0;
+	if (NeighborN(i, j)) ++na;
+	if (NeighborE(i, j)) ++na;
+	if (NeighborS(i, j)) ++na;
+	if (NeighborW(i, j)) ++na;
+	if (na == 4) 
+	{
+		/* optimization: overcrowding inevitable */
+		return na;
+	}
+
+	if (NeighborNE(i, j)) ++na;
+	if (na == 4)
+	{
+		/* optimization: overcrowding inevitable */
+		return na;
+	}
+
+	if (NeighborNW(i, j)) ++na;
+	if (na == 4)
+	{
+		/* optimization: overcrowding inevitable */
+		return na;
+	}
+
+	if (NeighborSE(i, j)) ++na;
+	if (na == 0 || na == 4)
+	{
+		/* optimization: starvation or overcrowding inevitable */
+		return na;
+	}
+
+	if (NeighborSW(i, j)) ++na;
+
+	return na;
+}
+
+int GameOfLifePlane::IndexLeft(int i)
+{
+	if (i == 0) return GetWidth() - 1;
+	return i - 1;
+}
+
+int GameOfLifePlane::IndexRight(int i)
+{
+	if (i == GetWidth() - 1) return 0;
+	return i + 1;
+}
+
+int GameOfLifePlane::IndexUp(int j)
+{
+	if (j == 0) return GetHeight() - 1;
+	return j - 1;
+}
+
+int GameOfLifePlane::IndexDown(int j)
+{
+	if (j == GetHeight() - 1) return 0;
+	return j + 1;
+}
