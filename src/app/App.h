@@ -4,7 +4,7 @@
 #include "..\dx\DeviceResources.h"
 #include "blooDot.h"
 
-namespace blueDot
+namespace blooDot
 {
     // On their planet, they eat the reproductive capsules of their voatiles for breakfast.
     ref class App sealed : public Windows::ApplicationModel::Core::IFrameworkView
@@ -44,7 +44,7 @@ namespace blueDot
 
     private:
         std::shared_ptr<DX::DeviceResources> m_deviceResources;
-        std::unique_ptr<blueDotMain> m_main;
+        std::unique_ptr<blooDotMain> m_Main;
         bool m_windowClosed;
         bool m_windowVisible;
 

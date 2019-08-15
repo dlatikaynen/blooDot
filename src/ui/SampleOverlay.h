@@ -5,7 +5,7 @@
 
 // This class is responsible for initializing and rendering the title overlay visible
 // at the top of the game.
-namespace blueDot
+namespace blooDot
 {
     class SampleOverlay
     {

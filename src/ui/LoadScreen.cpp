@@ -161,66 +161,70 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 
 	//m_moved.width++;
 
+	m_GoLEngine.SetInitialMatrix(m_GoL);
+	m_GoLEngine.SinlgeStep();
+	m_GoL = m_GoLEngine.GetCurrentMatrix();
+
 	/*
 		Births: Each dead cell adjacent to exactly three live neighbors will become live in the next generation.
 		Death by isolation: Each live cell with one or fewer live neighbors will die in the next generation.
 		Death by overcrowding: Each live cell with four or more live neighbors will die in the next generation.
 		Survival: Each live cell with either two or three live neighbors will remain alive for the next generation.
 	*/
-	for (int i = 0; i < m_GoL->GetWidth(); ++i) for (int j = 0; j < m_GoL->GetHeight(); ++j)
-	{
-		bool curState = m_GoL->CellAt(i, j)->IsAlive();
-		int NAl = m_GoL->NeighborsAlive(i, j);
-		if (curState)
-		{
-			if (NAl == 2 || NAl == 3)
-			{
-				/* survives */
-				m_GoL2->SetAlive(i, j);
-			}
-			else if (NAl < 2)
-			{
-				/* starvation */
-				m_GoL2->SetAlive(i, j, false);
-			}
-			else if (NAl > 3)
-			{
-				/* overcrowded */
-				m_GoL2->SetAlive(i, j, false);
-			}
-		}
-		else
-		{
-			/* birth out of thin air */
-			if (NAl == 3)
-			{
-				m_GoL2->SetAlive(i, j);
-			}
-		}
-	}
+	//for (int i = 0; i < m_GoL->GetWidth(); ++i) for (int j = 0; j < m_GoL->GetHeight(); ++j)
+	//{
+	//	bool curState = m_GoL->CellAt(i, j)->IsAlive();
+	//	int NAl = m_GoL->NeighborsAlive(i, j);
+	//	if (curState)
+	//	{
+	//		if (NAl == 2 || NAl == 3)
+	//		{
+	//			/* survives */
+	//			m_GoL2->SetAlive(i, j);
+	//		}
+	//		else if (NAl < 2)
+	//		{
+	//			/* starvation */
+	//			m_GoL2->SetAlive(i, j, false);
+	//		}
+	//		else if (NAl > 3)
+	//		{
+	//			/* overcrowded */
+	//			m_GoL2->SetAlive(i, j, false);
+	//		}
+	//	}
+	//	else
+	//	{
+	//		/* birth out of thin air */
+	//		if (NAl == 3)
+	//		{
+	//			m_GoL2->SetAlive(i, j);
+	//		}
+	//	}
+	//}
 
-	/* and then the rain set in */
-	int k = 0;
-	for (int z = 0; z < m_GoL->GetWidth(); ++z) 
-	{
-		int i = rand() % m_GoL->GetWidth();
-		int j = rand() % m_GoL->GetHeight();
-		if (!m_GoL2->CellAt(i, j)->IsAlive())
-		{
-			m_GoL2->CellAt(i, j)->MakeRaindrop(true);
-			++k;
-		}
-		if (k == 9) break;
-	}
+	///* and then the rain set in */
+	//int k = 0;
+	//for (int z = 0; z < m_GoL->GetWidth(); ++z) 
+	//{
+	//	int i = rand() % m_GoL->GetWidth();
+	//	int j = rand() % m_GoL->GetHeight();
+	//	if (!m_GoL2->CellAt(i, j)->IsAlive())
+	//	{
+	//		m_GoL2->CellAt(i, j)->MakeRaindrop(true);
+	//		++k;
+	//	}
+	//	if (k == 9) break;
+	//}
 
-	for (int x = 0; x < m_GoL2->GetWidth(); ++x)
-	{
-		for (int y = 0; y < m_GoL2->GetHeight(); ++y)
-		{
-			m_GoL->SetAlive(x, y, m_GoL2->CellAt(x, y)->IsAlive());
-			m_GoL->SetRaindrop(x, y, m_GoL2->CellAt(x, y)->IsRaindrop());
-		}
-	}
+	//for (int x = 0; x < m_GoL2->GetWidth(); ++x)
+	//{
+	//	for (int y = 0; y < m_GoL2->GetHeight(); ++y)
+	//	{
+	//		m_GoL->SetAlive(x, y, m_GoL2->CellAt(x, y)->IsAlive());
+	//		m_GoL->SetRaindrop(x, y, m_GoL2->CellAt(x, y)->IsRaindrop());
+	//	}
+	//}
 }
 
 void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)

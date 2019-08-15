@@ -3,13 +3,13 @@
 #include <DirectXColors.h> // For named colors
 #include "..\dx\DirectXHelper.h" // For ThrowIfFailed
 
-using namespace blueDot;
+using namespace blooDot;
 using namespace Windows::Gaming::Input;
 using namespace Platform::Collections;
 using namespace Windows::Foundation;
 using namespace Windows::System::Diagnostics;
 
-const byte blueDotMain::BLUEDOTFILE_SIGNATURE[8] { 0x03, 'L','S','L', 0x04, 'J','M','L' };
+const byte blooDotMain::BLOODOTFILE_SIGNATURE[8] { 0x03, 'L','S','L', 0x04, 'J','M','L' };
 
 inline D2D1_RECT_F ConvertRect(Windows::Foundation::Size source)
 {
@@ -27,7 +27,7 @@ inline void InflateRect(D2D1_RECT_F& rect, float x, float y)
 }
 
 // Loads and initializes application assets when the application is loaded.
-blueDotMain::blueDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResources) : 
+blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResources) : 
     m_deviceResources(deviceResources),
     m_gameState(GameState::Initial),
     m_windowActive(false),
@@ -60,7 +60,7 @@ blueDotMain::blueDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
     m_checkpoints.push_back(XMFLOAT3(846.8f, -377.0f, -45.0f)); // Goal
 
     m_persistentState = ref new PersistentState();
-    m_persistentState->Initialize(Windows::Storage::ApplicationData::Current->LocalSettings->Values, "blueDot");
+    m_persistentState->Initialize(Windows::Storage::ApplicationData::Current->LocalSettings->Values, "blooDot");
 
     m_camera = std::unique_ptr<Camera>(new Camera());
     m_sampleOverlay = std::unique_ptr<SampleOverlay>(new SampleOverlay(m_deviceResources, L"Lukas Spiel Test Demo"));
@@ -123,14 +123,14 @@ blueDotMain::blueDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	m_currentGamepadNeedsRefresh = false;
 }
 
-blueDotMain::~blueDotMain()
+blooDotMain::~blooDotMain()
 {
     // Deregister device notification
     m_deviceResources->RegisterDeviceNotify(nullptr);
 }
 
 // Updates application state when the window size changes (e.g. device orientation change)
-void blueDotMain::CreateWindowSizeDependentResources()
+void blooDotMain::CreateWindowSizeDependentResources()
 {
     // update the 3D projection matrix
     m_camera->SetProjectionParameters(
@@ -239,7 +239,7 @@ void blueDotMain::CreateWindowSizeDependentResources()
     m_sampleOverlay->CreateWindowSizeDependentResources();
 }
 
-void blueDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
+void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
 {
     DX::StepTimer loadingTimer;
 
@@ -414,7 +414,7 @@ void blueDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
 
 // Renders the current frame according to the current application state.
 // Returns true if the frame was rendered and is ready to be displayed.
-bool blueDotMain::Render()
+bool blooDotMain::Render()
 {
     // Don't try to render anything before the first Update.
     if (m_timer.GetFrameCount() == 0)
@@ -544,7 +544,7 @@ bool blueDotMain::Render()
     return true;
 }
 
-void blueDotMain::SetGameState(GameState nextState)
+void blooDotMain::SetGameState(GameState nextState)
 {
     // previous state cleanup
     switch (m_gameState)
@@ -637,12 +637,12 @@ void blueDotMain::SetGameState(GameState nextState)
     m_gameState = nextState;
 }
 
-void blueDotMain::ResetCheckpoints()
+void blooDotMain::ResetCheckpoints()
 {
     m_currentCheckpoint = 0;
 }
 
-CheckpointState blueDotMain::UpdateCheckpoints()
+CheckpointState blooDotMain::UpdateCheckpoints()
 {
     if (m_currentCheckpoint >= (m_checkpoints.size() - 1))
         return CheckpointState::None;
@@ -685,7 +685,7 @@ CheckpointState blueDotMain::UpdateCheckpoints()
 }
 
 // Updates the application state once per frame.
-void blueDotMain::Update()
+void blooDotMain::Update()
 {
 	float timerTotal;
 	float timerElapsed;
@@ -1134,7 +1134,7 @@ void blueDotMain::Update()
     });
 }
 
-void blueDotMain::SaveState()
+void blooDotMain::SaveState()
 {
     m_persistentState->SaveXMFLOAT3(":Position", m_physics.GetPosition());
     m_persistentState->SaveXMFLOAT3(":Velocity", m_physics.GetVelocity());
@@ -1159,7 +1159,7 @@ void blueDotMain::SaveState()
     }
 }
 
-void blueDotMain::LoadState()
+void blooDotMain::LoadState()
 {
     XMFLOAT3 position = m_persistentState->LoadXMFLOAT3(":Position", m_physics.GetPosition());
     XMFLOAT3 velocity = m_persistentState->LoadXMFLOAT3(":Velocity", m_physics.GetVelocity());
@@ -1217,31 +1217,31 @@ inline XMFLOAT2 PointToTouch(Windows::Foundation::Point point, Windows::Foundati
     return XMFLOAT2(dx, dy);
 }
 
-void blueDotMain::AddTouch(int id, Windows::Foundation::Point point)
+void blooDotMain::AddTouch(int id, Windows::Foundation::Point point)
 {
     m_touches[id] = PointToTouch(point, m_deviceResources->GetLogicalSize());
 
     m_pointQueue.push(D2D1::Point2F(point.X, point.Y));
 }
 
-void blueDotMain::UpdateTouch(int id, Windows::Foundation::Point point)
+void blooDotMain::UpdateTouch(int id, Windows::Foundation::Point point)
 {
     if (m_touches.find(id) != m_touches.end())
         m_touches[id] = PointToTouch(point, m_deviceResources->GetLogicalSize());
 }
 
-void blueDotMain::PointerMove(int id, Windows::Foundation::Point point)
+void blooDotMain::PointerMove(int id, Windows::Foundation::Point point)
 {
 	//m_pointerPosition = PointToTouch(point, m_deviceResources->GetLogicalSize());
 	m_pointerPosition = XMFLOAT2(point.X, point.Y);
 }
 
-void blueDotMain::RemoveTouch(int id)
+void blooDotMain::RemoveTouch(int id)
 {
     m_touches.erase(id);
 }
 
-void blueDotMain::KeyDown(Windows::System::VirtualKey key)
+void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 {
     if (key == Windows::System::VirtualKey::P)       // Pause
     {
@@ -1253,7 +1253,7 @@ void blueDotMain::KeyDown(Windows::System::VirtualKey key)
     }
 }
 
-void blueDotMain::KeyUp(Windows::System::VirtualKey key)
+void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 {
     if (key == Windows::System::VirtualKey::P)
     {
@@ -1279,18 +1279,18 @@ void blueDotMain::KeyUp(Windows::System::VirtualKey key)
 	}
 }
 
-void blueDotMain::OnSuspending()
+void blooDotMain::OnSuspending()
 {
     SaveState();
     m_audio.SuspendAudio();
 }
 
-void blueDotMain::OnResuming()
+void blooDotMain::OnResuming()
 {
     m_audio.ResumeAudio();
 }
 
-void blueDotMain::OnFocusChange(bool active)
+void blooDotMain::OnFocusChange(bool active)
 {
     static bool lostFocusPause = false;
 
@@ -1339,14 +1339,14 @@ FORCEINLINE int FindMeshIndexByName(Mesh &mesh, const char *meshName)
     return -1; // Not found.
 }
 
-void blueDot::blueDotMain::LogMessage(Platform::Object^ obj)
+void blooDot::blooDotMain::LogMessage(Platform::Object^ obj)
 {
 	auto str = obj->ToString();
 	auto formattedText = std::wstring(str->Data()).append(L"\r\n");
 	OutputDebugString(formattedText.c_str());
 }
 
-HRESULT blueDotMain::ExtractTrianglesFromMesh(
+HRESULT blooDotMain::ExtractTrianglesFromMesh(
     Mesh& mesh,
     const char* meshName,
     std::vector<Triangle>& triangles
@@ -1381,7 +1381,7 @@ HRESULT blueDotMain::ExtractTrianglesFromMesh(
 }
 
 // Notifies renderers that device resources need to be released.
-void blueDotMain::OnDeviceLost()
+void blooDotMain::OnDeviceLost()
 {
     m_sampleOverlay->ReleaseDeviceDependentResources();
     m_loadScreen->ReleaseDeviceDependentResources();
@@ -1402,7 +1402,7 @@ void blueDotMain::OnDeviceLost()
 }
 
 // Notifies renderers that device resources may now be re-created.
-void blueDotMain::OnDeviceRestored()
+void blooDotMain::OnDeviceRestored()
 {
     m_sampleOverlay->CreateDeviceDependentResources();
 
@@ -1425,21 +1425,21 @@ void blueDotMain::OnDeviceRestored()
     LoadDeferredResources(true, true);
 }
 
-bool blueDot::blueDotMain::ButtonJustPressed(GamepadButtons selection)
+bool blooDot::blooDotMain::ButtonJustPressed(GamepadButtons selection)
 {
 	bool newSelectionPressed = (selection == (m_newReading.Buttons & selection));
 	bool oldSelectionPressed = (selection == (m_oldReading.Buttons & selection));
 	return newSelectionPressed && !oldSelectionPressed;
 }
 
-bool blueDot::blueDotMain::ButtonJustReleased(GamepadButtons selection)
+bool blooDot::blooDotMain::ButtonJustReleased(GamepadButtons selection)
 {
 	bool newSelectionReleased = (GamepadButtons::None == (m_newReading.Buttons & selection));
 	bool oldSelectionReleased = (GamepadButtons::None == (m_oldReading.Buttons & selection));
 	return newSelectionReleased && !oldSelectionReleased;
 }
 
-Gamepad^ blueDot::blueDotMain::GetLastGamepad()
+Gamepad^ blooDot::blooDotMain::GetLastGamepad()
 {
 	Gamepad^ gamepad = nullptr;
 

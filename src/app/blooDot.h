@@ -48,15 +48,15 @@ enum class CheckpointState
 };
 
 // Renders Direct2D and 3D content on the screen.
-namespace blueDot
+namespace blooDot
 {
-    class blueDotMain : public DX::IDeviceNotify
+    class blooDotMain : public DX::IDeviceNotify
     {
     public:
-		blueDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResources);
-        ~blueDotMain();
+		blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResources);
+        ~blooDotMain();
 
-		static const byte BLUEDOTFILE_SIGNATURE[8];
+		static const byte BLOODOTFILE_SIGNATURE[8];
 
         // IDeviceNotify
         virtual void OnDeviceLost();

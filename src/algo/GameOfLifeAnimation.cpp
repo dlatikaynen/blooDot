@@ -64,6 +64,7 @@ void GameOfLifeAnimation::CancelRecording()
 
 void GameOfLifeAnimation::SetInitialMatrix(GameOfLifePlane* fromMatrix)
 {
+	m_initialMatrix = new GameOfLifePlane(fromMatrix->GetWidth(), fromMatrix->GetHeight());
 	fromMatrix->CopyTo(m_initialMatrix);
 }
 
@@ -151,6 +152,11 @@ GameOfLifePlane* GameOfLifeAnimation::GetCurrentMatrix()
 void GameOfLifeAnimation::SinlgeStep()
 {
 	GameOfLifeStep stepItem;
+	if (m_currentMatrix == NULL)
+	{
+		m_currentMatrix = new GameOfLifePlane(m_initialMatrix->GetWidth(), m_initialMatrix->GetHeight());
+		m_initialMatrix->CopyTo(m_currentMatrix);
+	}
 
 	/* get a bunch of new transitions */
 	++m_currentStepIndex;
@@ -171,7 +177,7 @@ void GameOfLifeAnimation::SinlgeStep()
 void GameOfLifeAnimation::SaveRecording(Platform::String^ fileName)
 {
 	std::ofstream oF(fileName->Data());
-	oF << blueDot::blueDotMain::BLUEDOTFILE_SIGNATURE;
+	oF << blooDot::blooDotMain::BLOODOTFILE_SIGNATURE;
 
 	oF.flush();
 	oF.close();	
@@ -187,8 +193,40 @@ bool GameOfLifeAnimation::StepIsPlaybackFromRecording()
 GameOfLifeStep GameOfLifeAnimation::ComputeFromCurrent()
 {
 	GameOfLifeStep step;
-	
-	//transitions[Transition::ComeToLife].AddAtom(1, 1, m_currentMatrix->GetColorCell());
+
+	/*
+		Births: Each dead cell adjacent to exactly three live neighbors will become live in the next generation.
+		Death by isolation: Each live cell with one or fewer live neighbors will die in the next generation.
+		Death by overcrowding: Each live cell with four or more live neighbors will die in the next generation.
+		Survival: Each live cell with either two or three live neighbors will remain alive for the next generation.
+	*/
+
+	for (int i = 0; i < m_currentMatrix->GetWidth(); ++i) for (int j = 0; j < m_currentMatrix->GetHeight(); ++j)
+	{
+		bool curState = m_currentMatrix->CellAt(i, j)->IsAlive();
+		int NAl = m_currentMatrix->NeighborsAlive(i, j);
+		if (curState)
+		{
+			if (NAl < 2)
+			{
+				/* starvation */
+				step.AddTransition(Transition::DeceaseStarved, i, j, m_currentMatrix->GetColorCell());
+			}
+			else if (NAl > 3)
+			{
+				/* overcrowded */
+				step.AddTransition(Transition::DeceaseOvercrowded, i, j, m_currentMatrix->GetColorCell());
+			}
+		}
+		else
+		{
+			/* birth out of thin air */
+			if (NAl == 3)
+			{
+				step.AddTransition(Transition::ComeToLife, i, j, m_currentMatrix->GetColorCell());
+			}
+		}
+	}
 
 	return step;
 }

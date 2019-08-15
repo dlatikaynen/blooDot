@@ -4,7 +4,7 @@
 #include <dxgi1_3.h>
 #include <dxgidebug.h>
 
-using namespace blueDot;
+using namespace blooDot;
 
 using namespace concurrency;
 using namespace Windows::ApplicationModel;
@@ -61,7 +61,7 @@ void App::SetWindow(CoreWindow^ window)
 {
 
     m_deviceResources->SetWindow(window);
-    m_main = std::unique_ptr<blueDot::blueDotMain>(new blueDot::blueDotMain(m_deviceResources));
+    m_Main = std::unique_ptr<blooDot::blooDotMain>(new blooDot::blooDotMain(m_deviceResources));
 
 #if WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP
     // API's not available on Phone
@@ -111,11 +111,11 @@ void App::Load(Platform::String^ entryPoint)
     // starts rendering after resume, but the resources are being reloaded at the same time 
     // which could cause random crashes.
 
-    if (!m_main->IsDeferredLoadReady())
+    if (!m_Main->IsDeferredLoadReady())
     {
         task<void>([=]()
         {
-               m_main->LoadDeferredResources(true, false);
+               m_Main->LoadDeferredResources(true, false);
         });
     }
 }
@@ -128,10 +128,8 @@ void App::Run()
         if (m_windowVisible)
         {
             CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
-
-            m_main->Update();
-
-            if (m_main->Render())
+            m_Main->Update();
+            if (m_Main->Render())
             {				
                 m_deviceResources->Present();
             }
@@ -143,7 +141,7 @@ void App::Run()
     }
 
     // The app is exiting so do the same thing as would if app was being suspended.
-    m_main->OnSuspending();
+    m_Main->OnSuspending();
 
 #ifdef _DEBUG
     // Dump debug info when exiting.
@@ -178,7 +176,7 @@ void App::OnSuspending(Platform::Object^ sender, SuspendingEventArgs^ args)
     create_task([this, deferral]()
     {
         m_deviceResources->Trim();
-        m_main->OnSuspending();
+        m_Main->OnSuspending();
         deferral->Complete();
     });
 }
@@ -188,8 +186,7 @@ void App::OnResuming(Platform::Object^ sender, Platform::Object^ args)
     // Restore any data or state that was unloaded on suspend. By default, data
     // and state are persisted when resuming from suspend. Note that this event
     // does not occur if the app was previously terminated.
-
-    m_main->OnResuming();
+    m_Main->OnResuming();
 }
 
 // Window event handlers.
@@ -197,7 +194,7 @@ void App::OnResuming(Platform::Object^ sender, Platform::Object^ args)
 void App::OnWindowSizeChanged(CoreWindow^ sender, WindowSizeChangedEventArgs^ args)
 {
     m_deviceResources->SetLogicalSize(Size(sender->Bounds.Width, sender->Bounds.Height));
-    m_main->CreateWindowSizeDependentResources();
+    m_Main->CreateWindowSizeDependentResources();
 }
 
 void App::OnVisibilityChanged(CoreWindow^ sender, VisibilityChangedEventArgs^ args)
@@ -215,13 +212,13 @@ void App::OnWindowClosed(CoreWindow^ sender, CoreWindowEventArgs^ args)
 void App::OnDpiChanged(DisplayInformation^ sender, Platform::Object^ args)
 {
     m_deviceResources->SetDpi(sender->LogicalDpi);
-    m_main->CreateWindowSizeDependentResources();
+    m_Main->CreateWindowSizeDependentResources();
 }
 
 void App::OnOrientationChanged(DisplayInformation^ sender, Platform::Object^ args)
 {
     m_deviceResources->SetCurrentOrientation(sender->CurrentOrientation);
-    m_main->CreateWindowSizeDependentResources();
+    m_Main->CreateWindowSizeDependentResources();
 }
 
 void App::OnDisplayContentsInvalidated(DisplayInformation^ sender, Platform::Object^ args)
@@ -233,40 +230,40 @@ void App::OnWindowActivationChanged(Windows::UI::Core::CoreWindow^ sender, Windo
 {
     if (args->WindowActivationState == CoreWindowActivationState::Deactivated)
     {
-        m_main->OnFocusChange(false);
+        m_Main->OnFocusChange(false);
     }
     else if (args->WindowActivationState == CoreWindowActivationState::CodeActivated
         || args->WindowActivationState == CoreWindowActivationState::PointerActivated)
     {
-        m_main->OnFocusChange(true);
+        m_Main->OnFocusChange(true);
     }
 }
 
 void App::OnPointerPressed(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::PointerEventArgs^ args)
 {
-    m_main->AddTouch(args->CurrentPoint->PointerId, args->CurrentPoint->Position);
+    m_Main->AddTouch(args->CurrentPoint->PointerId, args->CurrentPoint->Position);
 }
 
 void App::OnPointerReleased(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::PointerEventArgs^ args)
 {
-    m_main->RemoveTouch(args->CurrentPoint->PointerId);
+    m_Main->RemoveTouch(args->CurrentPoint->PointerId);
 }
 
 void App::OnPointerMoved(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::PointerEventArgs^ args)
 {
-    m_main->UpdateTouch(args->CurrentPoint->PointerId, args->CurrentPoint->Position);
-	m_main->PointerMove(args->CurrentPoint->PointerId, args->CurrentPoint->Position);
+    m_Main->UpdateTouch(args->CurrentPoint->PointerId, args->CurrentPoint->Position);
+	m_Main->PointerMove(args->CurrentPoint->PointerId, args->CurrentPoint->Position);
 }
 
 void App::OnKeyDown(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::KeyEventArgs^ args)
 {
-    m_main->KeyDown(args->VirtualKey);
+    m_Main->KeyDown(args->VirtualKey);
 }
 
 
 void App::OnKeyUp(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::KeyEventArgs^ args)
 {
-    m_main->KeyUp(args->VirtualKey);
+    m_Main->KeyUp(args->VirtualKey);
 #ifdef _DEBUG
     // Pressing F4 cause the app to exit, so that DumpD3DDebug method gets called on exit.
     if (args->VirtualKey == VirtualKey::F4)
@@ -280,7 +277,7 @@ void App::OnKeyUp(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::KeyE
 void App::DumpD3DDebug()
 {
     // This is debug code to free up all allocated D3D resources, and generate debug output for leaked objects.
-    // The way this works is that D3D keeps track of all objects. When we destroy the m_main and m_deviceResources classes, 
+    // The way this works is that D3D keeps track of all objects. When we destroy the m_Main and m_deviceResources classes, 
     // all D3D objects should be released. If any objects that D3D thinks are not released are being leaked and the code should be examined.
 
     // Get the debug interface for the device.
@@ -292,7 +289,7 @@ void App::DumpD3DDebug()
     m_deviceResources->GetD3DDeviceContext()->Flush();
 
     UserInterface::GetInstance().Release();
-    m_main = nullptr;
+    m_Main = nullptr;
     m_deviceResources = nullptr;
 
     // Dump the list of leaked objects to the debugger output window.

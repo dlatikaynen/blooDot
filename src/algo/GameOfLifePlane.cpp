@@ -113,6 +113,14 @@ MFARGB GameOfLifePlane::GetColorSprinkler()
 void GameOfLifePlane::CopyTo(GameOfLifePlane* destPlane)
 {
 	destPlane->SetDefaultColors(m_defaultColorCell, m_defaultColorRain);
+	for (int x = 0; x < m_Width; ++x)
+	{
+		for (int y = 0; y < m_Height; ++y)
+		{
+			destPlane->SetAlive(x, y, CellAt(x, y)->IsAlive());
+			destPlane->SetRaindrop(x, y, CellAt(x, y)->IsRaindrop());
+		}
+	}
 }
 
 bool GameOfLifePlane::NeighborN(int i, int j)
@@ -196,24 +204,40 @@ int GameOfLifePlane::NeighborsAlive(int i, int j)
 
 int GameOfLifePlane::IndexLeft(int i)
 {
-	if (i == 0) return GetWidth() - 1;
+	if (i == 0)
+	{
+		return m_Width - 1;
+	}
+
 	return i - 1;
 }
 
 int GameOfLifePlane::IndexRight(int i)
 {
-	if (i == GetWidth() - 1) return 0;
+	if (i == m_Width - 1)
+	{
+		return 0;
+	}
+
 	return i + 1;
 }
 
 int GameOfLifePlane::IndexUp(int j)
 {
-	if (j == 0) return GetHeight() - 1;
+	if (j == 0)
+	{
+		return m_Height - 1;
+	}
+
 	return j - 1;
 }
 
 int GameOfLifePlane::IndexDown(int j)
 {
-	if (j == GetHeight() - 1) return 0;
+	if (j == m_Height - 1)
+	{
+		return 0;
+	} 
+
 	return j + 1;
 }

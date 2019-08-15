@@ -1,7 +1,7 @@
 #include "..\PreCompiledHeaders.h"
 #include "SampleOverlay.h"
 
-using namespace blueDot;
+using namespace blooDot;
 
 using namespace Windows::UI::Core;
 using namespace Windows::Foundation;

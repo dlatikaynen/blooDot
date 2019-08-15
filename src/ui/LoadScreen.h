@@ -47,6 +47,7 @@ private:
 	D2D1_SIZE_F                                     m_totalSize;
 	bool											m_isResizing;
 
+	GameOfLifeAnimation								m_GoLEngine;
 	GameOfLifePlane*								m_GoL;
 	GameOfLifePlane*								m_GoL2;
 	GameOfLifeSprinkler*							m_Sprinkler;
