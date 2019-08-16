@@ -118,7 +118,7 @@ public:
 	static int FromBytes(byte* inBytes, unsigned long long offset, _Out_ Transition* transitionKey, _Out_ GameOfLifeTransition* transitionItem);
 	void AddAtom(int x, int y, MFARGB color);
 	GameOfLifeTransitionAtoms GetAtoms();
-	void TransitionToFile(ofstream* toFile);
+	void TransitionToFile(std::ofstream* toFile);
 
 private:
 	GameOfLifeTransitionAtoms m_Coordinates;
@@ -136,7 +136,7 @@ public:
 	GameOfLifeTransitions GetTransitions();
 	void ApplyStepTo(GameOfLifePlane* targetPlane);
 	GameOfLifeStep ExtractFromPlaneStatus(GameOfLifePlane* statusPlane);
-	void StepToFile(ofstream* toFile);
+	void StepToFile(std::ofstream* toFile);
 
 private:
 	GameOfLifeTransitions m_Transitions;

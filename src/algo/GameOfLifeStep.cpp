@@ -92,7 +92,7 @@ GameOfLifeStep GameOfLifeStep::ExtractFromPlaneStatus(GameOfLifePlane* statusPla
 	return step;
 }
 
-void GameOfLifeStep::StepToFile(ofstream* toFile)
+void GameOfLifeStep::StepToFile(std::ofstream* toFile)
 {
 	/* this basically consists only of the count of atoms per transition */
 	byte tranKeyCount = static_cast<byte>(m_Transitions.size());
