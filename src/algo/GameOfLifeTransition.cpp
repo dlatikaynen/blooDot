@@ -20,22 +20,24 @@ GameOfLifeTransition::GameOfLifeTransition()
 
 }
 
-int GameOfLifeTransition::FromBytes(byte* inBytes, unsigned long long offset, _Out_ GameOfLifeTransition* transition)
+int GameOfLifeTransition::FromBytes(byte* inBytes, unsigned long long offset, _Out_ Transition* transitionKey, _Out_ GameOfLifeTransition* transitionItem)
 {
 	int offsetDelta = 0;
 	GameOfLifeTransition tranItem;
 	/* read the number of coordinates */
-	uint32 savedAtomCount = *reinterpret_cast<uint32*>(inBytes + offset + offsetDelta); offsetDelta += sizeof(uint32);
+	Transition tranKey = *reinterpret_cast<Transition*>(inBytes + offset + offsetDelta); offsetDelta += sizeof(Transition);
+	unsigned short savedAtomCount = *reinterpret_cast<unsigned short*>(inBytes + offset + offsetDelta); offsetDelta += sizeof(unsigned short);
 	/* read each coordinate */
 	for (uint32 i = 0; i < savedAtomCount; ++i)
 	{
-		uint32 x = *reinterpret_cast<uint32*>(inBytes + offset + offsetDelta); offsetDelta += sizeof(uint32);
-		uint32 y = *reinterpret_cast<uint32*>(inBytes + offset + offsetDelta); offsetDelta += sizeof(uint32);
+		unsigned short x = *reinterpret_cast<unsigned short*>(inBytes + offset + offsetDelta); offsetDelta += sizeof(unsigned short);
+		unsigned short y = *reinterpret_cast<unsigned short*>(inBytes + offset + offsetDelta); offsetDelta += sizeof(unsigned short);
 		MFARGB c = *reinterpret_cast<MFARGB*>(inBytes + offset + offsetDelta); offsetDelta += sizeof(MFARGB);
 		tranItem.AddAtom(x, y, c);
 	}
 
-	transition = &tranItem;
+	transitionKey = &tranKey;
+	transitionItem = &tranItem;
 	return offsetDelta;
 
 }
@@ -54,7 +56,10 @@ GameOfLifeTransitionAtoms GameOfLifeTransition::GetAtoms()
 	return m_Coordinates;
 }
 
-byte* GameOfLifeTransition::ToBytes()
+void GameOfLifeTransition::TransitionToFile(ofstream* toFile)
 {
-	return NULL;
+	uint32 countAtoms = static_cast<uint32>(m_Coordinates.size());
+	toFile->write((char*)&countAtoms, sizeof(uint32));
+	TransitionAtom* atoms = m_Coordinates.data();
+	toFile->write((char*)atoms, sizeof(GameOfLifeTransition) * m_Coordinates.size());
 }

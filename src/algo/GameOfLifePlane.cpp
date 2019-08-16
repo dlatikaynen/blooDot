@@ -37,6 +37,22 @@ int GameOfLifePlane::GetHeight()
 	return m_Height;
 }
 
+bool GameOfLifePlane::IsEmpty()
+{
+	if (m_Width > 0 && m_Height > 0)
+	{
+		for (int i = 0; i < (m_Width * m_Height); ++i)
+		{
+			if ((&m_Matrix[i])->IsAlive())
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
 GameOfLifeCell* GameOfLifePlane::CellAt(int x, int y)
 {
 	return &m_Matrix[y*GetWidth() + x];

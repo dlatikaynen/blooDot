@@ -49,6 +49,5 @@ private:
 
 	GameOfLifeAnimation								m_GoLEngine;
 	GameOfLifePlane*								m_GoL;
-	GameOfLifePlane*								m_GoL2;
 	GameOfLifeSprinkler*							m_Sprinkler;
 };

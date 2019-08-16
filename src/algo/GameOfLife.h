@@ -5,6 +5,13 @@
 #include "..\dx\DeviceResources.h"
 #include "..\dx\BrushRegistry.h"
 
+#include <type_traits>
+//#include <array>
+//#include <memory>
+//#include <iomanip>
+#include <iostream>
+#include <fstream>
+
 class GameOfLifeCell
 {
 public:
@@ -14,6 +21,7 @@ public:
 	void SetAlive(bool isAlive);
 	void SetAlive(bool isAlive, MFARGB color);
 	void SetColor(MFARGB color);
+	MFARGB GetCurrentColor();
 	void SetRaindrop(bool isRaindrop);
 	void MakeRaindrop(bool isRaindrop);
 	bool IsRaindrop();
@@ -41,6 +49,7 @@ public:
 
 	int GetWidth();
 	int GetHeight();
+	bool IsEmpty();
 	GameOfLifeCell* CellAt(int x, int y);
 	int NeighborsAlive(int i, int j);
 	void SetAlive(int x, int y);
@@ -106,10 +115,10 @@ class GameOfLifeTransition
 public:
 	GameOfLifeTransition::GameOfLifeTransition();
 
-	static int FromBytes(byte* inBytes, unsigned long long offset, _Out_ GameOfLifeTransition* transition);
+	static int FromBytes(byte* inBytes, unsigned long long offset, _Out_ Transition* transitionKey, _Out_ GameOfLifeTransition* transitionItem);
 	void AddAtom(int x, int y, MFARGB color);
 	GameOfLifeTransitionAtoms GetAtoms();
-	byte* ToBytes();
+	void TransitionToFile(ofstream* toFile);
 
 private:
 	GameOfLifeTransitionAtoms m_Coordinates;
@@ -121,12 +130,13 @@ class GameOfLifeStep
 {
 public:
 	GameOfLifeStep::GameOfLifeStep();
-	static int FromBytes(byte* srcData, unsigned long long offset, _Out_ GameOfLifeStep* decodedStep, _Out_ int* numberOfTransitionsInStep);
+	static int FromBytes(byte* srcData, unsigned long long offset, _Out_ GameOfLifeStep* decodedStep, _Out_ int* numberOfTransitionKeysInStep);
 	void AddTransition(Transition transition, int x, int y, MFARGB color);
 	void SetTransition(Transition transition, GameOfLifeTransition transitionToAdd);
 	GameOfLifeTransitions GetTransitions();
 	void ApplyStepTo(GameOfLifePlane* targetPlane);
-	void ToFile(Microsoft::WRL::Wrappers::FileHandle* fileHandle);
+	GameOfLifeStep ExtractFromPlaneStatus(GameOfLifePlane* statusPlane);
+	void StepToFile(ofstream* toFile);
 
 private:
 	GameOfLifeTransitions m_Transitions;

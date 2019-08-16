@@ -2,8 +2,6 @@
 #include <DirectXColors.h> // For named colors
 #include "..\app\blooDot.h"
 #include "GameOfLife.h"
-#include <memory>
-#include <fstream>
 
 using namespace Windows::Storage;
 using namespace Windows::Storage::Streams;
@@ -51,6 +49,7 @@ void GameOfLifeAnimation::Reset(int matrixWidth, int matrixHeight)
 	}
 
 	m_Steps.clear();
+	CancelRecording();
 	m_playbackDirection = GameOfLifeAnimation::PlaybackDirection::Forward;
 }
 
@@ -91,16 +90,16 @@ void GameOfLifeAnimation::EndRecording()
 void GameOfLifeAnimation::LoadRecording(Platform::String^ fileName)
 {
 	unsigned long long offset = 0L;
-	GameOfLifeStep stepItem;
+	GameOfLifeStep stepItem;	
 	GameOfLifeTransition transitionItem;
 
 	Platform::Array<byte>^ rawData = m_basicReaderWriter->ReadData(fileName);
 	byte* srcData = rawData->Data;
 
 	/* 1. ask the file how big the matrix is */
-	uint32 fileSignature = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-	uint32 boardWidth = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-	uint32 boardHeight = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
+	unsigned short fileSignature = *reinterpret_cast<unsigned short*>(srcData + offset); offset += sizeof(unsigned short);
+	unsigned short boardWidth = *reinterpret_cast<unsigned short*>(srcData + offset); offset += sizeof(unsigned short);
+	unsigned short boardHeight = *reinterpret_cast<unsigned short*>(srcData + offset); offset += sizeof(unsigned short);
 
 	/* 2. create an initial matrix of this size */
 	Reset(boardWidth, boardHeight);
@@ -124,9 +123,9 @@ void GameOfLifeAnimation::LoadRecording(Platform::String^ fileName)
 		offset += GameOfLifeStep::FromBytes(srcData, offset, &stepItem, &transitionsInStep);
 		for (int t = 0; t < transitionsInStep; ++t)
 		{
-			Transition transition = *reinterpret_cast<Transition*>(srcData + offset); offset += sizeof(Transition);
-			offset += GameOfLifeTransition::FromBytes(srcData, offset, &transitionItem);
-			stepItem.SetTransition(transition, transitionItem);
+			Transition transitionKey;
+			offset += GameOfLifeTransition::FromBytes(srcData, offset, &transitionKey, &transitionItem);
+			stepItem.SetTransition(transitionKey, transitionItem);
 		}
 
 		if (i == 0 && initialIsEmpty == false)
@@ -146,17 +145,18 @@ void GameOfLifeAnimation::LoadRecording(Platform::String^ fileName)
 
 GameOfLifePlane* GameOfLifeAnimation::GetCurrentMatrix()
 {
+	if (m_currentMatrix == NULL)
+	{
+		m_currentMatrix = new GameOfLifePlane(m_initialMatrix->GetWidth(), m_initialMatrix->GetHeight());
+		m_initialMatrix->CopyTo(m_currentMatrix);
+	}
+
 	return m_currentMatrix;
 }
 
 void GameOfLifeAnimation::SinlgeStep()
 {
 	GameOfLifeStep stepItem;
-	if (m_currentMatrix == NULL)
-	{
-		m_currentMatrix = new GameOfLifePlane(m_initialMatrix->GetWidth(), m_initialMatrix->GetHeight());
-		m_initialMatrix->CopyTo(m_currentMatrix);
-	}
 
 	/* get a bunch of new transitions */
 	++m_currentStepIndex;
@@ -166,9 +166,8 @@ void GameOfLifeAnimation::SinlgeStep()
 	}
 	else
 	{
-		GameOfLifeStep step = ComputeFromCurrent();
-		step.ApplyStepTo(m_currentMatrix);
-		m_Steps.push_back(step);
+		stepItem = ComputeFromCurrent();
+		m_Steps.push_back(stepItem);
 	}
 
 	stepItem.ApplyStepTo(m_currentMatrix);
@@ -176,11 +175,47 @@ void GameOfLifeAnimation::SinlgeStep()
 
 void GameOfLifeAnimation::SaveRecording(Platform::String^ fileName)
 {
-	std::ofstream oF(fileName->Data());
+	std::wstring fPath = ApplicationData::Current->RoamingFolder->Path->Data();
+	std::wstring sPath = fPath.append(L"\\");
+	std::wstring fName = sPath.append(fileName->Data());
+	std::ofstream oF;
+	oF.open(fName, ios_base::out | ios_base::binary);
 	oF << blooDot::blooDotMain::BLOODOTFILE_SIGNATURE;
+	const unsigned short sigbytes = 42;
+	oF.write((char *)&sigbytes, sizeof(unsigned short));
+	const unsigned short uwidth = GetCurrentMatrix()->GetWidth();
+	oF.write((char *)&uwidth, sizeof(unsigned short));
+	const unsigned short uheight = GetCurrentMatrix()->GetHeight();
+	oF.write((char *)&uheight, sizeof(unsigned short));
+	const MFARGB ac1 = GetCurrentMatrix()->GetColorCell();
+	oF.write((char *)&ac1, sizeof(MFARGB));
+	const MFARGB ac2 = GetCurrentMatrix()->GetColorRain();
+	oF.write((char *)&ac2, sizeof(MFARGB));
+	const bool initialisempty = m_initialMatrix == NULL || m_initialMatrix->IsEmpty();
+	oF.write((char *)&initialisempty, sizeof(bool));
+	/* when we have a non-empty initial matrix, then we convert that to steps now,
+	 * adding one to the overall step count */
+	const uint32 stepCount = m_Steps.size() + initialisempty ? 1 : 0;
+	oF.write((char *)&stepCount, sizeof(uint32));
+	if (!initialisempty)
+	{
+		GameOfLifeStep step;
+		step.ExtractFromPlaneStatus(m_initialMatrix).StepToFile(&oF);
+	}
 
-	oF.flush();
+	/* write all the steps */
+	for (auto stepIter = m_Steps.begin(); stepIter != m_Steps.end(); ++stepIter)
+	{
+		stepIter->StepToFile(&oF);
+	}
+
+	/* termination */
+	oF.write((char *)&sigbytes, sizeof(unsigned short));
 	oF.close();	
+	if (!oF) 
+	{
+		OutputDebugStringW(L"mist.");
+	}
 }
 
 // private
@@ -201,21 +236,25 @@ GameOfLifeStep GameOfLifeAnimation::ComputeFromCurrent()
 		Survival: Each live cell with either two or three live neighbors will remain alive for the next generation.
 	*/
 
-	for (int i = 0; i < m_currentMatrix->GetWidth(); ++i) for (int j = 0; j < m_currentMatrix->GetHeight(); ++j)
+	auto currentMatrix = GetCurrentMatrix();
+	int width = currentMatrix->GetWidth();
+	int height = currentMatrix->GetHeight();
+
+	for (int i = 0; i < width; ++i) for (int j = 0; j < height; ++j)
 	{
-		bool curState = m_currentMatrix->CellAt(i, j)->IsAlive();
-		int NAl = m_currentMatrix->NeighborsAlive(i, j);
+		bool curState = currentMatrix->CellAt(i, j)->IsAlive();
+		int NAl = currentMatrix->NeighborsAlive(i, j);
 		if (curState)
 		{
 			if (NAl < 2)
 			{
 				/* starvation */
-				step.AddTransition(Transition::DeceaseStarved, i, j, m_currentMatrix->GetColorCell());
+				step.AddTransition(Transition::DeceaseStarved, i, j, currentMatrix->GetColorCell());
 			}
 			else if (NAl > 3)
 			{
 				/* overcrowded */
-				step.AddTransition(Transition::DeceaseOvercrowded, i, j, m_currentMatrix->GetColorCell());
+				step.AddTransition(Transition::DeceaseOvercrowded, i, j, currentMatrix->GetColorCell());
 			}
 		}
 		else
@@ -223,7 +262,7 @@ GameOfLifeStep GameOfLifeAnimation::ComputeFromCurrent()
 			/* birth out of thin air */
 			if (NAl == 3)
 			{
-				step.AddTransition(Transition::ComeToLife, i, j, m_currentMatrix->GetColorCell());
+				step.AddTransition(Transition::ComeToLife, i, j, currentMatrix->GetColorCell());
 			}
 		}
 	}

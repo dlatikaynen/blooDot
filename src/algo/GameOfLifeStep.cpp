@@ -1,7 +1,6 @@
 #include "..\PreCompiledHeaders.h"
 #include <DirectXColors.h> // For named colors
 #include "GameOfLife.h"
-#include <memory>
 
 using namespace Windows::Storage;
 using namespace Windows::Storage::Streams;
@@ -20,12 +19,12 @@ GameOfLifeStep::GameOfLifeStep()
 
 }
 
-int GameOfLifeStep::FromBytes(byte* srcData, unsigned long long offset, _Out_ GameOfLifeStep* decodedStep, _Out_ int* numberOfTransitionsInStep)
+int GameOfLifeStep::FromBytes(byte* srcData, unsigned long long offset, _Out_ GameOfLifeStep* decodedStep, _Out_ int* numberOfTransitionKeysInStep)
 {
 	int offsetDelta = 0;;
 	GameOfLifeStep step;
-	uint32 savedTranCount = *reinterpret_cast<uint32*>(srcData + offset + offsetDelta); offsetDelta += sizeof(uint32);
-	*numberOfTransitionsInStep = safe_cast<int>(savedTranCount);
+	byte savedTranKeyCount = *reinterpret_cast<byte*>(srcData + offset + offsetDelta); offsetDelta += sizeof(byte);
+	*numberOfTransitionKeysInStep = safe_cast<int>(savedTranKeyCount);
 	decodedStep = &step;
 	
 	return offsetDelta;
@@ -64,11 +63,48 @@ void GameOfLifeStep::ApplyStepTo(GameOfLifePlane* targetPlane)
 	}
 }
 
-void GameOfLifeStep::ToFile(Microsoft::WRL::Wrappers::FileHandle* fileHandle)
+GameOfLifeStep GameOfLifeStep::ExtractFromPlaneStatus(GameOfLifePlane* statusPlane)
 {
-	std::vector<byte> bytes;
-	auto bRW = ref new BasicReaderWriter();
-	/* this basically consists only of the measured transition count */
-	uint32 tranCount = static_cast<uint32>(m_Transitions.size());
-	bRW->WriteData(fileHandle, tranCount);
+	GameOfLifeStep step;
+	Transition transition;
+
+	for (int x = 0; x < statusPlane->GetWidth(); ++x)
+	{
+		for (int y = 0; y < statusPlane->GetHeight(); ++y)
+		{
+			auto cell = statusPlane->CellAt(x, y);
+			if (cell->IsAlive())
+			{
+				if (cell->IsRaindrop())
+				{
+					transition = Transition::RainedDown;
+				}
+				else
+				{
+					transition = Transition::ManuallySpawned;
+				}
+
+				step.AddTransition(transition, x, y, cell->GetCurrentColor());
+			}
+		}
+	}
+
+	return step;
+}
+
+void GameOfLifeStep::StepToFile(ofstream* toFile)
+{
+	/* this basically consists only of the count of atoms per transition */
+	byte tranKeyCount = static_cast<byte>(m_Transitions.size());
+	toFile->write((char *)&tranKeyCount, sizeof(byte));
+	
+	/* and of course, the atoms grouped by transitions themselves */
+	for (auto iter = m_Transitions.begin(); iter != m_Transitions.end(); ++iter)
+	{
+		Transition transitionKey = iter->first;
+		toFile->write((char*)&transitionKey, sizeof(transitionKey));
+
+		GameOfLifeTransition transitionItem = iter->second;
+		transitionItem.TransitionToFile(toFile);
+	}
 }

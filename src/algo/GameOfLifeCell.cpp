@@ -56,6 +56,11 @@ void GameOfLifeCell::SetColor(MFARGB color)
 	m_Color = color;
 }
 
+MFARGB GameOfLifeCell::GetCurrentColor()
+{
+	return m_Color;
+}
+
 void GameOfLifeCell::SetRaindrop(bool isRaindrop)
 {
 	m_isRaindrop = isRaindrop;

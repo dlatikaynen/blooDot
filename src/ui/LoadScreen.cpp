@@ -103,7 +103,6 @@ void LoadScreen::ReleaseDeviceDependentResources()
 	m_moved.width = m_moved.height = 0;
 
 	delete m_GoL;
-	delete m_GoL2;
 	delete m_Sprinkler;
 }
 
@@ -142,8 +141,9 @@ void LoadScreen::UpdateForWindowSizeChange()
 		}
 	}
 
-	/* the swap plane */
-	m_GoL2 = new GameOfLifePlane(m_GoL->GetWidth(), m_GoL->GetHeight());
+	/* the magic */
+	m_GoLEngine.SetInitialMatrix(m_GoL);
+	m_GoLEngine.SaveRecording(L"test.bloodot");
 
 	/* the sprinkler */
 	m_Sprinkler = new GameOfLifeSprinkler();
@@ -161,7 +161,6 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 
 	//m_moved.width++;
 
-	m_GoLEngine.SetInitialMatrix(m_GoL);
 	m_GoLEngine.SinlgeStep();
 	m_GoL = m_GoLEngine.GetCurrentMatrix();
 
