@@ -9,7 +9,8 @@ using namespace Platform::Collections;
 using namespace Windows::Foundation;
 using namespace Windows::System::Diagnostics;
 
-const byte blooDotMain::BLOODOTFILE_SIGNATURE[8] { 0x03, 'L','S','L', 0x04, 'J','M','L' };
+const byte blooDotMain::BLOODOTFILE_SIGNATURE[8]{ 0x03, 'L','S','L', 0x04, 'J','M','L' };
+const byte blooDotMain::BLOODOTFILE_CONTENTTYPE_GOLANIMATION[2]{ 0xc9, 0x05 };
 
 inline D2D1_RECT_F ConvertRect(Windows::Foundation::Size source)
 {

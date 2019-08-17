@@ -57,6 +57,7 @@ namespace blooDot
         ~blooDotMain();
 
 		static const byte BLOODOTFILE_SIGNATURE[8];
+		static const byte BLOODOTFILE_CONTENTTYPE_GOLANIMATION[2];
 
         // IDeviceNotify
         virtual void OnDeviceLost();
@@ -169,5 +170,14 @@ namespace blooDot
 		bool ButtonJustReleased(Windows::Gaming::Input::GamepadButtons selection);
 		Windows::Gaming::Input::Gamepad^ GetLastGamepad();
 		void LogMessage(Platform::Object^ obj);
-};
+	};
+
+	template <class T> void SafeRelease(T **ppT)
+	{
+		if (*ppT)
+		{
+			(*ppT)->Release();
+			*ppT = NULL;
+		}
+	}
 }

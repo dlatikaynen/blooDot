@@ -102,7 +102,6 @@ void LoadScreen::ReleaseDeviceDependentResources()
 	m_Brushes.Reset();
 	m_moved.width = m_moved.height = 0;
 
-	delete m_GoL;
 	delete m_Sprinkler;
 }
 
@@ -129,21 +128,23 @@ void LoadScreen::UpdateForWindowSizeChange()
 	int pixWidth = LoadScreen::GoLCellSideLength;
 	int pixHeight = LoadScreen::GoLCellSideLength;
 
-	m_GoL = new GameOfLifePlane(gridWidth, gridHeight);
+	GameOfLifePlane* randGoL = new GameOfLifePlane(gridWidth, gridHeight);
 
 	srand(static_cast<unsigned int>(time(NULL)));
-	for (int i = 0; i < m_GoL->GetWidth(); ++i)
+	for (int i = 0; i < randGoL->GetWidth(); ++i)
 	{
-		for (int j = 0; j < m_GoL->GetHeight(); ++j)
+		for (int j = 0; j < randGoL->GetHeight(); ++j)
 		{
 			isAlive = !((rand() % (rand() % 4 + 1)) == 0);
-			m_GoL->SetAlive(i, j, isAlive);
+			randGoL->SetAlive(i, j, isAlive);
 		}
 	}
 
 	/* the magic */
-	m_GoLEngine.SetInitialMatrix(m_GoL);
-	m_GoLEngine.SaveRecording(L"test.bloodot");
+	m_GoLEngine.SetInitialMatrix(randGoL);
+	delete randGoL;
+
+	m_GoLEngine.StartRecording();
 
 	/* the sprinkler */
 	m_Sprinkler = new GameOfLifeSprinkler();
@@ -162,46 +163,14 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 	//m_moved.width++;
 
 	m_GoLEngine.SinlgeStep();
-	m_GoL = m_GoLEngine.GetCurrentMatrix();
 
-	/*
-		Births: Each dead cell adjacent to exactly three live neighbors will become live in the next generation.
-		Death by isolation: Each live cell with one or fewer live neighbors will die in the next generation.
-		Death by overcrowding: Each live cell with four or more live neighbors will die in the next generation.
-		Survival: Each live cell with either two or three live neighbors will remain alive for the next generation.
-	*/
-	//for (int i = 0; i < m_GoL->GetWidth(); ++i) for (int j = 0; j < m_GoL->GetHeight(); ++j)
-	//{
-	//	bool curState = m_GoL->CellAt(i, j)->IsAlive();
-	//	int NAl = m_GoL->NeighborsAlive(i, j);
-	//	if (curState)
-	//	{
-	//		if (NAl == 2 || NAl == 3)
-	//		{
-	//			/* survives */
-	//			m_GoL2->SetAlive(i, j);
-	//		}
-	//		else if (NAl < 2)
-	//		{
-	//			/* starvation */
-	//			m_GoL2->SetAlive(i, j, false);
-	//		}
-	//		else if (NAl > 3)
-	//		{
-	//			/* overcrowded */
-	//			m_GoL2->SetAlive(i, j, false);
-	//		}
-	//	}
-	//	else
-	//	{
-	//		/* birth out of thin air */
-	//		if (NAl == 3)
-	//		{
-	//			m_GoL2->SetAlive(i, j);
-	//		}
-	//	}
-	//}
+	if (m_GoLEngine.IsRecording() && m_GoLEngine.GetNumStepsRecorded() == 100) 
+	{
+		m_GoLEngine.EndRecording();
+		m_GoLEngine.SaveRecording("GoLRecording1.bloodot");
+	}
 
+	//m_GoL = m_GoLEngine.GetCurrentMatrix();
 	///* and then the rain set in */
 	//int k = 0;
 	//for (int z = 0; z < m_GoL->GetWidth(); ++z) 
@@ -243,11 +212,12 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 	//	)
  //   );
 
-	int planeWidth = m_GoL->GetWidth();
-	int planeHeight = m_GoL->GetHeight();
+	auto plane = m_GoLEngine.GetCurrentMatrix();
+	int planeWidth = plane->GetWidth();
+	int planeHeight = plane->GetHeight();
 	for (int i = 0; i < planeWidth; ++i) for (int j = 0; j < planeHeight; ++j)
 	{
-		GameOfLifeCell* cell = m_GoL->CellAt(i, j);
+		auto cell = plane->CellAt(i, j);
 		if (cell->IsAlive())
 		{
 			cell->DrawCell(m_d2dContext, i, j, LoadScreen::GoLCellSideLength, &m_Brushes);

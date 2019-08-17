@@ -48,6 +48,5 @@ private:
 	bool											m_isResizing;
 
 	GameOfLifeAnimation								m_GoLEngine;
-	GameOfLifePlane*								m_GoL;
 	GameOfLifeSprinkler*							m_Sprinkler;
 };

@@ -154,6 +154,8 @@ public:
 	void SetInitialMatrix(GameOfLifePlane* fromMatrix);
 	GameOfLifePlane* GetCurrentMatrix();
 	void StartRecording();
+	bool IsRecording();
+	unsigned int GetNumStepsRecorded();
 	void CancelRecording();
 	void SinlgeStep();
 	void EndRecording();

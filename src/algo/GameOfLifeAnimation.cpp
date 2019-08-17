@@ -17,6 +17,7 @@ using namespace concurrency;
 
 GameOfLifeAnimation::GameOfLifeAnimation()
 {
+	m_currentStepIndex = -1;
 	m_initialMatrix = m_currentMatrix = NULL;
 	CancelRecording();
 }
@@ -55,7 +56,7 @@ void GameOfLifeAnimation::Reset(int matrixWidth, int matrixHeight)
 
 void GameOfLifeAnimation::CancelRecording()
 {
-	m_currentStepIndex = 0;
+	m_currentStepIndex = -1;
 	m_startedRecordingAtStepIndex = -1;
 	m_endedRecordingAtStepIndex = -1;
 	delete m_recordingStartSnapshot;
@@ -72,7 +73,7 @@ void GameOfLifeAnimation::StartRecording()
 	if (!m_IsRecording)
 	{
 		m_startedRecordingAtStepIndex = m_currentStepIndex;
-		m_recordingStartSnapshot = new GameOfLifePlane(m_currentMatrix->GetWidth(), m_currentMatrix->GetHeight());
+		m_recordingStartSnapshot = new GameOfLifePlane(GetCurrentMatrix()->GetWidth(), GetCurrentMatrix()->GetHeight());
 		m_currentMatrix->CopyTo(m_recordingStartSnapshot);
 		m_IsRecording = true;
 	}
@@ -159,7 +160,19 @@ void GameOfLifeAnimation::SinlgeStep()
 	GameOfLifeStep stepItem;
 
 	/* get a bunch of new transitions */
-	++m_currentStepIndex;
+	if (m_currentStepIndex < 0)
+	{
+		m_currentStepIndex = 0;
+		if (m_IsRecording && m_startedRecordingAtStepIndex < 0) 
+		{
+			m_startedRecordingAtStepIndex = m_currentStepIndex;
+		}
+	}
+	else
+	{
+		++m_currentStepIndex;
+	}
+
 	if (StepIsPlaybackFromRecording())
 	{
 		stepItem = m_Steps[m_currentStepIndex];
@@ -173,16 +186,41 @@ void GameOfLifeAnimation::SinlgeStep()
 	stepItem.ApplyStepTo(m_currentMatrix);
 }
 
+bool GameOfLifeAnimation::IsRecording()
+{
+	return m_IsRecording;
+}
+
+unsigned int GameOfLifeAnimation::GetNumStepsRecorded()
+{
+	if (m_startedRecordingAtStepIndex < 0)
+	{
+		return 0;
+	}
+	else if (m_IsRecording) 
+	{
+		return m_currentStepIndex - m_startedRecordingAtStepIndex + 1;
+	}
+
+	return m_endedRecordingAtStepIndex - m_startedRecordingAtStepIndex + 1;
+}
+
 void GameOfLifeAnimation::SaveRecording(Platform::String^ fileName)
 {
+	if (m_IsRecording || m_startedRecordingAtStepIndex < 0)
+	{
+		return;
+	}
+
 	std::wstring fPath = ApplicationData::Current->RoamingFolder->Path->Data();
 	std::wstring sPath = fPath.append(L"\\");
 	std::wstring fName = sPath.append(fileName->Data());
 	std::ofstream oF;
 	oF.open(fName, ios_base::out | ios_base::binary);
-	oF << blooDot::blooDotMain::BLOODOTFILE_SIGNATURE;
-	const unsigned short sigbytes = 42;
-	oF.write((char *)&sigbytes, sizeof(unsigned short));
+	oF.write((char*)&blooDot::blooDotMain::BLOODOTFILE_SIGNATURE, sizeof(blooDot::blooDotMain::BLOODOTFILE_SIGNATURE));
+	const unsigned char sigbyte = 42;
+	oF.write((char *)&sigbyte, sizeof(unsigned char));
+	oF.write((char*)&blooDot::blooDotMain::BLOODOTFILE_CONTENTTYPE_GOLANIMATION, sizeof(blooDot::blooDotMain::BLOODOTFILE_CONTENTTYPE_GOLANIMATION));
 	const unsigned short uwidth = GetCurrentMatrix()->GetWidth();
 	oF.write((char *)&uwidth, sizeof(unsigned short));
 	const unsigned short uheight = GetCurrentMatrix()->GetHeight();
@@ -191,26 +229,26 @@ void GameOfLifeAnimation::SaveRecording(Platform::String^ fileName)
 	oF.write((char *)&ac1, sizeof(MFARGB));
 	const MFARGB ac2 = GetCurrentMatrix()->GetColorRain();
 	oF.write((char *)&ac2, sizeof(MFARGB));
-	const bool initialisempty = m_initialMatrix == NULL || m_initialMatrix->IsEmpty();
+	const bool initialisempty = m_recordingStartSnapshot == NULL || m_recordingStartSnapshot->IsEmpty();
 	oF.write((char *)&initialisempty, sizeof(bool));
 	/* when we have a non-empty initial matrix, then we convert that to steps now,
 	 * adding one to the overall step count */
-	const uint32 stepCount = m_Steps.size() + initialisempty ? 1 : 0;
+	const uint32 stepCount = GetNumStepsRecorded() + initialisempty ? 1 : 0;
 	oF.write((char *)&stepCount, sizeof(uint32));
 	if (!initialisempty)
 	{
 		GameOfLifeStep step;
-		step.ExtractFromPlaneStatus(m_initialMatrix).StepToFile(&oF);
+		step.ExtractFromPlaneStatus(m_recordingStartSnapshot).StepToFile(&oF);
 	}
 
-	/* write all the steps */
-	for (auto stepIter = m_Steps.begin(); stepIter != m_Steps.end(); ++stepIter)
+	/* write all the steps included in the recording */
+	for (int i = m_startedRecordingAtStepIndex; i<= m_endedRecordingAtStepIndex; ++i)
 	{
-		stepIter->StepToFile(&oF);
+		m_Steps.at(i).StepToFile(&oF);
 	}
 
 	/* termination */
-	oF.write((char *)&sigbytes, sizeof(unsigned short));
+	oF.write((char *)&sigbyte, sizeof(unsigned char));
 	oF.close();	
 	if (!oF) 
 	{
@@ -218,7 +256,7 @@ void GameOfLifeAnimation::SaveRecording(Platform::String^ fileName)
 	}
 }
 
-// private
+// privates
 
 bool GameOfLifeAnimation::StepIsPlaybackFromRecording()
 {

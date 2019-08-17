@@ -20,18 +20,18 @@ namespace blooDot
         virtual void Uninitialize();
 
     protected:
-        // Application lifecycle event handlers.
+        // Application lifecycle event handlers
         void OnActivated(Windows::ApplicationModel::Core::CoreApplicationView^ applicationView, Windows::ApplicationModel::Activation::IActivatedEventArgs^ args);
         void OnWindowActivationChanged(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::WindowActivatedEventArgs^ args);
         void OnSuspending(Platform::Object^ sender, Windows::ApplicationModel::SuspendingEventArgs^ args);
         void OnResuming(Platform::Object^ sender, Platform::Object^ args);
 
-        // Window event handlers.
+        // Window event handlers
         void OnWindowSizeChanged(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::WindowSizeChangedEventArgs^ args);
         void OnVisibilityChanged(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::VisibilityChangedEventArgs^ args);
         void OnWindowClosed(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::CoreWindowEventArgs^ args);
 
-        // DisplayInformation event handlers.
+        // DisplayInformation event handlers
         void OnDpiChanged(Windows::Graphics::Display::DisplayInformation^ sender,  Platform::Object^ args);
         void OnOrientationChanged(Windows::Graphics::Display::DisplayInformation^ sender,  Platform::Object^ args);
         void OnDisplayContentsInvalidated(Windows::Graphics::Display::DisplayInformation^ sender,  Platform::Object^ args);
@@ -49,7 +49,7 @@ namespace blooDot
         bool m_windowVisible;
 
 #ifdef _DEBUG
-        // App method that deletes all D3D resources, dumps debug info.
+        // App method that deletes all D3D resources, dumps debug info
         void DumpD3DDebug();
 #endif
     };

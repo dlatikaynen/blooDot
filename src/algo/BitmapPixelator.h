@@ -5,6 +5,7 @@
 #include "..\dx\DeviceResources.h"
 #include "..\dx\DirectXHelper.h" // For ThrowIfFailed
 #include "..\dx\BrushRegistry.h"
+#include "..\app\blooDot.h"
 #include "GameOfLife.h"
 
 using namespace Platform::Collections;

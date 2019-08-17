@@ -61,5 +61,5 @@ void GameOfLifeTransition::TransitionToFile(std::ofstream* toFile)
 	uint32 countAtoms = static_cast<uint32>(m_Coordinates.size());
 	toFile->write((char*)&countAtoms, sizeof(uint32));
 	TransitionAtom* atoms = m_Coordinates.data();
-	toFile->write((char*)atoms, sizeof(GameOfLifeTransition) * m_Coordinates.size());
+	toFile->write((char*)atoms, sizeof(TransitionAtom) * m_Coordinates.size());
 }
