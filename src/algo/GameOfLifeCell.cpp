@@ -48,7 +48,6 @@ void GameOfLifeCell::SetAlive(bool isAlive, MFARGB color)
 	m_birthCountdown = isAlive ? GAMEOFLIFECELL_TRANSITION_FRAMES : 0;
 	m_Color = color;
 	m_isAlive = isAlive;
-
 }
 
 void GameOfLifeCell::SetColor(MFARGB color)

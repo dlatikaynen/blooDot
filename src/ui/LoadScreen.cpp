@@ -1,5 +1,6 @@
 #include "..\PreCompiledHeaders.h"
 #include "LoadScreen.h"
+#include "..\algo\BitmapPixelator.h"
 
 using namespace Windows::UI::Core;
 using namespace Windows::Foundation;
@@ -130,17 +131,23 @@ void LoadScreen::UpdateForWindowSizeChange()
 
 	GameOfLifePlane* randGoL = new GameOfLifePlane(gridWidth, gridHeight);
 
+	randGoL->Wipe();
+
 	srand(static_cast<unsigned int>(time(NULL)));
 	for (int i = 0; i < randGoL->GetWidth(); ++i)
 	{
 		for (int j = 0; j < randGoL->GetHeight(); ++j)
 		{
 			isAlive = !((rand() % (rand() % 4 + 1)) == 0);
-			randGoL->SetAlive(i, j, isAlive);
+			//randGoL->SetAlive(i, j, isAlive);
 		}
 	}
 
 	/* the magic */
+	BitmapPixelator bmPix;
+	bmPix.Load(L"Media\\Bitmaps\\blooDot.bmp");
+	bmPix.PlaceAt(randGoL, 10, 3);
+
 	m_GoLEngine.SetInitialMatrix(randGoL);
 	delete randGoL;
 
@@ -161,8 +168,7 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 	}
 
 	//m_moved.width++;
-
-	m_GoLEngine.SinlgeStep();
+	//m_GoLEngine.SingleStep();
 
 	if (m_GoLEngine.IsRecording() && m_GoLEngine.GetNumStepsRecorded() == 100) 
 	{

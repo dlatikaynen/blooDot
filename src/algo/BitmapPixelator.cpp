@@ -11,6 +11,7 @@ using namespace blooDot;
 
 BitmapPixelator::BitmapPixelator()
 {
+	m_Plane = NULL;
 }
 
 BitmapPixelator::~BitmapPixelator()
@@ -18,24 +19,17 @@ BitmapPixelator::~BitmapPixelator()
 	delete m_Plane;
 }
 
-void BitmapPixelator::Load(std::string fileName)
+void BitmapPixelator::Load(std::wstring fileName)
 {
-
-}
-
-void BitmapPixelator::GenerateFromFont(std::string text)
-{
-
-}
-
-void BitmapPixelator::PlaceAt(GameOfLifePlane* onPlane, int atX, int atY)
-{
-	/* effectively scans the bitmap, placing cells where pixels are, in the same color */
 	HRESULT hr = S_OK;
-
 	IWICImagingFactory* pIWICFactory;
 	IWICBitmapDecoder *pIDecoder = NULL;
 	IWICBitmapFrameDecode *pIDecoderFrame = NULL;
+	IWICBitmap *pIBitmap = NULL;
+	IWICBitmapLock *pILock = NULL;
+	UINT uiWidth;
+	UINT uiHeight;
+
 	hr = CoCreateInstance(
 		CLSID_WICImagingFactory,
 		NULL,
@@ -43,13 +37,18 @@ void BitmapPixelator::PlaceAt(GameOfLifePlane* onPlane, int atX, int atY)
 		IID_PPV_ARGS(&pIWICFactory)
 	);
 
-	hr = pIWICFactory->CreateDecoderFromFilename(
-		L"turtle.jpg",                  // Image to be decoded
-		NULL,                           // Do not prefer a particular vendor
-		GENERIC_READ,                   // Desired read access to the file
-		WICDecodeMetadataCacheOnDemand, // Cache metadata when needed
-		&pIDecoder                      // Pointer to the decoder
-	);
+	if (SUCCEEDED(hr))
+	{
+		LPCWSTR fName = fileName.data();		
+
+		hr = pIWICFactory->CreateDecoderFromFilename(
+			fName,							// Image to be decoded
+			NULL,                           // Do not prefer a particular vendor
+			GENERIC_READ,                   // Desired read access to the file
+			WICDecodeMetadataCacheOnDemand, // Cache metadata when needed
+			&pIDecoder                      // Pointer to the decoder
+		);
+	}
 
 	// Retrieve the first bitmap frame.
 	if (SUCCEEDED(hr))
@@ -57,49 +56,109 @@ void BitmapPixelator::PlaceAt(GameOfLifePlane* onPlane, int atX, int atY)
 		hr = pIDecoder->GetFrame(0, &pIDecoderFrame);
 	}
 
-	IWICBitmap *pIBitmap = NULL;
-	IWICBitmapLock *pILock = NULL;
-
-	UINT uiWidth = 10;
-	UINT uiHeight = 10;
-
-	WICRect rcLock = { 0, 0, uiWidth, uiHeight };
-
-	// Create the bitmap from the image frame.
 	if (SUCCEEDED(hr))
 	{
-		hr = pIWICFactory->CreateBitmapFromSource(
-			pIDecoderFrame,          // Create a bitmap from the image frame
-			WICBitmapCacheOnDemand,  // Cache metadata when needed
-			&pIBitmap);              // Pointer to the bitmap
+		hr = pIDecoderFrame->GetSize(&uiWidth, &uiHeight);
 	}
 
 	if (SUCCEEDED(hr))
 	{
-		// Obtain a bitmap lock for exclusive write.
-		// The lock is for a 10x10 rectangle starting at the top left of the
-		// bitmap.
-		hr = pIBitmap->Lock(&rcLock, WICBitmapLockWrite, &pILock);
+		WICRect rcLock = { 0, 0, uiWidth, uiHeight };
+
+		// Create the bitmap from the image frame.
 		if (SUCCEEDED(hr))
 		{
-			UINT cbBufferSize = 0;
-			BYTE *pv = NULL;
+			hr = pIWICFactory->CreateBitmapFromSource(
+				pIDecoderFrame,         // Create a bitmap from the image frame
+				WICBitmapCacheOnDemand, // Cache metadata when needed
+				&pIBitmap				// Pointer to the bitmap
+			);
+		}
 
-			// Retrieve a pointer to the pixel data.
+		if (SUCCEEDED(hr))
+		{
+			// Obtain a bitmap lock for reading
+			hr = pIBitmap->Lock(&rcLock, WICBitmapLockRead, &pILock);
 			if (SUCCEEDED(hr))
 			{
+				UINT cbBufferSize = 0;
+				BYTE *pv = NULL;
+
+				// Retrieve a pointer to the pixel data
 				hr = pILock->GetDataPointer(&cbBufferSize, &pv);
+				if (SUCCEEDED(hr))
+				{
+					// Pixel querying using the image data pointer pv.
+					// format is 24bpp RGB
+					m_Plane = new GameOfLifePlane(uiWidth, uiHeight);
+					m_Plane->Wipe();
+					MFARGB color;
+					int x = 0, y = 0, pix = 0;
+					for (int i = 0; i < cbBufferSize; i += 3)
+					{
+						color.rgbAlpha = 128;
+						color.rgbRed = pv[i];
+						color.rgbGreen = pv[i + 1];
+						color.rgbBlue = pv[i + 2];
+						
+						if (color.rgbRed > 0 || color.rgbGreen > 0 || color.rgbBlue > 0)
+						{
+							m_Plane->SetAlive(x, y);
+							m_Plane->CellAt(x, y)->SetColor(color);
+						}
+
+						/* next pixel --> next coordinate */
+						if (pix > 0 && (pix % uiWidth) == 0)
+						{
+							++y;
+							x = 0;
+						}
+						else
+						{
+							++x;
+						}
+
+						++pix;
+					}
+				}
+
+				SafeRelease(&pILock);
 			}
-
-			// Pixel manipulation using the image data pointer pv.
-			// ...
-
-			// Release the bitmap lock.
-			SafeRelease(&pILock);
 		}
 	}
 
 	SafeRelease(&pIBitmap);
 	SafeRelease(&pIDecoder);
 	SafeRelease(&pIDecoderFrame);
+}
+
+void BitmapPixelator::GenerateFromFont(std::wstring text)
+{
+
+}
+
+void BitmapPixelator::PlaceAt(GameOfLifePlane* onPlane, int atX, int atY)
+{
+	int destX;
+	int destY;
+
+	if (m_Plane != NULL) 
+	{
+		for (int x = 0; x < m_Plane->GetWidth(); ++x)
+		{
+			destX = x + atX;
+			for (int y = 0; y < m_Plane->GetHeight(); ++y)
+			{
+				destY = y + atY;
+				if (destX < onPlane->GetWidth() && destY < onPlane->GetHeight())
+				{
+					if (m_Plane->CellAt(x, y)->IsAlive())
+					{
+						onPlane->SetAlive(destX, destY);
+						onPlane->CellAt(destX, destY)->SetColor(m_Plane->CellAt(x, y)->GetCurrentColor());
+					}
+				}
+			}
+		}
+	}
 }

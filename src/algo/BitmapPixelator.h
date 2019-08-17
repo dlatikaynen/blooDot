@@ -18,8 +18,8 @@ public:
 	BitmapPixelator();
 	~BitmapPixelator();
 
-	void Load(std::string fileName);
-	void GenerateFromFont(std::string text);
+	void Load(std::wstring fileName);
+	void GenerateFromFont(std::wstring text);
 	void PlaceAt(GameOfLifePlane* onPlane, int atX, int atY);
 
 private:

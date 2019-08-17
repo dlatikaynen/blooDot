@@ -213,6 +213,9 @@
     <None Include="Media\Audio\background.wma">
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <None Include="Media\Bitmaps\blooDot.bmp">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="Media\Models\marble2.sdkmesh">
       <DeploymentContent>true</DeploymentContent>
     </None>

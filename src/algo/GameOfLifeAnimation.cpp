@@ -155,7 +155,7 @@ GameOfLifePlane* GameOfLifeAnimation::GetCurrentMatrix()
 	return m_currentMatrix;
 }
 
-void GameOfLifeAnimation::SinlgeStep()
+void GameOfLifeAnimation::SingleStep()
 {
 	GameOfLifeStep stepItem;
 

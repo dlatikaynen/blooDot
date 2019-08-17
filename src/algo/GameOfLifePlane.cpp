@@ -134,6 +134,7 @@ void GameOfLifePlane::CopyTo(GameOfLifePlane* destPlane)
 		for (int y = 0; y < m_Height; ++y)
 		{
 			destPlane->SetAlive(x, y, CellAt(x, y)->IsAlive());
+			destPlane->CellAt(x, y)->SetColor(CellAt(x, y)->GetCurrentColor());
 			destPlane->SetRaindrop(x, y, CellAt(x, y)->IsRaindrop());
 		}
 	}

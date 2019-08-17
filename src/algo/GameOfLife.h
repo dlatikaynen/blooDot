@@ -157,7 +157,7 @@ public:
 	bool IsRecording();
 	unsigned int GetNumStepsRecorded();
 	void CancelRecording();
-	void SinlgeStep();
+	void SingleStep();
 	void EndRecording();
 	void SaveRecording(Platform::String^ fileName);
 
