@@ -1,6 +1,5 @@
 # blooDot
-
--- A Game of Life --  
+### -- A Game of Life --  
 
 Development
 
