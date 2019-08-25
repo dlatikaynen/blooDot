@@ -1,6 +1,8 @@
 # blooDot
 
-Game Development
+-- A Game of Life --  
+
+Development
 
  - Lukas "PommesFritz03": worldbuilding, gameplay, design, graphics
  - Daniel "dlatikay": maths, physics, algorithms
