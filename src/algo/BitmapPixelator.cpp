@@ -105,7 +105,7 @@ void BitmapPixelator::Load(std::wstring fileName)
 						 * of colors not unlike our own, that feature prominently in the back story:
 						 * sibas... (the color) blue;  just as in "si pia SIBAS ian", he-(what)looks_like-blue-coming_from
 						 * alas.... (the color) green; just as in "alasta seakyo", green_ish-orb */						 						 
-						color.rgbAlpha = 0;
+						color.rgbAlpha = 0xff;
 						color.rgbGreen = pv[i + 2];
 						color.rgbRed = pv[i + 1];
 						color.rgbBlue = pv[i];

@@ -30,10 +30,6 @@ private:
 	const float										GoLCellSizePerc = 0.0105f;
 	const int										GoLSprinklerRadius = 4;
 	const int										GoLCellSideLength = 10;
-	static const int								FPSSampleSize = 10;
-	float											m_FPS[FPSSampleSize];
-	int												m_FPSCircular;
-	int												m_FPSWatermark;
 
 	std::shared_ptr<DX::DeviceResources>			m_deviceResources;
 	
@@ -54,7 +50,4 @@ private:
 
 	GameOfLifeAnimation								m_GoLEngine;
 	GameOfLifeSprinkler*							m_Sprinkler;
-
-	void ComputeFPS(float timeDelta);
-	int QueryFPS();
 };

@@ -33,7 +33,9 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
     m_gameState(GameState::Initial),
     m_windowActive(false),
 	m_deferredResourcesReadyPending(false),
-    m_deferredResourcesReady(false)
+    m_deferredResourcesReady(false),
+	m_FPSCircular(0),
+	m_FPSWatermark(0)
 {
     // Register to be notified if the Device is lost or recreated.
     m_deviceResources->RegisterDeviceNotify(this);
@@ -197,6 +199,14 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_preGameCountdownTimer.GetTextStyle().SetFontSize(144.0f);
     UserInterface::GetInstance().RegisterElement(&m_preGameCountdownTimer);
 
+	m_nerdStatsDisplay.Initialize();
+	m_nerdStatsDisplay.SetAlignment(AlignType::AlignNear, AlignType::AlignNear);
+	m_nerdStatsDisplay.SetContainer(clientRect);
+	m_nerdStatsDisplay.SetTextColor(D2D1::ColorF(D2D1::ColorF::LightGoldenrodYellow));
+	m_nerdStatsDisplay.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_DEMI_BOLD);
+	m_nerdStatsDisplay.GetTextStyle().SetFontSize(24.0f);
+	UserInterface::GetInstance().RegisterElement(&m_nerdStatsDisplay);
+
     m_inGameStopwatchTimer.Initialize();
     m_inGameStopwatchTimer.SetAlignment(AlignNear, AlignFar);
     m_inGameStopwatchTimer.SetContainer(clientRect);
@@ -235,7 +245,8 @@ void blooDotMain::CreateWindowSizeDependentResources()
     if ((!m_deferredResourcesReady) && m_loadScreen != nullptr)
     {
         m_loadScreen->UpdateForWindowSizeChange();
-    }
+		m_nerdStatsDisplay.SetVisible(true);
+	}
 
     m_sampleOverlay->CreateWindowSizeDependentResources();
 }
@@ -437,110 +448,112 @@ bool blooDotMain::Render()
     context->ClearRenderTargetView(m_deviceResources->GetBackBufferRenderTargetView(), DirectX::Colors::Black);
     context->ClearDepthStencilView(m_deviceResources->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-    if (!m_deferredResourcesReady)
-    {
-        // Only render the loading screen for now.
-        m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Loading Screen",0);
-        m_loadScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
-        m_deviceResources->GetD3DDeviceContext()->EndEvent();
-        return true;
-    }
+	if (m_deferredResourcesReady)
+	{
+		m_deviceResources->GetD3DDeviceContext()->IASetInputLayout(m_inputLayout.Get());
 
-    m_deviceResources->GetD3DDeviceContext()->IASetInputLayout(m_inputLayout.Get());
+		FLOAT blendFactors[4] = { 0, };
+		m_deviceResources->GetD3DDeviceContext()->OMSetBlendState(m_blendState.Get(), blendFactors, 0xffffffff);
 
-    FLOAT blendFactors[4] = { 0, };
-    m_deviceResources->GetD3DDeviceContext()->OMSetBlendState(m_blendState.Get(), blendFactors, 0xffffffff);
+		// Set the vertex shader stage state.
+		m_deviceResources->GetD3DDeviceContext()->VSSetShader(
+			m_vertexShader.Get(),   // use this vertex shader
+			nullptr,                // don't use shader linkage
+			0                       // don't use shader linkage
+		);
 
-    // Set the vertex shader stage state.
-    m_deviceResources->GetD3DDeviceContext()->VSSetShader(
-        m_vertexShader.Get(),   // use this vertex shader
-        nullptr,                // don't use shader linkage
-        0                       // don't use shader linkage
-        );
+		// Set the pixel shader stage state.
+		m_deviceResources->GetD3DDeviceContext()->PSSetShader(
+			m_pixelShader.Get(),    // use this pixel shader
+			nullptr,                // don't use shader linkage
+			0                       // don't use shader linkage
+		);
 
-    // Set the pixel shader stage state.
-    m_deviceResources->GetD3DDeviceContext()->PSSetShader(
-        m_pixelShader.Get(),    // use this pixel shader
-        nullptr,                // don't use shader linkage
-        0                       // don't use shader linkage
-        );
-
-    m_deviceResources->GetD3DDeviceContext()->PSSetSamplers(
-        0,                       // starting at the first sampler slot
-        1,                       // set one sampler binding
-        m_sampler.GetAddressOf() // to use this sampler
-        );
+		m_deviceResources->GetD3DDeviceContext()->PSSetSamplers(
+			0,                       // starting at the first sampler slot
+			1,                       // set one sampler binding
+			m_sampler.GetAddressOf() // to use this sampler
+		);
 
 #pragma region Rendering Maze
 
-        m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Maze", 0);
-        // Update the constant buffer with the new data.
-        m_deviceResources->GetD3DDeviceContext()->UpdateSubresource(
-            m_constantBuffer.Get(),
-            0,
-            nullptr,
-            &m_mazeConstantBufferData,
-            0,
-            0
-            );
+		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Maze", 0);
+		// Update the constant buffer with the new data.
+		m_deviceResources->GetD3DDeviceContext()->UpdateSubresource(
+			m_constantBuffer.Get(),
+			0,
+			nullptr,
+			&m_mazeConstantBufferData,
+			0,
+			0
+		);
 
-        m_deviceResources->GetD3DDeviceContext()->VSSetConstantBuffers(
-            0,                // starting at the first constant buffer slot
-            1,                // set one constant buffer binding
-            m_constantBuffer.GetAddressOf() // to use this buffer
-            );
+		m_deviceResources->GetD3DDeviceContext()->VSSetConstantBuffers(
+			0,                // starting at the first constant buffer slot
+			1,                // set one constant buffer binding
+			m_constantBuffer.GetAddressOf() // to use this buffer
+		);
 
-        m_deviceResources->GetD3DDeviceContext()->PSSetConstantBuffers(
-            0,                // starting at the first constant buffer slot
-            1,                // set one constant buffer binding
-            m_constantBuffer.GetAddressOf() // to use this buffer
-            );
+		m_deviceResources->GetD3DDeviceContext()->PSSetConstantBuffers(
+			0,                // starting at the first constant buffer slot
+			1,                // set one constant buffer binding
+			m_constantBuffer.GetAddressOf() // to use this buffer
+		);
 
-        m_mazeMesh.Render(m_deviceResources->GetD3DDeviceContext(), 0, INVALID_SAMPLER_SLOT, INVALID_SAMPLER_SLOT);
-        m_deviceResources->GetD3DDeviceContext()->EndEvent();
+		m_mazeMesh.Render(m_deviceResources->GetD3DDeviceContext(), 0, INVALID_SAMPLER_SLOT, INVALID_SAMPLER_SLOT);
+		m_deviceResources->GetD3DDeviceContext()->EndEvent();
 
 #pragma endregion
 
 #pragma region Rendering Marble
 
-        m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Marble", 0);
+		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Marble", 0);
 
-        // update the constant buffer with the new data
-        m_deviceResources->GetD3DDeviceContext()->UpdateSubresource(
-            m_constantBuffer.Get(),
-            0,
-            nullptr,
-            &m_marbleConstantBufferData,
-            0,
-            0
-            );
+		// update the constant buffer with the new data
+		m_deviceResources->GetD3DDeviceContext()->UpdateSubresource(
+			m_constantBuffer.Get(),
+			0,
+			nullptr,
+			&m_marbleConstantBufferData,
+			0,
+			0
+		);
 
-        m_deviceResources->GetD3DDeviceContext()->VSSetConstantBuffers(
-            0,                // starting at the first constant buffer slot
-            1,                // set one constant buffer binding
-            m_constantBuffer.GetAddressOf() // to use this buffer
-            );
+		m_deviceResources->GetD3DDeviceContext()->VSSetConstantBuffers(
+			0,                // starting at the first constant buffer slot
+			1,                // set one constant buffer binding
+			m_constantBuffer.GetAddressOf() // to use this buffer
+		);
 
-        m_deviceResources->GetD3DDeviceContext()->PSSetConstantBuffers(
-            0,                // starting at the first constant buffer slot
-            1,                // set one constant buffer binding
-            m_constantBuffer.GetAddressOf() // to use this buffer
-            );
+		m_deviceResources->GetD3DDeviceContext()->PSSetConstantBuffers(
+			0,                // starting at the first constant buffer slot
+			1,                // set one constant buffer binding
+			m_constantBuffer.GetAddressOf() // to use this buffer
+		);
 
-        m_marbleMesh.Render(m_deviceResources->GetD3DDeviceContext(), 0, INVALID_SAMPLER_SLOT, INVALID_SAMPLER_SLOT);
-        m_deviceResources->GetD3DDeviceContext()->EndEvent();
+		m_marbleMesh.Render(m_deviceResources->GetD3DDeviceContext(), 0, INVALID_SAMPLER_SLOT, INVALID_SAMPLER_SLOT);
+		m_deviceResources->GetD3DDeviceContext()->EndEvent();
 
 #pragma endregion
 
-    // Process audio.
-    m_audio.Render();
+		// Process audio.
+		m_audio.Render();
+
+	}
+	else
+	{
+		// Only render the loading screen for now.
+		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Loading Screen", 0);
+		m_loadScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
+		m_deviceResources->GetD3DDeviceContext()->EndEvent();
+	}
 
     // Draw the user interface and the overlay.
     UserInterface::GetInstance().Render(m_deviceResources->GetOrientationTransform2D());
 
-    m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Overlay", 0);
-    m_sampleOverlay->Render();
-    m_deviceResources->GetD3DDeviceContext()->EndEvent();
+    //m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Overlay", 0);
+    //m_sampleOverlay->Render();
+    //m_deviceResources->GetD3DDeviceContext()->EndEvent();
 
     return true;
 }
@@ -697,6 +710,15 @@ void blooDotMain::Update()
 		timerTotal = static_cast<float>(m_timer.GetTotalSeconds());
 		timerElapsed = static_cast<float>(m_timer.GetElapsedSeconds());
 
+		/* compute FPS for for Lukas */
+		ComputeFPS(timerElapsed);
+		if (m_timer.GetFrameCount() % 100 == 0)
+		{
+			m_nerdStatsDisplay.UpdateFPS(QueryFPS());
+		}
+		
+		UserInterface::GetInstance().Update(timerTotal, timerElapsed);
+
 		// When the game is first loaded, we display a load screen
         // and load any deferred resources that might be too expensive
         // to load during initialization.
@@ -713,7 +735,6 @@ void blooDotMain::Update()
             m_audio.Start();
         }
 
-        UserInterface::GetInstance().Update(timerTotal, timerElapsed);
 
 		if (m_gameState == GameState::Initial)
 		{
@@ -1326,6 +1347,50 @@ void blooDotMain::OnFocusChange(bool active)
             m_windowActive = active;
         }
     }
+}
+
+void blooDot::blooDotMain::ComputeFPS(float timeDelta)
+{
+	auto fpsMomentarily = 1.0f / timeDelta;
+	if (m_FPSWatermark == 0)
+	{
+		m_FPSWatermark = 1;
+		m_FPSCircular = 0;
+	}
+	else
+	{
+		if (m_FPSWatermark < FPSSampleSize)
+		{
+			++m_FPSWatermark;
+		}
+
+		++m_FPSCircular;
+		if (m_FPSCircular == FPSSampleSize)
+		{
+			m_FPSCircular = 0;
+		}
+	}
+	/* measurement of FPS for Lukas
+	 * https://www.gamedev.net/forums/topic/510019-how-to-calculate-frames-per-second/ */
+	m_FPS[m_FPSCircular] = fpsMomentarily;
+}
+
+int blooDot::blooDotMain::QueryFPS()
+{
+	if (m_FPSWatermark < FPSSampleSize)
+	{
+		return 0;
+	}
+	else
+	{
+		float fpsSum = 0.0F;
+		for (auto i = 0; i < FPSSampleSize; ++i)
+		{
+			fpsSum += m_FPS[i];
+		}
+
+		return static_cast<int>(std::roundf(fpsSum / static_cast<float>(FPSSampleSize)));
+	}
 }
 
 FORCEINLINE int FindMeshIndexByName(Mesh &mesh, const char *meshName)

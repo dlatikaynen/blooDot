@@ -11,8 +11,6 @@ using namespace D2D1;
 
 LoadScreen::LoadScreen() 
 {
-	m_FPSCircular = 0;
-	m_FPSWatermark = 0;
 }
 
 void LoadScreen::Initialize(
@@ -173,11 +171,8 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 		return;
 	}
 
-	/* compute FPS for for Lukas */
-	ComputeFPS(timeDelta);
-
 	//m_moved.width++;
-	//m_GoLEngine.SingleStep();
+	m_GoLEngine.SingleStep();
 
 	if (m_GoLEngine.IsRecording() && m_GoLEngine.GetNumStepsRecorded() == 100) 
 	{
@@ -208,50 +203,6 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 	//		m_GoL->SetRaindrop(x, y, m_GoL2->CellAt(x, y)->IsRaindrop());
 	//	}
 	//}
-}
-
-void LoadScreen::ComputeFPS(float timeDelta)
-{
-	auto fpsMomentarily = 1.0f / timeDelta;
-	if (m_FPSWatermark == 0) 
-	{
-		m_FPSWatermark = 1;
-		m_FPSCircular = 0;
-	}
-	else 
-	{
-		if (m_FPSWatermark < FPSSampleSize) 
-		{
-			++m_FPSWatermark;
-		}
-
-		++m_FPSCircular;
-		if (m_FPSCircular == FPSSampleSize) 
-		{
-			m_FPSCircular = 0;
-		}
-	}
-	/* measurement of FPS for Lukas
-	 * https://www.gamedev.net/forums/topic/510019-how-to-calculate-frames-per-second/ */
-	m_FPS[m_FPSCircular] = fpsMomentarily;
-}
-
-int LoadScreen::QueryFPS()
-{
-	if (m_FPSWatermark < FPSSampleSize) 
-	{
-		return 0;
-	}
-	else
-	{
-		float fpsSum = 0.0F;
-		for (auto i = 0; i < FPSSampleSize; ++i) 
-		{
-			fpsSum += m_FPS[i];
-		}
-
-		return static_cast<int>(std::roundf(fpsSum / static_cast<float>(FPSSampleSize)));
-	}
 }
 
 void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)

@@ -279,6 +279,7 @@
     <ClCompile Include="..\src\ui\TextElement.cpp" />
     <ClCompile Include="..\src\ui\TextStyle.cpp" />
     <ClCompile Include="..\src\ui\CountdownTimer.cpp" />
+    <ClCompile Include="..\src\ui\NerdStatsDisplay.cpp" />
     <ClCompile Include="..\src\dx\BrushRegistry.cpp" />
     <ClCompile Include="..\src\algo\BitmapPixelator.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeStep.cpp" />
@@ -311,6 +312,7 @@
     <ClInclude Include="..\src\ui\ElementBase.h" />
     <ClInclude Include="..\src\ui\HighScoreTable.h" />
     <ClInclude Include="..\src\ui\StopwatchTimer.h" />
+    <ClInclude Include="..\src\ui\NerdStatsDisplay.h" />
     <ClInclude Include="..\src\ui\TextButton.h" />
     <ClInclude Include="..\src\ui\TextElement.h" />
     <ClInclude Include="..\src\ui\TextStyle.h" />

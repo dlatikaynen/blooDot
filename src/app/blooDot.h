@@ -82,64 +82,69 @@ namespace blooDot
         bool IsDeferredLoadReady() {return m_deferredResourcesReady;}
 
     private:
-        // Cached pointer to device resources.
-        std::shared_ptr<DX::DeviceResources> m_deviceResources;
+		static const int							FPSSampleSize = 10;
+		const float									m_deadzoneRadius = 0.1f;
+		const float									m_deadzoneSquared = m_deadzoneRadius * m_deadzoneRadius;
+		const float									m_controllerScaleFactor = 8.0f;
+		const float									m_touchScaleFactor = 2.0f;
+		const float									m_accelerometerScaleFactor = 3.5f;
 
-        // Sample overlay class.
-        std::unique_ptr<SampleOverlay> m_sampleOverlay;
+		// Cached pointer to device resources.
+        std::shared_ptr<DX::DeviceResources>		m_deviceResources;
+        std::unique_ptr<SampleOverlay>				m_sampleOverlay;
+        DX::StepTimer								m_timer;
+        std::unique_ptr<LoadScreen>                 m_loadScreen;
+        Microsoft::WRL::ComPtr<ID3D11InputLayout>   m_inputLayout;
+        Microsoft::WRL::ComPtr<ID3D11VertexShader>  m_vertexShader;
+        Microsoft::WRL::ComPtr<ID3D11PixelShader>   m_pixelShader;
+        Microsoft::WRL::ComPtr<ID3D11SamplerState>  m_sampler;
+        Microsoft::WRL::ComPtr<ID3D11Buffer>        m_constantBuffer;
+        Microsoft::WRL::ComPtr<ID3D11BlendState>    m_blendState;
+        Windows::Devices::Sensors::Accelerometer^   m_accelerometer;
+        std::unique_ptr<Camera>						m_camera;
 
-        // Rendering loop timer.
-        DX::StepTimer m_timer;
-
-        std::unique_ptr<LoadScreen>                         m_loadScreen;
-
-        Microsoft::WRL::ComPtr<ID3D11InputLayout>           m_inputLayout;
-        Microsoft::WRL::ComPtr<ID3D11VertexShader>          m_vertexShader;
-        Microsoft::WRL::ComPtr<ID3D11PixelShader>           m_pixelShader;
-        Microsoft::WRL::ComPtr<ID3D11SamplerState>          m_sampler;
-        Microsoft::WRL::ComPtr<ID3D11Buffer>                m_constantBuffer;
-        Microsoft::WRL::ComPtr<ID3D11BlendState>            m_blendState;
-        Windows::Devices::Sensors::Accelerometer^           m_accelerometer;
-
-        std::unique_ptr<Camera> m_camera;
-        ConstantBuffer  m_mazeConstantBufferData;
-        Mesh			m_mazeMesh;
-        ConstantBuffer  m_marbleConstantBufferData;
-        Mesh			m_marbleMesh;
-        unsigned int    m_vertexStride;
-        float           m_lightStrength;
-        float           m_targetLightStrength;
-        Collision       m_collision;
-        Physics         m_physics;
-        Audio           m_audio;
-        GameState       m_gameState;
-        bool            m_resetCamera;
-        bool            m_resetMarbleRotation;
+        ConstantBuffer		m_mazeConstantBufferData;
+        Mesh				m_mazeMesh;
+        ConstantBuffer		m_marbleConstantBufferData;
+        Mesh				m_marbleMesh;
+        unsigned int		m_vertexStride;
+        float				m_lightStrength;
+        float				m_targetLightStrength;
+        Collision			m_collision;
+        Physics				m_physics;
+        Audio				m_audio;
+        GameState			m_gameState;
+        bool				m_resetCamera;
+        bool				m_resetMarbleRotation;
         typedef std::vector<XMFLOAT3> Checkpoints;
-        Checkpoints     m_checkpoints;
-        size_t          m_currentCheckpoint;
-        TextButton      m_startGameButton;
-        TextButton      m_highScoreButton;
-        HighScoreTable  m_highScoreTable;
-        CountdownTimer  m_preGameCountdownTimer;
-        StopwatchTimer  m_inGameStopwatchTimer;
-        TextElement     m_checkpointText;
-        TextButton      m_pausedText;
-        TextElement     m_resultsText;
-        HighScoreEntry  m_newHighScore;
+        Checkpoints			m_checkpoints;
+        size_t				m_currentCheckpoint;
+        TextButton			m_startGameButton;
+        TextButton			m_highScoreButton;
+        HighScoreTable		m_highScoreTable;
+        CountdownTimer		m_preGameCountdownTimer;
+        StopwatchTimer		m_inGameStopwatchTimer;
+		NerdStatsDisplay	m_nerdStatsDisplay;
+        TextElement			m_checkpointText;
+        TextButton			m_pausedText;
+        TextElement			m_resultsText;
+        HighScoreEntry		m_newHighScore;
         typedef std::map<int, XMFLOAT2> TouchMap;
-        TouchMap        m_touches;
-		XMFLOAT2		m_pointerPosition;
+        TouchMap			m_touches;
+		XMFLOAT2			m_pointerPosition;
         typedef std::queue<D2D1_POINT_2F> PointQueue;
-        PointQueue      m_pointQueue;
-        bool            m_pauseKeyActive;
-        bool            m_pauseKeyPressed;
-        bool            m_homeKeyActive;
-        bool            m_homeKeyPressed;
-        bool            m_windowActive;
-		bool            m_deferredResourcesReadyPending;
-		bool            m_deferredResourcesReady;
-        PersistentState^ m_persistentState;
+        PointQueue			m_pointQueue;
+        bool				m_pauseKeyActive;
+        bool				m_pauseKeyPressed;
+        bool				m_homeKeyActive;
+        bool				m_homeKeyPressed;
+        bool				m_windowActive;
+		bool				m_deferredResourcesReadyPending;
+		bool				m_deferredResourcesReady;
+        PersistentState^	m_persistentState;
+		float				m_FPS[FPSSampleSize];
+		int					m_FPSCircular;
+		int					m_FPSWatermark;
 
 		// Input
 		Platform::Collections::Vector<Windows::Gaming::Input::Gamepad^>^	m_myGamepads;
@@ -147,11 +152,6 @@ namespace blooDot
 		Windows::Gaming::Input::GamepadReading								m_newReading;
 		Windows::Gaming::Input::GamepadReading								m_oldReading;
 		bool																m_currentGamepadNeedsRefresh;
-		const float															m_deadzoneRadius = 0.1f;
-		const float															m_deadzoneSquared = m_deadzoneRadius * m_deadzoneRadius;
-		const float															m_controllerScaleFactor = 8.0f;
-		const float															m_touchScaleFactor = 2.0f;
-		const float															m_accelerometerScaleFactor = 3.5f;
 
         HRESULT ExtractTrianglesFromMesh(
             Mesh& mesh,
@@ -161,6 +161,9 @@ namespace blooDot
 
         void ResetCheckpoints();
         CheckpointState UpdateCheckpoints();
+
+		void ComputeFPS(float timeDelta);
+		int QueryFPS();
 
         void SetGameState(GameState nextState);
         void SaveState();

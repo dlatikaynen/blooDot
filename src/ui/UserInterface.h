@@ -5,6 +5,7 @@
 #include "TextElement.h"
 #include "CountdownTimer.h"
 #include "StopwatchTimer.h"
+#include "NerdStatsDisplay.h"
 #include "TextButton.h"
 #include "HighScoreTable.h"
 
