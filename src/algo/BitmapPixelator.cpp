@@ -63,7 +63,7 @@ void BitmapPixelator::Load(std::wstring fileName)
 
 	if (SUCCEEDED(hr))
 	{
-		WICRect rcLock = { 0, 0, uiWidth, uiHeight };
+		WICRect rcLock = { 0, 0, (int)uiWidth, (int)uiHeight };
 
 		// Create the bitmap from the image frame.
 		if (SUCCEEDED(hr))
@@ -73,7 +73,7 @@ void BitmapPixelator::Load(std::wstring fileName)
 				WICBitmapCacheOnDemand, // Cache metadata when needed
 				&pIBitmap				// Pointer to the bitmap
 			);
-		}
+		}		
 
 		if (SUCCEEDED(hr))
 		{
@@ -83,6 +83,9 @@ void BitmapPixelator::Load(std::wstring fileName)
 			{
 				UINT cbBufferSize = 0;
 				BYTE *pv = NULL;
+				
+				/* todo: recognize stride and pixelformat,
+				 * currently expecting 24bpp rgb invariantly */
 
 				// Retrieve a pointer to the pixel data
 				hr = pILock->GetDataPointer(&cbBufferSize, &pv);
@@ -93,13 +96,19 @@ void BitmapPixelator::Load(std::wstring fileName)
 					m_Plane = new GameOfLifePlane(uiWidth, uiHeight);
 					m_Plane->Wipe();
 					MFARGB color;
-					int x = 0, y = 0, pix = 0;
-					for (int i = 0; i < cbBufferSize; i += 3)
+					unsigned int x = 0, y = 0, pix = 0;
+					for (auto i = 0U; i < cbBufferSize; i += 3U)
 					{
-						color.rgbAlpha = 128;
-						color.rgbRed = pv[i];
-						color.rgbGreen = pv[i + 1];
-						color.rgbBlue = pv[i + 2];
+						/* sd for the comical ordering of colors, see
+						 * https://en.wikipedia.org/wiki/BMP_file_format#Pixel_format 
+						 * this is also interesting in-universe, as there are notions
+						 * of colors not unlike our own, that feature prominently in the back story:
+						 * sibas... (the color) blue;  just as in "si pia SIBAS ian", he-(what)looks_like-blue-coming_from
+						 * alas.... (the color) green; just as in "alasta seakyo", green_ish-orb */						 						 
+						color.rgbAlpha = 0;
+						color.rgbGreen = pv[i + 2];
+						color.rgbRed = pv[i + 1];
+						color.rgbBlue = pv[i];
 						
 						if (color.rgbRed > 0 || color.rgbGreen > 0 || color.rgbBlue > 0)
 						{
