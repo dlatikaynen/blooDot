@@ -21,14 +21,15 @@ void NerdStatsDisplay::Initialize()
 
 void NerdStatsDisplay::Update(float timeTotal, float timeDelta)
 {
-	if (m_lastShownFPS != m_averageFPS)
+	if (m_isFadingOut == false && m_lastShownFPS != m_averageFPS)
 	{
 		m_lastShownFPS = m_averageFPS;
 		WCHAR buffer[10];
 		swprintf_s(buffer, L"%d fps", m_averageFPS);
 		SetText(buffer);
 		SetTextOpacity(1.0f);
-		FadeOut(1.0f);
+		SetVisible(true);
+		FadeOut(2.0f);
 	}
 
 	TextElement::Update(timeTotal, timeDelta);
