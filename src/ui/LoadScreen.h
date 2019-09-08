@@ -10,13 +10,7 @@ class LoadScreen
 {
 public:
 	LoadScreen::LoadScreen();
-    void Initialize(
-        _In_ ID2D1Device*         d2dDevice,
-        _In_ ID2D1DeviceContext*  d2dContext,
-		_In_ std::shared_ptr<DX::DeviceResources>& deviceResources,
-		_In_ IWICImagingFactory*  wicFactory
-        );
-
+    void Initialize(_In_ std::shared_ptr<DX::DeviceResources>& deviceResources);
 	void CreateDeviceDependentResources();
 	void ResetDirectXResources();
     void ReleaseDeviceDependentResources();

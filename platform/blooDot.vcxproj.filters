@@ -99,6 +99,8 @@
     <ClCompile Include="..\src\app\blooDot.cpp">
       <Filter>app</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ui\NerdStatsDisplay.cpp" />
+    <ClCompile Include="..\src\ui\WorldScreenBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\sound\Audio.h" />
@@ -191,6 +193,8 @@
     <ClInclude Include="..\src\app\blooDot.h">
       <Filter>app</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\ui\NerdStatsDisplay.h" />
+    <ClInclude Include="..\src\ui\WorldScreenBase.h" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="Media\Audio\background.mp3" />
@@ -227,6 +231,7 @@
     <Image Include="Media\Textures\Marble.dds" />
     <Image Include="Media\Textures\topwall_color.dds" />
     <Image Include="Media\Textures\walllevel1.dds" />
+    <Image Include="Media\Bitmaps\universe_seamless.png" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
@@ -236,6 +241,7 @@
     <None Include="Media\Audio\background.wma" />
     <None Include="Media\Models\marble2.sdkmesh" />
     <None Include="Media\Models\maze1.sdkmesh" />
+    <None Include="Media\Bitmaps\blooDot.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="algo">

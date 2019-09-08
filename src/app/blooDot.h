@@ -12,7 +12,7 @@
 #include "..\ui\UserInterface.h"
 #include "..\ui\SampleOverlay.h"
 #include "..\ui\LoadScreen.h"
-
+#include "..\ui\WorldScreenBase.h"
 #include "StepTimer.h"
 
 using namespace DirectX;
@@ -31,7 +31,9 @@ struct ConstantBuffer
 
 enum class GameState
 {
-    Initial,
+	Initial,
+	LoadScreen,
+	LevelEditor,
     MainMenu,
     HighScoreDisplay,
     PreGameCountdown,
@@ -94,7 +96,8 @@ namespace blooDot
         std::unique_ptr<SampleOverlay>				m_sampleOverlay;
         DX::StepTimer								m_timer;
         std::unique_ptr<LoadScreen>                 m_loadScreen;
-        Microsoft::WRL::ComPtr<ID3D11InputLayout>   m_inputLayout;
+		std::unique_ptr<WorldScreenBase>            m_worldScreen;
+		Microsoft::WRL::ComPtr<ID3D11InputLayout>   m_inputLayout;
         Microsoft::WRL::ComPtr<ID3D11VertexShader>  m_vertexShader;
         Microsoft::WRL::ComPtr<ID3D11PixelShader>   m_pixelShader;
         Microsoft::WRL::ComPtr<ID3D11SamplerState>  m_sampler;

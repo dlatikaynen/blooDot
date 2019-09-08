@@ -72,19 +72,17 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
     m_accelerometer = Windows::Devices::Sensors::Accelerometer::GetDefault();
 
     m_loadScreen = std::unique_ptr<LoadScreen>(new LoadScreen());
-    m_loadScreen->Initialize(
-        m_deviceResources->GetD2DDevice(),
-        m_deviceResources->GetD2DDeviceContext(),
-		m_deviceResources,
-        m_deviceResources->GetWicImagingFactory()
-        );
+    m_loadScreen->Initialize(m_deviceResources);
+
+	m_worldScreen = std::unique_ptr<WorldScreenBase>(new WorldScreenBase());
+	m_worldScreen->Initialize(m_deviceResources);
 
     UserInterface::GetInstance().Initialize(
         m_deviceResources->GetD2DDevice(),
         m_deviceResources->GetD2DDeviceContext(),
         m_deviceResources->GetWicImagingFactory(),
         m_deviceResources->GetDWriteFactory()
-        );
+    );
 
     LoadState();
 
@@ -245,10 +243,17 @@ void blooDotMain::CreateWindowSizeDependentResources()
     if ((!m_deferredResourcesReady) && m_loadScreen != nullptr)
     {
         m_loadScreen->UpdateForWindowSizeChange();
-		//m_nerdStatsDisplay.SetVisible(true);
 	}
 
-    m_sampleOverlay->CreateWindowSizeDependentResources();
+	if (m_worldScreen != nullptr)
+	{
+		m_worldScreen->CreateDeviceDependentResources();
+	}
+
+	if (m_sampleOverlay != nullptr)
+	{
+		m_sampleOverlay->CreateWindowSizeDependentResources();
+	}
 }
 
 void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
@@ -276,6 +281,7 @@ void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
         );
     DX::ThrowIfFailed(m_vertexShader->SetPrivateData(WKPDID_D3DDebugObjectName, vertexShaderName->Length(), vertexShaderName->Data()));
 
+	
 
     // create the constant buffer for updating model and camera data.
     D3D11_BUFFER_DESC constantBufferDesc = { 0 };
@@ -296,7 +302,6 @@ void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
         );
     Platform::String^ constantBufferName = "Constant Buffer created in LoadDeferredResources";
     DX::ThrowIfFailed(m_constantBuffer->SetPrivateData(WKPDID_D3DDebugObjectName, constantBufferName->Length(), constantBufferName->Data()));
-
 
     Platform::String^ pixelShaderName = "BasicPixelShader.cso";
     loader->LoadShader(
@@ -448,7 +453,20 @@ bool blooDotMain::Render()
     context->ClearRenderTargetView(m_deviceResources->GetBackBufferRenderTargetView(), DirectX::Colors::Black);
     context->ClearDepthStencilView(m_deviceResources->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	if (m_deferredResourcesReady)
+	if (m_gameState == GameState::LoadScreen)
+	{
+		// Only render the loading screen for now.
+		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Loading Screen", 0);
+		m_loadScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
+		m_deviceResources->GetD3DDeviceContext()->EndEvent();
+	}
+	else if (m_gameState == GameState::LevelEditor)
+	{
+		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Level Editor", 0);
+		m_worldScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
+		m_deviceResources->GetD3DDeviceContext()->EndEvent();
+	}
+	else if (m_deferredResourcesReady)
 	{
 		m_deviceResources->GetD3DDeviceContext()->IASetInputLayout(m_inputLayout.Get());
 
@@ -539,13 +557,6 @@ bool blooDotMain::Render()
 		// Process audio.
 		m_audio.Render();
 
-	}
-	else
-	{
-		// Only render the loading screen for now.
-		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Loading Screen", 0);
-		m_loadScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
-		m_deviceResources->GetD3DDeviceContext()->EndEvent();
 	}
 
     // Draw the user interface and the overlay.
@@ -703,7 +714,12 @@ void blooDotMain::Update()
 {
 	float timerTotal;
 	float timerElapsed;
-	
+
+	if (m_gameState == GameState::Initial)
+	{
+		SetGameState(GameState::LoadScreen);
+	}
+
 	// Update scene objects.
     m_timer.Tick([&]()
     {
@@ -716,39 +732,38 @@ void blooDotMain::Update()
 		{
 			m_nerdStatsDisplay.UpdateFPS(QueryFPS());
 		}
-		
+
 		UserInterface::GetInstance().Update(timerTotal, timerElapsed);
 
 		// When the game is first loaded, we display a load screen
         // and load any deferred resources that might be too expensive
         // to load during initialization.
-        if (!m_deferredResourcesReady)
+        if (m_gameState==GameState::LoadScreen)
         {
             // At this point we can draw a progress bar, or if we had
             // loaded audio, we could play audio during the loading process.
 			m_loadScreen->Update(timerTotal, timerElapsed);
 			return;
         }
+		else if (m_gameState == GameState::LevelEditor)
+		{
+			m_worldScreen->Update(timerTotal, timerElapsed);
+			return;
+		}
 
         if (!m_audio.m_isAudioStarted)
         {
             m_audio.Start();
         }
 
-
-		if (m_gameState == GameState::Initial)
-		{
-			SetGameState(GameState::MainMenu);
-		}
-
         switch (m_gameState)
         {
-        case GameState::PreGameCountdown:
-			if (m_preGameCountdownTimer.IsCountdownComplete())
-			{
-				SetGameState(GameState::InGameActive);
-			}
-            break;
+			case GameState::PreGameCountdown:
+				if (m_preGameCountdownTimer.IsCountdownComplete())
+				{
+					SetGameState(GameState::InGameActive);
+				}
+				break;
         }
 
 #pragma region Process Input
@@ -1199,7 +1214,7 @@ void blooDotMain::LoadState()
     case GameState::HighScoreDisplay:
     case GameState::PreGameCountdown:
     case GameState::PostGameResults:
-        SetGameState(GameState::MainMenu);
+        SetGameState(GameState::LoadScreen);
         break;
 
     case GameState::InGameActive:
@@ -1298,6 +1313,7 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 	if (m_deferredResourcesReadyPending)
 	{
 		m_deferredResourcesReady = true;
+		SetGameState(GameState::LevelEditor);
 	}
 }
 
@@ -1451,6 +1467,7 @@ void blooDotMain::OnDeviceLost()
 {
     m_sampleOverlay->ReleaseDeviceDependentResources();
     m_loadScreen->ReleaseDeviceDependentResources();
+	m_worldScreen->ReleaseDeviceDependentResources();
     UserInterface::ReleaseDeviceDependentResources();
 
     m_inputLayout.Reset();
@@ -1470,24 +1487,20 @@ void blooDotMain::OnDeviceLost()
 // Notifies renderers that device resources may now be re-created.
 void blooDotMain::OnDeviceRestored()
 {
-    m_sampleOverlay->CreateDeviceDependentResources();
+	m_worldScreen->CreateDeviceDependentResources();
+	m_sampleOverlay->CreateDeviceDependentResources();
 
-    m_loadScreen->Initialize(
-        m_deviceResources->GetD2DDevice(),
-        m_deviceResources->GetD2DDeviceContext(),
-		m_deviceResources,
-        m_deviceResources->GetWicImagingFactory()
-        );
+    m_loadScreen->Initialize(m_deviceResources);
+	m_worldScreen->Initialize(m_deviceResources);
 
     UserInterface::GetInstance().Initialize(
         m_deviceResources->GetD2DDevice(),
         m_deviceResources->GetD2DDeviceContext(),
         m_deviceResources->GetWicImagingFactory(),
         m_deviceResources->GetDWriteFactory()
-        );
+    );
 
     CreateWindowSizeDependentResources();
-
     LoadDeferredResources(true, true);
 }
 

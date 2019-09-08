@@ -13,25 +13,19 @@ LoadScreen::LoadScreen()
 {
 }
 
-void LoadScreen::Initialize(
-    _In_ ID2D1Device*         d2dDevice,
-    _In_ ID2D1DeviceContext*  d2dContext,
-	_In_ std::shared_ptr<DX::DeviceResources>& deviceResources,
-    _In_ IWICImagingFactory*  wicFactory
-)
+void LoadScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>& deviceResources)
 {
-	m_deviceResources = deviceResources,
-    m_wicFactory = wicFactory;
-    m_d2dDevice = d2dDevice;
-    m_d2dContext = d2dContext;
+	m_deviceResources = deviceResources;
+	m_wicFactory = deviceResources->GetWicImagingFactory();
+	m_d2dDevice = deviceResources->GetD2DDevice();
+	m_d2dContext = deviceResources->GetD2DDeviceContext();
     m_imageSize = D2D1::SizeF(0.0f, 0.0f);
     m_offset = D2D1::SizeF(0.0f, 0.0f);
 	m_moved = D2D1::SizeF(0.0f, 0.0f);
 	m_totalSize = D2D1::SizeF(0.0f, 0.0f);
 
     ComPtr<ID2D1Factory> factory;
-    d2dDevice->GetFactory(&factory);
-
+    m_d2dDevice->GetFactory(&factory);
     DX::ThrowIfFailed(
         factory.As(&m_d2dFactory)
     );

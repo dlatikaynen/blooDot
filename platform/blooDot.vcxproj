@@ -240,6 +240,7 @@
     <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Image Include="Assets\StoreLogo.png" />
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Image Include="Media\Bitmaps\universe_seamless.png" />
     <Image Include="Media\Textures\bridge.dds" />
     <Image Include="Media\Textures\bridge_bump.dds" />
     <Image Include="Media\Textures\cliff_sides.dds" />
@@ -265,6 +266,7 @@
     <ClCompile Include="..\src\io\DDSTextureLoader.cpp" />
     <ClCompile Include="..\src\dx\DeviceResources.cpp" />
     <ClCompile Include="..\src\ui\LoadScreen.cpp" />
+    <ClCompile Include="..\src\ui\WorldScreenBase.cpp" />
     <ClCompile Include="..\src\app\blooDot.cpp" />
     <ClCompile Include="..\src\io\MediaStreamer.cpp" />
     <ClCompile Include="..\src\io\PersistentState.cpp" />
@@ -300,6 +302,7 @@
     <ClInclude Include="..\src\dx\DeviceResources.h" />
     <ClInclude Include="..\src\dx\DirectXHelper.h" />
     <ClInclude Include="..\src\ui\LoadScreen.h" />
+    <ClInclude Include="..\src\ui\WorldScreenBase.h" />
     <ClInclude Include="..\src\app\blooDot.h" />
     <ClInclude Include="..\src\io\MediaStreamer.h" />
     <ClInclude Include="..\src\io\PersistentState.h" />
