@@ -35,11 +35,6 @@ void NerdStatsDisplay::Update(float timeTotal, float timeDelta)
 	TextElement::Update(timeTotal, timeDelta);
 }
 
-void NerdStatsDisplay::Render()
-{
-	TextElement::Render();
-}
-
 void NerdStatsDisplay::UpdateFPS(int averageFPS)
 {
 	m_averageFPS = averageFPS;

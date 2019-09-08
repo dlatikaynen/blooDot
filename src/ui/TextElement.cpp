@@ -8,8 +8,7 @@ using namespace Microsoft::WRL;
 using namespace Windows::UI::ViewManagement;
 using namespace D2D1;
 
-TextElement::TextElement() :
-	m_isFadingOut(false)
+TextElement::TextElement()
 {
 }
 
@@ -108,10 +107,13 @@ void TextElement::SetText(Platform::String^ text)
 
 void TextElement::FadeOut(float fadeOutTime)
 {
-	m_fadeStartingOpacity = m_textColorBrush->GetOpacity();
-	m_fadeOutTime = fadeOutTime;
-	m_fadeOutTimeElapsed = 0.0f;
-	m_isFadingOut = true;
+	if (m_visible)
+	{
+		m_fadeStartingOpacity = m_textColorBrush->GetOpacity();
+		m_fadeOutTime = fadeOutTime;
+		m_fadeOutTimeElapsed = 0.0f;
+		m_isFadingOut = true;
+	}
 }
 
 void TextElement::CalculateSize()

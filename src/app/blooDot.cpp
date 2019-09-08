@@ -245,7 +245,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     if ((!m_deferredResourcesReady) && m_loadScreen != nullptr)
     {
         m_loadScreen->UpdateForWindowSizeChange();
-		m_nerdStatsDisplay.SetVisible(true);
+		//m_nerdStatsDisplay.SetVisible(true);
 	}
 
     m_sampleOverlay->CreateWindowSizeDependentResources();

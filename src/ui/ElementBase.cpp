@@ -9,7 +9,8 @@ using namespace Windows::UI::ViewManagement;
 using namespace D2D1;
 
 ElementBase::ElementBase() :
-	m_visible(false)
+	m_visible(false),
+	m_isFadingOut(false)
 {
 	m_alignment.horizontal = AlignCenter;
 	m_alignment.vertical = AlignCenter;
@@ -28,7 +29,10 @@ void ElementBase::SetContainer(const D2D1_RECT_F& container)
 
 void ElementBase::SetVisible(bool visible)
 {
-	m_visible = visible;
+	if (!(visible && m_isFadingOut))
+	{
+		m_visible = visible;
+	}
 }
 
 D2D1_RECT_F ElementBase::GetBounds()

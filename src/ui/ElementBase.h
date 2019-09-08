@@ -25,6 +25,7 @@ protected:
 	D2D1_RECT_F     m_container;
 	D2D1_SIZE_F     m_size;
 	bool            m_visible;
+	bool            m_isFadingOut;
 };
 
 typedef std::set<ElementBase*> ElementSet;

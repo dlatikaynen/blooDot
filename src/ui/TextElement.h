@@ -28,7 +28,6 @@ protected:
 
 	TextStyle           m_textStyle;
 
-	bool                m_isFadingOut;
 	float               m_fadeStartingOpacity;
 	float               m_fadeOutTime;
 	float               m_fadeOutTimeElapsed;
