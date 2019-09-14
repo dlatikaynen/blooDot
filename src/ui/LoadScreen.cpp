@@ -111,19 +111,31 @@ void LoadScreen::UpdateForWindowSizeChange()
 	m_isResizing = true;
 
     Windows::Foundation::Rect windowBounds = CoreWindow::GetForCurrentThread()->Bounds;
+	FLOAT dpiX, dpiY;
+	m_d2dContext->GetDpi(&dpiX, &dpiY);
+	Windows::Foundation::Rect viewportBounds = Windows::Foundation::Rect(
+		Windows::Foundation::Point(
+			DipsToPixelsX(windowBounds.Left, dpiX),
+			DipsToPixelsY(windowBounds.Top, dpiY)
+		),
+		Windows::Foundation::Point(
+			DipsToPixelsX(windowBounds.Right, dpiX),
+			DipsToPixelsY(windowBounds.Bottom, dpiY)
+		)
+	);
 
-    m_offset.width = (windowBounds.Width - m_imageSize.width) / 2.0f;
-    m_offset.height = (windowBounds.Height - m_imageSize.height) / 2.0f;
+    m_offset.width = (viewportBounds.Width - m_imageSize.width) / 2.0f;
+    m_offset.height = (viewportBounds.Height - m_imageSize.height) / 2.0f;
 
     m_totalSize.width = m_offset.width + m_imageSize.width;
     m_totalSize.height = m_offset.height + m_imageSize.height;
 
 	/* we have the screen size here, so we use this opportunity to compute the GoL dimensions
 	 * and also precompute the sprinkler circle dot matrix */
-	D2D1_SIZE_F canvasSize = m_d2dContext->GetSize();
+	//D2D1_SIZE_F canvasSize = m_d2dContext->GetSize();
 	int scaleFactor = (LoadScreen::GoLCellSideLength + 1) + 1;
-	int gridWidth = static_cast<int>(canvasSize.width / scaleFactor);
-	int gridHeight = static_cast<int>(canvasSize.height / scaleFactor);
+	int gridWidth = static_cast<int>(viewportBounds.Width / scaleFactor);
+	int gridHeight = static_cast<int>(viewportBounds.Height / scaleFactor);
 	int pixWidth = LoadScreen::GoLCellSideLength;
 	int pixHeight = LoadScreen::GoLCellSideLength;
 

@@ -17,6 +17,8 @@ public:
 	void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
 
 private:
+	const int										SCROLL_TRESHOLD_FACT = 0.61F;
+
 	std::shared_ptr<DX::DeviceResources>			m_deviceResources;
 	Microsoft::WRL::ComPtr<ID2D1Factory1>           m_d2dFactory;
     Microsoft::WRL::ComPtr<ID2D1Device>             m_d2dDevice;
@@ -28,6 +30,11 @@ private:
     D2D1_SIZE_F                                     m_imageSize;
 	D2D1_SIZE_F                                     m_totalSize;
 	bool											m_isResizing;
+
+	D2D1_SIZE_F										m_worldSize;
+	D2D1_POINT_2F									m_worldCenter;
+	D2D1_POINT_2F									m_viewportOffset;
+	D2D1_SIZE_F										m_viewportScrollTreshold;
 
 	void DrawLevelEditorRaster();
 };

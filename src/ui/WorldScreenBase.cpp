@@ -177,13 +177,13 @@ void WorldScreenBase::DrawLevelEditorRaster()
 	Microsoft::WRL::ComPtr<ID2D1Brush> brrect2 = m_Brushes.WannaHave(m_d2dContext, colrect2);
 
 	rect.left = 50;
-	rect.top = 2*49+1;
+	rect.top = 2*49;
 	rect.right = rect.left + 49;
 	rect.bottom = rect.top + 49;
 	m_d2dContext->FillRectangle(rect, brrect.Get());
 
-	rect.left = 50;
-	rect.top =2*49+1;
+	rect.left = 50+49;
+	rect.top =2*49;
 	rect.right = rect.left + 2*49+1;
 	rect.bottom = rect.top + 49;
 	m_d2dContext->FillRectangle(rect, brrect2.Get());

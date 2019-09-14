@@ -21,6 +21,9 @@ public:
 	void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
 
 private:
+	inline int DipsToPixelsX(float dips, float dpix) const { return int(dips * dpix / 96.f + 0.5f);	};
+	inline int DipsToPixelsY(float dips, float dpiy) const { return int(dips * dpiy / 96.f + 0.5f); };
+
 	const float										GoLCellSizePerc = 0.0105f;
 	const int										GoLSprinklerRadius = 4;
 	const int										GoLCellSideLength = 10;

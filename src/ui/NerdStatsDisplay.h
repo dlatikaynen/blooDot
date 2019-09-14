@@ -4,9 +4,8 @@ class NerdStatsDisplay : public TextElement
 {
 public:
 	NerdStatsDisplay();
-	void Initialize();
-	void Update(float timeTotal, float timeDelta);
-	//void Render();
+	void Initialize() override;
+	void Update(float timeTotal, float timeDelta) override;	
 	void UpdateFPS(int averageFPS);
 
 protected:
