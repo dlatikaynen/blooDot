@@ -27,9 +27,10 @@ private:
 	BrushRegistry									m_Brushes;
     Microsoft::WRL::ComPtr<IWICImagingFactory>      m_wicFactory;
     Microsoft::WRL::ComPtr<ID2D1Bitmap>             m_background;
-	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>       m_floor;
-	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>       m_walls;
-	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>       m_rooof;
+	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_dings;
+	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_floor;
+	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_walls;
+	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_rooof;
 	D2D1_SIZE_F                                     m_backgroundSize;
 	D2D1_SIZE_U										m_viewportSize;
 	D2D1_SIZE_F                                     m_totalSize;
@@ -41,4 +42,5 @@ private:
 	D2D1_SIZE_F										m_viewportScrollTreshold;
 
 	void DrawLevelEditorRaster();
+	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, int dingX, int dingY, int placementX, int placementY);
 };
