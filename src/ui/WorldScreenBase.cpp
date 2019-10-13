@@ -18,7 +18,8 @@ void WorldScreenBase::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	devi
 	m_wicFactory = deviceResources->GetWicImagingFactory();
 	m_d2dDevice = deviceResources->GetD2DDevice();
 	m_d2dContext = deviceResources->GetD2DDeviceContext();
-	m_imageSize = D2D1::SizeF(0.0f, 0.0f);
+	m_backgroundSize = D2D1::SizeF(0.0f, 0.0f);
+	m_viewportSize = D2D1::SizeU(0, 0);
 	m_totalSize = D2D1::SizeF(0.0f, 0.0f);
 
     ComPtr<ID2D1Factory> factory;
@@ -75,11 +76,34 @@ void WorldScreenBase::ResetDirectXResources()
         m_d2dContext->CreateBitmapFromWicBitmap(
             wicFormatConverter.Get(),
             BitmapProperties(PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)),
-            &m_bitmap
+            &m_background
         )
     );
 
-    m_imageSize = m_bitmap->GetSize();
+    m_backgroundSize = m_background->GetSize();
+	m_viewportSize.width = (unsigned int)m_backgroundSize.width;
+	m_viewportSize.height = (unsigned int)m_backgroundSize.height;
+
+	DX::ThrowIfFailed(
+		m_d2dContext->CreateCompatibleRenderTarget(
+			m_backgroundSize,
+			&m_floor
+		) 
+	);
+
+	DX::ThrowIfFailed(
+		m_d2dContext->CreateCompatibleRenderTarget(
+			m_backgroundSize,
+			&m_walls
+		)
+	);
+
+	DX::ThrowIfFailed(
+		m_d2dContext->CreateCompatibleRenderTarget(
+			m_backgroundSize,
+			&m_rooof
+		)
+	);
 
     DX::ThrowIfFailed(
         m_d2dFactory->CreateDrawingStateBlock(&m_stateBlock)
@@ -92,7 +116,10 @@ void WorldScreenBase::ReleaseDeviceDependentResources()
 {
     m_d2dDevice.Reset();
     m_d2dContext.Reset();
-    m_bitmap.Reset();
+    m_background.Reset();
+	m_floor.Reset();
+	m_walls.Reset();
+	m_rooof.Reset();	
     m_d2dFactory.Reset();
     m_stateBlock.Reset();
     m_wicFactory.Reset();
@@ -105,8 +132,8 @@ void WorldScreenBase::UpdateForWindowSizeChange()
 
     Windows::Foundation::Rect windowBounds = CoreWindow::GetForCurrentThread()->Bounds;
 
-    m_totalSize.width = m_imageSize.width;
-    m_totalSize.height = m_imageSize.height;
+    m_totalSize.width = m_viewportSize.width;
+    m_totalSize.height = m_viewportSize.height;
 	D2D1_SIZE_F canvasSize = m_d2dContext->GetSize();
 
 	m_isResizing = false;
@@ -118,6 +145,22 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 	{
 		return;
 	}
+
+	auto viewportRect = D2D1::RectF(
+		0.0f,
+		0.0f,
+		m_viewportSize.width,
+		m_viewportSize.height
+	);
+
+	auto copyOffset = D2D1::Point2U(0, 0);
+
+	m_floor->BeginDraw();
+	m_floor->DrawBitmap(m_background.Get(), viewportRect);
+	DX::ThrowIfFailed(
+		m_floor->EndDraw()
+	);
+	
 }
 
 void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)
@@ -125,16 +168,19 @@ void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 p
     m_d2dContext->SaveDrawingState(m_stateBlock.Get());
     m_d2dContext->BeginDraw();
     m_d2dContext->SetTransform(orientation2D);
+	auto screenRect = D2D1::RectF(
+		0,
+		0,
+		m_viewportSize.width,
+		m_viewportSize.height
+	);
 
-	m_d2dContext->DrawBitmap(
-        m_bitmap.Get(),
-        D2D1::RectF(
-            0,
-            0,
-            m_imageSize.width,
-            m_imageSize.height
-		)
-    );
+	ID2D1Bitmap *bmp = NULL;
+	m_floor->GetBitmap(&bmp);
+	m_d2dContext->DrawBitmap(bmp, screenRect);
+	//m_d2dContext->DrawBitmap(m_floor.Get(), screenRect);
+	//m_d2dContext->DrawBitmap(m_walls.Get(), screenRect);
+	//m_d2dContext->DrawBitmap(m_rooof.Get(), screenRect);
 
 	WorldScreenBase::DrawLevelEditorRaster();
 
