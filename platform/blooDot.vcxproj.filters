@@ -101,6 +101,7 @@
     </ClCompile>
     <ClCompile Include="..\src\ui\NerdStatsDisplay.cpp" />
     <ClCompile Include="..\src\ui\WorldScreenBase.cpp" />
+    <ClCompile Include="..\src\world\dings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\sound\Audio.h" />
@@ -195,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="..\src\ui\NerdStatsDisplay.h" />
     <ClInclude Include="..\src\ui\WorldScreenBase.h" />
+    <ClInclude Include="..\src\world\dings.h" />
+    <ClInclude Include="..\src\world\level.h" />
+    <ClInclude Include="..\src\world\world.h" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="Media\Audio\background.mp3" />

@@ -286,6 +286,7 @@
     <ClCompile Include="..\src\algo\BitmapPixelator.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeStep.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeTransition.cpp" />
+    <ClCompile Include="..\src\world\dings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\app\App.h" />
@@ -322,6 +323,9 @@
     <ClInclude Include="..\src\ui\CountdownTimer.h" />
     <ClInclude Include="..\src\dx\BrushRegistry.h" />
     <ClInclude Include="..\src\algo\BitmapPixelator.h" />
+    <ClInclude Include="..\src\world\dings.h" />
+    <ClInclude Include="..\src\world\level.h" />
+    <ClInclude Include="..\src\world\world.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\src\BasicPixelShader.hlsl">
