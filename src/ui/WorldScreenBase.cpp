@@ -159,11 +159,18 @@ void WorldScreenBase::UpdateForWindowSizeChange()
 
 	ID2D1Bitmap *dings = NULL;
 	m_dings->GetBitmap(&dings);
+
 	m_walls->BeginDraw();
-	PlacePrimitive(dings, m_walls, 1, 1, 0, 0);
-	PlacePrimitive(dings, m_walls, 0, 0, 1, 0);
-	PlacePrimitive(dings, m_walls, 10, 5, 2, 0);
-	PlacePrimitive(dings, m_walls, 10, 5, 3, 1);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Shy, 0, 0);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Shy, 1, 0);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Shy, 2, 0);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Shy, 3, 1);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Shy, 3, 2);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Shy, 4, 2);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Shy, 4, 3);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Shy, 5, 3);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Shy, 6, 3);
+
 	dings->Release();
 	DX::ThrowIfFailed(
 		m_walls->EndDraw()
@@ -172,9 +179,10 @@ void WorldScreenBase::UpdateForWindowSizeChange()
 	m_isResizing = false;
 }
 
-void WorldScreenBase::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, int dingX, int dingY, int placementX, int placementY)
+void WorldScreenBase::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY)
 {
-	D2D1_RECT_F dingRect = D2D1::RectF(dingX * 50.0f, dingX * 50.0f, dingX * 50.0f + 49.0f, dingY * 50.0f + 49.0f);
+	auto dingOnSheet = ding->GetSheetPlacement(coalesce);
+	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 50.0f, dingOnSheet.y * 50.0f, dingOnSheet.x * 50.0f + 49.0f, dingOnSheet.y * 50.0f + 49.0f);
 	D2D1_RECT_F placementRect = D2D1::RectF(placementX * 50.0f, placementY * 50.0f, placementX * 50.0f + 49.0f, placementY * 50.0f + 49.0f);
 	renderTarget->DrawBitmap(dingSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
 }

@@ -2,7 +2,7 @@
 
 Platform::String^ Object::Name()
 {
-	return m_Name;
+	return m_Dings->Name();
 }
 
 Layers Object::Layer()

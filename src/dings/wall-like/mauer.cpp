@@ -1,22 +1,40 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\dings.h"
 
-Mauer::Mauer(BrushRegistry drawBrushes) : Dings(1, "Mauer", drawBrushes) { }
-
-void Mauer::Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY)
+Mauer::Mauer(BrushRegistry drawBrushes) : Dings(1, "Mauer", drawBrushes) 
 {
-	//Ding::Draw();
-	MFARGB colrect;
-	colrect.rgbAlpha = 255;
-	colrect.rgbRed = 192;
-	colrect.rgbGreen = 192;
-	colrect.rgbBlue = 192;
+	m_Facing = Facings::Shy;
+	m_Coalescing = Facings::FullyCoalesced;
+	m_preferredLayer = Layers::Walls;
+	m_possibleLayers = Layers::Walls;
+}
 
+void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
+{
 	D2D1_RECT_F rect;
-	Microsoft::WRL::ComPtr<ID2D1Brush> brrect = m_Brushes.WannaHave(drawTo, colrect);
-	rect.left = 50.0f * canvasX;
-	rect.top = 50.0f * canvasY;
+	MFARGB colrect;
+	Microsoft::WRL::ComPtr<ID2D1Brush> brrect;
+
+	/* SHY
+	 * inner solid */
+	colrect = { 12, 128, 128, 255 };
+	brrect = m_Brushes.WannaHave(drawTo, colrect);
+
+	rect.left = 50.0f * this->m_sheetPlacement.x;
+	rect.top = 50.0f * this->m_sheetPlacement.y;
 	rect.right = rect.left + 49;
 	rect.bottom = rect.top + 49;
 	drawTo->FillRectangle(rect, brrect.Get());
+
+	/* inner border */
+	colrect = { 192, 192, 192, 192};
+	brrect = m_Brushes.WannaHave(drawTo, colrect);
+
+	rect.left += 6;
+	rect.top += 6;
+	rect.right -= 5;
+	rect.bottom -= 5;
+	drawTo->DrawRectangle(rect, brrect.Get(), 2.5f, 0);
+
+
 }

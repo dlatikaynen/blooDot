@@ -18,7 +18,7 @@ public:
 	void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
 
 private:
-	const int										SCROLL_TRESHOLD_FACT = 0.61F;
+	const float										SCROLL_TRESHOLD_FACT = 0.61F;
 
 	std::shared_ptr<DX::DeviceResources>			m_deviceResources;
 	Microsoft::WRL::ComPtr<ID2D1Factory1>           m_d2dFactory;
@@ -43,5 +43,5 @@ private:
 	D2D1_SIZE_F										m_viewportScrollTreshold;
 
 	void DrawLevelEditorRaster();
-	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, int dingX, int dingY, int placementX, int placementY);
+	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY);
 };
