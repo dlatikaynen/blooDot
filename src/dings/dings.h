@@ -14,14 +14,73 @@ enum Layers
 
 enum Facings
 {
-	Shy = 0,
-	North = 1,
-	East = 2,
-	South = 4,
-	West = 8,
-	NE = North | East,
-	NS = North | South,
-	FullyCoalesced = North | East | South | West
+	Shy = 0,													/* one shy (default placement) */
+	Center = 1,													/* crossing */
+	West = 2,													/* U-bag with opening to the right (westcap) */
+	East = 4,													/* U-bag with opening to the left (eastcap) */
+	South = 8,													/* U-bag with opening upwards (southcap) */
+	North = 16,													/* U-bag with opening downwards (northcap) */
+	SingleEdge = 32,
+	TripleEdge = 64,
+	CornerNear = 128,
+	CornerFar = 256,
+	NW = North | West,											/* left-top capping edge */
+	NE = North | East,											/* right-top capping edge */
+	WE = West| East,											/* horizontal pipe */
+	SW = South | West,											/* left-bottom capping edge */
+	SE = South | East,											/* right-bottom capping edge */
+	NS = North | South,											/* vertical pipe */
+	EdgeW = West | SingleEdge,									/* straight edge, left-only */
+	EdgeE = East | SingleEdge,									/* straight edge, right-only */
+	EdgeN = North | SingleEdge,									/* straight edge, up-only */
+	EdgeS = South | SingleEdge,									/* straight edge, down-only */
+	EdgeNW = North  | West | TripleEdge,						/* left upper outer edge */
+	EdgeNE = North | East | TripleEdge,							/* right upper outer edge */
+	EdgeSW = South | West | TripleEdge,							/* bottom left outer edge */
+	EdgeSE = South | East | TripleEdge,							/* bottom right outer edge */
+	EdgeCornerWD = West | SingleEdge | CornerNear,				/* left edge with one lower inner corner */
+	EdgeCornerWU = West | SingleEdge | CornerFar,				/* left edge with one upper inner corner */
+	EdgeCornerED = East | SingleEdge | CornerNear,				/* right edge with one lower inner corner */
+	EdgeCornerEU = East | SingleEdge | CornerFar,				/* right edge with one upper inner corner */
+	EdgeCornerSL = South | SingleEdge | CornerNear,				/* lower edge with one left inner corner */
+	EdgeCornerSR = South | SingleEdge | CornerFar,				/* lower edge with one right inner corner */
+	EdgeCornerNL = North | SingleEdge | CornerNear,				/* upper edge with one left inner corner */
+	EdgeCornerNR = North | SingleEdge | CornerFar,				/* upper edge with one right inner corner */
+	EdgeCornerNW = North | West | TripleEdge | CornerNear,		/* lower edge with one left inner corner */
+	EdgeCornerNE = North | East | TripleEdge | CornerFar,		/* lower edge with one right inner corner */
+	EdgeCornerSW = South | West | TripleEdge | CornerFar,		/* upper edge with one left inner corner */
+	EdgeCornerSE = South | East | TripleEdge | CornerFar,		/* bottom right facing outer edge with inner corner */
+	TW = West | SingleEdge | CornerNear | CornerFar,			/* T facing left */
+	TE = East | SingleEdge | CornerNear | CornerFar,			/* T facing right */
+	TS = South | SingleEdge | CornerNear | CornerFar,			/* T facing down */
+	TN = North | SingleEdge | CornerNear | CornerFar,			/* T facing up */
+	Corner1NW = North | West | CornerNear,						/* single inner top left corner */
+	Corner1NE = North | East | CornerNear,						/* single inner top right corner */
+	Corner1SW = South | West | CornerNear,						/* single inner bottom left corner */
+	Corner1SE = South | East | CornerNear,						/* single inner bottom right corner */
+	Corner2W = West | CornerNear | CornerFar,					/* double corners left side */
+	Corner2E = East | CornerNear | CornerFar,					/* double corners right side */
+	Corner2S = South | CornerNear | CornerFar,					/* double corners down */
+	Corner2N = North | CornerNear | CornerFar,					/* double corners top */
+	Corner3NW = North | West | CornerFar,						/* triple inner corner pointing top left */
+	Corner3NE = North | East | CornerFar,						/* triple inner corner pointing top right */
+	Corner3SW = South | West | CornerFar,						/* triple inner corner pointing bottom left */
+	Corner3SE = South | East | CornerFar,						/* triple inner corner pointing bottom right */
+	Immersed = NW | North |NE | East | SE | South | SW | West
+};
+
+enum OrientabilityIndexQuadruplet
+{
+	Lefty = 0,
+	Righty = 1,
+	Downy = 2,
+	Uppy = 3
+};
+
+enum OrientabilityIndexDuplex
+{
+	Horizontally = 0,
+	Vertically = 1
 };
 
 class Dings
@@ -44,22 +103,40 @@ protected:
 	Layers				m_preferredLayer;
 	Layers				m_possibleLayers;
 	
-	D2D1_POINT_2U		m_sheetPlacement;
-	D2D1_POINT_2U		m_sheetPlacementCN;
-	D2D1_POINT_2U		m_sheetPlacementCS;
-	D2D1_POINT_2U		m_sheetPlacementCE;
-	D2D1_POINT_2U		m_sheetPlacementCW;
-	D2D1_POINT_2U		m_sheetPlacementCNS;
-	D2D1_POINT_2U		m_sheetPlacementCEW;
-	D2D1_POINT_2U		m_sheetPlacementCNE;
-	D2D1_POINT_2U		m_sheetPlacementCES;
-	D2D1_POINT_2U		m_sheetPlacementCSW;
-	D2D1_POINT_2U		m_sheetPlacementCWN;
-	D2D1_POINT_2U		m_sheetPlacementCWNE;
-	D2D1_POINT_2U		m_sheetPlacementCNES;
-	D2D1_POINT_2U		m_sheetPlacementCESW;
-	D2D1_POINT_2U		m_sheetPlacementCSWN;
-	D2D1_POINT_2U		m_sheetPlacementFC;
+	/* squareish dings come in sets of 
+	 * topologically predictable coalescability, thusly:
+	 *
+	 * one shy (default placement)
+	 * one immersed
+	 * one crossing
+	 * two pipes
+	 * two diagonal inner corners
+	 * four single inner corners
+	 * four double inner corners
+	 * four triple inner corners
+	 * four outer-inner 90° corners
+	 * four outer-only 90° corners
+	 * four U-pieces
+	 * four straight edges
+	 * four straight edges with one inner corner
+	 * four straight edges with two inner corners (Ts) 
+	 *
+	 * indices are always orientationwise */
+
+	D2D1_POINT_2U		m_lookupShy;
+	D2D1_POINT_2U		m_lookupImmersed;
+	D2D1_POINT_2U		m_lookupCrossing;
+	D2D1_POINT_2U		m_lookupPipes[2];
+	D2D1_POINT_2U		m_lookupCornersDiag[2];
+	D2D1_POINT_2U		m_lookupCornersInner1[4];
+	D2D1_POINT_2U		m_lookupCornersInner2[4];
+	D2D1_POINT_2U		m_lookupCornersInner3[4];
+	D2D1_POINT_2U		m_lookupCornersBoth90[4];
+	D2D1_POINT_2U		m_lookupCornersOuter90[4];
+	D2D1_POINT_2U		m_lookupU[4];
+	D2D1_POINT_2U		m_lookupEdges[4];
+	D2D1_POINT_2U		m_lookupEdgesInner1[4];
+	D2D1_POINT_2U		m_lookupTs[4];
 
 private:
 	void				SetSheetPlacementsFromCoalescability();

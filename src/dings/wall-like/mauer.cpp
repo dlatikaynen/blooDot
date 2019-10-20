@@ -4,7 +4,7 @@
 Mauer::Mauer(BrushRegistry drawBrushes) : Dings(1, "Mauer", drawBrushes) 
 {
 	m_Facing = Facings::Shy;
-	m_Coalescing = Facings::FullyCoalesced;
+	m_Coalescing = Facings::Immersed;
 	m_preferredLayer = Layers::Walls;
 	m_possibleLayers = Layers::Walls;
 }
@@ -20,8 +20,8 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	colrect = { 12, 128, 128, 255 };
 	brrect = m_Brushes.WannaHave(drawTo, colrect);
 
-	rect.left = 50.0f * this->m_sheetPlacement.x;
-	rect.top = 50.0f * this->m_sheetPlacement.y;
+	rect.left = 50.0f * this->m_lookupShy.x;
+	rect.top = 50.0f * this->m_lookupShy.y;
 	rect.right = rect.left + 49;
 	rect.bottom = rect.top + 49;
 	drawTo->FillRectangle(rect, brrect.Get());
