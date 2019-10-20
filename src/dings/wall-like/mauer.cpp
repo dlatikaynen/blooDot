@@ -17,7 +17,7 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 
 	/* SHY
 	 * inner solid */
-	colrect = { 12, 128, 128, 255 };
+	colrect = { 128, 128, 128, 255 };
 	brrect = m_Brushes.WannaHave(drawTo, colrect);
 
 	rect.left = 50.0f * this->m_lookupShy.x;

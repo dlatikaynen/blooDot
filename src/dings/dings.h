@@ -46,10 +46,10 @@ enum Facings
 	EdgeCornerSR = South | SingleEdge | CornerFar,				/* lower edge with one right inner corner */
 	EdgeCornerNL = North | SingleEdge | CornerNear,				/* upper edge with one left inner corner */
 	EdgeCornerNR = North | SingleEdge | CornerFar,				/* upper edge with one right inner corner */
-	EdgeCornerNW = North | West | TripleEdge | CornerNear,		/* lower edge with one left inner corner */
-	EdgeCornerNE = North | East | TripleEdge | CornerFar,		/* lower edge with one right inner corner */
-	EdgeCornerSW = South | West | TripleEdge | CornerFar,		/* upper edge with one left inner corner */
-	EdgeCornerSE = South | East | TripleEdge | CornerFar,		/* bottom right facing outer edge with inner corner */
+	EdgeCornerNW = North | West | TripleEdge | CornerFar,		/* left upper edge with opposite inner corner */
+	EdgeCornerNE = North | East | TripleEdge | CornerFar,		/* right upper with opposite inner corner */
+	EdgeCornerSW = South | West | TripleEdge | CornerFar,		/* left bottom edge with opposite inner inner corner */
+	EdgeCornerSE = South | East | TripleEdge | CornerFar,		/* right bottom edge with opposite inner corner */
 	TW = West | SingleEdge | CornerNear | CornerFar,			/* T facing left */
 	TE = East | SingleEdge | CornerNear | CornerFar,			/* T facing right */
 	TS = South | SingleEdge | CornerNear | CornerFar,			/* T facing down */
@@ -74,7 +74,19 @@ enum OrientabilityIndexQuadruplet
 	Lefty = 0,
 	Righty = 1,
 	Downy = 2,
-	Uppy = 3
+	Uppy = 3,
+	LeftyFar = 4,
+	RightyFar = 5,
+	DownyFar = 6,
+	UppyFar = 7
+};
+
+enum OrientabilityIndexDiagon
+{
+	DiagNW = 0,
+	DiagSW = 1,
+	DiagSE = 2,
+	DiagNE = 3
 };
 
 enum OrientabilityIndexDuplex
@@ -132,14 +144,15 @@ protected:
 	D2D1_POINT_2U		m_lookupCornersInner2[4];
 	D2D1_POINT_2U		m_lookupCornersInner3[4];
 	D2D1_POINT_2U		m_lookupCornersBoth90[4];
-	D2D1_POINT_2U		m_lookupCornersOuter90[4];
-	D2D1_POINT_2U		m_lookupU[4];
+	D2D1_POINT_2U		m_lookupEdgesOuter90[4];
+	D2D1_POINT_2U		m_lookupSides[4];
 	D2D1_POINT_2U		m_lookupEdges[4];
-	D2D1_POINT_2U		m_lookupEdgesInner1[4];
+	D2D1_POINT_2U		m_lookupEdgesInner1[8];
+	D2D1_POINT_2U		m_lookupU[4];
 	D2D1_POINT_2U		m_lookupTs[4];
 
 private:
-	void				SetSheetPlacementsFromCoalescability();
+	void				SetSheetPlacementsFromCoalescability();	
 };
 
 class Mauer : public Dings 
