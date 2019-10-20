@@ -6,9 +6,6 @@
 #include "..\dx\BrushRegistry.h"
 
 #include <type_traits>
-//#include <array>
-//#include <memory>
-//#include <iomanip>
 #include <iostream>
 #include <fstream>
 

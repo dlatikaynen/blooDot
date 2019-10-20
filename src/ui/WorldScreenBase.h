@@ -3,6 +3,7 @@
 #include "..\dx\DirectXHelper.h"
 #include "..\dx\DeviceResources.h"
 #include "..\dx\BrushRegistry.h"
+#include "..\dings\dings.h"
 
 class WorldScreenBase
 {

@@ -16,7 +16,7 @@ enum Facings
 	West = 8
 };
 
-class Dings
+class Object
 {
 public:
 	Platform::String^	Name();

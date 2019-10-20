@@ -17,6 +17,8 @@ public:
 	~BrushRegistry();
 
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> WannaHave(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, MFARGB color);
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> WannaHave(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> dxTarget, MFARGB color);
+
 	void Reset();
 
 private:

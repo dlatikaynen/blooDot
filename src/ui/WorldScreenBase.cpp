@@ -145,34 +145,25 @@ void WorldScreenBase::UpdateForWindowSizeChange()
 	D2D1_SIZE_F canvasSize = m_d2dContext->GetSize();
 
 	/* pre-draw all dings */
-	MFARGB colrect;
-	colrect.rgbAlpha = 192;
-	colrect.rgbRed = 17;
-	colrect.rgbGreen = 209;
-	colrect.rgbBlue = 3;
-	D2D1_RECT_F rect;
-	Microsoft::WRL::ComPtr<ID2D1Brush> brrect = m_Brushes.WannaHave(m_d2dContext, colrect);
-	
+	auto deflt = Dings(0, "BLACK", m_Brushes);
+	auto mauer = Mauer(m_Brushes);
+
 	m_dings->BeginDraw();
-	rect.left = 0;
-	rect.top = 0;
-	rect.right = rect.left + 49;
-	rect.bottom = rect.top + 49;
-	m_dings->FillRectangle(rect, brrect.Get());
+
+	deflt.Draw(m_dings, 0, 0);
+	mauer.Draw(m_dings, 1, 1);
 
 	DX::ThrowIfFailed(
 		m_dings->EndDraw()
 	);
 
 	ID2D1Bitmap *dings = NULL;
-	const D2D1_RECT_F dingRect = D2D1::RectF(0.0f, 0.0f, 49.0f, 49.0f);
-	D2D1_RECT_F placementRect = D2D1::RectF(150.0f, 70.0f, 150.0f + 49.0f, 70.0f + 49.0f);
 	m_dings->GetBitmap(&dings);
 	m_walls->BeginDraw();
-	PlacePrimitive(dings, m_walls, 0, 0, 0, 0);
+	PlacePrimitive(dings, m_walls, 1, 1, 0, 0);
 	PlacePrimitive(dings, m_walls, 0, 0, 1, 0);
-	PlacePrimitive(dings, m_walls, 0, 0, 2, 0);
-	PlacePrimitive(dings, m_walls, 0, 0, 3, 1);
+	PlacePrimitive(dings, m_walls, 10, 5, 2, 0);
+	PlacePrimitive(dings, m_walls, 10, 5, 3, 1);
 	dings->Release();
 	DX::ThrowIfFailed(
 		m_walls->EndDraw()
@@ -210,29 +201,13 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 		m_floor->EndDraw()
 	);
 
-	MFARGB colrect;
-	colrect.rgbAlpha = 192;
-	colrect.rgbRed = 196;
-	colrect.rgbGreen = 3;
-	colrect.rgbBlue = 7;
 	MFARGB colrect2;
 	colrect2.rgbAlpha = 192;
 	colrect2.rgbRed = 9;
 	colrect2.rgbGreen = 2;
 	colrect2.rgbBlue = 198;
 	D2D1_RECT_F rect;
-	Microsoft::WRL::ComPtr<ID2D1Brush> brrect = m_Brushes.WannaHave(m_d2dContext, colrect);
 	Microsoft::WRL::ComPtr<ID2D1Brush> brrect2 = m_Brushes.WannaHave(m_d2dContext, colrect2);
-
-	m_walls->BeginDraw();
-	rect.left = 50;
-	rect.top = 2 * 49;
-	rect.right = rect.left + 49;
-	rect.bottom = rect.top + 49;
-	m_walls->FillRectangle(rect, brrect.Get());
-	DX::ThrowIfFailed(
-		m_walls->EndDraw()
-	);
 	
 	m_rooof->BeginDraw();
 	rect.left = 50 + 25;
