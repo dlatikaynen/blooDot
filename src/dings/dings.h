@@ -24,11 +24,11 @@ enum Facings
 	TripleEdge = 64,
 	CornerNear = 128,
 	CornerFar = 256,
-	NW = North | West,											/* left-top capping edge */
-	NE = North | East,											/* right-top capping edge */
-	WE = West| East,											/* horizontal pipe */
-	SW = South | West,											/* left-bottom capping edge */
-	SE = South | East,											/* right-bottom capping edge */
+	NW = 512,													/* left-top capping edge */
+	NE = 1024,													/* right-top capping edge */
+	WE = West | East,											/* horizontal pipe */
+	SW = 2048,													/* left-bottom capping edge */
+	SE = 4096,													/* right-bottom capping edge */
 	NS = North | South,											/* vertical pipe */
 	EdgeW = West | SingleEdge,									/* straight edge, left-only */
 	EdgeE = East | SingleEdge,									/* straight edge, right-only */
@@ -62,11 +62,13 @@ enum Facings
 	Corner2E = East | CornerNear | CornerFar,					/* double corners right side */
 	Corner2S = South | CornerNear | CornerFar,					/* double corners down */
 	Corner2N = North | CornerNear | CornerFar,					/* double corners top */
+	CornerNWSE = North | West | CornerNear | CornerFar,			/* diagonal double corner top-left / right-bottom */
+	CornerSWNE = South | East | CornerNear | CornerFar,			/* diagnoal double corner bottom-left / right-top */
 	Corner3NW = North | West | CornerFar,						/* triple inner corner pointing top left */
 	Corner3NE = North | East | CornerFar,						/* triple inner corner pointing top right */
 	Corner3SW = South | West | CornerFar,						/* triple inner corner pointing bottom left */
 	Corner3SE = South | East | CornerFar,						/* triple inner corner pointing bottom right */
-	Immersed = NW | North |NE | East | SE | South | SW | West
+	Immersed = NW | North | NE | East | SE | South | SW | West
 };
 
 enum OrientabilityIndexQuadruplet
