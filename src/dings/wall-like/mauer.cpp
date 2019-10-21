@@ -55,19 +55,25 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	rect.bottom = rect.top + 49.0 - 10;
 	rendEr->DrawRectangle(rect, innerBrush, 2.5f, 0);
 
-	/* Us: rotate so we have left (no rotation) last, so
+	/* Us: rotate so we have lefty (no rotation) last, so
 	 * after the loop ends the context is rotation-free */
 	for (int facing = OrientabilityIndexQuadruplet::Uppy; facing >= OrientabilityIndexQuadruplet::Lefty; --facing)
 	{
 		PrepareRect(&this->m_lookupU[facing], rect);
 		Rotate(rendEr, rect, facing);
-		rendEr->DrawLine(D2D1::Point2F(rect.left, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top + 5), innerBrush, 2.5f, 0);
-		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.bottom - 5), innerBrush, 2.5f, 0);
-		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.bottom - 5), D2D1::Point2F(rect.left, rect.bottom - 5), innerBrush, 2.5f, 0);
+		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top + 5), D2D1::Point2F(rect.right, rect.top + 5), innerBrush, 2.5f, 0);
+		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top + 5), D2D1::Point2F(rect.left + 5, rect.bottom - 5), innerBrush, 2.5f, 0);
+		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.bottom - 5), D2D1::Point2F(rect.right, rect.bottom - 5), innerBrush, 2.5f, 0);
 	}
 
 	/* pipes */
-
+	for (int facing = OrientabilityIndexQuadruplet::Downy; facing >= OrientabilityIndexQuadruplet::Lefty; --facing)
+	{
+		PrepareRect(&this->m_lookupPipes[facing], rect);
+		Rotate(rendEr, rect, facing);
+		rendEr->DrawLine(D2D1::Point2F(rect.left, rect.top + 5), D2D1::Point2F(rect.right, rect.top + 5), innerBrush, 2.5f, 0);
+		rendEr->DrawLine(D2D1::Point2F(rect.left, rect.bottom - 5), D2D1::Point2F(rect.right, rect.bottom - 5), innerBrush, 2.5f, 0);
+	}
 
 	/* Ts */
 }

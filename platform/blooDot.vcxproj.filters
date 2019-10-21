@@ -101,7 +101,9 @@
     </ClCompile>
     <ClCompile Include="..\src\ui\NerdStatsDisplay.cpp" />
     <ClCompile Include="..\src\ui\WorldScreenBase.cpp" />
-    <ClCompile Include="..\src\world\dings.cpp" />
+    <ClCompile Include="..\src\world\object.cpp" />
+    <ClCompile Include="..\src\dings\dings.cpp" />
+    <ClCompile Include="..\src\dings\wall-like\mauer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\sound\Audio.h" />
@@ -196,9 +198,10 @@
     </ClInclude>
     <ClInclude Include="..\src\ui\NerdStatsDisplay.h" />
     <ClInclude Include="..\src\ui\WorldScreenBase.h" />
-    <ClInclude Include="..\src\world\dings.h" />
     <ClInclude Include="..\src\world\level.h" />
     <ClInclude Include="..\src\world\world.h" />
+    <ClInclude Include="..\src\world\object.h" />
+    <ClInclude Include="..\src\dings\dings.h" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="Media\Audio\background.mp3" />
@@ -236,6 +239,7 @@
     <Image Include="Media\Textures\topwall_color.dds" />
     <Image Include="Media\Textures\walllevel1.dds" />
     <Image Include="Media\Bitmaps\universe_seamless.png" />
+    <Image Include="..\..\..\Users\dlatikay\Documents\notimeforcaution.png" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />

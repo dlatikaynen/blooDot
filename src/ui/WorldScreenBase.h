@@ -28,6 +28,7 @@ private:
 	BrushRegistry									m_Brushes;
     Microsoft::WRL::ComPtr<IWICImagingFactory>      m_wicFactory;
     Microsoft::WRL::ComPtr<ID2D1Bitmap>             m_background;
+	Microsoft::WRL::ComPtr<ID2D1Bitmap>             m_notimeforcaution;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_dings;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_floor;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_walls;

@@ -182,7 +182,7 @@ void Dings::Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation)
 	else
 	{
 		/* take anything else but 90° and funny stuff happens */
-		rendEr->SetTransform(D2D1::Matrix3x2F::Rotation(rotation * 90, D2D1::Point2F(rect.left + 24.5f, rect.top + 24.5f)));
+		rendEr->SetTransform(D2D1::Matrix3x2F::Rotation(rotation * -90, D2D1::Point2F(rect.left + 24.5f, rect.top + 24.5f)));
 	}
 }
 

@@ -41,7 +41,10 @@ void WorldScreenBase::CreateDeviceDependentResources()
 void WorldScreenBase::ResetDirectXResources()
 {
     ComPtr<IWICBitmapDecoder> wicBitmapDecoder;
-    DX::ThrowIfFailed(
+	ComPtr<IWICBitmapFrameDecode> wicBitmapFrame;
+	ComPtr<IWICFormatConverter> wicFormatConverter;
+
+	DX::ThrowIfFailed(
         m_wicFactory->CreateDecoderFromFilename(
             L"Media\\Bitmaps\\universe_seamless.png",
             nullptr,
@@ -51,16 +54,8 @@ void WorldScreenBase::ResetDirectXResources()
         )
     );
 
-    ComPtr<IWICBitmapFrameDecode> wicBitmapFrame;
-    DX::ThrowIfFailed(
-        wicBitmapDecoder->GetFrame(0, &wicBitmapFrame)
-    );
-
-    ComPtr<IWICFormatConverter> wicFormatConverter;
-    DX::ThrowIfFailed(
-        m_wicFactory->CreateFormatConverter(&wicFormatConverter)
-    );
-
+    DX::ThrowIfFailed(wicBitmapDecoder->GetFrame(0, &wicBitmapFrame));
+    DX::ThrowIfFailed(m_wicFactory->CreateFormatConverter(&wicFormatConverter));
     DX::ThrowIfFailed(
         wicFormatConverter->Initialize(
             wicBitmapFrame.Get(),
@@ -81,6 +76,40 @@ void WorldScreenBase::ResetDirectXResources()
     );
 
     m_backgroundSize = m_background->GetSize();
+
+	/* second bitmap loading */
+	DX::ThrowIfFailed(
+		m_wicFactory->CreateDecoderFromFilename(
+			L"Media\\Bitmaps\\notimeforcaution.png",
+			nullptr,
+			GENERIC_READ,
+			WICDecodeMetadataCacheOnDemand,
+			&wicBitmapDecoder
+		)
+	);
+
+	DX::ThrowIfFailed(wicBitmapDecoder->GetFrame(0, &wicBitmapFrame));
+	DX::ThrowIfFailed(m_wicFactory->CreateFormatConverter(&wicFormatConverter));
+	DX::ThrowIfFailed(
+		wicFormatConverter->Initialize(
+			wicBitmapFrame.Get(),
+			GUID_WICPixelFormat32bppPBGRA,
+			WICBitmapDitherTypeNone,
+			nullptr,
+			0.0,
+			WICBitmapPaletteTypeCustom
+		)
+	);
+
+	DX::ThrowIfFailed(
+		m_d2dContext->CreateBitmapFromWicBitmap(
+			wicFormatConverter.Get(),
+			BitmapProperties(PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)),
+			&m_notimeforcaution
+		)
+	);
+	
+	/* rest of initialization */
 	m_viewportSize.width = (unsigned int)m_backgroundSize.width;
 	m_viewportSize.height = (unsigned int)m_backgroundSize.height;
 
@@ -173,10 +202,22 @@ void WorldScreenBase::UpdateForWindowSizeChange()
 
 	PlacePrimitive(dings, m_walls, &mauer, Facings::North, 3, 4);
 	PlacePrimitive(dings, m_walls, &mauer, Facings::South, 3, 5);
-	PlacePrimitive(dings, m_walls, &mauer, Facings::East, 2, 6);
-	PlacePrimitive(dings, m_walls, &mauer, Facings::West, 3, 6);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::West, 2, 6);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::East, 3, 6);
 
+	PlacePrimitive(dings, m_walls, &mauer, Facings::NS, 5, 2);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::WE, 6, 3);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::WE, 7, 3);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::WE, 8, 3);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::WE, 9, 3);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::WE, 10, 3);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::WE, 11, 3);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::WE, 12, 3);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::East, 13, 3);
 
+	/* a preview on decor */
+	m_walls->DrawBitmap(m_notimeforcaution.Get(), D2D1::RectF(6.5f * 49.0f, 3.26f * 49.0f, 6.5f * 49.0f + 301.0f, 3.26f * 49.0f + 22.0f));
+	
 	dings->Release();
 	DX::ThrowIfFailed(
 		m_walls->EndDraw()

@@ -241,6 +241,7 @@
     <Image Include="Assets\StoreLogo.png" />
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
     <Image Include="Media\Bitmaps\universe_seamless.png" />
+    <Image Include="Media\Bitmaps\notimeforcaution.png" />
     <Image Include="Media\Textures\bridge.dds" />
     <Image Include="Media\Textures\bridge_bump.dds" />
     <Image Include="Media\Textures\cliff_sides.dds" />
