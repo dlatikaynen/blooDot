@@ -73,13 +73,17 @@ enum Facings
 
 enum OrientabilityIndexQuadruplet
 {
+	// Sequence is meaningful
+	// and must remain so we can
+	// say like, i_orientability * 90
+	// for rotation in a loop
 	Lefty = 0,
-	Righty = 1,
-	Downy = 2,
+	Downy = 1,
+	Righty = 2,
 	Uppy = 3,
 	LeftyFar = 4,
-	RightyFar = 5,
-	DownyFar = 6,
+	DownyFar = 5,
+	RightyFar = 6,
 	UppyFar = 7
 };
 
@@ -152,6 +156,9 @@ protected:
 	D2D1_POINT_2U		m_lookupEdgesInner1[8];
 	D2D1_POINT_2U		m_lookupU[4];
 	D2D1_POINT_2U		m_lookupTs[4];
+
+	void PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);
+	void Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation);
 
 private:
 	void				SetSheetPlacementsFromCoalescability();	

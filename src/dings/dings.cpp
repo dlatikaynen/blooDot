@@ -41,8 +41,6 @@ void Dings::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	rect.right = rect.left + 49;
 	rect.bottom = rect.top + 49;
 	drawTo->FillRectangle(rect, brrect.Get());
-
-
 }
 
 void Dings::SetSheetPlacementsFromCoalescability()
@@ -164,6 +162,27 @@ void Dings::SetSheetPlacementsFromCoalescability()
 		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagSW].y = ++y;
 		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagSE].x = ++x;
 		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagSE].y = y;
+	}
+}
+
+void Dings::PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet)
+{
+	rectToSet.left = 49.0f * lookupLocation->x;
+	rectToSet.top = 49.0f * lookupLocation->y;
+	rectToSet.right = rectToSet.left + 49.0;
+	rectToSet.bottom = rectToSet.top + 49.0;
+}
+
+void Dings::Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation)
+{
+	if (rotation == OrientabilityIndexQuadruplet::Lefty)
+	{
+		rendEr->SetTransform(D2D1::Matrix3x2F::Identity());
+	}
+	else
+	{
+		/* take anything else but 90° and funny stuff happens */
+		rendEr->SetTransform(D2D1::Matrix3x2F::Rotation(rotation * 90, D2D1::Point2F(rect.left + 24.5f, rect.top + 24.5f)));
 	}
 }
 

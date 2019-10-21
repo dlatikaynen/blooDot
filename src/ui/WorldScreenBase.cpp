@@ -171,6 +171,12 @@ void WorldScreenBase::UpdateForWindowSizeChange()
 	PlacePrimitive(dings, m_walls, &mauer, Facings::Center, 5, 3);
 	PlacePrimitive(dings, m_walls, &mauer, Facings::Shy, 6, 3);
 
+	PlacePrimitive(dings, m_walls, &mauer, Facings::North, 3, 4);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::South, 3, 5);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::East, 2, 6);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::West, 3, 6);
+
+
 	dings->Release();
 	DX::ThrowIfFailed(
 		m_walls->EndDraw()
@@ -245,6 +251,8 @@ void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 p
 	m_d2dContext->DrawBitmap(bmp, screenRect);
 	bmp->Release();
 
+	WorldScreenBase::DrawLevelEditorRaster();
+
 	m_walls->GetBitmap(&bmp);
 	m_d2dContext->DrawBitmap(bmp, screenRect);
 	bmp->Release();
@@ -252,8 +260,6 @@ void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 p
 	m_rooof->GetBitmap(&bmp);
 	m_d2dContext->DrawBitmap(bmp, screenRect);
 	bmp->Release();
-
-	WorldScreenBase::DrawLevelEditorRaster();
 
     HRESULT hr = m_d2dContext->EndDraw();
     if (hr != D2DERR_RECREATE_TARGET)
