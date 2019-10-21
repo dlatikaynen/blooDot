@@ -239,7 +239,7 @@
     <Image Include="Media\Textures\topwall_color.dds" />
     <Image Include="Media\Textures\walllevel1.dds" />
     <Image Include="Media\Bitmaps\universe_seamless.png" />
-    <Image Include="..\..\..\Users\dlatikay\Documents\notimeforcaution.png" />
+    <Image Include="Media\Bitmaps\notimeforcaution.png" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
