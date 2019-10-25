@@ -87,6 +87,8 @@ enum OrientabilityIndexQuadruplet
 	UppyFar = 7
 };
 
+const int FAR_OFFSET = 4;
+
 enum OrientabilityIndexDiagon
 {
 	DiagNW = 0,

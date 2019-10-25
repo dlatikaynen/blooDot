@@ -215,6 +215,9 @@ void WorldScreenBase::UpdateForWindowSizeChange()
 	PlacePrimitive(dings, m_walls, &mauer, Facings::WE, 12, 3);
 	PlacePrimitive(dings, m_walls, &mauer, Facings::East, 13, 3);
 
+	PlacePrimitive(dings, m_walls, &mauer, Facings::CornerNWSE, 8, 5);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::CornerSWNE, 9, 5);
+
 	PlacePrimitive(dings, m_walls, &mauer, Facings::TN, 6, 0);
 	PlacePrimitive(dings, m_walls, &mauer, Facings::Center, 6, 1);
 	PlacePrimitive(dings, m_walls, &mauer, Facings::TW, 5, 1);
@@ -234,6 +237,30 @@ void WorldScreenBase::UpdateForWindowSizeChange()
 	PlacePrimitive(dings, m_walls, &mauer, Facings::NE, 13, 0);
 	PlacePrimitive(dings, m_walls, &mauer, Facings::SW, 12, 1);
 	PlacePrimitive(dings, m_walls, &mauer, Facings::SE, 13, 1);
+
+	PlacePrimitive(dings, m_walls, &mauer, Facings::EdgeCornerED, 15, 0);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::EdgeCornerEU, 16, 0);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::EdgeCornerNL, 15, 1);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::EdgeCornerNR, 16, 1);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::EdgeCornerWU, 15, 2);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::EdgeCornerWD, 16, 2);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::EdgeCornerSL, 15, 3);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::EdgeCornerSL, 16, 3);
+
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner3SE, 18, 0);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner3SW, 19, 0);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner3NE, 18, 1);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner3NW, 19, 1);
+
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner2N, 18, 3);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner2W, 19, 3);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner2E, 18, 4);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner2S, 19, 4);
+
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner1SE, 18, 6);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner1SW, 19, 6);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner1NE, 18, 7);
+	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner1NW, 19, 7);
 
 	/* a preview on decor */
 	m_walls->DrawBitmap(m_notimeforcaution.Get(), D2D1::RectF(6.5f * 49.0f, 3.26f * 49.0f, 6.5f * 49.0f + 301.0f, 3.26f * 49.0f + 22.0f));
