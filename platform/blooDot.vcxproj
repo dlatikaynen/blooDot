@@ -290,6 +290,7 @@
     <ClCompile Include="..\src\world\object.cpp" />
     <ClCompile Include="..\src\dings\dings.cpp" />
     <ClCompile Include="..\src\dings\wall-like\mauer.cpp" />
+    <ClCompile Include="..\src\ui\LevelEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\app\App.h" />
@@ -330,6 +331,7 @@
     <ClInclude Include="..\src\world\level.h" />
     <ClInclude Include="..\src\world\world.h" />
     <ClInclude Include="..\src\dings\dings.h" />
+    <ClInclude Include="..\src\ui\LevelEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\src\BasicPixelShader.hlsl">

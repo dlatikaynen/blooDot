@@ -8,6 +8,8 @@
 #include "NerdStatsDisplay.h"
 #include "TextButton.h"
 #include "HighScoreTable.h"
+#include "WorldScreenBase.h"
+#include "LevelEditor.h"
 
 class UserInterface
 {

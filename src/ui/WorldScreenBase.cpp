@@ -339,8 +339,6 @@ void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 p
 	m_d2dContext->DrawBitmap(bmp, screenRect);
 	bmp->Release();
 
-	WorldScreenBase::DrawLevelEditorRaster();
-
 	m_walls->GetBitmap(&bmp);
 	m_d2dContext->DrawBitmap(bmp, screenRect);
 	bmp->Release();
@@ -356,39 +354,4 @@ void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 p
     }
 
     m_d2dContext->RestoreDrawingState(m_stateBlock.Get());
-}
-
-void WorldScreenBase::DrawLevelEditorRaster()
-{
-	D2D1_POINT_2F point0, point1;
-	MFARGB color;
-	color.rgbAlpha = 128;
-	color.rgbRed = 128;
-	color.rgbGreen = 128;
-	color.rgbBlue = 128;
-	MFARGB colhigh;
-	colhigh.rgbAlpha = 255;
-	colhigh.rgbRed = 0;
-	colhigh.rgbGreen = 0;
-	colhigh.rgbBlue = 255;
-	Microsoft::WRL::ComPtr<ID2D1Brush> brush = m_Brushes.WannaHave(m_d2dContext, color);
-	Microsoft::WRL::ComPtr<ID2D1Brush> highlight = m_Brushes.WannaHave(m_d2dContext, colhigh);
-
-	for (int y = 1; y < 1000; y += 49)
-	{
-		point0.x = 0;
-		point0.y = y;
-		point1.x = 1000;
-		point1.y = y;
-		m_d2dContext->DrawLine(point0, point1, y == 1 ? highlight.Get() : brush.Get(), 1.0F, NULL);
-	}
-
-	for (int x = 1; x < 1000; x += 49)
-	{
-		point0.x = x;
-		point0.y = 0;
-		point1.x = x;
-		point1.y = 1000;
-		m_d2dContext->DrawLine(point0, point1, x == 1 ? highlight.Get() : brush.Get(), 1.0F, NULL);
-	}
 }

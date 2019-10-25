@@ -74,7 +74,7 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
     m_loadScreen = std::unique_ptr<LoadScreen>(new LoadScreen());
     m_loadScreen->Initialize(m_deviceResources);
 
-	m_worldScreen = std::unique_ptr<WorldScreenBase>(new WorldScreenBase());
+	m_worldScreen = std::unique_ptr<WorldScreenBase>(new LevelEditor());
 	m_worldScreen->Initialize(m_deviceResources);
 
     UserInterface::GetInstance().Initialize(

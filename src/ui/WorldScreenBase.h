@@ -15,9 +15,9 @@ public:
     void ReleaseDeviceDependentResources();
     void UpdateForWindowSizeChange();
 	void Update(float timeTotal, float timeDelta);
-	void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
+	virtual void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
 
-private:
+protected:
 	const float										SCROLL_TRESHOLD_FACT = 0.61F;
 
 	std::shared_ptr<DX::DeviceResources>			m_deviceResources;
@@ -42,7 +42,7 @@ private:
 	D2D1_POINT_2F									m_worldCenter;
 	D2D1_POINT_2F									m_viewportOffset;
 	D2D1_SIZE_F										m_viewportScrollTreshold;
+	D2D1_POINT_2U									m_currentLevelEditorCell;
 
-	void DrawLevelEditorRaster();
 	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY);
 };
