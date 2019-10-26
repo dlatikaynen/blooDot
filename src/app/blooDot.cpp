@@ -278,8 +278,9 @@ void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
         ARRAYSIZE(layoutDesc),
         &m_vertexShader,
         &m_inputLayout
-        );
-    DX::ThrowIfFailed(m_vertexShader->SetPrivateData(WKPDID_D3DDebugObjectName, vertexShaderName->Length(), vertexShaderName->Data()));
+    );
+    
+	DX::ThrowIfFailed(m_vertexShader->SetPrivateData(WKPDID_D3DDebugObjectName, vertexShaderName->Length(), vertexShaderName->Data()));
 
 	
 
@@ -298,8 +299,9 @@ void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
             &constantBufferDesc,
             nullptr,             // leave the buffer uninitialized
             &m_constantBuffer
-            )
-        );
+        )
+    );
+
     Platform::String^ constantBufferName = "Constant Buffer created in LoadDeferredResources";
     DX::ThrowIfFailed(m_constantBuffer->SetPrivateData(WKPDID_D3DDebugObjectName, constantBufferName->Length(), constantBufferName->Data()));
 
@@ -351,56 +353,11 @@ void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
         m_deviceResources->GetD3DDevice()->CreateSamplerState(
             &samplerDesc,
             &m_sampler
-            )
-        );
+        )
+    );
+
     Platform::String^ samplerName = "Sampler created in LoadDeferredResources";
     DX::ThrowIfFailed(m_sampler->SetPrivateData(WKPDID_D3DDebugObjectName, samplerName->Length(), samplerName->Data()));
-
-    // Load the meshes.
-    DX::ThrowIfFailed(
-        m_mazeMesh.Create(
-            m_deviceResources->GetD3DDevice(),
-            L"Media\\Models\\maze1.sdkmesh",
-            false
-            )
-        );
-
-    DX::ThrowIfFailed(
-        m_marbleMesh.Create(
-            m_deviceResources->GetD3DDevice(),
-            L"Media\\Models\\marble2.sdkmesh",
-            false
-            )
-        );
-
-    // Extract mesh geometry for physics system.
-    DX::ThrowIfFailed(
-        ExtractTrianglesFromMesh(
-            m_mazeMesh,
-            "Mesh_walls",
-            m_collision.m_wallTriList
-            )
-        );
-
-    DX::ThrowIfFailed(
-        ExtractTrianglesFromMesh(
-            m_mazeMesh,
-            "Mesh_Floor",
-            m_collision.m_groundTriList
-            )
-        );
-
-    DX::ThrowIfFailed(
-        ExtractTrianglesFromMesh(
-            m_mazeMesh,
-            "Mesh_floorSides",
-            m_collision.m_floorTriList
-            )
-        );
-
-    m_physics.SetCollision(&m_collision);
-    float radius = m_marbleMesh.GetMeshBoundingBoxExtents(0).x / 2;
-    m_physics.SetRadius(radius);
 
     if (!deviceOnly)
     {

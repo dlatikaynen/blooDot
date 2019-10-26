@@ -84,13 +84,19 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.bottom - 5), D2D1::Point2F(rect.right - 5, rect.bottom), innerBrush, 2.5f, 0);
 	}
 
-	/* pipes */
-	for (int facing = OrientabilityIndexQuadruplet::Downy; facing >= OrientabilityIndexQuadruplet::Lefty; --facing)
+	/* pipes and double inner corners (dually oriented specialities) */
+	for (int facing = OrientabilityIndexDuplex::Vertically; facing >= OrientabilityIndexDuplex::Horizontally; --facing)
 	{
 		PrepareRect(&this->m_lookupPipes[facing], rect);
 		Rotate(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.left, rect.top + 5), D2D1::Point2F(rect.right, rect.top + 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.left, rect.bottom - 5), D2D1::Point2F(rect.right, rect.bottom - 5), innerBrush, 2.5f, 0);
+		PrepareRect(&this->m_lookupCornersDiag[facing], rect);
+		Rotate(rendEr, rect, facing);
+		rendEr->DrawLine(D2D1::Point2F(rect.right, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top + 5), innerBrush, 2.5f, 0);
+		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top), innerBrush, 2.5f, 0);
+		rendEr->DrawLine(D2D1::Point2F(rect.left, rect.bottom - 5), D2D1::Point2F(rect.left + 5, rect.bottom - 5), innerBrush, 2.5f, 0);
+		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.bottom - 5), D2D1::Point2F(rect.left + 5, rect.bottom), innerBrush, 2.5f, 0);
 	}
 
 	for (int facing = OrientabilityIndexDiagon::DiagNE; facing >= OrientabilityIndexDiagon::DiagNW; --facing)

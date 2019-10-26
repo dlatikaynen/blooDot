@@ -216,12 +216,6 @@
     <None Include="Media\Bitmaps\blooDot.bmp">
       <DeploymentContent>true</DeploymentContent>
     </None>
-    <None Include="Media\Models\marble2.sdkmesh">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="Media\Models\maze1.sdkmesh">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\src\mediumtile-sdk.png" />
@@ -245,8 +239,6 @@
     <Image Include="Media\Textures\bridge.dds" />
     <Image Include="Media\Textures\bridge_bump.dds" />
     <Image Include="Media\Textures\cliff_sides.dds" />
-    <Image Include="Media\Textures\floor_section1.dds" />
-    <Image Include="Media\Textures\floor_section2.dds" />
     <Image Include="Media\Textures\loadscreen.png" />
     <Image Include="Media\Textures\Marble.dds" />
     <Image Include="Media\Textures\topwall_color.dds" />
@@ -290,6 +282,7 @@
     <ClCompile Include="..\src\world\object.cpp" />
     <ClCompile Include="..\src\dings\dings.cpp" />
     <ClCompile Include="..\src\dings\wall-like\mauer.cpp" />
+    <ClCompile Include="..\src\dings\mob-like\dalek.cpp" />
     <ClCompile Include="..\src\ui\LevelEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -377,9 +370,6 @@
   <ItemGroup>
     <Media Include="Media\Audio\background.mp3" />
     <Media Include="Media\Audio\Checkpoint.wav" />
-    <Media Include="Media\Audio\MarbleFall.wav" />
-    <Media Include="Media\Audio\MarbleHit.wav" />
-    <Media Include="Media\Audio\MarbleRoll.wav" />
     <Media Include="Media\Audio\MenuChange.wav" />
     <Media Include="Media\Audio\MenuSelect.wav" />
   </ItemGroup>

@@ -261,9 +261,9 @@ void Audio::CreateResources()
         CreateReverb(m_soundEffectEngine, m_soundEffectMasteringVoice, &m_reverbParametersSmall, &m_soundEffectReverbVoiceSmallRoom, true);
         CreateReverb(m_soundEffectEngine, m_soundEffectMasteringVoice, &m_reverbParametersLarge, &m_soundEffectReverbVoiceLargeRoom, true);
 
-        CreateSourceVoice(RollingEvent);
-        CreateSourceVoice(FallingEvent);
-        CreateSourceVoice(CollisionEvent);
+        //CreateSourceVoice(RollingEvent);
+        //CreateSourceVoice(FallingEvent);
+        //CreateSourceVoice(CollisionEvent);
         CreateSourceVoice(MenuChangeEvent);
         CreateSourceVoice(MenuSelectedEvent);
         CreateSourceVoice(CheckpointEvent);
@@ -321,15 +321,12 @@ void Audio::CreateSourceVoice(SoundEvent sound)
     MediaStreamer soundEffectStream;
     switch (sound)
     {
-        case RollingEvent: soundEffectStream.Initialize(L"Media\\Audio\\MarbleRoll.wav"); break;
-        case FallingEvent: soundEffectStream.Initialize(L"Media\\Audio\\MarbleFall.wav"); break;
-        case CollisionEvent: soundEffectStream.Initialize(L"Media\\Audio\\MarbleHit.wav"); break;
         case MenuChangeEvent: soundEffectStream.Initialize(L"Media\\Audio\\MenuChange.wav"); break;
         case MenuSelectedEvent: soundEffectStream.Initialize(L"Media\\Audio\\MenuSelect.wav"); break;
         case CheckpointEvent: soundEffectStream.Initialize(L"Media\\Audio\\Checkpoint.wav"); break;
     }
-    m_soundEffects[sound].m_soundEventType = sound;
 
+    m_soundEffects[sound].m_soundEventType = sound;
     uint32 bufferLength = soundEffectStream.GetMaxStreamLengthInBytes();
     m_soundEffects[sound].m_soundEffectBufferData = new byte[bufferLength];
     soundEffectStream.ReadAll(m_soundEffects[sound].m_soundEffectBufferData, bufferLength, &m_soundEffects[sound].m_soundEffectBufferLength);
