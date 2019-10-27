@@ -5,6 +5,7 @@ Development
 
  - Lukas "PommesFritz03": worldbuilding, gameplay, design, graphics
  - Daniel "dlatikay": maths, physics, algorithms
+ - Jonas "jlatikay": test and quality assurance
 
 ![](https://raw.githubusercontent.com/dlatikaynen/blooDot/master/bloodot.png)
 
