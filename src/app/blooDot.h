@@ -141,6 +141,10 @@ namespace blooDot
         bool				m_pauseKeyPressed;
         bool				m_homeKeyActive;
         bool				m_homeKeyPressed;
+		bool				m_keyRightPressed;
+		bool				m_keyLeftPressed;
+		bool				m_keyUpPressed;
+		bool				m_keyDownPressed;
         bool				m_windowActive;
 		bool				m_deferredResourcesReadyPending;
 		bool				m_deferredResourcesReady;

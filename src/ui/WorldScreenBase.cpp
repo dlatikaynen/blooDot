@@ -20,7 +20,7 @@ void WorldScreenBase::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	devi
 	m_d2dContext = deviceResources->GetD2DDeviceContext();
 	m_backgroundSize = D2D1::SizeF(0.0f, 0.0f);
 	m_viewportSize = D2D1::SizeU(0, 0);
-	m_totalSize = D2D1::SizeF(0.0f, 0.0f);
+	m_viewportSizeSquares = D2D1::SizeU(0.0f, 0.0f);
 
     ComPtr<ID2D1Factory> factory;
     m_d2dDevice->GetFactory(&factory);
@@ -112,6 +112,9 @@ void WorldScreenBase::ResetDirectXResources()
 	/* rest of initialization */
 	m_viewportSize.width = (unsigned int)m_backgroundSize.width;
 	m_viewportSize.height = (unsigned int)m_backgroundSize.height;
+	this->ComputeWorldSize();
+	this->ComputeWorldCenter();
+	this->ComputeViewportOffset();
 
 	DX::ThrowIfFailed(
 		m_d2dContext->CreateCompatibleRenderTarget(
@@ -148,6 +151,31 @@ void WorldScreenBase::ResetDirectXResources()
     UpdateForWindowSizeChange();
 }
 
+void WorldScreenBase::ComputeWorldSize()
+{
+	m_worldSizeSquares = D2D1::SizeU(4200, 4200);
+	m_worldSize = D2D1::SizeF(m_worldSizeSquares.width * SQUARE_WIDTH, m_worldSizeSquares.height * SQUARE_HEIGHT);
+}
+
+void WorldScreenBase::ComputeWorldCenter()
+{
+	m_worldCenterSquares = D2D1::Point2U(m_worldSizeSquares.width / 2, m_worldSizeSquares.width / 2);
+	m_worldCenter = D2D1::Point2F(m_worldSize.width / 2.0, m_worldSize.height / 2.0);
+}
+
+void WorldScreenBase::ComputeViewportOffset()
+{
+	m_viewportSizeSquares = D2D1::SizeU(
+		ceil(m_viewportSize.width / static_cast<float>(SQUARE_WIDTH)),
+		ceil(m_viewportSize.height / static_cast<float>(SQUARE_HEIGHT))
+	);
+
+	m_viewportOffsetSquares = D2D1::Point2U(
+		m_worldCenterSquares.x - m_viewportSizeSquares.width / 2,
+		m_worldCenterSquares.y - m_viewportSizeSquares.height / 2
+	);
+}
+
 void WorldScreenBase::ReleaseDeviceDependentResources()
 {
     m_d2dDevice.Reset();
@@ -166,11 +194,7 @@ void WorldScreenBase::ReleaseDeviceDependentResources()
 void WorldScreenBase::UpdateForWindowSizeChange()
 {
 	m_isResizing = true;
-
     Windows::Foundation::Rect windowBounds = CoreWindow::GetForCurrentThread()->Bounds;
-
-    m_totalSize.width = m_viewportSize.width;
-    m_totalSize.height = m_viewportSize.height;
 	D2D1_SIZE_F canvasSize = m_d2dContext->GetSize();
 
 	/* pre-draw all dings */
@@ -283,6 +307,30 @@ void WorldScreenBase::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::C
 	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
 	D2D1_RECT_F placementRect = D2D1::RectF(placementX * 49.0f, placementY * 49.0f, placementX * 49.0f + 49.0f, placementY * 49.0f + 49.0f);
 	renderTarget->DrawBitmap(dingSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
+}
+
+void WorldScreenBase::SetControl(bool left, bool right, bool up, bool down)
+{
+	if (left)
+	{
+		m_isMoving = Facings::West;
+	}
+	else if (right)
+	{
+		m_isMoving = Facings::East;
+	}
+	else if (down)
+	{
+		m_isMoving = Facings::South;
+	}
+	else if (up)
+	{
+		m_isMoving = Facings::North;
+	}
+	else
+	{
+		m_isMoving = Facings::Shy;
+	}
 }
 
 void WorldScreenBase::Update(float timeTotal, float timeDelta)

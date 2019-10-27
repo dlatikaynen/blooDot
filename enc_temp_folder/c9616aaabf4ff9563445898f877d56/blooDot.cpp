@@ -710,7 +710,7 @@ void blooDotMain::Update()
 				m_audio.Start();
 			}
 
-			m_worldScreen->SetControl(m_keyLeftPressed, m_keyRightPressed, m_keyUpPressed, m_keyDownPressed);
+			m_worldScreen->SetControl(m_keyLeftPressed, m_keyRightPressed, m_keyDownPressed, m_keyUpPressed);
 			m_worldScreen->Update(timerTotal, timerElapsed);
 			return;
 		}

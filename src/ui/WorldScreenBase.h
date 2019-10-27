@@ -8,13 +8,17 @@
 class WorldScreenBase
 {
 public:
+	const float										SQUARE_WIDTH = 49.0;
+	const float										SQUARE_HEIGHT = 49.0;
+
 	WorldScreenBase::WorldScreenBase();
     void Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources);
 	void CreateDeviceDependentResources();
 	void ResetDirectXResources();
     void ReleaseDeviceDependentResources();
     void UpdateForWindowSizeChange();
-	void Update(float timeTotal, float timeDelta);
+	void SetControl(bool left, bool right, bool up, bool down);
+	virtual void Update(float timeTotal, float timeDelta);
 	virtual void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
 
 protected:
@@ -35,14 +39,23 @@ protected:
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_rooof;
 	D2D1_SIZE_F                                     m_backgroundSize;
 	D2D1_SIZE_U										m_viewportSize;
-	D2D1_SIZE_F                                     m_totalSize;
+	D2D1_SIZE_U                                     m_viewportSizeSquares;
 	bool											m_isResizing;
+	Facings											m_isMoving;
 
 	D2D1_SIZE_F										m_worldSize;
+	D2D1_SIZE_U										m_worldSizeSquares;
 	D2D1_POINT_2F									m_worldCenter;
+	D2D1_POINT_2U									m_worldCenterSquares;
 	D2D1_POINT_2F									m_viewportOffset;
+	D2D1_POINT_2U									m_viewportOffsetSquares;
 	D2D1_SIZE_F										m_viewportScrollTreshold;
 	D2D1_POINT_2U									m_currentLevelEditorCell;
 
 	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY);
+
+private:
+	void ComputeWorldSize();
+	void ComputeWorldCenter();
+	void ComputeViewportOffset();
 };
