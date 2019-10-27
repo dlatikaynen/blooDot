@@ -20,6 +20,7 @@ enum Facings
 	East = 4,													/* U-bag with opening to the left (eastcap) */
 	South = 8,													/* U-bag with opening upwards (southcap) */
 	North = 16,													/* U-bag with opening downwards (northcap) */
+	Viech = West | North | East | South,
 	SingleEdge = 32,
 	TripleEdge = 64,
 	CornerNear = 128,
@@ -118,7 +119,7 @@ protected:
 	int					m_ID;
 	Platform::String^	m_Name;
 	BrushRegistry		m_Brushes;
-	Facings				m_Facing;
+	Facings				m_Facings;
 	Facings				m_Coalescing;
 	Layers				m_preferredLayer;
 	Layers				m_possibleLayers;

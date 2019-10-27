@@ -176,11 +176,13 @@ void WorldScreenBase::UpdateForWindowSizeChange()
 	/* pre-draw all dings */
 	auto deflt = Dings(0, "BLACK", m_Brushes);
 	auto mauer = Mauer(m_Brushes);
+	auto dalek = Dalek(m_Brushes);
 
 	m_dings->BeginDraw();
 
 	deflt.Draw(m_dings, 0, 0);
 	mauer.Draw(m_dings, 1, 1);
+	dalek.Draw(m_dings, 1, 0);
 
 	DX::ThrowIfFailed(
 		m_dings->EndDraw()
@@ -261,6 +263,8 @@ void WorldScreenBase::UpdateForWindowSizeChange()
 	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner1SW, 19, 6);
 	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner1NE, 18, 7);
 	PlacePrimitive(dings, m_walls, &mauer, Facings::Corner1NW, 19, 7);
+
+	PlacePrimitive(dings, m_walls, &dalek, Facings::Shy, 1, 4);
 
 	/* a preview on decor */
 	m_walls->DrawBitmap(m_notimeforcaution.Get(), D2D1::RectF(6.5f * 49.0f, 3.26f * 49.0f, 6.5f * 49.0f + 301.0f, 3.26f * 49.0f + 22.0f));

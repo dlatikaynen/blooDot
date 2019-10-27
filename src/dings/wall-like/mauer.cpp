@@ -3,7 +3,7 @@
 
 Mauer::Mauer(BrushRegistry drawBrushes) : Dings(1, "Mauer", drawBrushes) 
 {
-	m_Facing = Facings::Shy;
+	m_Facings = Facings::Shy;
 	m_Coalescing = Facings::Immersed;
 	m_preferredLayer = Layers::Walls;
 	m_possibleLayers = Layers::Walls;

@@ -510,10 +510,11 @@ bool blooDotMain::Render()
 		m_deviceResources->GetD3DDeviceContext()->EndEvent();
 
 #pragma endregion
+	}
 
-		// Process audio.
+	if (m_audio.m_isAudioStarted)
+	{
 		m_audio.Render();
-
 	}
 
     // Draw the user interface and the overlay.
@@ -696,7 +697,7 @@ void blooDotMain::Update()
         // and load any deferred resources that might be too expensive
         // to load during initialization.
         if (m_gameState==GameState::LoadScreen)
-        {
+        {			
             // At this point we can draw a progress bar, or if we had
             // loaded audio, we could play audio during the loading process.
 			m_loadScreen->Update(timerTotal, timerElapsed);
@@ -704,14 +705,16 @@ void blooDotMain::Update()
         }
 		else if (m_gameState == GameState::LevelEditor)
 		{
+			if (!m_audio.m_isAudioStarted)
+			{
+				m_audio.Start();
+			}
+
 			m_worldScreen->Update(timerTotal, timerElapsed);
 			return;
 		}
 
-        if (!m_audio.m_isAudioStarted)
-        {
-            m_audio.Start();
-        }
+        
 
         switch (m_gameState)
         {

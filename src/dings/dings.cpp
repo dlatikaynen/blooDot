@@ -45,16 +45,27 @@ void Dings::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 
 void Dings::SetSheetPlacementsFromCoalescability()
 {
-	if (this->m_Coalescing != Facings::Shy) 
-	{
-		int x = this->m_lookupShy.x;
-		int y = this->m_lookupShy.y;
+	int x = this->m_lookupShy.x;
+	int y = this->m_lookupShy.y;
 
+	if (this->m_Facings == Facings::Viech)
+	{
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Lefty].x = x++;
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Lefty].y = y;
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Uppy].x = x++;
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Uppy].y = y;
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Righty].x = x++;
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Righty].y = y;
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Downy].x = x++;
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Downy].y = y;
+	}
+	else if (this->m_Coalescing != Facings::Shy) 
+	{		
 		this->m_lookupImmersed.x = ++x;
 		this->m_lookupImmersed.y = y;
 		this->m_lookupCrossing.x = ++x;
-		this->m_lookupCrossing.y=y;
-		this->m_lookupPipes[OrientabilityIndexDuplex::Vertically].x=++x;
+		this->m_lookupCrossing.y = y;
+		this->m_lookupPipes[OrientabilityIndexDuplex::Vertically].x = ++x;
 		this->m_lookupPipes[OrientabilityIndexDuplex::Vertically].y = y;
 		this->m_lookupPipes[OrientabilityIndexDuplex::Horizontally].x = ++x;
 		this->m_lookupPipes[OrientabilityIndexDuplex::Horizontally].y = y;
