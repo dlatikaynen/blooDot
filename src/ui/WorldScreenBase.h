@@ -2,6 +2,7 @@
 
 #include "..\dx\DirectXHelper.h"
 #include "..\dx\DeviceResources.h"
+#include "..\io\BasicLoader.h"
 #include "..\dx\BrushRegistry.h"
 #include "..\dings\dings.h"
 

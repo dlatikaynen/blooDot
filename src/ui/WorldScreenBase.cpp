@@ -40,74 +40,20 @@ void WorldScreenBase::CreateDeviceDependentResources()
 
 void WorldScreenBase::ResetDirectXResources()
 {
-    ComPtr<IWICBitmapDecoder> wicBitmapDecoder;
-	ComPtr<IWICBitmapFrameDecode> wicBitmapFrame;
-	ComPtr<IWICFormatConverter> wicFormatConverter;
+	auto loader = ref new BasicLoader(m_deviceResources->GetD3DDevice());
+	loader->LoadPngToBitmap(
+		L"Media\\Bitmaps\\notimeforcaution.png",
+		m_deviceResources,
+		&m_notimeforcaution
+	);
 
-	DX::ThrowIfFailed(
-        m_wicFactory->CreateDecoderFromFilename(
-            L"Media\\Bitmaps\\universe_seamless.png",
-            nullptr,
-            GENERIC_READ,
-            WICDecodeMetadataCacheOnDemand,
-            &wicBitmapDecoder
-        )
-    );
-
-    DX::ThrowIfFailed(wicBitmapDecoder->GetFrame(0, &wicBitmapFrame));
-    DX::ThrowIfFailed(m_wicFactory->CreateFormatConverter(&wicFormatConverter));
-    DX::ThrowIfFailed(
-        wicFormatConverter->Initialize(
-            wicBitmapFrame.Get(),
-            GUID_WICPixelFormat32bppPBGRA,
-            WICBitmapDitherTypeNone,
-            nullptr,
-            0.0,
-            WICBitmapPaletteTypeCustom
-        )
-    );
-
-    DX::ThrowIfFailed(
-        m_d2dContext->CreateBitmapFromWicBitmap(
-            wicFormatConverter.Get(),
-            BitmapProperties(PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)),
-            &m_background
-        )
-    );
+	loader->LoadPngToBitmap(
+		L"Media\\Bitmaps\\universe_seamless.png",
+		m_deviceResources,
+		&m_background
+	);
 
     m_backgroundSize = m_background->GetSize();
-
-	/* second bitmap loading */
-	DX::ThrowIfFailed(
-		m_wicFactory->CreateDecoderFromFilename(
-			L"Media\\Bitmaps\\notimeforcaution.png",
-			nullptr,
-			GENERIC_READ,
-			WICDecodeMetadataCacheOnDemand,
-			&wicBitmapDecoder
-		)
-	);
-
-	DX::ThrowIfFailed(wicBitmapDecoder->GetFrame(0, &wicBitmapFrame));
-	DX::ThrowIfFailed(m_wicFactory->CreateFormatConverter(&wicFormatConverter));
-	DX::ThrowIfFailed(
-		wicFormatConverter->Initialize(
-			wicBitmapFrame.Get(),
-			GUID_WICPixelFormat32bppPBGRA,
-			WICBitmapDitherTypeNone,
-			nullptr,
-			0.0,
-			WICBitmapPaletteTypeCustom
-		)
-	);
-
-	DX::ThrowIfFailed(
-		m_d2dContext->CreateBitmapFromWicBitmap(
-			wicFormatConverter.Get(),
-			BitmapProperties(PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)),
-			&m_notimeforcaution
-		)
-	);
 	
 	/* rest of initialization */
 	m_viewportSize.width = (unsigned int)m_backgroundSize.width;

@@ -365,6 +365,57 @@ void BasicLoader::CreateMesh(
     }
 }
 
+void BasicLoader::LoadPngToBitmap(
+	_In_ Platform::String^ fileName,
+	_In_ std::shared_ptr<DX::DeviceResources>& deviceResources,
+	_Out_ ID2D1Bitmap** thePicture
+)
+{
+	ComPtr<IWICBitmapDecoder> wicBitmapDecoder;
+	ComPtr<IWICBitmapFrameDecode> wicBitmapFrame;
+	ComPtr<IWICFormatConverter> wicFormatConverter;
+	ComPtr<ID2D1Bitmap> rawBitmap;
+
+	if (m_wicFactory.Get() == nullptr)
+	{
+		m_wicFactory = deviceResources->GetWicImagingFactory();
+	}
+
+	DX::ThrowIfFailed(
+		m_wicFactory->CreateDecoderFromFilename(
+			fileName->Data(),
+			nullptr,
+			GENERIC_READ,
+			WICDecodeMetadataCacheOnDemand,
+			&wicBitmapDecoder
+		)
+	);
+
+	DX::ThrowIfFailed(wicBitmapDecoder->GetFrame(0, &wicBitmapFrame));
+	DX::ThrowIfFailed(m_wicFactory->CreateFormatConverter(&wicFormatConverter));
+	DX::ThrowIfFailed(
+		wicFormatConverter->Initialize(
+			wicBitmapFrame.Get(),
+			GUID_WICPixelFormat32bppPBGRA,
+			WICBitmapDitherTypeNone,
+			nullptr,
+			0.0,
+			WICBitmapPaletteTypeCustom
+		)
+	);
+
+	DX::ThrowIfFailed(
+		deviceResources->GetD2DDeviceContext()->CreateBitmapFromWicBitmap(
+			wicFormatConverter.Get(),
+			D2D1::BitmapProperties(D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)),
+			&rawBitmap
+		)
+	);
+
+	/* deliver... in the most convuluted way we could contrive */
+	*thePicture = rawBitmap.Detach();
+}
+
 void BasicLoader::LoadTexture(
     _In_ Platform::String^ filename,
     _Out_opt_ ID3D11Texture2D** texture,
