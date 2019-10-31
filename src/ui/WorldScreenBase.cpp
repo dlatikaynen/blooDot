@@ -24,13 +24,9 @@ void WorldScreenBase::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	devi
 
     ComPtr<ID2D1Factory> factory;
     m_d2dDevice->GetFactory(&factory);
-
-    DX::ThrowIfFailed(
-        factory.As(&m_d2dFactory)
-    );
-	
-	CreateDeviceDependentResources();
-	ResetDirectXResources();
+    DX::ThrowIfFailed(factory.As(&m_d2dFactory));	
+	this->CreateDeviceDependentResources();
+	this->ResetDirectXResources();
 }
 
 void WorldScreenBase::CreateDeviceDependentResources()
@@ -41,18 +37,8 @@ void WorldScreenBase::CreateDeviceDependentResources()
 void WorldScreenBase::ResetDirectXResources()
 {
 	auto loader = ref new BasicLoader(m_deviceResources->GetD3DDevice());
-	loader->LoadPngToBitmap(
-		L"Media\\Bitmaps\\notimeforcaution.png",
-		m_deviceResources,
-		&m_notimeforcaution
-	);
-
-	loader->LoadPngToBitmap(
-		L"Media\\Bitmaps\\universe_seamless.png",
-		m_deviceResources,
-		&m_background
-	);
-
+	loader->LoadPngToBitmap(L"Media\\Bitmaps\\notimeforcaution.png", m_deviceResources,	&m_notimeforcaution);
+	loader->LoadPngToBitmap(L"Media\\Bitmaps\\universe_seamless.png", m_deviceResources, &m_background);
     m_backgroundSize = m_background->GetSize();
 	
 	/* rest of initialization */
@@ -62,37 +48,11 @@ void WorldScreenBase::ResetDirectXResources()
 	this->ComputeWorldCenter();
 	this->ComputeViewportOffset();
 
-	DX::ThrowIfFailed(
-		m_d2dContext->CreateCompatibleRenderTarget(
-			D2D1::SizeF(800.0f, 600.0f),
-			&m_dings
-		)
-	);
-
-	DX::ThrowIfFailed(
-		m_d2dContext->CreateCompatibleRenderTarget(
-			m_backgroundSize,
-			&m_floor
-		) 
-	);
-
-	DX::ThrowIfFailed(
-		m_d2dContext->CreateCompatibleRenderTarget(
-			m_backgroundSize,
-			&m_walls
-		)
-	);
-
-	DX::ThrowIfFailed(
-		m_d2dContext->CreateCompatibleRenderTarget(
-			m_backgroundSize,
-			&m_rooof
-		)
-	);
-
-    DX::ThrowIfFailed(
-        m_d2dFactory->CreateDrawingStateBlock(&m_stateBlock)
-    );
+	DX::ThrowIfFailed(m_d2dContext->CreateCompatibleRenderTarget(D2D1::SizeF(800.0f, 600.0f), &m_dings));
+	DX::ThrowIfFailed(m_d2dContext->CreateCompatibleRenderTarget(m_backgroundSize, &m_floor));
+	DX::ThrowIfFailed(m_d2dContext->CreateCompatibleRenderTarget(m_backgroundSize, &m_walls));
+	DX::ThrowIfFailed(m_d2dContext->CreateCompatibleRenderTarget(m_backgroundSize, &m_rooof));
+    DX::ThrowIfFailed(m_d2dFactory->CreateDrawingStateBlock(&m_stateBlock));
 
     UpdateForWindowSizeChange();
 }
@@ -154,9 +114,7 @@ void WorldScreenBase::UpdateForWindowSizeChange()
 	mauer.Draw(m_dings, 1, 1);
 	dalek.Draw(m_dings, 1, 0);
 
-	DX::ThrowIfFailed(
-		m_dings->EndDraw()
-	);
+	DX::ThrowIfFailed(m_dings->EndDraw());
 
 	ID2D1Bitmap *dings = NULL;
 	m_dings->GetBitmap(&dings);
