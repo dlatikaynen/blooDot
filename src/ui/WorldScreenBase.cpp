@@ -10,6 +10,15 @@ using namespace D2D1;
 
 WorldScreenBase::WorldScreenBase() 
 {
+	this->m_currentLevel = nullptr;
+}
+
+WorldScreenBase::~WorldScreenBase()
+{
+	if (this->m_currentLevel != nullptr)
+	{
+		delete this->m_currentLevel;
+	}
 }
 
 void WorldScreenBase::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources)

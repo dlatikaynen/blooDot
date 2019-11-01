@@ -104,6 +104,7 @@ enum OrientabilityIndexDuplex
 	Vertically = 1
 };
 
+// A Ding Wang Tile descriptor, and a candidate for clumsy packing on a 2-topology
 class Dings
 {
 public:

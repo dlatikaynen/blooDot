@@ -8,13 +8,25 @@ using namespace Windows::UI::ViewManagement;
 using namespace Windows::Graphics::Display;
 using namespace D2D1;
 
-WorldSheet::WorldSheet()
+WorldSheet::WorldSheet(std::shared_ptr<DX::DeviceResources> deviceResources)
 {
+	this->m_deviceResources = deviceResources;
 }
 
 WorldSheet::~WorldSheet()
 {
 	this->Discard();
+}
+
+void WorldSheet::PrepareThyself(Level* forLevel, int amSheetX, int amSheetY)
+{
+	this->m_d2dContext = this->m_deviceResources->GetD2DDeviceContext();
+	this->m_d2dFactory = this->m_deviceResources->GetD2DFactory();
+	this->m_d2dDevice = this->m_deviceResources->GetD2DDevice();
+	this->m_tiedToLevel = forLevel;
+	auto levBounds = forLevel->GetRectBoundsUnits();
+	auto sheetSize = forLevel->GetSheetSizeUnits();
+	this->m_leftUpperCornerInWorld = D2D1::Point2U(amSheetX * sheetSize.width, amSheetY * sheetSize.height);
 }
 
 D2D1_POINT_2U WorldSheet::CornerNW()

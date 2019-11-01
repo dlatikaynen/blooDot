@@ -2,6 +2,7 @@
 
 #pragma once
 
+// An object is the runtime incarnation of a Ding on a level map, including actual position in level
 class Object
 {
 public:

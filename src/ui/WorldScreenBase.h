@@ -14,7 +14,9 @@ public:
 	const float										SQUARE_HEIGHT = 49.0;
 
 	WorldScreenBase::WorldScreenBase();
-    void Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources);
+	WorldScreenBase::~WorldScreenBase();
+	
+	void Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources);
 	void CreateDeviceDependentResources();
 	void ResetDirectXResources();
     void ReleaseDeviceDependentResources();
@@ -54,6 +56,7 @@ protected:
 	D2D1_SIZE_F										m_viewportScrollTreshold;
 	D2D1_POINT_2U									m_currentLevelEditorCell;
 
+	Level*											m_currentLevel;
 	WorldSheet*										m_Sheets;
 
 	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY);

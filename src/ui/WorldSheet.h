@@ -5,12 +5,15 @@
 #include "..\io\BasicLoader.h"
 #include "..\dx\BrushRegistry.h"
 #include "..\dings\dings.h"
+#include "..\world\Level.h"
 
 class WorldSheet
 {
 public:
-	WorldSheet::WorldSheet();
+	WorldSheet::WorldSheet(std::shared_ptr<DX::DeviceResources> deviceResources);
 	WorldSheet::~WorldSheet();
+
+	void											PrepareThyself(Level* forLevel, int amSheetX, int amSheetY);
 
 	D2D1_POINT_2U									CornerNW();
 	D2D1_POINT_2U									CornerNE();
@@ -31,4 +34,9 @@ protected:
 
 private:
 	bool											m_isPopulated;
+	Level*											m_tiedToLevel;
+	std::shared_ptr<DX::DeviceResources>			m_deviceResources;
+	Microsoft::WRL::ComPtr<ID2D1Factory1>           m_d2dFactory;
+	Microsoft::WRL::ComPtr<ID2D1Device>             m_d2dDevice;
+	Microsoft::WRL::ComPtr<ID2D1DeviceContext>      m_d2dContext;
 };
