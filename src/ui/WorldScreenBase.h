@@ -5,6 +5,7 @@
 #include "..\io\BasicLoader.h"
 #include "..\dx\BrushRegistry.h"
 #include "..\dings\dings.h"
+#include "WorldSheet.h"
 
 class WorldScreenBase
 {
@@ -34,7 +35,7 @@ protected:
     Microsoft::WRL::ComPtr<IWICImagingFactory>      m_wicFactory;
     Microsoft::WRL::ComPtr<ID2D1Bitmap>             m_background;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>             m_notimeforcaution;
-	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_dings;
+	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_dingSheet;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_floor;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_walls;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_rooof;
@@ -52,6 +53,8 @@ protected:
 	D2D1_POINT_2U									m_viewportOffsetSquares;
 	D2D1_SIZE_F										m_viewportScrollTreshold;
 	D2D1_POINT_2U									m_currentLevelEditorCell;
+
+	WorldSheet*										m_Sheets;
 
 	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY);
 

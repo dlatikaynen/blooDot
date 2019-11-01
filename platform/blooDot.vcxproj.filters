@@ -118,6 +118,9 @@
     <ClCompile Include="..\src\ui\LevelEditor.cpp">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ui\WorldSheet.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\sound\Audio.h" />
@@ -225,6 +228,9 @@
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\WorldScreenBase.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\WorldSheet.h">
       <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>

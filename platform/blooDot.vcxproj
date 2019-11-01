@@ -279,6 +279,7 @@
     <ClCompile Include="..\src\algo\BitmapPixelator.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeStep.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeTransition.cpp" />
+    <ClCompile Include="..\src\ui\WorldSheet.cpp" />
     <ClCompile Include="..\src\world\object.cpp" />
     <ClCompile Include="..\src\dings\dings.cpp" />
     <ClCompile Include="..\src\dings\wall-like\mauer.cpp" />
@@ -320,6 +321,7 @@
     <ClInclude Include="..\src\ui\CountdownTimer.h" />
     <ClInclude Include="..\src\dx\BrushRegistry.h" />
     <ClInclude Include="..\src\algo\BitmapPixelator.h" />
+    <ClInclude Include="..\src\ui\WorldSheet.h" />
     <ClInclude Include="..\src\world\object.h" />
     <ClInclude Include="..\src\world\level.h" />
     <ClInclude Include="..\src\world\world.h" />

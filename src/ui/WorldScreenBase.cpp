@@ -48,7 +48,7 @@ void WorldScreenBase::ResetDirectXResources()
 	this->ComputeWorldCenter();
 	this->ComputeViewportOffset();
 
-	DX::ThrowIfFailed(m_d2dContext->CreateCompatibleRenderTarget(D2D1::SizeF(800.0f, 600.0f), &m_dings));
+	DX::ThrowIfFailed(m_d2dContext->CreateCompatibleRenderTarget(D2D1::SizeF(800.0f, 600.0f), &m_dingSheet));
 	DX::ThrowIfFailed(m_d2dContext->CreateCompatibleRenderTarget(m_backgroundSize, &m_floor));
 	DX::ThrowIfFailed(m_d2dContext->CreateCompatibleRenderTarget(m_backgroundSize, &m_walls));
 	DX::ThrowIfFailed(m_d2dContext->CreateCompatibleRenderTarget(m_backgroundSize, &m_rooof));
@@ -87,7 +87,7 @@ void WorldScreenBase::ReleaseDeviceDependentResources()
     m_d2dDevice.Reset();
     m_d2dContext.Reset();
     m_background.Reset();
-	m_dings.Reset();
+	m_dingSheet.Reset();
 	m_floor.Reset();
 	m_walls.Reset();
 	m_rooof.Reset();	
@@ -108,16 +108,16 @@ void WorldScreenBase::UpdateForWindowSizeChange()
 	auto mauer = Mauer(m_Brushes);
 	auto dalek = Dalek(m_Brushes);
 
-	m_dings->BeginDraw();
+	m_dingSheet->BeginDraw();
 
-	deflt.Draw(m_dings, 0, 0);
-	mauer.Draw(m_dings, 1, 1);
-	dalek.Draw(m_dings, 1, 0);
+	deflt.Draw(m_dingSheet, 0, 0);
+	mauer.Draw(m_dingSheet, 1, 1);
+	dalek.Draw(m_dingSheet, 1, 0);
 
-	DX::ThrowIfFailed(m_dings->EndDraw());
+	DX::ThrowIfFailed(m_dingSheet->EndDraw());
 
 	ID2D1Bitmap *dings = NULL;
-	m_dings->GetBitmap(&dings);
+	m_dingSheet->GetBitmap(&dings);
 
 	m_walls->BeginDraw();
 	PlacePrimitive(dings, m_walls, &mauer, Facings::Shy, 0, 0);
