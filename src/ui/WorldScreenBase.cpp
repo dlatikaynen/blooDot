@@ -10,15 +10,13 @@ using namespace D2D1;
 
 WorldScreenBase::WorldScreenBase() 
 {
-	this->m_currentLevel = nullptr;
+	this->m_currentLevel = nullptr;	
 }
 
 WorldScreenBase::~WorldScreenBase()
-{
-	if (this->m_currentLevel != nullptr)
-	{
-		delete this->m_currentLevel;
-	}
+{	
+	this->m_Sheets.clear();
+	delete this->m_currentLevel;
 }
 
 void WorldScreenBase::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources)
@@ -319,4 +317,27 @@ void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 p
     }
 
     m_d2dContext->RestoreDrawingState(m_stateBlock.Get());
+}
+
+void WorldScreenBase::EnterLevel(Level* level)
+{
+	this->m_currentLevel = level;
+
+	/* generate the sheets for this level */
+	auto subscriptX = level->GetNumOfSheetsWE();
+	auto subscriptY = level->GetNumOfSheetsNS();
+	for (auto y = 0; y < subscriptY; ++y)
+	{
+		for (auto x = 0; x < subscriptX; ++x)
+		{
+			auto newSheet = new WorldSheet(m_deviceResources);
+			newSheet->PrepareThyself(level, x, y);
+			this->m_Sheets.push_back(*newSheet);
+		}
+	}
+}
+
+WorldSheet*	WorldScreenBase::GetSheet(unsigned sheetX, unsigned sheetY)
+{
+	return &this->m_Sheets[sheetY*m_currentLevel->GetNumOfSheetsWE() + sheetX];
 }

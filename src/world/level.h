@@ -13,8 +13,8 @@ public:
 	Level::Level(Platform::String^ levelName, D2D1_SIZE_U sheetSize, unsigned extentWE, unsigned extentNS);
 	D2D1_SIZE_U GetRectBoundsUnits();
 	D2D1_SIZE_U GetSheetSizeUnits();
-	unsigned GetNumOfSheetsRequiredWE();
-	unsigned GetNumOfSheetsRequiredNE();
+	unsigned GetNumOfSheetsWE();
+	unsigned GetNumOfSheetsNS();
 
 private:
 	unsigned GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet);

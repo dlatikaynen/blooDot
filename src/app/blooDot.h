@@ -97,6 +97,7 @@ namespace blooDot
         DX::StepTimer								m_timer;
         std::unique_ptr<LoadScreen>                 m_loadScreen;
 		std::unique_ptr<WorldScreenBase>            m_worldScreen;
+		Level*										m_currentLevel;
 		Microsoft::WRL::ComPtr<ID3D11InputLayout>   m_inputLayout;
         Microsoft::WRL::ComPtr<ID3D11VertexShader>  m_vertexShader;
         Microsoft::WRL::ComPtr<ID3D11PixelShader>   m_pixelShader;

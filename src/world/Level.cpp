@@ -7,12 +7,12 @@ Level::Level(Platform::String^ levelName, D2D1_SIZE_U sheetSize, unsigned extent
 	this->m_sheetSize = sheetSize;
 }
 
-unsigned Level::GetNumOfSheetsRequiredWE()
+unsigned Level::GetNumOfSheetsWE()
 {
 	return this->GetNumOfSheetsRequired(this->m_rectangularBounds.width, this->m_sheetSize.width);
 }
 
-unsigned Level::GetNumOfSheetsRequiredNE()
+unsigned Level::GetNumOfSheetsNS()
 {
 	return this->GetNumOfSheetsRequired(this->m_rectangularBounds.height, this->m_sheetSize.height);
 }

@@ -16,6 +16,7 @@ public:
 	WorldScreenBase::WorldScreenBase();
 	WorldScreenBase::~WorldScreenBase();
 	
+	/* graphical */
 	void Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources);
 	void CreateDeviceDependentResources();
 	void ResetDirectXResources();
@@ -24,6 +25,9 @@ public:
 	void SetControl(bool left, bool right, bool up, bool down);
 	virtual void Update(float timeTotal, float timeDelta);
 	virtual void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
+
+	/* logical */
+	void EnterLevel(Level* level);
 
 protected:
 	const float										SCROLL_TRESHOLD_FACT = 0.61F;
@@ -57,8 +61,9 @@ protected:
 	D2D1_POINT_2U									m_currentLevelEditorCell;
 
 	Level*											m_currentLevel;
-	WorldSheet*										m_Sheets;
+	std::vector<WorldSheet>							m_Sheets;
 
+	WorldSheet*	GetSheet(unsigned sheetX, unsigned sheetY);
 	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY);
 
 private:

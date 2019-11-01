@@ -35,7 +35,8 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	m_deferredResourcesReadyPending(false),
     m_deferredResourcesReady(false),
 	m_FPSCircular(0),
-	m_FPSWatermark(0)
+	m_FPSWatermark(0),
+	m_currentLevel(nullptr)
 {
     // Register to be notified if the Device is lost or recreated.
     m_deviceResources->RegisterDeviceNotify(this);
@@ -76,6 +77,8 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 
 	m_worldScreen = std::unique_ptr<WorldScreenBase>(new LevelEditor());
 	m_worldScreen->Initialize(m_deviceResources);
+	m_currentLevel = new Level(L"Gartenwelt-1", D2D1::SizeU(50, 30), 3800, 3800);
+	m_worldScreen->EnterLevel(m_currentLevel);
 
     UserInterface::GetInstance().Initialize(
         m_deviceResources->GetD2DDevice(),
@@ -128,6 +131,7 @@ blooDotMain::~blooDotMain()
 {
     // Deregister device notification
     m_deviceResources->RegisterDeviceNotify(nullptr);
+	delete m_currentLevel;
 }
 
 // Updates application state when the window size changes (e.g. device orientation change)
