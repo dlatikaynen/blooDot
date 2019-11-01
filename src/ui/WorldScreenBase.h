@@ -52,7 +52,6 @@ protected:
 	Facings											m_isMoving;
 
 	D2D1_SIZE_F										m_worldSize;
-	D2D1_SIZE_U										m_worldSizeSquares;
 	D2D1_POINT_2F									m_worldCenter;
 	D2D1_POINT_2U									m_worldCenterSquares;
 	D2D1_POINT_2F									m_viewportOffset;
@@ -61,7 +60,7 @@ protected:
 	D2D1_POINT_2U									m_currentLevelEditorCell;
 
 	Level*											m_currentLevel;
-	std::vector<WorldSheet>							m_Sheets;
+	std::vector<WorldSheet*>						m_Sheets;
 
 	WorldSheet*	GetSheet(unsigned sheetX, unsigned sheetY);
 	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY);

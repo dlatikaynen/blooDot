@@ -120,10 +120,10 @@
     <ClCompile Include="..\src\ui\WorldSheet.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\world\object.cpp">
+    <ClCompile Include="..\src\world\Level.cpp">
       <Filter>world</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\world\Level.cpp">
+    <ClCompile Include="..\src\world\Object.cpp">
       <Filter>world</Filter>
     </ClCompile>
   </ItemGroup>
@@ -235,13 +235,13 @@
     <ClInclude Include="..\src\ui\WorldSheet.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\world\object.h">
-      <Filter>world</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\world\world.h">
       <Filter>world</Filter>
     </ClInclude>
     <ClInclude Include="..\src\world\Level.h">
+      <Filter>world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\world\Object.h">
       <Filter>world</Filter>
     </ClInclude>
   </ItemGroup>

@@ -15,7 +15,12 @@ WorldScreenBase::WorldScreenBase()
 
 WorldScreenBase::~WorldScreenBase()
 {	
-	this->m_Sheets.clear();
+	while (!this->m_Sheets.empty())
+	{
+		delete this->m_Sheets.back();
+		this->m_Sheets.pop_back();
+	}
+
 	delete this->m_currentLevel;
 }
 
@@ -66,13 +71,14 @@ void WorldScreenBase::ResetDirectXResources()
 
 void WorldScreenBase::ComputeWorldSize()
 {
-	m_worldSizeSquares = D2D1::SizeU(4200, 4200);
-	m_worldSize = D2D1::SizeF(m_worldSizeSquares.width * SQUARE_WIDTH, m_worldSizeSquares.height * SQUARE_HEIGHT);
+	auto worldSizeSquares = this->m_currentLevel->GetRectBoundsUnits();
+	m_worldSize = D2D1::SizeF(worldSizeSquares.width * SQUARE_WIDTH, worldSizeSquares.height * SQUARE_HEIGHT);
 }
 
 void WorldScreenBase::ComputeWorldCenter()
 {
-	m_worldCenterSquares = D2D1::Point2U(m_worldSizeSquares.width / 2, m_worldSizeSquares.width / 2);
+	auto worldSizeSquares = this->m_currentLevel->GetRectBoundsUnits();
+	m_worldCenterSquares = D2D1::Point2U(worldSizeSquares.width / 2, worldSizeSquares.width / 2);
 	m_worldCenter = D2D1::Point2F(m_worldSize.width / 2.0, m_worldSize.height / 2.0);
 }
 
@@ -283,6 +289,11 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 	DX::ThrowIfFailed(
 		m_rooof->EndDraw()
 	);
+
+	/* now so which quadrants from which sheets do we need to cover the screen with
+	 * the bit of the world the viewport is hovering over? that is here the question. */
+
+
 }
 
 void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)
@@ -330,14 +341,22 @@ void WorldScreenBase::EnterLevel(Level* level)
 	{
 		for (auto x = 0; x < subscriptX; ++x)
 		{
-			auto newSheet = new WorldSheet(m_deviceResources);
-			newSheet->PrepareThyself(level, x, y);
-			this->m_Sheets.push_back(*newSheet);
+			this->m_Sheets.push_back((WorldSheet*)nullptr);
 		}
 	}
 }
 
 WorldSheet*	WorldScreenBase::GetSheet(unsigned sheetX, unsigned sheetY)
 {
-	return &this->m_Sheets[sheetY*m_currentLevel->GetNumOfSheetsWE() + sheetX];
+	auto sheetAddress = sheetY * m_currentLevel->GetNumOfSheetsWE() + sheetX;
+	auto retrievedSheet = this->m_Sheets[sheetAddress];
+	if (retrievedSheet == nullptr) 	
+	{
+		auto newSheet = new WorldSheet(m_deviceResources);
+		newSheet->PrepareThyself(m_currentLevel, sheetX, sheetY);
+		this->m_Sheets[sheetAddress] = newSheet;
+		retrievedSheet = newSheet;
+	}
+
+	return retrievedSheet;
 }

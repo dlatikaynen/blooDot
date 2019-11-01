@@ -1,4 +1,10 @@
-#include "object.h"
+#include "Object.h"
+
+Object::Object(unsigned posInLevelX, unsigned posInLevelY)
+{
+	this->m_Dings = nullptr;
+	this->m_positionInLevel = D2D1::Point2U(posInLevelX, posInLevelY);
+}
 
 Platform::String^ Object::Name()
 {

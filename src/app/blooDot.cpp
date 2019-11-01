@@ -76,9 +76,9 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
     m_loadScreen->Initialize(m_deviceResources);
 
 	m_worldScreen = std::unique_ptr<WorldScreenBase>(new LevelEditor());
-	m_worldScreen->Initialize(m_deviceResources);
-	m_currentLevel = new Level(L"Gartenwelt-1", D2D1::SizeU(50, 30), 3800, 3800);
+	m_currentLevel = new Level(L"Gartenwelt-1", D2D1::SizeU(50, 30), 720, 720);
 	m_worldScreen->EnterLevel(m_currentLevel);
+	m_worldScreen->Initialize(m_deviceResources);
 
     UserInterface::GetInstance().Initialize(
         m_deviceResources->GetD2DDevice(),
