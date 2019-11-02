@@ -24,6 +24,7 @@ public:
 
 	void											Populate();
 	bool											IsPopulated();
+	void											DrawTo(D2D1_RECT_F screenRect);
 	void											Discard();
 
 protected:

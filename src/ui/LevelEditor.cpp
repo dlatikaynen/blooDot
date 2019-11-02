@@ -44,20 +44,12 @@ void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 		m_viewportSize.height
 	);
 
-	ID2D1Bitmap *bmp = NULL;
-	m_floor->GetBitmap(&bmp);
-	m_d2dContext->DrawBitmap(bmp, screenRect);
-	bmp->Release();
+	if (this->m_hoveringSheetNW != nullptr)
+	{
+		this->m_hoveringSheetNW->DrawTo(screenRect);
+	}
 
 	this->DrawLevelEditorRaster();
-
-	m_walls->GetBitmap(&bmp);
-	m_d2dContext->DrawBitmap(bmp, screenRect);
-	bmp->Release();
-
-	m_rooof->GetBitmap(&bmp);
-	m_d2dContext->DrawBitmap(bmp, screenRect);
-	bmp->Release();
 
 	HRESULT hr = m_d2dContext->EndDraw();
 	if (hr != D2DERR_RECREATE_TARGET)

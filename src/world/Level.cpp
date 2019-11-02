@@ -24,6 +24,32 @@ Level::~Level()
 		delete this->m_Objects.back();
 		this->m_Objects.pop_back();
 	}
+
+	this->m_dingSheet.Reset();
+}
+
+void Level::Initialize(Microsoft::WRL::ComPtr<ID2D1DeviceContext> deviceContext, BrushRegistry* brushRegistry)
+{
+	auto deflt = Dings(0, "BLACK", brushRegistry);
+	auto mauer = Mauer(brushRegistry);
+	auto dalek = Dalek(brushRegistry);
+
+	DX::ThrowIfFailed(deviceContext->CreateCompatibleRenderTarget(D2D1::SizeF(800.0f, 600.0f), &this->m_dingSheet));
+	m_dingSheet->BeginDraw();
+
+	deflt.Draw(m_dingSheet, 0, 0);
+	mauer.Draw(m_dingSheet, 1, 1);
+	dalek.Draw(m_dingSheet, 1, 0);
+	DX::ThrowIfFailed(m_dingSheet->EndDraw());
+
+	this->m_dingMap.emplace(deflt.ID(), deflt);
+	this->m_dingMap.emplace(mauer.ID(), mauer);
+	this->m_dingMap.emplace(dalek.ID(), dalek);
+}
+
+Dings* Level::GetDing(unsigned dingID)
+{
+	return &(this->m_dingMap.at(dingID));
 }
 
 unsigned Level::GetNumOfSheetsWE()
@@ -46,7 +72,7 @@ D2D1_SIZE_U Level::GetSheetSizeUnits()
 	return this->m_sheetSize;
 }
 
-Object* Level::GetObjectAt(unsigned levelX, unsigned levelY)
+Object* Level::GetObjectAt(unsigned levelX, unsigned levelY, bool createIfNull)
 {
 	auto objectAddress = levelY * m_rectangularBounds.width + levelX;
 	auto retrievedObject = (Object*)nullptr;
@@ -55,7 +81,7 @@ Object* Level::GetObjectAt(unsigned levelX, unsigned levelY)
 	if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
 	{
 		retrievedObject = this->m_Objects[objectAddress];
-		if (retrievedObject == nullptr)
+		if (retrievedObject == nullptr && createIfNull)
 		{
 			auto newObject = new Object(levelX, levelY);
 			this->m_Objects[objectAddress] = newObject;

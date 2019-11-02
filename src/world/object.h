@@ -7,6 +7,7 @@ class Object
 {
 public:
 	Object::Object(unsigned posInLevelX, unsigned posInLevelY);
+	void				Instantiate(Dings* templateDing);
 	Platform::String^	Name();
 	Layers				Layer();
 	Dings*				GetDings();

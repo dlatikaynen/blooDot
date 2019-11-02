@@ -1,7 +1,7 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\dings.h"
 
-Dalek::Dalek(BrushRegistry drawBrushes) : Dings(1, "Dalek", drawBrushes)
+Dalek::Dalek(BrushRegistry* drawBrushes) : Dings(43, "Dalek", drawBrushes)
 {
 	m_Facings = Facings::Viech;
 	m_Coalescing = Facings::Shy;
@@ -18,10 +18,10 @@ void Dalek::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 
 	/* IMMERSED - implied */
 	colrect = { 192, 192, 192, 64 };
-	brusherl = m_Brushes.WannaHave(drawTo, colrect);
+	brusherl = m_Brushes->WannaHave(drawTo, colrect);
 	auto innerBrush = brusherl.Get();
 
-	/* lefty (no rotation) last, so after the loop ends the context is rotation-free */
+	/* lefty (no rotation) last. so after the loop ends, the context is rotation-free */
 	for (int facing = OrientabilityIndexQuadruplet::Uppy; facing >= OrientabilityIndexQuadruplet::Lefty; --facing)
 	{
 		PrepareRect(&this->m_lookupSides[facing], rect);

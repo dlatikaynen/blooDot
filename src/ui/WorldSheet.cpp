@@ -99,7 +99,7 @@ void WorldSheet::Populate()
 			{
 				auto worldX = x + this->m_leftUpperCornerInWorld.x;
 				auto worldY = y + this->m_leftUpperCornerInWorld.y;
-				auto objectX = this->m_tiedToLevel->GetObjectAt(worldX, worldY);
+				auto objectX = this->m_tiedToLevel->GetObjectAt(worldX, worldY, false);
 				if (objectX != nullptr)
 				{
 					auto layer = objectX->Layer();					
@@ -165,6 +165,27 @@ void WorldSheet::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr
 	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
 	D2D1_RECT_F placementRect = D2D1::RectF(placementX * 49.0f, placementY * 49.0f, placementX * 49.0f + 49.0f, placementY * 49.0f + 49.0f);
 	renderTarget->DrawBitmap(dingSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
+}
+
+void WorldSheet::DrawTo(D2D1_RECT_F screenRect)
+{
+	ID2D1Bitmap *bmp = NULL;
+
+	m_floor->GetBitmap(&bmp);
+	m_d2dContext->DrawBitmap(bmp, screenRect);
+	bmp->Release();
+
+	m_walls->GetBitmap(&bmp);
+	m_d2dContext->DrawBitmap(bmp, screenRect);
+	bmp->Release();
+
+	m_rooof->GetBitmap(&bmp);
+	m_d2dContext->DrawBitmap(bmp, screenRect);
+	bmp->Release();
+
+	this->m_tiedToLevel->GetDingSheet()->GetBitmap(&bmp);
+	m_d2dContext->DrawBitmap(bmp, screenRect);
+	bmp->Release();
 }
 
 void WorldSheet::Discard()

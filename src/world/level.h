@@ -14,18 +14,21 @@ public:
 	Level::Level(Platform::String^ levelName, D2D1_SIZE_U sheetSize, unsigned extentWE, unsigned extentNS);
 	Level::~Level();
 
+	void Initialize(Microsoft::WRL::ComPtr<ID2D1DeviceContext> deviceContext, BrushRegistry* brushRegistry);
 	D2D1_SIZE_U GetRectBoundsUnits();
 	D2D1_SIZE_U GetSheetSizeUnits();
 	unsigned GetNumOfSheetsWE();
 	unsigned GetNumOfSheetsNS();
-	Object* GetObjectAt(unsigned levelX, unsigned levelY);
+	Object* GetObjectAt(unsigned levelX, unsigned levelY, bool createIfNull);
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> GetDingSheet();
+	Dings* GetDing(unsigned dingID);
 
 private:
 	unsigned GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet);
 
 	Platform::String^									m_Name;
 	D2D1_SIZE_U											m_rectangularBounds;
+	std::map<unsigned, Dings>							m_dingMap;
 	D2D1_SIZE_U											m_sheetSize;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_dingSheet;
 	std::vector<Object*>								m_Objects;

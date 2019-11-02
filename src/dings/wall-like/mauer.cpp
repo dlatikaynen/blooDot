@@ -1,7 +1,7 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\dings.h"
 
-Mauer::Mauer(BrushRegistry drawBrushes) : Dings(1, "Mauer", drawBrushes) 
+Mauer::Mauer(BrushRegistry* drawBrushes) : Dings(1, "Mauer", drawBrushes) 
 {
 	m_Facings = Facings::Shy;
 	m_Coalescing = Facings::Immersed;
@@ -19,7 +19,7 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	/* SHY
 	 * inner solid */
 	colrect = { 128, 128, 128, 255 };
-	brrect = m_Brushes.WannaHave(drawTo, colrect);
+	brrect = m_Brushes->WannaHave(drawTo, colrect);
 
 	rect.left = 49.0f * this->m_lookupShy.x;
 	rect.top = 49.0f * this->m_lookupShy.y;
@@ -29,7 +29,7 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 
 	/* IMMERSED - implied */
 	colrect = { 192, 192, 192, 192 };
-	brrect = m_Brushes.WannaHave(drawTo, colrect);
+	brrect = m_Brushes->WannaHave(drawTo, colrect);
 	auto innerBrush = brrect.Get();
 
 	/* CENTER CROSSING */

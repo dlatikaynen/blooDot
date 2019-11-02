@@ -1,7 +1,7 @@
 #include "..\PreCompiledHeaders.h"
 #include "dings.h"
 
-Dings::Dings(int dingID, Platform::String^ dingName, BrushRegistry drawBrushes)
+Dings::Dings(int dingID, Platform::String^ dingName, BrushRegistry* drawBrushes)
 {
 	this->m_ID = dingID;
 	this->m_Name = dingName;
@@ -16,6 +16,11 @@ int Dings::ID()
 Platform::String^ Dings::Name() 
 {
 	return this->m_Name;
+}
+
+Layers Dings::GetPreferredLayer()
+{
+	return this->m_preferredLayer;
 }
 
 void Dings::Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY)
@@ -35,7 +40,7 @@ void Dings::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	colrect.rgbBlue = 0;
 	
 	D2D1_RECT_F rect;
-	Microsoft::WRL::ComPtr<ID2D1Brush> brrect = m_Brushes.WannaHave(drawTo, colrect);
+	Microsoft::WRL::ComPtr<ID2D1Brush> brrect = m_Brushes->WannaHave(drawTo, colrect);
 	rect.left = 49.0f * this->m_lookupShy.x;
 	rect.top = 49.0f * this->m_lookupShy.y;
 	rect.right = rect.left + 49;

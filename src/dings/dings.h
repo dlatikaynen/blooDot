@@ -109,18 +109,19 @@ enum OrientabilityIndexDuplex
 class Dings
 {
 public:
-	Dings(int dingID, Platform::String^ dingName, BrushRegistry drawBrushes);
+	Dings(int dingID, Platform::String^ dingName, BrushRegistry* drawBrushes);
 
 	int					ID();
 	Platform::String^	Name();
 	void				Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY);
 	virtual void		DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	D2D1_POINT_2U		GetSheetPlacement(Facings coalesced);
+	Layers				GetPreferredLayer();
 
 protected:
 	int					m_ID;
 	Platform::String^	m_Name;
-	BrushRegistry		m_Brushes;
+	BrushRegistry*		m_Brushes;
 	Facings				m_Facings;
 	Facings				m_Coalescing;
 	Layers				m_preferredLayer;
@@ -172,13 +173,13 @@ private:
 class Mauer : public Dings 
 {
 public:
-	Mauer(BrushRegistry drawBrushes);
+	Mauer(BrushRegistry* drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 };
 
 class Dalek : public Dings
 {
 public:
-	Dalek(BrushRegistry drawBrushes);
+	Dalek(BrushRegistry* drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 };
