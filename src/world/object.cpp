@@ -15,3 +15,13 @@ Layers Object::Layer()
 {
 	return m_Layer;
 }
+
+Dings* Object::GetDings()
+{
+	return this->m_Dings;
+}
+
+Facings	Object::PlacementFacing()
+{
+	return this->m_Facing;
+}

@@ -49,17 +49,26 @@ D2D1_SIZE_U Level::GetSheetSizeUnits()
 Object* Level::GetObjectAt(unsigned levelX, unsigned levelY)
 {
 	auto objectAddress = levelY * m_rectangularBounds.width + levelX;
+	auto retrievedObject = (Object*)nullptr;
 
 	/* we create lazily, on demand */
-	auto retrievedObject = this->m_Objects[objectAddress];
-	if (retrievedObject == nullptr) 
+	if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
 	{
-		auto newObject = new Object(levelX, levelY);
-		this->m_Objects[objectAddress] = newObject;
-		retrievedObject = newObject;
+		retrievedObject = this->m_Objects[objectAddress];
+		if (retrievedObject == nullptr)
+		{
+			auto newObject = new Object(levelX, levelY);
+			this->m_Objects[objectAddress] = newObject;
+			retrievedObject = newObject;
+		}
 	}
 
 	return retrievedObject;
+}
+
+Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> Level::GetDingSheet()
+{
+	return this->m_dingSheet;
 }
 
 unsigned Level::GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet)

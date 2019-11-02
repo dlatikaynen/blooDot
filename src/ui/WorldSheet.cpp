@@ -89,8 +89,82 @@ void WorldSheet::Populate()
 			DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_rooof));
 		}
 
+		auto dingSheet = this->m_tiedToLevel->GetDingSheet();
+		ID2D1Bitmap *dingMap = NULL;
+		dingSheet->GetBitmap(&dingMap);
+		auto beganDrawWalls = false, beganDrawFloor = false, beganDrawRooof = false;
+		for (auto y = 0; y < this->m_sizeUnits.height; ++y)
+		{
+			for (auto x = 0; x < this->m_sizeUnits.width; ++x)
+			{
+				auto worldX = x + this->m_leftUpperCornerInWorld.x;
+				auto worldY = y + this->m_leftUpperCornerInWorld.y;
+				auto objectX = this->m_tiedToLevel->GetObjectAt(worldX, worldY);
+				if (objectX != nullptr)
+				{
+					auto layer = objectX->Layer();					
+					auto dings = objectX->GetDings();
+					if (layer == Layers::Floor)
+					{
+						if (!beganDrawFloor)
+						{
+							this->m_floor->BeginDraw();
+							beganDrawFloor = true;
+						}
+
+						this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(), x, y);
+					}
+					else if (layer == Layers::Walls)
+					{
+						if (!beganDrawWalls)
+						{
+							this->m_walls->BeginDraw();
+							beganDrawWalls = true;
+						}
+
+						this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(), x, y);
+					}
+					else if (layer == Layers::Rooof)
+					{
+						if (!beganDrawRooof)
+						{
+							this->m_rooof->BeginDraw();
+							beganDrawRooof = true;
+						}
+
+						this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(), x, y);
+					}
+				}
+			}
+		}
+
+		dingMap->Release();
+		if (beganDrawFloor)
+		{
+			DX::ThrowIfFailed(this->m_floor->EndDraw());
+		}
+
+		if (beganDrawWalls)
+		{
+			DX::ThrowIfFailed(this->m_walls->EndDraw());
+
+		}
+
+		if (beganDrawRooof)
+		{
+			DX::ThrowIfFailed(this->m_rooof->EndDraw());
+		}
+
 		this->m_isPopulated = true;
 	}
+}
+
+void WorldSheet::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY)
+{
+	auto dingOnSheet = ding->GetSheetPlacement(coalesce);
+	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
+	D2D1_RECT_F placementRect = D2D1::RectF(placementX * 49.0f, placementY * 49.0f, placementX * 49.0f + 49.0f, placementY * 49.0f + 49.0f);
+	renderTarget->DrawBitmap(dingSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
 }
 
 void WorldSheet::Discard()

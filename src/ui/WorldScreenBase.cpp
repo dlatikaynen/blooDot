@@ -385,7 +385,7 @@ void WorldScreenBase::EvaluateSheetHoveringSituation()
 	auto centerSheet = this->GetSheet(intersectedSheetX, intersectedSheetY);
 	if (!centerSheet->IsPopulated())
 	{
-
+		centerSheet->Populate();
 	}
 
 	this->m_sheetHoveringSituationKnown = true;
