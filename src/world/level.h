@@ -19,12 +19,14 @@ public:
 	unsigned GetNumOfSheetsWE();
 	unsigned GetNumOfSheetsNS();
 	Object* GetObjectAt(unsigned levelX, unsigned levelY);
+	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> GetDingSheet();
 
 private:
 	unsigned GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet);
 
-	Platform::String^			m_Name;
-	D2D1_SIZE_U					m_rectangularBounds;
-	D2D1_SIZE_U					m_sheetSize;
-	std::vector<Object*>		m_Objects;
+	Platform::String^									m_Name;
+	D2D1_SIZE_U											m_rectangularBounds;
+	D2D1_SIZE_U											m_sheetSize;
+	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_dingSheet;
+	std::vector<Object*>								m_Objects;
 };

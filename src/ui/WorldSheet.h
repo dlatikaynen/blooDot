@@ -42,4 +42,6 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Factory1>           m_d2dFactory;
 	Microsoft::WRL::ComPtr<ID2D1Device>             m_d2dDevice;
 	Microsoft::WRL::ComPtr<ID2D1DeviceContext>      m_d2dContext;
+
+	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY);
 };

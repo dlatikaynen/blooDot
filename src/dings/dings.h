@@ -5,6 +5,7 @@
 #include "..\dx\DeviceResources.h"
 #include "..\dx\BrushRegistry.h"
 
+// Numeric ordering is relied upon
 enum Layers
 {
 	Floor = 1,
