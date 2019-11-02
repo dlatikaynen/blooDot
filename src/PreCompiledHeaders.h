@@ -51,3 +51,5 @@
 #include <string>
 #include <set>
 #include <collection.h>
+
+#include "app\Consts.h"

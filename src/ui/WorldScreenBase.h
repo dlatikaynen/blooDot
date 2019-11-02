@@ -10,9 +10,6 @@
 class WorldScreenBase
 {
 public:
-	const float										SQUARE_WIDTH = 49.0;
-	const float										SQUARE_HEIGHT = 49.0;
-
 	WorldScreenBase::WorldScreenBase();
 	WorldScreenBase::~WorldScreenBase();
 	
@@ -61,12 +58,20 @@ protected:
 
 	Level*											m_currentLevel;
 	std::vector<WorldSheet*>						m_Sheets;
+	bool											m_sheetHoveringSituationKnown;
+	WorldSheet*										m_hoveringSheetNW;
+	WorldSheet*										m_hoveringSheetNE;
+	WorldSheet*										m_hoveringSheetSW;
+	WorldSheet*										m_hoveringSheetSE;
 
 	WorldSheet*	GetSheet(unsigned sheetX, unsigned sheetY);
+	void EvaluateSheetHoveringSituation();
+	void InvalidateSheetHoveringSituation();
 	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY);
 
 private:
 	void ComputeWorldSize();
 	void ComputeWorldCenter();
 	void ComputeViewportOffset();
+	D2D1_POINT_2U GetViewportCenterInLevel();
 };

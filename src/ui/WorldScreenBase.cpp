@@ -72,7 +72,7 @@ void WorldScreenBase::ResetDirectXResources()
 void WorldScreenBase::ComputeWorldSize()
 {
 	auto worldSizeSquares = this->m_currentLevel->GetRectBoundsUnits();
-	m_worldSize = D2D1::SizeF(worldSizeSquares.width * SQUARE_WIDTH, worldSizeSquares.height * SQUARE_HEIGHT);
+	m_worldSize = D2D1::SizeF(worldSizeSquares.width * blooDot::Consts::SQUARE_WIDTH, worldSizeSquares.height * blooDot::Consts::SQUARE_HEIGHT);
 }
 
 void WorldScreenBase::ComputeWorldCenter()
@@ -85,8 +85,8 @@ void WorldScreenBase::ComputeWorldCenter()
 void WorldScreenBase::ComputeViewportOffset()
 {
 	m_viewportSizeSquares = D2D1::SizeU(
-		ceil(m_viewportSize.width / static_cast<float>(SQUARE_WIDTH)),
-		ceil(m_viewportSize.height / static_cast<float>(SQUARE_HEIGHT))
+		ceil(m_viewportSize.width / static_cast<float>(blooDot::Consts::SQUARE_WIDTH)),
+		ceil(m_viewportSize.height / static_cast<float>(blooDot::Consts::SQUARE_HEIGHT))
 	);
 
 	m_viewportOffsetSquares = D2D1::Point2U(
@@ -292,7 +292,10 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 
 	/* now so which quadrants from which sheets do we need to cover the screen with
 	 * the bit of the world the viewport is hovering over? that is here the question. */
-
+	if (!this->m_sheetHoveringSituationKnown)
+	{
+		this->EvaluateSheetHoveringSituation();
+	}
 
 }
 
@@ -344,6 +347,61 @@ void WorldScreenBase::EnterLevel(Level* level)
 			this->m_Sheets.push_back((WorldSheet*)nullptr);
 		}
 	}
+}
+
+void WorldScreenBase::EvaluateSheetHoveringSituation()
+{
+	/* which sheets do we need populated to visualize,
+	 * and which adjacents should we start populating?
+	 * algorithm: we identify the sheet which has
+	 * current viewport's center point in world coordinates,
+	 * then we visit its neighbors and ask if they also intersect.
+	 * given the minimal size per sheet is viewport size, this can
+	 * never be more than 8 additional in close vicinity */
+	auto centerIntersectsSheet = this->GetViewportCenterInLevel();
+	auto sheetSize = this->m_currentLevel->GetSheetSizeUnits();
+	auto intersectedSheetX = centerIntersectsSheet.x / sheetSize.width;
+	auto intersectedSheetY = centerIntersectsSheet.y / sheetSize.height;
+	auto sheetBound = m_currentLevel->GetNumOfSheetsWE();
+	if (intersectedSheetX < 0)
+	{
+		intersectedSheetX = 0;
+	}
+	else if (intersectedSheetX >= sheetBound)
+	{
+		intersectedSheetX = sheetBound - 1;
+	}
+
+	sheetBound = this->m_currentLevel->GetNumOfSheetsNS();
+	if (intersectedSheetY < 0)
+	{
+		intersectedSheetY = 0;
+	}
+	else if (intersectedSheetY >= sheetBound)
+	{
+		intersectedSheetY = sheetBound - 1;
+	}
+
+	auto centerSheet = this->GetSheet(intersectedSheetX, intersectedSheetY);
+	if (!centerSheet->IsPopulated())
+	{
+
+	}
+
+	this->m_sheetHoveringSituationKnown = true;
+}
+
+D2D1_POINT_2U WorldScreenBase::GetViewportCenterInLevel()
+{
+	return D2D1::Point2U(
+		this->m_viewportOffsetSquares.x + this->m_viewportSizeSquares.width / 2,
+		this->m_viewportOffsetSquares.y + this->m_viewportSizeSquares.height / 2
+	);
+}
+
+void WorldScreenBase::InvalidateSheetHoveringSituation()
+{
+	this->m_sheetHoveringSituationKnown = false;
 }
 
 WorldSheet*	WorldScreenBase::GetSheet(unsigned sheetX, unsigned sheetY)

@@ -27,6 +27,8 @@ void WorldSheet::PrepareThyself(Level* forLevel, int amSheetX, int amSheetY)
 	auto levBounds = forLevel->GetRectBoundsUnits();
 	auto sheetSize = forLevel->GetSheetSizeUnits();
 	this->m_leftUpperCornerInWorld = D2D1::Point2U(amSheetX * sheetSize.width, amSheetY * sheetSize.height);
+	this->m_sizeUnits = sheetSize;
+	this->m_sizePixle = D2D1::SizeF(static_cast<float>(sheetSize.width) * blooDot::Consts::SQUARE_WIDTH, static_cast<float>(sheetSize.height) * blooDot::Consts::SQUARE_HEIGHT);
 }
 
 D2D1_POINT_2U WorldSheet::CornerNW()
@@ -60,6 +62,35 @@ D2D1_POINT_2U WorldSheet::GetCorner(Facings whichOne)
 	}
 
 	return D2D1_POINT_2U();
+}
+
+bool WorldSheet::IsPopulated()
+{
+	return this->m_isPopulated;
+}
+
+// Draw the Ding Wang Tang onto the sheet
+void WorldSheet::Populate()
+{
+	if (!this->m_isPopulated)
+	{
+		if (m_floor == nullptr)
+		{
+			DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_floor));
+		}
+
+		if (m_walls == nullptr)
+		{
+			DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_walls));
+		}
+
+		if (m_rooof == nullptr)
+		{
+			DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_rooof));
+		}
+
+		this->m_isPopulated = true;
+	}
 }
 
 void WorldSheet::Discard()

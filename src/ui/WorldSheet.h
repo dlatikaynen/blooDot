@@ -6,6 +6,7 @@
 #include "..\dx\BrushRegistry.h"
 #include "..\dings\dings.h"
 #include "..\world\Level.h"
+//#include "..\ui\WorldScreenBase.h"
 
 class WorldSheet
 {
@@ -21,6 +22,8 @@ public:
 	D2D1_POINT_2U									CornerSE();
 	D2D1_POINT_2U									GetCorner(Facings whichOne);
 
+	void											Populate();
+	bool											IsPopulated();
 	void											Discard();
 
 protected:
@@ -28,8 +31,8 @@ protected:
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_walls;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_rooof;
 
-	D2D1_SIZE_F                                     m_sizePixle;
 	D2D1_SIZE_U										m_sizeUnits;
+	D2D1_SIZE_F										m_sizePixle;
 	D2D1_POINT_2U									m_leftUpperCornerInWorld;
 
 private:

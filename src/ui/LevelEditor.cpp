@@ -88,10 +88,14 @@ void LevelEditor::DrawLevelEditorRaster()
 	auto brusherl = brush.Get();
 
 	/* the next multiple of the grid height less than the viewport top */
-	auto yAdjust = static_cast<float>(static_cast<unsigned>(m_viewportOffset.y) % static_cast<unsigned>(SQUARE_HEIGHT));
-	auto xAdjust = static_cast<float>(static_cast<unsigned>(m_viewportOffset.x) % static_cast<unsigned>(SQUARE_WIDTH));
+	auto yAdjust = static_cast<float>(static_cast<unsigned>(m_viewportOffset.y) % static_cast<unsigned>(blooDot::Consts::SQUARE_HEIGHT));
+	auto xAdjust = static_cast<float>(static_cast<unsigned>(m_viewportOffset.x) % static_cast<unsigned>(blooDot::Consts::SQUARE_WIDTH));
 
-	for (int y = -yAdjust; y < static_cast<int>(m_viewportSize.height+SQUARE_HEIGHT); y += static_cast<int>(SQUARE_HEIGHT))
+	for (
+		int y = -yAdjust; 
+		y < static_cast<int>(m_viewportSize.height + blooDot::Consts::SQUARE_HEIGHT); 
+		y += static_cast<int>(blooDot::Consts::SQUARE_HEIGHT)
+	)
 	{
 		point0.x = 0;
 		point0.y = y;
@@ -100,7 +104,11 @@ void LevelEditor::DrawLevelEditorRaster()
 		m_d2dContext->DrawLine(point0, point1, brusherl, 1.0F, NULL);
 	}
 
-	for (int x = -xAdjust; x < static_cast<int>(m_viewportSize.width+SQUARE_WIDTH); x += static_cast<int>(SQUARE_WIDTH))
+	for (
+		int x = -xAdjust; 
+		x < static_cast<int>(m_viewportSize.width + blooDot::Consts::SQUARE_WIDTH); 
+		x += static_cast<int>(blooDot::Consts::SQUARE_WIDTH)
+	)
 	{
 		point0.x = x;
 		point0.y = 0;
@@ -111,8 +119,8 @@ void LevelEditor::DrawLevelEditorRaster()
 
 	rect0.left = 0.0;
 	rect0.top = 0.0;
-	rect0.right = rect0.left + SQUARE_WIDTH;
-	rect0.bottom = rect0.top + SQUARE_HEIGHT;
+	rect0.right = rect0.left + blooDot::Consts::SQUARE_WIDTH;
+	rect0.bottom = rect0.top + blooDot::Consts::SQUARE_HEIGHT;
 
 	m_d2dContext->DrawRectangle(rect0, highlight.Get(), 1.0F, NULL);
 }
