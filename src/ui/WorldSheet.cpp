@@ -24,31 +24,38 @@ void WorldSheet::PrepareThyself(Level* forLevel, int amSheetX, int amSheetY)
 	this->m_d2dFactory = this->m_deviceResources->GetD2DFactory();
 	this->m_d2dDevice = this->m_deviceResources->GetD2DDevice();
 	this->m_tiedToLevel = forLevel;
+	this->m_theSheetIAm = D2D1::Point2U(amSheetX, amSheetY);
 	auto levBounds = forLevel->GetRectBoundsUnits();
 	auto sheetSize = forLevel->GetSheetSizeUnits();
-	this->m_leftUpperCornerInWorld = D2D1::Point2U(amSheetX * sheetSize.width, amSheetY * sheetSize.height);
+	this->m_NWcornerInWorldSquares = D2D1::Point2U(amSheetX * sheetSize.width, amSheetY * sheetSize.height);
+	this->m_NWcornerInWorld = D2D1::Point2F(static_cast<float>(amSheetX * sheetSize.width) * blooDot::Consts::SQUARE_WIDTH, static_cast<float>(amSheetY * sheetSize.height) * blooDot::Consts::SQUARE_WIDTH);
 	this->m_sizeUnits = sheetSize;
 	this->m_sizePixle = D2D1::SizeF(static_cast<float>(sheetSize.width) * blooDot::Consts::SQUARE_WIDTH, static_cast<float>(sheetSize.height) * blooDot::Consts::SQUARE_HEIGHT);
 }
 
+D2D1_POINT_2U WorldSheet::TheSheetIAm()
+{
+	return this->m_theSheetIAm;
+}
+
 D2D1_POINT_2U WorldSheet::CornerNW()
 {
-	return this->m_leftUpperCornerInWorld;
+	return this->m_NWcornerInWorldSquares;
 }
 
 D2D1_POINT_2U WorldSheet::CornerNE()
 {
-	return D2D1::Point2U(this->m_leftUpperCornerInWorld.x + this->m_sizeUnits.width, this->m_leftUpperCornerInWorld.y);
+	return D2D1::Point2U(this->m_NWcornerInWorldSquares.x + this->m_sizeUnits.width, this->m_NWcornerInWorldSquares.y);
 }
 
 D2D1_POINT_2U WorldSheet::CornerSW()
 {
-	return D2D1::Point2U(this->m_leftUpperCornerInWorld.x, this->m_leftUpperCornerInWorld.y + this->m_sizeUnits.height);
+	return D2D1::Point2U(this->m_NWcornerInWorldSquares.x, this->m_NWcornerInWorldSquares.y + this->m_sizeUnits.height);
 }
 
 D2D1_POINT_2U WorldSheet::CornerSE()
 {
-	return D2D1::Point2U(this->m_leftUpperCornerInWorld.x + this->m_sizeUnits.width, this->m_leftUpperCornerInWorld.y + this->m_sizeUnits.height);
+	return D2D1::Point2U(this->m_NWcornerInWorldSquares.x + this->m_sizeUnits.width, this->m_NWcornerInWorldSquares.y + this->m_sizeUnits.height);
 }
 
 D2D1_POINT_2U WorldSheet::GetCorner(Facings whichOne)
@@ -97,8 +104,8 @@ void WorldSheet::Populate()
 		{
 			for (auto x = 0; x < this->m_sizeUnits.width; ++x)
 			{
-				auto worldX = x + this->m_leftUpperCornerInWorld.x;
-				auto worldY = y + this->m_leftUpperCornerInWorld.y;
+				auto worldX = x + this->m_NWcornerInWorldSquares.x;
+				auto worldY = y + this->m_NWcornerInWorldSquares.y;
 				auto objectX = this->m_tiedToLevel->GetObjectAt(worldX, worldY, false);
 				if (objectX != nullptr)
 				{
@@ -164,27 +171,37 @@ void WorldSheet::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr
 	auto dingOnSheet = ding->GetSheetPlacement(coalesce);
 	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
 	D2D1_RECT_F placementRect = D2D1::RectF(placementX * 49.0f, placementY * 49.0f, placementX * 49.0f + 49.0f, placementY * 49.0f + 49.0f);
-	renderTarget->DrawBitmap(dingSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
+	renderTarget->DrawBitmap(dingSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);	
 }
 
-void WorldSheet::DrawTo(D2D1_RECT_F screenRect)
+void WorldSheet::ComputeViewportOverlap(D2D1_POINT_2F vpNWCorner, D2D1_SIZE_F vpSize)
+{
+
+}
+
+void WorldSheet::SetBlittingArea(D2D1_RECT_F blitFrom, D2D1_RECT_F blitTo)
+{
+	this->m_blitFrom = blitFrom;
+	this->m_blitTo = blitTo;
+}
+
+void WorldSheet::BlitToViewport()
 {
 	ID2D1Bitmap *bmp = NULL;
-
+	
+	//this->m_tiedToLevel->GetDingSheet()->GetBitmap(&bmp);
+	//m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
+	//bmp->Release();
 	m_floor->GetBitmap(&bmp);
-	m_d2dContext->DrawBitmap(bmp, screenRect);
+	m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
 	bmp->Release();
 
 	m_walls->GetBitmap(&bmp);
-	m_d2dContext->DrawBitmap(bmp, screenRect);
+	m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
 	bmp->Release();
 
-	m_rooof->GetBitmap(&bmp);
-	m_d2dContext->DrawBitmap(bmp, screenRect);
-	bmp->Release();
-
-	this->m_tiedToLevel->GetDingSheet()->GetBitmap(&bmp);
-	m_d2dContext->DrawBitmap(bmp, screenRect);
+	m_rooof->GetBitmap(&bmp);	
+	m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
 	bmp->Release();
 }
 

@@ -46,7 +46,7 @@ void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 
 	if (this->m_hoveringSheetNW != nullptr)
 	{
-		this->m_hoveringSheetNW->DrawTo(screenRect);
+		this->m_hoveringSheetNW->BlitToViewport();
 	}
 
 	this->DrawLevelEditorRaster();

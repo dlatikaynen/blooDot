@@ -43,7 +43,7 @@ protected:
 	//Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_walls;
 	//Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_rooof;
 	D2D1_SIZE_F                                     m_backgroundSize;
-	D2D1_SIZE_U										m_viewportSize;
+	D2D1_SIZE_F										m_viewportSize;
 	D2D1_SIZE_U                                     m_viewportSizeSquares;
 	bool											m_isResizing;
 	Facings											m_isMoving;
