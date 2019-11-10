@@ -174,9 +174,33 @@ void WorldSheet::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr
 	renderTarget->DrawBitmap(dingSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);	
 }
 
-void WorldSheet::ComputeViewportOverlap(D2D1_POINT_2F vpNWCorner, D2D1_SIZE_F vpSize)
+void WorldSheet::ComputeViewportOverlap(D2D1_POINT_2F vpNWCorner, D2D1_RECT_F viewPort)
 {
+	auto sheetRect = D2D1::RectF(m_NWcornerInWorld.x, m_NWcornerInWorld.y, m_NWcornerInWorld.x + this->m_sizePixle.width - 1.0f, m_NWcornerInWorld.y + this->m_sizePixle.height - 1.0f);
 
+	/* gives bottom-left point of intersection rectangle */
+	auto x5 = max(viewPort.left, sheetRect.left);
+	auto y5 = min(viewPort.bottom, sheetRect.bottom);
+	/* gives top-right point of intersection rectangle */
+	auto x6 = min(viewPort.right, sheetRect.right);
+	auto y6 = max(viewPort.top, sheetRect.top);
+	auto overlapRect = D2D1::RectF(x5, y6, x6, y5);
+	/* source is the overlap translated to co-ordinates locally relative to the sheet 
+	 * destination is the overlap translated to co-ordinates locally relative to the viewport */
+	this->SetBlittingArea(
+		D2D1::RectF(
+			overlapRect.left - sheetRect.left,
+			overlapRect.top - sheetRect.top,
+			overlapRect.right - sheetRect.left,
+			overlapRect.bottom - sheetRect.top
+		),
+		D2D1::RectF(
+			overlapRect.left - viewPort.left,
+			overlapRect.top - viewPort.top,
+			overlapRect.right - viewPort.left,
+			overlapRect.bottom - viewPort.top
+		)
+	);
 }
 
 void WorldSheet::SetBlittingArea(D2D1_RECT_F blitFrom, D2D1_RECT_F blitTo)

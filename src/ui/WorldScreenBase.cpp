@@ -181,9 +181,39 @@ void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 p
 		m_viewportSize.height
 	);
 	
+#ifdef _DEBUG
+	auto blitSheetCount = 0;
+#endif
 	if (this->m_hoveringSheetNW != nullptr)
 	{
 		this->m_hoveringSheetNW->BlitToViewport();
+#ifdef _DEBUG
+		++blitSheetCount;
+#endif
+	}
+
+	if (this->m_hoveringSheetNW != nullptr)
+	{
+		this->m_hoveringSheetNW->BlitToViewport();
+#ifdef _DEBUG
+		++blitSheetCount;
+#endif
+	}
+
+	if (this->m_hoveringSheetNW != nullptr)
+	{
+		this->m_hoveringSheetNW->BlitToViewport();
+#ifdef _DEBUG
+		++blitSheetCount;
+#endif
+	}
+
+	if (this->m_hoveringSheetNW != nullptr)
+	{
+		this->m_hoveringSheetNW->BlitToViewport();
+#ifdef _DEBUG
+		++blitSheetCount;
+#endif
 	}
 
     HRESULT hr = m_d2dContext->EndDraw();
@@ -193,6 +223,14 @@ void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 p
     }
 
     m_d2dContext->RestoreDrawingState(m_stateBlock.Get());
+
+#ifdef _DEBUG
+	const int bufferLength = 16;
+	char16 str[bufferLength];
+	int len = swprintf_s(str, bufferLength, L"%d", blitSheetCount);
+	Platform::String^ string = ref new Platform::String(str, len);
+	OutputDebugStringW(Platform::String::Concat(L"Number of sheets blitted: ", string)->Data());
+#endif
 }
 
 void WorldScreenBase::EnterLevel(Level* level)
@@ -251,7 +289,8 @@ void WorldScreenBase::EvaluateSheetHoveringSituation()
 		m_hoveringSheetNW = centerSheet;		
 	}
 
-	centerSheet->ComputeViewportOverlap(this->m_viewportOffset, this->m_viewportSize);
+	auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width - 1.0F, this->m_viewportOffset.y + this->m_viewportSize.height - 1.0F);
+	centerSheet->ComputeViewportOverlap(this->m_viewportOffset, viewPort);
 
 	this->m_sheetHoveringSituationKnown = true;
 }

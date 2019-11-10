@@ -11,7 +11,7 @@ class WorldScreenBase
 {
 public:
 	WorldScreenBase::WorldScreenBase();
-	WorldScreenBase::~WorldScreenBase();
+	virtual WorldScreenBase::~WorldScreenBase();
 	
 	/* graphical */
 	void Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources);

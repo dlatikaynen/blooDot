@@ -25,7 +25,7 @@ public:
 
 	void											Populate();
 	bool											IsPopulated();
-	void											ComputeViewportOverlap(D2D1_POINT_2F vpNWCorner, D2D1_SIZE_F vpSize);
+	void											ComputeViewportOverlap(D2D1_POINT_2F vpNWCorner, D2D1_RECT_F viewPort);
 	void											SetBlittingArea(D2D1_RECT_F blitFrom, D2D1_RECT_F blitTo);
 	void											BlitToViewport();
 	void											Discard();

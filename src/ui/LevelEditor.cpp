@@ -2,10 +2,6 @@
 #include "UserInterface.h"
 #include "..\dx\DirectXHelper.h"
 
-LevelEditor::LevelEditor()
-{
-}
-
 LevelEditor::~LevelEditor()
 {
 }
@@ -34,6 +30,9 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 
 void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)
 {
+#ifdef _DEBUG
+	auto blitSheetCount = 0;
+#endif
 	m_d2dContext->SaveDrawingState(m_stateBlock.Get());
 	m_d2dContext->BeginDraw();
 	m_d2dContext->SetTransform(orientation2D);
@@ -47,10 +46,36 @@ void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 	if (this->m_hoveringSheetNW != nullptr)
 	{
 		this->m_hoveringSheetNW->BlitToViewport();
+#ifdef _DEBUG
+		++blitSheetCount;
+#endif
+	}
+
+	if (this->m_hoveringSheetNE != nullptr)
+	{
+		this->m_hoveringSheetNE->BlitToViewport();
+#ifdef _DEBUG
+		++blitSheetCount;
+#endif
+	}
+
+	if (this->m_hoveringSheetSW != nullptr)
+	{
+		this->m_hoveringSheetSW->BlitToViewport();
+#ifdef _DEBUG
+		++blitSheetCount;
+#endif
+	}
+
+	if (this->m_hoveringSheetSE != nullptr)
+	{
+		this->m_hoveringSheetSE->BlitToViewport();
+#ifdef _DEBUG
+		++blitSheetCount;
+#endif
 	}
 
 	this->DrawLevelEditorRaster();
-
 	HRESULT hr = m_d2dContext->EndDraw();
 	if (hr != D2DERR_RECREATE_TARGET)
 	{
@@ -58,6 +83,13 @@ void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 	}
 
 	m_d2dContext->RestoreDrawingState(m_stateBlock.Get());
+
+#ifdef _DEBUG
+	char16 str[20];
+	int len = swprintf_s(str, sizeof(str) / sizeof(char16), L"%d\r\n", blitSheetCount);
+	Platform::String^ string = ref new Platform::String(str, len);
+	OutputDebugStringW(Platform::String::Concat(L"Number of sheets blitted: ", string)->Data());
+#endif
 }
 
 void LevelEditor::DrawLevelEditorRaster()
