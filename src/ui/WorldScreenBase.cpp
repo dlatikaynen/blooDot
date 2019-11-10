@@ -53,26 +53,21 @@ void WorldScreenBase::CreateDeviceDependentResources()
 
 void WorldScreenBase::ResetDirectXResources()
 {
-	auto loader = ref new BasicLoader(m_deviceResources->GetD3DDevice());
-	loader->LoadPngToBitmap(L"Media\\Bitmaps\\notimeforcaution.png", m_deviceResources,	&m_notimeforcaution);
-	loader->LoadPngToBitmap(L"Media\\Bitmaps\\universe_seamless.png", m_deviceResources, &m_background);
-    m_backgroundSize = m_background->GetSize();
+	auto loader = ref new BasicLoader(this->m_deviceResources->GetD3DDevice());
+	loader->LoadPngToBitmap(L"Media\\Bitmaps\\notimeforcaution.png", m_deviceResources,	&this->m_notimeforcaution);
+	loader->LoadPngToBitmap(L"Media\\Bitmaps\\universe_seamless.png", m_deviceResources, &this->m_background);
+	this->m_backgroundSize = this->m_background->GetSize();
 	
 	/* rest of initialization */
-	D2D1_SIZE_F canvasSize = m_d2dContext->GetSize();
-	m_viewportSize.width = canvasSize.width;
-	m_viewportSize.height = canvasSize.height;
+	D2D1_SIZE_F canvasSize = this->m_d2dContext->GetSize();
+	this->m_viewportSize.width = canvasSize.width;
+	this->m_viewportSize.height = canvasSize.height;
 	this->ComputeWorldSize();
 	this->ComputeWorldCenter();
 	this->ComputeViewportOffset();
 
-	//DX::ThrowIfFailed(m_d2dContext->CreateCompatibleRenderTarget(D2D1::SizeF(800.0f, 600.0f), &m_dingSheet));
-	//DX::ThrowIfFailed(m_d2dContext->CreateCompatibleRenderTarget(m_backgroundSize, &m_floor));
-	//DX::ThrowIfFailed(m_d2dContext->CreateCompatibleRenderTarget(m_backgroundSize, &m_walls));
-	//DX::ThrowIfFailed(m_d2dContext->CreateCompatibleRenderTarget(m_backgroundSize, &m_rooof));
-    DX::ThrowIfFailed(m_d2dFactory->CreateDrawingStateBlock(&m_stateBlock));
-
-    UpdateForWindowSizeChange();
+    DX::ThrowIfFailed(this->m_d2dFactory->CreateDrawingStateBlock(&this->m_stateBlock));
+    this->UpdateForWindowSizeChange();
 }
 
 void WorldScreenBase::ComputeWorldSize()
