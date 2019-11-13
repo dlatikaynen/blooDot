@@ -174,9 +174,14 @@ void WorldSheet::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr
 	renderTarget->DrawBitmap(dingSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);	
 }
 
-void WorldSheet::ComputeViewportOverlap(D2D1_POINT_2F vpNWCorner, D2D1_RECT_F viewPort)
+void WorldSheet::ComputeViewportOverlap(D2D1_RECT_F viewPort)
 {
-	auto sheetRect = D2D1::RectF(m_NWcornerInWorld.x, m_NWcornerInWorld.y, m_NWcornerInWorld.x + this->m_sizePixle.width - 1.0f, m_NWcornerInWorld.y + this->m_sizePixle.height - 1.0f);
+	auto sheetRect = D2D1::RectF(
+		this->m_NWcornerInWorld.x, 
+		this->m_NWcornerInWorld.y, 
+		this->m_NWcornerInWorld.x + this->m_sizePixle.width, 
+		this->m_NWcornerInWorld.y + this->m_sizePixle.height
+	);
 
 	/* gives bottom-left point of intersection rectangle */
 	auto x5 = max(viewPort.left, sheetRect.left);
@@ -207,6 +212,24 @@ void WorldSheet::SetBlittingArea(D2D1_RECT_F blitFrom, D2D1_RECT_F blitTo)
 {
 	this->m_blitFrom = blitFrom;
 	this->m_blitTo = blitTo;
+}
+
+void WorldSheet::Translate(D2D1_RECT_F viewPort, unsigned deltaX, unsigned deltaY)
+{
+	if (deltaX != 0)
+	{
+		this->m_NWcornerInWorld.x -= deltaX;
+	}
+
+	if (deltaY != 0)
+	{
+		this->m_NWcornerInWorld.y -= deltaY;
+	}
+
+	//if (deltaX != 0 || deltaY != 0)
+	{
+		this->ComputeViewportOverlap(viewPort);
+	}
 }
 
 void WorldSheet::BlitToViewport()

@@ -9,23 +9,8 @@ LevelEditor::~LevelEditor()
 void LevelEditor::Update(float timeTotal, float timeDelta)
 {
 	WorldScreenBase::Update(timeTotal, timeDelta);
-	if (m_isMoving & Facings::East)
-	{
-		m_viewportOffset = D2D1::Point2F(m_viewportOffset.x + 2.0, m_viewportOffset.y);
-	}
-	else if (m_isMoving & Facings::West)
-	{
-		m_viewportOffset = D2D1::Point2F(m_viewportOffset.x - 2.0, m_viewportOffset.y);
-	}
+	
 
-	if (m_isMoving & Facings::South)
-	{
-		m_viewportOffset = D2D1::Point2F(m_viewportOffset.x, m_viewportOffset.y + 2.0);
-	}
-	else if (m_isMoving & Facings::North)
-	{
-		m_viewportOffset = D2D1::Point2F(m_viewportOffset.x, m_viewportOffset.y - 2.0);
-	}
 }
 
 void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)

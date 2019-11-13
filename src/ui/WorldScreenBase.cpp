@@ -167,6 +167,31 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 		this->EvaluateSheetHoveringSituation();
 	}
 
+	unsigned deltaX = 0, deltaY = 0;
+	if (m_isMoving & Facings::East)
+	{
+		deltaX = 2;
+	}
+	else if (m_isMoving & Facings::West)
+	{
+		deltaX = -2;
+	}
+	else if (m_isMoving & Facings::South)
+	{
+		deltaY = 2;
+	}
+	else if (m_isMoving & Facings::North)
+	{
+		deltaY = -2;
+	}
+
+	this->m_viewportOffset = D2D1::Point2F(m_viewportOffset.x + static_cast<float>(deltaX), m_viewportOffset.y + static_cast<float>(deltaY));
+	if (this->m_hoveringSheetNW != nullptr)
+	{
+		auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);
+		this->m_hoveringSheetNW->Translate(viewPort, 0, 0);
+	}
+
 }
 
 void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)
@@ -289,8 +314,8 @@ void WorldScreenBase::EvaluateSheetHoveringSituation()
 		m_hoveringSheetNW = centerSheet;		
 	}
 
-	auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width - 1.0F, this->m_viewportOffset.y + this->m_viewportSize.height - 1.0F);
-	centerSheet->ComputeViewportOverlap(this->m_viewportOffset, viewPort);
+	auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);
+	centerSheet->ComputeViewportOverlap(viewPort);
 
 	this->m_sheetHoveringSituationKnown = true;
 }
