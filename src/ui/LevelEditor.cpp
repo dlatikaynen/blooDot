@@ -168,5 +168,8 @@ void LevelEditor::DrawLevelEditorRaster()
 	 * (and, because it is smart since we already have the values here) */
 	this->m_currentLevelEditorCell.x = this->m_viewportOffsetSquares.x + localSquareX;
 	this->m_currentLevelEditorCell.y = this->m_viewportOffsetSquares.y + localSquareY;
-	this->m_currentLevelEditorCellKnown = true;
+	if (!this->m_currentLevelEditorCellKnown)
+	{
+		this->m_currentLevelEditorCellKnown = this->m_currentLevelEditorCell.x > 0 || this->m_currentLevelEditorCell.y > 0;
+	}
 }

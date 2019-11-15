@@ -98,9 +98,9 @@ void WorldScreenBase::ComputeViewportOffset()
 		m_worldCenter.y - m_viewportSize.height / 2.0F
 	);
 
-	m_viewportOffsetSquares = D2D1::Point2U(
-		m_worldCenterSquares.x - m_viewportSizeSquares.width / 2,
-		m_worldCenterSquares.y - m_viewportSizeSquares.height / 2
+	this->m_viewportOffsetSquares = D2D1::Point2U(
+		static_cast<unsigned>(this->m_viewportOffset.x / blooDot::Consts::SQUARE_WIDTH),
+		static_cast<unsigned>(this->m_viewportOffset.y / blooDot::Consts::SQUARE_HEIGHT)
 	);
 }
 
