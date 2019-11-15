@@ -29,6 +29,9 @@ public:
 	void											SetBlittingArea(D2D1_RECT_F blitFrom, D2D1_RECT_F blitTo);
 	void											Translate(D2D1_RECT_F viewPort, unsigned deltaX, unsigned deltaY);
 	void											BlitToViewport();
+#ifdef _DEBUG
+	void											DebugDrawBorder(Microsoft::WRL::ComPtr<ID2D1Brush> brush);
+#endif
 	void											Discard();
 
 protected:

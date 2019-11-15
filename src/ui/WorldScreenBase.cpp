@@ -57,7 +57,10 @@ void WorldScreenBase::ResetDirectXResources()
 	loader->LoadPngToBitmap(L"Media\\Bitmaps\\notimeforcaution.png", m_deviceResources,	&this->m_notimeforcaution);
 	loader->LoadPngToBitmap(L"Media\\Bitmaps\\universe_seamless.png", m_deviceResources, &this->m_background);
 	this->m_backgroundSize = this->m_background->GetSize();
-	
+
+#ifdef _DEBUG
+	this->m_debugBorderBrush = this->m_Brushes.WannaHave(this->m_d2dContext, { 0,0,255,255 });
+#endif
 	/* rest of initialization */
 	D2D1_SIZE_F canvasSize = this->m_d2dContext->GetSize();
 	this->m_viewportSize.width = canvasSize.width;
@@ -103,13 +106,14 @@ void WorldScreenBase::ComputeViewportOffset()
 
 void WorldScreenBase::ReleaseDeviceDependentResources()
 {
-    m_d2dDevice.Reset();
-    m_d2dContext.Reset();
-    m_background.Reset();
-    m_d2dFactory.Reset();
-    m_stateBlock.Reset();
-    m_wicFactory.Reset();
-	m_Brushes.Reset();
+	this->m_d2dDevice.Reset();
+	this->m_d2dContext.Reset();
+	this->m_background.Reset();
+	this->m_d2dFactory.Reset();
+	this->m_stateBlock.Reset();
+	this->m_wicFactory.Reset();
+	this->m_Brushes.Reset();
+	this->m_debugBorderBrush.Reset();
 }
 
 void WorldScreenBase::UpdateForWindowSizeChange()
@@ -167,7 +171,7 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 		this->EvaluateSheetHoveringSituation();
 	}
 
-	unsigned deltaX = 0, deltaY = 0;
+	int deltaX = 0, deltaY = 0;
 	if (m_isMoving & Facings::East)
 	{
 		deltaX = 2;

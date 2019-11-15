@@ -63,6 +63,9 @@ protected:
 	WorldSheet*										m_hoveringSheetNE;
 	WorldSheet*										m_hoveringSheetSW;
 	WorldSheet*										m_hoveringSheetSE;
+#ifdef _DEBUG
+	Microsoft::WRL::ComPtr<ID2D1Brush>				m_debugBorderBrush;
+#endif
 
 	WorldSheet*	GetSheet(unsigned sheetX, unsigned sheetY);
 	void EvaluateSheetHoveringSituation();

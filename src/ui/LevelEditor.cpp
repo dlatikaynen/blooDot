@@ -32,6 +32,7 @@ void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 	{
 		this->m_hoveringSheetNW->BlitToViewport();
 #ifdef _DEBUG
+		this->m_hoveringSheetNW->DebugDrawBorder(this->m_debugBorderBrush);
 		++blitSheetCount;
 #endif
 	}
@@ -40,6 +41,7 @@ void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 	{
 		this->m_hoveringSheetNE->BlitToViewport();
 #ifdef _DEBUG
+		this->m_hoveringSheetNE->DebugDrawBorder(this->m_debugBorderBrush);
 		++blitSheetCount;
 #endif
 	}
@@ -48,6 +50,7 @@ void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 	{
 		this->m_hoveringSheetSW->BlitToViewport();
 #ifdef _DEBUG
+		this->m_hoveringSheetSW->DebugDrawBorder(this->m_debugBorderBrush);
 		++blitSheetCount;
 #endif
 	}
@@ -56,6 +59,7 @@ void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 	{
 		this->m_hoveringSheetSE->BlitToViewport();
 #ifdef _DEBUG
+		this->m_hoveringSheetSE->DebugDrawBorder(this->m_debugBorderBrush);
 		++blitSheetCount;
 #endif
 	}

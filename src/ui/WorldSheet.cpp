@@ -239,18 +239,26 @@ void WorldSheet::BlitToViewport()
 	//this->m_tiedToLevel->GetDingSheet()->GetBitmap(&bmp);
 	//m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
 	//bmp->Release();
-	m_floor->GetBitmap(&bmp);
-	m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
+	this->m_floor->GetBitmap(&bmp);
+	this->m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
 	bmp->Release();
 
-	m_walls->GetBitmap(&bmp);
-	m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
+	this->m_walls->GetBitmap(&bmp);
+	this->m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
 	bmp->Release();
 
-	m_rooof->GetBitmap(&bmp);	
-	m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
+	this->m_rooof->GetBitmap(&bmp);
+	this->m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
 	bmp->Release();
 }
+
+#ifdef _DEBUG
+void WorldSheet::DebugDrawBorder(Microsoft::WRL::ComPtr<ID2D1Brush> brush)
+{
+	auto rrect = D2D1::RoundedRect(this->m_blitTo, 5.0F, 5.0F);
+	this->m_d2dContext->DrawRoundedRectangle(&rrect, brush.Get());
+}
+#endif
 
 void WorldSheet::Discard()
 {
