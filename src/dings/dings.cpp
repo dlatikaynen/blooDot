@@ -1,6 +1,11 @@
 #include "..\PreCompiledHeaders.h"
 #include "dings.h"
 
+Facings& operator |=(Facings& a, Facings b)
+{
+	return a = a | b;
+}
+
 Dings::Dings(int dingID, Platform::String^ dingName, BrushRegistry* drawBrushes)
 {
 	this->m_ID = dingID;

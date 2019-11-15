@@ -85,16 +85,8 @@ void LevelEditor::DrawLevelEditorRaster()
 {
 	D2D1_POINT_2F point0, point1;
 	D2D1_RECT_F rect0;
-	MFARGB color;
-	color.rgbAlpha = 128;
-	color.rgbRed = 128;
-	color.rgbGreen = 128;
-	color.rgbBlue = 128;
-	MFARGB colhigh;
-	colhigh.rgbAlpha = 255;
-	colhigh.rgbRed = 0;
-	colhigh.rgbGreen = 0;
-	colhigh.rgbBlue = 255;
+	MFARGB color = { 128,128,128,128 };
+	MFARGB colhigh = { 255,0,0,255 };
 	Microsoft::WRL::ComPtr<ID2D1Brush> brush = m_Brushes.WannaHave(m_d2dContext, color);
 	Microsoft::WRL::ComPtr<ID2D1Brush> highlight = m_Brushes.WannaHave(m_d2dContext, colhigh);
 

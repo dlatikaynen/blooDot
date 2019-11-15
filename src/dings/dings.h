@@ -73,6 +73,13 @@ enum Facings
 	Immersed = NW | North | NE | East | SE | South | SW | West
 };
 
+constexpr inline Facings operator |(const Facings left, const Facings& right) 
+{
+	return static_cast<Facings>(static_cast<int>(left) | static_cast<int>(right));
+}
+
+Facings& operator |=(Facings& a, Facings b);
+
 enum OrientabilityIndexQuadruplet
 {
 	// Sequence is meaningful

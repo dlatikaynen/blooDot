@@ -82,6 +82,8 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 
 	auto newObject = m_currentLevel->GetObjectAt(353, 361, true);
 	newObject->Instantiate(m_currentLevel->GetDing(1));
+	newObject = m_currentLevel->GetObjectAt(354, 361, true);
+	newObject->Instantiate(m_currentLevel->GetDing(1));
 
     UserInterface::GetInstance().Initialize(
         m_deviceResources->GetD2DDevice(),
@@ -1248,7 +1250,7 @@ void blooDotMain::RemoveTouch(int id)
 
 void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 {
-    if (key == Windows::System::VirtualKey::P)       // Pause
+    if (key == Windows::System::VirtualKey::P)
     {
         m_pauseKeyActive = true;
     }

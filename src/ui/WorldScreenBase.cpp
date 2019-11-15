@@ -135,25 +135,24 @@ void WorldScreenBase::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::C
 
 void WorldScreenBase::SetControl(bool left, bool right, bool up, bool down)
 {
+	m_isMoving = Facings::Shy;
+
 	if (left)
 	{
-		m_isMoving = Facings::West;
+		m_isMoving |= Facings::West;
 	}
 	else if (right)
 	{
-		m_isMoving = Facings::East;
+		m_isMoving |= Facings::East;
 	}
-	else if (down)
+	
+	if (down)
 	{
-		m_isMoving = Facings::South;
+		m_isMoving |= Facings::South;
 	}
 	else if (up)
 	{
-		m_isMoving = Facings::North;
-	}
-	else
-	{
-		m_isMoving = Facings::Shy;
+		m_isMoving |= Facings::North;
 	}
 }
 
@@ -180,7 +179,8 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 	{
 		deltaX = -2;
 	}
-	else if (m_isMoving & Facings::South)
+	
+	if (m_isMoving & Facings::South)
 	{
 		deltaY = 2;
 	}
@@ -189,13 +189,15 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 		deltaY = -2;
 	}
 
-	this->m_viewportOffset = D2D1::Point2F(m_viewportOffset.x + static_cast<float>(deltaX), m_viewportOffset.y + static_cast<float>(deltaY));
-	if (this->m_hoveringSheetNW != nullptr)
+	if (deltaX != 0 || deltaY != 0)
 	{
-		auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);
-		this->m_hoveringSheetNW->Translate(viewPort, 0, 0);
+		this->m_viewportOffset = D2D1::Point2F(m_viewportOffset.x + static_cast<float>(deltaX), m_viewportOffset.y + static_cast<float>(deltaY));
+		if (this->m_hoveringSheetNW != nullptr)
+		{
+			auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);
+			this->m_hoveringSheetNW->Translate(viewPort, 0, 0);
+		}
 	}
-
 }
 
 void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)

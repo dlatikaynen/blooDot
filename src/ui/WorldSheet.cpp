@@ -225,11 +225,8 @@ void WorldSheet::Translate(D2D1_RECT_F viewPort, unsigned deltaX, unsigned delta
 	{
 		this->m_NWcornerInWorld.y -= deltaY;
 	}
-
-	//if (deltaX != 0 || deltaY != 0)
-	{
-		this->ComputeViewportOverlap(viewPort);
-	}
+	
+	this->ComputeViewportOverlap(viewPort);
 }
 
 void WorldSheet::BlitToViewport()
