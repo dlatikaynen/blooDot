@@ -13,9 +13,22 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 	/* we might emplace objects */
 	if (this->m_currentLevelEditorCellKnown && this->PeekTouchdown())
 	{
-	
-
 		//this->PopTouchdown();
+		auto newCell = this->m_currentLevel->GetObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, true);
+		auto curDings = newCell->GetDings();
+		auto newDings = this->m_currentLevel->GetDing(1);
+		if (curDings == nullptr || curDings->ID() != newDings->ID())
+		{
+			newCell->Instantiate(newDings);
+			/* draw the object onto the sheet immediately */
+			auto sheetSize = this->m_currentLevel->GetSheetSizeUnits();
+			auto intersectedSheetX = this->m_currentLevelEditorCell.x / sheetSize.width;
+			auto cellInSheetX = this->m_currentLevelEditorCell.x % sheetSize.width;
+			auto intersectedSheetY = this->m_currentLevelEditorCell.y / sheetSize.height;
+			auto cellInSheetY = this->m_currentLevelEditorCell.y % sheetSize.height;
+			auto placementSheet = this->GetSheet(intersectedSheetX, intersectedSheetY);
+			placementSheet->RedrawSingleSquare(cellInSheetX, cellInSheetY);
+		}
 	}
 }
 
@@ -152,7 +165,7 @@ void LevelEditor::DrawLevelEditorRaster()
 	m_d2dContext->DrawRectangle(rect0, this->PeekTouchdown() ? touchdown.Get() : highlight.Get(), 1.0F, NULL);
 
 	/* we use this to remember the current cursor cell, just because we can
-	 * (and, because it is smart since we already have the values here */
+	 * (and, because it is smart since we already have the values here) */
 	this->m_currentLevelEditorCell.x = this->m_viewportOffsetSquares.x + localSquareX;
 	this->m_currentLevelEditorCell.y = this->m_viewportOffsetSquares.y + localSquareY;
 	this->m_currentLevelEditorCellKnown = true;

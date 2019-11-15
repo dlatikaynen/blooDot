@@ -202,6 +202,11 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 	if (deltaX != 0 || deltaY != 0)
 	{
 		this->m_viewportOffset = D2D1::Point2F(this->m_viewportOffset.x + static_cast<float>(deltaX), this->m_viewportOffset.y + static_cast<float>(deltaY));
+		this->m_viewportOffsetSquares = D2D1::Point2U(
+			static_cast<unsigned>(this->m_viewportOffset.x / blooDot::Consts::SQUARE_WIDTH),
+			static_cast<unsigned>(this->m_viewportOffset.y / blooDot::Consts::SQUARE_HEIGHT)
+		);
+
 		auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);
 		if (this->m_hoveringSheetNW != nullptr)
 		{

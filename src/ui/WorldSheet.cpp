@@ -174,6 +174,92 @@ void WorldSheet::Populate()
 	}
 }
 
+void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y)
+{
+	auto beganDrawWalls = false, beganDrawFloor = false, beganDrawRooof = false;
+	if (m_floor == nullptr)
+	{
+		DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_floor));
+		if (!beganDrawFloor)
+		{
+			this->m_floor->BeginDraw();
+			beganDrawFloor = true;
+			auto floorBackground = this->m_tiedToLevel->GetFloorBackground().Get();
+			this->m_floor->DrawBitmap(floorBackground, this->GetFloorBounds(), 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->GetFloorBounds());
+		}
+	}
+
+	if (m_walls == nullptr)
+	{
+		DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_walls));
+	}
+
+	if (m_rooof == nullptr)
+	{
+		DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_rooof));
+	}
+
+	auto dingSheet = this->m_tiedToLevel->GetDingSheet();
+	ID2D1Bitmap *dingMap = NULL;
+	dingSheet->GetBitmap(&dingMap);
+
+	auto worldX = x + this->m_NWcornerInWorldSquares.x;
+	auto worldY = y + this->m_NWcornerInWorldSquares.y;
+	auto objectX = this->m_tiedToLevel->GetObjectAt(worldX, worldY, false);
+	if (objectX != nullptr)
+	{
+		auto layer = objectX->Layer();
+		auto dings = objectX->GetDings();
+		if (layer == Layers::Floor)
+		{
+			if (!beganDrawFloor)
+			{
+				this->m_floor->BeginDraw();
+				beganDrawFloor = true;
+			}
+
+			this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(), x, y);
+		}
+		else if (layer == Layers::Walls)
+		{
+			if (!beganDrawWalls)
+			{
+				this->m_walls->BeginDraw();
+				beganDrawWalls = true;
+			}
+
+			this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(), x, y);
+		}
+		else if (layer == Layers::Rooof)
+		{
+			if (!beganDrawRooof)
+			{
+				this->m_rooof->BeginDraw();
+				beganDrawRooof = true;
+			}
+
+			this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(), x, y);
+		}
+	}
+
+	dingMap->Release();
+	if (beganDrawFloor)
+	{
+		DX::ThrowIfFailed(this->m_floor->EndDraw());
+	}
+
+	if (beganDrawWalls)
+	{
+		DX::ThrowIfFailed(this->m_walls->EndDraw());
+
+	}
+
+	if (beganDrawRooof)
+	{
+		DX::ThrowIfFailed(this->m_rooof->EndDraw());
+	}
+}
+
 D2D1_RECT_F WorldSheet::GetFloorBounds()
 {
 	auto size = this->m_floor->GetSize();

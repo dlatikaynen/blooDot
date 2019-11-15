@@ -23,8 +23,9 @@ public:
 	D2D1_POINT_2U									CornerSE();
 	D2D1_POINT_2U									GetCorner(Facings whichOne);
 
-	void											Populate();
 	bool											IsPopulated();
+	void											Populate();
+	void											RedrawSingleSquare(unsigned relativeX, unsigned relativeY);
 	void											ComputeViewportOverlap(D2D1_RECT_F viewPort);
 	void											SetBlittingArea(D2D1_RECT_F blitFrom, D2D1_RECT_F blitTo);
 	void											Translate(D2D1_RECT_F viewPort, unsigned deltaX, unsigned deltaY);
