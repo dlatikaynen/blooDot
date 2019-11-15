@@ -10,7 +10,13 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 {
 	WorldScreenBase::Update(timeTotal, timeDelta);
 	
+	/* we might emplace objects */
+	if (this->m_currentLevelEditorCellKnown && this->PeekTouchdown())
+	{
+	
 
+		//this->PopTouchdown();
+	}
 }
 
 void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)
@@ -85,10 +91,12 @@ void LevelEditor::DrawLevelEditorRaster()
 {
 	D2D1_POINT_2F point0, point1;
 	D2D1_RECT_F rect0;
-	MFARGB color = { 128,128,128,128 };
-	MFARGB colhigh = { 255,0,0,255 };
+	MFARGB color = { 128, 128, 128, 128 };
+	MFARGB colhigh = { 255, 0, 0, 255 };
+	MFARGB coltuch = { 5, 151, 251,255 };
 	Microsoft::WRL::ComPtr<ID2D1Brush> brush = m_Brushes.WannaHave(m_d2dContext, color);
 	Microsoft::WRL::ComPtr<ID2D1Brush> highlight = m_Brushes.WannaHave(m_d2dContext, colhigh);
+	Microsoft::WRL::ComPtr<ID2D1Brush> touchdown = m_Brushes.WannaHave(m_d2dContext, coltuch);
 
 	auto brusherl = brush.Get();
 
@@ -122,10 +130,30 @@ void LevelEditor::DrawLevelEditorRaster()
 		m_d2dContext->DrawLine(point0, point1, brusherl, 1.0F, NULL);
 	}
 
-	rect0.left = 0.0;
-	rect0.top = 0.0;
+	auto halfSquareX = blooDot::Consts::SQUARE_WIDTH / 2.0F;
+	auto halfSquareY = blooDot::Consts::SQUARE_HEIGHT / 2.0F;
+	auto pointX = this->m_pointerPosition.x;
+	auto pointY = this->m_pointerPosition.y;
+
+	m_d2dContext->DrawRectangle(D2D1::RectF(
+		pointX-1.0F,
+		pointY-1.0F,
+		pointX+1.0F,
+		pointY+1.0F
+	), highlight.Get(), 1.0F, NULL);
+
+	/* the cursor aka the mouse may hover over one grid square */
+	auto localSquareX = static_cast<unsigned>((pointX + xAdjust) / blooDot::Consts::SQUARE_WIDTH);
+	auto localSquareY = static_cast<unsigned>((pointY + yAdjust) / blooDot::Consts::SQUARE_HEIGHT);
+	rect0.left = localSquareX * blooDot::Consts::SQUARE_WIDTH - xAdjust;
+	rect0.top = localSquareY * blooDot::Consts::SQUARE_HEIGHT - yAdjust;
 	rect0.right = rect0.left + blooDot::Consts::SQUARE_WIDTH;
 	rect0.bottom = rect0.top + blooDot::Consts::SQUARE_HEIGHT;
+	m_d2dContext->DrawRectangle(rect0, this->PeekTouchdown() ? touchdown.Get() : highlight.Get(), 1.0F, NULL);
 
-	m_d2dContext->DrawRectangle(rect0, highlight.Get(), 1.0F, NULL);
+	/* we use this to remember the current cursor cell, just because we can
+	 * (and, because it is smart since we already have the values here */
+	this->m_currentLevelEditorCell.x = this->m_viewportOffsetSquares.x + localSquareX;
+	this->m_currentLevelEditorCell.y = this->m_viewportOffsetSquares.y + localSquareY;
+	this->m_currentLevelEditorCellKnown = true;
 }

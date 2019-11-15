@@ -9,6 +9,8 @@
 
 class WorldScreenBase
 {
+	typedef std::map<int, DirectX::XMFLOAT2> TouchMap;
+
 public:
 	WorldScreenBase::WorldScreenBase();
 	virtual WorldScreenBase::~WorldScreenBase();
@@ -19,7 +21,7 @@ public:
 	void ResetDirectXResources();
     void ReleaseDeviceDependentResources();
     void UpdateForWindowSizeChange();
-	void SetControl(bool left, bool right, bool up, bool down);
+	void SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down);
 	virtual void Update(float timeTotal, float timeDelta);
 	virtual void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
 
@@ -36,17 +38,13 @@ protected:
     Microsoft::WRL::ComPtr<ID2D1DrawingStateBlock>  m_stateBlock;
 	BrushRegistry									m_Brushes;
     Microsoft::WRL::ComPtr<IWICImagingFactory>      m_wicFactory;
-    Microsoft::WRL::ComPtr<ID2D1Bitmap>             m_background;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>             m_notimeforcaution;
-	//Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_dingSheet;
-	//Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_floor;
-	//Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_walls;
-	//Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_rooof;
-	D2D1_SIZE_F                                     m_backgroundSize;
 	D2D1_SIZE_F										m_viewportSize;
 	D2D1_SIZE_U                                     m_viewportSizeSquares;
 	bool											m_isResizing;
 	Facings											m_isMoving;
+	unsigned										m_movingSpeedX;
+	unsigned										m_movingSpeedY;
 
 	D2D1_SIZE_F										m_worldSize;
 	D2D1_POINT_2F									m_worldCenter;
@@ -55,6 +53,7 @@ protected:
 	D2D1_POINT_2U									m_viewportOffsetSquares;
 	D2D1_SIZE_F										m_viewportScrollTreshold;
 	D2D1_POINT_2U									m_currentLevelEditorCell;
+	bool											m_currentLevelEditorCellKnown;
 
 	Level*											m_currentLevel;
 	std::vector<WorldSheet*>						m_Sheets;
@@ -66,15 +65,19 @@ protected:
 #ifdef _DEBUG
 	Microsoft::WRL::ComPtr<ID2D1Brush>				m_debugBorderBrush;
 #endif
+	D2D1_POINT_2F									m_pointerPosition;
+	TouchMap* 										m_touchMap;
 
 	WorldSheet*	GetSheet(unsigned sheetX, unsigned sheetY);
 	void EvaluateSheetHoveringSituation();
 	void InvalidateSheetHoveringSituation();
 	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY);
+	bool PeekTouchdown();
+	bool PopTouchdown();
 
 private:
 	void ComputeWorldSize();
 	void ComputeWorldCenter();
 	void ComputeViewportOffset();
-	D2D1_POINT_2U GetViewportCenterInLevel();
+	D2D1_POINT_2U GetViewportCenterInLevel();	
 };

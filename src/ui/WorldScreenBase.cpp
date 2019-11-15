@@ -15,6 +15,9 @@ WorldScreenBase::WorldScreenBase()
 	this->m_hoveringSheetNE = nullptr;
 	this->m_hoveringSheetSE = nullptr;
 	this->m_hoveringSheetSW = nullptr;
+	this->m_currentLevelEditorCell = D2D1::Point2U(0, 0);
+	this->m_currentLevelEditorCellKnown = false;
+	this->m_touchMap = nullptr;
 }
 
 WorldScreenBase::~WorldScreenBase()
@@ -33,15 +36,14 @@ void WorldScreenBase::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	devi
 	this->m_deviceResources = deviceResources;
 	this->m_wicFactory = deviceResources->GetWicImagingFactory();
 	this->m_d2dDevice = deviceResources->GetD2DDevice();
-	this->m_d2dContext = deviceResources->GetD2DDeviceContext();
-	this->m_backgroundSize = D2D1::SizeF(0.0f, 0.0f);
+	this->m_d2dContext = deviceResources->GetD2DDeviceContext();	
 	this->m_viewportSize = D2D1::SizeF(0, 0);
 	this->m_viewportSizeSquares = D2D1::SizeU(0.0f, 0.0f);
 
     ComPtr<ID2D1Factory> factory;
 	this->m_d2dDevice->GetFactory(&factory);
     DX::ThrowIfFailed(factory.As(&this->m_d2dFactory));
-	this->m_currentLevel->Initialize(this->m_d2dContext, &this->m_Brushes);
+	this->m_currentLevel->Initialize(this->m_deviceResources, &this->m_Brushes);
 	this->CreateDeviceDependentResources();
 	this->ResetDirectXResources();
 }
@@ -55,8 +57,6 @@ void WorldScreenBase::ResetDirectXResources()
 {
 	auto loader = ref new BasicLoader(this->m_deviceResources->GetD3DDevice());
 	loader->LoadPngToBitmap(L"Media\\Bitmaps\\notimeforcaution.png", m_deviceResources,	&this->m_notimeforcaution);
-	loader->LoadPngToBitmap(L"Media\\Bitmaps\\universe_seamless.png", m_deviceResources, &this->m_background);
-	this->m_backgroundSize = this->m_background->GetSize();
 
 #ifdef _DEBUG
 	this->m_debugBorderBrush = this->m_Brushes.WannaHave(this->m_d2dContext, { 0,0,255,255 });
@@ -107,13 +107,14 @@ void WorldScreenBase::ComputeViewportOffset()
 void WorldScreenBase::ReleaseDeviceDependentResources()
 {
 	this->m_d2dDevice.Reset();
-	this->m_d2dContext.Reset();
-	this->m_background.Reset();
+	this->m_d2dContext.Reset();	
 	this->m_d2dFactory.Reset();
 	this->m_stateBlock.Reset();
 	this->m_wicFactory.Reset();
 	this->m_Brushes.Reset();
+#ifdef _DEBUG
 	this->m_debugBorderBrush.Reset();
+#endif
 }
 
 void WorldScreenBase::UpdateForWindowSizeChange()
@@ -133,32 +134,41 @@ void WorldScreenBase::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::C
 	renderTarget->DrawBitmap(dingSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
 }
 
-void WorldScreenBase::SetControl(bool left, bool right, bool up, bool down)
+void WorldScreenBase::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down)
 {
-	m_isMoving = Facings::Shy;
+	this->m_pointerPosition.x = pointerPosition.x;
+	this->m_pointerPosition.y = pointerPosition.y;
+	this->m_touchMap = touchMap;
+	this->m_isMoving = Facings::Shy;
 
 	if (left)
 	{
-		m_isMoving |= Facings::West;
+		this->m_isMoving |= Facings::West;
 	}
 	else if (right)
 	{
-		m_isMoving |= Facings::East;
+		this->m_isMoving |= Facings::East;
 	}
 	
 	if (down)
 	{
-		m_isMoving |= Facings::South;
+		this->m_isMoving |= Facings::South;
 	}
 	else if (up)
 	{
-		m_isMoving |= Facings::North;
+		this->m_isMoving |= Facings::North;
+	}
+
+	if (this->m_isMoving != Facings::Shy)
+	{
+		this->m_movingSpeedX = shiftKeyActive ? 4 : 2;
+		this->m_movingSpeedY = shiftKeyActive ? 4 : 2;
 	}
 }
 
 void WorldScreenBase::Update(float timeTotal, float timeDelta)
 {
-	if (m_isResizing) 
+	if (this->m_isResizing) 
 	{
 		return;
 	}
@@ -171,31 +181,46 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 	}
 
 	int deltaX = 0, deltaY = 0;
-	if (m_isMoving & Facings::East)
+	if (this->m_isMoving & Facings::East)
 	{
-		deltaX = 2;
+		deltaX = this->m_movingSpeedX;
 	}
-	else if (m_isMoving & Facings::West)
+	else if (this->m_isMoving & Facings::West)
 	{
-		deltaX = -2;
+		deltaX = -static_cast<int>(this->m_movingSpeedX);
 	}
 	
-	if (m_isMoving & Facings::South)
+	if (this->m_isMoving & Facings::South)
 	{
-		deltaY = 2;
+		deltaY = this->m_movingSpeedY;
 	}
-	else if (m_isMoving & Facings::North)
+	else if (this->m_isMoving & Facings::North)
 	{
-		deltaY = -2;
+		deltaY = -static_cast<int>(this->m_movingSpeedY);
 	}
 
 	if (deltaX != 0 || deltaY != 0)
 	{
-		this->m_viewportOffset = D2D1::Point2F(m_viewportOffset.x + static_cast<float>(deltaX), m_viewportOffset.y + static_cast<float>(deltaY));
+		this->m_viewportOffset = D2D1::Point2F(this->m_viewportOffset.x + static_cast<float>(deltaX), this->m_viewportOffset.y + static_cast<float>(deltaY));
+		auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);
 		if (this->m_hoveringSheetNW != nullptr)
 		{
-			auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);
 			this->m_hoveringSheetNW->Translate(viewPort, 0, 0);
+		}
+
+		if (this->m_hoveringSheetNE != nullptr)
+		{
+			this->m_hoveringSheetNE->Translate(viewPort, 0, 0);
+		}
+
+		if (this->m_hoveringSheetSE != nullptr)
+		{
+			this->m_hoveringSheetSE->Translate(viewPort, 0, 0);
+		}
+
+		if (this->m_hoveringSheetSW != nullptr)
+		{
+			this->m_hoveringSheetSW->Translate(viewPort, 0, 0);
 		}
 	}
 }
@@ -292,7 +317,9 @@ void WorldScreenBase::EvaluateSheetHoveringSituation()
 	auto centerIntersectsSheet = this->GetViewportCenterInLevel();
 	auto sheetSize = this->m_currentLevel->GetSheetSizeUnits();
 	auto intersectedSheetX = centerIntersectsSheet.x / sheetSize.width;
+	auto cellInSheetX = centerIntersectsSheet.x % sheetSize.width;
 	auto intersectedSheetY = centerIntersectsSheet.y / sheetSize.height;
+	auto cellInSheetY = centerIntersectsSheet.y % sheetSize.height;
 	auto sheetBound = m_currentLevel->GetNumOfSheetsWE();
 	if (intersectedSheetX < 0)
 	{
@@ -313,16 +340,76 @@ void WorldScreenBase::EvaluateSheetHoveringSituation()
 		intersectedSheetY = sheetBound - 1;
 	}
 
-	auto centerSheet = this->GetSheet(intersectedSheetX, intersectedSheetY);
-	if (!centerSheet->IsPopulated())
+	/* depending on where the center is inside the centersheet, we shall
+	 * know where we are and which are our neighbor sheets */
+	auto centerSheet = this->GetSheet(intersectedSheetX, intersectedSheetY);	
+	if (cellInSheetX > sheetSize.width / 2)
 	{
-		centerSheet->Populate();
-		m_hoveringSheetNW = centerSheet;		
+		if (cellInSheetY > sheetSize.height / 2)
+		{
+			/* we are hit in our right, bottom, thus we are NW */
+			this->m_hoveringSheetNW = centerSheet;
+			this->m_hoveringSheetNE = this->GetSheet(intersectedSheetX + 1, intersectedSheetY);
+			this->m_hoveringSheetSW = this->GetSheet(intersectedSheetX, intersectedSheetY + 1);
+			this->m_hoveringSheetSE = this->GetSheet(intersectedSheetX + 1, intersectedSheetY + 1);
+		}
+		else
+		{
+			/* we are hit in out right, top, thus we are SW */
+			this->m_hoveringSheetSW = centerSheet;
+			this->m_hoveringSheetNW = this->GetSheet(intersectedSheetX, intersectedSheetY -1 );
+			this->m_hoveringSheetNE = this->GetSheet(intersectedSheetX + 1, intersectedSheetY - 1);
+			this->m_hoveringSheetSE = this->GetSheet(intersectedSheetX + 1, intersectedSheetY);
+		}
+	}
+	else
+	{
+		if (cellInSheetY > sheetSize.height / 2)
+		{
+			/* we are hit in our left, bottom, so we are NE */
+			this->m_hoveringSheetNE = centerSheet;
+			this->m_hoveringSheetNW = this->GetSheet(intersectedSheetX - 1, intersectedSheetY);
+			this->m_hoveringSheetSE = this->GetSheet(intersectedSheetX, intersectedSheetY + 1);
+			this->m_hoveringSheetSW = this->GetSheet(intersectedSheetX - 1, intersectedSheetY + 1);
+		}
+		else
+		{
+			/* we are hit in our left, top, so we are SE */
+			this->m_hoveringSheetSE = centerSheet;
+			this->m_hoveringSheetSW = this->GetSheet(intersectedSheetX - 1, intersectedSheetY);
+			this->m_hoveringSheetNW = this->GetSheet(intersectedSheetX - 1, intersectedSheetY - 1);
+			this->m_hoveringSheetNE = this->GetSheet(intersectedSheetX, intersectedSheetY - 1);
+		}
 	}
 
-	auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);
-	centerSheet->ComputeViewportOverlap(viewPort);
+	/* make sure the sheets have consciousness about their own whereabouts */
+	if (!m_hoveringSheetNW->IsPopulated())
+	{
+		m_hoveringSheetNW->Populate();
+	}
 
+	if (!m_hoveringSheetNE->IsPopulated())
+	{
+		m_hoveringSheetNE->Populate();
+	}
+
+	if (!m_hoveringSheetSW->IsPopulated())
+	{
+		m_hoveringSheetSW->Populate();
+	}
+
+	if (!m_hoveringSheetSE->IsPopulated())
+	{
+		m_hoveringSheetSE->Populate();
+	}
+
+	/* finally, we have the quadruplet arranged,
+	 * now prime the initial overlap rectangles */
+	auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);
+	m_hoveringSheetNW->ComputeViewportOverlap(viewPort);
+	m_hoveringSheetNE->ComputeViewportOverlap(viewPort);
+	m_hoveringSheetSW->ComputeViewportOverlap(viewPort);
+	m_hoveringSheetSE->ComputeViewportOverlap(viewPort);
 	this->m_sheetHoveringSituationKnown = true;
 }
 
@@ -352,4 +439,27 @@ WorldSheet*	WorldScreenBase::GetSheet(unsigned sheetX, unsigned sheetY)
 	}
 
 	return retrievedSheet;
+}
+
+bool WorldScreenBase::PeekTouchdown()
+{
+	if (this->m_touchMap == nullptr)
+	{
+		return false;
+	}
+	else
+	{
+		return this->m_touchMap->size() > 0;
+	}
+}
+
+bool WorldScreenBase::PopTouchdown()
+{
+	if (m_touchMap != nullptr && !m_touchMap->empty())
+	{
+		m_touchMap->erase(std::prev(m_touchMap->end()));
+		return true;
+	}
+
+	return false;
 }

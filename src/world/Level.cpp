@@ -26,15 +26,21 @@ Level::~Level()
 	}
 
 	this->m_dingSheet.Reset();
+	this->m_floorBackground.Reset();
 }
 
-void Level::Initialize(Microsoft::WRL::ComPtr<ID2D1DeviceContext> deviceContext, BrushRegistry* brushRegistry)
-{
+void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* brushRegistry)
+{	
+	auto resources = deviceResources->GetD3DDevice();
+	auto device = deviceResources->GetD2DDeviceContext();
+	auto loader = ref new BasicLoader(resources);
+	loader->LoadPngToBitmap(L"Media\\Bitmaps\\universe_seamless.png", deviceResources, &this->m_floorBackground);
+
 	auto deflt = Dings(0, "BLACK", brushRegistry);
 	auto mauer = Mauer(brushRegistry);
 	auto dalek = Dalek(brushRegistry);
 
-	DX::ThrowIfFailed(deviceContext->CreateCompatibleRenderTarget(D2D1::SizeF(800.0f, 600.0f), &this->m_dingSheet));
+	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(800.0f, 600.0f), &this->m_dingSheet));
 	m_dingSheet->BeginDraw();
 
 	deflt.Draw(m_dingSheet, 0, 0);
@@ -100,4 +106,9 @@ Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> Level::GetDingSheet()
 unsigned Level::GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet)
 {
 	return static_cast<unsigned>(ceilf(static_cast<float>(extentUnits) / static_cast<float>(sizePerSheet)));
+}
+
+Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::GetFloorBackground()
+{
+	return this->m_floorBackground;
 }

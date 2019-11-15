@@ -133,14 +133,15 @@ namespace blooDot
         TextButton			m_pausedText;
         TextElement			m_resultsText;
         HighScoreEntry		m_newHighScore;
-        typedef std::map<int, XMFLOAT2> TouchMap;
+		typedef std::map<int, XMFLOAT2> TouchMap;
         TouchMap			m_touches;
 		XMFLOAT2			m_pointerPosition;
         typedef std::queue<D2D1_POINT_2F> PointQueue;
         PointQueue			m_pointQueue;
         bool				m_pauseKeyActive;
         bool				m_pauseKeyPressed;
-        bool				m_homeKeyActive;
+		bool				m_shiftKeyActive;
+		bool				m_homeKeyActive;
         bool				m_homeKeyPressed;
 		bool				m_keyRightPressed;
 		bool				m_keyLeftPressed;

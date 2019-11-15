@@ -55,5 +55,6 @@ private:
 	D2D1_RECT_F										m_blitFrom;
 	D2D1_RECT_F										m_blitTo;
 
+	D2D1_RECT_F GetFloorBounds();
 	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY);
 };

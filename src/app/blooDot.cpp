@@ -705,13 +705,13 @@ void blooDotMain::Update()
 		// When the game is first loaded, we display a load screen
         // and load any deferred resources that might be too expensive
         // to load during initialization.
-        if (m_gameState==GameState::LoadScreen)
-        {			
-            // At this point we can draw a progress bar, or if we had
-            // loaded audio, we could play audio during the loading process.
+		if (m_gameState == GameState::LoadScreen)
+		{
+			// At this point we can draw a progress bar, or if we had
+			// loaded audio, we could play audio during the loading process.
 			m_loadScreen->Update(timerTotal, timerElapsed);
 			return;
-        }
+		}
 		else if (m_gameState == GameState::LevelEditor)
 		{
 			if (!m_audio.m_isAudioStarted)
@@ -719,7 +719,16 @@ void blooDotMain::Update()
 				m_audio.Start();
 			}
 
-			m_worldScreen->SetControl(m_keyLeftPressed, m_keyRightPressed, m_keyUpPressed, m_keyDownPressed);
+			m_worldScreen->SetControl(
+				this->m_pointerPosition, 
+				&this->m_touches,
+				this->m_shiftKeyActive, 
+				m_keyLeftPressed, 
+				m_keyRightPressed, 
+				m_keyUpPressed, 
+				m_keyDownPressed
+			);
+
 			m_worldScreen->Update(timerTotal, timerElapsed);
 			return;
 		}
@@ -1226,15 +1235,16 @@ inline XMFLOAT2 PointToTouch(Windows::Foundation::Point point, Windows::Foundati
 
 void blooDotMain::AddTouch(int id, Windows::Foundation::Point point)
 {
-    m_touches[id] = PointToTouch(point, m_deviceResources->GetLogicalSize());
-
-    m_pointQueue.push(D2D1::Point2F(point.X, point.Y));
+	m_touches[id] = PointToTouch(point, m_deviceResources->GetLogicalSize());
+	m_pointQueue.push(D2D1::Point2F(point.X, point.Y));
 }
 
 void blooDotMain::UpdateTouch(int id, Windows::Foundation::Point point)
 {
-    if (m_touches.find(id) != m_touches.end())
-        m_touches[id] = PointToTouch(point, m_deviceResources->GetLogicalSize());
+	if (m_touches.find(id) != m_touches.end())
+	{
+		m_touches[id] = PointToTouch(point, m_deviceResources->GetLogicalSize());
+	}
 }
 
 void blooDotMain::PointerMove(int id, Windows::Foundation::Point point)
@@ -1254,7 +1264,11 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
     {
         m_pauseKeyActive = true;
     }
-    else if (key == Windows::System::VirtualKey::Home)
+	else if (key == Windows::System::VirtualKey::Shift)
+	{
+		m_shiftKeyActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Home)
     {
         m_homeKeyActive = true;
     }
@@ -1295,6 +1309,10 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
             m_homeKeyActive = false;
         }
     }
+	else if (key == Windows::System::VirtualKey::Shift)
+	{
+		m_shiftKeyActive = false;
+	}
 	else if (key == Windows::System::VirtualKey::Left)
 	{
 		m_keyLeftPressed = false;

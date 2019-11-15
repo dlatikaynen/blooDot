@@ -79,11 +79,20 @@ bool WorldSheet::IsPopulated()
 // Draw the Ding Wang Tang onto the sheet
 void WorldSheet::Populate()
 {
+	auto beganDrawWalls = false, beganDrawFloor = false, beganDrawRooof = false;
+
 	if (!this->m_isPopulated)
 	{
 		if (m_floor == nullptr)
 		{
 			DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_floor));
+			if (!beganDrawFloor)
+			{
+				this->m_floor->BeginDraw();
+				beganDrawFloor = true;
+				auto floorBackground = this->m_tiedToLevel->GetFloorBackground().Get();
+				this->m_floor->DrawBitmap(floorBackground, this->GetFloorBounds(), 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->GetFloorBounds());
+			}
 		}
 
 		if (m_walls == nullptr)
@@ -99,7 +108,6 @@ void WorldSheet::Populate()
 		auto dingSheet = this->m_tiedToLevel->GetDingSheet();
 		ID2D1Bitmap *dingMap = NULL;
 		dingSheet->GetBitmap(&dingMap);
-		auto beganDrawWalls = false, beganDrawFloor = false, beganDrawRooof = false;
 		for (auto y = 0; y < this->m_sizeUnits.height; ++y)
 		{
 			for (auto x = 0; x < this->m_sizeUnits.width; ++x)
@@ -164,6 +172,17 @@ void WorldSheet::Populate()
 
 		this->m_isPopulated = true;
 	}
+}
+
+D2D1_RECT_F WorldSheet::GetFloorBounds()
+{
+	auto size = this->m_floor->GetSize();
+	return D2D1::RectF(
+		0.0F,
+		0.0F,
+		size.width,
+		size.height
+	);
 }
 
 void WorldSheet::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY)
@@ -236,6 +255,7 @@ void WorldSheet::BlitToViewport()
 	//this->m_tiedToLevel->GetDingSheet()->GetBitmap(&bmp);
 	//m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
 	//bmp->Release();
+
 	this->m_floor->GetBitmap(&bmp);
 	this->m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
 	bmp->Release();
