@@ -10,6 +10,7 @@
 #include "HighScoreTable.h"
 #include "WorldScreenBase.h"
 #include "LevelEditor.h"
+#include "LevelEditorHUD.h"
 
 class UserInterface
 {
@@ -40,8 +41,9 @@ public:
     void Update(float timeTotal, float timeDelta);
     void Render(D2D1::Matrix3x2F orientation2D);
 
-    void RegisterElement(ElementBase* element);
-    void UnregisterElement(ElementBase* element);
+    void RegisterElement(blooDot::UIElement elementKey, ElementBase* element);
+	ElementBase* GetElement(blooDot::UIElement elementKey);
+    void UnregisterElement(blooDot::UIElement elementKey);
 
     void HitTest(D2D1_POINT_2F point);
 

@@ -48,7 +48,8 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
     m_resetMarbleRotation = false;
     m_currentCheckpoint = 0;
     m_windowActive = false;
-
+	m_keySubtractActive = false;
+	m_keySubtractPressed = false;
 
     m_lightStrength = 0.0f;
     m_targetLightStrength = 0.0f;
@@ -177,7 +178,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_startGameButton.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
     m_startGameButton.SetPadding(D2D1::SizeF(32.0f, 16.0f));
     m_startGameButton.GetTextStyle().SetFontSize(72.0f);
-    UserInterface::GetInstance().RegisterElement(&m_startGameButton);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::StartGameButton, &m_startGameButton);
 
     m_highScoreButton.Initialize();
     m_highScoreButton.SetAlignment(AlignCenter, AlignNear);
@@ -187,7 +188,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_highScoreButton.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
     m_highScoreButton.SetPadding(D2D1::SizeF(32.0f, 16.0f));
     m_highScoreButton.GetTextStyle().SetFontSize(72.0f);
-    UserInterface::GetInstance().RegisterElement(&m_highScoreButton);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::HighScoreButton, &m_highScoreButton);
 
     m_highScoreTable.Initialize();
     m_highScoreTable.SetAlignment(AlignCenter, AlignCenter);
@@ -196,7 +197,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_highScoreTable.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BOLD);
     m_highScoreTable.GetTextStyle().SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
     m_highScoreTable.GetTextStyle().SetFontSize(60.0f);
-    UserInterface::GetInstance().RegisterElement(&m_highScoreTable);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::HighscoreTable, &m_highScoreTable);
 
     m_preGameCountdownTimer.Initialize();
     m_preGameCountdownTimer.SetAlignment(AlignCenter, AlignCenter);
@@ -204,7 +205,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_preGameCountdownTimer.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
     m_preGameCountdownTimer.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
     m_preGameCountdownTimer.GetTextStyle().SetFontSize(144.0f);
-    UserInterface::GetInstance().RegisterElement(&m_preGameCountdownTimer);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::PreGameCountdownTimer, &m_preGameCountdownTimer);
 
 	m_nerdStatsDisplay.Initialize();
 	m_nerdStatsDisplay.SetAlignment(AlignType::AlignNear, AlignType::AlignNear);
@@ -212,7 +213,12 @@ void blooDotMain::CreateWindowSizeDependentResources()
 	m_nerdStatsDisplay.SetTextColor(D2D1::ColorF(D2D1::ColorF::LightGoldenrodYellow));
 	m_nerdStatsDisplay.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_DEMI_BOLD);
 	m_nerdStatsDisplay.GetTextStyle().SetFontSize(24.0f);
-	UserInterface::GetInstance().RegisterElement(&m_nerdStatsDisplay);
+	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::NerdStatsDisplay, &m_nerdStatsDisplay);
+
+	m_levelEditorHUD.Initialize();
+	m_levelEditorHUD.SetAlignment(AlignType::AlignFar, AlignType::AlignNear);
+	m_levelEditorHUD.SetContainer(clientRect);
+	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::LevelEditorHUD, &m_levelEditorHUD);
 
     m_inGameStopwatchTimer.Initialize();
     m_inGameStopwatchTimer.SetAlignment(AlignNear, AlignFar);
@@ -220,7 +226,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_inGameStopwatchTimer.SetTextColor(D2D1::ColorF(D2D1::ColorF::White, 0.75f));
     m_inGameStopwatchTimer.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
     m_inGameStopwatchTimer.GetTextStyle().SetFontSize(96.0f);
-    UserInterface::GetInstance().RegisterElement(&m_inGameStopwatchTimer);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::InGameStopwatchTimer, &m_inGameStopwatchTimer);
 
     m_checkpointText.Initialize();
     m_checkpointText.SetAlignment(AlignCenter, AlignCenter);
@@ -229,7 +235,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_checkpointText.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
     m_checkpointText.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
     m_checkpointText.GetTextStyle().SetFontSize(72.0f);
-    UserInterface::GetInstance().RegisterElement(&m_checkpointText);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::CheckPointText, &m_checkpointText);
 
     m_pausedText.Initialize();
     m_pausedText.SetAlignment(AlignCenter, AlignCenter);
@@ -238,7 +244,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_pausedText.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
     m_pausedText.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
     m_pausedText.GetTextStyle().SetFontSize(72.0f);
-    UserInterface::GetInstance().RegisterElement(&m_pausedText);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::PausedText, &m_pausedText);
 
     m_resultsText.Initialize();
     m_resultsText.SetAlignment(AlignCenter, AlignCenter);
@@ -247,7 +253,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_resultsText.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BOLD);
     m_resultsText.GetTextStyle().SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
     m_resultsText.GetTextStyle().SetFontSize(36.0f);
-    UserInterface::GetInstance().RegisterElement(&m_resultsText);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::ResultsText, &m_resultsText);
 
     if ((!m_deferredResourcesReady) && m_loadScreen != nullptr)
     {
@@ -379,7 +385,7 @@ void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
 
     if (delay)
     {
-        while (loadingTimer.GetTotalSeconds() < 3.5)
+        while (loadingTimer.GetTotalSeconds() < 0.5)
         {
             // game doesn't take long to load resources,
             // so we're simulating a longer load time to demonstrate
@@ -729,6 +735,12 @@ void blooDotMain::Update()
 				m_keyDownPressed
 			);
 
+			if (this->m_keySubtractPressed)
+			{
+				this->m_keySubtractPressed = false;
+				this->m_levelEditorHUD.ToggleEraser();
+			}
+
 			m_worldScreen->Update(timerTotal, timerElapsed);
 			return;
 		}
@@ -842,6 +854,7 @@ void blooDotMain::Update()
                 SetGameState(GameState::InGameActive);
             }
             break;
+
         }
 
         // Update the game state if the user chose a menu option.
@@ -1272,6 +1285,10 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
     {
         m_homeKeyActive = true;
     }
+	else if (key == Windows::System::VirtualKey::Subtract)
+	{
+		m_keySubtractActive = true;
+	}
 	else if (key == Windows::System::VirtualKey::Left)
 	{
 		m_keyLeftPressed = true;
@@ -1309,6 +1326,14 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
             m_homeKeyActive = false;
         }
     }
+	else if (key == Windows::System::VirtualKey::Subtract)
+	{
+		if (m_keySubtractActive)
+		{
+			m_keySubtractPressed = true;
+			m_keySubtractActive = false;
+		}
+	}
 	else if (key == Windows::System::VirtualKey::Shift)
 	{
 		m_shiftKeyActive = false;
@@ -1334,6 +1359,7 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 	{
 		m_deferredResourcesReady = true;
 		SetGameState(GameState::LevelEditor);
+		this->m_levelEditorHUD.SetVisible(true);
 	}
 }
 
@@ -1362,8 +1388,12 @@ void blooDotMain::OnFocusChange(bool active)
                 if ((m_gameState == GameState::InGamePaused) && lostFocusPause)
                 {
                     SetGameState(GameState::InGameActive);
-                }
-            }
+                }			
+				else if ((m_gameState == GameState::LevelEditor) && !this->m_levelEditorHUD.IsVisible())
+				{
+					this->m_levelEditorHUD.SetVisible(true);
+				}
+			}
             else
             {
                 m_audio.SuspendAudio();
@@ -1380,6 +1410,7 @@ void blooDotMain::OnFocusChange(bool active)
                     m_preGameCountdownTimer.SetVisible(false);
                 }
             }
+
             m_windowActive = active;
         }
     }

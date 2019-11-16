@@ -37,11 +37,11 @@ void ElementBase::SetVisible(bool visible)
 
 D2D1_RECT_F ElementBase::GetBounds()
 {
-	CalculateSize();
+	this->CalculateSize();
 
 	D2D1_RECT_F bounds = D2D1::RectF();
 
-	switch (m_alignment.horizontal)
+	switch (this->m_alignment.horizontal)
 	{
 	case AlignNear:
 		bounds.left = m_container.left;

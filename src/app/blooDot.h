@@ -129,6 +129,7 @@ namespace blooDot
         CountdownTimer		m_preGameCountdownTimer;
         StopwatchTimer		m_inGameStopwatchTimer;
 		NerdStatsDisplay	m_nerdStatsDisplay;
+		LevelEditorHUD		m_levelEditorHUD;
         TextElement			m_checkpointText;
         TextButton			m_pausedText;
         TextElement			m_resultsText;
@@ -147,6 +148,8 @@ namespace blooDot
 		bool				m_keyLeftPressed;
 		bool				m_keyUpPressed;
 		bool				m_keyDownPressed;
+		bool				m_keySubtractActive;
+		bool				m_keySubtractPressed;
         bool				m_windowActive;
 		bool				m_deferredResourcesReadyPending;
 		bool				m_deferredResourcesReady;

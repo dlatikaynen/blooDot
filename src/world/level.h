@@ -20,6 +20,7 @@ public:
 	unsigned GetNumOfSheetsWE();
 	unsigned GetNumOfSheetsNS();
 	Object* GetObjectAt(unsigned levelX, unsigned levelY, bool createIfNull);
+	bool WeedObjectAt(unsigned levelX, unsigned levelY);
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> GetDingSheet();
 	Dings* GetDing(unsigned dingID);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> GetFloorBackground();

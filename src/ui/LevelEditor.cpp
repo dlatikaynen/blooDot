@@ -13,13 +13,26 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 	/* we might emplace objects */
 	if (this->m_currentLevelEditorCellKnown && this->PeekTouchdown())
 	{
-		//this->PopTouchdown();
-		auto newCell = this->m_currentLevel->GetObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, true);
-		auto curDings = newCell->GetDings();
-		auto newDings = this->m_currentLevel->GetDing(1);
-		if (curDings == nullptr || curDings->ID() != newDings->ID())
+		bool needRedraw = false;
+		bool isErasing = static_cast<LevelEditorHUD*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::LevelEditorHUD))->IsInEraserMode();
+		if (isErasing)
 		{
-			newCell->Instantiate(newDings);
+			needRedraw = this->m_currentLevel->WeedObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y);
+		}
+		else
+		{
+			auto newCell = this->m_currentLevel->GetObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, true);
+			auto curDings = newCell->GetDings();
+			auto newDings = this->m_currentLevel->GetDing(1);
+			if (curDings == nullptr || curDings->ID() != newDings->ID())
+			{
+				newCell->Instantiate(newDings);
+				needRedraw = true;
+			}
+		}
+
+		if (needRedraw)
+		{
 			/* draw the object onto the sheet immediately */
 			auto sheetSize = this->m_currentLevel->GetSheetSizeUnits();
 			auto intersectedSheetX = this->m_currentLevelEditorCell.x / sheetSize.width;

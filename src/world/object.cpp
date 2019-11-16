@@ -12,6 +12,11 @@ void Object::Instantiate(Dings* templateDing)
 	this->m_Layer = templateDing->GetPreferredLayer();
 }
 
+void Object::Weed()
+{
+	this->m_Dings = nullptr;
+}
+
 Platform::String^ Object::Name()
 {
 	return m_Dings->Name();
