@@ -3,6 +3,7 @@
 #include <DirectXColors.h> // For named colors
 #include <string>
 #include <sstream>
+#include <iostream>
 #include <vector>
 #include <ppltasks.h>
 #include <concurrent_unordered_map.h>
@@ -58,8 +59,10 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	m_keySubtractActive = false;
 	m_keySubtractPressed = false;
 	m_keySaveActive = false;
-	m_keyLoadActive = false;
 	m_keySavePressed = false;
+	m_keySaveAsActive = false;
+	m_keySaveAsPressed = false;
+	m_keyLoadActive = false;
 	m_keyLoadPressed = false;
 
     m_lightStrength = 0.0f;
@@ -755,26 +758,19 @@ void blooDotMain::Update()
 			if (this->m_keySavePressed)
 			{
 				this->m_keySavePressed = false;
-				if (this->m_currentLevel != nullptr)
-				{
-					this->m_currentLevel->DesignSaveToFile(L"Level0001.bloodot");
-				}			
+				this->OnActionSaveLevel(false);
+			}
+
+			if (this->m_keySaveAsPressed)
+			{
+				this->m_keySaveAsPressed = false;
+				this->OnActionSaveLevel(true);
 			}
 
 			if (this->m_keyLoadPressed)
 			{
 				this->m_keyLoadPressed = false;
-				Windows::Storage::Pickers::FileOpenPicker^ openPicker = ref new Windows::Storage::Pickers::FileOpenPicker();
-				openPicker->ViewMode = Windows::Storage::Pickers::PickerViewMode::Thumbnail;
-				openPicker->SuggestedStartLocation = Windows::Storage::Pickers::PickerLocationId::DocumentsLibrary;
-				openPicker->FileTypeFilter->Append(L".bloodot");
-				create_task(openPicker->PickSingleFileAsync()).then([this](Windows::Storage::StorageFile^ file)
-				{
-					if (file)
-					{
-						this->m_worldScreen->LoadAndEnterLevel(file->Path);
-					}					
-				});	
+				this->OnActionLoadLevel();
 			}
 
 			this->m_worldScreen->Update(timerTotal, timerElapsed);
@@ -1197,6 +1193,49 @@ void blooDotMain::Update()
     });
 }
 
+void blooDotMain::OnActionSaveLevel(bool forcePrompt)
+{
+	if (this->m_currentLevel != nullptr)
+	{
+		if (!forcePrompt && this->m_currentLevel->HasSaveFileNameBeenSpecifiedBefore())
+		{
+			this->m_currentLevel->DesignSaveToFile();
+		}
+		else
+		{
+			auto savePicker = ref new Windows::Storage::Pickers::FileSavePicker();
+			savePicker->DefaultFileExtension = L".bloodot";
+			savePicker->SuggestedStartLocation = Windows::Storage::Pickers::PickerLocationId::ComputerFolder;
+			auto blooDotExtensions = ref new Platform::Collections::Vector<Platform::String^>();
+			blooDotExtensions->Append(L".bloodot");
+			savePicker->FileTypeChoices->Insert(L"blooDot Level File", blooDotExtensions);
+			savePicker->SuggestedFileName = L"New Document";
+			create_task(savePicker->PickSaveFileAsync()).then([this](Windows::Storage::StorageFile^ file)
+			{
+				if (file)
+				{
+					this->m_currentLevel->DesignSaveToFile(file->Path);
+				}
+			});
+		}
+	}
+}
+
+void blooDotMain::OnActionLoadLevel()
+{
+	Windows::Storage::Pickers::FileOpenPicker^ openPicker = ref new Windows::Storage::Pickers::FileOpenPicker();
+	openPicker->ViewMode = Windows::Storage::Pickers::PickerViewMode::Thumbnail;
+	openPicker->SuggestedStartLocation = Windows::Storage::Pickers::PickerLocationId::ComputerFolder;
+	openPicker->FileTypeFilter->Append(L".bloodot");
+	create_task(openPicker->PickSingleFileAsync()).then([this](Windows::Storage::StorageFile^ file)
+	{
+		if (file)
+		{
+			this->m_worldScreen->LoadAndEnterLevel(file->Path);
+		}
+	});
+}
+
 void blooDotMain::SaveState()
 {
     m_persistentState->SaveXMFLOAT3(":Position", m_physics.GetPosition());
@@ -1327,6 +1366,10 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 	{
 		m_keySaveActive = true;
 	}
+	else if (key == Windows::System::VirtualKey::A)
+	{
+		m_keySaveAsActive = true;
+	}
 	else if (key == Windows::System::VirtualKey::L)
 	{
 		m_keyLoadActive = true;
@@ -1382,6 +1425,14 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 		{
 			m_keySavePressed = true;
 			m_keySaveActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::A)
+	{
+		if (m_keySaveAsActive)
+		{
+			m_keySaveAsPressed = true;
+			m_keySaveAsActive = false;
 		}
 	}
 	else if (key == Windows::System::VirtualKey::L)

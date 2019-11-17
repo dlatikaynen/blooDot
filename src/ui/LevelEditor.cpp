@@ -110,10 +110,15 @@ void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 	m_d2dContext->RestoreDrawingState(m_stateBlock.Get());
 
 #ifdef _DEBUG
-	char16 str[20];
-	int len = swprintf_s(str, sizeof(str) / sizeof(char16), L"%d\r\n", blitSheetCount);
-	Platform::String^ string = ref new Platform::String(str, len);
-	OutputDebugStringW(Platform::String::Concat(L"Number of sheets blitted: ", string)->Data());
+	if (blitSheetCount != this->m_lastBlitSheetCount)
+	{
+		const int bufferLength = 16;
+		char16 str[bufferLength];
+		int len = swprintf_s(str, bufferLength, L"%d", blitSheetCount);
+		Platform::String^ string = ref new Platform::String(str, len);
+		OutputDebugStringW(Platform::String::Concat(Platform::String::Concat(L"Number of sheets blitted: ", string), L"\r\n")->Data());
+		this->m_lastBlitSheetCount = blitSheetCount;
+	}
 #endif
 }
 

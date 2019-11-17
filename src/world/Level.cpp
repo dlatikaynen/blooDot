@@ -22,6 +22,8 @@ Level::Level(Platform::String^ levelName, D2D1_SIZE_U sheetSize, unsigned extent
 	this->m_sheetSize = sheetSize;
 	this->m_Name = levelName;
 	this->Clear();
+	this->m_isDesignTime = false;
+	this->m_DesignTimeDirty = false;
 }
 
 Level::~Level()
@@ -50,6 +52,11 @@ void Level::Clear()
 		{
 			this->m_Objects.push_back((Object*)nullptr);
 		}
+	}
+
+	if (m_isDesignTime)
+	{
+		this->m_DesignTimeDirty = true;
 	}
 }
 
@@ -116,6 +123,10 @@ Object* Level::GetObjectAt(unsigned levelX, unsigned levelY, bool createIfNull)
 			auto newObject = new Object(levelX, levelY);
 			this->m_Objects[objectAddress] = newObject;
 			retrievedObject = newObject;
+			if (this->m_isDesignTime)
+			{
+				this->m_DesignTimeDirty = true;
+			}
 		}
 	}
 
@@ -132,6 +143,10 @@ bool Level::WeedObjectAt(unsigned levelX, unsigned levelY)
 		{
 			existingObject->Weed();
 			this->m_Objects[objectAddress] = nullptr;
+			if (this->m_isDesignTime)
+			{
+				this->m_DesignTimeDirty = true;
+			}
 			return true;
 		}
 	}
@@ -154,11 +169,30 @@ Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::GetFloorBackground()
 	return this->m_floorBackground;
 }
 
+void Level::SetDesignTime()
+{
+	this->m_isDesignTime = true;
+}
+
+bool Level::HasSaveFileNameBeenSpecifiedBefore()
+{
+	return !this->m_lastSavedAsFileName->IsEmpty();
+}
+
+void Level::DesignSaveToFile()
+{
+	if (this->HasSaveFileNameBeenSpecifiedBefore())
+	{
+		this->DesignSaveToFile(this->m_lastSavedAsFileName);
+	}
+}
+
 void Level::DesignSaveToFile(Platform::String^ fileName)
 {
-	std::wstring fPath = ApplicationData::Current->RoamingFolder->Path->Data();
-	std::wstring sPath = fPath.append(L"\\");
-	std::wstring fName = sPath.append(fileName->Data());
+	unsigned blockSaveCount = 0;
+	unsigned char whatsthere;
+
+	std::wstring fName = fileName->Data();
 	std::ofstream oF;
 	oF.open(fName, ios_base::out | ios_base::binary);
 	/* header */
@@ -183,7 +217,7 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 				}
 				else
 				{
-					unsigned char whatsthere = 0x0;
+					whatsthere = 0x0;
 					auto layers = allocatedObject->GetLayers();
 					if ((layers & Layers::Floor) == Layers::Floor)
 					{
@@ -215,6 +249,13 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 					{
 						allocatedObject->GetDing(Layers::Rooof)->DesignSaveToFile(&oF);
 					}
+
+#ifdef _DEBUG
+					if (whatsthere > 0)
+					{
+						++blockSaveCount;
+					}
+#endif
 				}
 			}
 		}
@@ -222,13 +263,27 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 
 	oF.flush();
 	oF.close();
+
+#ifdef _DEBUG
+	const int bufferLength = 16;
+	char16 str[bufferLength];
+	int len = swprintf_s(str, bufferLength, L"%d", blockSaveCount);
+	Platform::String^ string = ref new Platform::String(str, len);
+	OutputDebugStringW(Platform::String::Concat(Platform::String::Concat(L"Number of non-empty squares saved: ", string), L"\r\n")->Data());
+#endif
+
+	this->m_DesignTimeDirty = false;
+	this->m_lastSavedAsFileName = fileName;
 }
 
 bool Level::DesignLoadFromFile(Platform::String^ fileName)
 {
 	BasicReaderWriter^ basicReaderWriter;
 	unsigned long long offset = 0L;
-	
+#ifdef _DEBUG
+	unsigned blockLoadCount = 0;
+#endif	
+
 	Platform::Array<byte>^ rawData = basicReaderWriter->ReadData(fileName);
 	byte* srcData = rawData->Data;
 	/* parse the signature */
@@ -284,7 +339,23 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 					uint32 dingIdRooof = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
 					this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Rooof, &this->m_dingMap.at(dingIdRooof));
 				}
+
+#ifdef _DEBUG
+				blockLoadCount += (whatsthere & this->emptybit) == this->emptybit ? 0 : 1;
+#endif
 			}
 		}
 	}
+
+#ifdef _DEBUG
+	const int bufferLength = 16;
+	char16 str[bufferLength];
+	int len = swprintf_s(str, bufferLength, L"%d", blockLoadCount);
+	Platform::String^ string = ref new Platform::String(str, len);
+	OutputDebugStringW(Platform::String::Concat(Platform::String::Concat(L"Number of non-empty squares loaded: ", string), L"\r\n")->Data());
+#endif
+
+	/* so next time hitting "Save" will not prompt for file name */
+	this->m_lastSavedAsFileName = fileName;
+	this->m_DesignTimeDirty = false;
 }

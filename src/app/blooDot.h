@@ -84,6 +84,10 @@ namespace blooDot
         void OnFocusChange(bool active);
         bool IsDeferredLoadReady() {return m_deferredResourcesReady;}
 
+	protected:
+		void OnActionLoadLevel();
+		void OnActionSaveLevel(bool forcePrompt);
+
     private:
 		static const int							FPSSampleSize = 10;
 		const float									m_deadzoneRadius = 0.1f;
@@ -153,6 +157,8 @@ namespace blooDot
 		bool				m_keySubtractPressed;
 		bool				m_keySaveActive;
 		bool				m_keySavePressed;
+		bool				m_keySaveAsActive;
+		bool				m_keySaveAsPressed;
 		bool				m_keyLoadActive;
 		bool				m_keyLoadPressed;
 		bool				m_windowActive;

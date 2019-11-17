@@ -24,8 +24,12 @@ public:
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> GetDingSheet();
 	Dings* GetDing(unsigned dingID);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> GetFloorBackground();
+
+	void SetDesignTime();
 	bool DesignLoadFromFile(Platform::String^ fileName);
 	void DesignSaveToFile(Platform::String^ fileName);
+	void DesignSaveToFile();
+	bool HasSaveFileNameBeenSpecifiedBefore();
 
 private:
 	const unsigned char sigbyte = 42;
@@ -44,4 +48,8 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_floorBackground;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_dingSheet;
 	std::vector<Object*>								m_Objects;
+
+	bool												m_isDesignTime;
+	Platform::String^									m_lastSavedAsFileName;
+	bool												m_DesignTimeDirty;
 };

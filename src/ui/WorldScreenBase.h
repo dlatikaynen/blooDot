@@ -65,6 +65,7 @@ protected:
 	WorldSheet*										m_hoveringSheetSE;
 #ifdef _DEBUG
 	Microsoft::WRL::ComPtr<ID2D1Brush>				m_debugBorderBrush;
+	unsigned										m_lastBlitSheetCount;
 #endif
 	D2D1_POINT_2F									m_pointerPosition;
 	TouchMap* 										m_touchMap;
