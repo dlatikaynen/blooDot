@@ -100,16 +100,16 @@ namespace blooDot
         std::shared_ptr<DX::DeviceResources>		m_deviceResources;
         std::unique_ptr<SampleOverlay>				m_sampleOverlay;
         DX::StepTimer								m_timer;
-        std::unique_ptr<LoadScreen>                 m_loadScreen;
-		std::unique_ptr<WorldScreenBase>            m_worldScreen;
+        std::unique_ptr<LoadScreen>					m_loadScreen;
+		std::unique_ptr<WorldScreenBase>			m_worldScreen;
 		Level*										m_currentLevel;
-		Microsoft::WRL::ComPtr<ID3D11InputLayout>   m_inputLayout;
+		Microsoft::WRL::ComPtr<ID3D11InputLayout>	m_inputLayout;
         Microsoft::WRL::ComPtr<ID3D11VertexShader>  m_vertexShader;
-        Microsoft::WRL::ComPtr<ID3D11PixelShader>   m_pixelShader;
-        Microsoft::WRL::ComPtr<ID3D11SamplerState>  m_sampler;
-        Microsoft::WRL::ComPtr<ID3D11Buffer>        m_constantBuffer;
-        Microsoft::WRL::ComPtr<ID3D11BlendState>    m_blendState;
-        Windows::Devices::Sensors::Accelerometer^   m_accelerometer;
+        Microsoft::WRL::ComPtr<ID3D11PixelShader>	m_pixelShader;
+        Microsoft::WRL::ComPtr<ID3D11SamplerState>	m_sampler;
+        Microsoft::WRL::ComPtr<ID3D11Buffer>		m_constantBuffer;
+        Microsoft::WRL::ComPtr<ID3D11BlendState>	m_blendState;
+        Windows::Devices::Sensors::Accelerometer^	m_accelerometer;
         std::unique_ptr<Camera>						m_camera;
 
         ConstantBuffer		m_mazeConstantBufferData;

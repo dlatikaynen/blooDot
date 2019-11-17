@@ -284,67 +284,83 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 	unsigned blockLoadCount = 0;
 #endif	
 
-	Platform::Array<byte>^ rawData = basicReaderWriter->ReadData(fileName);
-	byte* srcData = rawData->Data;
-	/* parse the signature */
-	uint64 fileSignature = *reinterpret_cast<uint64*>(srcData + offset); offset += sizeof(uint64);
-	uint64 signatToMatch = (uint64_t)(*(uint64_t*)&blooDot::blooDotMain::BLOODOTFILE_SIGNATURE[0]);
-	if (fileSignature != signatToMatch)
+	std::ifstream iF;
+	iF.open(fileName->Data(), ios_base::in | ios_base::binary);
+	if (!iF.fail() && iF.is_open())
 	{
-		return false;
-	}
+		iF.seekg(0, std::ios::end);
+		size_t length = iF.tellg();
+		iF.seekg(0, std::ios::beg);
+		char* srcData = new char[length];
+		iF.read(srcData, length);
 
-	unsigned char sigByte = *reinterpret_cast<unsigned char*>(srcData + offset); offset += sizeof(unsigned char);
-	if (sigByte != sigbyte)
-	{
-		return false;
-	}
-
-	uint16 fileType = *reinterpret_cast<uint16*>(srcData + offset); offset += sizeof(uint16);
-	uint64 tToMatch = (uint16_t)(*(uint16_t*)&blooDot::blooDotMain::BLOODOTFILE_CONTENTTYPE_LEVEL_DESIGN[0]);
-	if (fileType != tToMatch)
-	{
-		return false;
-	}	
-
-	/* read and apply the size */
-	unsigned short extentY = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-	unsigned short extentX = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-	this->m_rectangularBounds.width = extentX;
-	this->m_rectangularBounds.height = extentY;
-	this->Clear();
-	/* read the matrix */
-	for (auto y = 0; y < this->m_rectangularBounds.height; ++y)
-	{
-		for (auto x = 0; x < this->m_rectangularBounds.width; ++x)
+		//Platform::Array<byte>^ rawData = basicReaderWriter->ReadData(fileName);
+		//byte* srcData = rawData->Data;
+		/* parse the signature */
+		uint64 fileSignature = *reinterpret_cast<uint64*>(srcData + offset); offset += sizeof(uint64);
+		uint64 signatToMatch = (uint64_t)(*(uint64_t*)&blooDot::blooDotMain::BLOODOTFILE_SIGNATURE[0]);
+		if (fileSignature != signatToMatch)
 		{
-			auto objectAddress = y * this->m_rectangularBounds.width + x;
-			if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
+			return false;
+		}
+
+		unsigned char sigByte = *reinterpret_cast<unsigned char*>(srcData + offset); offset += sizeof(unsigned char);
+		if (sigByte != sigbyte)
+		{
+			return false;
+		}
+
+		uint16 fileType = *reinterpret_cast<uint16*>(srcData + offset); offset += sizeof(uint16);
+		uint64 tToMatch = (uint16_t)(*(uint16_t*)&blooDot::blooDotMain::BLOODOTFILE_CONTENTTYPE_LEVEL_DESIGN[0]);
+		if (fileType != tToMatch)
+		{
+			return false;
+		}
+
+		/* read and apply the size */
+		unsigned short extentY = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
+		unsigned short extentX = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
+		this->m_rectangularBounds.width = extentX;
+		this->m_rectangularBounds.height = extentY;
+		this->Clear();
+		/* read the matrix */
+		for (auto y = 0; y < this->m_rectangularBounds.height; ++y)
+		{
+			for (auto x = 0; x < this->m_rectangularBounds.width; ++x)
 			{
-				unsigned char whatsthere = *reinterpret_cast<unsigned char*>(srcData + offset); offset += sizeof(const unsigned char);
-				if ((whatsthere & this->floorbit) == this->floorbit)
+				auto objectAddress = y * this->m_rectangularBounds.width + x;
+				if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
 				{
-					unsigned dingIdFloor = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-					this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Floor, &this->m_dingMap.at(dingIdFloor));
-				}
+					unsigned char whatsthere = *reinterpret_cast<unsigned char*>(srcData + offset); offset += sizeof(const unsigned char);
+					if ((whatsthere & this->floorbit) == this->floorbit)
+					{
+						unsigned dingIdFloor = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
+						this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Floor, &this->m_dingMap.at(dingIdFloor));
+					}
 
-				if ((whatsthere & this->wallsbit) == this->wallsbit)
-				{
-					uint32 dingIdWalls = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-					this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Walls, &this->m_dingMap.at(dingIdWalls));
-				}
+					if ((whatsthere & this->wallsbit) == this->wallsbit)
+					{
+						uint32 dingIdWalls = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
+						this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Walls, &this->m_dingMap.at(dingIdWalls));
+					}
 
-				if ((whatsthere & this->rooofbit) == this->rooofbit)
-				{
-					uint32 dingIdRooof = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-					this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Rooof, &this->m_dingMap.at(dingIdRooof));
-				}
+					if ((whatsthere & this->rooofbit) == this->rooofbit)
+					{
+						uint32 dingIdRooof = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
+						this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Rooof, &this->m_dingMap.at(dingIdRooof));
+					}
 
 #ifdef _DEBUG
-				blockLoadCount += (whatsthere & this->emptybit) == this->emptybit ? 0 : 1;
+					blockLoadCount += (whatsthere & this->emptybit) == this->emptybit ? 0 : 1;
 #endif
+				}
 			}
 		}
+
+		delete[] srcData;
+		/* so next time hitting "Save" will not prompt for file name */
+		this->m_lastSavedAsFileName = fileName;
+		this->m_DesignTimeDirty = false;
 	}
 
 #ifdef _DEBUG
@@ -354,8 +370,4 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 	Platform::String^ string = ref new Platform::String(str, len);
 	OutputDebugStringW(Platform::String::Concat(Platform::String::Concat(L"Number of non-empty squares loaded: ", string), L"\r\n")->Data());
 #endif
-
-	/* so next time hitting "Save" will not prompt for file name */
-	this->m_lastSavedAsFileName = fileName;
-	this->m_DesignTimeDirty = false;
 }

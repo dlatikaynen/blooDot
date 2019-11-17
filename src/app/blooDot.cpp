@@ -1231,7 +1231,12 @@ void blooDotMain::OnActionLoadLevel()
 	{
 		if (file)
 		{
-			this->m_worldScreen->LoadAndEnterLevel(file->Path);
+			auto newLevel = m_worldScreen->LoadAndEnterLevel(file->Path);
+			if (newLevel != nullptr)
+			{
+				delete this->m_currentLevel;
+				this->m_currentLevel = newLevel;
+			}
 		}
 	});
 }

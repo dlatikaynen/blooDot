@@ -1,4 +1,4 @@
-#pragma once
+	#pragma once
 
 #include "..\dx\DirectXHelper.h"
 #include "..\dx\DeviceResources.h"
@@ -26,22 +26,22 @@ public:
 	virtual void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
 
 	/* logical */
-	void LoadAndEnterLevel(Platform::String^ loadFromFile);
+	Level* LoadAndEnterLevel(Platform::String^ loadFromFile);
 	void EnterLevel(Level* level);
 
 protected:
 	const float										SCROLL_TRESHOLD_FACT = 0.61F;
 
 	std::shared_ptr<DX::DeviceResources>			m_deviceResources;
-	Microsoft::WRL::ComPtr<ID2D1Factory1>           m_d2dFactory;
-    Microsoft::WRL::ComPtr<ID2D1Device>             m_d2dDevice;
-    Microsoft::WRL::ComPtr<ID2D1DeviceContext>      m_d2dContext;
-    Microsoft::WRL::ComPtr<ID2D1DrawingStateBlock>  m_stateBlock;
+	Microsoft::WRL::ComPtr<ID2D1Factory1>			m_d2dFactory;
+    Microsoft::WRL::ComPtr<ID2D1Device>				m_d2dDevice;
+    Microsoft::WRL::ComPtr<ID2D1DeviceContext>		m_d2dContext;
+    Microsoft::WRL::ComPtr<ID2D1DrawingStateBlock>	m_stateBlock;
 	BrushRegistry									m_Brushes;
-    Microsoft::WRL::ComPtr<IWICImagingFactory>      m_wicFactory;
-	Microsoft::WRL::ComPtr<ID2D1Bitmap>             m_notimeforcaution;
+    Microsoft::WRL::ComPtr<IWICImagingFactory>		m_wicFactory;
+	Microsoft::WRL::ComPtr<ID2D1Bitmap>				m_notimeforcaution;
 	D2D1_SIZE_F										m_viewportSize;
-	D2D1_SIZE_U                                     m_viewportSizeSquares;
+	D2D1_SIZE_U										m_viewportSizeSquares;
 	bool											m_isResizing;
 	Facings											m_isMoving;
 	unsigned										m_movingSpeedX;

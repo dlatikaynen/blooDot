@@ -301,12 +301,13 @@ void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 p
 #endif
 }
 
-void WorldScreenBase::LoadAndEnterLevel(Platform::String^ loadFromFile)
+Level* WorldScreenBase::LoadAndEnterLevel(Platform::String^ loadFromFile)
 {
 	auto loadedLevel = new Level(L"Gartenwelt-1", D2D1::SizeU(50, 30), 720, 720);
 	loadedLevel->Initialize(this->m_deviceResources, &this->m_Brushes);
 	loadedLevel->DesignLoadFromFile(loadFromFile);
 	this->EnterLevel(loadedLevel);
+	return loadedLevel;
 }
 
 void WorldScreenBase::EnterLevel(Level* level)

@@ -7,7 +7,7 @@
 #include "..\dings\dings.h"
 #include "Object.h"
 
-/* A level is a set of worldsheets belonging to the same floor level, hence its name */
+/* A level is a set of worldsheets belonging to the same floor level, hence its name :) */
 class Level
 {
 public:
