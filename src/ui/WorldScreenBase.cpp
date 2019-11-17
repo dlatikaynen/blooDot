@@ -294,11 +294,25 @@ void WorldScreenBase::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 p
 #endif
 }
 
+void WorldScreenBase::LoadAndEnterLevel(Platform::String^ loadFromFile)
+{
+	auto loadedLevel = new Level(L"Gartenwelt-1", D2D1::SizeU(50, 30), 720, 720);
+	loadedLevel->Initialize(this->m_deviceResources, &this->m_Brushes);
+	loadedLevel->DesignLoadFromFile(loadFromFile);
+	this->EnterLevel(loadedLevel);
+}
+
 void WorldScreenBase::EnterLevel(Level* level)
 {
 	this->m_currentLevel = level;
+	this->m_sheetHoveringSituationKnown = false;
 
 	/* generate the sheets for this level */
+	if (!this->m_Sheets.empty())
+	{
+		this->m_Sheets.clear();
+	}
+
 	auto subscriptX = level->GetNumOfSheetsWE();
 	auto subscriptY = level->GetNumOfSheetsNS();
 	for (auto y = 0; y < subscriptY; ++y)

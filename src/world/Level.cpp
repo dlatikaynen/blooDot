@@ -224,7 +224,6 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 	oF.close();
 }
 
-
 bool Level::DesignLoadFromFile(Platform::String^ fileName)
 {
 	BasicReaderWriter^ basicReaderWriter;
@@ -268,8 +267,23 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 			if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
 			{
 				unsigned char whatsthere = *reinterpret_cast<unsigned char*>(srcData + offset); offset += sizeof(const unsigned char);
+				if ((whatsthere & this->floorbit) == this->floorbit)
+				{
+					unsigned dingIdFloor = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
+					this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Floor, &this->m_dingMap.at(dingIdFloor));
+				}
 
+				if ((whatsthere & this->wallsbit) == this->wallsbit)
+				{
+					uint32 dingIdWalls = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
+					this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Walls, &this->m_dingMap.at(dingIdWalls));
+				}
 
+				if ((whatsthere & this->rooofbit) == this->rooofbit)
+				{
+					uint32 dingIdRooof = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
+					this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Rooof, &this->m_dingMap.at(dingIdRooof));
+				}
 			}
 		}
 	}

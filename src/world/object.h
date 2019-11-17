@@ -8,6 +8,7 @@ class Object
 public:
 	Object::Object(unsigned posInLevelX, unsigned posInLevelY);
 	void				Instantiate(Dings* templateDing);
+	void				InstantiateInLayer(Layers inLayer, Dings* templateDing);
 	void				Weed();
 	Platform::String^	GetName();
 	Layers				GetLayers();

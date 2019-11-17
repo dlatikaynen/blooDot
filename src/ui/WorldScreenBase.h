@@ -26,6 +26,7 @@ public:
 	virtual void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
 
 	/* logical */
+	void LoadAndEnterLevel(Platform::String^ loadFromFile);
 	void EnterLevel(Level* level);
 
 protected:

@@ -8,8 +8,13 @@ Object::Object(unsigned posInLevelX, unsigned posInLevelY)
 
 void Object::Instantiate(Dings* templateDing)
 {
-	this->m_Layers = templateDing->GetPreferredLayer();
-	switch (this->m_Layers)
+	auto preferredLayer = templateDing->GetPreferredLayer();
+	this->InstantiateInLayer(preferredLayer, templateDing);
+}
+
+void Object::InstantiateInLayer(Layers inLayer, Dings* templateDing)
+{
+	switch (inLayer)
 	{
 	case Layers::Floor:
 		this->m_DingFloor = templateDing;
@@ -23,6 +28,8 @@ void Object::Instantiate(Dings* templateDing)
 		this->m_DingRooof = templateDing;
 		break;
 	}
+
+	this->m_Layers = static_cast<Layers>(this->m_Layers | inLayer);
 }
 
 void Object::Weed()

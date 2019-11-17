@@ -772,12 +772,7 @@ void blooDotMain::Update()
 				{
 					if (file)
 					{
-						if (this->m_currentLevel == nullptr)
-						{
-							this->m_currentLevel = new Level(L"default", D2D1::SizeU(50, 30), 0, 0);
-						}
-
-						this->m_currentLevel->DesignLoadFromFile(file->Path);
+						this->m_worldScreen->LoadAndEnterLevel(file->Path);
 					}					
 				});	
 			}
