@@ -16,9 +16,9 @@ using namespace Windows::Foundation;
 using namespace Windows::System::Diagnostics;
 using namespace concurrency;
 
-const byte blooDotMain::BLOODOTFILE_SIGNATURE[8]{ 0x03, 'L','S','L', 0x04, 'J','M','L' };
-const byte blooDotMain::BLOODOTFILE_CONTENTTYPE_GOLANIMATION[2]{ 0xc9, 0x05 };
-const byte blooDotMain::BLOODOTFILE_CONTENTTYPE_LEVEL_DESIGN[2]{ 0xd1, 0x71 };
+const byte blooDotMain::BLOODOTFILE_SIGNATURE[8] { 0x03, 'L','S','L', 0x04, 'J','M','L' };
+const byte blooDotMain::BLOODOTFILE_CONTENTTYPE_GOLANIMATION[2] { 0xc9, 0x05 };
+const byte blooDotMain::BLOODOTFILE_CONTENTTYPE_LEVEL_DESIGN[2] { 0xd1, 0x71 };
 
 inline D2D1_RECT_F ConvertRect(Windows::Foundation::Size source)
 {

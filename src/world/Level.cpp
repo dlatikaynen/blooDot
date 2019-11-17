@@ -16,6 +16,16 @@ using namespace D2D1;
 using namespace std;
 using namespace concurrency;
 
+// The wonder of the clumsy packing of wang tiles in a 2-topology
+// See clumsypack.xlsx for illumination. this set has its own primes,
+// its own pi, and its own euler number
+const Facings Level::CLUMSY_PACKING[256] {
+	Facings::Shy,
+	Facings::Shy,
+	Facings::South,
+	Facings::South
+};
+
 Level::Level(Platform::String^ levelName, D2D1_SIZE_U sheetSize, unsigned extentWE, unsigned extentNS)
 {
 	this->m_rectangularBounds = D2D1::SizeU(extentWE, extentNS);

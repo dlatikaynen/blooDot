@@ -52,4 +52,6 @@ private:
 	bool												m_isDesignTime;
 	Platform::String^									m_lastSavedAsFileName;
 	bool												m_DesignTimeDirty;
+
+	static const Facings CLUMSY_PACKING[256];
 };
