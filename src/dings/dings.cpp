@@ -1,5 +1,17 @@
 #include "..\PreCompiledHeaders.h"
+#include <fstream>
 #include "dings.h"
+
+using namespace Windows::Storage;
+using namespace Windows::Storage::Streams;
+using namespace Windows::ApplicationModel;
+using namespace Windows::UI::Core;
+using namespace Windows::Foundation;
+using namespace Microsoft::WRL;
+using namespace Windows::UI::ViewManagement;
+using namespace Windows::Graphics::Display;
+using namespace D2D1;
+using namespace std;
 
 Facings& operator |=(Facings& a, Facings b)
 {
@@ -13,7 +25,7 @@ Dings::Dings(int dingID, Platform::String^ dingName, BrushRegistry* drawBrushes)
 	this->m_Brushes = drawBrushes;
 }
 
-int Dings::ID() 
+unsigned Dings::ID() 
 {
 	return this->m_ID;
 }
@@ -265,4 +277,9 @@ D2D1_POINT_2U Dings::GetSheetPlacement(Facings coalesced)
 	}
 
 	return this->m_lookupShy;
+}
+
+void Dings::DesignSaveToFile(std::ofstream* toFile)
+{
+	toFile->write((char*)&this->m_ID, sizeof(uint32));
 }

@@ -117,8 +117,8 @@ void WorldSheet::Populate()
 				auto objectX = this->m_tiedToLevel->GetObjectAt(worldX, worldY, false);
 				if (objectX != nullptr)
 				{
-					auto layer = objectX->Layer();					
-					auto dings = objectX->GetDings();
+					auto layer = objectX->GetLayers();					
+					auto dings = objectX->GetDing(layer);
 					if (layer == Layers::Floor)
 					{
 						if (!beganDrawFloor)
@@ -206,10 +206,21 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y)
 	auto worldX = x + this->m_NWcornerInWorldSquares.x;
 	auto worldY = y + this->m_NWcornerInWorldSquares.y;
 	auto objectX = this->m_tiedToLevel->GetObjectAt(worldX, worldY, false);
-	if (objectX != nullptr)
+	if (objectX == nullptr)
 	{
-		auto layer = objectX->Layer();
-		auto dings = objectX->GetDings();
+		/* erase by transparenting everything on that layer */
+		if (!beganDrawWalls)
+		{
+			this->m_walls->BeginDraw();
+			beganDrawWalls = true;
+		}
+
+		this->EraseSquare(this->m_walls, x, y);
+	}
+	else
+	{
+		auto layer = objectX->GetLayers();
+		auto dings = objectX->GetDing(layer);
 		if (layer == Layers::Floor)
 		{
 			if (!beganDrawFloor)
@@ -277,6 +288,14 @@ void WorldSheet::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr
 	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
 	D2D1_RECT_F placementRect = D2D1::RectF(placementX * 49.0f, placementY * 49.0f, placementX * 49.0f + 49.0f, placementY * 49.0f + 49.0f);
 	renderTarget->DrawBitmap(dingSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);	
+}
+
+void WorldSheet::EraseSquare(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, int placementX, int placementY)
+{
+	D2D1_RECT_F placementRect = D2D1::RectF(placementX * 49.0f, placementY * 49.0f, placementX * 49.0f + 49.0f, placementY * 49.0f + 49.0f);
+	renderTarget->PushAxisAlignedClip(placementRect, D2D1_ANTIALIAS_MODE::D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
+	renderTarget->Clear();
+	renderTarget->PopAxisAlignedClip();
 }
 
 void WorldSheet::ComputeViewportOverlap(D2D1_RECT_F viewPort)

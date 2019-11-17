@@ -2,37 +2,98 @@
 
 Object::Object(unsigned posInLevelX, unsigned posInLevelY)
 {
-	this->m_Dings = nullptr;
+	this->Weed();
 	this->m_positionInLevel = D2D1::Point2U(posInLevelX, posInLevelY);
 }
 
 void Object::Instantiate(Dings* templateDing)
 {
-	this->m_Dings = templateDing;	
-	this->m_Layer = templateDing->GetPreferredLayer();
+	this->m_Layers = templateDing->GetPreferredLayer();
+	switch (this->m_Layers)
+	{
+	case Layers::Floor:
+		this->m_DingFloor = templateDing;
+		break;
+
+	case Layers::Walls:
+		this->m_DingWalls = templateDing;
+		break;
+
+	case Layers::Rooof:
+		this->m_DingRooof = templateDing;
+		break;
+	}
 }
 
 void Object::Weed()
 {
-	this->m_Dings = nullptr;
+	this->m_DingFloor = nullptr;
+	this->m_DingWalls = nullptr;
+	this->m_DingRooof = nullptr;
+	this->m_FacingFloor = Facings::Shy;
+	this->m_FacingWalls = Facings::Shy;
+	this->m_FacingRooof = Facings::Shy;
 }
 
-Platform::String^ Object::Name()
+Platform::String^ Object::GetName()
 {
-	return m_Dings->Name();
+	std::wstring names;
+	if (this->m_DingFloor != nullptr)
+	{
+		if (names.length() > 0)
+		{
+			names.append(L"\r\n");
+		}
+
+		names.append(this->m_DingFloor->Name()->Data());
+	}
+
+	if (this->m_DingWalls != nullptr)
+	{
+		if (names.length() > 0)
+		{
+			names.append(L"\r\n");
+		}
+
+		names.append(this->m_DingWalls->Name()->Data());
+	}
+
+	if (this->m_DingRooof != nullptr)
+	{
+		if (names.length() > 0)
+		{
+			names.append(L"\r\n");
+		}
+
+		names.append(this->m_DingRooof->Name()->Data());
+	}
+
+	return ref new Platform::String(names.c_str());
 }
 
-Layers Object::Layer()
+Layers Object::GetLayers()
 {
-	return m_Layer;
+	return m_Layers;
 }
 
-Dings* Object::GetDings()
+Dings* Object::GetDing(Layers ofLayer)
 {
-	return this->m_Dings;
+	switch (this->m_Layers)
+	{
+	case Layers::Floor:
+		return this->m_DingFloor;
+
+	case Layers::Walls:
+		return this->m_DingWalls;
+
+	case Layers::Rooof:
+		return this->m_DingRooof;
+	}
+
+	return nullptr;
 }
 
 Facings	Object::PlacementFacing()
 {
-	return this->m_Facing;
+	return this->m_FacingWalls;
 }

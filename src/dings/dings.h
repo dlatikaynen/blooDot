@@ -118,15 +118,16 @@ class Dings
 public:
 	Dings(int dingID, Platform::String^ dingName, BrushRegistry* drawBrushes);
 
-	int					ID();
+	unsigned			ID();
 	Platform::String^	Name();
 	void				Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY);
 	virtual void		DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	D2D1_POINT_2U		GetSheetPlacement(Facings coalesced);
 	Layers				GetPreferredLayer();
+	void				DesignSaveToFile(std::ofstream* toFile);
 
 protected:
-	int					m_ID;
+	unsigned			m_ID;
 	Platform::String^	m_Name;
 	BrushRegistry*		m_Brushes;
 	Facings				m_Facings;

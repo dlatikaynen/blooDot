@@ -11,5 +11,6 @@ public:
 private:
 	void DrawLevelEditorRaster();
 
+	bool m_IsErasing;
 };
 

@@ -9,17 +9,21 @@ public:
 	Object::Object(unsigned posInLevelX, unsigned posInLevelY);
 	void				Instantiate(Dings* templateDing);
 	void				Weed();
-	Platform::String^	Name();
-	Layers				Layer();
-	Dings*				GetDings();
+	Platform::String^	GetName();
+	Layers				GetLayers();
+	Dings*				GetDing(Layers ofLayer);
 	Facings				PlacementFacing();
 
 protected:
 
 private:
 	D2D1_POINT_2U		m_positionInLevel;
-	Dings*				m_Dings;
-	Layers				m_Layer;	
-	Facings				m_Facing;
+	Layers				m_Layers;
+	Dings*				m_DingFloor;
+	Dings*				m_DingWalls;
+	Dings*				m_DingRooof;
+	Facings				m_FacingFloor;
+	Facings				m_FacingWalls;
+	Facings				m_FacingRooof;
 };
 

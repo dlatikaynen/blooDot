@@ -60,6 +60,7 @@ namespace blooDot
 
 		static const byte BLOODOTFILE_SIGNATURE[8];
 		static const byte BLOODOTFILE_CONTENTTYPE_GOLANIMATION[2];
+		static const byte BLOODOTFILE_CONTENTTYPE_LEVEL_DESIGN[2];
 
         // IDeviceNotify
         virtual void OnDeviceLost();
@@ -150,7 +151,11 @@ namespace blooDot
 		bool				m_keyDownPressed;
 		bool				m_keySubtractActive;
 		bool				m_keySubtractPressed;
-        bool				m_windowActive;
+		bool				m_keySaveActive;
+		bool				m_keySavePressed;
+		bool				m_keyLoadActive;
+		bool				m_keyLoadPressed;
+		bool				m_windowActive;
 		bool				m_deferredResourcesReadyPending;
 		bool				m_deferredResourcesReady;
         PersistentState^	m_persistentState;

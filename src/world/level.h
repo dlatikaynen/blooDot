@@ -24,8 +24,17 @@ public:
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> GetDingSheet();
 	Dings* GetDing(unsigned dingID);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> GetFloorBackground();
+	bool DesignLoadFromFile(Platform::String^ fileName);
+	void DesignSaveToFile(Platform::String^ fileName);
 
 private:
+	const unsigned char sigbyte = 42;
+	const unsigned char emptybit = 0x40;
+	const unsigned char floorbit = 0x2;
+	const unsigned char wallsbit = 0x4;
+	const unsigned char rooofbit = 0x16;
+
+	void Clear();
 	unsigned GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet);
 
 	Platform::String^									m_Name;

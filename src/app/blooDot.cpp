@@ -1,6 +1,11 @@
 ﻿#include "..\PreCompiledHeaders.h"
 #include "blooDot.h"
 #include <DirectXColors.h> // For named colors
+#include <string>
+#include <sstream>
+#include <vector>
+#include <ppltasks.h>
+#include <concurrent_unordered_map.h>
 #include "..\dx\DirectXHelper.h" // For ThrowIfFailed
 
 using namespace blooDot;
@@ -8,9 +13,11 @@ using namespace Windows::Gaming::Input;
 using namespace Platform::Collections;
 using namespace Windows::Foundation;
 using namespace Windows::System::Diagnostics;
+using namespace concurrency;
 
 const byte blooDotMain::BLOODOTFILE_SIGNATURE[8]{ 0x03, 'L','S','L', 0x04, 'J','M','L' };
 const byte blooDotMain::BLOODOTFILE_CONTENTTYPE_GOLANIMATION[2]{ 0xc9, 0x05 };
+const byte blooDotMain::BLOODOTFILE_CONTENTTYPE_LEVEL_DESIGN[2]{ 0xd1, 0x71 };
 
 inline D2D1_RECT_F ConvertRect(Windows::Foundation::Size source)
 {
@@ -50,6 +57,10 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
     m_windowActive = false;
 	m_keySubtractActive = false;
 	m_keySubtractPressed = false;
+	m_keySaveActive = false;
+	m_keyLoadActive = false;
+	m_keySavePressed = false;
+	m_keyLoadPressed = false;
 
     m_lightStrength = 0.0f;
     m_targetLightStrength = 0.0f;
@@ -688,22 +699,22 @@ void blooDotMain::Update()
 	float timerTotal;
 	float timerElapsed;
 
-	if (m_gameState == GameState::Initial)
+	if (this->m_gameState == GameState::Initial)
 	{
-		SetGameState(GameState::LoadScreen);
+		this->SetGameState(GameState::LoadScreen);
 	}
 
 	// Update scene objects.
-    m_timer.Tick([&]()
+	this->m_timer.Tick([&]()
     {
-		timerTotal = static_cast<float>(m_timer.GetTotalSeconds());
-		timerElapsed = static_cast<float>(m_timer.GetElapsedSeconds());
+		timerTotal = static_cast<float>(this->m_timer.GetTotalSeconds());
+		timerElapsed = static_cast<float>(this->m_timer.GetElapsedSeconds());
 
 		/* compute FPS for for Lukas */
-		ComputeFPS(timerElapsed);
-		if (m_timer.GetFrameCount() % 100 == 0)
+		this->ComputeFPS(timerElapsed);
+		if (this->m_timer.GetFrameCount() % 100 == 0)
 		{
-			m_nerdStatsDisplay.UpdateFPS(QueryFPS());
+			this->m_nerdStatsDisplay.UpdateFPS(this->QueryFPS());
 		}
 
 		UserInterface::GetInstance().Update(timerTotal, timerElapsed);
@@ -711,28 +722,28 @@ void blooDotMain::Update()
 		// When the game is first loaded, we display a load screen
         // and load any deferred resources that might be too expensive
         // to load during initialization.
-		if (m_gameState == GameState::LoadScreen)
+		if (this->m_gameState == GameState::LoadScreen)
 		{
 			// At this point we can draw a progress bar, or if we had
 			// loaded audio, we could play audio during the loading process.
-			m_loadScreen->Update(timerTotal, timerElapsed);
+			this->m_loadScreen->Update(timerTotal, timerElapsed);
 			return;
 		}
-		else if (m_gameState == GameState::LevelEditor)
+		else if (this->m_gameState == GameState::LevelEditor)
 		{
-			if (!m_audio.m_isAudioStarted)
+			if (!this->m_audio.m_isAudioStarted)
 			{
-				m_audio.Start();
+				this->m_audio.Start();
 			}
 
-			m_worldScreen->SetControl(
+			this->m_worldScreen->SetControl(
 				this->m_pointerPosition, 
 				&this->m_touches,
 				this->m_shiftKeyActive, 
-				m_keyLeftPressed, 
-				m_keyRightPressed, 
-				m_keyUpPressed, 
-				m_keyDownPressed
+				this->m_keyLeftPressed,
+				this->m_keyRightPressed,
+				this->m_keyUpPressed,
+				this->m_keyDownPressed
 			);
 
 			if (this->m_keySubtractPressed)
@@ -740,17 +751,45 @@ void blooDotMain::Update()
 				this->m_keySubtractPressed = false;
 				this->m_levelEditorHUD.ToggleEraser();
 			}
+			
+			if (this->m_keySavePressed)
+			{
+				this->m_keySavePressed = false;
+				if (this->m_currentLevel != nullptr)
+				{
+					this->m_currentLevel->DesignSaveToFile(L"Level0001.bloodot");
+				}			
+			}
 
-			m_worldScreen->Update(timerTotal, timerElapsed);
+			if (this->m_keyLoadPressed)
+			{
+				this->m_keyLoadPressed = false;
+				Windows::Storage::Pickers::FileOpenPicker^ openPicker = ref new Windows::Storage::Pickers::FileOpenPicker();
+				openPicker->ViewMode = Windows::Storage::Pickers::PickerViewMode::Thumbnail;
+				openPicker->SuggestedStartLocation = Windows::Storage::Pickers::PickerLocationId::DocumentsLibrary;
+				openPicker->FileTypeFilter->Append(L".bloodot");
+				create_task(openPicker->PickSingleFileAsync()).then([this](Windows::Storage::StorageFile^ file)
+				{
+					if (file)
+					{
+						if (this->m_currentLevel == nullptr)
+						{
+							this->m_currentLevel = new Level(L"default", D2D1::SizeU(50, 30), 0, 0);
+						}
+
+						this->m_currentLevel->DesignLoadFromFile(file->Path);
+					}					
+				});	
+			}
+
+			this->m_worldScreen->Update(timerTotal, timerElapsed);
 			return;
 		}
-
         
-
-        switch (m_gameState)
+        switch (this->m_gameState)
         {
 			case GameState::PreGameCountdown:
-				if (m_preGameCountdownTimer.IsCountdownComplete())
+				if (this->m_preGameCountdownTimer.IsCountdownComplete())
 				{
 					SetGameState(GameState::InGameActive);
 				}
@@ -1289,6 +1328,14 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 	{
 		m_keySubtractActive = true;
 	}
+	else if (key == Windows::System::VirtualKey::S)
+	{
+		m_keySaveActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::L)
+	{
+		m_keyLoadActive = true;
+	}
 	else if (key == Windows::System::VirtualKey::Left)
 	{
 		m_keyLeftPressed = true;
@@ -1332,6 +1379,22 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 		{
 			m_keySubtractPressed = true;
 			m_keySubtractActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::S)
+	{
+		if (m_keySaveActive)
+		{
+			m_keySavePressed = true;
+			m_keySaveActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::L)
+	{
+		if (m_keyLoadActive)
+		{
+			m_keyLoadPressed = true;
+			m_keyLoadActive = false;
 		}
 	}
 	else if (key == Windows::System::VirtualKey::Shift)
