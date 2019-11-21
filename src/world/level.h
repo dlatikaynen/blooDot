@@ -23,6 +23,7 @@ public:
 	bool WeedObjectAt(unsigned levelX, unsigned levelY);
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> GetDingSheet();
 	Dings* GetDing(unsigned dingID);
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> CreateDingImage(unsigned dingID);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> GetFloorBackground();
 
 	void SetDesignTime();
@@ -47,6 +48,7 @@ private:
 	D2D1_SIZE_U											m_sheetSize;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_floorBackground;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_dingSheet;
+	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_dingImage;
 	std::vector<Object*>								m_Objects;
 
 	bool												m_isDesignTime;

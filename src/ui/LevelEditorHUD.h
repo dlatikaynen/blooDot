@@ -10,6 +10,10 @@ public:
 	virtual void Render();
 	virtual void ReleaseDeviceDependentResources();
 
+	bool IsDingSelected();
+	void SelectDing(unsigned dingID, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage);
+
+	unsigned SelectedDingID();
 	void ToggleEraser();
 	bool IsInEraserMode();
 
@@ -25,5 +29,7 @@ protected:
 	Microsoft::WRL::ComPtr<IDWriteTextLayout>       m_textLayout;
 
 private:
+	unsigned										m_selectedDingID;
 	bool											m_isEraserChosen;
+	Microsoft::WRL::ComPtr<ID2D1Bitmap>				m_selectedDingImage;
 };

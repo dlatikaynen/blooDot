@@ -18,7 +18,7 @@ using namespace concurrency;
 
 // The wonder of the clumsy packing of wang tiles in a 2-topology
 // See clumsypack.xlsx for illumination. this set has its own primes,
-// its own pi, and its own euler number
+// its own pi, and its own fine structure constant, probably
 const Facings Level::CLUMSY_PACKING[256] {
 	Facings::Shy,
 	Facings::Shy,
@@ -45,6 +45,7 @@ Level::~Level()
 	}
 
 	this->m_dingSheet.Reset();
+	this->m_dingImage.Reset();
 	this->m_floorBackground.Reset();
 }
 
@@ -82,6 +83,7 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	auto dalek = Dalek(brushRegistry);
 
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(800.0f, 600.0f), &this->m_dingSheet));
+	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT), &this->m_dingImage));
 	m_dingSheet->BeginDraw();
 
 	deflt.Draw(m_dingSheet, 0, 0);
@@ -97,6 +99,17 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 Dings* Level::GetDing(unsigned dingID)
 {
 	return &(this->m_dingMap.at(dingID));
+}
+
+Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::CreateDingImage(unsigned dingID)
+{
+	auto dingToRender = this->GetDing(dingID);
+	m_dingImage->BeginDraw();
+
+	ID2D1Bitmap *resultBitmap = NULL;
+	m_dingImage->GetBitmap(&resultBitmap);
+	DX::ThrowIfFailed(m_dingSheet->EndDraw());
+	return new Microsoft::WRL::ComPtr<ID2D1Bitmap>(resultBitmap);
 }
 
 unsigned Level::GetNumOfSheetsWE()

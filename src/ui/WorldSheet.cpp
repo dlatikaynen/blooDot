@@ -117,7 +117,7 @@ void WorldSheet::Populate()
 				auto objectX = this->m_tiedToLevel->GetObjectAt(worldX, worldY, false);
 				if (objectX != nullptr)
 				{
-					auto layer = objectX->GetLayers();					
+					auto layer = objectX->GetLayers();
 					auto dings = objectX->GetDing(layer);
 					if (layer == Layers::Floor)
 					{

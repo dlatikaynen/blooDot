@@ -2,6 +2,11 @@
 #include "UserInterface.h"
 #include "..\dx\DirectXHelper.h"
 
+LevelEditor::LevelEditor() : WorldScreenBase() 
+{
+	this->m_selectedDingID = 1;
+}
+
 LevelEditor::~LevelEditor()
 {
 }
@@ -10,10 +15,20 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 {
 	WorldScreenBase::Update(timeTotal, timeDelta);
 
+	/* we would have a HUD showing the currently selected toolbox ding */
+	auto myHUD = static_cast<LevelEditorHUD*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::LevelEditorHUD));
+	if (!myHUD->IsDingSelected())
+	{
+		
+		//myHUD->SelectDing(this->m_selectedDingID, dingPic);
+	}
+
 	/* we might emplace objects */
 	if (this->m_currentLevelEditorCellKnown)
 	{
-		this->m_IsErasing = static_cast<LevelEditorHUD*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::LevelEditorHUD))->IsInEraserMode();
+		this->m_IsErasing = myHUD->IsInEraserMode();
+		this->m_selectedDingID = myHUD->SelectedDingID();
+
 		if (this->PeekTouchdown())
 		{
 			bool needRedraw = false;
