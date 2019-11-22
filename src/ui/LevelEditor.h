@@ -11,6 +11,7 @@ public:
 	void SelectDingForPlacement(unsigned dingID);
 	void SelectNextDingForPlacement();
 	void SelectPreviousDingForPlacement();
+	Dings* SelectedDing();
 
 private:
 	void DrawLevelEditorRaster();

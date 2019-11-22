@@ -25,9 +25,7 @@ protected:
 
 	Platform::String^   m_text;
 	D2D1_RECT_F         m_textExtents;
-
 	TextStyle           m_textStyle;
-
 	float               m_fadeStartingOpacity;
 	float               m_fadeOutTime;
 	float               m_fadeOutTimeElapsed;

@@ -20,7 +20,7 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 	if (this->m_selectedDingID > 0 && this->m_selectedDingID != myHUD->SelectedDingID())
 	{
 		auto dingPic = this->m_currentLevel->CreateDingImage(this->m_selectedDingID);
-		myHUD->SelectDing(this->m_selectedDingID, dingPic);
+		myHUD->SelectDing(this->SelectedDing(), dingPic);
 	}
 
 	/* we might emplace objects */
@@ -186,13 +186,6 @@ void LevelEditor::DrawLevelEditorRaster()
 	auto pointX = this->m_pointerPosition.x;
 	auto pointY = this->m_pointerPosition.y;
 
-	/*m_d2dContext->DrawRectangle(D2D1::RectF(
-		pointX - 1.0F,
-		pointY - 1.0F,
-		pointX + 1.0F,
-		pointY + 1.0F
-	), highlight.Get(), 1.0F, NULL);*/
-
 	/* the cursor aka the mouse may hover over one grid square */
 	auto localSquareX = static_cast<unsigned>((pointX + xAdjust) / blooDot::Consts::SQUARE_WIDTH);
 	auto localSquareY = static_cast<unsigned>((pointY + yAdjust) / blooDot::Consts::SQUARE_HEIGHT);
@@ -226,6 +219,16 @@ void LevelEditor::DrawLevelEditorRaster()
 	{
 		this->m_currentLevelEditorCellKnown = this->m_currentLevelEditorCell.x > 0 || this->m_currentLevelEditorCell.y > 0;
 	}
+}
+
+Dings* LevelEditor::SelectedDing()
+{
+	if (this->m_selectedDingID > 0)
+	{
+		return this->m_currentLevel->GetDing(m_selectedDingID);
+	}
+
+	return nullptr;
 }
 
 void LevelEditor::SelectDingForPlacement(unsigned dingID)

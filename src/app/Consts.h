@@ -8,6 +8,7 @@ namespace blooDot
 		static const float								SQUARE_WIDTH;
 		static const float								SQUARE_HEIGHT;
 		static const float								GOLDEN_RATIO;
+		static const float								DIALOG_PADDING;
 	};
 
 	enum class UIElement

@@ -210,7 +210,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="blooDot_TemporaryKey.pfx" />
-    <None Include="ClassDiagram.cd" />
     <None Include="Media\Audio\background.wma">
       <DeploymentContent>true</DeploymentContent>
     </None>
