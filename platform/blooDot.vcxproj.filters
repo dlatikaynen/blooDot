@@ -132,6 +132,7 @@
     <ClCompile Include="..\src\ui\LevelEditorHUD.cpp">
       <Filter>ui</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\dings\floor-like\wasser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\sound\Audio.h" />
@@ -297,6 +298,7 @@
     <None Include="blooDot_TemporaryKey.pfx" />
     <None Include="Media\Audio\background.wma" />
     <None Include="Media\Bitmaps\blooDot.bmp" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="algo">

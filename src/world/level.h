@@ -23,6 +23,9 @@ public:
 	bool WeedObjectAt(unsigned levelX, unsigned levelY);
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> GetDingSheet();
 	Dings* GetDing(unsigned dingID);
+	unsigned GetNextDingID(unsigned dingID);
+	unsigned GetPreviousDingID(unsigned dingID);
+	unsigned ConfirmDingID(unsigned dingID);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> CreateDingImage(unsigned dingID);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> GetFloorBackground();
 

@@ -73,7 +73,6 @@ protected:
 	WorldSheet*	GetSheet(unsigned sheetX, unsigned sheetY);
 	void EvaluateSheetHoveringSituation();
 	void InvalidateSheetHoveringSituation();
-	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY);
 	bool PeekTouchdown();
 	bool PopTouchdown();
 

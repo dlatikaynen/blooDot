@@ -185,6 +185,13 @@ public:
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 };
 
+class Wasser : public Dings
+{
+public:
+	Wasser(BrushRegistry* drawBrushes);
+	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+};
+
 class Dalek : public Dings
 {
 public:

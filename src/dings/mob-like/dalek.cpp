@@ -21,7 +21,7 @@ void Dalek::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	brusherl = m_Brushes->WannaHave(drawTo, colrect);
 	auto innerBrush = brusherl.Get();
 
-	/* lefty (no rotation) last. so after the loop ends, the context is rotation-free */
+	/* lefty (no rotation) last. so after the loop ends, the context is rotation-free for free */
 	for (int facing = OrientabilityIndexQuadruplet::Uppy; facing >= OrientabilityIndexQuadruplet::Lefty; --facing)
 	{
 		PrepareRect(&this->m_lookupSides[facing], rect);

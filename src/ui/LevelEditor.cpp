@@ -17,10 +17,10 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 
 	/* we would have a HUD showing the currently selected toolbox ding */
 	auto myHUD = static_cast<LevelEditorHUD*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::LevelEditorHUD));
-	if (!myHUD->IsDingSelected())
+	if (this->m_selectedDingID > 0 && this->m_selectedDingID != myHUD->SelectedDingID())
 	{
-		
-		//myHUD->SelectDing(this->m_selectedDingID, dingPic);
+		auto dingPic = this->m_currentLevel->CreateDingImage(this->m_selectedDingID);
+		myHUD->SelectDing(this->m_selectedDingID, dingPic);
 	}
 
 	/* we might emplace objects */
@@ -36,11 +36,11 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 			{
 				needRedraw = this->m_currentLevel->WeedObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y);
 			}
-			else
+			else if (this->m_selectedDingID > 0)
 			{
 				auto newCell = this->m_currentLevel->GetObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, true);
 				auto curDings = newCell->GetDing(Layers::Walls);
-				auto newDings = this->m_currentLevel->GetDing(1);
+				auto newDings = this->m_currentLevel->GetDing(this->m_selectedDingID);
 				if (curDings == nullptr || curDings->ID() != newDings->ID())
 				{
 					newCell->Instantiate(newDings);
@@ -225,5 +225,28 @@ void LevelEditor::DrawLevelEditorRaster()
 	if (!this->m_currentLevelEditorCellKnown)
 	{
 		this->m_currentLevelEditorCellKnown = this->m_currentLevelEditorCell.x > 0 || this->m_currentLevelEditorCell.y > 0;
+	}
+}
+
+void LevelEditor::SelectDingForPlacement(unsigned dingID)
+{
+	this->m_selectedDingID = this->m_currentLevel->ConfirmDingID(dingID);
+}
+
+void LevelEditor::SelectNextDingForPlacement()
+{
+	auto nextDing = this->m_currentLevel->GetNextDingID(this->m_selectedDingID);
+	if (nextDing > 0)
+	{
+		this->SelectDingForPlacement(nextDing);
+	}
+}
+
+void LevelEditor::SelectPreviousDingForPlacement()
+{
+	auto prevDing = this->m_currentLevel->GetPreviousDingID(this->m_selectedDingID);
+	if (prevDing > 0)
+	{
+		this->SelectDingForPlacement(prevDing);
 	}
 }

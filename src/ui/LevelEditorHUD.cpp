@@ -74,9 +74,9 @@ unsigned LevelEditorHUD::SelectedDingID()
 	return this->m_selectedDingID;
 }
 
-void LevelEditorHUD::ToggleEraser()
+void LevelEditorHUD::ToggleEraser(bool doErase)
 {
-	this->m_isEraserChosen = !this->m_isEraserChosen;
+	this->m_isEraserChosen = doErase;
 }
 
 bool LevelEditorHUD::IsInEraserMode()

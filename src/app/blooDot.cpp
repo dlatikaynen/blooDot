@@ -56,8 +56,12 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
     m_resetMarbleRotation = false;
     m_currentCheckpoint = 0;
     m_windowActive = false;
-	m_keySubtractActive = false;
-	m_keySubtractPressed = false;
+	m_keyInsertActive = false;
+	m_keyDeletePressed = false;
+	m_keyMinusActive = false;
+	m_keyMinusPressed = false;
+	m_keyPlusActive = false;
+	m_keyPlusPressed = false;
 	m_keySaveActive = false;
 	m_keySavePressed = false;
 	m_keySaveAsActive = false;
@@ -749,12 +753,32 @@ void blooDotMain::Update()
 				this->m_keyDownPressed
 			);
 
-			if (this->m_keySubtractPressed)
+			if (this->m_keyDeletePressed)
 			{
-				this->m_keySubtractPressed = false;
-				this->m_levelEditorHUD.ToggleEraser();
+				this->m_keyDeletePressed = false;
+				this->m_levelEditorHUD.ToggleEraser(true);
 			}
-			
+
+			if (this->m_keyInsertPressed)
+			{
+				this->m_keyInsertPressed = false;
+				this->m_levelEditorHUD.ToggleEraser(false);
+			}
+
+			if (this->m_keyPlusPressed)
+			{
+				this->m_keyPlusPressed = false;
+				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->SelectNextDingForPlacement();
+			}
+
+			if (this->m_keyMinusPressed)
+			{
+				this->m_keyMinusPressed = false;
+				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->SelectPreviousDingForPlacement();
+			}
+
 			if (this->m_keySavePressed)
 			{
 				this->m_keySavePressed = false;
@@ -1365,7 +1389,19 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
     }
 	else if (key == Windows::System::VirtualKey::Subtract)
 	{
-		m_keySubtractActive = true;
+		m_keyMinusActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Add)
+	{
+		m_keyPlusActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Insert)
+	{
+		m_keyInsertActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Delete)
+	{
+		m_keyDeleteActive = true;
 	}
 	else if (key == Windows::System::VirtualKey::S)
 	{
@@ -1418,10 +1454,34 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
     }
 	else if (key == Windows::System::VirtualKey::Subtract)
 	{
-		if (m_keySubtractActive)
+		if (m_keyMinusActive)
 		{
-			m_keySubtractPressed = true;
-			m_keySubtractActive = false;
+			m_keyMinusPressed = true;
+			m_keyMinusActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Add)
+	{
+		if (m_keyPlusActive)
+		{
+			m_keyPlusPressed = true;
+			m_keyPlusActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Insert)
+	{
+		if (m_keyInsertActive)
+		{
+			m_keyInsertPressed = true;
+			m_keyInsertActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Delete)
+	{
+		if (m_keyDeleteActive)
+		{
+			m_keyDeletePressed = true;
+			m_keyDeleteActive = false;
 		}
 	}
 	else if (key == Windows::System::VirtualKey::S)

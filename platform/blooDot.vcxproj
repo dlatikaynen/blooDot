@@ -210,6 +210,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="blooDot_TemporaryKey.pfx" />
+    <None Include="ClassDiagram.cd" />
     <None Include="Media\Audio\background.wma">
       <DeploymentContent>true</DeploymentContent>
     </None>
@@ -285,6 +286,7 @@
     <ClCompile Include="..\src\world\Object.cpp" />
     <ClCompile Include="..\src\dings\dings.cpp" />
     <ClCompile Include="..\src\dings\wall-like\mauer.cpp" />
+    <ClCompile Include="..\src\dings\floor-like\wasser.cpp" />
     <ClCompile Include="..\src\dings\mob-like\dalek.cpp" />
     <ClCompile Include="..\src\ui\LevelEditor.cpp" />
     <ClCompile Include="..\src\ui\LevelEditorHUD.cpp" />

@@ -14,7 +14,7 @@ public:
 	void SelectDing(unsigned dingID, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage);
 
 	unsigned SelectedDingID();
-	void ToggleEraser();
+	void ToggleEraser(bool doErase);
 	bool IsInEraserMode();
 
 protected:

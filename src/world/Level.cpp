@@ -80,6 +80,7 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 
 	auto deflt = Dings(0, "BLACK", brushRegistry);
 	auto mauer = Mauer(brushRegistry);
+	auto wasser = Wasser(brushRegistry);
 	auto dalek = Dalek(brushRegistry);
 
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(800.0f, 600.0f), &this->m_dingSheet));
@@ -88,11 +89,13 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 
 	deflt.Draw(m_dingSheet, 0, 0);
 	mauer.Draw(m_dingSheet, 1, 1);
-	dalek.Draw(m_dingSheet, 1, 0);
+	wasser.Draw(m_dingSheet, 1, 0);
+	dalek.Draw(m_dingSheet, 2, 0);
 	DX::ThrowIfFailed(m_dingSheet->EndDraw());
 
 	this->m_dingMap.emplace(deflt.ID(), deflt);
 	this->m_dingMap.emplace(mauer.ID(), mauer);
+	this->m_dingMap.emplace(wasser.ID(), wasser);
 	this->m_dingMap.emplace(dalek.ID(), dalek);
 }
 
@@ -101,15 +104,68 @@ Dings* Level::GetDing(unsigned dingID)
 	return &(this->m_dingMap.at(dingID));
 }
 
+unsigned Level::GetPreviousDingID(unsigned dingID)
+{
+	auto dingPointer = this->m_dingMap.find(dingID);
+	if (dingPointer == this->m_dingMap.end())
+	{
+		return 0;
+	}
+	else
+	{
+		if ((--dingPointer) == this->m_dingMap.begin())
+		{
+			return 0;
+		}
+		else
+		{
+			return dingPointer->second.ID();
+		}
+	}
+}
+
+unsigned Level::GetNextDingID(unsigned dingID)
+{
+	auto dingPointer = this->m_dingMap.find(dingID);	
+	if (dingPointer == this->m_dingMap.end())
+	{
+		return 0;
+	}
+	else
+	{
+		if ((++dingPointer) == this->m_dingMap.end())
+		{
+			return 0;
+		}
+		else
+		{
+			return dingPointer->second.ID();
+		}
+	}
+}
+
+unsigned Level::ConfirmDingID(unsigned dingID)
+{
+	return this->m_dingMap.count(dingID) ? dingID : 0;
+}
+
 Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::CreateDingImage(unsigned dingID)
 {
 	auto dingToRender = this->GetDing(dingID);
-	m_dingImage->BeginDraw();
-
+	auto dingOnSheet = dingToRender->GetSheetPlacement(Facings::Shy);
+	ID2D1Bitmap *sheetSurface = NULL;
 	ID2D1Bitmap *resultBitmap = NULL;
+
+	m_dingImage->BeginDraw();
+	m_dingImage->Clear();
+	this->m_dingSheet->GetBitmap(&sheetSurface);
+	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
+	D2D1_RECT_F placementRect = D2D1::RectF(0, 0, blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT);
+	m_dingImage->DrawBitmap(sheetSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
+	DX::ThrowIfFailed(m_dingImage->EndDraw());
 	m_dingImage->GetBitmap(&resultBitmap);
-	DX::ThrowIfFailed(m_dingSheet->EndDraw());
-	return new Microsoft::WRL::ComPtr<ID2D1Bitmap>(resultBitmap);
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> resultPointer = resultBitmap;
+	return resultPointer;
 }
 
 unsigned Level::GetNumOfSheetsWE()
