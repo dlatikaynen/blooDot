@@ -16,21 +16,21 @@ enum Layers
 enum Facings
 {
 	Shy = 0,													/* one shy (default placement) */
-	Center = 1,													/* crossing */
-	West = 2,													/* U-bag with opening to the right (westcap) */
-	East = 4,													/* U-bag with opening to the left (eastcap) */
-	South = 8,													/* U-bag with opening upwards (southcap) */
-	North = 16,													/* U-bag with opening downwards (northcap) */
+	NW = 1,														/* left-top capping edge */
+	North = 2,													/* U-bag with opening downwards (northcap) */
+	NE = 4,														/* right-top capping edge */
+	East = 8,													/* U-bag with opening to the left (eastcap) */
+	SE = 16,													/* right-bottom capping edge */
+	South = 32,													/* U-bag with opening upwards (southcap) */
+	SW = 64,													/* left-bottom capping edge */
+	West = 128,													/* U-bag with opening to the right (westcap) */
 	Viech = West | North | East | South,
-	SingleEdge = 32,
-	TripleEdge = 64,
-	CornerNear = 128,
-	CornerFar = 256,
-	NW = 512,													/* left-top capping edge */
-	NE = 1024,													/* right-top capping edge */
+	Center = 256,												/* crossing */
+	SingleEdge = 512,
+	TripleEdge = 1024,
+	CornerNear = 2048,
+	CornerFar = 4096,
 	WE = West | East,											/* horizontal pipe */
-	SW = 2048,													/* left-bottom capping edge */
-	SE = 4096,													/* right-bottom capping edge */
 	NS = North | South,											/* vertical pipe */
 	EdgeW = West | SingleEdge,									/* straight edge, left-only */
 	EdgeE = East | SingleEdge,									/* straight edge, right-only */
