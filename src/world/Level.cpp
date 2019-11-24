@@ -83,8 +83,8 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	mauer.Draw(m_dingSheet, 1, 1);
 	wasser.Draw(m_dingSheet, 1, 0);
 	hgrass.Draw(m_dingSheet, 2, 0);
-	snow.Draw(m_dingSheet, 2, 0);
-	dalek.Draw(m_dingSheet, 3, 0);
+	snow.Draw(m_dingSheet, 3, 0);
+	dalek.Draw(m_dingSheet, 4, 0);
 	DX::ThrowIfFailed(m_dingSheet->EndDraw());
 
 	this->m_dingMap.emplace(deflt.ID(), deflt);
