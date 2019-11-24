@@ -167,6 +167,8 @@ namespace blooDot
 		bool				m_keyMinusPressed;
 		bool				m_keyPlusActive;
 		bool				m_keyPlusPressed;
+		bool				m_keyMusicActive;
+		bool				m_keyMusicPressed;
 		bool				m_windowActive;
 		bool				m_deferredResourcesReadyPending;
 		bool				m_deferredResourcesReady;

@@ -103,6 +103,8 @@ private:
     bool                        m_engineExperiencedCriticalError;
     AudioEngineCallbacks        m_musicEngineCallback;
     AudioEngineCallbacks        m_soundEffectEngineCallback;
+	bool						m_isAudioStarted;
+	bool						m_isAudioPaused;
 
     void CreateSourceVoice(SoundEvent);
     void CreateReverb(
@@ -114,8 +116,6 @@ private:
         );
 
 public:
-    bool m_isAudioStarted;
-
     Audio();
     ~Audio();
     void Initialize();
@@ -123,7 +123,10 @@ public:
     void ReleaseResources();
     void Start();
     void Render();
-    void SuspendAudio();
+	bool IsAudioStarted();
+	bool IsAudioPlaying();
+	void SuspendAudio();
+	bool IsAudioSuspended();
     void ResumeAudio();
 
     // This flag can be used to tell when the audio system

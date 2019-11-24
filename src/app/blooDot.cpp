@@ -60,6 +60,8 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	m_keyDeletePressed = false;
 	m_keyMinusActive = false;
 	m_keyMinusPressed = false;
+	m_keyMusicActive = false;
+	m_keyMusicPressed = false;
 	m_keyPlusActive = false;
 	m_keyPlusPressed = false;
 	m_keySaveActive = false;
@@ -545,9 +547,9 @@ bool blooDotMain::Render()
 #pragma endregion
 	}
 
-	if (m_audio.m_isAudioStarted)
+	if (this->m_audio.IsAudioPlaying())
 	{
-		m_audio.Render();
+		this->m_audio.Render();
 	}
 
     // Draw the user interface and the overlay.
@@ -726,6 +728,19 @@ void blooDotMain::Update()
 
 		UserInterface::GetInstance().Update(timerTotal, timerElapsed);
 
+		if (this->m_keyMusicPressed)
+		{
+			this->m_keyMusicPressed = false;
+			if (this->m_audio.IsAudioSuspended())
+			{
+				this->m_audio.ResumeAudio();
+			}
+			else
+			{
+				this->m_audio.SuspendAudio();
+			}
+		}
+
 		// When the game is first loaded, we display a load screen
         // and load any deferred resources that might be too expensive
         // to load during initialization.
@@ -738,7 +753,7 @@ void blooDotMain::Update()
 		}
 		else if (this->m_gameState == GameState::LevelEditor)
 		{
-			if (!this->m_audio.m_isAudioStarted)
+			if (!this->m_audio.IsAudioStarted())
 			{
 				this->m_audio.Start();
 			}
@@ -800,17 +815,14 @@ void blooDotMain::Update()
 			this->m_worldScreen->Update(timerTotal, timerElapsed);
 			return;
 		}
-        
-        switch (this->m_gameState)
-        {
-			case GameState::PreGameCountdown:
-				if (this->m_preGameCountdownTimer.IsCountdownComplete())
-				{
-					SetGameState(GameState::InGameActive);
-				}
-				break;
-        }
-
+		else if (this->m_gameState == GameState::PreGameCountdown)
+		{
+			if (this->m_preGameCountdownTimer.IsCountdownComplete())
+			{
+				SetGameState(GameState::InGameActive);
+			}
+		}
+		
 #pragma region Process Input
 
         float combinedTiltX = 0.0f;
@@ -1395,6 +1407,10 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 	{
 		m_keyPlusActive = true;
 	}
+	else if (key == Windows::System::VirtualKey::M)
+	{
+		m_keyMusicActive = true;
+	}
 	else if (key == Windows::System::VirtualKey::Insert)
 	{
 		m_keyInsertActive = true;
@@ -1452,6 +1468,14 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
             m_homeKeyActive = false;
         }
     }
+	else if (key == Windows::System::VirtualKey::M)
+	{
+		if (m_keyMusicActive)
+		{
+			m_keyMusicPressed = true;
+			m_keyMusicActive = false;
+		}
+	}
 	else if (key == Windows::System::VirtualKey::Subtract)
 	{
 		if (m_keyMinusActive)
