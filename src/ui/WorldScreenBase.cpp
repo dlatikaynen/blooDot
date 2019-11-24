@@ -315,9 +315,9 @@ void WorldScreenBase::EnterLevel(Level* level)
 
 	auto subscriptX = level->GetNumOfSheetsWE();
 	auto subscriptY = level->GetNumOfSheetsNS();
-	for (auto y = 0; y < subscriptY; ++y)
+	for (unsigned y = 0; y < subscriptY; ++y)
 	{
-		for (auto x = 0; x < subscriptX; ++x)
+		for (unsigned x = 0; x < subscriptX; ++x)
 		{
 			this->m_Sheets.push_back((WorldSheet*)nullptr);
 		}

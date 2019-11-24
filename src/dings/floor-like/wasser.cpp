@@ -1,7 +1,7 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\dings.h"
 
-Wasser::Wasser(BrushRegistry* drawBrushes) : Dings(2, "Wasser", drawBrushes)
+Wasser::Wasser(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(2, "Wasser", deviceResources, drawBrushes)
 {
 	m_Facings = Facings::Shy;
 	m_Coalescing = Facings::Shy;

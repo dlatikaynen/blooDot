@@ -47,9 +47,9 @@ void Level::Clear()
 	}
 
 	/* generates the matrix for this level, lazy-loading */
-	for (auto y = 0; y < this->m_rectangularBounds.height; ++y)
+	for (unsigned y = 0; y < this->m_rectangularBounds.height; ++y)
 	{
-		for (auto x = 0; x < this->m_rectangularBounds.width; ++x)
+		for (unsigned x = 0; x < this->m_rectangularBounds.width; ++x)
 		{
 			this->m_Objects.push_back((Object*)nullptr);
 		}
@@ -68,10 +68,12 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	auto loader = ref new BasicLoader(resources);
 	loader->LoadPngToBitmap(L"Media\\Bitmaps\\universe_seamless.png", deviceResources, &this->m_floorBackground);
 
-	auto deflt = Dings(0, "BLACK", brushRegistry);
-	auto mauer = Mauer(brushRegistry);
-	auto wasser = Wasser(brushRegistry);
-	auto dalek = Dalek(brushRegistry);
+	auto deflt = Dings(0, "BLACK", deviceResources, brushRegistry);
+	auto mauer = Mauer(deviceResources, brushRegistry);
+	auto wasser = Wasser(deviceResources, brushRegistry);
+	auto hgrass = HighGrass(deviceResources, brushRegistry);
+	auto snow = Snow(deviceResources, brushRegistry);
+	auto dalek = Dalek(deviceResources, brushRegistry);
 
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(800.0f, 600.0f), &this->m_dingSheet));
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT), &this->m_dingImage));
@@ -80,12 +82,16 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	deflt.Draw(m_dingSheet, 0, 0);
 	mauer.Draw(m_dingSheet, 1, 1);
 	wasser.Draw(m_dingSheet, 1, 0);
-	dalek.Draw(m_dingSheet, 2, 0);
+	hgrass.Draw(m_dingSheet, 2, 0);
+	snow.Draw(m_dingSheet, 2, 0);
+	dalek.Draw(m_dingSheet, 3, 0);
 	DX::ThrowIfFailed(m_dingSheet->EndDraw());
 
 	this->m_dingMap.emplace(deflt.ID(), deflt);
 	this->m_dingMap.emplace(mauer.ID(), mauer);
 	this->m_dingMap.emplace(wasser.ID(), wasser);
+	this->m_dingMap.emplace(hgrass.ID(), hgrass);
+	this->m_dingMap.emplace(snow.ID(), snow);
 	this->m_dingMap.emplace(dalek.ID(), dalek);
 }
 
@@ -272,9 +278,9 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 	oF.write((char *)&m_rectangularBounds.height, sizeof(uint32));
 	oF.write((char *)&m_rectangularBounds.width, sizeof(uint32));
 	/* skip table */
-	for (auto y = 0; y < this->m_rectangularBounds.height; ++y)
+	for (unsigned y = 0; y < this->m_rectangularBounds.height; ++y)
 	{
-		for (auto x = 0; x < this->m_rectangularBounds.width; ++x)
+		for (unsigned x = 0; x < this->m_rectangularBounds.width; ++x)
 		{
 			auto objectAddress = y * this->m_rectangularBounds.width + x;
 			if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
@@ -393,9 +399,9 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 		this->m_rectangularBounds.height = extentY;
 		this->Clear();
 		/* read the matrix */
-		for (auto y = 0; y < this->m_rectangularBounds.height; ++y)
+		for (unsigned y = 0; y < this->m_rectangularBounds.height; ++y)
 		{
-			for (auto x = 0; x < this->m_rectangularBounds.width; ++x)
+			for (unsigned x = 0; x < this->m_rectangularBounds.width; ++x)
 			{
 				auto objectAddress = y * this->m_rectangularBounds.width + x;
 				if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
@@ -439,4 +445,6 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 	Platform::String^ string = ref new Platform::String(str, len);
 	OutputDebugStringW(Platform::String::Concat(Platform::String::Concat(L"Number of non-empty squares loaded: ", string), L"\r\n")->Data());
 #endif
+
+	return true;
 }

@@ -234,6 +234,8 @@
     <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Image Include="Assets\StoreLogo.png" />
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Image Include="Media\Bitmaps\highgrass.png" />
+    <Image Include="Media\Bitmaps\snowblock.png" />
     <Image Include="Media\Bitmaps\universe_seamless.png" />
     <Image Include="Media\Bitmaps\notimeforcaution.png" />
     <Image Include="Media\Textures\bridge.dds" />
@@ -287,6 +289,7 @@
     <ClCompile Include="..\src\world\Object.cpp" />
     <ClCompile Include="..\src\dings\dings.cpp" />
     <ClCompile Include="..\src\dings\wall-like\mauer.cpp" />
+    <ClCompile Include="..\src\dings\wall-like\bitmapdings.cpp" />
     <ClCompile Include="..\src\dings\floor-like\wasser.cpp" />
     <ClCompile Include="..\src\dings\mob-like\dalek.cpp" />
     <ClCompile Include="..\src\ui\LevelEditor.cpp" />

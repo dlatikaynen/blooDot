@@ -133,6 +133,10 @@
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dings\floor-like\wasser.cpp" />
+    <ClCompile Include="..\src\algo\ClumsyPacking.cpp" />
+    <ClCompile Include="..\src\algo\ClumsyPackingData.cpp" />
+    <ClCompile Include="..\src\algo\ClumsyPacking.h" />
+    <ClCompile Include="..\src\dings\wall-like\bitmapdings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\sound\Audio.h" />
@@ -290,6 +294,8 @@
     <Image Include="Media\Textures\walllevel1.dds" />
     <Image Include="Media\Bitmaps\universe_seamless.png" />
     <Image Include="Media\Bitmaps\notimeforcaution.png" />
+    <Image Include="Media\Bitmaps\highgrass.png" />
+    <Image Include="Media\Bitmaps\snowblock.png" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />

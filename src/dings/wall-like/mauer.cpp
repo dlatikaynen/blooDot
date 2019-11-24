@@ -1,7 +1,7 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\dings.h"
 
-Mauer::Mauer(BrushRegistry* drawBrushes) : Dings(1, "Mauer", drawBrushes) 
+Mauer::Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(1, "Mauer", deviceResources, drawBrushes)
 {
 	m_Facings = Facings::Shy;
 	m_Coalescing = Facings::Immersed;

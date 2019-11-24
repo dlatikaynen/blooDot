@@ -18,10 +18,11 @@ Facings& operator |=(Facings& a, Facings b)
 	return a = a | b;
 }
 
-Dings::Dings(int dingID, Platform::String^ dingName, BrushRegistry* drawBrushes)
+Dings::Dings(int dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes)
 {
 	this->m_ID = dingID;
 	this->m_Name = dingName;
+	this->m_deviceResources = deviceResources;
 	this->m_Brushes = drawBrushes;
 }
 
@@ -45,7 +46,38 @@ void Dings::Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int can
 	this->m_lookupShy.x = canvasX;
 	this->m_lookupShy.y = canvasY;
 	this->SetSheetPlacementsFromCoalescability();
-	this->DrawInternal(drawTo);
+	this->m_fromFile = this->ShouldLoadFromBitmap();
+	if (this->m_fromFile == nullptr)
+	{
+		this->DrawInternal(drawTo);
+	}
+	else
+	{
+		auto bitMap = this->LoadFromBitmap();
+		auto rect = D2D1::Rect(
+			49.0f * this->m_lookupShy.x,
+			49.0f * this->m_lookupShy.y,
+			49.0f * this->m_lookupShy.x + 49.0f,
+			49.0f * this->m_lookupShy.y + 49.0f
+		);
+
+		drawTo->DrawBitmap(bitMap.Get(), rect);
+		bitMap.Reset();
+	}
+}
+
+Platform::String^ Dings::ShouldLoadFromBitmap()
+{
+	return nullptr;
+}
+
+Microsoft::WRL::ComPtr<ID2D1Bitmap> Dings::LoadFromBitmap()
+{	
+	Microsoft::WRL::ComPtr<ID2D1Bitmap>	bitMap;
+	auto loader = ref new BasicLoader(this->m_deviceResources->GetD3DDevice());
+	auto fullPath = Platform::String::Concat(L"Media\\Bitmaps\\", this->m_fromFile);
+	loader->LoadPngToBitmap(fullPath, this->m_deviceResources, &bitMap);
+	return bitMap;
 }
 
 void Dings::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)

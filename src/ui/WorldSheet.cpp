@@ -108,9 +108,9 @@ void WorldSheet::Populate()
 		auto dingSheet = this->m_tiedToLevel->GetDingSheet();
 		ID2D1Bitmap *dingMap = NULL;
 		dingSheet->GetBitmap(&dingMap);
-		for (auto y = 0; y < this->m_sizeUnits.height; ++y)
+		for (unsigned y = 0; y < this->m_sizeUnits.height; ++y)
 		{
-			for (auto x = 0; x < this->m_sizeUnits.width; ++x)
+			for (unsigned x = 0; x < this->m_sizeUnits.width; ++x)
 			{
 				auto worldX = x + this->m_NWcornerInWorldSquares.x;
 				auto worldY = y + this->m_NWcornerInWorldSquares.y;

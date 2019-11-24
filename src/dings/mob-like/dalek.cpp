@@ -1,7 +1,7 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\dings.h"
 
-Dalek::Dalek(BrushRegistry* drawBrushes) : Dings(43, "Dalek", drawBrushes)
+Dalek::Dalek(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(43, "Dalek", deviceResources, drawBrushes)
 {
 	m_Facings = Facings::Viech;
 	m_Coalescing = Facings::Shy;

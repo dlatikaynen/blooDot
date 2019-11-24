@@ -4,8 +4,8 @@
 // See clumsypack.xlsx for illumination. this set has its own primes,
 // its own pi, and its own fine structure constant, probably
 const Facings ClumsyPacking::CLUMSY_PACKING[256]{
+	Facings::Shy,	
 	Facings::Shy,
-	Facings::Shy,
-	Facings::South,
+	Facings::South, // southcap
 	Facings::South
 };

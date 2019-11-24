@@ -4,6 +4,7 @@
 #include "..\dx\DirectXHelper.h"
 #include "..\dx\DeviceResources.h"
 #include "..\dx\BrushRegistry.h"
+#include "..\io\BasicLoader.h"
 
 // Numeric ordering is relied upon
 enum Layers
@@ -116,7 +117,7 @@ enum OrientabilityIndexDuplex
 class Dings
 {
 public:
-	Dings(int dingID, Platform::String^ dingName, BrushRegistry* drawBrushes);
+	Dings(int dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 
 	unsigned			ID();
 	Platform::String^	Name();
@@ -149,9 +150,13 @@ protected:
 	 * four outer-inner 90° corners
 	 * four outer-only 90° corners
 	 * four U-pieces
+	 * four T-pieces
 	 * four straight edges
 	 * four straight edges with one inner corner
 	 * four straight edges with two inner corners (Ts) 
+	 *
+	 * 10 x 4 + 2 x 2 + 3 x 1 = 40 + 4 + 3 = 47, the Wang number
+	 * so we seem to have it somewhat right, exactly, that is.
 	 *
 	 * indices are always orientationwise */
 
@@ -171,30 +176,51 @@ protected:
 	D2D1_POINT_2U		m_lookupU[4];
 	D2D1_POINT_2U		m_lookupTs[4];
 
+	virtual Platform::String^ ShouldLoadFromBitmap();
 	void PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);
 	void Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation);
 
 private:
-	void				SetSheetPlacementsFromCoalescability();	
+	void SetSheetPlacementsFromCoalescability();	
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> LoadFromBitmap();
+
+	std::shared_ptr<DX::DeviceResources> m_deviceResources;
+	Platform::String^ m_fromFile;
 };
 
 class Mauer : public Dings 
 {
 public:
-	Mauer(BrushRegistry* drawBrushes);
+	Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 };
 
 class Wasser : public Dings
 {
 public:
-	Wasser(BrushRegistry* drawBrushes);
+	Wasser(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 };
 
 class Dalek : public Dings
 {
 public:
-	Dalek(BrushRegistry* drawBrushes);
+	Dalek(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+};
+
+class HighGrass : public Dings
+{
+public:
+	HighGrass(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Snow : public Dings
+{
+public:
+	Snow(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
 };
