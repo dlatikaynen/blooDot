@@ -38,12 +38,16 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 			}
 			else if (this->m_selectedDingID > 0)
 			{
+				auto inLayer = Layers::Walls;
 				auto newCell = this->m_currentLevel->GetObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, true);
-				auto curDings = newCell->GetDing(Layers::Walls);
+				auto curDings = newCell->GetDing(inLayer);
 				auto newDings = this->m_currentLevel->GetDing(this->m_selectedDingID);
-				if (curDings == nullptr || curDings->ID() != newDings->ID())
+				auto newDingID = newDings->ID();
+				if (curDings == nullptr || curDings->ID() != newDingID)
 				{
-					newCell->Instantiate(newDings);
+					auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingID, inLayer);
+					newCell->Instantiate(newDings, neighborHood);
+					this->ClumsyPackNeighborhoodOf(neighborHood, this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, inLayer, newDingID);
 					needRedraw = true;
 				}
 			}
@@ -51,18 +55,85 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 			if (needRedraw)
 			{
 				/* draw the object onto the sheet immediately */
-				auto sheetSize = this->m_currentLevel->GetSheetSizeUnits();
-				auto intersectedSheetX = this->m_currentLevelEditorCell.x / sheetSize.width;
-				auto cellInSheetX = this->m_currentLevelEditorCell.x % sheetSize.width;
-				auto intersectedSheetY = this->m_currentLevelEditorCell.y / sheetSize.height;
-				auto cellInSheetY = this->m_currentLevelEditorCell.y % sheetSize.height;
-				auto placementSheet = this->GetSheet(intersectedSheetX, intersectedSheetY);
-				placementSheet->RedrawSingleSquare(cellInSheetX, cellInSheetY);
+				this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y);
 			}
 		}
 	}
 }
 
+void LevelEditor::ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration neighborHood, unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, unsigned dingID)
+{
+	if ((neighborHood & 1) == 1)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX - 1, aroundLevelY - 1, inLayer, dingID);
+	}
+
+	if ((neighborHood & 2) == 2)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX, aroundLevelY - 1, inLayer, dingID);
+	}
+
+	if ((neighborHood & 4) == 4)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX + 1, aroundLevelY - 1, inLayer, dingID);
+	}
+
+	if ((neighborHood & 8) == 8)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX + 1, aroundLevelY, inLayer, dingID);
+	}
+
+	if ((neighborHood & 16) == 16)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX + 1, aroundLevelY + 1, inLayer, dingID);
+	}
+
+	if ((neighborHood & 32) == 32)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX, aroundLevelY + 1, inLayer, dingID);
+	}
+
+	if ((neighborHood & 64) == 64)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX - 1, aroundLevelY + 1, inLayer, dingID);
+	}
+
+	if ((neighborHood & 128) == 128)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX - 1, aroundLevelY, inLayer, dingID);
+	}
+}
+
+void LevelEditor::ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, unsigned dingID)
+{
+	auto centerObject = this->m_currentLevel->GetObjectAt(aroundLevelX, aroundLevelY, false);
+	if (centerObject != nullptr)
+	{
+		auto centerDings = centerObject->GetDing(inLayer);
+		if (centerDings != nullptr && centerDings->ID() == dingID)
+		{
+			auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(aroundLevelX, aroundLevelY, dingID, inLayer);
+			auto shouldBeFacing = ClumsyPacking::FacingFromConfiguration(neighborHood);
+			if (centerObject->PlacementFacing() != shouldBeFacing)
+			{
+				centerObject->AdjustFacing(inLayer, shouldBeFacing);
+				this->RedrawSingleSquare(aroundLevelX, aroundLevelY);
+				this->ClumsyPackNeighborhoodOf(neighborHood, aroundLevelX, aroundLevelY, inLayer, dingID);
+			}
+		}
+	}
+}
+
+void LevelEditor::RedrawSingleSquare(unsigned levelX, unsigned levelY)
+{
+	auto sheetSize = this->m_currentLevel->GetSheetSizeUnits();
+	auto intersectedSheetX = levelX / sheetSize.width;
+	auto cellInSheetX = levelX % sheetSize.width;
+	auto intersectedSheetY = levelY / sheetSize.height;
+	auto cellInSheetY = levelY % sheetSize.height;
+	auto placementSheet = this->GetSheet(intersectedSheetX, intersectedSheetY);
+	placementSheet->RedrawSingleSquare(cellInSheetX, cellInSheetY);
+}
 
 void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)
 {

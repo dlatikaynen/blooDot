@@ -5,6 +5,7 @@
 #include "..\io\BasicLoader.h"
 #include "..\dx\BrushRegistry.h"
 #include "..\dings\dings.h"
+#include "..\algo\ClumsyPacking.h"
 #include "Object.h"
 
 /* A level is a set of worldsheets belonging to the same floor level, hence its name :) */
@@ -20,6 +21,7 @@ public:
 	unsigned GetNumOfSheetsWE();
 	unsigned GetNumOfSheetsNS();
 	Object* GetObjectAt(unsigned levelX, unsigned levelY, bool createIfNull);
+	ClumsyPacking::NeighborConfiguration GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, unsigned dingID, Layers inLayer);
 	bool WeedObjectAt(unsigned levelX, unsigned levelY);
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> GetDingSheet();
 	Dings* GetDing(unsigned dingID);
@@ -44,6 +46,7 @@ private:
 
 	void Clear();
 	unsigned GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet);
+	bool HasCompatibleNeighbor(int x, int y, int dingID, Layers ofLayer);
 
 	Platform::String^									m_Name;
 	D2D1_SIZE_U											m_rectangularBounds;

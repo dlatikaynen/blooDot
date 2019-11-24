@@ -13,6 +13,7 @@
 #include "..\ui\SampleOverlay.h"
 #include "..\ui\LoadScreen.h"
 #include "..\ui\WorldScreenBase.h"
+#include "..\algo\ClumsyPacking.h"
 #include "StepTimer.h"
 
 using namespace DirectX;

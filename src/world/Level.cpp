@@ -229,6 +229,43 @@ bool Level::WeedObjectAt(unsigned levelX, unsigned levelY)
 	return false;
 }
 
+ClumsyPacking::NeighborConfiguration Level::GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, unsigned dingID, Layers inLayer)
+{
+	if (dingID > 0)
+	{
+		return ClumsyPacking::ConfigurationFromNeighbors(
+			this->HasCompatibleNeighbor((int)levelX - 1, (int)levelY - 1, dingID, inLayer),
+			this->HasCompatibleNeighbor((int)levelX, (int)levelY - 1, dingID, inLayer),
+			this->HasCompatibleNeighbor((int)levelX + 1, (int)levelY - 1, dingID, inLayer),
+			this->HasCompatibleNeighbor((int)levelX + 1, (int)levelY, dingID, inLayer),
+			this->HasCompatibleNeighbor((int)levelX + 1, (int)levelY + 1, dingID, inLayer),
+			this->HasCompatibleNeighbor((int)levelX, (int)levelY + 1, dingID, inLayer),
+			this->HasCompatibleNeighbor((int)levelX - 1, (int)levelY + 1, dingID, inLayer),
+			this->HasCompatibleNeighbor((int)levelX - 1, (int)levelY, dingID, inLayer)
+		);
+	}
+
+	return Facings::Shy;
+}
+
+bool Level::HasCompatibleNeighbor(int x, int y, int dingID, Layers ofLayer)
+{
+	if (!(x < 0 || y < 0 || x >= this->m_rectangularBounds.width || y >= this->m_rectangularBounds.height))
+	{
+		auto thereObject = this->GetObjectAt(x, y, false);
+		if (thereObject != nullptr && ((thereObject->GetLayers() & ofLayer) == ofLayer))
+		{
+			auto thereDing = thereObject->GetDing(ofLayer);
+			if (thereDing != nullptr && thereDing->ID() == dingID)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> Level::GetDingSheet()
 {
 	return this->m_dingSheet;
@@ -410,19 +447,19 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 					if ((whatsthere & this->floorbit) == this->floorbit)
 					{
 						unsigned dingIdFloor = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-						this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Floor, &this->m_dingMap.at(dingIdFloor));
+						this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Floor, &this->m_dingMap.at(dingIdFloor), 0);
 					}
 
 					if ((whatsthere & this->wallsbit) == this->wallsbit)
 					{
 						uint32 dingIdWalls = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-						this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Walls, &this->m_dingMap.at(dingIdWalls));
+						this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Walls, &this->m_dingMap.at(dingIdWalls), 0);
 					}
 
 					if ((whatsthere & this->rooofbit) == this->rooofbit)
 					{
 						uint32 dingIdRooof = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-						this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Rooof, &this->m_dingMap.at(dingIdRooof));
+						this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Rooof, &this->m_dingMap.at(dingIdRooof), 0);
 					}
 
 #ifdef _DEBUG

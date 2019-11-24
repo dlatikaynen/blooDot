@@ -102,9 +102,9 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	m_worldScreen->Initialize(m_deviceResources);
 
 	auto newObject = m_currentLevel->GetObjectAt(353, 361, true);
-	newObject->Instantiate(m_currentLevel->GetDing(1));
+	newObject->Instantiate(m_currentLevel->GetDing(1), ClumsyPacking::ConfigurationFromNeighbors(Facings::East));
 	newObject = m_currentLevel->GetObjectAt(354, 361, true);
-	newObject->Instantiate(m_currentLevel->GetDing(1));
+	newObject->Instantiate(m_currentLevel->GetDing(1), ClumsyPacking::ConfigurationFromNeighbors(Facings::West));
 
     UserInterface::GetInstance().Initialize(
         m_deviceResources->GetD2DDevice(),

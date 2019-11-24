@@ -6,29 +6,32 @@ Object::Object(unsigned posInLevelX, unsigned posInLevelY)
 	this->m_positionInLevel = D2D1::Point2U(posInLevelX, posInLevelY);
 }
 
-void Object::Instantiate(Dings* templateDing)
+void Object::Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
 {
 	auto preferredLayer = templateDing->GetPreferredLayer();
-	this->InstantiateInLayer(preferredLayer, templateDing);
+	this->InstantiateInLayer(preferredLayer, templateDing, neighborHood);
 }
 
-void Object::InstantiateInLayer(Layers inLayer, Dings* templateDing)
+void Object::InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
 {
 	switch (inLayer)
 	{
 	case Layers::Floor:
 		this->m_DingFloor = templateDing;
+		this->m_FacingFloor = ClumsyPacking::FacingFromConfiguration(neighborHood);
 		break;
 
 	case Layers::Walls:
 		this->m_DingWalls = templateDing;
+		this->m_FacingWalls = ClumsyPacking::FacingFromConfiguration(neighborHood);
 		break;
 
 	case Layers::Rooof:
 		this->m_DingRooof = templateDing;
+		this->m_FacingRooof = ClumsyPacking::FacingFromConfiguration(neighborHood);
 		break;
 	}
-
+	
 	this->m_Layers = static_cast<Layers>(this->m_Layers | inLayer);
 }
 
@@ -102,5 +105,32 @@ Dings* Object::GetDing(Layers ofLayer)
 
 Facings	Object::PlacementFacing()
 {
-	return this->m_FacingWalls;
+	switch (this->m_Layers)
+	{
+	case Layers::Floor:
+		return this->m_FacingFloor;
+
+	case Layers::Walls:
+		return this->m_FacingWalls;
+
+	case Layers::Rooof:
+		return this->m_FacingRooof;
+	}
+
+	return Facings::Shy;
+}
+
+void Object::AdjustFacing(Layers inLayer, Facings shouldBeFacing)
+{
+	switch (inLayer)
+	{
+	case Layers::Floor:
+		this->m_FacingFloor = shouldBeFacing;
+
+	case Layers::Walls:
+		this->m_FacingWalls = shouldBeFacing;
+
+	case Layers::Rooof:
+		this->m_FacingRooof = shouldBeFacing;
+	}
 }

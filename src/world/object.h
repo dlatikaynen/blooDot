@@ -1,19 +1,21 @@
-#include "..\dings\dings.h"
-
 #pragma once
+
+#include "..\dings\dings.h"
+#include "..\algo\ClumsyPacking.h"
 
 // An object is the runtime incarnation of a Ding on a level map, including actual position in level
 class Object
 {
 public:
 	Object::Object(unsigned posInLevelX, unsigned posInLevelY);
-	void				Instantiate(Dings* templateDing);
-	void				InstantiateInLayer(Layers inLayer, Dings* templateDing);
+	void				Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
+	void				InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
 	void				Weed();
 	Platform::String^	GetName();
 	Layers				GetLayers();
 	Dings*				GetDing(Layers ofLayer);
 	Facings				PlacementFacing();
+	void				AdjustFacing(Layers inLayer, Facings shouldBeFacing);
 
 protected:
 
