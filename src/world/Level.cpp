@@ -301,19 +301,21 @@ void Level::DesignSaveToFile()
 
 void Level::DesignSaveToFile(Platform::String^ fileName)
 {
+	const unsigned char levelFileFormatVersion = 2;
+
 	unsigned blockSaveCount = 0;
 	unsigned char whatsthere;
-
 	std::wstring fName = fileName->Data();
 	std::ofstream oF;
 	oF.open(fName, ios_base::out | ios_base::binary);
 	/* header */
 	oF.write((char*)&blooDot::blooDotMain::BLOODOTFILE_SIGNATURE, sizeof(blooDot::blooDotMain::BLOODOTFILE_SIGNATURE));
-	oF.write((char *)&sigbyte, sizeof(unsigned char));
+	oF.write((char*)&sigbyte, sizeof(unsigned char));
 	oF.write((char*)&blooDot::blooDotMain::BLOODOTFILE_CONTENTTYPE_LEVEL_DESIGN, sizeof(blooDot::blooDotMain::BLOODOTFILE_CONTENTTYPE_LEVEL_DESIGN));
+	oF.write((char*)&levelFileFormatVersion, sizeof(unsigned char));
 	/* dimensions */
-	oF.write((char *)&m_rectangularBounds.height, sizeof(uint32));
-	oF.write((char *)&m_rectangularBounds.width, sizeof(uint32));
+	oF.write((char*)&m_rectangularBounds.height, sizeof(uint32));
+	oF.write((char*)&m_rectangularBounds.width, sizeof(uint32));
 	/* skip table */
 	for (unsigned y = 0; y < this->m_rectangularBounds.height; ++y)
 	{
@@ -323,11 +325,7 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 			if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
 			{
 				auto allocatedObject = this->m_Objects[objectAddress];
-				if (allocatedObject == nullptr)
-				{
-					oF.write((char *)&emptybit, sizeof(const unsigned char));
-				}
-				else
+				if (allocatedObject != nullptr)
 				{
 					whatsthere = 0x0;
 					auto layers = allocatedObject->GetLayers();
@@ -343,31 +341,37 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 
 					if ((layers & Layers::Rooof) == Layers::Rooof)
 					{
-						whatsthere |= Rooof;
+						whatsthere |= rooofbit;
 					}
 
-					oF.write((char *)&whatsthere, sizeof(const unsigned char));
-					if ((layers & Layers::Floor) == Layers::Floor)
-					{
-						allocatedObject->GetDing(Layers::Floor)->DesignSaveToFile(&oF);
-					}
-
-					if ((layers & Layers::Walls) == Layers::Walls)
-					{
-						allocatedObject->GetDing(Layers::Walls)->DesignSaveToFile(&oF);
-					}
-
-					if ((layers & Layers::Rooof) == Layers::Rooof)
-					{
-						allocatedObject->GetDing(Layers::Rooof)->DesignSaveToFile(&oF);
-					}
-
-#ifdef _DEBUG
 					if (whatsthere > 0)
 					{
+						/* the square address descriptor is 24bit, so compose it accordingly */
+						uint64 addressDescriptor = ((y & 0x3ff) << 16) | (((whatsthere << 1) + 1) << 10) | (x & 0x3ff);
+						byte msb = (addressDescriptor >> 16) & 0xff;
+						byte isb = (addressDescriptor >> 8) & 0xff;
+						byte lsb = addressDescriptor & 0xff;
+						oF.write((char *)&msb, sizeof(unsigned char));
+						oF.write((char *)&isb, sizeof(unsigned char));
+						oF.write((char *)&lsb, sizeof(unsigned char));
+						if ((layers & Layers::Floor) == Layers::Floor)
+						{
+							allocatedObject->GetDing(Layers::Floor)->DesignSaveToFile(&oF);
+						}
+
+						if ((layers & Layers::Walls) == Layers::Walls)
+						{
+							allocatedObject->GetDing(Layers::Walls)->DesignSaveToFile(&oF);
+						}
+
+						if ((layers & Layers::Rooof) == Layers::Rooof)
+						{
+							allocatedObject->GetDing(Layers::Rooof)->DesignSaveToFile(&oF);
+						}
+#ifdef _DEBUG
 						++blockSaveCount;
-					}
 #endif
+					}
 				}
 			}
 		}
@@ -463,7 +467,7 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 					}
 
 #ifdef _DEBUG
-					blockLoadCount += (whatsthere & this->emptybit) == this->emptybit ? 0 : 1;
+					blockLoadCount += whatsthere ? 0 : 1;
 #endif
 				}
 			}

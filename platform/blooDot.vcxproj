@@ -252,7 +252,6 @@
     <ClCompile Include="..\src\algo\GameOfLifePlane.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeSprinkler.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeAnimation.cpp" />
-    <ClCompile Include="..\src\algo\ClumsyPacking.cpp" />
     <ClCompile Include="..\src\app\Consts.cpp" />
     <ClCompile Include="..\src\sound\Audio.cpp" />
     <ClCompile Include="..\src\io\BasicLoader.cpp" />

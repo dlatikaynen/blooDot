@@ -133,7 +133,6 @@
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dings\floor-like\wasser.cpp" />
-    <ClCompile Include="..\src\algo\ClumsyPacking.cpp" />
     <ClCompile Include="..\src\algo\ClumsyPacking.h" />
     <ClCompile Include="..\src\dings\wall-like\bitmapdings.cpp" />
   </ItemGroup>

@@ -39,10 +39,9 @@ public:
 
 private:
 	const unsigned char sigbyte = 42;
-	const unsigned char emptybit = 0x40;
-	const unsigned char floorbit = 0x2;
-	const unsigned char wallsbit = 0x4;
-	const unsigned char rooofbit = 0x16;
+	const unsigned char floorbit = 0x1;
+	const unsigned char wallsbit = 0x2;
+	const unsigned char rooofbit = 0x4;
 
 	void Clear();
 	unsigned GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet);

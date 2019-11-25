@@ -126,11 +126,14 @@ void Object::AdjustFacing(Layers inLayer, Facings shouldBeFacing)
 	{
 	case Layers::Floor:
 		this->m_FacingFloor = shouldBeFacing;
-
+		break;
+		
 	case Layers::Walls:
 		this->m_FacingWalls = shouldBeFacing;
+		break;
 
 	case Layers::Rooof:
 		this->m_FacingRooof = shouldBeFacing;
+		break;
 	}
 }
