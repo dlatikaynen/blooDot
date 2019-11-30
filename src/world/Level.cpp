@@ -347,7 +347,7 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 					if (whatsthere > 0)
 					{
 						/* the square address descriptor is 24bit, so compose it accordingly */
-						uint64 addressDescriptor = ((y & 0x3ff) << 16) | (((whatsthere << 1) + 1) << 10) | (x & 0x3ff);
+						uint64 addressDescriptor = ((y & 0x3ff) << 14) | (((whatsthere << 1) + 1) << 10) | (x & 0x3ff);
 						byte msb = (addressDescriptor >> 16) & 0xff;
 						byte isb = (addressDescriptor >> 8) & 0xff;
 						byte lsb = addressDescriptor & 0xff;

@@ -126,6 +126,7 @@ public:
 	D2D1_POINT_2U		GetSheetPlacement(Facings coalesced);
 	Layers				GetPreferredLayer();
 	void				DesignSaveToFile(std::ofstream* toFile);
+	bool				CouldCoalesce();
 
 protected:
 	unsigned			m_ID;

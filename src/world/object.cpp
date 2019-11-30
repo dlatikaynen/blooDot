@@ -14,21 +14,22 @@ void Object::Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfigurati
 
 void Object::InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
 {
+	auto facingVariation = templateDing->CouldCoalesce() ? ClumsyPacking::FacingFromConfiguration(neighborHood) : Facings::Shy;
 	switch (inLayer)
 	{
 	case Layers::Floor:
 		this->m_DingFloor = templateDing;
-		this->m_FacingFloor = ClumsyPacking::FacingFromConfiguration(neighborHood);
+		this->m_FacingFloor = facingVariation;
 		break;
 
 	case Layers::Walls:
 		this->m_DingWalls = templateDing;
-		this->m_FacingWalls = ClumsyPacking::FacingFromConfiguration(neighborHood);
+		this->m_FacingWalls = facingVariation;
 		break;
 
 	case Layers::Rooof:
 		this->m_DingRooof = templateDing;
-		this->m_FacingRooof = ClumsyPacking::FacingFromConfiguration(neighborHood);
+		this->m_FacingRooof = facingVariation;
 		break;
 	}
 	

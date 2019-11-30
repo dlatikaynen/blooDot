@@ -47,7 +47,11 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 				{
 					auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingID, inLayer);
 					newCell->Instantiate(newDings, neighborHood);
-					this->ClumsyPackNeighborhoodOf(neighborHood, this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, inLayer, newDingID);
+					if (newDings->CouldCoalesce())
+					{
+						this->ClumsyPackNeighborhoodOf(neighborHood, this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, inLayer, newDingID);
+					}
+
 					needRedraw = true;
 				}
 			}

@@ -18,7 +18,7 @@ Snow::Snow(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* 
 {
 	this->m_Facings = Facings::Shy;
 	this->m_Coalescing = Facings::Shy;
-	this->m_preferredLayer = Layers::Walls;
+	this->m_preferredLayer = Layers::Floor;
 	this->m_possibleLayers = (Layers)(Layers::Walls | Layers::Floor);
 }
 

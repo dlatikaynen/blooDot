@@ -5,7 +5,6 @@
     <FxCompile Include="..\src\BasicVertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\sound\Audio.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeSprinkler.cpp">
       <Filter>algo</Filter>
     </ClCompile>
@@ -132,13 +131,20 @@
     <ClCompile Include="..\src\ui\LevelEditorHUD.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\floor-like\wasser.cpp" />
-    <ClCompile Include="..\src\algo\ClumsyPacking.h" />
-    <ClCompile Include="..\src\dings\wall-like\bitmapdings.cpp" />
+    <ClCompile Include="..\src\dings\wall-like\bitmapdings.cpp">
+      <Filter>ui\dings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dings\floor-like\wasser.cpp">
+      <Filter>ui\dings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\algo\ClumsyPacking.h">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sound\Audio.cpp">
+      <Filter>audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\sound\Audio.h" />
-    <ClInclude Include="..\src\dx\Primitives.h" />
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
       <Filter>algo</Filter>
     </ClInclude>
@@ -259,6 +265,12 @@
     <ClInclude Include="..\src\ui\LevelEditorHUD.h">
       <Filter>ui</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\dx\Primitives.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sound\Audio.h">
+      <Filter>audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Media Include="Media\Audio\background.mp3" />
@@ -327,6 +339,9 @@
     </Filter>
     <Filter Include="world">
       <UniqueIdentifier>{718ea7fb-a814-40ca-98d3-0cc426bad6dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="audio">
+      <UniqueIdentifier>{29991b5a-8268-48ef-adb8-8fa4897b6d09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
