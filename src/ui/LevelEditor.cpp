@@ -87,7 +87,6 @@ void LevelEditor::DoObliterateDing()
 	}
 }
 
-
 void LevelEditor::ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration neighborHood, unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, unsigned dingID)
 {
 	if ((neighborHood & 1) == 1)
