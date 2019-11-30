@@ -234,8 +234,8 @@ void Dings::PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet)
 {
 	rectToSet.left = 49.0f * lookupLocation->x;
 	rectToSet.top = 49.0f * lookupLocation->y;
-	rectToSet.right = rectToSet.left + 49.0;
-	rectToSet.bottom = rectToSet.top + 49.0;
+	rectToSet.right = rectToSet.left + 49.0f;
+	rectToSet.bottom = rectToSet.top + 49.0f;
 }
 
 void Dings::Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation)
@@ -247,7 +247,7 @@ void Dings::Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation)
 	else
 	{
 		/* take anything else but 90° and funny stuff happens */
-		rendEr->SetTransform(D2D1::Matrix3x2F::Rotation(rotation * -90, D2D1::Point2F(rect.left + 24.5f, rect.top + 24.5f)));
+		rendEr->SetTransform(D2D1::Matrix3x2F::Rotation(static_cast<float>(rotation * -90), D2D1::Point2F(rect.left + 24.5f, rect.top + 24.5f)));
 	}
 }
 

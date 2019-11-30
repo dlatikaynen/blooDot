@@ -40,8 +40,8 @@ void WorldScreenBase::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	devi
 	this->m_wicFactory = deviceResources->GetWicImagingFactory();
 	this->m_d2dDevice = deviceResources->GetD2DDevice();
 	this->m_d2dContext = deviceResources->GetD2DDeviceContext();	
-	this->m_viewportSize = D2D1::SizeF(0, 0);
-	this->m_viewportSizeSquares = D2D1::SizeU(0.0f, 0.0f);
+	this->m_viewportSize = D2D1::SizeF(0.0f, 0.0f);
+	this->m_viewportSizeSquares = D2D1::SizeU(0, 0);
 
     ComPtr<ID2D1Factory> factory;
 	this->m_d2dDevice->GetFactory(&factory);
@@ -86,14 +86,14 @@ void WorldScreenBase::ComputeWorldCenter()
 {
 	auto worldSizeSquares = this->m_currentLevel->GetRectBoundsUnits();
 	m_worldCenterSquares = D2D1::Point2U(worldSizeSquares.width / 2, worldSizeSquares.width / 2);
-	m_worldCenter = D2D1::Point2F(m_worldSize.width / 2.0, m_worldSize.height / 2.0);
+	m_worldCenter = D2D1::Point2F(m_worldSize.width / 2.0f, m_worldSize.height / 2.0f);
 }
 
 void WorldScreenBase::ComputeViewportOffset()
 {
 	m_viewportSizeSquares = D2D1::SizeU(
-		ceil(m_viewportSize.width / static_cast<float>(blooDot::Consts::SQUARE_WIDTH)),
-		ceil(m_viewportSize.height / static_cast<float>(blooDot::Consts::SQUARE_HEIGHT))
+		static_cast<unsigned>(ceil(m_viewportSize.width / static_cast<float>(blooDot::Consts::SQUARE_WIDTH))),
+		static_cast<unsigned>(ceil(m_viewportSize.height / static_cast<float>(blooDot::Consts::SQUARE_HEIGHT)))
 	);
 
 	m_viewportOffset = D2D1::Point2F(

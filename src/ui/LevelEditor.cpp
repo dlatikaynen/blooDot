@@ -27,6 +27,7 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 	if (this->m_currentLevelEditorCellKnown)
 	{
 		this->m_IsErasing = myHUD->IsInEraserMode();
+		this->m_IsOverwriting = myHUD->IsInOverwriteMode();
 		this->m_selectedDingID = myHUD->SelectedDingID();
 
 		if (this->PeekTouchdown())
@@ -34,36 +35,52 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 			bool needRedraw = false;
 			if (this->m_IsErasing)
 			{
-				needRedraw = this->m_currentLevel->WeedObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y);
+				this->DoObliterateDing();
 			}
-			else if (this->m_selectedDingID > 0)
+			else 
 			{
-				auto inLayer = Layers::Walls;
-				auto newCell = this->m_currentLevel->GetObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, true);
-				auto curDings = newCell->GetDing(inLayer);
-				auto newDings = this->m_currentLevel->GetDing(this->m_selectedDingID);
-				auto newDingID = newDings->ID();
-				if (curDings == nullptr || curDings->ID() != newDingID)
-				{
-					auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingID, inLayer);
-					newCell->Instantiate(newDings, neighborHood);
-					if (newDings->CouldCoalesce())
-					{
-						this->ClumsyPackNeighborhoodOf(neighborHood, this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, inLayer, newDingID);
-					}
-
-					needRedraw = true;
-				}
-			}
-
-			if (needRedraw)
-			{
-				/* draw the object onto the sheet immediately */
-				this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y);
+				this->DoPlaceDing();
 			}
 		}
 	}
 }
+
+void LevelEditor::DoPlaceDing()
+{
+	if (this->m_currentLevelEditorCellKnown && this->m_selectedDingID > 0)
+	{
+		auto needRedraw = false;
+		auto newCell = this->m_currentLevel->GetObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, true);
+		auto newDings = this->m_currentLevel->GetDing(this->m_selectedDingID);
+		auto newDingID = newDings->ID();
+		auto newDingLayer = newDings->GetPreferredLayer();
+		auto curDings = newCell->GetDing(newDingLayer);
+		if (curDings == nullptr || (this->m_IsOverwriting && curDings->ID() != newDingID))
+		{
+			auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingID, newDingLayer);
+			newCell->Instantiate(newDings, neighborHood);
+			if (newDings->CouldCoalesce())
+			{
+				this->ClumsyPackNeighborhoodOf(neighborHood, this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingLayer, newDingID);
+			}
+
+			this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y);
+		}
+	}
+}
+
+void LevelEditor::DoObliterateDing() 
+{
+	if (this->m_currentLevelEditorCellKnown)
+	{
+		bool needRedraw = this->m_currentLevel->WeedObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y);
+		if (needRedraw)
+		{
+			this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y);
+		}
+	}
+}
+
 
 void LevelEditor::ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration neighborHood, unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, unsigned dingID)
 {
@@ -231,28 +248,28 @@ void LevelEditor::DrawLevelEditorRaster()
 	auto xAdjust = static_cast<float>(static_cast<unsigned>(m_viewportOffset.x) % static_cast<unsigned>(blooDot::Consts::SQUARE_WIDTH));
 
 	for (
-		int y = -yAdjust;
+		int y = -static_cast<int>(yAdjust);
 		y < static_cast<int>(m_viewportSize.height + blooDot::Consts::SQUARE_HEIGHT);
 		y += static_cast<int>(blooDot::Consts::SQUARE_HEIGHT)
 		)
 	{
-		point0.x = 0;
-		point0.y = y;
-		point1.x = static_cast<int>(m_viewportSize.width);
-		point1.y = y;
+		point0.x = (float)0;
+		point0.y = (float)y;
+		point1.x = (float)static_cast<int>(m_viewportSize.width);
+		point1.y = (float)y;
 		m_d2dContext->DrawLine(point0, point1, brusherl, 1.0F, NULL);
 	}
 
 	for (
-		int x = -xAdjust;
+		int x = -static_cast<int>(xAdjust);
 		x < static_cast<int>(m_viewportSize.width + blooDot::Consts::SQUARE_WIDTH);
 		x += static_cast<int>(blooDot::Consts::SQUARE_WIDTH)
 		)
 	{
-		point0.x = x;
-		point0.y = 0;
-		point1.x = x;
-		point1.y = static_cast<int>(m_viewportSize.height);
+		point0.x = (float)x;
+		point0.y = (float)0;
+		point1.x = (float)x;
+		point1.y = (float)static_cast<int>(m_viewportSize.height);
 		m_d2dContext->DrawLine(point0, point1, brusherl, 1.0F, NULL);
 	}
 

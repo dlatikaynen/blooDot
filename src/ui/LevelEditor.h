@@ -12,6 +12,8 @@ public:
 	void SelectNextDingForPlacement();
 	void SelectPreviousDingForPlacement();
 	Dings* SelectedDing();
+	void DoPlaceDing();
+	void DoObliterateDing();
 
 private:
 	void DrawLevelEditorRaster();
@@ -21,5 +23,6 @@ private:
 
 	unsigned m_selectedDingID;
 	bool m_IsErasing;
+	bool m_IsOverwriting;
 };
 

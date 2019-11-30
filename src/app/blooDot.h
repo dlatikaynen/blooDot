@@ -145,8 +145,6 @@ namespace blooDot
 		XMFLOAT2			m_pointerPosition;
         typedef std::queue<D2D1_POINT_2F> PointQueue;
         PointQueue			m_pointQueue;
-        bool				m_pauseKeyActive;
-        bool				m_pauseKeyPressed;
 		bool				m_shiftKeyActive;
 		bool				m_homeKeyActive;
         bool				m_homeKeyPressed;
@@ -168,6 +166,10 @@ namespace blooDot
 		bool				m_keyMinusPressed;
 		bool				m_keyPlusActive;
 		bool				m_keyPlusPressed;
+		bool				m_keyPlaceActive;
+		bool				m_keyPlacePressed;
+		bool				m_keyObliterateActive;
+		bool				m_keyObliteratePressed;
 		bool				m_keyMusicActive;
 		bool				m_keyMusicPressed;
 		bool				m_windowActive;

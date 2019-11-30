@@ -114,12 +114,22 @@ unsigned LevelEditorHUD::SelectedDingID()
 	return this->m_selectedDingID;
 }
 
-void LevelEditorHUD::ToggleEraser(bool doErase)
+void LevelEditorHUD::ToggleEraser()
 {
-	this->m_isEraserChosen = doErase;
+	this->m_isEraserChosen = !this->m_isEraserChosen;
+}
+
+void LevelEditorHUD::ToggleOverwrite()
+{
+	this->m_isInOverwriteMode = !this->m_isInOverwriteMode;
 }
 
 bool LevelEditorHUD::IsInEraserMode()
 {
 	return this->m_isEraserChosen;
+}
+
+bool LevelEditorHUD::IsInOverwriteMode()
+{
+	return this->m_isInOverwriteMode;
 }

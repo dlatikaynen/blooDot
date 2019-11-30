@@ -203,13 +203,6 @@ public:
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 };
 
-class Dalek : public Dings
-{
-public:
-	Dalek(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
-	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
-};
-
 class HighGrass : public Dings
 {
 public:
@@ -222,6 +215,14 @@ class Snow : public Dings
 {
 public:
 	Snow(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Dalek : public Dings
+{
+public:
+	Dalek(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };

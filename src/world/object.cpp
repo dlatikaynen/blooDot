@@ -38,12 +38,30 @@ void Object::InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacki
 
 void Object::Weed()
 {
-	this->m_DingFloor = nullptr;
-	this->m_DingWalls = nullptr;
-	this->m_DingRooof = nullptr;
-	this->m_FacingFloor = Facings::Shy;
-	this->m_FacingWalls = Facings::Shy;
-	this->m_FacingRooof = Facings::Shy;
+	while (!this->WeedFromTop());
+}
+
+// returns true, if nothing left
+// Dings are placement-created, don't delete them
+bool Object::WeedFromTop()
+{
+	if (this->m_DingRooof != nullptr)
+	{
+		this->m_DingRooof = nullptr;
+		this->m_FacingRooof = Facings::Shy;
+	}
+	else if (this->m_DingWalls != nullptr)
+	{
+		this->m_DingWalls = nullptr;
+		this->m_FacingWalls = Facings::Shy;
+	}
+	else if (this->m_DingFloor != nullptr)
+	{
+		this->m_DingFloor = nullptr;
+		this->m_FacingFloor = Facings::Shy;
+	}
+
+	return this->m_DingRooof == nullptr && this->m_DingWalls == nullptr && this->m_DingFloor == nullptr;
 }
 
 Platform::String^ Object::GetName()

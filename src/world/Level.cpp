@@ -216,8 +216,11 @@ bool Level::WeedObjectAt(unsigned levelX, unsigned levelY)
 		auto existingObject = this->m_Objects[objectAddress];
 		if (existingObject != nullptr)
 		{
-			existingObject->Weed();
-			this->m_Objects[objectAddress] = nullptr;
+			if (existingObject->WeedFromTop())
+			{
+				this->m_Objects[objectAddress] = nullptr;
+			}
+
 			if (this->m_isDesignTime)
 			{
 				this->m_DesignTimeDirty = true;
@@ -250,7 +253,7 @@ ClumsyPacking::NeighborConfiguration Level::GetNeighborConfigurationOf(unsigned 
 
 bool Level::HasCompatibleNeighbor(int x, int y, int dingID, Layers ofLayer)
 {
-	if (!(x < 0 || y < 0 || x >= this->m_rectangularBounds.width || y >= this->m_rectangularBounds.height))
+	if (!(x < 0 || y < 0 || x >= (int)this->m_rectangularBounds.width || y >= (int)this->m_rectangularBounds.height))
 	{
 		auto thereObject = this->GetObjectAt(x, y, false);
 		if (thereObject != nullptr && ((thereObject->GetLayers() & ofLayer) == ofLayer))

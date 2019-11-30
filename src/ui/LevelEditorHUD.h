@@ -14,8 +14,10 @@ public:
 	void SelectDing(Dings* ding, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage);
 
 	unsigned SelectedDingID();
-	void ToggleEraser(bool doErase);
+	void ToggleEraser();
 	bool IsInEraserMode();
+	void ToggleOverwrite();
+	bool IsInOverwriteMode();
 
 protected:
 	virtual void CalculateSize();
@@ -36,5 +38,6 @@ private:
 	unsigned										m_selectedDingID;
 	Platform::String^								m_dingName;
 	bool											m_isEraserChosen;
+	bool											m_isInOverwriteMode;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>				m_selectedDingImage;
 };

@@ -64,6 +64,10 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	m_keyMusicPressed = false;
 	m_keyPlusActive = false;
 	m_keyPlusPressed = false;
+	m_keyPlaceActive = false;
+	m_keyPlacePressed = false;
+	m_keyObliterateActive = false;
+	m_keyObliteratePressed = false;
 	m_keySaveActive = false;
 	m_keySavePressed = false;
 	m_keySaveAsActive = false;
@@ -768,16 +772,30 @@ void blooDotMain::Update()
 				this->m_keyDownPressed
 			);
 
+			if (this->m_keyPlacePressed)
+			{
+				this->m_keyPlacePressed = false;
+				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->DoPlaceDing();
+			}
+
+			if (this->m_keyObliteratePressed)
+			{
+				this->m_keyObliteratePressed = false;
+				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->DoObliterateDing();
+			}
+
 			if (this->m_keyDeletePressed)
 			{
 				this->m_keyDeletePressed = false;
-				this->m_levelEditorHUD.ToggleEraser(true);
+				this->m_levelEditorHUD.ToggleEraser();
 			}
 
 			if (this->m_keyInsertPressed)
 			{
 				this->m_keyInsertPressed = false;
-				this->m_levelEditorHUD.ToggleEraser(false);
+				this->m_levelEditorHUD.ToggleOverwrite();
 			}
 
 			if (this->m_keyPlusPressed)
@@ -829,10 +847,8 @@ void blooDotMain::Update()
         float combinedTiltY = 0.0f;
 
         // Check whether the user paused or resumed the game.
-        if (ButtonJustPressed(GamepadButtons::Menu) || m_pauseKeyPressed)
+        if (ButtonJustPressed(GamepadButtons::Menu))
         {
-            m_pauseKeyPressed = false;
-
 			if (m_gameState == GameState::InGameActive)
 			{
 				SetGameState(GameState::InGamePaused);
@@ -1387,11 +1403,7 @@ void blooDotMain::RemoveTouch(int id)
 
 void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 {
-    if (key == Windows::System::VirtualKey::P)
-    {
-        m_pauseKeyActive = true;
-    }
-	else if (key == Windows::System::VirtualKey::Shift)
+	if (key == Windows::System::VirtualKey::Shift)
 	{
 		m_shiftKeyActive = true;
 	}
@@ -1399,6 +1411,14 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
     {
         m_homeKeyActive = true;
     }
+	else if (key == Windows::System::VirtualKey::P)
+	{
+		m_keyPlaceActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::O)
+	{
+		m_keyObliterateActive = true;
+	}
 	else if (key == Windows::System::VirtualKey::Subtract)
 	{
 		m_keyMinusActive = true;
@@ -1451,112 +1471,119 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 
 void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 {
-    if (key == Windows::System::VirtualKey::P)
+    if (key == Windows::System::VirtualKey::Home)
     {
-        if (m_pauseKeyActive)
+        if (this->m_homeKeyActive)
         {
-            // trigger pause only once on button release
-            m_pauseKeyPressed = true;
-            m_pauseKeyActive = false;
-        }
-    }
-    else if (key == Windows::System::VirtualKey::Home)
-    {
-        if (m_homeKeyActive)
-        {
-            m_homeKeyPressed = true;
-            m_homeKeyActive = false;
+			this->m_homeKeyPressed = true;
+			this->m_homeKeyActive = false;
         }
     }
 	else if (key == Windows::System::VirtualKey::M)
 	{
-		if (m_keyMusicActive)
+		if (this->m_keyMusicActive)
 		{
-			m_keyMusicPressed = true;
-			m_keyMusicActive = false;
+			this->m_keyMusicPressed = true;
+			this->m_keyMusicActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::P)
+	{
+		if (this->m_keyPlaceActive)
+		{
+			this->m_keyPlacePressed = true;
+			this->m_keyPlaceActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::O)
+	{
+		if (this->m_keyObliterateActive)
+		{
+			this->m_keyObliteratePressed = true;
+			this->m_keyObliterateActive = false;
 		}
 	}
 	else if (key == Windows::System::VirtualKey::Subtract)
 	{
-		if (m_keyMinusActive)
+		if (this->m_keyMinusActive)
 		{
-			m_keyMinusPressed = true;
-			m_keyMinusActive = false;
+			this->m_keyMinusPressed = true;
+			this->m_keyMinusActive = false;
 		}
 	}
 	else if (key == Windows::System::VirtualKey::Add)
 	{
-		if (m_keyPlusActive)
+		if (this->m_keyPlusActive)
 		{
-			m_keyPlusPressed = true;
-			m_keyPlusActive = false;
+			this->m_keyPlusPressed = true;
+			this->m_keyPlusActive = false;
 		}
 	}
 	else if (key == Windows::System::VirtualKey::Insert)
 	{
-		if (m_keyInsertActive)
+		if (this->m_keyInsertActive)
 		{
-			m_keyInsertPressed = true;
-			m_keyInsertActive = false;
+			this->m_keyInsertPressed = true;
+			this->m_keyInsertActive = false;
 		}
 	}
 	else if (key == Windows::System::VirtualKey::Delete)
 	{
-		if (m_keyDeleteActive)
+		if (this->m_keyDeleteActive)
 		{
-			m_keyDeletePressed = true;
-			m_keyDeleteActive = false;
+			this->m_keyDeletePressed = true;
+			this->m_keyDeleteActive = false;
 		}
 	}
 	else if (key == Windows::System::VirtualKey::S)
 	{
-		if (m_keySaveActive)
+		if (this->m_keySaveActive)
 		{
-			m_keySavePressed = true;
-			m_keySaveActive = false;
+			this->m_keySavePressed = true;
+			this->m_keySaveActive = false;
 		}
 	}
 	else if (key == Windows::System::VirtualKey::A)
 	{
-		if (m_keySaveAsActive)
+		if (this->m_keySaveAsActive)
 		{
-			m_keySaveAsPressed = true;
-			m_keySaveAsActive = false;
+			this->m_keySaveAsPressed = true;
+			this->m_keySaveAsActive = false;
 		}
 	}
 	else if (key == Windows::System::VirtualKey::L)
 	{
-		if (m_keyLoadActive)
+		if (this->m_keyLoadActive)
 		{
-			m_keyLoadPressed = true;
-			m_keyLoadActive = false;
+			this->m_keyLoadPressed = true;
+			this->m_keyLoadActive = false;
 		}
 	}
 	else if (key == Windows::System::VirtualKey::Shift)
 	{
-		m_shiftKeyActive = false;
+		this->m_shiftKeyActive = false;
 	}
 	else if (key == Windows::System::VirtualKey::Left)
 	{
-		m_keyLeftPressed = false;
+		this->m_keyLeftPressed = false;
 	}
 	else if (key == Windows::System::VirtualKey::Right)
 	{
-		m_keyRightPressed = false;
+		this->m_keyRightPressed = false;
 	}
 	else if (key == Windows::System::VirtualKey::Up)
 	{
-		m_keyUpPressed = false;
+		this->m_keyUpPressed = false;
 	}
 	else if (key == Windows::System::VirtualKey::Down)
 	{
-		m_keyDownPressed = false;
+		this->m_keyDownPressed = false;
 	}
 
-	if (m_deferredResourcesReadyPending)
+	if (this->m_deferredResourcesReadyPending)
 	{
-		m_deferredResourcesReady = true;
-		SetGameState(GameState::LevelEditor);
+		this->m_deferredResourcesReady = true;
+		this->SetGameState(GameState::LevelEditor);
 		this->m_levelEditorHUD.SetVisible(true);
 	}
 }

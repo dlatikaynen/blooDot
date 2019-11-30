@@ -35,8 +35,8 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	/* CENTER CROSSING */
 	rect.left = 49.0f * this->m_lookupCrossing.x;
 	rect.top = 49.0f * this->m_lookupCrossing.y;
-	rect.right = rect.left + 49.0;
-	rect.bottom = rect.top + 49.0;	
+	rect.right = rect.left + 49.0f;
+	rect.bottom = rect.top + 49.0f;	
 	rendEr->DrawLine(D2D1::Point2F(rect.left, rect.top+5), D2D1::Point2F(rect.left+5, rect.top+5), innerBrush, 2.5f, 0);
 	rendEr->DrawLine(D2D1::Point2F(rect.left+5, rect.top+5), D2D1::Point2F(rect.left+5, rect.top), innerBrush, 2.5f, 0);
 	rendEr->DrawLine(D2D1::Point2F(rect.right, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top + 5), innerBrush, 2.5f, 0);
@@ -48,10 +48,10 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	
 	/* SHY
 	 * inner border */
-	rect.left = 49.0f * this->m_lookupShy.x + 5;
-	rect.top = 49.0f * this->m_lookupShy.y + 5;
-	rect.right = rect.left + 49.0 - 10;
-	rect.bottom = rect.top + 49.0 - 10;
+	rect.left = 49.0f * this->m_lookupShy.x + 5.0f;
+	rect.top = 49.0f * this->m_lookupShy.y + 5.0f;
+	rect.right = rect.left + 49.0f - 10.0f;
+	rect.bottom = rect.top + 49.0f - 10.0f;
 	rendEr->DrawRectangle(rect, innerBrush, 2.5f, 0);
 
 	/* Us: rotate so we have lefty (no rotation) last, so
@@ -60,9 +60,9 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	{
 		PrepareRect(&this->m_lookupU[facing], rect);
 		Rotate(rendEr, rect, facing);
-		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top + 5), D2D1::Point2F(rect.right, rect.top + 5), innerBrush, 2.5f, 0);
-		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top + 5), D2D1::Point2F(rect.left + 5, rect.bottom - 5), innerBrush, 2.5f, 0);
-		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.bottom - 5), D2D1::Point2F(rect.right, rect.bottom - 5), innerBrush, 2.5f, 0);
+		rendEr->DrawLine(D2D1::Point2F(rect.left + 5.0f, rect.top + 5.0f), D2D1::Point2F(rect.right, rect.top + 5.0f), innerBrush, 2.5f, 0);
+		rendEr->DrawLine(D2D1::Point2F(rect.left + 5.0f, rect.top + 5.0f), D2D1::Point2F(rect.left + 5, rect.bottom - 5.0f), innerBrush, 2.5f, 0);
+		rendEr->DrawLine(D2D1::Point2F(rect.left + 5.0f, rect.bottom - 5.0f), D2D1::Point2F(rect.right, rect.bottom - 5.0f), innerBrush, 2.5f, 0);
 		/* Ts */
 		PrepareRect(&this->m_lookupTs[facing], rect);
 		Rotate(rendEr, rect, facing);
