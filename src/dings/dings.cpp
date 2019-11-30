@@ -288,10 +288,10 @@ D2D1_POINT_2U Dings::GetSheetPlacement(Facings coalesced)
 		case Facings::EdgeCornerSE: return this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagSE];
 		case Facings::EdgeCornerNE: return this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagNE];
 		case Facings::EdgeCornerSW: return this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagSW];
-		case Facings::TW: return this->m_lookupTs[OrientabilityIndexQuadruplet::Lefty];
-		case Facings::TE: return this->m_lookupTs[OrientabilityIndexQuadruplet::Righty];
-		case Facings::TN: return this->m_lookupTs[OrientabilityIndexQuadruplet::Uppy];
-		case Facings::TS: return this->m_lookupTs[OrientabilityIndexQuadruplet::Downy];
+		case Facings::TW: return this->m_lookupTs[OrientabilityIndexQuadruplet::Righty];
+		case Facings::TE: return this->m_lookupTs[OrientabilityIndexQuadruplet::Lefty];
+		case Facings::TN: return this->m_lookupTs[OrientabilityIndexQuadruplet::Downy];
+		case Facings::TS: return this->m_lookupTs[OrientabilityIndexQuadruplet::Uppy];
 		case Facings::Corner1NW: return this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagNW];
 		case Facings::Corner1NE: return this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagNE];
 		case Facings::Corner1SW: return this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagSW];

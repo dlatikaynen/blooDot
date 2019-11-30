@@ -38,27 +38,40 @@ void Object::InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacki
 
 void Object::Weed()
 {
-	while (!this->WeedFromTop());
+	Dings* tempDing = nullptr;
+	Layers tempLayer = Layers::None;
+	while (!this->WeedFromTop(&tempDing, &tempLayer));
 }
 
 // returns true, if nothing left
 // Dings are placement-created, don't delete them
-bool Object::WeedFromTop()
+bool Object::WeedFromTop(Dings** dingWeeded, Layers* layerWeeded)
 {
 	if (this->m_DingRooof != nullptr)
 	{
+		(*dingWeeded) = this->m_DingRooof;
+		(*layerWeeded) = Layers::Rooof;
 		this->m_DingRooof = nullptr;
 		this->m_FacingRooof = Facings::Shy;
 	}
 	else if (this->m_DingWalls != nullptr)
 	{
+		(*dingWeeded) = this->m_DingWalls;
+		(*layerWeeded) = Layers::Walls;
 		this->m_DingWalls = nullptr;
 		this->m_FacingWalls = Facings::Shy;
 	}
 	else if (this->m_DingFloor != nullptr)
 	{
+		(*dingWeeded) = this->m_DingFloor;
+		(*layerWeeded) = Layers::Floor;
 		this->m_DingFloor = nullptr;
 		this->m_FacingFloor = Facings::Shy;
+	}
+	else
+	{
+		(*dingWeeded) = nullptr;
+		(*layerWeeded) = Layers::None;
 	}
 
 	return this->m_DingRooof == nullptr && this->m_DingWalls == nullptr && this->m_DingFloor == nullptr;

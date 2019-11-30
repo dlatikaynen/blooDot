@@ -208,28 +208,30 @@ Object* Level::GetObjectAt(unsigned levelX, unsigned levelY, bool createIfNull)
 	return retrievedObject;
 }
 
-bool Level::WeedObjectAt(unsigned levelX, unsigned levelY)
+Dings* Level::WeedObjectAt(unsigned levelX, unsigned levelY, Layers* cullCoalescableInLayer)
 {
+	Dings* dingWeeded = nullptr;
+	(*cullCoalescableInLayer) = Layers::None;
 	auto objectAddress = levelY * this->m_rectangularBounds.width + levelX;
 	if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
 	{
 		auto existingObject = this->m_Objects[objectAddress];
 		if (existingObject != nullptr)
 		{
-			if (existingObject->WeedFromTop())
+			auto weedComplete = existingObject->WeedFromTop(&dingWeeded, cullCoalescableInLayer);
+			if (weedComplete)
 			{
 				this->m_Objects[objectAddress] = nullptr;
 			}
 
-			if (this->m_isDesignTime)
+			if (dingWeeded != nullptr && this->m_isDesignTime)
 			{
 				this->m_DesignTimeDirty = true;
 			}
-			return true;
 		}
 	}
 
-	return false;
+	return dingWeeded;
 }
 
 ClumsyPacking::NeighborConfiguration Level::GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, unsigned dingID, Layers inLayer)

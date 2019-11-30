@@ -9,6 +9,7 @@
 // Numeric ordering is relied upon
 enum Layers
 {
+	None = 0,
 	Floor = 1,
 	Walls = 2,
 	Rooof = 4

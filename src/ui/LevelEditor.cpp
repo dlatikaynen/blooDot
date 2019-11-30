@@ -29,7 +29,6 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 		this->m_IsErasing = myHUD->IsInEraserMode();
 		this->m_IsOverwriting = myHUD->IsInOverwriteMode();
 		this->m_selectedDingID = myHUD->SelectedDingID();
-
 		if (this->PeekTouchdown())
 		{
 			bool needRedraw = false;
@@ -73,10 +72,17 @@ void LevelEditor::DoObliterateDing()
 {
 	if (this->m_currentLevelEditorCellKnown)
 	{
-		bool needRedraw = this->m_currentLevel->WeedObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y);
-		if (needRedraw)
+		Layers cullCoalescablesInLayer;
+		auto dingWeeded = this->m_currentLevel->WeedObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, &cullCoalescablesInLayer);
+		if (dingWeeded != nullptr)
 		{
 			this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y);
+			if (dingWeeded->CouldCoalesce())
+			{
+				auto weededDingID = dingWeeded->ID();
+				auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, weededDingID, cullCoalescablesInLayer);
+				this->ClumsyPackNeighborhoodOf(neighborHood, this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, cullCoalescablesInLayer, weededDingID);
+			}
 		}
 	}
 }

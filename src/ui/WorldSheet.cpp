@@ -202,7 +202,6 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y)
 	auto dingSheet = this->m_tiedToLevel->GetDingSheet();
 	ID2D1Bitmap *dingMap = NULL;
 	dingSheet->GetBitmap(&dingMap);
-
 	auto worldX = x + this->m_NWcornerInWorldSquares.x;
 	auto worldY = y + this->m_NWcornerInWorldSquares.y;
 	auto objectX = this->m_tiedToLevel->GetObjectAt(worldX, worldY, false);
@@ -227,6 +226,9 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y)
 			{
 				this->m_floor->BeginDraw();
 				beganDrawFloor = true;
+				auto floorBackground = this->m_tiedToLevel->GetFloorBackground().Get();
+				D2D1_RECT_F replacementRect = D2D1::RectF(x * 49.0f, x * 49.0f, x * 49.0f + 49.0f, x * 49.0f + 49.0f);
+				this->m_floor->DrawBitmap(floorBackground, replacementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, replacementRect);
 			}
 
 			this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(), x, y);
@@ -237,6 +239,7 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y)
 			{
 				this->m_walls->BeginDraw();
 				beganDrawWalls = true;
+				this->EraseSquare(this->m_walls, x, y);
 			}
 
 			this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(), x, y);
@@ -247,6 +250,7 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y)
 			{
 				this->m_rooof->BeginDraw();
 				beganDrawRooof = true;
+				this->EraseSquare(this->m_rooof, x, y);
 			}
 
 			this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(), x, y);

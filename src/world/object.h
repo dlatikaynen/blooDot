@@ -11,7 +11,7 @@ public:
 	void				Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
 	void				InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
 	void				Weed();
-	bool				WeedFromTop();
+	bool				Object::WeedFromTop(Dings** dingWeeded, Layers* layerWeeded);
 	Platform::String^	GetName();
 	Layers				GetLayers();
 	Dings*				GetDing(Layers ofLayer);
