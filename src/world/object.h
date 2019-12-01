@@ -10,7 +10,7 @@ public:
 	Object::Object(unsigned posInLevelX, unsigned posInLevelY);
 	void				Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
 	void				InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
-	void				InstantiateInLayer(Layers inLayer, Dings* templateDing, Facings placementFacing);
+	void				InstantiateInLayerFacing(Layers inLayer, Dings* templateDing, Facings placementFacing);
 	void				Weed();
 	bool				Object::WeedFromTop(Dings** dingWeeded, Layers* layerWeeded);
 	Platform::String^	GetName();

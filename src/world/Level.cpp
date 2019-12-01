@@ -468,7 +468,7 @@ void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t off
 	this->Clear();
 
 	/* read the descriptor stream */
-	while (offset < length)
+	while (offset < (length - 1))
 	{
 		Facings placementFacing;
 		unsigned dingID;
@@ -497,7 +497,7 @@ void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t off
 				placementFacing = Facings::Shy;
 			}
 
-			this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayer(Layers::Floor, &this->m_dingMap.at(dingID), placementFacing);
+			this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Floor, &this->m_dingMap.at(dingID), placementFacing);
 		}
 
 		if (hasWalls)
@@ -513,7 +513,7 @@ void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t off
 				placementFacing = Facings::Shy;
 			}
 
-			this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayer(Layers::Walls, &this->m_dingMap.at(dingID), placementFacing);
+			this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Walls, &this->m_dingMap.at(dingID), placementFacing);
 		}
 
 		if (hasRooof)
@@ -529,7 +529,7 @@ void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t off
 				placementFacing = Facings::Shy;
 			}
 
-			this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayer(Layers::Rooof, &this->m_dingMap.at(dingID), placementFacing);
+			this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Rooof, &this->m_dingMap.at(dingID), placementFacing);
 		}
 
 #ifdef _DEBUG

@@ -16,10 +16,10 @@ void Object::Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfigurati
 void Object::InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
 {
 	auto facingVariation = templateDing->CouldCoalesce() ? ClumsyPacking::FacingFromConfiguration(neighborHood) : Facings::Shy;
-	this->InstantiateInLayer(inLayer, templateDing, facingVariation);
+	this->InstantiateInLayerFacing(inLayer, templateDing, facingVariation);
 }
 
-void Object::InstantiateInLayer(Layers inLayer, Dings* templateDing, Facings placementFacing)
+void Object::InstantiateInLayerFacing(Layers inLayer, Dings* templateDing, Facings placementFacing)
 {
 	switch (inLayer)
 	{
