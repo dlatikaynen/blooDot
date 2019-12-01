@@ -1,4 +1,5 @@
 #include "Object.h"
+#include <fstream>
 
 Object::Object(unsigned posInLevelX, unsigned posInLevelY)
 {
@@ -15,21 +16,26 @@ void Object::Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfigurati
 void Object::InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
 {
 	auto facingVariation = templateDing->CouldCoalesce() ? ClumsyPacking::FacingFromConfiguration(neighborHood) : Facings::Shy;
+	this->InstantiateInLayer(inLayer, templateDing, facingVariation);
+}
+
+void Object::InstantiateInLayer(Layers inLayer, Dings* templateDing, Facings placementFacing)
+{
 	switch (inLayer)
 	{
 	case Layers::Floor:
 		this->m_DingFloor = templateDing;
-		this->m_FacingFloor = facingVariation;
+		this->m_FacingFloor = placementFacing;
 		break;
 
 	case Layers::Walls:
 		this->m_DingWalls = templateDing;
-		this->m_FacingWalls = facingVariation;
+		this->m_FacingWalls = placementFacing;
 		break;
 
 	case Layers::Rooof:
 		this->m_DingRooof = templateDing;
-		this->m_FacingRooof = facingVariation;
+		this->m_FacingRooof = placementFacing;
 		break;
 	}
 	
@@ -138,9 +144,9 @@ Dings* Object::GetDing(Layers ofLayer)
 	return nullptr;
 }
 
-Facings	Object::PlacementFacing()
+Facings	Object::PlacementFacing(Layers ofLayer)
 {
-	switch (this->m_Layers)
+	switch (ofLayer)
 	{
 	case Layers::Floor:
 		return this->m_FacingFloor;
@@ -170,5 +176,31 @@ void Object::AdjustFacing(Layers inLayer, Facings shouldBeFacing)
 	case Layers::Rooof:
 		this->m_FacingRooof = shouldBeFacing;
 		break;
+	}
+}
+
+void Object::DesignSaveToFile(std::ofstream* toFile, Layers ofLayer)
+{
+	auto thisDing = this->GetDing(ofLayer);
+	if (thisDing == nullptr)
+	{
+		toFile->write((char*)0, sizeof(byte));
+	}
+	else 
+	{
+		auto dingID = thisDing->ID();
+		auto dingFacing = this->PlacementFacing(ofLayer);
+		if ((dingID & 0x80) || dingFacing != Facings::Shy)
+		{
+			byte msb = 0x80 | (dingID & 0x7f);
+			toFile->write((char*)&msb, sizeof(byte));
+			byte lsb = static_cast<byte>(dingFacing);
+			toFile->write((char*)&lsb, sizeof(byte));
+		}
+		else
+		{
+			dingID = dingID & 0x7f;
+			toFile->write((char*)&dingID, sizeof(uint32));
+		}
 	}
 }

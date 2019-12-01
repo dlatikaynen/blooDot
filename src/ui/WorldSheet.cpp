@@ -127,7 +127,7 @@ void WorldSheet::Populate()
 							beganDrawFloor = true;
 						}
 
-						this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(), x, y);
+						this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(::Floor), x, y);
 					}
 					else if (layer == Layers::Walls)
 					{
@@ -137,7 +137,7 @@ void WorldSheet::Populate()
 							beganDrawWalls = true;
 						}
 
-						this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(), x, y);
+						this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(::Walls), x, y);
 					}
 					else if (layer == Layers::Rooof)
 					{
@@ -147,7 +147,7 @@ void WorldSheet::Populate()
 							beganDrawRooof = true;
 						}
 
-						this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(), x, y);
+						this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(::Rooof), x, y);
 					}
 				}
 			}
@@ -269,7 +269,7 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 			}
 			else			
 			{
-				this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(), x, y);
+				this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(::Floor), x, y);
 			}
 		}
 		
@@ -285,7 +285,7 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 			dings = objectX->GetDing(Layers::Walls);
 			if (dings != nullptr)
 			{
-				this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(), x, y);
+				this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(::Walls), x, y);
 			}
 		}
 		
@@ -301,7 +301,7 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 			dings = objectX->GetDing(Layers::Rooof);
 			if (dings != nullptr)
 			{
-				this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(), x, y);
+				this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(::Rooof), x, y);
 			}			
 		}
 	}

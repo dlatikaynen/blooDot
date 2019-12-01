@@ -10,13 +10,15 @@ public:
 	Object::Object(unsigned posInLevelX, unsigned posInLevelY);
 	void				Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
 	void				InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
+	void				InstantiateInLayer(Layers inLayer, Dings* templateDing, Facings placementFacing);
 	void				Weed();
 	bool				Object::WeedFromTop(Dings** dingWeeded, Layers* layerWeeded);
 	Platform::String^	GetName();
 	Layers				GetLayers();
 	Dings*				GetDing(Layers ofLayer);
-	Facings				PlacementFacing();
+	Facings				PlacementFacing(Layers ofLayer);
 	void				AdjustFacing(Layers inLayer, Facings shouldBeFacing);
+	void				DesignSaveToFile(std::ofstream* toFile, Layers ofLayer);
 
 protected:
 

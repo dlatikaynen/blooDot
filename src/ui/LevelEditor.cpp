@@ -140,7 +140,7 @@ void LevelEditor::ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroun
 		{
 			auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(aroundLevelX, aroundLevelY, dingID, inLayer);
 			auto shouldBeFacing = ClumsyPacking::FacingFromConfiguration(neighborHood);
-			if (centerObject->PlacementFacing() != shouldBeFacing)
+			if (centerObject->PlacementFacing(inLayer) != shouldBeFacing)
 			{
 				centerObject->AdjustFacing(inLayer, shouldBeFacing);
 				this->RedrawSingleSquare(aroundLevelX, aroundLevelY, inLayer);

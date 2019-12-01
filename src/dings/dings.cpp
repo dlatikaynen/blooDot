@@ -1,5 +1,4 @@
 #include "..\PreCompiledHeaders.h"
-#include <fstream>
 #include "dings.h"
 
 using namespace Windows::Storage;
@@ -314,9 +313,4 @@ D2D1_POINT_2U Dings::GetSheetPlacement(Facings coalesced)
 bool Dings::CouldCoalesce()
 {
 	return this->m_Coalescing != Facings::Shy && this->m_Coalescing != Facings::Viech;
-}
-
-void Dings::DesignSaveToFile(std::ofstream* toFile)
-{
-	toFile->write((char*)&this->m_ID, sizeof(uint32));
 }

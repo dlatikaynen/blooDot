@@ -329,17 +329,17 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 				{
 					whatsthere = 0x0;
 					auto layers = allocatedObject->GetLayers();
-					if ((layers & Layers::Floor) == Layers::Floor)
+					if (layers & Layers::Floor)
 					{
 						whatsthere |= floorbit;
 					}
 
-					if ((layers & Layers::Walls) == Layers::Walls)
+					if (layers & Layers::Walls)
 					{
 						whatsthere |= wallsbit;
 					}
 
-					if ((layers & Layers::Rooof) == Layers::Rooof)
+					if (layers & Layers::Rooof)
 					{
 						whatsthere |= rooofbit;
 					}
@@ -354,19 +354,19 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 						oF.write((char *)&msb, sizeof(unsigned char));
 						oF.write((char *)&isb, sizeof(unsigned char));
 						oF.write((char *)&lsb, sizeof(unsigned char));
-						if ((layers & Layers::Floor) == Layers::Floor)
+						if (layers & ::Floor)
 						{
-							allocatedObject->GetDing(Layers::Floor)->DesignSaveToFile(&oF);
+							allocatedObject->DesignSaveToFile(&oF, ::Floor);
 						}
 
-						if ((layers & Layers::Walls) == Layers::Walls)
+						if (layers & ::Walls)
 						{
-							allocatedObject->GetDing(Layers::Walls)->DesignSaveToFile(&oF);
+							allocatedObject->DesignSaveToFile(&oF, ::Walls);
 						}
 
-						if ((layers & Layers::Rooof) == Layers::Rooof)
+						if (layers & ::Rooof)
 						{
-							allocatedObject->GetDing(Layers::Rooof)->DesignSaveToFile(&oF);
+							allocatedObject->DesignSaveToFile(&oF, ::Rooof);
 						}
 #ifdef _DEBUG
 						++blockSaveCount;
@@ -395,11 +395,7 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 bool Level::DesignLoadFromFile(Platform::String^ fileName)
 {
 	BasicReaderWriter^ basicReaderWriter;
-	unsigned long long offset = 0L;
-#ifdef _DEBUG
-	unsigned blockLoadCount = 0;
-#endif	
-
+	size_t offset = 0L;
 	std::ifstream iF;
 	iF.open(fileName->Data(), ios_base::in | ios_base::binary);
 	if (!iF.fail() && iF.is_open())
@@ -410,8 +406,6 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 		char* srcData = new char[length];
 		iF.read(srcData, length);
 
-		//Platform::Array<byte>^ rawData = basicReaderWriter->ReadData(fileName);
-		//byte* srcData = rawData->Data;
 		/* parse the signature */
 		uint64 fileSignature = *reinterpret_cast<uint64*>(srcData + offset); offset += sizeof(uint64);
 		uint64 signatToMatch = (uint64_t)(*(uint64_t*)&blooDot::blooDotMain::BLOODOTFILE_SIGNATURE[0]);
@@ -433,50 +427,114 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 			return false;
 		}
 
-		/* read and apply the size */
-		unsigned short extentY = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-		unsigned short extentX = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-		this->m_rectangularBounds.width = extentX;
-		this->m_rectangularBounds.height = extentY;
-		this->Clear();
-		/* read the matrix */
-		for (unsigned y = 0; y < this->m_rectangularBounds.height; ++y)
+		/* parse the actual descriptor content, may differ depending on version */
+		unsigned versionByte = static_cast<unsigned>(*reinterpret_cast<byte*>(srcData + offset)); offset += sizeof(byte);
+		switch (versionByte)
 		{
-			for (unsigned x = 0; x < this->m_rectangularBounds.width; ++x)
-			{
-				auto objectAddress = y * this->m_rectangularBounds.width + x;
-				if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
-				{
-					unsigned char whatsthere = *reinterpret_cast<unsigned char*>(srcData + offset); offset += sizeof(const unsigned char);
-					if ((whatsthere & this->floorbit) == this->floorbit)
-					{
-						unsigned dingIdFloor = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-						this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Floor, &this->m_dingMap.at(dingIdFloor), 0);
-					}
+		case 1:
+			throw ref new Platform::FailureException(L"deprecated level design file version");
 
-					if ((whatsthere & this->wallsbit) == this->wallsbit)
-					{
-						uint32 dingIdWalls = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-						this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Walls, &this->m_dingMap.at(dingIdWalls), 0);
-					}
+		case 2:
+			this->DesignLoadFromFile_version2(srcData, length, offset);
+			break;
 
-					if ((whatsthere & this->rooofbit) == this->rooofbit)
-					{
-						uint32 dingIdRooof = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
-						this->GetObjectAt(x, y, true)->InstantiateInLayer(Layers::Rooof, &this->m_dingMap.at(dingIdRooof), 0);
-					}
-
-#ifdef _DEBUG
-					blockLoadCount += whatsthere ? 0 : 1;
-#endif
-				}
-			}
+		default:
+			throw ref new Platform::FailureException(L"invalid level design file version");
 		}
 
 		delete[] srcData;
 		/* so next time hitting "Save" will not prompt for file name */
 		this->m_lastSavedAsFileName = fileName;
 		this->m_DesignTimeDirty = false;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t offset)
+{
+#ifdef _DEBUG
+	unsigned blockLoadCount = 0;
+#endif	
+
+	/* read and apply the size */
+	unsigned short extentY = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
+	unsigned short extentX = *reinterpret_cast<uint32*>(srcData + offset); offset += sizeof(uint32);
+	this->m_rectangularBounds.width = extentX;
+	this->m_rectangularBounds.height = extentY;
+	this->Clear();
+
+	/* read the descriptor stream */
+	while (offset < length)
+	{
+		Facings placementFacing;
+		unsigned dingID;
+		byte msb = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
+		byte isb = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
+		byte lsb = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
+		int32 placementDescriptor = (msb << 16 | isb << 8 | lsb) & 0xffffff;
+		uint32 coordinateY = (placementDescriptor >> 14) & 0x3ff;
+		byte layerFlags = (placementDescriptor >> 11) & 0x7;
+		uint32 coordinateX = placementDescriptor & 0x3ff;
+		bool
+			hasFloor = layerFlags & Level::floorbit,
+			hasWalls = layerFlags & Level::wallsbit,
+			hasRooof = layerFlags & Level::rooofbit;
+
+		if (hasFloor)
+		{			
+			byte floorDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
+			dingID = static_cast<unsigned>(floorDescriptor & 0x7f);
+			if (floorDescriptor & 128)
+			{
+				placementFacing = static_cast<Facings>(*reinterpret_cast<byte*>(srcData + offset)); offset += sizeof(const byte);
+			}
+			else
+			{
+				placementFacing = Facings::Shy;
+			}
+
+			this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayer(Layers::Floor, &this->m_dingMap.at(dingID), placementFacing);
+		}
+
+		if (hasWalls)
+		{
+			byte wallsDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
+			dingID = static_cast<unsigned>(wallsDescriptor & 0x7f);
+			if (wallsDescriptor & 128)
+			{
+				placementFacing = static_cast<Facings>(*reinterpret_cast<byte*>(srcData + offset)); offset += sizeof(const byte);
+			}
+			else
+			{
+				placementFacing = Facings::Shy;
+			}
+
+			this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayer(Layers::Walls, &this->m_dingMap.at(dingID), placementFacing);
+		}
+
+		if (hasRooof)
+		{
+			byte rooofDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
+			dingID = static_cast<unsigned>(rooofDescriptor & 0x7f);
+			if (rooofDescriptor & 128)
+			{
+				placementFacing = static_cast<Facings>(*reinterpret_cast<byte*>(srcData + offset)); offset += sizeof(const byte);
+			}
+			else
+			{
+				placementFacing = Facings::Shy;
+			}
+
+			this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayer(Layers::Rooof, &this->m_dingMap.at(dingID), placementFacing);
+		}
+
+#ifdef _DEBUG
+		blockLoadCount += static_cast<unsigned>(hasRooof) + static_cast<unsigned>(hasWalls) + static_cast<unsigned>(hasFloor);
+#endif
 	}
 
 #ifdef _DEBUG
@@ -486,6 +544,4 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 	Platform::String^ string = ref new Platform::String(str, len);
 	OutputDebugStringW(Platform::String::Concat(Platform::String::Concat(L"Number of non-empty squares loaded: ", string), L"\r\n")->Data());
 #endif
-
-	return true;
 }

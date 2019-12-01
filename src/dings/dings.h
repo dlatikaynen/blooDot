@@ -126,7 +126,6 @@ public:
 	virtual void		DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	D2D1_POINT_2U		GetSheetPlacement(Facings coalesced);
 	Layers				GetPreferredLayer();
-	void				DesignSaveToFile(std::ofstream* toFile);
 	bool				CouldCoalesce();
 
 protected:

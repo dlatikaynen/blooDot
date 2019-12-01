@@ -42,13 +42,14 @@ protected:
 
 private:
 	const unsigned char sigbyte = 42;
-	const unsigned char floorbit = 0x1;
+	const unsigned char floorbit = 0x4;
 	const unsigned char wallsbit = 0x2;
-	const unsigned char rooofbit = 0x4;
+	const unsigned char rooofbit = 0x1;
 
 	void Clear();
 	unsigned GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet);
 	bool HasCompatibleNeighbor(int x, int y, int dingID, Layers ofLayer);
+	void DesignLoadFromFile_version2(char* srcData, size_t length, size_t offset);
 
 	Platform::String^									m_Name;
 	D2D1_SIZE_U											m_rectangularBounds;
