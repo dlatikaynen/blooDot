@@ -68,31 +68,25 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	auto loader = ref new BasicLoader(resources);
 	loader->LoadPngToBitmap(L"Media\\Bitmaps\\universe_seamless.png", deviceResources, &this->m_floorBackground);
 
-	auto deflt = Dings(0, "BLACK", deviceResources, brushRegistry);
-	auto mauer = Mauer(deviceResources, brushRegistry);
-	auto wasser = Wasser(deviceResources, brushRegistry);
-	auto hgrass = HighGrass(deviceResources, brushRegistry);
-	auto snow = Snow(deviceResources, brushRegistry);
-	auto dalek = Dalek(deviceResources, brushRegistry);
-
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(800.0f, 600.0f), &this->m_dingSheet));
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT), &this->m_dingImage));
-	m_dingSheet->BeginDraw();
+	
+	this->m_dingSheet->BeginDraw();
+	this->RegisterDing(&Dings(0, "BLACK", deviceResources, brushRegistry),	0, 0);
+	this->RegisterDing(&Mauer(deviceResources, brushRegistry),				0, 1);
+	this->RegisterDing(&Wasser(deviceResources, brushRegistry),				1, 0);
+	this->RegisterDing(&HighGrass(deviceResources, brushRegistry),			2, 0);
+	this->RegisterDing(&Snow(deviceResources, brushRegistry),				3, 0);
+	this->RegisterDing(&FloorStoneTile(deviceResources, brushRegistry),		4, 0);
+	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				5, 0);
 
-	deflt.Draw(m_dingSheet, 0, 0);
-	mauer.Draw(m_dingSheet, 1, 1);
-	wasser.Draw(m_dingSheet, 1, 0);
-	hgrass.Draw(m_dingSheet, 2, 0);
-	snow.Draw(m_dingSheet, 3, 0);
-	dalek.Draw(m_dingSheet, 4, 0);
-	DX::ThrowIfFailed(m_dingSheet->EndDraw());
+	DX::ThrowIfFailed(this->m_dingSheet->EndDraw());
+}
 
-	this->m_dingMap.emplace(deflt.ID(), deflt);
-	this->m_dingMap.emplace(mauer.ID(), mauer);
-	this->m_dingMap.emplace(wasser.ID(), wasser);
-	this->m_dingMap.emplace(hgrass.ID(), hgrass);
-	this->m_dingMap.emplace(snow.ID(), snow);
-	this->m_dingMap.emplace(dalek.ID(), dalek);
+void Level::RegisterDing(Dings* dingDef, unsigned xOnSheet, unsigned yOnSheet)
+{
+	dingDef->Draw(this->m_dingSheet, xOnSheet, yOnSheet);
+	this->m_dingMap.emplace(dingDef->ID(), *dingDef);
 }
 
 Dings* Level::GetDing(unsigned dingID)
@@ -109,13 +103,13 @@ unsigned Level::GetPreviousDingID(unsigned dingID)
 	}
 	else
 	{
-		if ((--dingPointer) == this->m_dingMap.begin())
+		if (dingPointer == this->m_dingMap.begin())
 		{
 			return 0;
 		}
 		else
 		{
-			return dingPointer->second.ID();
+			return (--dingPointer)->second.ID();
 		}
 	}
 }
@@ -129,7 +123,8 @@ unsigned Level::GetNextDingID(unsigned dingID)
 	}
 	else
 	{
-		if ((++dingPointer) == this->m_dingMap.end())
+		++dingPointer;
+		if (dingPointer == this->m_dingMap.end())
 		{
 			return 0;
 		}

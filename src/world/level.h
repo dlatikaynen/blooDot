@@ -37,6 +37,9 @@ public:
 	void DesignSaveToFile();
 	bool HasSaveFileNameBeenSpecifiedBefore();
 
+protected:
+	void RegisterDing(Dings* dingDef, unsigned xOnSheet, unsigned yOnSheet);
+
 private:
 	const unsigned char sigbyte = 42;
 	const unsigned char floorbit = 0x1;

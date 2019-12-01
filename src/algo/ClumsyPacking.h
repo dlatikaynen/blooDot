@@ -188,12 +188,12 @@ public:
 		Facings::WE, //157
 		Facings::EdgeCornerSL, //158
 		Facings::EdgeS, //159
-		Facings::EdgeNE, //160
-		Facings::EdgeNE, //161
+		Facings::EdgeCornerNE, //160
+		Facings::EdgeCornerNE, //161
 		Facings::TW, //162
 		Facings::EdgeCornerED, //163
-		Facings::EdgeNE, //164
-		Facings::EdgeNE, //165
+		Facings::EdgeCornerNE, //164
+		Facings::EdgeCornerNE, //165
 		Facings::TW, //166
 		Facings::EdgeCornerED, //167
 		Facings::TS, //168

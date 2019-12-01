@@ -235,6 +235,7 @@
     <Image Include="Assets\StoreLogo.png" />
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
     <Image Include="Media\Bitmaps\highgrass.png" />
+    <Image Include="Media\Bitmaps\floorstonetile.png" />
     <Image Include="Media\Bitmaps\dalek.png" />
     <Image Include="Media\Bitmaps\snowblock.png" />
     <Image Include="Media\Bitmaps\universe_seamless.png" />
