@@ -63,7 +63,7 @@ void LevelEditor::DoPlaceDing()
 				this->ClumsyPackNeighborhoodOf(neighborHood, this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingLayer, newDingID);
 			}
 
-			this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y);
+			this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingLayer);
 		}
 	}
 }
@@ -72,16 +72,16 @@ void LevelEditor::DoObliterateDing()
 {
 	if (this->m_currentLevelEditorCellKnown)
 	{
-		Layers cullCoalescablesInLayer;
-		auto dingWeeded = this->m_currentLevel->WeedObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, &cullCoalescablesInLayer);
+		Layers layerToCull;
+		auto dingWeeded = this->m_currentLevel->WeedObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, &layerToCull);
 		if (dingWeeded != nullptr)
 		{
-			this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y);
+			this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, layerToCull);
 			if (dingWeeded->CouldCoalesce())
 			{
 				auto weededDingID = dingWeeded->ID();
-				auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, weededDingID, cullCoalescablesInLayer);
-				this->ClumsyPackNeighborhoodOf(neighborHood, this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, cullCoalescablesInLayer, weededDingID);
+				auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, weededDingID, layerToCull);
+				this->ClumsyPackNeighborhoodOf(neighborHood, this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, layerToCull, weededDingID);
 			}
 		}
 	}
@@ -143,14 +143,14 @@ void LevelEditor::ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroun
 			if (centerObject->PlacementFacing() != shouldBeFacing)
 			{
 				centerObject->AdjustFacing(inLayer, shouldBeFacing);
-				this->RedrawSingleSquare(aroundLevelX, aroundLevelY);
+				this->RedrawSingleSquare(aroundLevelX, aroundLevelY, inLayer);
 				this->ClumsyPackNeighborhoodOf(neighborHood, aroundLevelX, aroundLevelY, inLayer, dingID);
 			}
 		}
 	}
 }
 
-void LevelEditor::RedrawSingleSquare(unsigned levelX, unsigned levelY)
+void LevelEditor::RedrawSingleSquare(unsigned levelX, unsigned levelY, Layers inLayer)
 {
 	auto sheetSize = this->m_currentLevel->GetSheetSizeUnits();
 	auto intersectedSheetX = levelX / sheetSize.width;
@@ -158,7 +158,7 @@ void LevelEditor::RedrawSingleSquare(unsigned levelX, unsigned levelY)
 	auto intersectedSheetY = levelY / sheetSize.height;
 	auto cellInSheetY = levelY % sheetSize.height;
 	auto placementSheet = this->GetSheet(intersectedSheetX, intersectedSheetY);
-	placementSheet->RedrawSingleSquare(cellInSheetX, cellInSheetY);
+	placementSheet->RedrawSingleSquare(cellInSheetX, cellInSheetY, inLayer);
 }
 
 void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)

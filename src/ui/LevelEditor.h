@@ -19,7 +19,7 @@ private:
 	void DrawLevelEditorRaster();
 	void ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration neighborHood, unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, unsigned dingID);
 	void ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, unsigned dingID);
-	void RedrawSingleSquare(unsigned levelX, unsigned levelY);
+	void RedrawSingleSquare(unsigned levelX, unsigned levelY, Layers inLayer);
 
 	unsigned m_selectedDingID;
 	bool m_IsErasing;

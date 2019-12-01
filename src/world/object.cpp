@@ -53,6 +53,7 @@ bool Object::WeedFromTop(Dings** dingWeeded, Layers* layerWeeded)
 		(*layerWeeded) = Layers::Rooof;
 		this->m_DingRooof = nullptr;
 		this->m_FacingRooof = Facings::Shy;
+		this->m_Layers = static_cast<Layers>(this->m_Layers & ~Layers::Rooof);
 	}
 	else if (this->m_DingWalls != nullptr)
 	{
@@ -60,6 +61,7 @@ bool Object::WeedFromTop(Dings** dingWeeded, Layers* layerWeeded)
 		(*layerWeeded) = Layers::Walls;
 		this->m_DingWalls = nullptr;
 		this->m_FacingWalls = Facings::Shy;
+		this->m_Layers = static_cast<Layers>(this->m_Layers & ~Layers::Walls);
 	}
 	else if (this->m_DingFloor != nullptr)
 	{
@@ -67,6 +69,7 @@ bool Object::WeedFromTop(Dings** dingWeeded, Layers* layerWeeded)
 		(*layerWeeded) = Layers::Floor;
 		this->m_DingFloor = nullptr;
 		this->m_FacingFloor = Facings::Shy;
+		this->m_Layers = static_cast<Layers>(this->m_Layers & ~Layers::Floor);
 	}
 	else
 	{
@@ -120,7 +123,7 @@ Layers Object::GetLayers()
 
 Dings* Object::GetDing(Layers ofLayer)
 {
-	switch (this->m_Layers)
+	switch (ofLayer)
 	{
 	case Layers::Floor:
 		return this->m_DingFloor;

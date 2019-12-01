@@ -174,27 +174,33 @@ void WorldSheet::Populate()
 	}
 }
 
-void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y)
+void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 {
 	auto beganDrawWalls = false, beganDrawFloor = false, beganDrawRooof = false;
-	if (m_floor == nullptr)
+	auto doFloor = inLayer & Layers::Floor, doWalls = inLayer & Layers::Walls, doRooof = inLayer & Layers::Rooof;
+	Dings* dings = nullptr;
+
+	if (doFloor)
 	{
-		DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_floor));
-		if (!beganDrawFloor)
+		if (m_floor == nullptr)
 		{
-			this->m_floor->BeginDraw();
-			beganDrawFloor = true;
-			auto floorBackground = this->m_tiedToLevel->GetFloorBackground().Get();
-			this->m_floor->DrawBitmap(floorBackground, this->GetFloorBounds(), 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->GetFloorBounds());
+			DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_floor));
+			if (!beganDrawFloor)
+			{
+				this->m_floor->BeginDraw();
+				beganDrawFloor = true;
+				auto floorBackground = this->m_tiedToLevel->GetFloorBackground().Get();
+				this->m_floor->DrawBitmap(floorBackground, this->GetFloorBounds(), 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->GetFloorBounds());
+			}
 		}
 	}
 
-	if (m_walls == nullptr)
+	if (doWalls && m_walls == nullptr)
 	{
 		DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_walls));
 	}
 
-	if (m_rooof == nullptr)
+	if (doRooof && m_rooof == nullptr)
 	{
 		DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_rooof));
 	}
@@ -208,32 +214,66 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y)
 	if (objectX == nullptr)
 	{
 		/* erase by transparenting everything on that layer */
-		if (!beganDrawWalls)
-		{
-			this->m_walls->BeginDraw();
-			beganDrawWalls = true;
-		}
-
-		this->EraseSquare(this->m_walls, x, y);
-	}
-	else
-	{
-		auto layer = objectX->GetLayers();
-		auto dings = objectX->GetDing(layer);
-		if (layer == Layers::Floor)
+		if (doFloor)
 		{
 			if (!beganDrawFloor)
 			{
 				this->m_floor->BeginDraw();
 				beganDrawFloor = true;
-				auto floorBackground = this->m_tiedToLevel->GetFloorBackground().Get();
-				D2D1_RECT_F replacementRect = D2D1::RectF(x * 49.0f, x * 49.0f, x * 49.0f + 49.0f, x * 49.0f + 49.0f);
-				this->m_floor->DrawBitmap(floorBackground, replacementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, replacementRect);
 			}
 
-			this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(), x, y);
+			auto floorBackground = this->m_tiedToLevel->GetFloorBackground().Get();
+			D2D1_RECT_F replacementRect = D2D1::RectF(x * 49.0f, y * 49.0f, x * 49.0f + 49.0f, y * 49.0f + 49.0f);
+			this->m_floor->DrawBitmap(floorBackground, replacementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, replacementRect);
 		}
-		else if (layer == Layers::Walls)
+
+		if (doWalls)
+		{
+			if (!beganDrawWalls)
+			{
+				this->m_walls->BeginDraw();
+				beganDrawWalls = true;
+			}
+
+			this->EraseSquare(this->m_walls, x, y);
+		}
+
+		if (doRooof)
+		{		
+			if (!beganDrawRooof)
+			{
+				this->m_rooof->BeginDraw();
+				beganDrawRooof = true;
+			}
+
+			this->EraseSquare(this->m_rooof, x, y);
+		}
+	}
+	else
+	{
+		auto layers = objectX->GetLayers();
+		if (doFloor)
+		{
+			if (!beganDrawFloor)
+			{
+				this->m_floor->BeginDraw();
+				beganDrawFloor = true;
+			}
+
+			dings = objectX->GetDing(Layers::Floor);
+			if (dings == nullptr)
+			{
+				auto floorBackground = this->m_tiedToLevel->GetFloorBackground().Get();
+				D2D1_RECT_F replacementRect = D2D1::RectF(x * 49.0f, y * 49.0f, x * 49.0f + 49.0f, y * 49.0f + 49.0f);
+				this->m_floor->DrawBitmap(floorBackground, replacementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, replacementRect);
+			}
+			else			
+			{
+				this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(), x, y);
+			}
+		}
+		
+		if (doWalls)
 		{
 			if (!beganDrawWalls)
 			{
@@ -242,9 +282,14 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y)
 				this->EraseSquare(this->m_walls, x, y);
 			}
 
-			this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(), x, y);
+			dings = objectX->GetDing(Layers::Walls);
+			if (dings != nullptr)
+			{
+				this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(), x, y);
+			}
 		}
-		else if (layer == Layers::Rooof)
+		
+		if (doRooof)
 		{
 			if (!beganDrawRooof)
 			{
@@ -253,7 +298,11 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y)
 				this->EraseSquare(this->m_rooof, x, y);
 			}
 
-			this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(), x, y);
+			dings = objectX->GetDing(Layers::Rooof);
+			if (dings != nullptr)
+			{
+				this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(), x, y);
+			}			
 		}
 	}
 
