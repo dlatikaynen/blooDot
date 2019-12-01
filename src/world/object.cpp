@@ -192,10 +192,10 @@ void Object::DesignSaveToFile(std::ofstream* toFile, Layers ofLayer)
 		auto dingFacing = this->PlacementFacing(ofLayer);
 		if ((dingID & 0x80) || dingFacing != Facings::Shy)
 		{
-			byte msb = 0x80 | (dingID & 0x7f);
-			toFile->write((char*)&msb, sizeof(byte));
-			byte lsb = static_cast<byte>(dingFacing);
-			toFile->write((char*)&lsb, sizeof(byte));
+			byte dingNum = 0x80 | (dingID & 0x7f);
+			toFile->write((char*)&dingNum, sizeof(byte));
+			unsigned int facingVal = static_cast<unsigned int>(dingFacing);
+			toFile->write((char*)&facingVal, sizeof(unsigned int));
 		}
 		else
 		{

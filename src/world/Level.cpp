@@ -490,7 +490,7 @@ void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t off
 			dingID = static_cast<unsigned>(floorDescriptor & 0x7f);
 			if (floorDescriptor & 128)
 			{
-				placementFacing = static_cast<Facings>(*reinterpret_cast<byte*>(srcData + offset)); offset += sizeof(const byte);
+				placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
 			}
 			else
 			{
@@ -506,13 +506,13 @@ void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t off
 			dingID = static_cast<unsigned>(wallsDescriptor & 0x7f);
 			if (wallsDescriptor & 128)
 			{
-				placementFacing = static_cast<Facings>(*reinterpret_cast<byte*>(srcData + offset)); offset += sizeof(const byte);
+				placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
 			}
 			else
 			{
 				placementFacing = Facings::Shy;
 			}
-
+			
 			this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Walls, &this->m_dingMap.at(dingID), placementFacing);
 		}
 
@@ -522,7 +522,7 @@ void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t off
 			dingID = static_cast<unsigned>(rooofDescriptor & 0x7f);
 			if (rooofDescriptor & 128)
 			{
-				placementFacing = static_cast<Facings>(*reinterpret_cast<byte*>(srcData + offset)); offset += sizeof(const byte);
+				placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
 			}
 			else
 			{
