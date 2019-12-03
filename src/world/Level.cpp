@@ -78,7 +78,8 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	this->RegisterDing(&HighGrass(deviceResources, brushRegistry),			2, 0);
 	this->RegisterDing(&Snow(deviceResources, brushRegistry),				3, 0);
 	this->RegisterDing(&FloorStoneTile(deviceResources, brushRegistry),		4, 0);
-	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				5, 0);
+	this->RegisterDing(&Coin(deviceResources, brushRegistry),				5, 0);
+	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				6, 0);
 
 	DX::ThrowIfFailed(this->m_dingSheet->EndDraw());
 }

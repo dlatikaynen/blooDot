@@ -234,3 +234,10 @@ public:
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
+
+class Coin : public Dings
+{
+public:
+	Coin(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+};

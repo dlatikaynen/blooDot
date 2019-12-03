@@ -143,6 +143,9 @@
     <ClCompile Include="..\src\sound\Audio.cpp">
       <Filter>audio</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\dings\loot-like\coin.cpp">
+      <Filter>ui\dings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
@@ -306,6 +309,8 @@
     <Image Include="Media\Bitmaps\notimeforcaution.png" />
     <Image Include="Media\Bitmaps\highgrass.png" />
     <Image Include="Media\Bitmaps\snowblock.png" />
+    <Image Include="Media\Bitmaps\floorstonetile.png" />
+    <Image Include="Media\Bitmaps\dalek.png" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
