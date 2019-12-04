@@ -294,7 +294,7 @@
     <ClCompile Include="..\src\dings\mob-like\dalek.cpp" />
     <ClCompile Include="..\src\ui\LevelEditor.cpp" />
     <ClCompile Include="..\src\ui\LevelEditorHUD.cpp" />
-    <ClCompile Include="..\src\dings\loot-like\coin.cpp" />
+    <ClCompile Include="..\src\dings\looot-like\looot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\app\App.h" />

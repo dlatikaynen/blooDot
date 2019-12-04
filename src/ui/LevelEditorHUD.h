@@ -11,13 +11,19 @@ public:
 	virtual void ReleaseDeviceDependentResources();
 
 	bool IsDingSelected();
-	void SelectDing(Dings* ding, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage);
+	void SelectDing(Dings* ding, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage, bool resetFacing);
 
 	unsigned SelectedDingID();
 	void ToggleEraser();
 	bool IsInEraserMode();
 	void ToggleOverwrite();
 	bool IsInOverwriteMode();
+	void ToggleGrid();
+	void SetScrollLock(bool scrollLock);
+	void Rotate();
+	bool LevelEditorHUD::IsGridShown();
+	bool LevelEditorHUD::IsScrollLocked();
+	Facings LevelEditorHUD::SelectedDingOrientation();
 
 protected:
 	virtual void CalculateSize();
@@ -39,5 +45,9 @@ private:
 	Platform::String^								m_dingName;
 	bool											m_isEraserChosen;
 	bool											m_isInOverwriteMode;
+	bool											m_isGridShown;
+	bool											m_isScrollLocked;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>				m_selectedDingImage;
+	bool											m_isSelectedDingRotatable;
+	Facings											m_selectedDingFacing;
 };

@@ -72,14 +72,15 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT), &this->m_dingImage));
 	
 	this->m_dingSheet->BeginDraw();
-	this->RegisterDing(&Dings(0, "BLACK", deviceResources, brushRegistry),	0, 0);
-	this->RegisterDing(&Mauer(deviceResources, brushRegistry),				0, 1);
-	this->RegisterDing(&Wasser(deviceResources, brushRegistry),				1, 0);
-	this->RegisterDing(&HighGrass(deviceResources, brushRegistry),			2, 0);
-	this->RegisterDing(&Snow(deviceResources, brushRegistry),				3, 0);
-	this->RegisterDing(&FloorStoneTile(deviceResources, brushRegistry),		4, 0);
-	this->RegisterDing(&Coin(deviceResources, brushRegistry),				5, 0);
-	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				6, 0);
+	this->RegisterDing(&Dings(0, "BLACK", deviceResources, brushRegistry),	00, 0);
+	this->RegisterDing(&Mauer(deviceResources, brushRegistry),				00, 1);
+	this->RegisterDing(&Wasser(deviceResources, brushRegistry),				01, 0);
+	this->RegisterDing(&HighGrass(deviceResources, brushRegistry),			02, 0);
+	this->RegisterDing(&Snow(deviceResources, brushRegistry),				03, 0);
+	this->RegisterDing(&FloorStoneTile(deviceResources, brushRegistry),		04, 0);
+	this->RegisterDing(&Coin(deviceResources, brushRegistry),				05, 0);
+	this->RegisterDing(&Chest(deviceResources, brushRegistry),				06, 0);
+	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				10, 0);
 
 	DX::ThrowIfFailed(this->m_dingSheet->EndDraw());
 }
@@ -141,10 +142,10 @@ unsigned Level::ConfirmDingID(unsigned dingID)
 	return this->m_dingMap.count(dingID) ? dingID : 0;
 }
 
-Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::CreateDingImage(unsigned dingID)
+Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::CreateDingImage(unsigned dingID, Facings placementOrientation)
 {
 	auto dingToRender = this->GetDing(dingID);
-	auto dingOnSheet = dingToRender->GetSheetPlacement(Facings::Shy);
+	auto dingOnSheet = dingToRender->GetSheetPlacement(placementOrientation);
 	ID2D1Bitmap *sheetSurface = NULL;
 	ID2D1Bitmap *resultBitmap = NULL;
 

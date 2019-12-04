@@ -26,7 +26,7 @@ enum Facings
 	South = 32,													/* U-bag with opening upwards (southcap) */
 	SW = 64,													/* left-bottom capping edge */
 	West = 128,													/* U-bag with opening to the right (westcap) */
-	Viech = West | North | East | South,
+	Viech = West | North | East | South,						/* in fact anything that can orient left-right-up-down, all viech mobs and stuff like chests */
 	Center = 256,												/* crossing */
 	SingleEdge = 512,
 	TripleEdge = 1024,
@@ -124,8 +124,9 @@ public:
 	Platform::String^	Name();
 	void				Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY);
 	virtual void		DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
-	D2D1_POINT_2U		GetSheetPlacement(Facings coalesced);
+	D2D1_POINT_2U		GetSheetPlacement(Facings orientation);
 	Layers				GetPreferredLayer();
+	Facings				AvailableFacings();
 	bool				CouldCoalesce();
 
 protected:
@@ -239,5 +240,12 @@ class Coin : public Dings
 {
 public:
 	Coin(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+};
+
+class Chest : public Dings
+{
+public:
+	Chest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 };

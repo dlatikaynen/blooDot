@@ -59,7 +59,6 @@ void App::Initialize(CoreApplicationView^ applicationView)
 // Called when the CoreWindow object is created (or re-created).
 void App::SetWindow(CoreWindow^ window)
 {
-
     m_deviceResources->SetWindow(window);
     m_Main = std::unique_ptr<blooDot::blooDotMain>(new blooDot::blooDotMain(m_deviceResources));
 
@@ -81,7 +80,7 @@ void App::SetWindow(CoreWindow^ window)
     window->PointerReleased += ref new TypedEventHandler<CoreWindow^, PointerEventArgs^>(this, &App::OnPointerReleased);
     window->PointerMoved += ref new TypedEventHandler<CoreWindow^, PointerEventArgs^>(this, &App::OnPointerMoved);
     window->KeyDown += ref new TypedEventHandler<CoreWindow^, KeyEventArgs^>(this, &App::OnKeyDown);
-    window->KeyUp += ref new TypedEventHandler<CoreWindow^, KeyEventArgs^>(this, &App::OnKeyUp);
+    window->KeyUp += ref new TypedEventHandler<CoreWindow^, KeyEventArgs^>(this, &App::OnKeyUp);	
 
     DisplayInformation^ currentDisplayInformation = DisplayInformation::GetForCurrentView();
     currentDisplayInformation->DpiChanged += ref new TypedEventHandler<DisplayInformation^, Platform::Object^>(this, &App::OnDpiChanged);
@@ -251,7 +250,7 @@ void App::OnKeyDown(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::Ke
 
 
 void App::OnKeyUp(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::KeyEventArgs^ args)
-{
+{		
     m_Main->KeyUp(args->VirtualKey);
 #ifdef _DEBUG
     // Pressing F4 cause the app to exit, so that DumpD3DDebug method gets called on exit.

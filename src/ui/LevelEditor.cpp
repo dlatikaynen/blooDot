@@ -5,6 +5,8 @@
 LevelEditor::LevelEditor() : WorldScreenBase() 
 {
 	this->m_selectedDingID = 1;
+	this->m_selectedDingOrientation = Facings::Shy;
+	this->m_isGridShown = true;
 }
 
 LevelEditor::~LevelEditor()
@@ -17,11 +19,17 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 
 	/* we would have a HUD showing the currently selected toolbox ding */
 	auto myHUD = static_cast<LevelEditorHUD*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::LevelEditorHUD));
-	if (this->m_selectedDingID > 0 && this->m_selectedDingID != myHUD->SelectedDingID())
+	auto newOrientation = myHUD->SelectedDingOrientation();
+	auto curDingID = myHUD->SelectedDingID();
+	this->m_isGridShown = myHUD->IsGridShown();
+	if (this->m_selectedDingID > 0 && (this->m_selectedDingID != curDingID || this->m_selectedDingOrientation != newOrientation))
 	{
-		auto dingPic = this->m_currentLevel->CreateDingImage(this->m_selectedDingID);
-		myHUD->SelectDing(this->SelectedDing(), dingPic);
+		auto dingPic = this->m_currentLevel->CreateDingImage(this->m_selectedDingID, newOrientation);
+		auto needResetOrientation = this->m_selectedDingID != curDingID;
+		myHUD->SelectDing(this->SelectedDing(), dingPic, needResetOrientation);
 	}
+
+	this->m_selectedDingOrientation = newOrientation;
 
 	/* we might emplace objects */
 	if (this->m_currentLevelEditorCellKnown)
@@ -57,10 +65,14 @@ void LevelEditor::DoPlaceDing()
 		if (curDings == nullptr || (this->m_IsOverwriting && curDings->ID() != newDingID))
 		{
 			auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingID, newDingLayer);
-			newCell->Instantiate(newDings, neighborHood);
 			if (newDings->CouldCoalesce())
 			{
+				newCell->Instantiate(newDings, neighborHood);
 				this->ClumsyPackNeighborhoodOf(neighborHood, this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingLayer, newDingID);
+			}
+			else
+			{
+				newCell->InstantiateInLayerFacing(newDingLayer, newDings, this->m_selectedDingOrientation);
 			}
 
 			this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingLayer);
@@ -251,31 +263,33 @@ void LevelEditor::DrawLevelEditorRaster()
 	/* the next multiple of the grid height less than the viewport top */
 	auto yAdjust = static_cast<float>(static_cast<unsigned>(m_viewportOffset.y) % static_cast<unsigned>(blooDot::Consts::SQUARE_HEIGHT));
 	auto xAdjust = static_cast<float>(static_cast<unsigned>(m_viewportOffset.x) % static_cast<unsigned>(blooDot::Consts::SQUARE_WIDTH));
-
-	for (
-		int y = -static_cast<int>(yAdjust);
-		y < static_cast<int>(m_viewportSize.height + blooDot::Consts::SQUARE_HEIGHT);
-		y += static_cast<int>(blooDot::Consts::SQUARE_HEIGHT)
-		)
+	if (this->m_isGridShown)
 	{
-		point0.x = (float)0;
-		point0.y = (float)y;
-		point1.x = (float)static_cast<int>(m_viewportSize.width);
-		point1.y = (float)y;
-		m_d2dContext->DrawLine(point0, point1, brusherl, 1.0F, NULL);
-	}
+		for (
+			int y = -static_cast<int>(yAdjust);
+			y < static_cast<int>(m_viewportSize.height + blooDot::Consts::SQUARE_HEIGHT);
+			y += static_cast<int>(blooDot::Consts::SQUARE_HEIGHT)
+			)
+		{
+			point0.x = (float)0;
+			point0.y = (float)y;
+			point1.x = (float)static_cast<int>(m_viewportSize.width);
+			point1.y = (float)y;
+			m_d2dContext->DrawLine(point0, point1, brusherl, 1.0F, NULL);
+		}
 
-	for (
-		int x = -static_cast<int>(xAdjust);
-		x < static_cast<int>(m_viewportSize.width + blooDot::Consts::SQUARE_WIDTH);
-		x += static_cast<int>(blooDot::Consts::SQUARE_WIDTH)
-		)
-	{
-		point0.x = (float)x;
-		point0.y = (float)0;
-		point1.x = (float)x;
-		point1.y = (float)static_cast<int>(m_viewportSize.height);
-		m_d2dContext->DrawLine(point0, point1, brusherl, 1.0F, NULL);
+		for (
+			int x = -static_cast<int>(xAdjust);
+			x < static_cast<int>(m_viewportSize.width + blooDot::Consts::SQUARE_WIDTH);
+			x += static_cast<int>(blooDot::Consts::SQUARE_WIDTH)
+			)
+		{
+			point0.x = (float)x;
+			point0.y = (float)0;
+			point1.x = (float)x;
+			point1.y = (float)static_cast<int>(m_viewportSize.height);
+			m_d2dContext->DrawLine(point0, point1, brusherl, 1.0F, NULL);
+		}
 	}
 
 	auto halfSquareX = blooDot::Consts::SQUARE_WIDTH / 2.0F;
@@ -348,5 +362,39 @@ void LevelEditor::SelectPreviousDingForPlacement()
 	if (prevDing > 0)
 	{
 		this->SelectDingForPlacement(prevDing);
+	}
+}
+
+void LevelEditor::DoSetScrollLock(bool scrollLocked)
+{
+	auto myHUD = static_cast<LevelEditorHUD*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::LevelEditorHUD));
+	if (myHUD != nullptr)
+	{
+		myHUD->SetScrollLock(scrollLocked);
+	}
+}
+
+void LevelEditor::DoToggleGrid()
+{
+	auto myHUD = static_cast<LevelEditorHUD*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::LevelEditorHUD));
+	if (myHUD != nullptr)
+	{
+		myHUD->ToggleGrid();
+	}
+}
+
+void LevelEditor::DoRotate(bool affectPlacement)
+{
+	if (affectPlacement)
+	{
+
+	}
+	else
+	{
+		auto myHUD = static_cast<LevelEditorHUD*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::LevelEditorHUD));
+		if (myHUD != nullptr)
+		{
+			myHUD->Rotate();
+		}
 	}
 }

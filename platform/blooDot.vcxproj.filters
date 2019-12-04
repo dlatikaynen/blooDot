@@ -143,7 +143,7 @@
     <ClCompile Include="..\src\sound\Audio.cpp">
       <Filter>audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\loot-like\coin.cpp">
+    <ClCompile Include="..\src\dings\looot-like\looot.cpp">
       <Filter>ui\dings</Filter>
     </ClCompile>
   </ItemGroup>

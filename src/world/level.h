@@ -28,7 +28,7 @@ public:
 	unsigned GetNextDingID(unsigned dingID);
 	unsigned GetPreviousDingID(unsigned dingID);
 	unsigned ConfirmDingID(unsigned dingID);
-	Microsoft::WRL::ComPtr<ID2D1Bitmap> CreateDingImage(unsigned dingID);
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> CreateDingImage(unsigned dingID, Facings placementOrientation);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> GetFloorBackground();
 
 	void SetDesignTime();

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <ppltasks.h>
+#include <WinUser.h>
 #include <concurrent_unordered_map.h>
 #include "..\dx\DirectXHelper.h" // For ThrowIfFailed
 
@@ -779,6 +780,27 @@ void blooDotMain::Update()
 				levelEditor->DoPlaceDing();
 			}
 
+			if (this->m_keyGridPressed)
+			{
+				this->m_keyGridPressed = false;
+				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->DoToggleGrid();
+			}
+
+			if (this->m_keyRotatePressed)
+			{
+				this->m_keyRotatePressed = false;
+				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->DoRotate(this->m_shiftKeyActive);
+			}
+
+			if (this->m_keyScrollLockStateChanged)
+			{
+				this->m_keyScrollLockStateChanged = false;
+				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->DoSetScrollLock(this->m_keyScrollLockState);
+			}
+
 			if (this->m_keyObliteratePressed)
 			{
 				this->m_keyObliteratePressed = false;
@@ -796,6 +818,24 @@ void blooDotMain::Update()
 			{
 				this->m_keyInsertPressed = false;
 				this->m_levelEditorHUD.ToggleOverwrite();
+			}
+
+			if (this->m_keyRotatePressed)
+			{
+				this->m_keyRotatePressed = false;
+				this->m_levelEditorHUD.Rotate();
+			}
+
+			if (this->m_keyGridPressed)
+			{
+				this->m_keyGridPressed = false;
+				this->m_levelEditorHUD.ToggleGrid();
+			}
+
+			if (this->m_keyScrollLockStateChanged)
+			{
+				this->m_keyScrollLockStateChanged = false;
+				this->m_levelEditorHUD.SetScrollLock(this->m_keyScrollLockState);
 			}
 
 			if (this->m_keyPlusPressed)
@@ -1439,6 +1479,14 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 	{
 		m_keyDeleteActive = true;
 	}
+	else if (key == Windows::System::VirtualKey::G)
+	{
+		m_keyGridActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::R)
+	{
+		m_keyRotateActive = true;
+	}
 	else if (key == Windows::System::VirtualKey::S)
 	{
 		m_keySaveActive = true;
@@ -1533,6 +1581,36 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 		{
 			this->m_keyDeletePressed = true;
 			this->m_keyDeleteActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::G)
+	{
+		if (this->m_keyGridActive)
+		{
+			this->m_keyGridPressed = true;
+			this->m_keyGridActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::R)
+	{
+		if (this->m_keyRotateActive)
+		{
+			this->m_keyRotatePressed = true;
+			this->m_keyRotateActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Scroll)
+	{
+		if (!this->m_keyScrollLockStateChanged)
+		{
+			auto hostWindow = m_deviceResources->GetWindow();
+			auto vrkeyState = hostWindow->GetKeyState(key);
+			bool newState = static_cast<bool>(vrkeyState & Windows::UI::Core::CoreVirtualKeyStates::Locked);
+			if (this->m_keyScrollLockState != newState)
+			{
+				this->m_keyScrollLockState = newState;
+				this->m_keyScrollLockStateChanged = true;
+			}
 		}
 	}
 	else if (key == Windows::System::VirtualKey::S)

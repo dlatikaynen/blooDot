@@ -14,6 +14,9 @@ public:
 	Dings* SelectedDing();
 	void DoPlaceDing();
 	void DoObliterateDing();
+	void DoSetScrollLock(bool scrollLocked);
+	void DoToggleGrid();
+	void DoRotate(bool affectPlacement);
 
 private:
 	void DrawLevelEditorRaster();
@@ -22,7 +25,9 @@ private:
 	void RedrawSingleSquare(unsigned levelX, unsigned levelY, Layers inLayer);
 
 	unsigned m_selectedDingID;
+	Facings m_selectedDingOrientation;
 	bool m_IsErasing;
 	bool m_IsOverwriting;
+	bool m_isGridShown;
 };
 

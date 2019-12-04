@@ -13,6 +13,8 @@ LevelEditorHUD::LevelEditorHUD()
 {
 	this->m_isEraserChosen = false;
 	this->m_selectedDingID = 0;
+	this->m_isGridShown = true;
+	this->m_isSelectedDingRotatable = false;
 }
 
 void LevelEditorHUD::Initialize()
@@ -39,12 +41,17 @@ bool LevelEditorHUD::IsDingSelected()
 	return this->m_selectedDingID > 0;
 }
 
-void LevelEditorHUD::SelectDing(Dings* ding, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage)
+void LevelEditorHUD::SelectDing(Dings* ding, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage, bool resetFacing)
 {
 	this->m_selectedDingID = ding->ID();
 	this->m_dingName = ding->Name();
 	this->m_selectedDingImage = dingImage;
 	this->m_textLayout = nullptr;
+	this->m_isSelectedDingRotatable = ding->AvailableFacings() != Facings::Shy;
+	if (resetFacing)
+	{
+		this->m_selectedDingFacing = Facings::Shy;
+	}
 }
 
 void LevelEditorHUD::CreateTextLayout()
@@ -124,6 +131,16 @@ void LevelEditorHUD::ToggleOverwrite()
 	this->m_isInOverwriteMode = !this->m_isInOverwriteMode;
 }
 
+void LevelEditorHUD::ToggleGrid()
+{
+	this->m_isGridShown = !this->m_isGridShown;
+}
+
+void LevelEditorHUD::SetScrollLock(bool scrollLock)
+{
+	this->m_isScrollLocked = scrollLock;
+}
+
 bool LevelEditorHUD::IsInEraserMode()
 {
 	return this->m_isEraserChosen;
@@ -132,4 +149,45 @@ bool LevelEditorHUD::IsInEraserMode()
 bool LevelEditorHUD::IsInOverwriteMode()
 {
 	return this->m_isInOverwriteMode;
+}
+
+bool LevelEditorHUD::IsGridShown()
+{
+	return this->m_isGridShown;
+}
+
+bool LevelEditorHUD::IsScrollLocked()
+{
+	return this->m_isScrollLocked;
+}
+
+void LevelEditorHUD::Rotate()
+{
+	if (this->m_selectedDingID > 0 && this->m_isSelectedDingRotatable)
+	{
+		switch (this->m_selectedDingFacing)
+		{
+		case Facings::Shy:
+		case Facings::West:
+			this->m_selectedDingFacing = Facings::South;
+			break;
+
+		case Facings::South:
+			this->m_selectedDingFacing = Facings::East;
+			break;
+
+		case Facings::East:
+			this->m_selectedDingFacing = Facings::North;
+			break;
+
+		case Facings::North:
+			this->m_selectedDingFacing = Facings::West;
+			break;
+		}
+	}
+}
+
+Facings LevelEditorHUD::SelectedDingOrientation()
+{
+	return this->m_selectedDingFacing;
 }
