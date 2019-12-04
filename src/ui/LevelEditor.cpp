@@ -52,11 +52,27 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 	}
 }
 
+void LevelEditor::SetControl(int detentCount, bool shiftKeyActive)
+{
+	/* mousewheeled */
+	auto myHUD = static_cast<LevelEditorHUD*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::LevelEditorHUD));
+	if (myHUD != nullptr)
+	{
+		if (detentCount > 0)
+		{
+			this->DoRotate(shiftKeyActive, false);
+		}
+		else if (detentCount < 0)
+		{
+			this->DoRotate(shiftKeyActive, true);
+		}
+	}
+}
+
 void LevelEditor::DoPlaceDing()
 {
 	if (this->m_currentLevelEditorCellKnown && this->m_selectedDingID > 0)
 	{
-		auto needRedraw = false;
 		auto newCell = this->m_currentLevel->GetObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, true);
 		auto newDings = this->m_currentLevel->GetDing(this->m_selectedDingID);
 		auto newDingID = newDings->ID();
@@ -76,6 +92,24 @@ void LevelEditor::DoPlaceDing()
 			}
 
 			this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingLayer);
+		}
+	}
+}
+
+void LevelEditor::DoRotateObject(bool inverse)
+{
+	if (this->m_currentLevelEditorCellKnown)
+	{
+		auto curCell = this->m_currentLevel->GetObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, false);
+		if (curCell != nullptr)
+		{
+			auto topLayer = curCell->GetTopmostPopulatedLayer();
+			auto curDings = curCell->GetDing(topLayer);
+			if (curDings != nullptr && !curDings->CouldCoalesce())
+			{
+				curCell->RotateInPlace(topLayer, inverse);
+				this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, topLayer);
+			}
 		}
 	}
 }
@@ -383,18 +417,25 @@ void LevelEditor::DoToggleGrid()
 	}
 }
 
-void LevelEditor::DoRotate(bool affectPlacement)
+void LevelEditor::DoRotate(bool affectPlacement, bool inverse)
 {
 	if (affectPlacement)
 	{
-
+		this->DoRotateObject(inverse);
 	}
 	else
 	{
 		auto myHUD = static_cast<LevelEditorHUD*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::LevelEditorHUD));
 		if (myHUD != nullptr)
 		{
-			myHUD->Rotate();
+			if (inverse)
+			{
+				myHUD->RotateInverse();
+			}
+			else
+			{
+				myHUD->Rotate();
+			}
 		}
 	}
 }

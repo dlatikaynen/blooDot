@@ -791,7 +791,7 @@ void blooDotMain::Update()
 			{
 				this->m_keyRotatePressed = false;
 				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
-				levelEditor->DoRotate(this->m_shiftKeyActive);
+				levelEditor->DoRotate(this->m_shiftKeyActive, this->m_ctrlKeyActive);
 			}
 
 			if (this->m_keyScrollLockStateChanged)
@@ -1432,8 +1432,13 @@ void blooDotMain::UpdateTouch(int id, Windows::Foundation::Point point)
 
 void blooDotMain::PointerMove(int id, Windows::Foundation::Point point)
 {
-	//m_pointerPosition = PointToTouch(point, m_deviceResources->GetLogicalSize());
-	m_pointerPosition = XMFLOAT2(point.X, point.Y);
+	//this->m_pointerPosition = PointToTouch(point, m_deviceResources->GetLogicalSize());
+	this->m_pointerPosition = XMFLOAT2(point.X, point.Y);
+}
+
+void blooDotMain::MouseWheeled(int pointerID, int detentCount)
+{
+	this->m_worldScreen->SetControl(detentCount, this->m_shiftKeyActive);
 }
 
 void blooDotMain::RemoveTouch(int id)
@@ -1446,6 +1451,10 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 	if (key == Windows::System::VirtualKey::Shift)
 	{
 		m_shiftKeyActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Control)
+	{
+		m_ctrlKeyActive = true;
 	}
 	else if (key == Windows::System::VirtualKey::Home)
     {
@@ -1640,6 +1649,10 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 	else if (key == Windows::System::VirtualKey::Shift)
 	{
 		this->m_shiftKeyActive = false;
+	}
+	else if (key == Windows::System::VirtualKey::Control)
+	{
+		this->m_ctrlKeyActive = false;
 	}
 	else if (key == Windows::System::VirtualKey::Left)
 	{

@@ -86,6 +86,26 @@ bool Object::WeedFromTop(Dings** dingWeeded, Layers* layerWeeded)
 	return this->m_DingRooof == nullptr && this->m_DingWalls == nullptr && this->m_DingFloor == nullptr;
 }
 
+Layers Object::GetTopmostPopulatedLayer()
+{
+	if (this->m_DingRooof != nullptr)
+	{
+		return Layers::Rooof;
+	}
+
+	if (this->m_DingWalls != nullptr)
+	{
+		return Layers::Walls;
+	}
+
+	if (this->m_DingFloor != nullptr)
+	{
+		return Layers::Floor;
+	}
+
+	return Layers::None;
+}
+
 Platform::String^ Object::GetName()
 {
 	std::wstring names;
@@ -159,6 +179,24 @@ Facings	Object::PlacementFacing(Layers ofLayer)
 	}
 
 	return Facings::Shy;
+}
+
+void Object::RotateInPlace(Layers inLayer, bool inverseDirection)
+{
+	switch (inLayer)
+	{
+	case Layers::Floor:
+		this->AdjustFacing(inLayer, Dings::RotateFromFacing(this->m_FacingFloor, inverseDirection));
+		break;
+
+	case Layers::Walls:
+		this->AdjustFacing(inLayer, Dings::RotateFromFacing(this->m_FacingWalls, inverseDirection));
+		break;
+
+	case Layers::Rooof:
+		this->AdjustFacing(inLayer, Dings::RotateFromFacing(this->m_FacingRooof, inverseDirection));
+		break;
+	}
 }
 
 void Object::AdjustFacing(Layers inLayer, Facings shouldBeFacing)

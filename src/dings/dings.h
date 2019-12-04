@@ -128,6 +128,7 @@ public:
 	Layers				GetPreferredLayer();
 	Facings				AvailableFacings();
 	bool				CouldCoalesce();
+	static Facings		RotateFromFacing(Facings fromFacing, bool inverseDirection);
 
 protected:
 	unsigned			m_ID;

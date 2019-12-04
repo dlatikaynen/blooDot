@@ -165,25 +165,15 @@ void LevelEditorHUD::Rotate()
 {
 	if (this->m_selectedDingID > 0 && this->m_isSelectedDingRotatable)
 	{
-		switch (this->m_selectedDingFacing)
-		{
-		case Facings::Shy:
-		case Facings::West:
-			this->m_selectedDingFacing = Facings::South;
-			break;
+		this->m_selectedDingFacing = Dings::RotateFromFacing(this->m_selectedDingFacing, false);
+	}
+}
 
-		case Facings::South:
-			this->m_selectedDingFacing = Facings::East;
-			break;
-
-		case Facings::East:
-			this->m_selectedDingFacing = Facings::North;
-			break;
-
-		case Facings::North:
-			this->m_selectedDingFacing = Facings::West;
-			break;
-		}
+void LevelEditorHUD::RotateInverse()
+{
+	if (this->m_selectedDingID > 0 && this->m_isSelectedDingRotatable)
+	{
+		this->m_selectedDingFacing = Dings::RotateFromFacing(this->m_selectedDingFacing, true);
 	}
 }
 

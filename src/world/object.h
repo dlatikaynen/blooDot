@@ -13,11 +13,13 @@ public:
 	void				InstantiateInLayerFacing(Layers inLayer, Dings* templateDing, Facings placementFacing);
 	void				Weed();
 	bool				Object::WeedFromTop(Dings** dingWeeded, Layers* layerWeeded);
+	Layers				GetTopmostPopulatedLayer();
 	Platform::String^	GetName();
 	Layers				GetLayers();
 	Dings*				GetDing(Layers ofLayer);
 	Facings				PlacementFacing(Layers ofLayer);
 	void				AdjustFacing(Layers inLayer, Facings shouldBeFacing);
+	void				RotateInPlace(Layers inLayer, bool inverseDirection);
 	void				DesignSaveToFile(std::ofstream* toFile, Layers ofLayer);
 
 protected:

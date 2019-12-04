@@ -13,10 +13,12 @@ public:
 	void SelectPreviousDingForPlacement();
 	Dings* SelectedDing();
 	void DoPlaceDing();
+	void DoRotateObject(bool inverse);
 	void DoObliterateDing();
 	void DoSetScrollLock(bool scrollLocked);
 	void DoToggleGrid();
-	void DoRotate(bool affectPlacement);
+	void SetControl(int detentCount, bool shiftKeyActive) override;
+	void DoRotate(bool affectPlacement, bool inverse);
 
 private:
 	void DrawLevelEditorRaster();

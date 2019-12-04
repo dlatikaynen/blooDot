@@ -332,3 +332,49 @@ bool Dings::CouldCoalesce()
 {
 	return this->m_Coalescing != Facings::Shy && this->m_Coalescing != Facings::Viech;
 }
+
+Facings Dings::RotateFromFacing(Facings fromFacing, bool inverseDirection)
+{
+	if (inverseDirection)
+	{
+		switch (fromFacing)
+		{
+		case Facings::Shy:
+		case Facings::West:
+			return ::North;
+
+		case Facings::South:
+			return ::West;
+
+		case Facings::East:
+			return ::South;
+
+		case Facings::North:
+			return ::East;
+
+		default:
+			return fromFacing;
+		}
+	}
+	else
+	{
+		switch (fromFacing)
+		{
+		case Facings::Shy:
+		case Facings::West:
+			return ::South;
+
+		case Facings::South:
+			return ::East;
+
+		case Facings::East:
+			return ::North;
+
+		case Facings::North:
+			return ::West;
+
+		default:
+			return fromFacing;
+		}
+	}
+}

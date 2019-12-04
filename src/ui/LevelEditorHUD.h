@@ -21,6 +21,7 @@ public:
 	void ToggleGrid();
 	void SetScrollLock(bool scrollLock);
 	void Rotate();
+	void RotateInverse();
 	bool LevelEditorHUD::IsGridShown();
 	bool LevelEditorHUD::IsScrollLocked();
 	Facings LevelEditorHUD::SelectedDingOrientation();

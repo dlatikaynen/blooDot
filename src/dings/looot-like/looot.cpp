@@ -43,18 +43,25 @@ void Chest::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	/* declare */
 	D2D1_RECT_F rect;
 	MFARGB colbase { 0, 102, 153, 255 };
+	MFARGB coldark { 0, 91, 143, 255 };
 	/* prepare */
 	PrepareRect(&this->m_lookupShy, rect);
 	auto rendEr = drawTo.Get();
 	Microsoft::WRL::ComPtr<ID2D1Brush> brusherl = m_Brushes->WannaHave(drawTo, colbase);
 	auto brushBase = brusherl.Get();
+	Microsoft::WRL::ComPtr<ID2D1Brush> brusherl2 = m_Brushes->WannaHave(drawTo, coldark);
+	auto brushDark = brusherl2.Get();
 	/* draw away */
 	for (int facing = OrientabilityIndexQuadruplet::Uppy; facing >= OrientabilityIndexQuadruplet::Lefty; --facing)
 	{
 		PrepareRect(&this->m_lookupSides[facing], rect);
 		Rotate(rendEr, rect, facing);
-		rendEr->FillRectangle(D2D1::RectF(rect.left + 1.0f, rect.top + 2.0f, rect.left + ((rect.right - rect.left) - 4.0f) * blooDot::Consts::GOLDEN_RATIO, rect.bottom - 2.0f), brushBase);
+		auto left = rect.left + 1.0f;
+		auto rite = rect.left + ((rect.right - rect.left) - 4.0f) * blooDot::Consts::GOLDEN_RATIO;
+		auto step = (rite - left) / 4.0f;
+		rendEr->FillRectangle(D2D1::RectF(left, rect.top + 2.0f, rite, rect.bottom - 2.0f), brushBase);
+		rendEr->DrawLine(D2D1::Point2F(rect.left + step, rect.top + 2.0f), D2D1::Point2F(rect.left + step, rect.bottom - 2.0f), brushDark);
+		rendEr->DrawLine(D2D1::Point2F(rect.left + step * 2.0f, rect.top + 2.0f), D2D1::Point2F(rect.left + step * 2.0f, rect.bottom - 2.0f), brushDark);
+		rendEr->DrawLine(D2D1::Point2F(rect.left + step * 3.0f, rect.top + 2.0f), D2D1::Point2F(rect.left + step * 3.0f, rect.bottom - 2.0f), brushDark);
 	}
-	//brusherl = m_Brushes->WannaHave(drawTo, colring);
-	//auto ringBrush = brusherl.Get();
 }

@@ -22,6 +22,7 @@ public:
     void ReleaseDeviceDependentResources();
     void UpdateForWindowSizeChange();
 	void SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down);
+	virtual void SetControl(int detentCount, bool shiftKeyActive);
 	virtual void Update(float timeTotal, float timeDelta);
 	virtual void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
 

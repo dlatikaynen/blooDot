@@ -161,6 +161,12 @@ void WorldScreenBase::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* to
 	}
 }
 
+// mousewheeled
+void WorldScreenBase::SetControl(int detentCount, bool shiftKeyActive)
+{
+
+}
+
 void WorldScreenBase::Update(float timeTotal, float timeDelta)
 {
 	if (this->m_isResizing) 

@@ -79,6 +79,7 @@ namespace blooDot
         void AddTouch(int id, Windows::Foundation::Point point);
         void UpdateTouch(int id, Windows::Foundation::Point point);
 		void PointerMove(int id, Windows::Foundation::Point point);
+		void MouseWheeled(int pointerID, int detentCount);
 		void RemoveTouch(int id);
         void KeyDown(Windows::System::VirtualKey key);
         void KeyUp(Windows::System::VirtualKey key);
@@ -146,6 +147,7 @@ namespace blooDot
         typedef std::queue<D2D1_POINT_2F> PointQueue;
         PointQueue			m_pointQueue;
 		bool				m_shiftKeyActive;
+		bool				m_ctrlKeyActive;
 		bool				m_homeKeyActive;
         bool				m_homeKeyPressed;
 		bool				m_keyRightPressed;

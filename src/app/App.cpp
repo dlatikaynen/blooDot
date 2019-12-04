@@ -81,6 +81,7 @@ void App::SetWindow(CoreWindow^ window)
     window->PointerMoved += ref new TypedEventHandler<CoreWindow^, PointerEventArgs^>(this, &App::OnPointerMoved);
     window->KeyDown += ref new TypedEventHandler<CoreWindow^, KeyEventArgs^>(this, &App::OnKeyDown);
     window->KeyUp += ref new TypedEventHandler<CoreWindow^, KeyEventArgs^>(this, &App::OnKeyUp);	
+	window->PointerWheelChanged += ref new TypedEventHandler<CoreWindow^, PointerEventArgs^>(this, &App::OnMouseWheel);
 
     DisplayInformation^ currentDisplayInformation = DisplayInformation::GetForCurrentView();
     currentDisplayInformation->DpiChanged += ref new TypedEventHandler<DisplayInformation^, Platform::Object^>(this, &App::OnDpiChanged);
@@ -241,6 +242,11 @@ void App::OnPointerMoved(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Cor
 {
     m_Main->UpdateTouch(args->CurrentPoint->PointerId, args->CurrentPoint->Position);
 	m_Main->PointerMove(args->CurrentPoint->PointerId, args->CurrentPoint->Position);
+}
+
+void App::OnMouseWheel(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::PointerEventArgs^ args)
+{
+	this->m_Main->MouseWheeled(args->CurrentPoint->PointerId, args->CurrentPoint->Properties->MouseWheelDelta);
 }
 
 void App::OnKeyDown(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::KeyEventArgs^ args)
