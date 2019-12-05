@@ -85,7 +85,7 @@ void SampleOverlay::CreateDeviceDependentResources()
     ComPtr<IDWriteTextFormat> nameTextFormat;
     DX::ThrowIfFailed(
         m_deviceResources->GetDWriteFactory()->CreateTextFormat(
-            L"Segoe UI",
+            L"Fredoka One",
             nullptr,
             DWRITE_FONT_WEIGHT_LIGHT,
             DWRITE_FONT_STYLE_NORMAL,

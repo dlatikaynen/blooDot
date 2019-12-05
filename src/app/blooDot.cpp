@@ -111,11 +111,12 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	newObject = m_currentLevel->GetObjectAt(355, 361, true);
 	newObject->Instantiate(m_currentLevel->GetDing(1), ClumsyPacking::ConfigurationFromNeighbors(Facings::Shy));
 
-    UserInterface::GetInstance().Initialize(
-        m_deviceResources->GetD2DDevice(),
-        m_deviceResources->GetD2DDeviceContext(),
-        m_deviceResources->GetWicImagingFactory(),
-        m_deviceResources->GetDWriteFactory()
+	UserInterface::GetInstance().Initialize(
+		m_deviceResources->GetD2DDevice(),
+		m_deviceResources->GetD2DDeviceContext(),
+		m_deviceResources->GetWicImagingFactory(),
+		m_deviceResources->GetDWriteFactory(),
+		m_deviceResources->GetDWriteFactory3()
     );
 
     LoadState();
@@ -198,7 +199,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_startGameButton.Initialize();
     m_startGameButton.SetAlignment(AlignCenter, AlignFar);
     m_startGameButton.SetContainer(topHalfRect);
-    m_startGameButton.SetText(L"Start Game");
+    m_startGameButton.SetText(L"solipsist");
     m_startGameButton.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
     m_startGameButton.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
     m_startGameButton.SetPadding(D2D1::SizeF(32.0f, 16.0f));
@@ -208,7 +209,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_highScoreButton.Initialize();
     m_highScoreButton.SetAlignment(AlignCenter, AlignNear);
     m_highScoreButton.SetContainer(bottomHalfRect);
-    m_highScoreButton.SetText(L"High Scores");
+    m_highScoreButton.SetText(L"multiplayer");
     m_highScoreButton.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
     m_highScoreButton.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
     m_highScoreButton.SetPadding(D2D1::SizeF(32.0f, 16.0f));
@@ -763,6 +764,11 @@ void blooDotMain::Update()
 				this->m_audio.Start();
 			}
 
+			if (!this->m_levelEditorHUD.IsVisible())
+			{
+				this->m_levelEditorHUD.SetVisible(true);
+			}
+
 			this->m_worldScreen->SetControl(
 				this->m_pointerPosition, 
 				&this->m_touches,
@@ -871,52 +877,52 @@ void blooDotMain::Update()
 			}
 
 			this->m_worldScreen->Update(timerTotal, timerElapsed);
-			return;
 		}
-		else if (this->m_gameState == GameState::PreGameCountdown)
-		{
-			if (this->m_preGameCountdownTimer.IsCountdownComplete())
-			{
-				SetGameState(GameState::InGameActive);
-			}
-		}
+
+		//else if (this->m_gameState == GameState::PreGameCountdown)
+		//{
+		//	if (this->m_preGameCountdownTimer.IsCountdownComplete())
+		//	{
+		//		SetGameState(GameState::InGameActive);
+		//	}
+		//}
 		
 #pragma region Process Input
 
-        float combinedTiltX = 0.0f;
-        float combinedTiltY = 0.0f;
+        //float combinedTiltX = 0.0f;
+        //float combinedTiltY = 0.0f;
 
         // Check whether the user paused or resumed the game.
-        if (ButtonJustPressed(GamepadButtons::Menu))
-        {
-			if (m_gameState == GameState::InGameActive)
-			{
-				SetGameState(GameState::InGamePaused);
-			}  
-			else if (m_gameState == GameState::InGamePaused)
-			{
-				SetGameState(GameState::InGameActive);
-			}
-        }
+   //     if (ButtonJustPressed(GamepadButtons::Menu))
+   //     {
+			//if (m_gameState == GameState::InGameActive)
+			//{
+			//	SetGameState(GameState::InGamePaused);
+			//}  
+			//else if (m_gameState == GameState::InGamePaused)
+			//{
+			//	SetGameState(GameState::InGameActive);
+			//}
+   //     }
 
         // Check whether the user restarted the game or cleared the high score table.
-        if (ButtonJustPressed(GamepadButtons::View) || m_homeKeyPressed)
-        {
-            m_homeKeyPressed = false;
+        //if (ButtonJustPressed(GamepadButtons::View) || m_homeKeyPressed)
+        //{
+        //    m_homeKeyPressed = false;
 
-            if (m_gameState == GameState::InGameActive ||
-                m_gameState == GameState::InGamePaused ||
-                m_gameState == GameState::PreGameCountdown)
-            {
-                SetGameState(GameState::MainMenu);
-                m_inGameStopwatchTimer.SetVisible(false);
-                m_preGameCountdownTimer.SetVisible(false);
-            }
-            else if (m_gameState == GameState::HighScoreDisplay)
-            {
-                m_highScoreTable.Reset();
-            }
-        }
+        //    if (m_gameState == GameState::InGameActive ||
+        //        m_gameState == GameState::InGamePaused ||
+        //        m_gameState == GameState::PreGameCountdown)
+        //    {
+        //        SetGameState(GameState::MainMenu);
+        //        m_inGameStopwatchTimer.SetVisible(false);
+        //        m_preGameCountdownTimer.SetVisible(false);
+        //    }
+        //    else if (m_gameState == GameState::HighScoreDisplay)
+        //    {
+        //        m_highScoreTable.Reset();
+        //    }
+        //}
 
         // Check whether the user chose a button from the UI.
         bool anyPoints = !m_pointQueue.empty();
@@ -927,70 +933,86 @@ void blooDotMain::Update()
             m_pointQueue.pop();
         }
 
-        // Handle menu navigation.
-        bool chooseSelection = (ButtonJustPressed(GamepadButtons::A) || ButtonJustPressed(GamepadButtons::Menu));
-		bool moveUp = ButtonJustPressed(GamepadButtons::DPadUp);
-		bool moveDown = ButtonJustPressed(GamepadButtons::DPadDown);
-
-        switch (m_gameState)
+        switch (this->m_gameState)
         {
         case GameState::MainMenu:
-            if (chooseSelection)
+			bool chooseSelection = (this->ButtonJustPressed(GamepadButtons::A) || this->ButtonJustPressed(GamepadButtons::Menu));
+			if (chooseSelection)
             {
-                m_audio.PlaySoundEffect(MenuSelectedEvent);
-				if (m_startGameButton.GetSelected())
+				this->m_audio.PlaySoundEffect(MenuSelectedEvent);
+				if (this->m_startGameButton.GetSelected())
 				{
-					m_startGameButton.SetPressed(true);
+					this->m_startGameButton.SetPressed(true);
 				}
-				if (m_highScoreButton.GetSelected())
+				if (this->m_highScoreButton.GetSelected())
 				{
-					m_highScoreButton.SetPressed(true);
+					this->m_highScoreButton.SetPressed(true);
 				}
             }
-            if (moveUp || moveDown)
-            {
-                m_startGameButton.SetSelected(!m_startGameButton.GetSelected());
-                m_highScoreButton.SetSelected(!m_startGameButton.GetSelected());
-                m_audio.PlaySoundEffect(MenuChangeEvent);
-            }
-            break;
-
-        case GameState::HighScoreDisplay:
-			if (chooseSelection || anyPoints)
+			else 
 			{
-				SetGameState(GameState::MainMenu);
-			}
-            break;
+				bool moveUp = this->ButtonJustPressed(GamepadButtons::DPadUp);
+				if (!moveUp && this->m_keyUpPressed)
+				{
+					this->m_keyUpPressed = false;
+					moveUp = true;
+				}
+				
+				bool moveDown = false;
+				if (!moveUp)
+				{
+					moveDown = this->ButtonJustPressed(GamepadButtons::DPadDown);
+					if (!moveDown && this->m_keyDownPressed)
+					{
+						this->m_keyDownPressed = false;
+						moveDown = true;
+					}
+				}
 
-        case GameState::PostGameResults:
-			if (chooseSelection || anyPoints)
+				if (moveUp || moveDown)
+				{
+					this->m_startGameButton.SetSelected(!m_startGameButton.GetSelected());
+					this->m_highScoreButton.SetSelected(!m_startGameButton.GetSelected());
+					this->m_audio.PlaySoundEffect(MenuChangeEvent);
+				}
+			}
+
+			// Update the game state if the user chose a menu option.
+			if (this->m_startGameButton.IsPressed())
 			{
-				SetGameState(GameState::HighScoreDisplay);
+				this->m_startGameButton.SetPressed(false);
+				this->SetGameState(GameState::LevelEditor);
 			}
+			else if (this->m_highScoreButton.IsPressed())
+			{
+				this->SetGameState(GameState::HighScoreDisplay);
+				this->m_highScoreButton.SetPressed(false);
+			}
+
             break;
 
-        case GameState::InGamePaused:
-            if (m_pausedText.IsPressed())
-            {
-                m_pausedText.SetPressed(false);
-                SetGameState(GameState::InGameActive);
-            }
-            break;
+   //     case GameState::HighScoreDisplay:
+			//if (chooseSelection || anyPoints)
+			//{
+			//	SetGameState(GameState::MainMenu);
+			//}
+   //         break;
 
-        }
+   //     case GameState::PostGameResults:
+			//if (chooseSelection || anyPoints)
+			//{
+			//	SetGameState(GameState::HighScoreDisplay);
+			//}
+   //         break;
 
-        // Update the game state if the user chose a menu option.
-        if (m_startGameButton.IsPressed())
-        {
-            SetGameState(GameState::PreGameCountdown);
-            m_startGameButton.SetPressed(false);
-        }
-
-        if (m_highScoreButton.IsPressed())
-        {
-            SetGameState(GameState::HighScoreDisplay);
-            m_highScoreButton.SetPressed(false);
-        }
+   //     case GameState::InGamePaused:
+   //         if (m_pausedText.IsPressed())
+   //         {
+   //             m_pausedText.SetPressed(false);
+   //             SetGameState(GameState::InGameActive);
+   //         }
+   //         break;
+		}
 
 		// Process controller input.
 #if WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP // Only process controller input when the device is not a phone.
@@ -998,7 +1020,6 @@ void blooDotMain::Update()
 		if (m_currentGamepadNeedsRefresh)
 		{
 			auto mostRecentGamepad = GetLastGamepad();
-
 			if (m_gamepad != mostRecentGamepad)
 			{
 				m_gamepad = mostRecentGamepad;
@@ -1015,14 +1036,12 @@ void blooDotMain::Update()
 
 		float leftStickX = static_cast<float>(m_newReading.LeftThumbstickX);
 		float leftStickY = static_cast<float>(m_newReading.LeftThumbstickY);
-
 		auto oppositeSquared = leftStickY * leftStickY;
 		auto adjacentSquared = leftStickX * leftStickX;
-
 		if ((oppositeSquared + adjacentSquared) > m_deadzoneSquared)
 		{
-			combinedTiltX += leftStickX * m_controllerScaleFactor;
-			combinedTiltY += leftStickY * m_controllerScaleFactor;
+			//combinedTiltX += leftStickX * m_controllerScaleFactor;
+			//combinedTiltY += leftStickY * m_controllerScaleFactor;
 		}
 
 #endif
@@ -1030,8 +1049,8 @@ void blooDotMain::Update()
         // Account for touch input.
         for (TouchMap::const_iterator iter = m_touches.cbegin(); iter != m_touches.cend(); ++iter)
         {
-            combinedTiltX += iter->second.x * m_touchScaleFactor;
-            combinedTiltY += iter->second.y * m_touchScaleFactor;
+            //combinedTiltX += iter->second.x * m_touchScaleFactor;
+            //combinedTiltY += iter->second.y * m_touchScaleFactor;
         }
 
         // Account for sensors.
@@ -1042,176 +1061,27 @@ void blooDotMain::Update()
 
             if (reading != nullptr)
             {
-                combinedTiltX += static_cast<float>(reading->AccelerationX) * m_accelerometerScaleFactor;
-                combinedTiltY += static_cast<float>(reading->AccelerationY) * m_accelerometerScaleFactor;
+                //combinedTiltX += static_cast<float>(reading->AccelerationX) * m_accelerometerScaleFactor;
+                //combinedTiltY += static_cast<float>(reading->AccelerationY) * m_accelerometerScaleFactor;
             }
         }
 
         // Clamp input.
-        combinedTiltX = max(-1, min(1, combinedTiltX));
-        combinedTiltY = max(-1, min(1, combinedTiltY));
+        //combinedTiltX = max(-1, min(1, combinedTiltX));
+        //combinedTiltY = max(-1, min(1, combinedTiltY));
 
-        if (m_gameState != GameState::PreGameCountdown &&
-            m_gameState != GameState::InGameActive &&
-            m_gameState != GameState::InGamePaused)
-        {
-            // Ignore tilt when the menu is active.
-            combinedTiltX = 0.0f;
-            combinedTiltY = 0.0f;
-        }
-
-#pragma endregion
-
-#pragma region Physics
-
-        const float maxTilt = 1.0f / 8.0f;
-        XMVECTOR gravity = XMVectorSet(combinedTiltX * maxTilt, combinedTiltY * maxTilt, 1.0f, 0.0f);
-        gravity = XMVector3Normalize(gravity);
-
-        XMFLOAT3A g;
-        XMStoreFloat3(&g, gravity);
-        m_physics.SetGravity(g);
-
-        if (m_gameState == GameState::InGameActive)
-        {
-            // Only update physics when gameplay is active.
-            m_physics.UpdatePhysicsSimulation(static_cast<float>(m_timer.GetElapsedSeconds()));
-
-            // Handle checkpoints.
-            switch (UpdateCheckpoints())
-            {
-            case CheckpointState::Save:
-                // Display checkpoint notice.
-                m_checkpointText.SetVisible(true);
-                m_checkpointText.SetTextOpacity(1.0f);
-                m_checkpointText.FadeOut(2.0f);
-                m_audio.PlaySoundEffect(CheckpointEvent);
-                SaveState();
-                break;
-
-            case CheckpointState::Goal:
-                m_inGameStopwatchTimer.Stop();
-                m_newHighScore.elapsedTime = m_inGameStopwatchTimer.GetElapsedTime();
-                SYSTEMTIME systemTime;
-                GetLocalTime(&systemTime);
-                WCHAR buffer[64];
-                swprintf_s(buffer, L"%d/%d/%d", systemTime.wYear, systemTime.wMonth, systemTime.wDay);
-                m_newHighScore.tag = ref new Platform::String(buffer);
-                m_highScoreTable.AddScoreToTable(m_newHighScore);
-
-                m_audio.PlaySoundEffect(CheckpointEvent);
-                m_audio.StopSoundEffect(RollingEvent);
-
-                // Display game results.
-                SetGameState(GameState::PostGameResults);
-                SaveState();
-                break;
-            }
-        }
-
-        XMFLOAT3A marblePosition;
-        memcpy(&marblePosition, &m_physics.GetPosition(), sizeof(XMFLOAT3));
-        static XMFLOAT3A oldMarblePosition = marblePosition;
-
-        const XMMATRIX initialMarbleRotationMatrix = XMMatrixMultiply( XMMatrixRotationY(90.0f * (XM_PI / 180.0f)) , XMMatrixRotationX(90.0f * (XM_PI / 180.0f)));
-
-        static XMMATRIX marbleRotationMatrix = initialMarbleRotationMatrix;
-
-        // Check whether the marble fell off of the maze.
-        const float fadeOutDepth = 0.0f;
-        const float resetDepth = 80.0f;
-        if (marblePosition.z >= fadeOutDepth)
-        {
-            m_targetLightStrength = 0.0f;
-        }
-        if (marblePosition.z >= resetDepth)
-        {
-            // Reset marble.
-            memcpy(&marblePosition, &m_checkpoints[m_currentCheckpoint], sizeof(XMFLOAT3));
-            oldMarblePosition = marblePosition;
-            m_physics.SetPosition((const XMFLOAT3&) marblePosition);
-            m_physics.SetVelocity(XMFLOAT3(0, 0, 0));
-            m_lightStrength = 0.0f;
-            m_targetLightStrength = 1.0f;
-
-            m_resetCamera = true;
-            m_resetMarbleRotation = true;
-            m_audio.PlaySoundEffect(FallingEvent);
-        }
-
-        XMFLOAT3A marbleRotation;
-        XMStoreFloat3A(&marbleRotation, (XMLoadFloat3A(&oldMarblePosition) - XMLoadFloat3A(&marblePosition)) / m_physics.GetRadius());
-        oldMarblePosition = marblePosition;
-
-        if (m_resetMarbleRotation)
-        {
-            marbleRotationMatrix = initialMarbleRotationMatrix;
-            m_resetMarbleRotation = false;
-        }
-        else
-        {
-            marbleRotationMatrix = XMMatrixMultiply(marbleRotationMatrix, XMMatrixRotationY(marbleRotation.x /** 180.0f / 3.1415926535f*/));
-            marbleRotationMatrix = XMMatrixMultiply(marbleRotationMatrix, XMMatrixRotationX(-marbleRotation.y /** -180.0f / 3.1415926535f*/));
-        }
+        //if (m_gameState != GameState::PreGameCountdown &&
+        //    m_gameState != GameState::InGameActive &&
+        //    m_gameState != GameState::InGamePaused)
+        //{
+        //    // Ignore tilt when the menu is active.
+        //    combinedTiltX = 0.0f;
+        //    combinedTiltY = 0.0f;
+        //}
 
 #pragma endregion
 
-#pragma region Update Camera
 
-        static float eyeDistance = 200.0f;
-        static XMFLOAT3A eyePosition = XMFLOAT3A(0, 0, 0);
-
-        // Gradually move the camera above the marble.
-        XMFLOAT3A targetEyePosition;
-        XMStoreFloat3A(&targetEyePosition, XMLoadFloat3A(&marblePosition) - (XMLoadFloat3A(&g) * eyeDistance));
-
-        if (m_resetCamera)
-        {
-            eyePosition = targetEyePosition;
-            m_resetCamera = false;
-        }
-        else
-        {
-            XMStoreFloat3A(&eyePosition, XMLoadFloat3A(&eyePosition) + ((XMLoadFloat3A(&targetEyePosition) - XMLoadFloat3A(&eyePosition)) * min(1, static_cast<float>(m_timer.GetElapsedSeconds()) * 8)));
-        }
-
-        // Look at the marble.
-        if ((m_gameState == GameState::MainMenu) || (m_gameState == GameState::HighScoreDisplay))
-        {
-            // Override camera position for menus.
-            XMStoreFloat3A(&eyePosition, XMLoadFloat3A(&marblePosition) + XMVectorSet(75.0f, -150.0f, -75.0f, 0.0f));
-            m_camera->SetViewParameters(eyePosition, marblePosition, XMFLOAT3(0.0f, 0.0f, -1.0f));
-        }
-        else
-        {
-            m_camera->SetViewParameters(eyePosition, marblePosition, XMFLOAT3(0.0f, 1.0f, 0.0f));
-        }
-
-#pragma endregion
-
-#pragma region Update Constant Buffers
-
-        // Update the model matrices based on the simulation.
-        XMStoreFloat4x4(&m_mazeConstantBufferData.model, XMMatrixIdentity());
-        XMStoreFloat4x4(&m_marbleConstantBufferData.model, XMMatrixTranspose(XMMatrixMultiply(marbleRotationMatrix, XMMatrixTranslationFromVector(XMLoadFloat3A(&marblePosition)))));
-
-        // Update the view matrix based on the camera.
-        XMFLOAT4X4 view;
-        m_camera->GetViewMatrix(&view);
-        m_mazeConstantBufferData.view = view;
-        m_marbleConstantBufferData.view = view;
-
-        // Update lighting constants.
-        m_lightStrength += (m_targetLightStrength - m_lightStrength) * min(1, static_cast<float>(m_timer.GetElapsedSeconds()) * 4);
-
-        m_mazeConstantBufferData.marblePosition = marblePosition;
-        m_mazeConstantBufferData.marbleRadius = m_physics.GetRadius();
-        m_mazeConstantBufferData.lightStrength = m_lightStrength;
-        m_marbleConstantBufferData.marblePosition = marblePosition;
-        m_marbleConstantBufferData.marbleRadius = m_physics.GetRadius();
-        m_marbleConstantBufferData.lightStrength = m_lightStrength;
-
-#pragma endregion
 
 #pragma region Update Audio
 
@@ -1673,9 +1543,9 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 
 	if (this->m_deferredResourcesReadyPending)
 	{
+		this->m_deferredResourcesReadyPending = false;
 		this->m_deferredResourcesReady = true;
-		this->SetGameState(GameState::LevelEditor);
-		this->m_levelEditorHUD.SetVisible(true);
+		this->SetGameState(GameState::MainMenu);
 	}
 }
 
@@ -1864,7 +1734,8 @@ void blooDotMain::OnDeviceRestored()
         m_deviceResources->GetD2DDevice(),
         m_deviceResources->GetD2DDeviceContext(),
         m_deviceResources->GetWicImagingFactory(),
-        m_deviceResources->GetDWriteFactory()
+        m_deviceResources->GetDWriteFactory(),
+		m_deviceResources->GetDWriteFactory3()
     );
 
     CreateWindowSizeDependentResources();

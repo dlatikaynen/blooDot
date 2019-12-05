@@ -85,14 +85,9 @@ void DX::DeviceResources::CreateDeviceIndependentResources()
             )
         );
 
-    // Initialize the DirectWrite Factory.
-    DX::ThrowIfFailed(
-        DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(IDWriteFactory2),
-            &m_dwriteFactory
-            )
-        );
+    // Initialize the DirectWrite Factories
+    DX::ThrowIfFailed(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory2), &m_dwriteFactory));
+	DX::ThrowIfFailed(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory3), &m_dwriteFactory3));
 
     // Initialize the Windows Imaging Component (WIC) Factory.
     DX::ThrowIfFailed(

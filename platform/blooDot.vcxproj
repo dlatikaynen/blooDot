@@ -216,6 +216,15 @@
     <None Include="Media\Bitmaps\blooDot.bmp">
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <None Include="Media\Fonts\FreckleFace-Regular.ttf">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Media\Fonts\FredokaOne-Regular.ttf">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Media\Fonts\OFL.txt">
+      <DeploymentContent>false</DeploymentContent>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\src\mediumtile-sdk.png" />

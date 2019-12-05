@@ -10,7 +10,7 @@ using namespace D2D1;
 
 TextStyle::TextStyle()
 {
-	m_fontName = L"Segoe UI";
+	m_fontName = L"Freckle Face";
 	m_fontSize = 24.0f;
 	m_fontWeight = DWRITE_FONT_WEIGHT_NORMAL;
 	m_fontStyle = DWRITE_FONT_STYLE_NORMAL;
@@ -68,10 +68,12 @@ IDWriteTextFormat* TextStyle::GetTextFormat()
 	{
 		IDWriteFactory* dwriteFactory = UserInterface::GetDWriteFactory();
 
+		//std::wstring fontFilename = L"Media\\Fonts\\FreckleFace-Regular.ttf";
+
 		DX::ThrowIfFailed(
 			dwriteFactory->CreateTextFormat(
 				m_fontName->Data(),
-				nullptr,
+				nullptr, //m_fontCollection.Get(),
 				m_fontWeight,
 				m_fontStyle,
 				DWRITE_FONT_STRETCH_NORMAL,

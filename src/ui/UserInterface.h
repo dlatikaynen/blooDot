@@ -18,14 +18,16 @@ public:
     static UserInterface& GetInstance() { return m_instance; }
 
     static IDWriteFactory* GetDWriteFactory() { return m_instance.m_dwriteFactory.Get(); }
-    static ID2D1DeviceContext* GetD2DContext() { return m_instance.m_d2dContext.Get(); }
+	static IDWriteFactory3* GetDWriteFactory3() { return m_instance.m_dwriteFactory3.Get(); }
+	static ID2D1DeviceContext* GetD2DContext() { return m_instance.m_d2dContext.Get(); }
     static void ReleaseDeviceDependentResources();
 
     void Initialize(
-        _In_ ID2D1Device*         d2dDevice,
-        _In_ ID2D1DeviceContext*  d2dContext,
-        _In_ IWICImagingFactory*  wicFactory,
-        _In_ IDWriteFactory*      dwriteFactory
+        _In_ ID2D1Device*			d2dDevice,
+        _In_ ID2D1DeviceContext*	d2dContext,
+        _In_ IWICImagingFactory*	wicFactory,
+        _In_ IDWriteFactory*		dwriteFactory,
+		_In_ IDWriteFactory3*		dwriteFactory3
         );
 
     void Release()
@@ -34,6 +36,7 @@ public:
         m_d2dDevice = nullptr;
         m_d2dContext = nullptr;
         m_dwriteFactory = nullptr;
+		m_dwriteFactory3 = nullptr;
         m_stateBlock = nullptr;
         m_wicFactory = nullptr;
     }
@@ -57,7 +60,8 @@ private:
     Microsoft::WRL::ComPtr<ID2D1Device>             m_d2dDevice;
     Microsoft::WRL::ComPtr<ID2D1DeviceContext>      m_d2dContext;
     Microsoft::WRL::ComPtr<IDWriteFactory>          m_dwriteFactory;
-    Microsoft::WRL::ComPtr<ID2D1DrawingStateBlock>  m_stateBlock;
+	Microsoft::WRL::ComPtr<IDWriteFactory3>         m_dwriteFactory3;
+	Microsoft::WRL::ComPtr<ID2D1DrawingStateBlock>  m_stateBlock;
     Microsoft::WRL::ComPtr<IWICImagingFactory>      m_wicFactory;
 
     ElementSet m_elements;

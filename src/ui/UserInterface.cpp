@@ -22,10 +22,11 @@ void UserInterface::ReleaseDeviceDependentResources()
 }
 
 void UserInterface::Initialize(
-    _In_ ID2D1Device*         d2dDevice,
-    _In_ ID2D1DeviceContext*  d2dContext,
-    _In_ IWICImagingFactory*  wicFactory,
-    _In_ IDWriteFactory*      dwriteFactory
+    _In_ ID2D1Device*			d2dDevice,
+    _In_ ID2D1DeviceContext*	d2dContext,
+    _In_ IWICImagingFactory*	wicFactory,
+    _In_ IDWriteFactory*		dwriteFactory,
+	_In_ IDWriteFactory3*		dwriteFactory3
     )
 {
     m_wicFactory = wicFactory;

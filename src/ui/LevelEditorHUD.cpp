@@ -22,7 +22,7 @@ void LevelEditorHUD::Initialize()
 	auto d2dContext = UserInterface::GetD2DContext();
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::White), &this->m_textColorBrush));
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::Black), &this->m_shadowColorBrush));
-	this->m_shadowColorBrush->SetOpacity(m_shadowColorBrush->GetOpacity() * blooDot::Consts::GOLDEN_RATIO);
+	this->m_shadowColorBrush->SetOpacity(m_shadowColorBrush->GetOpacity() * blooDot::Consts::GOLDEN_RATIO);	
 }
 
 void LevelEditorHUD::CalculateSize()
@@ -59,6 +59,7 @@ void LevelEditorHUD::CreateTextLayout()
 	if (this->m_textLayout == nullptr && this->IsDingSelected())
 	{
 		auto dwriteFactory = UserInterface::GetDWriteFactory();
+		this->m_textStyle.SetFontName(L"Fredoka One");
 		DX::ThrowIfFailed(
 			dwriteFactory->CreateTextLayout(
 				this->m_dingName->Data(),
