@@ -30,9 +30,10 @@ protected:
 	float               m_fadeOutTime;
 	float               m_fadeOutTimeElapsed;
 
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_textColorBrush;
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_shadowColorBrush;
-	Microsoft::WRL::ComPtr<IDWriteTextLayout>       m_textLayout;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>	m_textColorBrush;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>	m_selectionBackdropBrush;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>	m_shadowColorBrush;
+	Microsoft::WRL::ComPtr<IDWriteTextLayout>		m_textLayout;
 
 	void CreateTextLayout();
 };

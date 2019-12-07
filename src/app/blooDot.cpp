@@ -195,19 +195,17 @@ void blooDotMain::CreateWindowSizeDependentResources()
     topHalfRect.bottom = ((clientRect.top + clientRect.bottom) / 2.0f) - (padding / 2.0f);
     D2D1_RECT_F bottomHalfRect = clientRect;
     bottomHalfRect.top = topHalfRect.bottom + padding;
-
-    m_startGameButton.Initialize();
-    m_startGameButton.SetAlignment(AlignCenter, AlignFar);
-    m_startGameButton.SetContainer(topHalfRect);
-    m_startGameButton.SetText(L"solipsist");
-    m_startGameButton.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
-    m_startGameButton.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
-    m_startGameButton.SetPadding(D2D1::SizeF(32.0f, 16.0f));
-    m_startGameButton.GetTextStyle().SetFontSize(72.0f);
-    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::StartGameButton, &m_startGameButton);
+	
+	D2D1_RECT_F containerRect = D2D1::RectF(clientRect.left, clientRect.top, clientRect.right, clientRect.top + 100.0f);
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"singleplayer", UIElement::SinglePlayerButton, &containerRect));
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"multiplayer", UIElement::MultiPlayerButton, &containerRect));
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"worldbuilder", UIElement::WorldBuilderButton, &containerRect));
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"configuration", UIElement::ConfigurationButton, &containerRect));
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"help~about", UIElement::HelpAboutButton, &containerRect));
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"exterminate", UIElement::ExterminateButton, &containerRect));
 
     m_highScoreButton.Initialize();
-    m_highScoreButton.SetAlignment(AlignCenter, AlignNear);
+    m_highScoreButton.SetAlignment(AlignCenter, AlignCenter);
     m_highScoreButton.SetContainer(bottomHalfRect);
     m_highScoreButton.SetText(L"multiplayer");
     m_highScoreButton.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
@@ -295,6 +293,25 @@ void blooDotMain::CreateWindowSizeDependentResources()
 	{
 		m_sampleOverlay->CreateWindowSizeDependentResources();
 	}
+}
+
+TextButton* blooDotMain::CreateMainMenuButton(Platform::String^ captionText, UIElement elementKey, D2D1_RECT_F* containerRect)
+{
+	auto newButton = new TextButton();
+	newButton->Initialize();
+	newButton->SetAlignment(AlignCenter, AlignCenter);
+	newButton->SetContainer(*containerRect);
+	newButton->SetText(captionText);
+	newButton->SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
+	newButton->GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
+	newButton->SetPadding(D2D1::SizeF(16.0f, 8.0f));
+	newButton->GetTextStyle().SetFontSize(52.0f);
+	UserInterface::GetInstance().RegisterElement(elementKey, newButton);
+	/* next line automatically */
+	auto yDelta = (containerRect->bottom - containerRect->top) + 8.0f;
+	(*containerRect).top += yDelta;
+	(*containerRect).bottom += yDelta;
+	return newButton;
 }
 
 void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
@@ -451,7 +468,7 @@ bool blooDotMain::Render()
     context->ClearRenderTargetView(m_deviceResources->GetBackBufferRenderTargetView(), DirectX::Colors::Black);
     context->ClearDepthStencilView(m_deviceResources->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	if (m_gameState == GameState::LoadScreen)
+	if (m_gameState == GameState::LoadScreen || m_gameState==GameState::MainMenu)
 	{
 		// Only render the loading screen for now.
 		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Loading Screen", 0);
@@ -574,9 +591,8 @@ void blooDotMain::SetGameState(GameState nextState)
     switch (m_gameState)
     {
     case GameState::MainMenu:
-        m_startGameButton.SetVisible(false);
-        m_highScoreButton.SetVisible(false);
-        break;
+		for (auto iter = this->m_mainMenuButtons.begin(); iter != this->m_mainMenuButtons.end(); ++iter) (*iter)->SetVisible(false);
+		break;
 
     case GameState::HighScoreDisplay:
         m_highScoreTable.SetVisible(false);
@@ -596,11 +612,11 @@ void blooDotMain::SetGameState(GameState nextState)
     switch (nextState)
     {
     case GameState::MainMenu:
-        m_startGameButton.SetVisible(true);
-        m_startGameButton.SetSelected(true);
-        m_highScoreButton.SetVisible(true);
-        m_highScoreButton.SetSelected(false);
-        m_pausedText.SetVisible(false);
+		for (auto iter = this->m_mainMenuButtons.begin(); iter != this->m_mainMenuButtons.end(); ++iter) (*iter)->SetVisible(true);
+		m_menuButtonSinglePlayer.SetVisible(true);
+        (*this->m_mainMenuButtons.begin())->SetSelected(true);
+
+		m_pausedText.SetVisible(false);
 
         m_resetCamera = true;
         m_resetMarbleRotation = true;
@@ -750,12 +766,11 @@ void blooDotMain::Update()
 		// When the game is first loaded, we display a load screen
         // and load any deferred resources that might be too expensive
         // to load during initialization.
-		if (this->m_gameState == GameState::LoadScreen)
+		if (this->m_gameState == GameState::LoadScreen || this->m_gameState == GameState::MainMenu)
 		{
 			// At this point we can draw a progress bar, or if we had
 			// loaded audio, we could play audio during the loading process.
-			this->m_loadScreen->Update(timerTotal, timerElapsed);
-			return;
+			this->m_loadScreen->Update(timerTotal, timerElapsed);			
 		}
 		else if (this->m_gameState == GameState::LevelEditor)
 		{
@@ -940,9 +955,9 @@ void blooDotMain::Update()
 			if (chooseSelection)
             {
 				this->m_audio.PlaySoundEffect(MenuSelectedEvent);
-				if (this->m_startGameButton.GetSelected())
+				if (this->m_menuButtonSinglePlayer.GetSelected())
 				{
-					this->m_startGameButton.SetPressed(true);
+					this->m_menuButtonSinglePlayer.SetPressed(true);
 				}
 				if (this->m_highScoreButton.GetSelected())
 				{
@@ -971,16 +986,14 @@ void blooDotMain::Update()
 
 				if (moveUp || moveDown)
 				{
-					this->m_startGameButton.SetSelected(!m_startGameButton.GetSelected());
-					this->m_highScoreButton.SetSelected(!m_startGameButton.GetSelected());
-					this->m_audio.PlaySoundEffect(MenuChangeEvent);
+					SelectMainMenu(moveUp, moveDown);
 				}
 			}
 
 			// Update the game state if the user chose a menu option.
-			if (this->m_startGameButton.IsPressed())
+			if (this->m_menuButtonSinglePlayer.IsPressed())
 			{
-				this->m_startGameButton.SetPressed(false);
+				this->m_menuButtonSinglePlayer.SetPressed(false);
 				this->SetGameState(GameState::LevelEditor);
 			}
 			else if (this->m_highScoreButton.IsPressed())
@@ -1153,6 +1166,42 @@ void blooDotMain::Update()
         }
 #pragma endregion
     });
+}
+
+void blooDotMain::SelectMainMenu(bool moveUp, bool moveDown)
+{
+	auto didMove = false;
+	if (moveUp)
+	{
+		for (auto iter = this->m_mainMenuButtons.crbegin(); std::next(iter) != this->m_mainMenuButtons.crend(); ++iter)
+		{
+			if ((*iter)->GetSelected())
+			{
+				(*iter)->SetSelected(false);
+				(*(++iter))->SetSelected(true);
+				didMove = true;
+				break;
+			}
+		}
+	}
+	else if (moveDown)
+	{
+		for (auto iter = this->m_mainMenuButtons.cbegin(); std::next(iter) != this->m_mainMenuButtons.cend(); ++iter)
+		{
+			if ((*iter)->GetSelected())
+			{
+				(*iter)->SetSelected(false);
+				(*(++iter))->SetSelected(true);
+				didMove = true;
+				break;
+			}
+		}
+	}
+
+	if (didMove)
+	{
+		this->m_audio.PlaySoundEffect(MenuChangeEvent);
+	}
 }
 
 void blooDotMain::OnActionSaveLevel(bool forcePrompt)

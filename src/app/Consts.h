@@ -23,6 +23,12 @@ namespace blooDot
 		InGameStopwatchTimer = 7,
 		CheckPointText = 8,
 		PausedText = 9,
-		ResultsText = 10
+		ResultsText = 10,
+		SinglePlayerButton = 11,
+		MultiPlayerButton = 12,
+		WorldBuilderButton = 13,
+		ConfigurationButton = 14,
+		HelpAboutButton = 15,
+		ExterminateButton = 16
 	};
 }

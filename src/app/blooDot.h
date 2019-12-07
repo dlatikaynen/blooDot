@@ -130,7 +130,9 @@ namespace blooDot
         typedef std::vector<XMFLOAT3> Checkpoints;
         Checkpoints			m_checkpoints;
         size_t				m_currentCheckpoint;
-        TextButton			m_startGameButton;
+		typedef std::vector<TextButton*> Menubuttons;
+		Menubuttons			m_mainMenuButtons;
+		TextButton			m_menuButtonSinglePlayer;
         TextButton			m_highScoreButton;
         HighScoreTable		m_highScoreTable;
         CountdownTimer		m_preGameCountdownTimer;
@@ -195,15 +197,11 @@ namespace blooDot
 		Windows::Gaming::Input::GamepadReading								m_oldReading;
 		bool																m_currentGamepadNeedsRefresh;
 
-        HRESULT ExtractTrianglesFromMesh(
-            Mesh& mesh,
-            const char* meshName,
-            std::vector<Triangle>& triangles
-            );
-
+		TextButton* CreateMainMenuButton(Platform::String^ captionText, UIElement elementKey, D2D1_RECT_F* containerRect);
+		void SelectMainMenu(bool moveUp, bool MoveDown);
+        HRESULT ExtractTrianglesFromMesh(Mesh& mesh, const char* meshName, std::vector<Triangle>& triangles);
         void ResetCheckpoints();
         CheckpointState UpdateCheckpoints();
-
 		void ComputeFPS(float timeDelta);
 		int QueryFPS();
 
