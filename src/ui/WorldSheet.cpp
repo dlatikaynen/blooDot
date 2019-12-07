@@ -441,21 +441,18 @@ void WorldSheet::Discard()
 
 	if (m_floor != nullptr)
 	{
-		this->m_floor.Get()->Release();
 		this->m_floor.Reset();
 		this->m_floor = nullptr;
 	}
 
 	if (m_walls != nullptr)
 	{
-		this->m_walls.Get()->Release();
 		this->m_walls.Reset();
 		this->m_walls = nullptr;
 	}
 
 	if (m_rooof != nullptr)
 	{
-		this->m_rooof.Get()->Release();
 		this->m_rooof.Reset();
 		this->m_rooof = nullptr;
 	}

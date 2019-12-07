@@ -47,8 +47,8 @@ public:
     void RegisterElement(blooDot::UIElement elementKey, ElementBase* element);
 	ElementBase* GetElement(blooDot::UIElement elementKey);
     void UnregisterElement(blooDot::UIElement elementKey);
-
     void HitTest(D2D1_POINT_2F point);
+	blooDot::UIElement PopPressed();
 
 private:
     UserInterface() {}

@@ -37,10 +37,11 @@ inline void InflateRect(D2D1_RECT_F& rect, float x, float y)
 }
 
 // Loads and initializes application assets when the application is loaded.
-blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResources) : 
+blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResources) :
     m_deviceResources(deviceResources),
     m_gameState(GameState::Initial),
     m_windowActive(false),
+	m_triggerSuicide(false),
 	m_deferredResourcesReadyPending(false),
     m_deferredResourcesReady(false),
 	m_FPSCircular(0),
@@ -164,6 +165,11 @@ blooDotMain::~blooDotMain()
     // Deregister device notification
     m_deviceResources->RegisterDeviceNotify(nullptr);
 	delete m_currentLevel;
+}
+
+bool blooDotMain::Suicide()
+{
+	return this->m_triggerSuicide;
 }
 
 // Updates application state when the window size changes (e.g. device orientation change)
@@ -941,7 +947,6 @@ void blooDotMain::Update()
 
         // Check whether the user chose a button from the UI.
         bool anyPoints = !m_pointQueue.empty();
-
         while (!m_pointQueue.empty())
         {
             UserInterface::GetInstance().HitTest(m_pointQueue.front());
@@ -951,19 +956,21 @@ void blooDotMain::Update()
         switch (this->m_gameState)
         {
         case GameState::MainMenu:
-			bool chooseSelection = (this->ButtonJustPressed(GamepadButtons::A) || this->ButtonJustPressed(GamepadButtons::Menu));
+			bool chooseSelection = (anyPoints || this->ButtonJustPressed(GamepadButtons::A) || this->ButtonJustPressed(GamepadButtons::Menu));
 			if (chooseSelection)
             {
-				this->m_audio.PlaySoundEffect(MenuSelectedEvent);
-				if (this->m_menuButtonSinglePlayer.GetSelected())
+				// Update the game state if the user chose a menu option.
+				auto elementPressed = this->DetectMenuItemPressed();
+				if (elementPressed == UIElement::WorldBuilderButton)
 				{
-					this->m_menuButtonSinglePlayer.SetPressed(true);
+					dynamic_cast<TextButton*>(UserInterface::GetInstance().GetElement(elementPressed))->SetPressed(false);
+					this->SetGameState(GameState::LevelEditor);
 				}
-				if (this->m_highScoreButton.GetSelected())
+				else if (elementPressed == UIElement::ExterminateButton)
 				{
-					this->m_highScoreButton.SetPressed(true);
+					this->m_triggerSuicide = true;
 				}
-            }
+			}
 			else 
 			{
 				bool moveUp = this->ButtonJustPressed(GamepadButtons::DPadUp);
@@ -988,18 +995,6 @@ void blooDotMain::Update()
 				{
 					SelectMainMenu(moveUp, moveDown);
 				}
-			}
-
-			// Update the game state if the user chose a menu option.
-			if (this->m_menuButtonSinglePlayer.IsPressed())
-			{
-				this->m_menuButtonSinglePlayer.SetPressed(false);
-				this->SetGameState(GameState::LevelEditor);
-			}
-			else if (this->m_highScoreButton.IsPressed())
-			{
-				this->SetGameState(GameState::HighScoreDisplay);
-				this->m_highScoreButton.SetPressed(false);
 			}
 
             break;
@@ -1202,6 +1197,17 @@ void blooDotMain::SelectMainMenu(bool moveUp, bool moveDown)
 	{
 		this->m_audio.PlaySoundEffect(MenuChangeEvent);
 	}
+}
+
+UIElement blooDotMain::DetectMenuItemPressed()
+{
+	auto lastPressed = UserInterface::GetInstance().PopPressed();
+	if (lastPressed != blooDot::UIElement::None)
+	{
+		this->m_audio.PlaySoundEffect(MenuSelectedEvent);
+	}
+	
+	return lastPressed;
 }
 
 void blooDotMain::OnActionSaveLevel(bool forcePrompt)

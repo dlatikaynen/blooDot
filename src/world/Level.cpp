@@ -34,9 +34,23 @@ Level::~Level()
 		this->m_Objects.pop_back();
 	}
 
-	this->m_dingSheet.Reset();
-	this->m_dingImage.Reset();
-	this->m_floorBackground.Reset();
+	if (this->m_dingSheet != nullptr)
+	{
+		this->m_dingSheet.Reset();
+		this->m_dingSheet = nullptr;
+	}
+
+	if (this->m_dingImage != nullptr)
+	{
+		this->m_dingImage.Reset();
+		this->m_dingImage = nullptr;
+	}
+
+	if (this->m_floorBackground != nullptr)
+	{
+		this->m_floorBackground.Reset();
+		this->m_floorBackground = nullptr;
+	}
 }
 
 void Level::Clear()

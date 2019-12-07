@@ -63,7 +63,7 @@ void App::SetWindow(CoreWindow^ window)
     m_Main = std::unique_ptr<blooDot::blooDotMain>(new blooDot::blooDotMain(m_deviceResources));
 
 #if WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP
-    // API's not available on Phone
+    // APIs not available on Phone
     window->PointerCursor = ref new CoreCursor(CoreCursorType::Arrow, 0);
 
     // Disable all pointer visual feedback for better performance when touching.
@@ -112,15 +112,15 @@ void App::Load(Platform::String^ entryPoint)
 // This method is called after the window becomes active.
 void App::Run()
 {
-    while (!m_windowClosed)
+    while (!this->m_windowClosed && !this->m_Main->Suicide())
     {
-        if (m_windowVisible)
+        if (this->m_windowVisible)
         {
             CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
-            m_Main->Update();
-            if (m_Main->Render())
+            this->m_Main->Update();
+            if (this->m_Main->Render())
             {				
-                m_deviceResources->Present();
+                this->m_deviceResources->Present();
             }
         }
         else
@@ -265,6 +265,11 @@ void App::OnKeyUp(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::KeyE
         m_windowClosed = true;
     }
 #endif // _DEBUG
+}
+
+void App::Exit()
+{
+	this->m_windowClosed = true;
 }
 
 #ifdef _DEBUG

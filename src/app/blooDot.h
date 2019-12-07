@@ -70,6 +70,7 @@ namespace blooDot
         void CreateWindowSizeDependentResources();
         void Update();
         bool Render();
+		bool Suicide();
 
         void LoadDeferredResources(bool delay, bool deviceOnly);
 
@@ -148,6 +149,7 @@ namespace blooDot
 		XMFLOAT2			m_pointerPosition;
         typedef std::queue<D2D1_POINT_2F> PointQueue;
         PointQueue			m_pointQueue;
+		bool				m_triggerSuicide;
 		bool				m_shiftKeyActive;
 		bool				m_ctrlKeyActive;
 		bool				m_homeKeyActive;
@@ -199,6 +201,7 @@ namespace blooDot
 
 		TextButton* CreateMainMenuButton(Platform::String^ captionText, UIElement elementKey, D2D1_RECT_F* containerRect);
 		void SelectMainMenu(bool moveUp, bool MoveDown);
+		UIElement DetectMenuItemPressed();
         HRESULT ExtractTrianglesFromMesh(Mesh& mesh, const char* meshName, std::vector<Triangle>& triangles);
         void ResetCheckpoints();
         CheckpointState UpdateCheckpoints();

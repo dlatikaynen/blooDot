@@ -19,6 +19,8 @@ namespace blooDot
         virtual void Run();
         virtual void Uninitialize();
 
+		void Exit();
+
     protected:
         // Application lifecycle event handlers
         void OnActivated(Windows::ApplicationModel::Core::CoreApplicationView^ applicationView, Windows::ApplicationModel::Activation::IActivatedEventArgs^ args);

@@ -111,8 +111,10 @@ void UserInterface::HitTest(D2D1_POINT_2F point)
 {
     for (auto iter = m_elements.begin(); iter != m_elements.end(); ++iter)
     {
-        if (!(*iter).second->IsVisible())
-            continue;
+		if (!(*iter).second->IsVisible())
+		{
+			continue;
+		}
 
         TextButton* textButton = dynamic_cast<TextButton*>((*iter).second);
         if (textButton != nullptr)
@@ -121,4 +123,27 @@ void UserInterface::HitTest(D2D1_POINT_2F point)
             textButton->SetPressed(PointInRect(point, bounds));
         }
     }
+}
+
+blooDot::UIElement UserInterface::PopPressed()
+{
+	for (auto iter = m_elements.begin(); iter != m_elements.end(); ++iter)
+	{
+		if (!(*iter).second->IsVisible())
+		{
+			continue;
+		}
+
+		TextButton* textButton = dynamic_cast<TextButton*>((*iter).second);
+		if (textButton != nullptr)
+		{
+			if (textButton->IsPressed())
+			{
+				textButton->SetPressed(false);
+				return (*iter).first;
+			}
+		}
+	}
+
+	return blooDot::UIElement::None;
 }

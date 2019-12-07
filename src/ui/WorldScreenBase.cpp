@@ -31,7 +31,7 @@ WorldScreenBase::~WorldScreenBase()
 		this->m_Sheets.pop_back();
 	}
 
-	delete this->m_currentLevel;
+	//delete this->m_currentLevel;
 }
 
 void WorldScreenBase::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources)
