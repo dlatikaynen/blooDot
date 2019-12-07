@@ -39,8 +39,7 @@ void BitmapPixelator::Load(std::wstring fileName)
 
 	if (SUCCEEDED(hr))
 	{
-		LPCWSTR fName = fileName.data();		
-
+		LPCWSTR fName = fileName.data();
 		hr = pIWICFactory->CreateDecoderFromFilename(
 			fName,							// Image to be decoded
 			NULL,                           // Do not prefer a particular vendor
@@ -99,12 +98,12 @@ void BitmapPixelator::Load(std::wstring fileName)
 					unsigned int x = 0, y = 0, pix = 0;
 					for (auto i = 0U; i < cbBufferSize; i += 3U)
 					{
-						/* sd for the comical ordering of colors, see
+						/* for the comical ordering of colors, see
 						 * https://en.wikipedia.org/wiki/BMP_file_format#Pixel_format 
 						 * this is also interesting in-universe, as there are notions
 						 * of colors not unlike our own, that feature prominently in the back story:
 						 * sibas... (the color) blue;  just as in "si pia SIBAS ian", he-(what)looks_like-blue-coming_from
-						 * alas.... (the color) green; just as in "alasta seakyo", green_ish-orb */						 						 
+						 * alas.... (the color) green; just as in "alasta seakyo", green_ish-orb */
 						color.rgbAlpha = 0xff;
 						color.rgbGreen = pv[i + 2];
 						color.rgbRed = pv[i + 1];

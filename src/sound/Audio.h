@@ -83,6 +83,42 @@ public :
 
 class Audio
 {
+public:
+	Audio();
+	~Audio();
+	void Initialize();
+	void CreateResources();
+	void ReleaseResources();
+	void Start();
+	void Render();
+	bool IsAudioStarted();
+	bool IsAudioPlaying();
+	void SuspendAudio();
+	bool IsAudioSuspended();
+	void ResumeAudio();
+
+	// This flag can be used to tell when the audio system
+	// is experiencing critial errors.
+	// XAudio2 gives a critical error when the user unplugs
+	// the headphones and a new speaker configuration is generated.
+	void SetEngineExperiencedCriticalError()
+	{
+		m_engineExperiencedCriticalError = true;
+	}
+
+	bool HasEngineExperiencedCriticalError()
+	{
+		return m_engineExperiencedCriticalError;
+	}
+
+	void PlaySoundEffect(SoundEvent sound);
+	bool IsSoundEffectStarted(SoundEvent sound);
+	void StopSoundEffect(SoundEvent sound);
+	void SetSoundEffectVolume(SoundEvent sound, float volume);
+	void SetSoundEffectPitch(SoundEvent sound, float pitch);
+	void SetSoundEffectFilter(SoundEvent sound, float frequency, float oneOverQ);
+	void SetRoomSize(float roomSize, float* wallDistances);
+
 private:
     IXAudio2*                   m_musicEngine;
     IXAudio2*                   m_soundEffectEngine;
@@ -113,41 +149,14 @@ private:
         XAUDIO2FX_REVERB_PARAMETERS* parameters,
         IXAudio2SubmixVoice** newSubmix,
         bool enableEffect
-        );
+    );
 
-public:
-    Audio();
-    ~Audio();
-    void Initialize();
-    void CreateResources();
-    void ReleaseResources();
-    void Start();
-    void Render();
-	bool IsAudioStarted();
-	bool IsAudioPlaying();
-	void SuspendAudio();
-	bool IsAudioSuspended();
-    void ResumeAudio();
-
-    // This flag can be used to tell when the audio system
-    // is experiencing critial errors.
-    // XAudio2 gives a critical error when the user unplugs
-    // the headphones and a new speaker configuration is generated.
-    void SetEngineExperiencedCriticalError()
-    {
-        m_engineExperiencedCriticalError = true;
-    }
-
-    bool HasEngineExperiencedCriticalError()
-    {
-        return m_engineExperiencedCriticalError;
-    }
-
-    void PlaySoundEffect(SoundEvent sound);
-    bool IsSoundEffectStarted(SoundEvent sound);
-    void StopSoundEffect(SoundEvent sound);
-    void SetSoundEffectVolume(SoundEvent sound, float volume);
-    void SetSoundEffectPitch(SoundEvent sound, float pitch);
-    void SetSoundEffectFilter(SoundEvent sound, float frequency, float oneOverQ);
-    void SetRoomSize(float roomSize, float* wallDistances);
+	template <class T> void SafeRelease(T **ppT)
+	{
+		if (*ppT)
+		{
+			(*ppT)->Release();
+			*ppT = NULL;
+		}
+	}
 };

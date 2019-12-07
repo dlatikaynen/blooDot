@@ -63,7 +63,7 @@ namespace blooDot
 		static const byte BLOODOTFILE_CONTENTTYPE_GOLANIMATION[2];
 		static const byte BLOODOTFILE_CONTENTTYPE_LEVEL_DESIGN[2];
 
-        // IDeviceNotify
+        // implementing IDeviceNotify
         virtual void OnDeviceLost();
         virtual void OnDeviceRestored();
         
@@ -71,21 +71,20 @@ namespace blooDot
         void Update();
         bool Render();
 		bool Suicide();
-
         void LoadDeferredResources(bool delay, bool deviceOnly);
-
-        void OnSuspending();
+		bool IsDeferredLoadReady() { return m_deferredResourcesReady; }
+		void OnSuspending();
         void OnResuming();
+		void OnFocusChange(bool active);
 
-        void AddTouch(int id, Windows::Foundation::Point point);
+		// input
+		void AddTouch(int id, Windows::Foundation::Point point);
         void UpdateTouch(int id, Windows::Foundation::Point point);
 		void PointerMove(int id, Windows::Foundation::Point point);
 		void MouseWheeled(int pointerID, int detentCount);
 		void RemoveTouch(int id);
         void KeyDown(Windows::System::VirtualKey key);
         void KeyUp(Windows::System::VirtualKey key);
-        void OnFocusChange(bool active);
-        bool IsDeferredLoadReady() {return m_deferredResourcesReady;}
 
 	protected:
 		void OnActionLoadLevel();
@@ -107,27 +106,12 @@ namespace blooDot
 		std::unique_ptr<WorldScreenBase>			m_worldScreen;
 		Level*										m_currentLevel;
 		Microsoft::WRL::ComPtr<ID3D11InputLayout>	m_inputLayout;
-        Microsoft::WRL::ComPtr<ID3D11VertexShader>  m_vertexShader;
-        Microsoft::WRL::ComPtr<ID3D11PixelShader>	m_pixelShader;
-        Microsoft::WRL::ComPtr<ID3D11SamplerState>	m_sampler;
-        Microsoft::WRL::ComPtr<ID3D11Buffer>		m_constantBuffer;
-        Microsoft::WRL::ComPtr<ID3D11BlendState>	m_blendState;
         Windows::Devices::Sensors::Accelerometer^	m_accelerometer;
-        std::unique_ptr<Camera>						m_camera;
 
-        ConstantBuffer		m_mazeConstantBufferData;
-        Mesh				m_mazeMesh;
-        ConstantBuffer		m_marbleConstantBufferData;
-        Mesh				m_marbleMesh;
-        unsigned int		m_vertexStride;
-        float				m_lightStrength;
-        float				m_targetLightStrength;
         Collision			m_collision;
         Physics				m_physics;
         Audio				m_audio;
         GameState			m_gameState;
-        bool				m_resetCamera;
-        bool				m_resetMarbleRotation;
         typedef std::vector<XMFLOAT3> Checkpoints;
         Checkpoints			m_checkpoints;
         size_t				m_currentCheckpoint;
@@ -154,6 +138,12 @@ namespace blooDot
 		bool				m_ctrlKeyActive;
 		bool				m_homeKeyActive;
         bool				m_homeKeyPressed;
+		bool				m_keyEnterActive;
+		bool				m_keyEnterPressed;
+		bool				m_keyEscapeActive;
+		bool				m_keyEscapePressed;
+		bool				m_keySpaceActive;
+		bool				m_keySpacePressed;
 		bool				m_keyRightPressed;
 		bool				m_keyLeftPressed;
 		bool				m_keyUpPressed;
@@ -192,29 +182,32 @@ namespace blooDot
 		int					m_FPSCircular;
 		int					m_FPSWatermark;
 
-		// Input
+		// input
 		Platform::Collections::Vector<Windows::Gaming::Input::Gamepad^>^	m_myGamepads;
 		Windows::Gaming::Input::Gamepad^									m_gamepad;
 		Windows::Gaming::Input::GamepadReading								m_newReading;
 		Windows::Gaming::Input::GamepadReading								m_oldReading;
 		bool																m_currentGamepadNeedsRefresh;
 
-		TextButton* CreateMainMenuButton(Platform::String^ captionText, UIElement elementKey, D2D1_RECT_F* containerRect);
-		void SelectMainMenu(bool moveUp, bool MoveDown);
-		UIElement DetectMenuItemPressed();
-        HRESULT ExtractTrianglesFromMesh(Mesh& mesh, const char* meshName, std::vector<Triangle>& triangles);
-        void ResetCheckpoints();
-        CheckpointState UpdateCheckpoints();
-		void ComputeFPS(float timeDelta);
-		int QueryFPS();
-
-        void SetGameState(GameState nextState);
-        void SaveState();
-        void LoadState();
-
+		// interaction and state
 		bool ButtonJustPressed(Windows::Gaming::Input::GamepadButtons selection);
 		bool ButtonJustReleased(Windows::Gaming::Input::GamepadButtons selection);
 		Windows::Gaming::Input::Gamepad^ GetLastGamepad();
+		TextButton* CreateMainMenuButton(Platform::String^ captionText, UIElement elementKey, D2D1_RECT_F* containerRect);
+		void SelectMainMenu(bool moveUp, bool MoveDown);
+		UIElement DetectMenuItemSelected();
+		UIElement DetectMenuItemPressed();
+		void SetGameState(GameState nextState);
+		void SaveState();
+		void LoadState();
+		void OnActionEnterLevelEditor();
+		void OnActionTerminate();
+
+		// utility
+		void ResetCheckpoints();
+        CheckpointState UpdateCheckpoints();
+		void ComputeFPS(float timeDelta);
+		int QueryFPS();
 		void LogMessage(Platform::Object^ obj);
 	};
 

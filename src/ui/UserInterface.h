@@ -48,6 +48,7 @@ public:
 	ElementBase* GetElement(blooDot::UIElement elementKey);
     void UnregisterElement(blooDot::UIElement elementKey);
     void HitTest(D2D1_POINT_2F point);
+	blooDot::UIElement GetSelectedButton();
 	blooDot::UIElement PopPressed();
 
 private:

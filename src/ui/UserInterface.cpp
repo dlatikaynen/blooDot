@@ -125,19 +125,31 @@ void UserInterface::HitTest(D2D1_POINT_2F point)
     }
 }
 
+blooDot::UIElement UserInterface::GetSelectedButton()
+{
+	for (auto iter = this->m_elements.begin(); iter != this->m_elements.end(); ++iter)
+	{
+		if ((*iter).second->IsVisible())
+		{
+			auto textButton = dynamic_cast<TextButton*>((*iter).second);
+			if (textButton != nullptr && textButton->GetSelected())
+			{
+				return (*iter).first;
+			}
+		}
+	}
+
+	return blooDot::UIElement::None;
+}
+
 blooDot::UIElement UserInterface::PopPressed()
 {
-	for (auto iter = m_elements.begin(); iter != m_elements.end(); ++iter)
+	for (auto iter = this->m_elements.begin(); iter != this->m_elements.end(); ++iter)
 	{
-		if (!(*iter).second->IsVisible())
+		if ((*iter).second->IsVisible())
 		{
-			continue;
-		}
-
-		TextButton* textButton = dynamic_cast<TextButton*>((*iter).second);
-		if (textButton != nullptr)
-		{
-			if (textButton->IsPressed())
+			auto textButton = dynamic_cast<TextButton*>((*iter).second);
+			if (textButton != nullptr && textButton->IsPressed())
 			{
 				textButton->SetPressed(false);
 				return (*iter).first;

@@ -49,38 +49,34 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	m_currentLevel(nullptr)
 {
     // Register to be notified if the Device is lost or recreated.
-    m_deviceResources->RegisterDeviceNotify(this);
+	this->m_deviceResources->RegisterDeviceNotify(this);
 
-    ZeroMemory(&m_mazeConstantBufferData, sizeof(m_mazeConstantBufferData));
-    ZeroMemory(&m_marbleConstantBufferData, sizeof(m_marbleConstantBufferData));
-    m_vertexStride = 0;
-    m_resetCamera = false;
-    m_resetMarbleRotation = false;
-    m_currentCheckpoint = 0;
-    m_windowActive = false;
-	m_keyInsertActive = false;
-	m_keyDeletePressed = false;
-	m_keyMinusActive = false;
-	m_keyMinusPressed = false;
-	m_keyMusicActive = false;
-	m_keyMusicPressed = false;
-	m_keyPlusActive = false;
-	m_keyPlusPressed = false;
-	m_keyPlaceActive = false;
-	m_keyPlacePressed = false;
-	m_keyObliterateActive = false;
-	m_keyObliteratePressed = false;
-	m_keySaveActive = false;
-	m_keySavePressed = false;
-	m_keySaveAsActive = false;
-	m_keySaveAsPressed = false;
-	m_keyLoadActive = false;
-	m_keyLoadPressed = false;
-
-    m_lightStrength = 0.0f;
-    m_targetLightStrength = 0.0f;
-    m_resetCamera = true;
-    m_resetMarbleRotation = true;
+    this->m_currentCheckpoint = 0;
+    this->m_windowActive = false;
+	this->m_keyInsertActive = false;
+	this->m_keyDeletePressed = false;
+	this->m_keyMinusActive = false;
+	this->m_keyMinusPressed = false;
+	this->m_keyMusicActive = false;
+	this->m_keyMusicPressed = false;
+	this->m_keyPlusActive = false;
+	this->m_keyPlusPressed = false;
+	this->m_keyPlaceActive = false;
+	this->m_keyPlacePressed = false;
+	this->m_keyObliterateActive = false;
+	this->m_keyObliteratePressed = false;
+	this->m_keySaveActive = false;
+	this->m_keySavePressed = false;
+	this->m_keySaveAsActive = false;
+	this->m_keySaveAsPressed = false;
+	this->m_keyLoadActive = false;
+	this->m_keyLoadPressed = false;
+	this->m_keyEnterActive = false;
+	this->m_keyEnterPressed = false;
+	this->m_keySpaceActive = false;
+	this->m_keySpacePressed = false;
+	this->m_keyEscapeActive = false;
+	this->m_keyEscapePressed = false;
 
     // Checkpoints (from start to goal).
     m_checkpoints.push_back(XMFLOAT3(45.7f, -43.6f, -45.0f)); // Start
@@ -92,13 +88,10 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 
     m_persistentState = ref new PersistentState();
     m_persistentState->Initialize(Windows::Storage::ApplicationData::Current->LocalSettings->Values, "blooDot");
-
-    m_camera = std::unique_ptr<Camera>(new Camera());
     m_sampleOverlay = std::unique_ptr<SampleOverlay>(new SampleOverlay(m_deviceResources, L"Lukas Spiel Test Demo"));
 
     m_audio.Initialize();
     m_accelerometer = Windows::Devices::Sensors::Accelerometer::GetDefault();
-
     m_loadScreen = std::unique_ptr<LoadScreen>(new LoadScreen());
     m_loadScreen->Initialize(m_deviceResources);
 
@@ -175,23 +168,6 @@ bool blooDotMain::Suicide()
 // Updates application state when the window size changes (e.g. device orientation change)
 void blooDotMain::CreateWindowSizeDependentResources()
 {
-    // update the 3D projection matrix
-    m_camera->SetProjectionParameters(
-        40.0f,                                                  // use a 70-degree vertical field of view
-        m_deviceResources->GetOutputSize().Width / m_deviceResources->GetOutputSize().Height,  // specify the aspect ratio of the window
-        50.0f,                                                  // specify the nearest Z-distance at which to draw vertices
-        500.0f                                                  // specify the farthest Z-distance at which to draw vertice
-        );
-
-    // game specific
-    XMFLOAT4X4 projection;
-    m_camera->GetProjectionMatrix(&projection);
-
-    XMStoreFloat4x4(&projection, XMMatrixMultiply(XMMatrixTranspose(XMLoadFloat4x4(&m_deviceResources->GetOrientationTransform3D())), XMLoadFloat4x4(&projection)));
-
-    m_mazeConstantBufferData.projection = projection;
-    m_marbleConstantBufferData.projection = projection;
-
     // user interface
     const float padding = 32.0f;
     D2D1_RECT_F clientRect = ConvertRect(m_deviceResources->GetLogicalSize());
@@ -323,112 +299,14 @@ TextButton* blooDotMain::CreateMainMenuButton(Platform::String^ captionText, UIE
 void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
 {
     DX::StepTimer loadingTimer;
-
     BasicLoader^ loader = ref new BasicLoader(m_deviceResources->GetD3DDevice());
 
-    D3D11_INPUT_ELEMENT_DESC layoutDesc [] =
-    {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    };
-    m_vertexStride = 44; // must set this to match the size of layoutDesc above
-
-    Platform::String^ vertexShaderName = L"BasicVertexShader.cso";
-    loader->LoadShader(
-        vertexShaderName,
-        layoutDesc,
-        ARRAYSIZE(layoutDesc),
-        &m_vertexShader,
-        &m_inputLayout
-    );
-    
-	DX::ThrowIfFailed(m_vertexShader->SetPrivateData(WKPDID_D3DDebugObjectName, vertexShaderName->Length(), vertexShaderName->Data()));
-
 	
-
-    // create the constant buffer for updating model and camera data.
-    D3D11_BUFFER_DESC constantBufferDesc = { 0 };
-    constantBufferDesc.ByteWidth = ((sizeof(ConstantBuffer) + 15) / 16) * 16; // multiple of 16 bytes
-    constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-    constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    constantBufferDesc.CPUAccessFlags = 0;
-    constantBufferDesc.MiscFlags = 0;
-    // this will not be used as a structured buffer, so this parameter is ignored
-    constantBufferDesc.StructureByteStride = 0;
-
-    DX::ThrowIfFailed(
-        m_deviceResources->GetD3DDevice()->CreateBuffer(
-            &constantBufferDesc,
-            nullptr,             // leave the buffer uninitialized
-            &m_constantBuffer
-        )
-    );
-
-    Platform::String^ constantBufferName = "Constant Buffer created in LoadDeferredResources";
-    DX::ThrowIfFailed(m_constantBuffer->SetPrivateData(WKPDID_D3DDebugObjectName, constantBufferName->Length(), constantBufferName->Data()));
-
-    Platform::String^ pixelShaderName = "BasicPixelShader.cso";
-    loader->LoadShader(
-        pixelShaderName,
-        &m_pixelShader
-        );
-    DX::ThrowIfFailed(m_pixelShader->SetPrivateData(WKPDID_D3DDebugObjectName, pixelShaderName->Length(), pixelShaderName->Data()));
-
-    // create the blend state.
-    D3D11_BLEND_DESC blendDesc = { 0 };
-    blendDesc.RenderTarget[0].BlendEnable = TRUE;
-    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-    blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-    blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-    blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-    blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    DX::ThrowIfFailed(
-        m_deviceResources->GetD3DDevice()->CreateBlendState(
-            &blendDesc,
-            &m_blendState
-            )
-        );
-    Platform::String^ blendStateName = "Blend State created in LoadDeferredResources";
-    DX::ThrowIfFailed(m_blendState->SetPrivateData(WKPDID_D3DDebugObjectName, blendStateName->Length(), blendStateName->Data()));
-
-    // create the sampler
-    D3D11_SAMPLER_DESC samplerDesc;
-    samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
-    samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.MipLODBias = 0.0f;
-    samplerDesc.MaxAnisotropy = m_deviceResources->GetDeviceFeatureLevel() > D3D_FEATURE_LEVEL_9_1 ? 4 : 2;
-    samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    samplerDesc.BorderColor[0] = 0.0f;
-    samplerDesc.BorderColor[1] = 0.0f;
-    samplerDesc.BorderColor[2] = 0.0f;
-    samplerDesc.BorderColor[3] = 0.0f;
-    // allow use of all mip levels
-    samplerDesc.MinLOD = 0;
-    samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-    DX::ThrowIfFailed(
-        m_deviceResources->GetD3DDevice()->CreateSamplerState(
-            &samplerDesc,
-            &m_sampler
-        )
-    );
-
-    Platform::String^ samplerName = "Sampler created in LoadDeferredResources";
-    DX::ThrowIfFailed(m_sampler->SetPrivateData(WKPDID_D3DDebugObjectName, samplerName->Length(), samplerName->Data()));
-
     if (!deviceOnly)
     {
         // When handling device lost, we only need to recreate the graphics-device related
         // resources. All other delayed resources that only need to be created on app
         // startup go here.
-
         m_audio.CreateResources();
     }
 
@@ -490,90 +368,6 @@ bool blooDotMain::Render()
 	else if (m_deferredResourcesReady)
 	{
 		m_deviceResources->GetD3DDeviceContext()->IASetInputLayout(m_inputLayout.Get());
-
-		FLOAT blendFactors[4] = { 0, };
-		m_deviceResources->GetD3DDeviceContext()->OMSetBlendState(m_blendState.Get(), blendFactors, 0xffffffff);
-
-		// Set the vertex shader stage state.
-		m_deviceResources->GetD3DDeviceContext()->VSSetShader(
-			m_vertexShader.Get(),   // use this vertex shader
-			nullptr,                // don't use shader linkage
-			0                       // don't use shader linkage
-		);
-
-		// Set the pixel shader stage state.
-		m_deviceResources->GetD3DDeviceContext()->PSSetShader(
-			m_pixelShader.Get(),    // use this pixel shader
-			nullptr,                // don't use shader linkage
-			0                       // don't use shader linkage
-		);
-
-		m_deviceResources->GetD3DDeviceContext()->PSSetSamplers(
-			0,                       // starting at the first sampler slot
-			1,                       // set one sampler binding
-			m_sampler.GetAddressOf() // to use this sampler
-		);
-
-#pragma region Rendering Maze
-
-		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Maze", 0);
-		// Update the constant buffer with the new data.
-		m_deviceResources->GetD3DDeviceContext()->UpdateSubresource(
-			m_constantBuffer.Get(),
-			0,
-			nullptr,
-			&m_mazeConstantBufferData,
-			0,
-			0
-		);
-
-		m_deviceResources->GetD3DDeviceContext()->VSSetConstantBuffers(
-			0,                // starting at the first constant buffer slot
-			1,                // set one constant buffer binding
-			m_constantBuffer.GetAddressOf() // to use this buffer
-		);
-
-		m_deviceResources->GetD3DDeviceContext()->PSSetConstantBuffers(
-			0,                // starting at the first constant buffer slot
-			1,                // set one constant buffer binding
-			m_constantBuffer.GetAddressOf() // to use this buffer
-		);
-
-		m_mazeMesh.Render(m_deviceResources->GetD3DDeviceContext(), 0, INVALID_SAMPLER_SLOT, INVALID_SAMPLER_SLOT);
-		m_deviceResources->GetD3DDeviceContext()->EndEvent();
-
-#pragma endregion
-
-#pragma region Rendering Marble
-
-		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Marble", 0);
-
-		// update the constant buffer with the new data
-		m_deviceResources->GetD3DDeviceContext()->UpdateSubresource(
-			m_constantBuffer.Get(),
-			0,
-			nullptr,
-			&m_marbleConstantBufferData,
-			0,
-			0
-		);
-
-		m_deviceResources->GetD3DDeviceContext()->VSSetConstantBuffers(
-			0,                // starting at the first constant buffer slot
-			1,                // set one constant buffer binding
-			m_constantBuffer.GetAddressOf() // to use this buffer
-		);
-
-		m_deviceResources->GetD3DDeviceContext()->PSSetConstantBuffers(
-			0,                // starting at the first constant buffer slot
-			1,                // set one constant buffer binding
-			m_constantBuffer.GetAddressOf() // to use this buffer
-		);
-
-		m_marbleMesh.Render(m_deviceResources->GetD3DDeviceContext(), 0, INVALID_SAMPLER_SLOT, INVALID_SAMPLER_SLOT);
-		m_deviceResources->GetD3DDeviceContext()->EndEvent();
-
-#pragma endregion
 	}
 
 	if (this->m_audio.IsAudioPlaying())
@@ -623,11 +417,7 @@ void blooDotMain::SetGameState(GameState nextState)
         (*this->m_mainMenuButtons.begin())->SetSelected(true);
 
 		m_pausedText.SetVisible(false);
-
-        m_resetCamera = true;
-        m_resetMarbleRotation = true;
         m_physics.SetPosition(XMFLOAT3(305, -210, -43));
-        m_targetLightStrength = 0.6f;
         break;
 
     case GameState::HighScoreDisplay:
@@ -640,23 +430,18 @@ void blooDotMain::SetGameState(GameState nextState)
         m_preGameCountdownTimer.StartCountdown(3);
 
         ResetCheckpoints();
-        m_resetCamera = true;
-        m_resetMarbleRotation = true;
         m_physics.SetPosition(m_checkpoints[0]);
         m_physics.SetVelocity(XMFLOAT3(0, 0, 0));
-        m_targetLightStrength = 1.0f;
         break;
 
     case GameState::InGameActive:
         m_pausedText.SetVisible(false);
         m_inGameStopwatchTimer.Start();
-        m_targetLightStrength = 1.0f;
         break;
 
     case GameState::InGamePaused:
         m_pausedText.SetVisible(true);
         m_inGameStopwatchTimer.Stop();
-        m_targetLightStrength = 0.6f;
         break;
 
     case GameState::PostGameResults:
@@ -676,8 +461,8 @@ void blooDotMain::SetGameState(GameState nextState)
             m_resultsText.SetText(buffer);
             m_resultsText.SetVisible(true);
         }
-        m_targetLightStrength = 0.6f;
-        break;
+
+		break;
     }
 
     m_gameState = nextState;
@@ -776,7 +561,7 @@ void blooDotMain::Update()
 		{
 			// At this point we can draw a progress bar, or if we had
 			// loaded audio, we could play audio during the loading process.
-			this->m_loadScreen->Update(timerTotal, timerElapsed);			
+			this->m_loadScreen->Update(timerTotal, timerElapsed);
 		}
 		else if (this->m_gameState == GameState::LevelEditor)
 		{
@@ -956,23 +741,24 @@ void blooDotMain::Update()
         switch (this->m_gameState)
         {
         case GameState::MainMenu:
+			auto menuItemToExecute = UIElement::None;
 			bool chooseSelection = (anyPoints || this->ButtonJustPressed(GamepadButtons::A) || this->ButtonJustPressed(GamepadButtons::Menu));
+			// Update the game state if the user chose a menu option.
 			if (chooseSelection)
-            {
-				// Update the game state if the user chose a menu option.
-				auto elementPressed = this->DetectMenuItemPressed();
-				if (elementPressed == UIElement::WorldBuilderButton)
-				{
-					dynamic_cast<TextButton*>(UserInterface::GetInstance().GetElement(elementPressed))->SetPressed(false);
-					this->SetGameState(GameState::LevelEditor);
-				}
-				else if (elementPressed == UIElement::ExterminateButton)
-				{
-					this->m_triggerSuicide = true;
-				}
+			{
+				menuItemToExecute = this->DetectMenuItemPressed();
+			}
+			else if (this->m_keySpacePressed || this->m_keyEnterPressed)
+			{
+				menuItemToExecute = this->DetectMenuItemSelected();
+			}
+			else if (this->m_keyEscapePressed)
+			{
+				menuItemToExecute = UIElement::ExterminateButton;
 			}
 			else 
 			{
+				/* navigate the menu with keyboard / gamepad */
 				bool moveUp = this->ButtonJustPressed(GamepadButtons::DPadUp);
 				if (!moveUp && this->m_keyUpPressed)
 				{
@@ -993,8 +779,17 @@ void blooDotMain::Update()
 
 				if (moveUp || moveDown)
 				{
-					SelectMainMenu(moveUp, moveDown);
+					this->SelectMainMenu(moveUp, moveDown);
 				}
+			}
+
+			if (menuItemToExecute == UIElement::WorldBuilderButton)
+			{
+				this->OnActionEnterLevelEditor();
+			}
+			else if (menuItemToExecute == UIElement::ExterminateButton)
+			{
+				this->OnActionTerminate();
 			}
 
             break;
@@ -1087,6 +882,20 @@ void blooDotMain::Update()
         //    combinedTiltY = 0.0f;
         //}
 
+		if (this->m_keyEscapePressed)
+		{
+			this->m_keyEscapePressed = false;
+		}
+
+		if (this->m_keyEnterPressed)
+		{
+			this->m_keyEnterPressed = false;
+		}
+
+		if (this->m_keySpacePressed)
+		{
+			this->m_keySpacePressed = false;
+		}
 #pragma endregion
 
 
@@ -1199,6 +1008,17 @@ void blooDotMain::SelectMainMenu(bool moveUp, bool moveDown)
 	}
 }
 
+UIElement blooDotMain::DetectMenuItemSelected()
+{
+	auto currentlySelected = UserInterface::GetInstance().GetSelectedButton();
+	if (currentlySelected != blooDot::UIElement::None)
+	{
+		this->m_audio.PlaySoundEffect(MenuSelectedEvent);
+	}
+	
+	return currentlySelected;
+}
+
 UIElement blooDotMain::DetectMenuItemPressed()
 {
 	auto lastPressed = UserInterface::GetInstance().PopPressed();
@@ -1206,8 +1026,20 @@ UIElement blooDotMain::DetectMenuItemPressed()
 	{
 		this->m_audio.PlaySoundEffect(MenuSelectedEvent);
 	}
-	
+
 	return lastPressed;
+}
+
+void blooDotMain::OnActionEnterLevelEditor()
+{
+	this->SetGameState(GameState::LevelEditor);
+}
+
+void blooDotMain::OnActionTerminate()
+{
+	this->m_audio.SuspendAudio();
+	this->m_audio.ReleaseResources();
+	this->m_triggerSuicide = true;
 }
 
 void blooDotMain::OnActionSaveLevel(bool forcePrompt)
@@ -1385,6 +1217,18 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
     {
         m_homeKeyActive = true;
     }
+	else if (key == Windows::System::VirtualKey::Enter)
+	{
+		m_keyEnterActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Space)
+	{
+		m_keySpaceActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Escape)
+	{
+		m_keyEscapeActive = true;
+	}
 	else if (key == Windows::System::VirtualKey::P)
 	{
 		m_keyPlaceActive = true;
@@ -1461,6 +1305,30 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 			this->m_homeKeyActive = false;
         }
     }
+	else if (key == Windows::System::VirtualKey::Enter)
+	{
+		if (this->m_keyEnterActive)
+		{
+			this->m_keyEnterPressed = true;
+			this->m_keyEnterActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Space)
+	{
+		if (this->m_keySpaceActive)
+		{
+			this->m_keySpacePressed = true;
+			this->m_keySpaceActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Escape)
+	{
+		if (this->m_keyEscapeActive)
+		{
+			this->m_keyEscapePressed = true;
+			this->m_keyEscapeActive = false;
+		}
+	}
 	else if (key == Windows::System::VirtualKey::M)
 	{
 		if (this->m_keyMusicActive)
@@ -1720,40 +1588,6 @@ void blooDot::blooDotMain::LogMessage(Platform::Object^ obj)
 	OutputDebugString(formattedText.c_str());
 }
 
-HRESULT blooDotMain::ExtractTrianglesFromMesh(
-    Mesh& mesh,
-    const char* meshName,
-    std::vector<Triangle>& triangles
-    )
-{
-    triangles.clear();
-
-    int meshIndex = FindMeshIndexByName(mesh, meshName);
-    if (meshIndex < 0)
-    {
-        return E_FAIL;
-    }
-    MESH_MESH *currentmesh = mesh.GetMesh(meshIndex);
-
-    for (UINT i = 0; i < currentmesh->NumSubsets; ++i)
-    {
-        MESH_SUBSET *subsetmesh = mesh.GetSubset(meshIndex, i);
-
-        USHORT *indices = (USHORT*) mesh.GetRawIndicesAt(currentmesh->IndexBuffer) + subsetmesh->IndexStart;
-        BYTE *vertices = mesh.GetRawVerticesAt(currentmesh->VertexBuffers[0]) + (subsetmesh->VertexStart * m_vertexStride);
-        for (UINT j = 0; j < subsetmesh->IndexCount; j += 3)
-        {
-            XMFLOAT3 a, b, c;
-            memcpy(&a, vertices + (*(indices++) * m_vertexStride), sizeof(XMFLOAT3));
-            memcpy(&b, vertices + (*(indices++) * m_vertexStride), sizeof(XMFLOAT3));
-            memcpy(&c, vertices + (*(indices++) * m_vertexStride), sizeof(XMFLOAT3));
-            triangles.push_back(Triangle(a, b, c));
-        }
-    }
-
-    return S_OK;
-}
-
 // Notifies renderers that device resources need to be released.
 void blooDotMain::OnDeviceLost()
 {
@@ -1761,16 +1595,7 @@ void blooDotMain::OnDeviceLost()
     m_loadScreen->ReleaseDeviceDependentResources();
 	m_worldScreen->ReleaseDeviceDependentResources();
     UserInterface::ReleaseDeviceDependentResources();
-
     m_inputLayout.Reset();
-    m_vertexShader.Reset();
-    m_pixelShader.Reset();
-    m_sampler.Reset();
-    m_constantBuffer.Reset();
-    m_blendState.Reset();
-
-    m_mazeMesh.Destroy();
-    m_marbleMesh.Destroy();
 
 	m_deferredResourcesReadyPending = false;
     m_deferredResourcesReady = false;
