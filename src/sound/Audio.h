@@ -8,13 +8,14 @@ static const int MAX_BUFFER_COUNT = 3;
 
 enum SoundEvent
 {
-    RollingEvent        = 0,
-    FallingEvent        = 1,
-    CollisionEvent      = 2,
-    CheckpointEvent     = 3,
-    MenuChangeEvent     = 4,
-    MenuSelectedEvent   = 5,
-    LastSoundEvent,
+	RollingEvent		= 0,
+    FallingEvent		= 1,
+    CollisionEvent		= 2,
+    CheckpointEvent		= 3,
+    MenuChangeEvent		= 4,
+    MenuSelectedEvent	= 5,
+	MenuTiltEvent		= 6,
+    LastSoundEvent		= 7,
 };
 
 // Make sure this matches the number of entries in the SoundEvent enum above

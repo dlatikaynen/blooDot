@@ -1,8 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="..\src\BasicPixelShader.hlsl" />
-    <FxCompile Include="..\src\BasicVertexShader.hlsl" />
+    <FxCompile Include="..\src\BasicPixelShader.hlsl">
+      <Filter>dx\3dx</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\BasicVertexShader.hlsl">
+      <Filter>dx\3dx</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\algo\GameOfLifeSprinkler.cpp">
@@ -276,49 +280,126 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="Media\Audio\background.mp3" />
-    <Media Include="Media\Audio\Checkpoint.wav" />
-    <Media Include="Media\Audio\MenuChange.wav" />
-    <Media Include="Media\Audio\MenuSelect.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\src\mediumtile-sdk.png" />
-    <Image Include="..\src\smalltile-phone-sdk.png" />
-    <Image Include="..\src\smalltile-windows-sdk.png" />
-    <Image Include="..\src\splash-phone-sdk.png" />
-    <Image Include="..\src\splash-windows-sdk.png" />
-    <Image Include="..\src\squareTile-sdk.png" />
-    <Image Include="..\src\storeLogo-sdk.png" />
-    <Image Include="..\src\tile-sdk.png" />
-    <Image Include="..\src\windowstitle-sdk.png" />
-    <Image Include="Assets\LockScreenLogo.scale-200.png" />
-    <Image Include="Assets\SplashScreen.scale-200.png" />
-    <Image Include="Assets\Square150x150Logo.scale-200.png" />
-    <Image Include="Assets\Square44x44Logo.scale-200.png" />
-    <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Image Include="Assets\StoreLogo.png" />
-    <Image Include="Assets\Wide310x150Logo.scale-200.png" />
-    <Image Include="Media\Textures\bridge.dds" />
-    <Image Include="Media\Textures\bridge_bump.dds" />
-    <Image Include="Media\Textures\cliff_sides.dds" />
-    <Image Include="Media\Textures\loadscreen.png" />
-    <Image Include="Media\Textures\Marble.dds" />
-    <Image Include="Media\Textures\topwall_color.dds" />
-    <Image Include="Media\Textures\walllevel1.dds" />
-    <Image Include="Media\Bitmaps\universe_seamless.png" />
-    <Image Include="Media\Bitmaps\notimeforcaution.png" />
-    <Image Include="Media\Bitmaps\highgrass.png" />
-    <Image Include="Media\Bitmaps\snowblock.png" />
-    <Image Include="Media\Bitmaps\floorstonetile.png" />
-    <Image Include="Media\Bitmaps\dalek.png" />
+    <Image Include="Media\Bitmaps\dalek.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\floorstonetile.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\notimeforcaution.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\mediumtile-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\smalltile-phone-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\smalltile-windows-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\snowblock.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\splash-phone-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.scale-200.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\splash-windows-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.scale-200.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\Square150x150Logo.scale-200.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\squareTile-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\StoreLogo.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\storeLogo-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\tile-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\universe_seamless.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\highgrass.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Textures\loadscreen.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\LockScreenLogo.scale-200.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\Wide310x150Logo.scale-200.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\windowstitle-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Textures\bridge.dds">
+      <Filter>dx\3dx</Filter>
+    </Image>
+    <Image Include="Media\Textures\bridge_bump.dds">
+      <Filter>dx\3dx</Filter>
+    </Image>
+    <Image Include="Media\Textures\cliff_sides.dds">
+      <Filter>dx\3dx</Filter>
+    </Image>
+    <Image Include="Media\Textures\Marble.dds">
+      <Filter>dx\3dx</Filter>
+    </Image>
+    <Image Include="Media\Textures\topwall_color.dds">
+      <Filter>dx\3dx</Filter>
+    </Image>
+    <Image Include="Media\Textures\walllevel1.dds">
+      <Filter>dx\3dx</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
   </ItemGroup>
   <ItemGroup>
     <None Include="blooDot_TemporaryKey.pfx" />
-    <None Include="Media\Audio\background.wma" />
-    <None Include="Media\Bitmaps\blooDot.bmp" />
+    <None Include="Media\Audio\background.wma">
+      <Filter>media\music</Filter>
+    </None>
+    <None Include="Media\Fonts\FreckleFace-Regular.ttf">
+      <Filter>media\font</Filter>
+    </None>
+    <None Include="Media\Fonts\FredokaOne-Regular.ttf">
+      <Filter>media\font</Filter>
+    </None>
+    <None Include="Media\Fonts\OFL.txt">
+      <Filter>media\font</Filter>
+    </None>
+    <None Include="Media\Audio\onmenuselectionfrustra.wav">
+      <Filter>media\sfx</Filter>
+    </None>
+    <None Include="Media\Audio\onmenuselectionchange.wav">
+      <Filter>media\sfx</Filter>
+    </None>
+    <None Include="Media\Audio\onmenuitempressed.wav">
+      <Filter>media\sfx</Filter>
+    </None>
+    <None Include="Media\Bitmaps\blooDot.bmp">
+      <Filter>media\bitmap</Filter>
+    </None>
+    <None Include="Media\Audio\onsuccessfulsave.wav">
+      <Filter>media\sfx</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="algo">
@@ -348,5 +429,28 @@
     <Filter Include="audio">
       <UniqueIdentifier>{29991b5a-8268-48ef-adb8-8fa4897b6d09}</UniqueIdentifier>
     </Filter>
+    <Filter Include="media">
+      <UniqueIdentifier>{033da9a0-d944-44e7-a785-e528c49199b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\bitmap">
+      <UniqueIdentifier>{b61619e4-f197-4360-90ea-3105f82fed0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\sfx">
+      <UniqueIdentifier>{99a9289e-f26e-4772-942d-4926727bde4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\music">
+      <UniqueIdentifier>{e525a3c6-e753-4314-8e41-5a8d9b5a7c49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\font">
+      <UniqueIdentifier>{92936b36-5994-4916-ab89-e93fef575fa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dx\3dx">
+      <UniqueIdentifier>{a212c7f3-557a-4543-bcfb-cd170556664d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Media\Audio\background.mp3">
+      <Filter>media\music</Filter>
+    </Media>
   </ItemGroup>
 </Project>

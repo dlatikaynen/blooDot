@@ -1006,6 +1006,10 @@ void blooDotMain::SelectMainMenu(bool moveUp, bool moveDown)
 	{
 		this->m_audio.PlaySoundEffect(MenuChangeEvent);
 	}
+	else if (moveUp || moveDown)
+	{
+		this->m_audio.PlaySoundEffect(MenuTiltEvent);
+	}
 }
 
 UIElement blooDotMain::DetectMenuItemSelected()
@@ -1059,11 +1063,22 @@ void blooDotMain::OnActionSaveLevel(bool forcePrompt)
 			blooDotExtensions->Append(L".bloodot");
 			savePicker->FileTypeChoices->Insert(L"blooDot Level File", blooDotExtensions);
 			savePicker->SuggestedFileName = L"New Document";
-			create_task(savePicker->PickSaveFileAsync()).then([this](Windows::Storage::StorageFile^ file)
+			create_task(savePicker->PickSaveFileAsync()).then([this](Windows::Storage::StorageFile^ destFile)
 			{
-				if (file)
+				if (destFile)
 				{
-					this->m_currentLevel->DesignSaveToFile(file->Path);
+					Windows::Storage::StorageFolder^ tempFolder = Windows::Storage::ApplicationData::Current->TemporaryFolder;
+					Platform::String^ fullTempFile = Platform::String::Concat(Platform::String::Concat(tempFolder->Path, L"\\"), destFile->Name);
+					this->m_currentLevel->DesignSaveToFile(fullTempFile);
+					auto openFileTask = tempFolder->GetFileAsync(destFile->Name);
+					::create_task(openFileTask).then([this, destFile](Windows::Storage::StorageFile^ tempFile)
+					{
+						auto moveFileTask = tempFile->CopyAndReplaceAsync(destFile);
+						create_task(moveFileTask).then([this]()
+						{
+							this->m_audio.PlaySoundEffect(SoundEvent::CheckpointEvent);
+						});
+					});
 				}
 			});
 		}
@@ -1080,12 +1095,17 @@ void blooDotMain::OnActionLoadLevel()
 	{
 		if (file)
 		{
-			auto newLevel = m_worldScreen->LoadAndEnterLevel(file->Path);
-			if (newLevel != nullptr)
+			Windows::Storage::StorageFolder^ targetFolder = Windows::Storage::ApplicationData::Current->TemporaryFolder;
+			auto copyFileTask = file->CopyAsync(targetFolder, file->Name, Windows::Storage::NameCollisionOption::ReplaceExisting);
+			create_task(copyFileTask).then([this](Windows::Storage::StorageFile^ copiedFile) 
 			{
-				delete this->m_currentLevel;
-				this->m_currentLevel = newLevel;
-			}
+				auto newLevel = this->m_worldScreen->LoadAndEnterLevel(copiedFile->Path);
+				if (newLevel != nullptr)
+				{
+					delete this->m_currentLevel;
+					this->m_currentLevel = newLevel;
+				}
+			});
 		}
 	});
 }
@@ -1095,7 +1115,6 @@ void blooDotMain::SaveState()
     m_persistentState->SaveXMFLOAT3(":Position", m_physics.GetPosition());
     m_persistentState->SaveXMFLOAT3(":Velocity", m_physics.GetVelocity());
     m_persistentState->SaveSingle(":ElapsedTime", m_inGameStopwatchTimer.GetElapsedTime());
-
     m_persistentState->SaveInt32(":GameState", static_cast<int>(m_gameState));
     m_persistentState->SaveInt32(":Checkpoint", static_cast<int>(m_currentCheckpoint));
 

@@ -261,12 +261,10 @@ void Audio::CreateResources()
         CreateReverb(m_soundEffectEngine, m_soundEffectMasteringVoice, &m_reverbParametersSmall, &m_soundEffectReverbVoiceSmallRoom, true);
         CreateReverb(m_soundEffectEngine, m_soundEffectMasteringVoice, &m_reverbParametersLarge, &m_soundEffectReverbVoiceLargeRoom, true);
 
-        //CreateSourceVoice(RollingEvent);
-        //CreateSourceVoice(FallingEvent);
-        //CreateSourceVoice(CollisionEvent);
-        CreateSourceVoice(MenuChangeEvent);
+		CreateSourceVoice(CheckpointEvent);
+		CreateSourceVoice(MenuChangeEvent);
         CreateSourceVoice(MenuSelectedEvent);
-        CreateSourceVoice(CheckpointEvent);
+        CreateSourceVoice(MenuTiltEvent);
     }
     catch (...)
     {
@@ -321,9 +319,21 @@ void Audio::CreateSourceVoice(SoundEvent sound)
     MediaStreamer soundEffectStream;
     switch (sound)
     {
-        case MenuChangeEvent: soundEffectStream.Initialize(L"Media\\Audio\\MenuChange.wav"); break;
-        case MenuSelectedEvent: soundEffectStream.Initialize(L"Media\\Audio\\MenuSelect.wav"); break;
-        case CheckpointEvent: soundEffectStream.Initialize(L"Media\\Audio\\Checkpoint.wav"); break;
+		case CheckpointEvent:
+			soundEffectStream.Initialize(L"Media\\Audio\\onsuccessfulsave.wav");
+			break;
+	
+		case MenuChangeEvent:
+			soundEffectStream.Initialize(L"Media\\Audio\\onmenuselectionchange.wav"); 
+			break;
+
+        case MenuSelectedEvent: 
+			soundEffectStream.Initialize(L"Media\\Audio\\onmenuitempressed.wav"); 			
+			break;
+
+		case MenuTiltEvent:
+			soundEffectStream.Initialize(L"Media\\Audio\\onmenuselectionfrustra.wav"); 
+			break;
     }
 
     m_soundEffects[sound].m_soundEventType = sound;
@@ -568,13 +578,13 @@ void Audio::PlaySoundEffect(SoundEvent sound)
         // Note that stopping and then flushing could cause a glitch due to the
         // waveform not being at a zero-crossing, but due to the nature of the sound
         // (fast and 'clicky'), we don't mind.
-        if (state.BuffersQueued > 0 && sound == MenuChangeEvent)
-        {
-            soundEffect->m_soundEffectSourceVoice->Stop();
-            soundEffect->m_soundEffectSourceVoice->FlushSourceBuffers();
-            soundEffect->m_soundEffectSourceVoice->SubmitSourceBuffer(&soundEffect->m_audioBuffer);
-            soundEffect->m_soundEffectSourceVoice->Start();
-        }
+		if (state.BuffersQueued > 0 && (sound == MenuChangeEvent || sound == MenuTiltEvent))
+		{
+			soundEffect->m_soundEffectSourceVoice->Stop();
+			soundEffect->m_soundEffectSourceVoice->FlushSourceBuffers();
+			soundEffect->m_soundEffectSourceVoice->SubmitSourceBuffer(&soundEffect->m_audioBuffer);
+			soundEffect->m_soundEffectSourceVoice->Start();
+		}
     }
 
     m_soundEffects[sound].m_soundEffectStarted = true;

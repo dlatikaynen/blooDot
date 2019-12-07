@@ -213,6 +213,18 @@
     <None Include="Media\Audio\background.wma">
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <None Include="Media\Audio\onmenuitempressed.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Media\Audio\onmenuselectionchange.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Media\Audio\onmenuselectionfrustra.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Media\Audio\onsuccessfulsave.wav">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="Media\Bitmaps\blooDot.bmp">
       <DeploymentContent>true</DeploymentContent>
     </None>
@@ -393,9 +405,6 @@
   </ItemGroup>
   <ItemGroup>
     <Media Include="Media\Audio\background.mp3" />
-    <Media Include="Media\Audio\Checkpoint.wav" />
-    <Media Include="Media\Audio\MenuChange.wav" />
-    <Media Include="Media\Audio\MenuSelect.wav" />
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="Microsoft.UniversalCRT.Debug, Version=10.0.17134.0" />
