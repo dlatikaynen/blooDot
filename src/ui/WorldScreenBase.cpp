@@ -135,6 +135,7 @@ void WorldScreenBase::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* to
 	this->m_pointerPosition.y = pointerPosition.y;
 	this->m_touchMap = touchMap;
 	this->m_isMoving = Facings::Shy;
+	this->m_keyShiftDown = shiftKeyActive;
 
 	if (left)
 	{

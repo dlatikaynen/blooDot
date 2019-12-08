@@ -97,7 +97,8 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	this->RegisterDing(&Rail(deviceResources, brushRegistry),				10, 0);
 	this->RegisterDing(&CrackedMauer(deviceResources, brushRegistry),		07, 1);
 	this->RegisterDing(&FloorRockTile(deviceResources, brushRegistry),		12, 0);
-	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				13, 0);
+	this->RegisterDing(&Lettuce(deviceResources, brushRegistry),      13, 0);
+	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				14, 0);
 
 	DX::ThrowIfFailed(this->m_dingSheet->EndDraw());
 }

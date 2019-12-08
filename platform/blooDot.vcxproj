@@ -293,6 +293,7 @@
     <Image Include="Media\Bitmaps\highgrass.png" />
     <Image Include="Media\Bitmaps\floorstonetile.png" />
     <Image Include="Media\Bitmaps\dalek.png" />
+    <Image Include="Media\Bitmaps\lettuce.png" />
     <Image Include="Media\Bitmaps\packcover-wallcrack.png" />
     <Image Include="Media\Bitmaps\snowblock.png" />
     <Image Include="Media\Bitmaps\universe_seamless.png" />

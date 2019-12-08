@@ -472,48 +472,6 @@ void blooDotMain::ResetCheckpoints()
     m_currentCheckpoint = 0;
 }
 
-CheckpointState blooDotMain::UpdateCheckpoints()
-{
-    if (m_currentCheckpoint >= (m_checkpoints.size() - 1))
-        return CheckpointState::None;
-
-    const float checkpointRadius = 20.0f;
-    float radius = m_physics.GetRadius();
-    float horizDistSq = (radius + checkpointRadius) * (radius + checkpointRadius);
-    XMVECTOR horizDistSqLimit = XMVectorSet(horizDistSq, horizDistSq, horizDistSq, horizDistSq);
-    float vertDistSq = radius * radius;
-    XMVECTOR vertDistSqLimit = XMVectorSet(vertDistSq, vertDistSq, vertDistSq, vertDistSq);
-
-    XMVECTOR position = XMLoadFloat3(&m_physics.GetPosition());
-    XMVECTOR up = XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f);
-
-    for (size_t i = m_currentCheckpoint + 1; i < m_checkpoints.size(); ++i)
-    {
-        XMVECTOR checkpointPos = XMLoadFloat3(&m_checkpoints[i]);
-        XMVECTOR posCheckSpace = position - checkpointPos;
-        XMVECTOR posVertical = up * XMVector3Dot(up, posCheckSpace);
-        XMVECTOR posHorizontal = posCheckSpace - posVertical;
-        XMVECTOR vHorizDistSq = XMVector3LengthSq(posHorizontal);
-        XMVECTOR vVertDistSq = XMVector3LengthSq(posVertical);
-
-        XMVECTOR check = XMVectorAndInt(
-            XMVectorLessOrEqual(vHorizDistSq, horizDistSqLimit),
-            XMVectorLessOrEqual(vVertDistSq, vertDistSqLimit)
-            );
-        if (XMVector3EqualInt(check, XMVectorTrueInt()))
-        {
-            m_currentCheckpoint = i;
-
-            if (i == (m_checkpoints.size() - 1))
-                return CheckpointState::Goal;
-            else
-                return CheckpointState::Save;
-        }
-    }
-
-    return CheckpointState::None;
-}
-
 // Updates the application state once per frame.
 void blooDotMain::Update()
 {
@@ -575,20 +533,20 @@ void blooDotMain::Update()
 			}
 
 			this->m_worldScreen->SetControl(
-				this->m_pointerPosition, 
+				this->m_pointerPosition,
 				&this->m_touches,
-				this->m_shiftKeyActive, 
-				this->m_keyLeftPressed,
-				this->m_keyRightPressed,
-				this->m_keyUpPressed,
-				this->m_keyDownPressed
+				this->m_shiftKeyActive,
+				this->m_keyLeftPressed || this->ButtonJustPressed(GamepadButtons::DPadLeft),
+				this->m_keyRightPressed || this->ButtonJustPressed(GamepadButtons::DPadRight),
+				this->m_keyUpPressed || this->ButtonJustPressed(GamepadButtons::DPadUp),
+				this->m_keyDownPressed || this->ButtonJustPressed(GamepadButtons::DPadDown)
 			);
 
-			if (this->m_keyPlacePressed)
+			if (this->m_keyPlacePressed || this->ButtonJustPressed(GamepadButtons::A))
 			{
 				this->m_keyPlacePressed = false;
 				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
-				levelEditor->DoPlaceDing();
+				levelEditor->ConsiderPlacement(this->m_shiftKeyActive);
 			}
 
 			if (this->m_keyGridPressed)
@@ -598,7 +556,7 @@ void blooDotMain::Update()
 				levelEditor->DoToggleGrid();
 			}
 
-			if (this->m_keyRotatePressed)
+			if (this->m_keyRotatePressed || this->ButtonJustPressed(GamepadButtons::Y))
 			{
 				this->m_keyRotatePressed = false;
 				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
@@ -612,7 +570,7 @@ void blooDotMain::Update()
 				levelEditor->DoSetScrollLock(this->m_keyScrollLockState);
 			}
 
-			if (this->m_keyObliteratePressed)
+			if (this->m_keyObliteratePressed || this->ButtonJustPressed(GamepadButtons::B))
 			{
 				this->m_keyObliteratePressed = false;
 				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
@@ -631,12 +589,6 @@ void blooDotMain::Update()
 				this->m_levelEditorHUD.ToggleOverwrite();
 			}
 
-			if (this->m_keyRotatePressed)
-			{
-				this->m_keyRotatePressed = false;
-				this->m_levelEditorHUD.Rotate();
-			}
-
 			if (this->m_keyGridPressed)
 			{
 				this->m_keyGridPressed = false;
@@ -649,14 +601,14 @@ void blooDotMain::Update()
 				this->m_levelEditorHUD.SetScrollLock(this->m_keyScrollLockState);
 			}
 
-			if (this->m_keyPlusPressed)
+			if (this->m_keyPlusPressed || this->ButtonJustPressed(GamepadButtons::RightShoulder))
 			{
 				this->m_keyPlusPressed = false;
 				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
 				levelEditor->SelectNextDingForPlacement();
 			}
 
-			if (this->m_keyMinusPressed)
+			if (this->m_keyMinusPressed || this->ButtonJustPressed(GamepadButtons::LeftShoulder))
 			{
 				this->m_keyMinusPressed = false;
 				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
@@ -683,52 +635,7 @@ void blooDotMain::Update()
 
 			this->m_worldScreen->Update(timerTotal, timerElapsed);
 		}
-
-		//else if (this->m_gameState == GameState::PreGameCountdown)
-		//{
-		//	if (this->m_preGameCountdownTimer.IsCountdownComplete())
-		//	{
-		//		SetGameState(GameState::InGameActive);
-		//	}
-		//}
 		
-#pragma region Process Input
-
-        //float combinedTiltX = 0.0f;
-        //float combinedTiltY = 0.0f;
-
-        // Check whether the user paused or resumed the game.
-   //     if (ButtonJustPressed(GamepadButtons::Menu))
-   //     {
-			//if (m_gameState == GameState::InGameActive)
-			//{
-			//	SetGameState(GameState::InGamePaused);
-			//}  
-			//else if (m_gameState == GameState::InGamePaused)
-			//{
-			//	SetGameState(GameState::InGameActive);
-			//}
-   //     }
-
-        // Check whether the user restarted the game or cleared the high score table.
-        //if (ButtonJustPressed(GamepadButtons::View) || m_homeKeyPressed)
-        //{
-        //    m_homeKeyPressed = false;
-
-        //    if (m_gameState == GameState::InGameActive ||
-        //        m_gameState == GameState::InGamePaused ||
-        //        m_gameState == GameState::PreGameCountdown)
-        //    {
-        //        SetGameState(GameState::MainMenu);
-        //        m_inGameStopwatchTimer.SetVisible(false);
-        //        m_preGameCountdownTimer.SetVisible(false);
-        //    }
-        //    else if (m_gameState == GameState::HighScoreDisplay)
-        //    {
-        //        m_highScoreTable.Reset();
-        //    }
-        //}
-
         // Check whether the user chose a button from the UI.
         bool anyPoints = !m_pointQueue.empty();
         while (!m_pointQueue.empty())
@@ -741,13 +648,11 @@ void blooDotMain::Update()
         {
         case GameState::MainMenu:
 			auto menuItemToExecute = UIElement::None;
-			bool chooseSelection = (anyPoints || this->ButtonJustPressed(GamepadButtons::A) || this->ButtonJustPressed(GamepadButtons::Menu));
-			// Update the game state if the user chose a menu option.
-			if (chooseSelection)
+			if (anyPoints)
 			{
 				menuItemToExecute = this->DetectMenuItemPressed();
 			}
-			else if (this->m_keySpacePressed || this->m_keyEnterPressed)
+			else if (this->m_keySpacePressed || this->m_keyEnterPressed || this->ButtonJustPressed(GamepadButtons::A))
 			{
 				menuItemToExecute = this->DetectMenuItemSelected();
 			}

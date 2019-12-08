@@ -75,3 +75,16 @@ void Chest::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo,
 	rendEr->FillEllipse(elli, brushNail);
 	rendEr->FillRectangle(D2D1::RectF(rite, yctr - 1.8f, rite + 1.5f, yctr + 1.8f), brushNail);
 }
+
+Lettuce::Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(11, "Lettuce", deviceResources, drawBrushes)
+{
+	this->m_Facings = Facings::Shy;
+	this->m_Coalescing = Facings::Shy;
+	this->m_preferredLayer = Layers::Walls;
+	this->m_possibleLayers = Layers::Walls;
+}
+
+Platform::String^ Lettuce::ShouldLoadFromBitmap()
+{
+	return L"lettuce.png";
+}

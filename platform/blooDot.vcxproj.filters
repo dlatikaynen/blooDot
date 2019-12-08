@@ -373,6 +373,9 @@
     <Image Include="Media\Bitmaps\packcover-wallcrack.png">
       <Filter>media\bitmap</Filter>
     </Image>
+    <Image Include="Media\Bitmaps\lettuce.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />

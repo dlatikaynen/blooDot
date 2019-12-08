@@ -16,7 +16,7 @@ public:
 	virtual WorldScreenBase::~WorldScreenBase();
 	
 	/* graphical */
-	void Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources);
+	virtual void Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources);
 	void CreateDeviceDependentResources();
 	void ResetDirectXResources();
     void ReleaseDeviceDependentResources();
@@ -69,6 +69,7 @@ protected:
 	unsigned										m_lastBlitSheetCount;
 #endif
 	D2D1_POINT_2F									m_pointerPosition;
+	bool											m_keyShiftDown;
 	TouchMap* 										m_touchMap;
 
 	WorldSheet*	GetSheet(unsigned sheetX, unsigned sheetY);

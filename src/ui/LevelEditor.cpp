@@ -7,10 +7,28 @@ LevelEditor::LevelEditor() : WorldScreenBase()
 	this->m_selectedDingID = 1;
 	this->m_selectedDingOrientation = Facings::Shy;
 	this->m_isGridShown = true;
+	this->m_lastPlacementPositionValid = false;
+	this->m_lastActiveGridPositionValid = false;
+	this->m_keyShiftDown = false;
 }
 
 LevelEditor::~LevelEditor()
+{	
+	if (this->m_textColorBrush != nullptr)
+	{
+		this->m_textColorBrush->Release();
+	}
+}
+
+void LevelEditor::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources)
 {
+	WorldScreenBase::Initialize(deviceResources);
+	DX::ThrowIfFailed(deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &this->m_textColorBrush));
+	this->m_textColorBrush->SetOpacity(m_textColorBrush->GetOpacity() * blooDot::Consts::GOLDEN_RATIO);
+	this->m_textStyle.SetFontName(L"Segoe UI");
+	this->m_textStyle.SetFontSize(11.0f);
+	this->m_textStyle.SetFontWeight(DWRITE_FONT_WEIGHT_LIGHT);
+	this->m_textStyle.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
 void LevelEditor::Update(float timeTotal, float timeDelta)
@@ -46,7 +64,7 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 			}
 			else 
 			{
-				this->DoPlaceDing();
+				this->ConsiderPlacement(this->m_keyShiftDown);
 			}
 		}
 	}
@@ -65,6 +83,40 @@ void LevelEditor::SetControl(int detentCount, bool shiftKeyActive)
 		else if (detentCount < 0)
 		{
 			this->DoRotate(shiftKeyActive, true);
+		}
+	}
+
+	this->m_keyShiftDown = shiftKeyActive;
+}
+
+void LevelEditor::ConsiderPlacement(bool fillArea)
+{
+	if (this->m_currentLevelEditorCellKnown && this->m_selectedDingID > 0)
+	{
+		if (fillArea && m_lastPlacementPositionValid)
+		{
+			auto lastPositionBackup = this->m_lastPlacementPosition;
+			auto currentCellBackup = this->m_currentLevelEditorCell;
+			auto xFrom = lastPositionBackup.x > this->m_currentLevelEditorCell.x ? this->m_currentLevelEditorCell.x : lastPositionBackup.x;
+			auto yFrom = lastPositionBackup.y > this->m_currentLevelEditorCell.y ? this->m_currentLevelEditorCell.y : lastPositionBackup.y;
+			auto xTo = lastPositionBackup.x < this->m_currentLevelEditorCell.x ? this->m_currentLevelEditorCell.x : lastPositionBackup.x;
+			auto yTo = lastPositionBackup.y < this->m_currentLevelEditorCell.y ? this->m_currentLevelEditorCell.y : lastPositionBackup.y;
+			for (auto y = yFrom; y <= yTo; ++y)
+			{
+				for (auto x = xFrom; x <= xTo; ++x)
+				{
+					this->m_currentLevelEditorCell.x = x;
+					this->m_currentLevelEditorCell.y = y;
+					this->DoPlaceDing();
+				}
+			}
+
+			this->m_currentLevelEditorCell = currentCellBackup;
+			this->m_lastPlacementPosition = lastPositionBackup;
+		}
+		else
+		{
+			this->DoPlaceDing();
 		}
 	}
 }
@@ -92,6 +144,9 @@ void LevelEditor::DoPlaceDing()
 			}
 
 			this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingLayer);
+			this->m_lastPlacementPosition.x = this->m_currentLevelEditorCell.x;
+			this->m_lastPlacementPosition.y = this->m_currentLevelEditorCell.y;
+			this->m_lastPlacementPositionValid = true;
 		}
 	}
 }
@@ -354,15 +409,63 @@ void LevelEditor::DrawLevelEditorRaster()
 		}
 	}
 
-	this->m_d2dContext->DrawRectangle(rect0, brusherl, 1.0F, NULL);
-
 	/* we use this to remember the current cursor cell, just because we can
 	 * (and, because it is smart since we already have the values here) */
+	this->m_d2dContext->DrawRectangle(rect0, brusherl, 1.0F, NULL);
 	this->m_currentLevelEditorCell.x = this->m_viewportOffsetSquares.x + localSquareX;
 	this->m_currentLevelEditorCell.y = this->m_viewportOffsetSquares.y + localSquareY;
 	if (!this->m_currentLevelEditorCellKnown)
 	{
 		this->m_currentLevelEditorCellKnown = this->m_currentLevelEditorCell.x > 0 || this->m_currentLevelEditorCell.y > 0;
+	}
+
+	/* show where we are */
+	if (!m_lastActiveGridPositionValid || this->m_lastActiveGridPosition.x != this->m_currentLevelEditorCell.x || this->m_lastActiveGridPosition.y != this->m_currentLevelEditorCell.y)
+	{
+		this->m_textLayout.Reset();
+		this->m_textLayout = nullptr;
+		WCHAR buffer[64];
+		swprintf_s(
+			buffer,
+			L"[%d,%d]",
+			this->m_currentLevelEditorCell.x,
+			this->m_currentLevelEditorCell.y
+		);
+
+		this->CreateTextLayout(&rect0, ref new Platform::String(buffer));
+		this->m_lastActiveGridPosition.x = this->m_currentLevelEditorCell.x;
+		this->m_lastActiveGridPosition.y = this->m_currentLevelEditorCell.y;
+		this->m_lastActiveGridPositionValid = true;
+	}
+
+	this->m_d2dContext->DrawTextLayout(
+		D2D1::Point2F(
+			rect0.left,
+			rect0.top
+		),
+		this->m_textLayout.Get(),
+		this->m_textColorBrush.Get(),
+		D2D1_DRAW_TEXT_OPTIONS_NO_SNAP
+	);
+}
+
+void LevelEditor::CreateTextLayout(D2D1_RECT_F* rect, Platform::String^ text)
+{
+	if (this->m_textLayout == nullptr)
+	{
+		auto dwriteFactory = UserInterface::GetDWriteFactory();
+		DX::ThrowIfFailed(
+			dwriteFactory->CreateTextLayout(
+				text->Data(),
+				text->Length(),
+				this->m_textStyle.GetTextFormat(),
+				rect->right - rect->left,
+				rect->bottom - rect->top,
+				&this->m_textLayout
+			)
+		);
+
+		this->m_textLayout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
 	}
 }
 

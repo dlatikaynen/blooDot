@@ -203,6 +203,7 @@ void Dings::SetSheetPlacementsFromCoalescability()
 	}
 	else if (this->m_Coalescing != Facings::Shy) 
 	{	
+		this->Pack7x7X(oX, oY, &x, &y);
 		this->m_lookupImmersed.x = this->Pack7x7X(oX, oY, &x, &y);
 		this->m_lookupImmersed.y = y;
 		this->m_lookupCrossing.x = this->Pack7x7X(oX, oY, &x, &y);

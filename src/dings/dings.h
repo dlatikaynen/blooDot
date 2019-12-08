@@ -280,6 +280,14 @@ public:
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect) override;
 };
 
+class Lettuce : public Dings
+{
+public:
+	Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
 class Rail : public Dings
 {
 public:
