@@ -295,6 +295,7 @@
     <Image Include="Media\Bitmaps\dalek.png" />
     <Image Include="Media\Bitmaps\lettuce.png" />
     <Image Include="Media\Bitmaps\packcover-wallcrack.png" />
+    <Image Include="Media\Bitmaps\player-1.png" />
     <Image Include="Media\Bitmaps\snowblock.png" />
     <Image Include="Media\Bitmaps\universe_seamless.png" />
     <Image Include="Media\Bitmaps\notimeforcaution.png" />
@@ -353,6 +354,7 @@
     <ClCompile Include="..\src\ui\LevelEditor.cpp" />
     <ClCompile Include="..\src\ui\LevelEditorHUD.cpp" />
     <ClCompile Include="..\src\dings\looot-like\looot.cpp" />
+    <ClCompile Include="..\src\dings\mob-like\mobs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\app\App.h" />

@@ -212,13 +212,4 @@ namespace blooDot
 		int QueryFPS();
 		void LogMessage(Platform::Object^ obj);
 	};
-
-	template <class T> void SafeRelease(T **ppT)
-	{
-		if (*ppT)
-		{
-			(*ppT)->Release();
-			*ppT = NULL;
-		}
-	}
 }

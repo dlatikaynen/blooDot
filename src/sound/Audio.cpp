@@ -452,8 +452,8 @@ void Audio::ReleaseResources()
     m_musicReverbVoiceSmallRoom = nullptr;
     m_musicReverbVoiceLargeRoom = nullptr;
 
-	SafeRelease(&m_musicEngine);
-	SafeRelease(&m_soundEffectEngine);
+	this->SafeRelease(&m_musicEngine);
+	this->SafeRelease(&m_soundEffectEngine);
 }
 
 void Audio::Start()

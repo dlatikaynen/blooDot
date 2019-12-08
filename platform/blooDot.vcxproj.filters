@@ -150,6 +150,9 @@
     <ClCompile Include="..\src\dings\looot-like\looot.cpp">
       <Filter>ui\dings</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\dings\mob-like\mobs.cpp">
+      <Filter>ui\dings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
@@ -374,6 +377,9 @@
       <Filter>media\bitmap</Filter>
     </Image>
     <Image Include="Media\Bitmaps\lettuce.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\player-1.png">
       <Filter>media\bitmap</Filter>
     </Image>
   </ItemGroup>

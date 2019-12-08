@@ -86,7 +86,6 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT), &this->m_dingImage));
 	
 	this->m_dingSheet->BeginDraw();
-	this->RegisterDing(&Dings(0, "BLACK", deviceResources, brushRegistry),	00, 0);
 	this->RegisterDing(&Mauer(deviceResources, brushRegistry),				00, 1);
 	this->RegisterDing(&Wasser(deviceResources, brushRegistry),				01, 0);
 	this->RegisterDing(&HighGrass(deviceResources, brushRegistry),			02, 0);
@@ -97,8 +96,9 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	this->RegisterDing(&Rail(deviceResources, brushRegistry),				10, 0);
 	this->RegisterDing(&CrackedMauer(deviceResources, brushRegistry),		07, 1);
 	this->RegisterDing(&FloorRockTile(deviceResources, brushRegistry),		12, 0);
-	this->RegisterDing(&Lettuce(deviceResources, brushRegistry),      13, 0);
-	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				14, 0);
+	this->RegisterDing(&Lettuce(deviceResources, brushRegistry),			13, 0);
+	this->RegisterDing(&Player1(deviceResources, brushRegistry),			14, 0);
+	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				18, 0);
 
 	DX::ThrowIfFailed(this->m_dingSheet->EndDraw());
 }
@@ -125,7 +125,7 @@ unsigned Level::GetPreviousDingID(unsigned dingID)
 	{
 		if (dingPointer == this->m_dingMap.begin())
 		{
-			return 0;
+			return this->m_dingMap.rbegin()->second.ID();
 		}
 		else
 		{
@@ -136,7 +136,7 @@ unsigned Level::GetPreviousDingID(unsigned dingID)
 
 unsigned Level::GetNextDingID(unsigned dingID)
 {
-	auto dingPointer = this->m_dingMap.find(dingID);	
+	auto dingPointer = this->m_dingMap.find(dingID);
 	if (dingPointer == this->m_dingMap.end())
 	{
 		return 0;
@@ -146,7 +146,7 @@ unsigned Level::GetNextDingID(unsigned dingID)
 		++dingPointer;
 		if (dingPointer == this->m_dingMap.end())
 		{
-			return 0;
+			return m_dingMap.begin()->second.ID();
 		}
 		else
 		{
@@ -500,48 +500,69 @@ void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t off
 		{			
 			byte floorDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
 			dingID = static_cast<unsigned>(floorDescriptor & 0x7f);
-			if (floorDescriptor & 128)
+			if (dingID > 0)
 			{
-				placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
+				if (floorDescriptor & 128)
+				{
+					placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
+				}
+				else
+				{
+					placementFacing = Facings::Shy;
+				}
+
+				this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Floor, &this->m_dingMap.at(dingID), placementFacing);
 			}
 			else
 			{
-				placementFacing = Facings::Shy;
+				hasFloor = false;
 			}
-
-			this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Floor, &this->m_dingMap.at(dingID), placementFacing);
 		}
 
 		if (hasWalls)
 		{
 			byte wallsDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
 			dingID = static_cast<unsigned>(wallsDescriptor & 0x7f);
-			if (wallsDescriptor & 128)
+			if (dingID > 0)
 			{
-				placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
+				if (wallsDescriptor & 128)
+				{
+					placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
+				}
+				else
+				{
+					placementFacing = Facings::Shy;
+				}
+
+				this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Walls, &this->m_dingMap.at(dingID), placementFacing);
 			}
-			else
+			else 
 			{
-				placementFacing = Facings::Shy;
+				hasWalls = false;
 			}
-			
-			this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Walls, &this->m_dingMap.at(dingID), placementFacing);
 		}
 
 		if (hasRooof)
 		{
 			byte rooofDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
 			dingID = static_cast<unsigned>(rooofDescriptor & 0x7f);
-			if (rooofDescriptor & 128)
+			if (dingID > 0)
 			{
-				placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
+				if (rooofDescriptor & 128)
+				{
+					placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
+				}
+				else
+				{
+					placementFacing = Facings::Shy;
+				}
+
+				this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Rooof, &this->m_dingMap.at(dingID), placementFacing);
 			}
 			else
 			{
-				placementFacing = Facings::Shy;
+				hasRooof = false;
 			}
-
-			this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Rooof, &this->m_dingMap.at(dingID), placementFacing);
 		}
 
 #ifdef _DEBUG

@@ -26,5 +26,13 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> m_Bitmap;
 	GameOfLifePlane* m_Plane;
 
+	template <class T> void SafeRelease(T **ppT)
+	{
+		if (*ppT)
+		{
+			(*ppT)->Release();
+			*ppT = NULL;
+		}
+	}
 };
 

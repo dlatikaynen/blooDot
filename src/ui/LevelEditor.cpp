@@ -14,10 +14,7 @@ LevelEditor::LevelEditor() : WorldScreenBase()
 
 LevelEditor::~LevelEditor()
 {	
-	if (this->m_textColorBrush != nullptr)
-	{
-		this->m_textColorBrush->Release();
-	}
+	this->m_textColorBrush.Reset();
 }
 
 void LevelEditor::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources)
@@ -95,12 +92,11 @@ void LevelEditor::ConsiderPlacement(bool fillArea)
 	{
 		if (fillArea && m_lastPlacementPositionValid)
 		{
-			auto lastPositionBackup = this->m_lastPlacementPosition;
 			auto currentCellBackup = this->m_currentLevelEditorCell;
-			auto xFrom = lastPositionBackup.x > this->m_currentLevelEditorCell.x ? this->m_currentLevelEditorCell.x : lastPositionBackup.x;
-			auto yFrom = lastPositionBackup.y > this->m_currentLevelEditorCell.y ? this->m_currentLevelEditorCell.y : lastPositionBackup.y;
-			auto xTo = lastPositionBackup.x < this->m_currentLevelEditorCell.x ? this->m_currentLevelEditorCell.x : lastPositionBackup.x;
-			auto yTo = lastPositionBackup.y < this->m_currentLevelEditorCell.y ? this->m_currentLevelEditorCell.y : lastPositionBackup.y;
+			auto xFrom = this->m_lastPlacementPosition.x > this->m_currentLevelEditorCell.x ? this->m_currentLevelEditorCell.x : this->m_lastPlacementPosition.x;
+			auto yFrom = this->m_lastPlacementPosition.y > this->m_currentLevelEditorCell.y ? this->m_currentLevelEditorCell.y : this->m_lastPlacementPosition.y;
+			auto xTo = this->m_lastPlacementPosition.x < this->m_currentLevelEditorCell.x ? this->m_currentLevelEditorCell.x : this->m_lastPlacementPosition.x;
+			auto yTo = this->m_lastPlacementPosition.y < this->m_currentLevelEditorCell.y ? this->m_currentLevelEditorCell.y : this->m_lastPlacementPosition.y;
 			for (auto y = yFrom; y <= yTo; ++y)
 			{
 				for (auto x = xFrom; x <= xTo; ++x)
@@ -111,8 +107,10 @@ void LevelEditor::ConsiderPlacement(bool fillArea)
 				}
 			}
 
+			/* so we can comfortably continue to "connect the dots" */
 			this->m_currentLevelEditorCell = currentCellBackup;
-			this->m_lastPlacementPosition = lastPositionBackup;
+			this->m_lastPlacementPosition = currentCellBackup;
+			this->m_lastPlacementPositionValid = true;
 		}
 		else
 		{

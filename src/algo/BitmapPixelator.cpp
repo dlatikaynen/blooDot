@@ -130,14 +130,14 @@ void BitmapPixelator::Load(std::wstring fileName)
 					}
 				}
 
-				SafeRelease(&pILock);
+				blooDot::Consts::SafeRelease(&pILock);
 			}
 		}
 	}
 
-	SafeRelease(&pIBitmap);
-	SafeRelease(&pIDecoder);
-	SafeRelease(&pIDecoderFrame);
+	this->SafeRelease(&pIBitmap);
+	this->SafeRelease(&pIDecoder);
+	this->SafeRelease(&pIDecoderFrame);
 }
 
 void BitmapPixelator::GenerateFromFont(std::wstring text)
