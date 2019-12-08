@@ -82,7 +82,7 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	auto loader = ref new BasicLoader(resources);
 	loader->LoadPngToBitmap(L"Media\\Bitmaps\\universe_seamless.png", deviceResources, &this->m_floorBackground);
 
-	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(800.0f, 600.0f), &this->m_dingSheet));
+	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(2048.0f, 600.0f), &this->m_dingSheet));
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT), &this->m_dingImage));
 	
 	this->m_dingSheet->BeginDraw();
@@ -96,7 +96,8 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	this->RegisterDing(&Chest(deviceResources, brushRegistry),				06, 0);
 	this->RegisterDing(&Rail(deviceResources, brushRegistry),				10, 0);
 	this->RegisterDing(&CrackedMauer(deviceResources, brushRegistry),		07, 1);
-	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				12, 0);
+	this->RegisterDing(&FloorRockTile(deviceResources, brushRegistry),		12, 0);
+	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				13, 0);
 
 	DX::ThrowIfFailed(this->m_dingSheet->EndDraw());
 }

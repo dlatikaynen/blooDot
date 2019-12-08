@@ -39,3 +39,16 @@ Platform::String^ FloorStoneTile::ShouldLoadFromBitmap()
 {
 	return L"floorstonetile.png";
 }
+
+FloorRockTile::FloorRockTile(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(10, "Floor rock tiling", deviceResources, drawBrushes)
+{
+	this->m_Facings = Facings::Shy;
+	this->m_Coalescing = Facings::Shy;
+	this->m_preferredLayer = Layers::Floor;
+	this->m_possibleLayers = Layers::Floor;
+}
+
+Platform::String^ FloorRockTile::ShouldLoadFromBitmap()
+{
+	return L"floorrocktile.png";
+}

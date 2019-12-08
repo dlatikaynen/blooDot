@@ -237,6 +237,40 @@
     <None Include="Media\Fonts\OFL.txt">
       <DeploymentContent>false</DeploymentContent>
     </None>
+    <None Include="Media\Legacy\NEPOMUK.BAS" />
+    <None Include="Media\Legacy\NEPOMUK2.BAS" />
+    <None Include="Media\Legacy\TIMER12.DA1" />
+    <None Include="Media\Legacy\TIMER15.DA1" />
+    <None Include="Media\Legacy\TIMER15.DA2" />
+    <None Include="Media\Legacy\TIMER16.DA1" />
+    <None Include="Media\Legacy\TIMER16.DA2" />
+    <None Include="Media\Legacy\TIMER16.DA3" />
+    <None Include="Media\Legacy\TIMER16.DA4" />
+    <None Include="Media\Legacy\TIMER17.DA1" />
+    <None Include="Media\Legacy\TIMER17.DA2" />
+    <None Include="Media\Legacy\TIMER18.DA1" />
+    <None Include="Media\Legacy\TIMER19.DA1" />
+    <None Include="Media\Legacy\TIMER20.DA1" />
+    <None Include="Media\Legacy\TIMER21.DA1" />
+    <None Include="Media\Legacy\TIMER22.DA1" />
+    <None Include="Media\Legacy\TIMER23.DA1" />
+    <None Include="Media\Legacy\TIMER24.DA1" />
+    <None Include="Media\Legacy\TIMER25.DA1" />
+    <None Include="Media\Legacy\TIMER26.DA1" />
+    <None Include="Media\Legacy\TIMER27.DA1" />
+    <None Include="Media\Legacy\TIMER28.DA1" />
+    <None Include="Media\Legacy\TIMER29.DA1" />
+    <None Include="Media\Legacy\TIMER3.DA1" />
+    <None Include="Media\Legacy\TIMER3.DA2" />
+    <None Include="Media\Legacy\TIMER30.DA1" />
+    <None Include="Media\Legacy\TIMER30.DA2" />
+    <None Include="Media\Legacy\TIMER32.DA1" />
+    <None Include="Media\Legacy\TIMER33.DA1" />
+    <None Include="Media\Legacy\TIMER34.DA1" />
+    <None Include="Media\Legacy\TIMER35.DA1" />
+    <None Include="Media\Legacy\TIMER36.DA1" />
+    <None Include="Media\Legacy\TIMER37.DA1" />
+    <None Include="Media\Legacy\UBERGANG.DAT" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\src\mediumtile-sdk.png" />

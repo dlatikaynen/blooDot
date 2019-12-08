@@ -406,6 +406,108 @@
     <None Include="Media\Audio\onsuccessfulsave.wav">
       <Filter>media\sfx</Filter>
     </None>
+    <None Include="Media\Legacy\NEPOMUK.BAS">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\NEPOMUK2.BAS">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER3.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER3.DA2">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER12.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER15.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER15.DA2">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER16.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER16.DA2">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER16.DA3">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER16.DA4">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER17.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER17.DA2">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER18.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER19.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER20.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER21.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER22.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER23.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER24.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER25.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER26.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER27.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER28.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER29.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER30.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER30.DA2">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER32.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER33.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER34.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER35.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER36.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER37.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\UBERGANG.DAT">
+      <Filter>media\legacy</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="algo">
@@ -452,6 +554,9 @@
     </Filter>
     <Filter Include="dx\3dx">
       <UniqueIdentifier>{a212c7f3-557a-4543-bcfb-cd170556664d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\legacy">
+      <UniqueIdentifier>{5ad9b12e-0441-4ccf-899f-6ae06c107570}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

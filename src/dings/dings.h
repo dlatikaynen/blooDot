@@ -258,6 +258,14 @@ protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
 
+class FloorRockTile : public Dings
+{
+public:
+	FloorRockTile(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
 class Coin : public Dings
 {
 public:
