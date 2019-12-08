@@ -511,6 +511,29 @@ void blooDotMain::Update()
 			}
 		}
 
+		// Process controller input.
+#if WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP // Only process controller input when the device is not a phone.
+		if (m_currentGamepadNeedsRefresh)
+		{
+			auto mostRecentGamepad = GetLastGamepad();
+			if (m_gamepad != mostRecentGamepad)
+			{
+				m_gamepad = mostRecentGamepad;
+			}
+
+			m_currentGamepadNeedsRefresh = false;
+		}
+
+		if (m_gamepad != nullptr)
+		{
+			m_oldReading = m_newReading;
+			m_newReading = m_gamepad->GetCurrentReading();
+		}
+
+		float leftStickX = static_cast<float>(m_newReading.LeftThumbstickX);
+		float leftStickY = static_cast<float>(m_newReading.LeftThumbstickY);
+#endif
+
 		// When the game is first loaded, we display a load screen
         // and load any deferred resources that might be too expensive
         // to load during initialization.
@@ -539,7 +562,9 @@ void blooDotMain::Update()
 				this->m_keyLeftPressed || this->ButtonJustPressed(GamepadButtons::DPadLeft),
 				this->m_keyRightPressed || this->ButtonJustPressed(GamepadButtons::DPadRight),
 				this->m_keyUpPressed || this->ButtonJustPressed(GamepadButtons::DPadUp),
-				this->m_keyDownPressed || this->ButtonJustPressed(GamepadButtons::DPadDown)
+				this->m_keyDownPressed || this->ButtonJustPressed(GamepadButtons::DPadDown),
+				leftStickX,
+				leftStickY
 			);
 
 			if (this->m_keyPlacePressed || this->ButtonJustPressed(GamepadButtons::A))
@@ -697,61 +722,8 @@ void blooDotMain::Update()
 			}
 
             break;
-
-   //     case GameState::HighScoreDisplay:
-			//if (chooseSelection || anyPoints)
-			//{
-			//	SetGameState(GameState::MainMenu);
-			//}
-   //         break;
-
-   //     case GameState::PostGameResults:
-			//if (chooseSelection || anyPoints)
-			//{
-			//	SetGameState(GameState::HighScoreDisplay);
-			//}
-   //         break;
-
-   //     case GameState::InGamePaused:
-   //         if (m_pausedText.IsPressed())
-   //         {
-   //             m_pausedText.SetPressed(false);
-   //             SetGameState(GameState::InGameActive);
-   //         }
-   //         break;
 		}
 
-		// Process controller input.
-#if WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP // Only process controller input when the device is not a phone.
-
-		if (m_currentGamepadNeedsRefresh)
-		{
-			auto mostRecentGamepad = GetLastGamepad();
-			if (m_gamepad != mostRecentGamepad)
-			{
-				m_gamepad = mostRecentGamepad;
-			}
-
-			m_currentGamepadNeedsRefresh = false;
-		}
-
-		if (m_gamepad != nullptr)
-		{
-			m_oldReading = m_newReading;
-			m_newReading = m_gamepad->GetCurrentReading();
-		}
-
-		float leftStickX = static_cast<float>(m_newReading.LeftThumbstickX);
-		float leftStickY = static_cast<float>(m_newReading.LeftThumbstickY);
-		auto oppositeSquared = leftStickY * leftStickY;
-		auto adjacentSquared = leftStickX * leftStickX;
-		if ((oppositeSquared + adjacentSquared) > m_deadzoneSquared)
-		{
-			//combinedTiltX += leftStickX * m_controllerScaleFactor;
-			//combinedTiltY += leftStickY * m_controllerScaleFactor;
-		}
-
-#endif
 
         // Account for touch input.
         for (TouchMap::const_iterator iter = m_touches.cbegin(); iter != m_touches.cend(); ++iter)

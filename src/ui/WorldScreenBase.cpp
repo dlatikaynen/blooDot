@@ -129,7 +129,7 @@ void WorldScreenBase::UpdateForWindowSizeChange()
 	m_isResizing = false;
 }
 
-void WorldScreenBase::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down)
+void WorldScreenBase::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down, float scrollDeltaX, float scrollDeltaY)
 {
 	this->m_pointerPosition.x = pointerPosition.x;
 	this->m_pointerPosition.y = pointerPosition.y;
@@ -137,28 +137,55 @@ void WorldScreenBase::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* to
 	this->m_isMoving = Facings::Shy;
 	this->m_keyShiftDown = shiftKeyActive;
 
-	if (left)
-	{
-		this->m_isMoving |= Facings::West;
-	}
-	else if (right)
-	{
-		this->m_isMoving |= Facings::East;
-	}
-	
-	if (down)
-	{
-		this->m_isMoving |= Facings::South;
-	}
-	else if (up)
-	{
-		this->m_isMoving |= Facings::North;
-	}
+	if (abs(scrollDeltaX) > 0.15f || abs(scrollDeltaY) > 0.15f)
+	{		
+		if (scrollDeltaX > 0)
+		{
+			this->m_isMoving |= Facings::East;
+			this->m_movingSpeedX = static_cast<unsigned>(scrollDeltaX * 15.0f);
+		}
+		else if (scrollDeltaX < 0)
+		{
+			this->m_isMoving |= Facings::West;
+			this->m_movingSpeedX = static_cast<unsigned>(-scrollDeltaX * 15.0f);
+		}
 
-	if (this->m_isMoving != Facings::Shy)
+		if (scrollDeltaY > 0)
+		{
+			this->m_isMoving |= Facings::North;
+			this->m_movingSpeedY = static_cast<unsigned>(scrollDeltaY * 15.0f);
+		}
+		else if (scrollDeltaY < 0)
+		{
+			this->m_isMoving |= Facings::South;
+			this->m_movingSpeedY = static_cast<unsigned>(-scrollDeltaY * 15.0f);
+		}
+	}
+	else
 	{
-		this->m_movingSpeedX = shiftKeyActive ? 4 : 2;
-		this->m_movingSpeedY = shiftKeyActive ? 4 : 2;
+		if (left)
+		{
+			this->m_isMoving |= Facings::West;
+		}
+		else if (right)
+		{
+			this->m_isMoving |= Facings::East;
+		}
+
+		if (down)
+		{
+			this->m_isMoving |= Facings::South;
+		}
+		else if (up)
+		{
+			this->m_isMoving |= Facings::North;
+		}
+
+		if (this->m_isMoving != Facings::Shy)
+		{
+			this->m_movingSpeedX = shiftKeyActive ? 4 : 2;
+			this->m_movingSpeedY = shiftKeyActive ? 4 : 2;
+		}
 	}
 }
 

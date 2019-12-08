@@ -130,7 +130,7 @@ void BitmapPixelator::Load(std::wstring fileName)
 					}
 				}
 
-				blooDot::Consts::SafeRelease(&pILock);
+				this->SafeRelease(&pILock);
 			}
 		}
 	}
