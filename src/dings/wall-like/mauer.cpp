@@ -1,4 +1,4 @@
-#include "..\..\PreCompiledHeaders.h"
+﻿#include "..\..\PreCompiledHeaders.h"
 #include "..\dings.h"
 
 Mauer::Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(1, "Mauer", deviceResources, drawBrushes)
@@ -9,25 +9,26 @@ Mauer::Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry
 	m_possibleLayers = Layers::Walls;
 }
 
+void Mauer::PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
+{
+	D2D1_RECT_F rect;
+	Microsoft::WRL::ComPtr<ID2D1Brush> brrect = m_Brushes->WannaHave(drawTo, { 128, 128, 128, 255 });
+	auto rendEr = drawTo.Get();
+	this->PrepareRect7x7(&this->m_lookupShy, rect);
+	rendEr->FillRectangle(rect, brrect.Get());
+}
+
 void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 {
 	D2D1_RECT_F rect;
 	MFARGB colrect;
-	Microsoft::WRL::ComPtr<ID2D1Brush> brrect;
-	auto rendEr = drawTo.Get();
+	Microsoft::WRL::ComPtr<ID2D1Brush> brrect;	
+	auto rendEr = drawTo.Get();	
 
-	/* SHY
-	 * inner solid */
-	colrect = { 128, 128, 128, 255 };
-	brrect = m_Brushes->WannaHave(drawTo, colrect);
+	/* SHY - inner solid;
+	 * IMMERSED as well
+	 * → implied by background */
 
-	rect.left = 49.0f * this->m_lookupShy.x;
-	rect.top = 49.0f * this->m_lookupShy.y;
-	rect.right = rect.left + 10 * 49;
-	rect.bottom = rect.top + 10 * 49;
-	rendEr->FillRectangle(rect, brrect.Get());
-
-	/* IMMERSED - implied */
 	colrect = { 192, 192, 192, 192 };
 	brrect = m_Brushes->WannaHave(drawTo, colrect);
 	auto innerBrush = brrect.Get();
@@ -149,4 +150,25 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 		rendEr->DrawLine(D2D1::Point2F(rect.left, rect.bottom - 5), D2D1::Point2F(rect.left + 5, rect.bottom - 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.bottom - 5), D2D1::Point2F(rect.left + 5, rect.bottom), innerBrush, 2.5f, 0);
 	}
+}
+
+CrackedMauer::CrackedMauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Mauer(deviceResources, drawBrushes)
+{
+	this->m_ID = 9;
+	this->m_Name = L"Cracked";
+	m_Facings = Facings::Shy;
+	m_Coalescing = Facings::Immersed;
+	m_preferredLayer = Layers::Walls;
+	m_possibleLayers = Layers::Walls;
+}
+
+void CrackedMauer::PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
+{
+	D2D1_RECT_F rect;
+	auto backPic = this->LoadBitmap(L"packcover-wallcrack.png");
+	auto rendEr = drawTo.Get();
+
+	Mauer::PrepareBackground(drawTo);
+	PrepareRect7x7(&this->m_lookupShy, rect);
+	rendEr->DrawBitmap(backPic.Get(), rect);
 }

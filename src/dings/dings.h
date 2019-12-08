@@ -180,16 +180,19 @@ protected:
 
 	virtual Platform::String^ ShouldLoadFromBitmap();
 	void PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);
+	void PrepareRect7x7(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);
 	void Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation);
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> LoadBitmap(Platform::String^ fileName);
+	virtual void PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) { };
 	virtual void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	virtual void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect);
 
 private:
 	void SetSheetPlacementsFromCoalescability();
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> LoadFromBitmap();
 	void Pack7x7(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y);
 	unsigned Pack7x7X(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y);
 	unsigned Pack7x7Y(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y);
-	Microsoft::WRL::ComPtr<ID2D1Bitmap> LoadFromBitmap();
 	void DrawShy(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	void DrawTwin(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	void DrawQuadruplet(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
@@ -204,6 +207,16 @@ class Mauer : public Dings
 public:
 	Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+protected:
+	void Mauer::PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+};
+
+class CrackedMauer : public Mauer
+{
+public:
+	CrackedMauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	void PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 };
 
 class Wasser : public Dings

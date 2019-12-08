@@ -367,6 +367,12 @@
     <Image Include="Media\Textures\walllevel1.dds">
       <Filter>dx\3dx</Filter>
     </Image>
+    <Image Include="Media\Bitmaps\floorrocktile.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\packcover-wallcrack.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />

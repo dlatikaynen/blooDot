@@ -46,6 +46,7 @@ void Dings::Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int can
 	this->m_lookupShy.y = canvasY;
 	this->SetSheetPlacementsFromCoalescability();
 	this->m_fromFile = this->ShouldLoadFromBitmap();
+	this->PrepareBackground(drawTo);
 	if (this->m_Facings == Facings::Viech)
 	{
 		this->DrawQuadruplet(drawTo);
@@ -69,13 +70,18 @@ Platform::String^ Dings::ShouldLoadFromBitmap()
 	return nullptr;
 }
 
-Microsoft::WRL::ComPtr<ID2D1Bitmap> Dings::LoadFromBitmap()
-{	
+Microsoft::WRL::ComPtr<ID2D1Bitmap> Dings::LoadBitmap(Platform::String^ fileName)
+{
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>	bitMap;
 	auto loader = ref new BasicLoader(this->m_deviceResources->GetD3DDevice());
-	auto fullPath = Platform::String::Concat(L"Media\\Bitmaps\\", this->m_fromFile);
+	auto fullPath = Platform::String::Concat(L"Media\\Bitmaps\\", fileName);
 	loader->LoadPngToBitmap(fullPath, this->m_deviceResources, &bitMap);
 	return bitMap;
+}
+
+Microsoft::WRL::ComPtr<ID2D1Bitmap> Dings::LoadFromBitmap()
+{	
+	return this->LoadBitmap(this->m_fromFile);
 }
 
 void Dings::DrawShy(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
@@ -164,7 +170,7 @@ void Dings::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 
 void Dings::DrawClumsyPack(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 {
-	/* this one must deal with all its 7x7 complexity all by itself */
+	/* this one must deal with all its 7x7 complexity all by itself */	
 	this->DrawInternal(drawTo);
 }
 
@@ -330,6 +336,14 @@ void Dings::PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet)
 	rectToSet.top = 49.0f * lookupLocation->y;
 	rectToSet.right = rectToSet.left + 49.0f;
 	rectToSet.bottom = rectToSet.top + 49.0f;
+}
+
+void Dings::PrepareRect7x7(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet)
+{
+	rectToSet.left = 49.0f * lookupLocation->x;
+	rectToSet.top = 49.0f * lookupLocation->y;
+	rectToSet.right = rectToSet.left + 7.0f * 49.0f;
+	rectToSet.bottom = rectToSet.top + 7.0f * 49.0f;
 }
 
 void Dings::Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation)
