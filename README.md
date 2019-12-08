@@ -1,7 +1,7 @@
 # blooDot
 ### -- A Game of Life --  
 
-News: Leverage your WiiU Pro and Nintendo Switch Controllers to play on a PC running Windows 10 via Bluetooth using this excellent driver library, which maps the Nintendo controllers to XInput (XBOX works anyway, out of the box):    
+News: Leverage your WiiU Pro and Nintendo Switch Controllers to play on a PC running Windows 10 via Bluetooth using this excellent driver library, which maps the Nintendo controllers to XInput (Xbox works anyway, out of the box):    
 http://www.wiinupro.com/
 
 Development
