@@ -94,7 +94,8 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	this->RegisterDing(&FloorStoneTile(deviceResources, brushRegistry),		04, 0);
 	this->RegisterDing(&Coin(deviceResources, brushRegistry),				05, 0);
 	this->RegisterDing(&Chest(deviceResources, brushRegistry),				06, 0);
-	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				10, 0);
+	this->RegisterDing(&Rail(deviceResources, brushRegistry),				10, 0);
+	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				12, 0);
 
 	DX::ThrowIfFailed(this->m_dingSheet->EndDraw());
 }
@@ -305,14 +306,6 @@ void Level::SetDesignTime()
 bool Level::HasSaveFileNameBeenSpecifiedBefore()
 {
 	return !this->m_lastSavedAsFileName->IsEmpty();
-}
-
-void Level::DesignSaveToFile()
-{
-	if (this->HasSaveFileNameBeenSpecifiedBefore())
-	{
-		this->DesignSaveToFile(this->m_lastSavedAsFileName);
-	}
 }
 
 void Level::DesignSaveToFile(Platform::String^ fileName)

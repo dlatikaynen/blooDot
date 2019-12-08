@@ -34,7 +34,6 @@ public:
 	void SetDesignTime();
 	bool DesignLoadFromFile(Platform::String^ fileName);
 	void DesignSaveToFile(Platform::String^ fileName);
-	void DesignSaveToFile();
 	bool HasSaveFileNameBeenSpecifiedBefore();
 
 protected:
@@ -59,7 +58,6 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_dingSheet;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_dingImage;
 	std::vector<Object*>								m_Objects;
-
 	bool												m_isDesignTime;
 	Platform::String^									m_lastSavedAsFileName;
 	bool												m_DesignTimeDirty;

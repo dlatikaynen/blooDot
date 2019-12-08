@@ -123,7 +123,6 @@ public:
 	unsigned			ID();
 	Platform::String^	Name();
 	void				Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY);
-	virtual void		DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	D2D1_POINT_2U		GetSheetPlacement(Facings orientation);
 	Layers				GetPreferredLayer();
 	Facings				AvailableFacings();
@@ -182,10 +181,19 @@ protected:
 	virtual Platform::String^ ShouldLoadFromBitmap();
 	void PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);
 	void Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation);
+	virtual void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
+	virtual void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect);
 
 private:
-	void SetSheetPlacementsFromCoalescability();	
+	void SetSheetPlacementsFromCoalescability();
+	void Pack7x7(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y);
+	unsigned Pack7x7X(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y);
+	unsigned Pack7x7Y(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> LoadFromBitmap();
+	void DrawShy(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
+	void DrawTwin(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
+	void DrawQuadruplet(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
+	void DrawClumsyPack(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 
 	std::shared_ptr<DX::DeviceResources> m_deviceResources;
 	Platform::String^ m_fromFile;
@@ -248,5 +256,12 @@ class Chest : public Dings
 {
 public:
 	Chest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
-	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect) override;
+};
+
+class Rail : public Dings
+{
+public:
+	Rail(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect) override;
 };

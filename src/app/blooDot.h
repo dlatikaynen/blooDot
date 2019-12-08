@@ -107,6 +107,7 @@ namespace blooDot
 		Level*										m_currentLevel;
 		Microsoft::WRL::ComPtr<ID3D11InputLayout>	m_inputLayout;
         Windows::Devices::Sensors::Accelerometer^	m_accelerometer;
+		Windows::Storage::IStorageFile^				m_knownLevelSaveTarget;
 
         Collision			m_collision;
         Physics				m_physics;
@@ -201,6 +202,7 @@ namespace blooDot
 		void SaveState();
 		void LoadState();
 		void OnActionEnterLevelEditor();
+		void SaveLevelInternal();
 		void OnActionTerminate();
 
 		// utility

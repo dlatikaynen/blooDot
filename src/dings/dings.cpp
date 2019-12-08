@@ -46,22 +46,21 @@ void Dings::Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int can
 	this->m_lookupShy.y = canvasY;
 	this->SetSheetPlacementsFromCoalescability();
 	this->m_fromFile = this->ShouldLoadFromBitmap();
-	if (this->m_fromFile == nullptr)
+	if (this->m_Facings == Facings::Viech)
 	{
-		this->DrawInternal(drawTo);
+		this->DrawQuadruplet(drawTo);
+	}
+	else if (this->m_Facings == Facings::Center)
+	{
+		this->DrawTwin(drawTo);
+	}
+	else if (this->m_Facings != Facings::Shy)
+	{
+		this->DrawClumsyPack(drawTo);
 	}
 	else
 	{
-		auto bitMap = this->LoadFromBitmap();
-		auto rect = D2D1::Rect(
-			49.0f * this->m_lookupShy.x,
-			49.0f * this->m_lookupShy.y,
-			49.0f * this->m_lookupShy.x + 49.0f,
-			49.0f * this->m_lookupShy.y + 49.0f
-		);
-
-		drawTo->DrawBitmap(bitMap.Get(), rect);
-		bitMap.Reset();
+		this->DrawInternal(drawTo);
 	}
 }
 
@@ -79,28 +78,105 @@ Microsoft::WRL::ComPtr<ID2D1Bitmap> Dings::LoadFromBitmap()
 	return bitMap;
 }
 
+void Dings::DrawShy(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
+{
+	D2D1_RECT_F rect;
+	PrepareRect(&this->m_lookupShy, rect);
+	this->DrawInternal(drawTo, rect);
+}
+
+void Dings::DrawTwin(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
+{
+	D2D1_RECT_F rect;
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> bitMap;
+	auto rendEr = drawTo.Get();
+	if (this->m_fromFile != nullptr)
+	{
+		bitMap = this->LoadFromBitmap();
+	}
+
+	for (int facing = OrientabilityIndexDuplex::Vertically; facing >= OrientabilityIndexDuplex::Horizontally; --facing)
+	{
+		PrepareRect(&this->m_lookupPipes[facing], rect);
+		Rotate(rendEr, rect, facing);
+		if (this->m_fromFile == nullptr)
+		{
+			this->DrawInternal(drawTo, rect);
+		}
+		else
+		{
+			drawTo->DrawBitmap(bitMap.Get(), rect);
+		}
+	}
+	
+	bitMap.Reset();
+}
+
+void Dings::DrawQuadruplet(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
+{
+	D2D1_RECT_F rect;
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> bitMap;
+	auto rendEr = drawTo.Get();
+	if (this->m_fromFile != nullptr)
+	{
+		bitMap = this->LoadFromBitmap();
+	}
+
+	for (int facing = OrientabilityIndexQuadruplet::Uppy; facing >= OrientabilityIndexQuadruplet::Lefty; --facing)
+	{
+		PrepareRect(&this->m_lookupSides[facing], rect);
+		Rotate(rendEr, rect, facing);
+		if (this->m_fromFile == nullptr)
+		{
+			this->DrawInternal(drawTo, rect);
+		}
+		else
+		{
+			drawTo->DrawBitmap(bitMap.Get(), rect);
+		}
+	}
+	
+	bitMap.Reset();
+}
+
 void Dings::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 {
-	MFARGB colrect;
-	colrect.rgbAlpha = 255;
-	colrect.rgbRed = 0;
-	colrect.rgbGreen = 0;
-	colrect.rgbBlue = 0;
-	
 	D2D1_RECT_F rect;
-	Microsoft::WRL::ComPtr<ID2D1Brush> brrect = m_Brushes->WannaHave(drawTo, colrect);
-	rect.left = 49.0f * this->m_lookupShy.x;
-	rect.top = 49.0f * this->m_lookupShy.y;
-	rect.right = rect.left + 49;
-	rect.bottom = rect.top + 49;
-	drawTo->FillRectangle(rect, brrect.Get());
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> bitMap;
+	auto rendEr = drawTo.Get();
+	if (this->m_fromFile != nullptr)
+	{
+		bitMap = this->LoadFromBitmap();
+	}
+
+	PrepareRect(&this->m_lookupShy, rect);
+	if (this->m_fromFile == nullptr)
+	{
+		this->DrawInternal(drawTo, rect);
+	}
+	else
+	{
+		drawTo->DrawBitmap(bitMap.Get(), rect);
+	}
+
+	bitMap.Reset();
+}
+
+void Dings::DrawClumsyPack(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
+{
+	/* this one must deal with all its 7x7 complexity all by itself */
+	this->DrawInternal(drawTo);
+}
+
+void Dings::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect)
+{
+	/* pure virtual */
 }
 
 void Dings::SetSheetPlacementsFromCoalescability()
 {
-	int x = this->m_lookupShy.x;
-	int y = this->m_lookupShy.y;
-
+	auto oX = this->m_lookupShy.x, oY = this->m_lookupShy.y;
+	auto x = oX, y = oY;
 	if (this->m_Facings == Facings::Viech)
 	{
 		this->m_lookupSides[OrientabilityIndexQuadruplet::Lefty].x = x++;
@@ -112,121 +188,140 @@ void Dings::SetSheetPlacementsFromCoalescability()
 		this->m_lookupSides[OrientabilityIndexQuadruplet::Downy].x = x++;
 		this->m_lookupSides[OrientabilityIndexQuadruplet::Downy].y = y;
 	}
-	else if (this->m_Coalescing != Facings::Shy) 
-	{		
-		this->m_lookupImmersed.x = ++x;
-		this->m_lookupImmersed.y = y;
-		this->m_lookupCrossing.x = ++x;
-		this->m_lookupCrossing.y = y;
-		this->m_lookupPipes[OrientabilityIndexDuplex::Vertically].x = ++x;
-		this->m_lookupPipes[OrientabilityIndexDuplex::Vertically].y = y;
-		this->m_lookupPipes[OrientabilityIndexDuplex::Horizontally].x = ++x;
+	else if (this->m_Facings == Facings::Center)
+	{
+		this->m_lookupPipes[OrientabilityIndexDuplex::Horizontally].x = x++;
 		this->m_lookupPipes[OrientabilityIndexDuplex::Horizontally].y = y;
-		this->m_lookupU[OrientabilityIndexQuadruplet::Lefty].x = ++x;
-		this->m_lookupU[OrientabilityIndexQuadruplet::Lefty].y = y;
-		this->m_lookupU[OrientabilityIndexQuadruplet::Righty].x = ++x;
-		this->m_lookupU[OrientabilityIndexQuadruplet::Righty].y = y;
-		this->m_lookupU[OrientabilityIndexQuadruplet::Uppy].x = ++x;
-		this->m_lookupU[OrientabilityIndexQuadruplet::Uppy].y = y;
-		this->m_lookupU[OrientabilityIndexQuadruplet::Downy].x = ++x;
-		this->m_lookupU[OrientabilityIndexQuadruplet::Downy].y = y;
-
-		x = this->m_lookupShy.x;
-		this->m_lookupEdges[OrientabilityIndexDiagon::DiagNW].x = x;
-		this->m_lookupEdges[OrientabilityIndexDiagon::DiagNW].y = ++y;
-		this->m_lookupEdges[OrientabilityIndexDiagon::DiagSW].x = ++x;
-		this->m_lookupEdges[OrientabilityIndexDiagon::DiagSW].y = y;
-		this->m_lookupEdges[OrientabilityIndexDiagon::DiagNE].x = ++x;
-		this->m_lookupEdges[OrientabilityIndexDiagon::DiagNE].y = y;
-		this->m_lookupEdges[OrientabilityIndexDiagon::DiagSE].x = ++x;
-		this->m_lookupEdges[OrientabilityIndexDiagon::DiagSE].y = y;
-		this->m_lookupSides[OrientabilityIndexQuadruplet::Lefty].x = ++x;
-		this->m_lookupSides[OrientabilityIndexQuadruplet::Lefty].y = y;
-		this->m_lookupSides[OrientabilityIndexQuadruplet::Uppy].x = ++x;
-		this->m_lookupSides[OrientabilityIndexQuadruplet::Uppy].y = y;
-		this->m_lookupSides[OrientabilityIndexQuadruplet::Righty].x = ++x;
-		this->m_lookupSides[OrientabilityIndexQuadruplet::Righty].y = y;
-		this->m_lookupSides[OrientabilityIndexQuadruplet::Downy].x = ++x;
-		this->m_lookupSides[OrientabilityIndexQuadruplet::Downy].y = y;
-
-		x = this->m_lookupShy.x;
-		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagNW].x = x;
-		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagNW].y = ++y;
-		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagSW].x = ++x;
-		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagSW].y = y;
-		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagNE].x = ++x;
-		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagNE].y = y;
-		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagSE].x = ++x;
-		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagSE].y = y;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Lefty].x = ++x;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Lefty].y = y;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::LeftyFar].x = ++x;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::LeftyFar].y = y;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Righty].x = ++x;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Righty].y = y;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::RightyFar].x = ++x;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::RightyFar].y = y;
-
-		x = this->m_lookupShy.x;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Downy].x = x;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Downy].y = ++y;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::DownyFar].x = ++x;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::DownyFar].y = y;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Uppy].x = ++x;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Uppy].y = y;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::UppyFar].x = ++x;
-		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::UppyFar].y = y;
-		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagNW].x = ++x;
-		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagNW].y = y;
-		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagSE].x = ++x;
-		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagSE].y = y;
-		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagNE].x = ++x;
-		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagNE].y = y;
-		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagSW].x = ++x;
-		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagSW].y = y;
-
-		x = this->m_lookupShy.x;
-		this->m_lookupTs[OrientabilityIndexQuadruplet::Lefty].x = x;
-		this->m_lookupTs[OrientabilityIndexQuadruplet::Lefty].y = ++y;
-		this->m_lookupTs[OrientabilityIndexQuadruplet::Righty].x = ++x;
-		this->m_lookupTs[OrientabilityIndexQuadruplet::Righty].y = y;
-		this->m_lookupTs[OrientabilityIndexQuadruplet::Uppy].x = ++x;
-		this->m_lookupTs[OrientabilityIndexQuadruplet::Uppy].y = y;
-		this->m_lookupTs[OrientabilityIndexQuadruplet::Downy].x = ++x;
-		this->m_lookupTs[OrientabilityIndexQuadruplet::Downy].y = y;
-		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagNW].x = ++x;
-		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagNW].y = y;
-		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagNE].x = ++x;
-		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagNE].y = y;
-		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagSW].x = ++x;
-		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagSW].y = y;
-		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagSE].x = ++x;
-		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagSE].y = y;
-
-		x = this->m_lookupShy.x;
-		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Lefty].x = x;
-		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Lefty].y = ++y;
-		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Righty].x = ++x;
-		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Righty].y = y;
-		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Downy].x = ++x;
-		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Downy].y = y;
-		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Uppy].x = ++x;
-		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Uppy].y = y;
-		this->m_lookupCornersDiag[OrientabilityIndexDiagon::DiagNW].x = ++x;
-		this->m_lookupCornersDiag[OrientabilityIndexDiagon::DiagNW].y = y;
-		this->m_lookupCornersDiag[OrientabilityIndexDiagon::DiagSW].x = ++x;
-		this->m_lookupCornersDiag[OrientabilityIndexDiagon::DiagSW].y = y;
-		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagNW].x = ++x;
-		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagNW].y = y;
-		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagNE].x = ++x;
-		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagNE].y = y;
-
-		x = this->m_lookupShy.x;
-		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagSW].x = x;
-		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagSW].y = ++y;
-		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagSE].x = ++x;
-		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagSE].y = y;
+		this->m_lookupPipes[OrientabilityIndexDuplex::Vertically].x = x;
+		this->m_lookupPipes[OrientabilityIndexDuplex::Vertically].y = y;
 	}
+	else if (this->m_Coalescing != Facings::Shy) 
+	{	
+		this->m_lookupImmersed.x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupImmersed.y = y;
+		this->m_lookupCrossing.x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCrossing.y = y;
+		this->m_lookupPipes[OrientabilityIndexDuplex::Vertically].y = y;
+		this->m_lookupPipes[OrientabilityIndexDuplex::Vertically].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupPipes[OrientabilityIndexDuplex::Horizontally].y = y;
+		this->m_lookupPipes[OrientabilityIndexDuplex::Horizontally].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupU[OrientabilityIndexQuadruplet::Lefty].y = y;
+		this->m_lookupU[OrientabilityIndexQuadruplet::Lefty].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupU[OrientabilityIndexQuadruplet::Righty].y = y;
+		this->m_lookupU[OrientabilityIndexQuadruplet::Righty].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupU[OrientabilityIndexQuadruplet::Uppy].y = y;
+		this->m_lookupU[OrientabilityIndexQuadruplet::Uppy].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupU[OrientabilityIndexQuadruplet::Downy].y = y;
+		this->m_lookupU[OrientabilityIndexQuadruplet::Downy].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdges[OrientabilityIndexDiagon::DiagNW].y = y;
+		this->m_lookupEdges[OrientabilityIndexDiagon::DiagNW].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdges[OrientabilityIndexDiagon::DiagSW].y = y;
+		this->m_lookupEdges[OrientabilityIndexDiagon::DiagSW].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdges[OrientabilityIndexDiagon::DiagNE].y = y;
+		this->m_lookupEdges[OrientabilityIndexDiagon::DiagNE].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdges[OrientabilityIndexDiagon::DiagSE].y = y;
+		this->m_lookupEdges[OrientabilityIndexDiagon::DiagSE].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Lefty].y = y;
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Lefty].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Uppy].y = y;
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Uppy].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Righty].y = y;
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Righty].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Downy].y = y;
+		this->m_lookupSides[OrientabilityIndexQuadruplet::Downy].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagNW].y = y;
+		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagNW].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagSW].y = y;
+		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagSW].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagNE].y = y;
+		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagNE].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagSE].y = y;
+		this->m_lookupEdgesOuter90[OrientabilityIndexDiagon::DiagSE].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Lefty].y = y;
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Lefty].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::LeftyFar].y = y;
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::LeftyFar].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Righty].y = y;
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Righty].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::RightyFar].y = y;
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::RightyFar].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Downy].y = y;
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Downy].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::DownyFar].y = y;
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::DownyFar].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Uppy].y = y;
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::Uppy].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::UppyFar].y = y;
+		this->m_lookupEdgesInner1[OrientabilityIndexQuadruplet::UppyFar].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagNW].y = y;
+		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagNW].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagSE].y = y;
+		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagSE].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagNE].y = y;
+		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagNE].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagSW].y = y;
+		this->m_lookupCornersBoth90[OrientabilityIndexDiagon::DiagSW].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupTs[OrientabilityIndexQuadruplet::Lefty].y = y;
+		this->m_lookupTs[OrientabilityIndexQuadruplet::Lefty].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupTs[OrientabilityIndexQuadruplet::Righty].y = y;
+		this->m_lookupTs[OrientabilityIndexQuadruplet::Righty].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupTs[OrientabilityIndexQuadruplet::Uppy].y = y;
+		this->m_lookupTs[OrientabilityIndexQuadruplet::Uppy].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupTs[OrientabilityIndexQuadruplet::Downy].y = y;
+		this->m_lookupTs[OrientabilityIndexQuadruplet::Downy].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagNW].y = y;
+		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagNW].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagNE].y = y;
+		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagNE].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagSW].y = y;
+		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagSW].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagSE].y = y;
+		this->m_lookupCornersInner1[OrientabilityIndexDiagon::DiagSE].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Lefty].y = y;
+		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Lefty].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Righty].y = y;
+		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Righty].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Downy].y = y;
+		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Downy].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Uppy].y = y;
+		this->m_lookupCornersInner2[OrientabilityIndexQuadruplet::Uppy].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersDiag[OrientabilityIndexDiagon::DiagNW].y = y;
+		this->m_lookupCornersDiag[OrientabilityIndexDiagon::DiagNW].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersDiag[OrientabilityIndexDiagon::DiagSW].y = y;
+		this->m_lookupCornersDiag[OrientabilityIndexDiagon::DiagSW].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagNW].y = y;
+		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagNW].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagNE].y = y;
+		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagNE].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagSW].y = y;
+		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagSW].x = this->Pack7x7X(oX, oY, &x, &y);
+		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagSE].y = y;
+		this->m_lookupCornersInner3[OrientabilityIndexDiagon::DiagSE].x = this->Pack7x7X(oX, oY, &x, &y);
+	}
+}
+
+unsigned Dings::Pack7x7X(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y)
+{
+	auto xCoord = *x;
+	this->Pack7x7(offsetX, offsetY, x, y);
+	return xCoord;
+}
+
+unsigned Dings::Pack7x7Y(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y)
+{
+	auto yCoord = *y;
+	this->Pack7x7(offsetX, offsetY, x, y);
+	return yCoord;
+}
+
+void Dings::Pack7x7(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y)
+{
+	(*x)++;
+	if ((*x) == offsetX + 7)
+	{
+		(*x) = offsetX;
+		(*y)++;
+	}	
 }
 
 void Dings::PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet)
@@ -262,7 +357,7 @@ D2D1_POINT_2U Dings::GetSheetPlacement(Facings orientation)
 			case Facings::South: return this->m_lookupSides[OrientabilityIndexQuadruplet::Downy];
 		}
 	}
-	else if (this->m_Facings == Facings::Shy && this->m_Coalescing == Facings::Immersed)
+	else if ((this->m_Facings == Facings::Shy && this->m_Coalescing == Facings::Immersed) || this->m_Facings == Facings::Center)
 	{
 		switch (orientation)
 		{
@@ -335,22 +430,29 @@ bool Dings::CouldCoalesce()
 
 Facings Dings::RotateFromFacing(Facings fromFacing, bool inverseDirection)
 {
-	if (inverseDirection)
+	/* pipes just flip, so they are always done with the inverse pattern as it makes zilch difference */
+	if (inverseDirection || fromFacing == ::NS || fromFacing == ::WE)
 	{
 		switch (fromFacing)
 		{
-		case Facings::Shy:
-		case Facings::West:
+		case ::Shy:
+		case ::West:
 			return ::North;
 
-		case Facings::South:
+		case ::South:
 			return ::West;
 
-		case Facings::East:
+		case ::East:
 			return ::South;
 
-		case Facings::North:
+		case ::North:
 			return ::East;
+
+		case ::NS:
+			return ::WE;
+
+		case ::WE:
+			return ::NS;
 
 		default:
 			return fromFacing;

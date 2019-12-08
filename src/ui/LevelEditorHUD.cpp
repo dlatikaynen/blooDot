@@ -47,10 +47,20 @@ void LevelEditorHUD::SelectDing(Dings* ding, Microsoft::WRL::ComPtr<ID2D1Bitmap>
 	this->m_dingName = ding->Name();
 	this->m_selectedDingImage = dingImage;
 	this->m_textLayout = nullptr;
-	this->m_isSelectedDingRotatable = ding->AvailableFacings() != Facings::Shy;
+	auto intrinsicFacing = ding->AvailableFacings();
+	this->m_isSelectedDingRotatable = intrinsicFacing != Facings::Shy;
 	if (resetFacing)
 	{
-		this->m_selectedDingFacing = Facings::Shy;
+		if (intrinsicFacing == Facings::Center)
+		{
+			/* this is actually the pipes, and their standard orientation is horz */
+			this->m_selectedDingFacing = Facings::WE;
+		}
+		else 
+		{
+			/* clumsy packs work with initial shyness */
+			this->m_selectedDingFacing = Facings::Shy;
+		}
 	}
 }
 

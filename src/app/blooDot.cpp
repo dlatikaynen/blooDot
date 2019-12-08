@@ -178,7 +178,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     D2D1_RECT_F bottomHalfRect = clientRect;
     bottomHalfRect.top = topHalfRect.bottom + padding;
 	
-	D2D1_RECT_F containerRect = D2D1::RectF(clientRect.left, clientRect.top, clientRect.right, clientRect.top + 100.0f);
+	D2D1_RECT_F containerRect = D2D1::RectF(clientRect.left, clientRect.top, clientRect.right, clientRect.top + 85.0f);
 	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"singleplayer", UIElement::SinglePlayerButton, &containerRect));
 	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"multiplayer", UIElement::MultiPlayerButton, &containerRect));
 	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"worldbuilder", UIElement::WorldBuilderButton, &containerRect));
@@ -284,8 +284,8 @@ TextButton* blooDotMain::CreateMainMenuButton(Platform::String^ captionText, UIE
 	newButton->SetAlignment(AlignCenter, AlignCenter);
 	newButton->SetContainer(*containerRect);
 	newButton->SetText(captionText);
-	newButton->SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
-	newButton->GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
+	newButton->SetTextColor(D2D1::ColorF(D2D1::ColorF::WhiteSmoke));
+	newButton->GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BOLD);
 	newButton->SetPadding(D2D1::SizeF(16.0f, 8.0f));
 	newButton->GetTextStyle().SetFontSize(52.0f);
 	UserInterface::GetInstance().RegisterElement(elementKey, newButton);
@@ -320,8 +320,7 @@ void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
             loadingTimer.Tick([&]()
             {
                 //do nothing, just wait
-            }
-            );
+            });
         }
 
 		m_deferredResourcesReadyPending = true;
@@ -1052,7 +1051,7 @@ void blooDotMain::OnActionSaveLevel(bool forcePrompt)
 	{
 		if (!forcePrompt && this->m_currentLevel->HasSaveFileNameBeenSpecifiedBefore())
 		{
-			this->m_currentLevel->DesignSaveToFile();
+			this->SaveLevelInternal();
 		}
 		else
 		{
@@ -1063,26 +1062,32 @@ void blooDotMain::OnActionSaveLevel(bool forcePrompt)
 			blooDotExtensions->Append(L".bloodot");
 			savePicker->FileTypeChoices->Insert(L"blooDot Level File", blooDotExtensions);
 			savePicker->SuggestedFileName = L"New Document";
-			create_task(savePicker->PickSaveFileAsync()).then([this](Windows::Storage::StorageFile^ destFile)
+			::create_task(savePicker->PickSaveFileAsync()).then([this](Windows::Storage::StorageFile^ destFile)
 			{
 				if (destFile)
 				{
-					Windows::Storage::StorageFolder^ tempFolder = Windows::Storage::ApplicationData::Current->TemporaryFolder;
-					Platform::String^ fullTempFile = Platform::String::Concat(Platform::String::Concat(tempFolder->Path, L"\\"), destFile->Name);
-					this->m_currentLevel->DesignSaveToFile(fullTempFile);
-					auto openFileTask = tempFolder->GetFileAsync(destFile->Name);
-					::create_task(openFileTask).then([this, destFile](Windows::Storage::StorageFile^ tempFile)
-					{
-						auto moveFileTask = tempFile->CopyAndReplaceAsync(destFile);
-						create_task(moveFileTask).then([this]()
-						{
-							this->m_audio.PlaySoundEffect(SoundEvent::CheckpointEvent);
-						});
-					});
+					this->m_knownLevelSaveTarget = destFile;
+					this->SaveLevelInternal();
 				}
 			});
 		}
 	}
+}
+
+void blooDotMain::SaveLevelInternal()
+{
+	auto tempFolder = Windows::Storage::ApplicationData::Current->TemporaryFolder;
+	auto fullTempFile = Platform::String::Concat(Platform::String::Concat(tempFolder->Path, L"\\"), this->m_knownLevelSaveTarget->Name);
+	this->m_currentLevel->DesignSaveToFile(fullTempFile);
+	auto openFileTask = tempFolder->GetFileAsync(this->m_knownLevelSaveTarget->Name);
+	::create_task(openFileTask).then([this](Windows::Storage::StorageFile^ tempFile)
+	{
+		auto moveFileTask = tempFile->CopyAndReplaceAsync(this->m_knownLevelSaveTarget);
+		::create_task(moveFileTask).then([this]()
+		{
+			this->m_audio.PlaySoundEffect(SoundEvent::CheckpointEvent);
+		});
+	});
 }
 
 void blooDotMain::OnActionLoadLevel()
@@ -1091,19 +1096,20 @@ void blooDotMain::OnActionLoadLevel()
 	openPicker->ViewMode = Windows::Storage::Pickers::PickerViewMode::Thumbnail;
 	openPicker->SuggestedStartLocation = Windows::Storage::Pickers::PickerLocationId::ComputerFolder;
 	openPicker->FileTypeFilter->Append(L".bloodot");
-	create_task(openPicker->PickSingleFileAsync()).then([this](Windows::Storage::StorageFile^ file)
+	create_task(openPicker->PickSingleFileAsync()).then([this](Windows::Storage::StorageFile^ sourceFile)
 	{
-		if (file)
+		if (sourceFile)
 		{
 			Windows::Storage::StorageFolder^ targetFolder = Windows::Storage::ApplicationData::Current->TemporaryFolder;
-			auto copyFileTask = file->CopyAsync(targetFolder, file->Name, Windows::Storage::NameCollisionOption::ReplaceExisting);
-			create_task(copyFileTask).then([this](Windows::Storage::StorageFile^ copiedFile) 
+			auto copyFileTask = sourceFile->CopyAsync(targetFolder, sourceFile->Name, Windows::Storage::NameCollisionOption::ReplaceExisting);
+			create_task(copyFileTask).then([this, sourceFile](Windows::Storage::StorageFile^ copiedFile)
 			{
 				auto newLevel = this->m_worldScreen->LoadAndEnterLevel(copiedFile->Path);
 				if (newLevel != nullptr)
 				{
 					delete this->m_currentLevel;
 					this->m_currentLevel = newLevel;
+					this->m_knownLevelSaveTarget = sourceFile;
 				}
 			});
 		}
@@ -1214,7 +1220,21 @@ void blooDotMain::PointerMove(int id, Windows::Foundation::Point point)
 
 void blooDotMain::MouseWheeled(int pointerID, int detentCount)
 {
-	this->m_worldScreen->SetControl(detentCount, this->m_shiftKeyActive);
+	if (this->m_gameState == GameState::MainMenu)
+	{
+		if (detentCount < 0 && !this->m_keyDownPressed)
+		{
+			this->m_keyDownPressed = true;
+		}
+		else if (detentCount > 0 && !this->m_keyUpPressed)
+		{
+			this->m_keyUpPressed = true;
+		}
+	}
+	else if (m_gameState == GameState::LevelEditor)
+	{
+		this->m_worldScreen->SetControl(detentCount, this->m_shiftKeyActive);
+	}
 }
 
 void blooDotMain::RemoveTouch(int id)
