@@ -153,6 +153,9 @@
     <ClCompile Include="..\src\dings\mob-like\mobs.cpp">
       <Filter>ui\dings</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\dx\TTFLoader.cpp">
+      <Filter>dx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
@@ -280,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="..\src\sound\Audio.h">
       <Filter>audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dx\TTFLoader.h">
+      <Filter>dx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

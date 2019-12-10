@@ -83,48 +83,32 @@ void SampleOverlay::CreateDeviceDependentResources()
     m_logoSize = m_logoBitmap->GetSize();
 
     ComPtr<IDWriteTextFormat> nameTextFormat;
-    DX::ThrowIfFailed(
-        m_deviceResources->GetDWriteFactory()->CreateTextFormat(
-            L"Fredoka One",
-            nullptr,
-            DWRITE_FONT_WEIGHT_LIGHT,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            36.0f,
-            L"en-US",
-            &nameTextFormat
-            )
-        );
+    DX::ThrowIfFailed(m_deviceResources->GetDWriteFactory()->CreateTextFormat(
+        L"Fredoka One",
+        nullptr,
+        DWRITE_FONT_WEIGHT_LIGHT,
+        DWRITE_FONT_STYLE_NORMAL,
+        DWRITE_FONT_STRETCH_NORMAL,
+        36.0f,
+        L"en-US",
+        &nameTextFormat
+    ));
 
-    DX::ThrowIfFailed(
-        nameTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING)
-        );
-
-    DX::ThrowIfFailed(
-        nameTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR)
-        );
-
-    DX::ThrowIfFailed(
-        m_deviceResources->GetDWriteFactory()->CreateTextLayout(
-            m_caption.c_str(),
-            static_cast<UINT32>(m_caption.size()),
-            nameTextFormat.Get(),
-            4096.0f,
-            4096.0f,
-            &m_textLayout
-            )
-        );
+    DX::ThrowIfFailed(nameTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING));
+    DX::ThrowIfFailed(nameTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR));
+    DX::ThrowIfFailed(m_deviceResources->GetDWriteFactory()->CreateTextLayout(
+        m_caption.c_str(),
+        static_cast<UINT32>(m_caption.size()),
+        nameTextFormat.Get(),
+        4096.0f,
+        4096.0f,
+        &m_textLayout
+    ));
 
     DWRITE_TEXT_METRICS metrics = {0};
-    DX::ThrowIfFailed(
-        m_textLayout->GetMetrics(&metrics)
-        );
-
+    DX::ThrowIfFailed(m_textLayout->GetMetrics(&metrics));
     m_overlayWidth = m_padding * 3.0f + m_logoSize.width + metrics.width;
-
-    DX::ThrowIfFailed(
-        m_deviceResources->GetD2DFactory()->CreateDrawingStateBlock(&m_stateBlock)
-        );
+    DX::ThrowIfFailed(m_deviceResources->GetD2DFactory()->CreateDrawingStateBlock(&m_stateBlock));
 }
 
 void SampleOverlay::CreateWindowSizeDependentResources()

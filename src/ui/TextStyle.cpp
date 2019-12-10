@@ -1,6 +1,7 @@
 #include "..\PreCompiledHeaders.h"
 #include "UserInterface.h"
 #include "..\dx\DirectXHelper.h"
+#include "..\dx\TTFLoader.h"
 
 using namespace Windows::UI::Core;
 using namespace Windows::Foundation;
@@ -67,13 +68,16 @@ IDWriteTextFormat* TextStyle::GetTextFormat()
 	if (m_textFormat == nullptr)
 	{
 		IDWriteFactory* dwriteFactory = UserInterface::GetDWriteFactory();
-
-		//std::wstring fontFilename = L"Media\\Fonts\\FreckleFace-Regular.ttf";
-
+		IDWriteFontCollection *fCollection;
+		MFFontContext fContext(dwriteFactory);
+		std::vector<std::wstring> filePaths;
+		std::wstring fontFileFilePath = L"Media\\Fonts\\FreckleFace-Regular.ttf";
+		filePaths.push_back(fontFileFilePath);
+		DX::ThrowIfFailed(fContext.CreateFontCollection(filePaths, &fCollection));
 		DX::ThrowIfFailed(
 			dwriteFactory->CreateTextFormat(
 				m_fontName->Data(),
-				nullptr, //m_fontCollection.Get(),
+				fCollection,
 				m_fontWeight,
 				m_fontStyle,
 				DWRITE_FONT_STRETCH_NORMAL,
@@ -83,13 +87,8 @@ IDWriteTextFormat* TextStyle::GetTextFormat()
 			)
 		);
 
-		DX::ThrowIfFailed(
-			m_textFormat->SetTextAlignment(m_textAlignment)
-		);
-
-		DX::ThrowIfFailed(
-			m_textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR)
-		);
+		DX::ThrowIfFailed(m_textFormat->SetTextAlignment(m_textAlignment));
+		DX::ThrowIfFailed(m_textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR));
 	}
 
 	return m_textFormat.Get();

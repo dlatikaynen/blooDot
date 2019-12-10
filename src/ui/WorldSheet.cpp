@@ -315,7 +315,6 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 	if (beganDrawWalls)
 	{
 		DX::ThrowIfFailed(this->m_walls->EndDraw());
-
 	}
 
 	if (beganDrawRooof)
