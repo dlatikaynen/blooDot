@@ -30,6 +30,8 @@ public:
 	void											SetBlittingArea(D2D1_RECT_F blitFrom, D2D1_RECT_F blitTo);
 	void											Translate(D2D1_RECT_F viewPort, unsigned deltaX, unsigned deltaY);
 	void											BlitToViewport();
+	void											BlitToViewportFloor();
+	void											BlitToViewportWallsRooof();
 #ifdef _DEBUG
 	void											DebugDrawBorder(Microsoft::WRL::ComPtr<ID2D1Brush> brush);
 #endif
@@ -37,8 +39,11 @@ public:
 
 protected:
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_floor;
+	ID2D1Bitmap*									m_floorBitmap;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_walls;
+	ID2D1Bitmap*									m_wallsBitmap;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> m_rooof;
+	ID2D1Bitmap*									m_rooofBitmap;
 
 	D2D1_SIZE_U										m_sizeUnits;
 	D2D1_SIZE_F										m_sizePixle;
@@ -59,4 +64,14 @@ private:
 	D2D1_RECT_F GetFloorBounds();
 	void PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY);
 	void EraseSquare(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, int placementX, int placementY);
+	void FreeBitmaps();
+
+	template <class T> void SafeRelease(T **ppT)
+	{
+		if (*ppT)
+		{
+			(*ppT)->Release();
+			*ppT = NULL;
+		}
+	}
 };

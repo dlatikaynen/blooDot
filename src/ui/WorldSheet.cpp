@@ -11,6 +11,9 @@ using namespace D2D1;
 WorldSheet::WorldSheet(std::shared_ptr<DX::DeviceResources> deviceResources)
 {
 	this->m_deviceResources = deviceResources;
+	this->m_floorBitmap = nullptr;
+	this->m_wallsBitmap = nullptr;
+	this->m_rooofBitmap = nullptr;
 }
 
 WorldSheet::~WorldSheet()
@@ -83,6 +86,7 @@ void WorldSheet::Populate()
 
 	if (!this->m_isPopulated)
 	{
+		this->FreeBitmaps();
 		if (m_floor == nullptr)
 		{
 			DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_floor));
@@ -170,6 +174,9 @@ void WorldSheet::Populate()
 			DX::ThrowIfFailed(this->m_rooof->EndDraw());
 		}
 
+		this->m_floor.Get()->GetBitmap(&this->m_floorBitmap);
+		this->m_walls.Get()->GetBitmap(&this->m_wallsBitmap);
+		this->m_rooof.Get()->GetBitmap(&this->m_rooofBitmap);
 		this->m_isPopulated = true;
 	}
 }
@@ -406,24 +413,21 @@ void WorldSheet::Translate(D2D1_RECT_F viewPort, unsigned deltaX, unsigned delta
 }
 
 void WorldSheet::BlitToViewport()
+{	
+	this->m_d2dContext->DrawBitmap(this->m_floorBitmap, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
+	this->m_d2dContext->DrawBitmap(this->m_wallsBitmap, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
+	this->m_d2dContext->DrawBitmap(this->m_rooofBitmap, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
+}
+
+void WorldSheet::BlitToViewportFloor()
 {
-	ID2D1Bitmap *bmp = NULL;
-	
-	//this->m_tiedToLevel->GetDingSheet()->GetBitmap(&bmp);
-	//m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
-	//bmp->Release();
+	this->m_d2dContext->DrawBitmap(this->m_floorBitmap, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
+}
 
-	this->m_floor->GetBitmap(&bmp);
-	this->m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
-	bmp->Release();
-
-	this->m_walls->GetBitmap(&bmp);
-	this->m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
-	bmp->Release();
-
-	this->m_rooof->GetBitmap(&bmp);
-	this->m_d2dContext->DrawBitmap(bmp, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
-	bmp->Release();
+void WorldSheet::BlitToViewportWallsRooof()
+{
+	this->m_d2dContext->DrawBitmap(this->m_wallsBitmap, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
+	this->m_d2dContext->DrawBitmap(this->m_rooofBitmap, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
 }
 
 #ifdef _DEBUG
@@ -434,23 +438,41 @@ void WorldSheet::DebugDrawBorder(Microsoft::WRL::ComPtr<ID2D1Brush> brush)
 }
 #endif
 
+void WorldSheet::FreeBitmaps()
+{
+	if (!(this->m_floorBitmap == nullptr))
+	{
+		this->SafeRelease(&this->m_floorBitmap);
+	}
+
+	if (!(this->m_floorBitmap == nullptr))
+	{
+		this->SafeRelease(&this->m_wallsBitmap);
+	}
+
+	if (!(this->m_floorBitmap == nullptr))
+	{
+		this->SafeRelease(&this->m_rooofBitmap);
+	}
+}
+
 void WorldSheet::Discard()
 {
-	m_isPopulated = false;
-
-	if (m_floor != nullptr)
+	this->FreeBitmaps();
+	this->m_isPopulated = false;
+	if (this->m_floor != nullptr)
 	{
 		this->m_floor.Reset();
 		this->m_floor = nullptr;
 	}
 
-	if (m_walls != nullptr)
+	if (this->m_walls != nullptr)
 	{
 		this->m_walls.Reset();
 		this->m_walls = nullptr;
 	}
 
-	if (m_rooof != nullptr)
+	if (this->m_rooof != nullptr)
 	{
 		this->m_rooof.Reset();
 		this->m_rooof = nullptr;

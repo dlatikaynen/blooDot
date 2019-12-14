@@ -156,6 +156,9 @@
     <ClCompile Include="..\src\dx\TTFLoader.cpp">
       <Filter>dx</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ui\WorldScreen.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
@@ -286,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="..\src\dx\TTFLoader.h">
       <Filter>dx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\WorldScreen.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -523,6 +529,9 @@
     <None Include="Media\Legacy\UBERGANG.DAT">
       <Filter>media\legacy</Filter>
     </None>
+    <None Include="Media\Levels\grassmere.bloodot">
+      <Filter>media\levels</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="algo">
@@ -572,6 +581,9 @@
     </Filter>
     <Filter Include="media\legacy">
       <UniqueIdentifier>{5ad9b12e-0441-4ccf-899f-6ae06c107570}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\levels">
+      <UniqueIdentifier>{7bf3c37d-0bbb-4ef1-975c-8b2e4d51717b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

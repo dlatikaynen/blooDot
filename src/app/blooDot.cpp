@@ -96,15 +96,6 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	this->m_accelerometer = Windows::Devices::Sensors::Accelerometer::GetDefault();
 	this->m_loadScreen = std::unique_ptr<LoadScreen>(new LoadScreen());
 	this->m_loadScreen->Initialize(m_deviceResources);
-	this->m_worldScreen = std::unique_ptr<WorldScreenBase>(new LevelEditor());
-	this->m_currentLevel = new Level(L"Gartenwelt-1", D2D1::SizeU(50, 30), 720, 720);
-	this->m_worldScreen->EnterLevel(m_currentLevel);
-	this->m_worldScreen->Initialize(m_deviceResources);
-
-	auto newObject = m_currentLevel->GetObjectAt(353, 361, true);
-	newObject->Instantiate(m_currentLevel->GetDing(1), ClumsyPacking::ConfigurationFromNeighbors(Facings::Shy));
-	newObject = m_currentLevel->GetObjectAt(355, 361, true);
-	newObject->Instantiate(m_currentLevel->GetDing(1), ClumsyPacking::ConfigurationFromNeighbors(Facings::Shy));
 
 	UserInterface::GetInstance().Initialize(
 		this->m_deviceResources->GetD2DDevice(),
@@ -374,6 +365,12 @@ bool blooDotMain::Render()
 		m_worldScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
 		m_deviceResources->GetD3DDeviceContext()->EndEvent();
 	}
+	else if (m_gameState == GameState::InGameActive)
+	{
+		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render World", 0);
+		m_worldScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
+		m_deviceResources->GetD3DDeviceContext()->EndEvent();
+	}
 	else if (m_deferredResourcesReady)
 	{
 		m_deviceResources->GetD3DDeviceContext()->IASetInputLayout(m_inputLayout.Get());
@@ -444,8 +441,8 @@ void blooDotMain::SetGameState(GameState nextState)
         break;
 
     case GameState::InGameActive:
-        m_pausedText.SetVisible(false);
-        m_inGameStopwatchTimer.Start();
+        //m_pausedText.SetVisible(false);
+        //m_inGameStopwatchTimer.Start();
         break;
 
     case GameState::InGamePaused:
@@ -553,6 +550,27 @@ void blooDotMain::Update()
 			// loaded audio, we could play audio during the loading process.
 			this->m_loadScreen->Update(timerTotal, timerElapsed);
 		}
+		else if (this->m_gameState == GameState::InGameActive)
+		{
+			if (!this->m_audio.IsAudioStarted())
+			{
+				this->m_audio.Start();
+			}
+
+			this->m_worldScreen->SetControl(
+				this->m_pointerPosition,
+				&this->m_touches,
+				this->m_shiftKeyActive,
+				this->m_keyLeftPressed || this->ButtonJustPressed(GamepadButtons::DPadLeft),
+				this->m_keyRightPressed || this->ButtonJustPressed(GamepadButtons::DPadRight),
+				this->m_keyUpPressed || this->ButtonJustPressed(GamepadButtons::DPadUp),
+				this->m_keyDownPressed || this->ButtonJustPressed(GamepadButtons::DPadDown),
+				leftStickX,
+				leftStickY
+			);
+
+			this->m_worldScreen->Update(timerTotal, timerElapsed);
+		}
 		else if (this->m_gameState == GameState::LevelEditor)
 		{
 			if (!this->m_audio.IsAudioStarted())
@@ -580,35 +598,35 @@ void blooDotMain::Update()
 			if (this->m_keyPlacePressed || this->ButtonJustPressed(GamepadButtons::A))
 			{
 				this->m_keyPlacePressed = false;
-				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
 				levelEditor->ConsiderPlacement(this->m_shiftKeyActive);
 			}
 
 			if (this->m_keyGridPressed)
 			{
 				this->m_keyGridPressed = false;
-				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
 				levelEditor->DoToggleGrid();
 			}
 
 			if (this->m_keyRotatePressed || this->ButtonJustPressed(GamepadButtons::Y))
 			{
 				this->m_keyRotatePressed = false;
-				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
 				levelEditor->DoRotate(this->m_shiftKeyActive, this->m_ctrlKeyActive);
 			}
 
 			if (this->m_keyScrollLockStateChanged)
 			{
 				this->m_keyScrollLockStateChanged = false;
-				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
 				levelEditor->DoSetScrollLock(this->m_keyScrollLockState);
 			}
 
 			if (this->m_keyObliteratePressed || this->ButtonJustPressed(GamepadButtons::B))
 			{
 				this->m_keyObliteratePressed = false;
-				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
 				levelEditor->DoObliterateDing();
 			}
 
@@ -639,14 +657,14 @@ void blooDotMain::Update()
 			if (this->m_keyPlusPressed || this->ButtonJustPressed(GamepadButtons::RightShoulder))
 			{
 				this->m_keyPlusPressed = false;
-				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
 				levelEditor->SelectNextDingForPlacement();
 			}
 
 			if (this->m_keyMinusPressed || this->ButtonJustPressed(GamepadButtons::LeftShoulder))
 			{
 				this->m_keyMinusPressed = false;
-				LevelEditor* levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
 				levelEditor->SelectPreviousDingForPlacement();
 			}
 
@@ -722,9 +740,25 @@ void blooDotMain::Update()
 				}
 			}
 
+			if (menuItemToExecute == UIElement::SinglePlayerButton)
+			{
+				this->OnActionEnterLevel();
+			}
+			if (menuItemToExecute == UIElement::MultiPlayerButton)
+			{
+
+			}
 			if (menuItemToExecute == UIElement::WorldBuilderButton)
 			{
 				this->OnActionEnterLevelEditor();
+			}
+			if (menuItemToExecute == UIElement::ConfigurationButton)
+			{
+
+			}
+			if (menuItemToExecute == UIElement::HelpAboutButton)
+			{
+
 			}
 			else if (menuItemToExecute == UIElement::ExterminateButton)
 			{
@@ -790,69 +824,69 @@ void blooDotMain::Update()
 
         if (!m_audio.HasEngineExperiencedCriticalError())
         {
-            if (m_gameState == GameState::InGameActive)
-            {
-                float wallDistances[8];
-                int returnedCount = m_physics.GetRoomDimensions(wallDistances, ARRAYSIZE(wallDistances));
-                assert(returnedCount == ARRAYSIZE(wallDistances));
-                m_audio.SetRoomSize(m_physics.GetRoomSize(), wallDistances);
-                CollisionInfo ci = m_physics.GetCollisionInfo();
+            //if (m_gameState == GameState::InGameActive)
+            //{
+            //    float wallDistances[8];
+            //    int returnedCount = m_physics.GetRoomDimensions(wallDistances, ARRAYSIZE(wallDistances));
+            //    assert(returnedCount == ARRAYSIZE(wallDistances));
+            //    m_audio.SetRoomSize(m_physics.GetRoomSize(), wallDistances);
+            //    CollisionInfo ci = m_physics.GetCollisionInfo();
 
-                // Calculate roll sound, and pitch according to velocity.
-                XMFLOAT3 velocity = m_physics.GetVelocity();
-                XMFLOAT3 position = m_physics.GetPosition();
-                float volumeX = abs(velocity.x) / 200;
-                if (volumeX > 1.0) volumeX = 1.0;
-                if (volumeX < 0.0) volumeX = 0.0;
-                float volumeY = abs(velocity.y) / 200;
-                if (volumeY > 1.0) volumeY = 1.0;
-                if (volumeY < 0.0) volumeY = 0.0;
-                float volume = max(volumeX, volumeY);
+            //    // Calculate roll sound, and pitch according to velocity.
+            //    XMFLOAT3 velocity = m_physics.GetVelocity();
+            //    XMFLOAT3 position = m_physics.GetPosition();
+            //    float volumeX = abs(velocity.x) / 200;
+            //    if (volumeX > 1.0) volumeX = 1.0;
+            //    if (volumeX < 0.0) volumeX = 0.0;
+            //    float volumeY = abs(velocity.y) / 200;
+            //    if (volumeY > 1.0) volumeY = 1.0;
+            //    if (volumeY < 0.0) volumeY = 0.0;
+            //    float volume = max(volumeX, volumeY);
 
-                // Pitch of the rolling sound ranges from .85 to 1.05f,
-                // increasing logarithmically.
-                float pitch = .85f + (volume * volume / 5.0f);
+            //    // Pitch of the rolling sound ranges from .85 to 1.05f,
+            //    // increasing logarithmically.
+            //    float pitch = .85f + (volume * volume / 5.0f);
 
-                // Play the roll sound only if the marble is actually rolling.
-                if (ci.isRollingOnFloor && volume > 0)
-                {
-                    if (!m_audio.IsSoundEffectStarted(RollingEvent))
-                    {
-                        m_audio.PlaySoundEffect(RollingEvent);
-                    }
+            //    // Play the roll sound only if the marble is actually rolling.
+            //    if (ci.isRollingOnFloor && volume > 0)
+            //    {
+            //        if (!m_audio.IsSoundEffectStarted(RollingEvent))
+            //        {
+            //            m_audio.PlaySoundEffect(RollingEvent);
+            //        }
 
-                    // Update the volume and pitch by the velocity.
-                    m_audio.SetSoundEffectVolume(RollingEvent, volume);
-                    m_audio.SetSoundEffectPitch(RollingEvent, pitch);
+            //        // Update the volume and pitch by the velocity.
+            //        m_audio.SetSoundEffectVolume(RollingEvent, volume);
+            //        m_audio.SetSoundEffectPitch(RollingEvent, pitch);
 
-                    // The rolling sound has at most 8000Hz sounds, so we linearly
-                    // ramp up the low-pass filter the faster we go.
-                    // We also reduce the Q-value of the filter, starting with a
-                    // relatively broad cutoff and get progressively tighter.
-                    m_audio.SetSoundEffectFilter(
-                        RollingEvent,
-                        600.0f + 8000.0f * volume,
-                        XAUDIO2_MAX_FILTER_ONEOVERQ - volume*volume
-                        );
-                }
-                else
-                {
-                    m_audio.SetSoundEffectVolume(RollingEvent, 0);
-                }
+            //        // The rolling sound has at most 8000Hz sounds, so we linearly
+            //        // ramp up the low-pass filter the faster we go.
+            //        // We also reduce the Q-value of the filter, starting with a
+            //        // relatively broad cutoff and get progressively tighter.
+            //        m_audio.SetSoundEffectFilter(
+            //            RollingEvent,
+            //            600.0f + 8000.0f * volume,
+            //            XAUDIO2_MAX_FILTER_ONEOVERQ - volume*volume
+            //            );
+            //    }
+            //    else
+            //    {
+            //        m_audio.SetSoundEffectVolume(RollingEvent, 0);
+            //    }
 
-                if (ci.elasticCollision && ci.maxCollisionSpeed > 10)
-                {
-                    m_audio.PlaySoundEffect(CollisionEvent);
+            //    if (ci.elasticCollision && ci.maxCollisionSpeed > 10)
+            //    {
+            //        m_audio.PlaySoundEffect(CollisionEvent);
 
-                    float collisionVolume = ci.maxCollisionSpeed / 150.0f;
-                    collisionVolume = min(collisionVolume * collisionVolume, 1.0f);
-                    m_audio.SetSoundEffectVolume(CollisionEvent, collisionVolume);
-                }
-            }
-            else
-            {
-                m_audio.SetSoundEffectVolume(RollingEvent, 0);
-            }
+            //        float collisionVolume = ci.maxCollisionSpeed / 150.0f;
+            //        collisionVolume = min(collisionVolume * collisionVolume, 1.0f);
+            //        m_audio.SetSoundEffectVolume(CollisionEvent, collisionVolume);
+            //    }
+            //}
+            //else
+            //{
+            //    m_audio.SetSoundEffectVolume(RollingEvent, 0);
+            //}
         }
 #pragma endregion
     });
@@ -920,8 +954,27 @@ UIElement blooDotMain::DetectMenuItemPressed()
 	return lastPressed;
 }
 
+void blooDotMain::OnActionEnterLevel()
+{
+	this->m_worldScreen = std::unique_ptr<WorldScreenBase>(new WorldScreen());
+	this->m_currentLevel = new Level(L"Grassmere-1", D2D1::SizeU(50, 30), 720, 720);
+	this->m_worldScreen->EnterLevel(m_currentLevel);
+	this->m_worldScreen->Initialize(m_deviceResources);
+	this->m_currentLevel->DesignLoadFromFile(L"Media\\Levels\\grassmere.bloodot");
+	this->SetGameState(GameState::InGameActive);
+}
+
 void blooDotMain::OnActionEnterLevelEditor()
 {
+	this->m_worldScreen = std::unique_ptr<WorldScreenBase>(new LevelEditor());
+	this->m_currentLevel = new Level(L"Gartenwelt-1", D2D1::SizeU(50, 30), 720, 720);
+	this->m_worldScreen->EnterLevel(m_currentLevel);
+	this->m_worldScreen->Initialize(m_deviceResources);
+
+	auto newObject = m_currentLevel->GetObjectAt(353, 361, true);
+	newObject->Instantiate(m_currentLevel->GetDing(1), ClumsyPacking::ConfigurationFromNeighbors(Facings::Shy));
+	newObject = m_currentLevel->GetObjectAt(355, 361, true);
+	newObject->Instantiate(m_currentLevel->GetDing(1), ClumsyPacking::ConfigurationFromNeighbors(Facings::Shy));
 	this->SetGameState(GameState::LevelEditor);
 }
 
@@ -1049,7 +1102,9 @@ void blooDotMain::LoadState()
         break;
 
     case GameState::InGameActive:
-    case GameState::InGamePaused:
+		break;
+
+	case GameState::InGamePaused:
         m_inGameStopwatchTimer.SetVisible(true);
         m_inGameStopwatchTimer.SetElapsedTime(elapsedTime);
         m_physics.SetPosition(position);
@@ -1118,7 +1173,7 @@ void blooDotMain::MouseWheeled(int pointerID, int detentCount)
 			this->m_keyUpPressed = true;
 		}
 	}
-	else if (m_gameState == GameState::LevelEditor)
+	else if (m_gameState == GameState::LevelEditor || m_gameState == GameState::InGameActive)
 	{
 		this->m_worldScreen->SetControl(detentCount, this->m_shiftKeyActive);
 	}
@@ -1434,9 +1489,9 @@ void blooDotMain::OnFocusChange(bool active)
                 m_audio.SuspendAudio();
                 if (m_gameState == GameState::InGameActive)
                 {
-                    SetGameState(GameState::InGamePaused);
-                    lostFocusPause = true;
-                    SaveState();
+                    //SetGameState(GameState::InGamePaused);
+                    //lostFocusPause = true;
+                    //SaveState();
                 }
                 else if (m_gameState == GameState::PreGameCountdown)
                 {

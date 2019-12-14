@@ -28,7 +28,7 @@ void UserInterface::Initialize(
     _In_ IDWriteFactory*		dwriteFactory,
 	_In_ IDWriteFactory3*		dwriteFactory3,
 	_In_ IDWriteFontCollection*	dwriteFontCollection
-    )
+)
 {
 	this->m_wicFactory = wicFactory;
 	this->m_dwriteFactory = dwriteFactory;
@@ -52,32 +52,32 @@ void UserInterface::Update(float timeTotal, float timeDelta)
 
 void UserInterface::Render(D2D1::Matrix3x2F orientation2D)
 {
-    m_d2dContext->SaveDrawingState(m_stateBlock.Get());
-    m_d2dContext->BeginDraw();
-    m_d2dContext->SetTransform(orientation2D);
-
-    m_d2dContext->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
-
-    for (auto iter = m_elements.begin(); iter != m_elements.end(); ++iter)
+	this->m_d2dContext->SaveDrawingState(this->m_stateBlock.Get());
+	this->m_d2dContext->BeginDraw();
+	this->m_d2dContext->SetTransform(orientation2D);
+	this->m_d2dContext->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
+    for (auto iter = this->m_elements.begin(); iter != this->m_elements.end(); ++iter)
     {
-        if ((*iter).second->IsVisible())
-            (*iter).second->Render();
+		if ((*iter).second->IsVisible())
+		{
+			(*iter).second->Render();
+		}
     }
 
     // We ignore D2DERR_RECREATE_TARGET here. This error indicates that the device
     // is lost. It will be handled during the next call to Present.
-    HRESULT hr = m_d2dContext->EndDraw();
+    HRESULT hr = this->m_d2dContext->EndDraw();
     if (hr != D2DERR_RECREATE_TARGET)
     {
         DX::ThrowIfFailed(hr);
     }
 
-    m_d2dContext->RestoreDrawingState(m_stateBlock.Get());
+    this->m_d2dContext->RestoreDrawingState(this->m_stateBlock.Get());
 }
 
 void UserInterface::RegisterElement(blooDot::UIElement elementKey, ElementBase* element)
 {
-    m_elements.emplace(elementKey, element);
+	this->m_elements.emplace(elementKey, element);
 }
 
 ElementBase* UserInterface::UserInterface::GetElement(blooDot::UIElement elementKey)
@@ -95,7 +95,8 @@ inline bool PointInRect(D2D1_POINT_2F point, D2D1_RECT_F rect)
     if ((point.x < rect.left) ||
         (point.x > rect.right) ||
         (point.y < rect.top) ||
-        (point.y > rect.bottom))
+        (point.y > rect.bottom)
+	)
     {
         return false;
     }

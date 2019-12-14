@@ -202,6 +202,7 @@ namespace blooDot
 		void SetGameState(GameState nextState);
 		void SaveState();
 		void LoadState();
+		void OnActionEnterLevel();
 		void OnActionEnterLevelEditor();
 		void SaveLevelInternal();
 		void OnActionTerminate();

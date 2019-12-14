@@ -9,6 +9,7 @@
 #include "TextButton.h"
 #include "HighScoreTable.h"
 #include "WorldScreenBase.h"
+#include "WorldScreen.h"
 #include "LevelEditor.h"
 #include "LevelEditorHUD.h"
 

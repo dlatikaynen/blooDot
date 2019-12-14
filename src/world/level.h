@@ -24,6 +24,7 @@ public:
 	ClumsyPacking::NeighborConfiguration GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, unsigned dingID, Layers inLayer);
 	Dings* WeedObjectAt(unsigned levelX, unsigned levelY, Layers* cullCoalescableInLayer);
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> GetDingSheet();
+	ID2D1Bitmap* GetDingSheetBmp();
 	Dings* GetDing(unsigned dingID);
 	unsigned GetNextDingID(unsigned dingID);
 	unsigned GetPreviousDingID(unsigned dingID);
@@ -57,8 +58,10 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_floorBackground;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_dingSheet;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_dingImage;
+	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_dingSheetBmp;
+
 	std::vector<Object*>								m_Objects;
 	bool												m_isDesignTime;
 	Platform::String^									m_lastSavedAsFileName;
-	bool												m_DesignTimeDirty;
+	bool												m_designTimeDirty;
 };

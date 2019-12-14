@@ -23,7 +23,7 @@ Level::Level(Platform::String^ levelName, D2D1_SIZE_U sheetSize, unsigned extent
 	this->m_Name = levelName;
 	this->Clear();
 	this->m_isDesignTime = false;
-	this->m_DesignTimeDirty = false;
+	this->m_designTimeDirty = false;
 }
 
 Level::~Level()
@@ -38,6 +38,12 @@ Level::~Level()
 	{
 		this->m_dingSheet.Reset();
 		this->m_dingSheet = nullptr;
+	}
+
+	if (this->m_dingSheetBmp != nullptr)
+	{
+		this->m_dingSheetBmp.Reset();
+		this->m_dingSheetBmp = nullptr;
 	}
 
 	if (this->m_dingImage != nullptr)
@@ -71,7 +77,7 @@ void Level::Clear()
 
 	if (m_isDesignTime)
 	{
-		this->m_DesignTimeDirty = true;
+		this->m_designTimeDirty = true;
 	}
 }
 
@@ -101,6 +107,7 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				18, 0);
 
 	DX::ThrowIfFailed(this->m_dingSheet->EndDraw());
+	this->m_dingSheet->GetBitmap(&this->m_dingSheetBmp);
 }
 
 void Level::RegisterDing(Dings* dingDef, unsigned xOnSheet, unsigned yOnSheet)
@@ -164,15 +171,13 @@ Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::CreateDingImage(unsigned dingID, Faci
 {
 	auto dingToRender = this->GetDing(dingID);
 	auto dingOnSheet = dingToRender->GetSheetPlacement(placementOrientation);
-	ID2D1Bitmap *sheetSurface = NULL;
 	ID2D1Bitmap *resultBitmap = NULL;
 
 	m_dingImage->BeginDraw();
 	m_dingImage->Clear();
-	this->m_dingSheet->GetBitmap(&sheetSurface);
 	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
 	D2D1_RECT_F placementRect = D2D1::RectF(0, 0, blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT);
-	m_dingImage->DrawBitmap(sheetSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
+	m_dingImage->DrawBitmap(this->m_dingSheetBmp.Get(), placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
 	DX::ThrowIfFailed(m_dingImage->EndDraw());
 	m_dingImage->GetBitmap(&resultBitmap);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> resultPointer = resultBitmap;
@@ -215,7 +220,7 @@ Object* Level::GetObjectAt(unsigned levelX, unsigned levelY, bool createIfNull)
 			retrievedObject = newObject;
 			if (this->m_isDesignTime)
 			{
-				this->m_DesignTimeDirty = true;
+				this->m_designTimeDirty = true;
 			}
 		}
 	}
@@ -241,7 +246,7 @@ Dings* Level::WeedObjectAt(unsigned levelX, unsigned levelY, Layers* cullCoalesc
 
 			if (dingWeeded != nullptr && this->m_isDesignTime)
 			{
-				this->m_DesignTimeDirty = true;
+				this->m_designTimeDirty = true;
 			}
 		}
 	}
@@ -289,6 +294,11 @@ bool Level::HasCompatibleNeighbor(int x, int y, int dingID, Layers ofLayer)
 Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> Level::GetDingSheet()
 {
 	return this->m_dingSheet;
+}
+
+ID2D1Bitmap* Level::GetDingSheetBmp()
+{
+	return this->m_dingSheetBmp.Get();
 }
 
 unsigned Level::GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet)
@@ -400,7 +410,7 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 	OutputDebugStringW(Platform::String::Concat(Platform::String::Concat(L"Number of non-empty squares saved: ", string), L"\r\n")->Data());
 #endif
 
-	this->m_DesignTimeDirty = false;
+	this->m_designTimeDirty = false;
 	this->m_lastSavedAsFileName = fileName;
 }
 
@@ -457,7 +467,7 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 		delete[] srcData;
 		/* so next time hitting "Save" will not prompt for file name */
 		this->m_lastSavedAsFileName = fileName;
-		this->m_DesignTimeDirty = false;
+		this->m_designTimeDirty = false;
 		return true;
 	}
 	else

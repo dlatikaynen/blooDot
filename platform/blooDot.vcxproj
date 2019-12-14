@@ -210,6 +210,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="blooDot_TemporaryKey.pfx" />
+    <None Include="Media\Levels\grassmere.bloodot">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="Media\Audio\background.wma">
       <DeploymentContent>true</DeploymentContent>
     </None>
@@ -324,6 +327,7 @@
     <ClCompile Include="..\src\io\DDSTextureLoader.cpp" />
     <ClCompile Include="..\src\dx\DeviceResources.cpp" />
     <ClCompile Include="..\src\ui\LoadScreen.cpp" />
+    <ClCompile Include="..\src\ui\WorldScreen.cpp" />
     <ClCompile Include="..\src\ui\WorldScreenBase.cpp" />
     <ClCompile Include="..\src\app\blooDot.cpp" />
     <ClCompile Include="..\src\io\MediaStreamer.cpp" />
@@ -375,6 +379,7 @@
     <ClInclude Include="..\src\dx\DeviceResources.h" />
     <ClInclude Include="..\src\dx\DirectXHelper.h" />
     <ClInclude Include="..\src\ui\LoadScreen.h" />
+    <ClInclude Include="..\src\ui\WorldScreen.h" />
     <ClInclude Include="..\src\ui\WorldScreenBase.h" />
     <ClInclude Include="..\src\app\blooDot.h" />
     <ClInclude Include="..\src\io\MediaStreamer.h" />
