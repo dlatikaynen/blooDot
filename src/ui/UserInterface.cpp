@@ -26,24 +26,20 @@ void UserInterface::Initialize(
     _In_ ID2D1DeviceContext*	d2dContext,
     _In_ IWICImagingFactory*	wicFactory,
     _In_ IDWriteFactory*		dwriteFactory,
-	_In_ IDWriteFactory3*		dwriteFactory3
+	_In_ IDWriteFactory3*		dwriteFactory3,
+	_In_ IDWriteFontCollection*	dwriteFontCollection
     )
 {
-    m_wicFactory = wicFactory;
-    m_dwriteFactory = dwriteFactory;
-    m_d2dDevice = d2dDevice;
-    m_d2dContext = d2dContext;
+	this->m_wicFactory = wicFactory;
+	this->m_dwriteFactory = dwriteFactory;
+	this->m_d2dDevice = d2dDevice;
+	this->m_d2dContext = d2dContext;
+	this->m_fontCollection = dwriteFontCollection;
 
     ComPtr<ID2D1Factory> factory;
     d2dDevice->GetFactory(&factory);
-
-    DX::ThrowIfFailed(
-        factory.As(&m_d2dFactory)
-        );
-
-    DX::ThrowIfFailed(
-        m_d2dFactory->CreateDrawingStateBlock(&m_stateBlock)
-        );
+    DX::ThrowIfFailed(factory.As(&this->m_d2dFactory));
+    DX::ThrowIfFailed(this->m_d2dFactory->CreateDrawingStateBlock(&this->m_stateBlock));
 }
 
 void UserInterface::Update(float timeTotal, float timeDelta)

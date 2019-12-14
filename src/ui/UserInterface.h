@@ -20,6 +20,8 @@ public:
     static IDWriteFactory* GetDWriteFactory() { return m_instance.m_dwriteFactory.Get(); }
 	static IDWriteFactory3* GetDWriteFactory3() { return m_instance.m_dwriteFactory3.Get(); }
 	static ID2D1DeviceContext* GetD2DContext() { return m_instance.m_d2dContext.Get(); }
+	static IDWriteFontCollection* GetFontCollection() {	return m_instance.m_fontCollection.Get(); }
+
     static void ReleaseDeviceDependentResources();
 
     void Initialize(
@@ -27,7 +29,8 @@ public:
         _In_ ID2D1DeviceContext*	d2dContext,
         _In_ IWICImagingFactory*	wicFactory,
         _In_ IDWriteFactory*		dwriteFactory,
-		_In_ IDWriteFactory3*		dwriteFactory3
+		_In_ IDWriteFactory3*		dwriteFactory3,
+		_In_ IDWriteFontCollection*	drwiteFontCollection
         );
 
     void Release()
@@ -64,6 +67,7 @@ private:
 	Microsoft::WRL::ComPtr<IDWriteFactory3>         m_dwriteFactory3;
 	Microsoft::WRL::ComPtr<ID2D1DrawingStateBlock>  m_stateBlock;
     Microsoft::WRL::ComPtr<IWICImagingFactory>      m_wicFactory;
+	Microsoft::WRL::ComPtr<IDWriteFontCollection>   m_fontCollection;
 
     ElementSet m_elements;
 };

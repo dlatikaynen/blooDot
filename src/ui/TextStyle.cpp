@@ -68,16 +68,10 @@ IDWriteTextFormat* TextStyle::GetTextFormat()
 	if (m_textFormat == nullptr)
 	{
 		IDWriteFactory* dwriteFactory = UserInterface::GetDWriteFactory();
-		IDWriteFontCollection *fCollection;
-		MFFontContext fContext(dwriteFactory);
-		std::vector<std::wstring> filePaths;
-		std::wstring fontFileFilePath = L"Media\\Fonts\\FreckleFace-Regular.ttf";
-		filePaths.push_back(fontFileFilePath);
-		DX::ThrowIfFailed(fContext.CreateFontCollection(filePaths, &fCollection));
 		DX::ThrowIfFailed(
 			dwriteFactory->CreateTextFormat(
 				m_fontName->Data(),
-				fCollection,
+				UserInterface::GetFontCollection(),
 				m_fontWeight,
 				m_fontStyle,
 				DWRITE_FONT_STRETCH_NORMAL,

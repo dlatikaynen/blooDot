@@ -9,6 +9,7 @@
 #include <WinUser.h>
 #include <concurrent_unordered_map.h>
 #include "..\dx\DirectXHelper.h" // For ThrowIfFailed
+#include "..\dx\TTFLoader.h"
 
 using namespace blooDot;
 using namespace Windows::Gaming::Input;
@@ -90,15 +91,15 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
     m_persistentState->Initialize(Windows::Storage::ApplicationData::Current->LocalSettings->Values, "blooDot");
     m_sampleOverlay = std::unique_ptr<SampleOverlay>(new SampleOverlay(m_deviceResources, L"Lukas Spiel Test Demo"));
 
-    m_audio.Initialize();
-    m_accelerometer = Windows::Devices::Sensors::Accelerometer::GetDefault();
-    m_loadScreen = std::unique_ptr<LoadScreen>(new LoadScreen());
-    m_loadScreen->Initialize(m_deviceResources);
-
-	m_worldScreen = std::unique_ptr<WorldScreenBase>(new LevelEditor());
-	m_currentLevel = new Level(L"Gartenwelt-1", D2D1::SizeU(50, 30), 720, 720);	
-	m_worldScreen->EnterLevel(m_currentLevel);
-	m_worldScreen->Initialize(m_deviceResources);
+	this->LoadFontCollection();
+    this->m_audio.Initialize();
+	this->m_accelerometer = Windows::Devices::Sensors::Accelerometer::GetDefault();
+	this->m_loadScreen = std::unique_ptr<LoadScreen>(new LoadScreen());
+	this->m_loadScreen->Initialize(m_deviceResources);
+	this->m_worldScreen = std::unique_ptr<WorldScreenBase>(new LevelEditor());
+	this->m_currentLevel = new Level(L"Gartenwelt-1", D2D1::SizeU(50, 30), 720, 720);
+	this->m_worldScreen->EnterLevel(m_currentLevel);
+	this->m_worldScreen->Initialize(m_deviceResources);
 
 	auto newObject = m_currentLevel->GetObjectAt(353, 361, true);
 	newObject->Instantiate(m_currentLevel->GetDing(1), ClumsyPacking::ConfigurationFromNeighbors(Facings::Shy));
@@ -106,16 +107,16 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	newObject->Instantiate(m_currentLevel->GetDing(1), ClumsyPacking::ConfigurationFromNeighbors(Facings::Shy));
 
 	UserInterface::GetInstance().Initialize(
-		m_deviceResources->GetD2DDevice(),
-		m_deviceResources->GetD2DDeviceContext(),
-		m_deviceResources->GetWicImagingFactory(),
-		m_deviceResources->GetDWriteFactory(),
-		m_deviceResources->GetDWriteFactory3()
+		this->m_deviceResources->GetD2DDevice(),
+		this->m_deviceResources->GetD2DDeviceContext(),
+		this->m_deviceResources->GetWicImagingFactory(),
+		this->m_deviceResources->GetDWriteFactory(),
+		this->m_deviceResources->GetDWriteFactory3(),
+		this->m_fontCollection
     );
 
-    LoadState();
-
-    CreateWindowSizeDependentResources();
+	this->LoadState();
+	this->CreateWindowSizeDependentResources();
 
     // TODO: Change timer settings if you want something other than the default variable timestep mode.
     // eg. for 60 FPS fixed timestep update logic, call:
@@ -296,17 +297,26 @@ TextButton* blooDotMain::CreateMainMenuButton(Platform::String^ captionText, UIE
 	return newButton;
 }
 
+void blooDotMain::LoadFontCollection()
+{
+	MFFontContext fContext(this->m_deviceResources->GetDWriteFactory());
+	std::vector<std::wstring> filePaths;
+	filePaths.push_back(L"Media\\Fonts\\FreckleFace-Regular.ttf");
+	filePaths.push_back(L"Media\\Fonts\\FredokaOne-Regular.ttf");
+	DX::ThrowIfFailed(fContext.CreateFontCollection(filePaths, &this->m_fontCollection));
+}
+
 void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
 {
     DX::StepTimer loadingTimer;
     BasicLoader^ loader = ref new BasicLoader(m_deviceResources->GetD3DDevice());
-
 	
     if (!deviceOnly)
     {
-        // When handling device lost, we only need to recreate the graphics-device related
-        // resources. All other delayed resources that only need to be created on app
-        // startup go here.
+		/* When handling device lost, we only need to recreate the graphics - device related
+		 * resources.All other delayed resources that only need to be created on app
+		 * startup go here;
+		 * (1) audio */
         m_audio.CreateResources();
     }
 
@@ -1520,22 +1530,21 @@ void blooDotMain::OnDeviceLost()
 // Notifies renderers that device resources may now be re-created.
 void blooDotMain::OnDeviceRestored()
 {
-	m_worldScreen->CreateDeviceDependentResources();
-	m_sampleOverlay->CreateDeviceDependentResources();
-
-    m_loadScreen->Initialize(m_deviceResources);
-	m_worldScreen->Initialize(m_deviceResources);
-
+	this->m_worldScreen->CreateDeviceDependentResources();
+	this->m_sampleOverlay->CreateDeviceDependentResources();
+	this->m_loadScreen->Initialize(this->m_deviceResources);
+	this->m_worldScreen->Initialize(this->m_deviceResources);
     UserInterface::GetInstance().Initialize(
-        m_deviceResources->GetD2DDevice(),
-        m_deviceResources->GetD2DDeviceContext(),
-        m_deviceResources->GetWicImagingFactory(),
-        m_deviceResources->GetDWriteFactory(),
-		m_deviceResources->GetDWriteFactory3()
+		this->m_deviceResources->GetD2DDevice(),
+		this->m_deviceResources->GetD2DDeviceContext(),
+		this->m_deviceResources->GetWicImagingFactory(),
+		this->m_deviceResources->GetDWriteFactory(),
+		this->m_deviceResources->GetDWriteFactory3(),
+		this->m_fontCollection
     );
 
-    CreateWindowSizeDependentResources();
-    LoadDeferredResources(true, true);
+	this->CreateWindowSizeDependentResources();
+	this->LoadDeferredResources(true, true);
 }
 
 bool blooDot::blooDotMain::ButtonJustPressed(GamepadButtons selection)

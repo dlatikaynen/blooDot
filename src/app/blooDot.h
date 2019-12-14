@@ -108,6 +108,7 @@ namespace blooDot
 		Microsoft::WRL::ComPtr<ID3D11InputLayout>	m_inputLayout;
         Windows::Devices::Sensors::Accelerometer^	m_accelerometer;
 		Windows::Storage::IStorageFile^				m_knownLevelSaveTarget;
+		IDWriteFontCollection*						m_fontCollection;
 
         Collision			m_collision;
         Physics				m_physics;
@@ -206,6 +207,7 @@ namespace blooDot
 		void OnActionTerminate();
 
 		// utility
+		void LoadFontCollection();
 		void ResetCheckpoints();
         CheckpointState UpdateCheckpoints();
 		void ComputeFPS(float timeDelta);
