@@ -1,6 +1,6 @@
-#include "..\PreCompiledHeaders.h"
-#include "UserInterface.h"
-#include "..\dx\DirectXHelper.h"
+#include "..\..\PreCompiledHeaders.h"
+#include "..\..\dx\DirectXHelper.h"
+#include "..\UserInterface.h"
 
 LevelEditor::LevelEditor() : WorldScreenBase() 
 {

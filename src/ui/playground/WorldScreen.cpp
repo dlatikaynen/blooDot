@@ -1,6 +1,6 @@
-#include "..\PreCompiledHeaders.h"
-#include "UserInterface.h"
-#include "..\dx\DirectXHelper.h"
+#include "..\..\PreCompiledHeaders.h"
+#include "..\UserInterface.h"
+#include "..\..\dx\DirectXHelper.h"
 
 WorldScreen::WorldScreen() : WorldScreenBase()
 {
@@ -31,6 +31,51 @@ void WorldScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceRe
 	this->m_playerData.push_back(player1);
 }
 
+void WorldScreen::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down, float scrollDeltaX, float scrollDeltaY)
+{
+	this->m_pointerPosition.x = pointerPosition.x;
+	this->m_pointerPosition.y = pointerPosition.y;
+	this->m_touchMap = touchMap;
+	this->m_isMoving = Facings::Shy;
+	this->m_keyShiftDown = shiftKeyActive;
+
+	auto keyboardPlayer = *this->m_playerData.begin();
+	if (left)
+	{
+		keyboardPlayer->Facing = Facings::West;
+		keyboardPlayer->Momentum.Acceleration = D2D1::SizeF(-0.15f, 0.0f);
+		keyboardPlayer->Momentum.Gradient = D2D1::SizeF(0.01f, 0.0f);
+	}
+	else if (right)
+	{
+		keyboardPlayer->Facing = Facings::East;
+		keyboardPlayer->Momentum.Acceleration = D2D1::SizeF(0.15f, 0.0f);
+		keyboardPlayer->Momentum.Gradient = D2D1::SizeF(-0.01f, 0.0f);
+	}
+	else if (down)
+	{
+		keyboardPlayer->Facing = Facings::South;
+		keyboardPlayer->Momentum.Acceleration = D2D1::SizeF(0.0f, 0.15f);
+		keyboardPlayer->Momentum.Gradient = D2D1::SizeF(0.0f, -0.01f);
+	}
+	else if (up)
+	{
+		keyboardPlayer->Facing = Facings::North;
+		keyboardPlayer->Momentum.Acceleration = D2D1::SizeF(0.0f, -0.15f);
+		keyboardPlayer->Momentum.Gradient = D2D1::SizeF(0.0f, 0.01f);
+	}
+
+	if (keyboardPlayer->Facing != Facings::Shy)
+	{
+	}
+}
+
+// mousewheeled
+void WorldScreen::SetControl(int detentCount, bool shiftKeyActive)
+{
+
+}
+
 void WorldScreen::Update(float timeTotal, float timeDelta)
 {
 	WorldScreenBase::Update(timeTotal, timeDelta);
@@ -38,7 +83,7 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 	/* update player positions */
 	for (auto mob = this->m_playerData.begin(); mob != this->m_playerData.end(); ++mob)
 	{
-
+		(*mob)->Update();
 	}
 }
 

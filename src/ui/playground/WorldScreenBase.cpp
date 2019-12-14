@@ -1,4 +1,4 @@
-#include "..\PreCompiledHeaders.h"
+#include "..\..\PreCompiledHeaders.h"
 #include "WorldScreenBase.h"
 
 using namespace Windows::UI::Core;

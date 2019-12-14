@@ -327,8 +327,9 @@
     <ClCompile Include="..\src\io\DDSTextureLoader.cpp" />
     <ClCompile Include="..\src\dx\DeviceResources.cpp" />
     <ClCompile Include="..\src\ui\LoadScreen.cpp" />
-    <ClCompile Include="..\src\ui\WorldScreen.cpp" />
-    <ClCompile Include="..\src\ui\WorldScreenBase.cpp" />
+    <ClCompile Include="..\src\ui\playground\Player.cpp" />
+    <ClCompile Include="..\src\ui\playground\WorldScreen.cpp" />
+    <ClCompile Include="..\src\ui\playground\WorldScreenBase.cpp" />
     <ClCompile Include="..\src\app\blooDot.cpp" />
     <ClCompile Include="..\src\io\MediaStreamer.cpp" />
     <ClCompile Include="..\src\io\PersistentState.cpp" />
@@ -356,7 +357,7 @@
     <ClCompile Include="..\src\dings\wall-like\bitmapdings.cpp" />
     <ClCompile Include="..\src\dings\floor-like\wasser.cpp" />
     <ClCompile Include="..\src\dings\mob-like\dalek.cpp" />
-    <ClCompile Include="..\src\ui\LevelEditor.cpp" />
+    <ClCompile Include="..\src\ui\playground\LevelEditor.cpp" />
     <ClCompile Include="..\src\ui\LevelEditorHUD.cpp" />
     <ClCompile Include="..\src\dings\looot-like\looot.cpp" />
     <ClCompile Include="..\src\dings\mob-like\mobs.cpp" />
@@ -379,8 +380,10 @@
     <ClInclude Include="..\src\dx\DeviceResources.h" />
     <ClInclude Include="..\src\dx\DirectXHelper.h" />
     <ClInclude Include="..\src\ui\LoadScreen.h" />
-    <ClInclude Include="..\src\ui\WorldScreen.h" />
-    <ClInclude Include="..\src\ui\WorldScreenBase.h" />
+    <ClInclude Include="..\src\ui\playground\Player.h" />
+    <ClCompile Include="..\src\ui\playground\PlayerMomentum.h" />
+    <ClInclude Include="..\src\ui\playground\WorldScreen.h" />
+    <ClInclude Include="..\src\ui\playground\WorldScreenBase.h" />
     <ClInclude Include="..\src\app\blooDot.h" />
     <ClInclude Include="..\src\io\MediaStreamer.h" />
     <ClInclude Include="..\src\io\PersistentState.h" />
@@ -405,7 +408,7 @@
     <ClInclude Include="..\src\world\Level.h" />
     <ClInclude Include="..\src\world\world.h" />
     <ClInclude Include="..\src\dings\dings.h" />
-    <ClInclude Include="..\src\ui\LevelEditor.h" />
+    <ClInclude Include="..\src\ui\playground\LevelEditor.h" />
     <ClInclude Include="..\src\ui\LevelEditorHUD.h" />
   </ItemGroup>
   <ItemGroup>

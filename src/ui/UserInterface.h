@@ -8,9 +8,9 @@
 #include "NerdStatsDisplay.h"
 #include "TextButton.h"
 #include "HighScoreTable.h"
-#include "WorldScreenBase.h"
-#include "WorldScreen.h"
-#include "LevelEditor.h"
+#include "playground\WorldScreenBase.h"
+#include "playground\WorldScreen.h"
+#include "playground\LevelEditor.h"
 #include "LevelEditorHUD.h"
 
 class UserInterface

@@ -114,12 +114,6 @@
     <ClCompile Include="..\src\ui\NerdStatsDisplay.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\WorldScreenBase.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ui\LevelEditor.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ui\WorldSheet.cpp">
       <Filter>ui</Filter>
     </ClCompile>
@@ -156,8 +150,20 @@
     <ClCompile Include="..\src\dx\TTFLoader.cpp">
       <Filter>dx</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\WorldScreen.cpp">
-      <Filter>ui</Filter>
+    <ClCompile Include="..\src\ui\playground\WorldScreenBase.cpp">
+      <Filter>ui\playground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\playground\WorldScreen.cpp">
+      <Filter>ui\playground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\playground\LevelEditor.cpp">
+      <Filter>ui\playground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\playground\PlayerMomentum.h">
+      <Filter>ui\playground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\playground\Player.cpp">
+      <Filter>ui\playground</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -254,13 +260,7 @@
     <ClInclude Include="..\src\physics\BasicMath.h">
       <Filter>algo</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\LevelEditor.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ui\NerdStatsDisplay.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ui\WorldScreenBase.h">
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\WorldSheet.h">
@@ -290,8 +290,17 @@
     <ClInclude Include="..\src\dx\TTFLoader.h">
       <Filter>dx</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\WorldScreen.h">
-      <Filter>ui</Filter>
+    <ClInclude Include="..\src\ui\playground\WorldScreenBase.h">
+      <Filter>ui\playground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\playground\WorldScreen.h">
+      <Filter>ui\playground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\playground\LevelEditor.h">
+      <Filter>ui\playground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\playground\Player.h">
+      <Filter>ui\playground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -584,6 +593,9 @@
     </Filter>
     <Filter Include="media\levels">
       <UniqueIdentifier>{7bf3c37d-0bbb-4ef1-975c-8b2e4d51717b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\playground">
+      <UniqueIdentifier>{e1b24f93-f12b-45ef-be90-c324090333be}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,27 +1,27 @@
 	#pragma once
 
-#include "..\dx\DirectXHelper.h"
-#include "..\dx\DeviceResources.h"
-#include "..\io\BasicLoader.h"
-#include "..\dx\BrushRegistry.h"
-#include "..\dings\dings.h"
-#include "WorldSheet.h"
+#include "..\..\dx\DirectXHelper.h"
+#include "..\..\dx\DeviceResources.h"
+#include "..\..\io\BasicLoader.h"
+#include "..\..\dx\BrushRegistry.h"
+#include "..\..\dings\dings.h"
+#include "..\WorldSheet.h"
 
 class WorldScreenBase
 {
-	typedef std::map<int, DirectX::XMFLOAT2> TouchMap;
-
 public:
 	WorldScreenBase::WorldScreenBase();
 	virtual WorldScreenBase::~WorldScreenBase();
-	
+
+	typedef std::map<int, DirectX::XMFLOAT2> TouchMap;
+
 	/* graphical */
 	virtual void Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources);
 	void CreateDeviceDependentResources();
 	void ResetDirectXResources();
     void ReleaseDeviceDependentResources();
     void UpdateForWindowSizeChange();
-	void SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down, float scrollDeltaX, float scrollDeltaY);
+	virtual void SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down, float scrollDeltaX, float scrollDeltaY);
 	virtual void SetControl(int detentCount, bool shiftKeyActive);
 	virtual void Update(float timeTotal, float timeDelta);
 	virtual void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition) { };
