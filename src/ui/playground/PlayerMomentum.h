@@ -5,7 +5,15 @@
 class PlayerMomentum
 {
 public:
-	D2D1_SIZE_F Speed;
-	D2D1_SIZE_F Acceleration;
-	D2D1_SIZE_F Gradient;
+	/* logical pixels per frame */
+	float speedX; //vectorial
+	float speedY; //vectorial
+	float accelerationX; //vectorial
+	float accelerationY; //vectorial
+	float attenuationX; //absolute
+	float attenuationY; //absolute
+	
+	/* always apply in both dimensions equally */
+	float gripFactor; //absolute
+	float mediumViscosity; //absolute
 };

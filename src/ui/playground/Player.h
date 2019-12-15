@@ -12,6 +12,8 @@ public:
 	Player(Player&& obj) {};
 	~Player() {};
 
+	void PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
+	void PushY(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
 	void Update();
 
 	Platform::String^ Name;

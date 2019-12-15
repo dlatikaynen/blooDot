@@ -43,26 +43,22 @@ void WorldScreen::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchM
 	if (left)
 	{
 		keyboardPlayer->Facing = Facings::West;
-		keyboardPlayer->Momentum.Acceleration = D2D1::SizeF(-0.15f, 0.0f);
-		keyboardPlayer->Momentum.Gradient = D2D1::SizeF(0.01f, 0.0f);
+		keyboardPlayer->PushX(-0.15f, 0.01f, 1.0f, 0.05f);
 	}
 	else if (right)
 	{
 		keyboardPlayer->Facing = Facings::East;
-		keyboardPlayer->Momentum.Acceleration = D2D1::SizeF(0.15f, 0.0f);
-		keyboardPlayer->Momentum.Gradient = D2D1::SizeF(-0.01f, 0.0f);
+		keyboardPlayer->PushX(0.15f, 0.01f, 1.0f, 0.05f);
 	}
 	else if (down)
 	{
 		keyboardPlayer->Facing = Facings::South;
-		keyboardPlayer->Momentum.Acceleration = D2D1::SizeF(0.0f, 0.15f);
-		keyboardPlayer->Momentum.Gradient = D2D1::SizeF(0.0f, -0.01f);
+		keyboardPlayer->PushY(0.15f, 0.01f, 1.0f, 0.05f);
 	}
 	else if (up)
 	{
 		keyboardPlayer->Facing = Facings::North;
-		keyboardPlayer->Momentum.Acceleration = D2D1::SizeF(0.0f, -0.15f);
-		keyboardPlayer->Momentum.Gradient = D2D1::SizeF(0.0f, 0.01f);
+		keyboardPlayer->PushY(-0.15f, 0.01f, 1.0f, 0.05f);
 	}
 
 	if (keyboardPlayer->Facing != Facings::Shy)
