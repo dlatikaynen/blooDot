@@ -38,7 +38,6 @@ void WorldScreen::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchM
 	this->m_touchMap = touchMap;
 	this->m_isMoving = Facings::Shy;
 	this->m_keyShiftDown = shiftKeyActive;
-
 	auto keyboardPlayer = *this->m_playerData.begin();
 	if (left)
 	{
@@ -59,10 +58,6 @@ void WorldScreen::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchM
 	{
 		keyboardPlayer->Facing = Facings::North;
 		keyboardPlayer->PushY(-0.15f, 0.01f, 1.0f, 0.05f);
-	}
-
-	if (keyboardPlayer->Facing != Facings::Shy)
-	{
 	}
 }
 

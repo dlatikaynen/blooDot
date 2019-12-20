@@ -36,11 +36,12 @@ enum class GameState
 	LoadScreen,
 	LevelEditor,
     MainMenu,
+	ControllerSelection,
     HighScoreDisplay,
     PreGameCountdown,
     InGameActive,
     InGamePaused,
-    PostGameResults,
+    PostGameResults
 };
 
 enum class CheckpointState
@@ -202,6 +203,8 @@ namespace blooDot
 		void SetGameState(GameState nextState);
 		void SaveState();
 		void LoadState();
+		void OnActionStartLocalGame();
+		void OnActionStartNetworkGame();
 		void OnActionEnterLevel();
 		void OnActionEnterLevelEditor();
 		void SaveLevelInternal();

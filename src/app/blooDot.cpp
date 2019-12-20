@@ -171,8 +171,8 @@ void blooDotMain::CreateWindowSizeDependentResources()
     bottomHalfRect.top = topHalfRect.bottom + padding;
 	
 	D2D1_RECT_F containerRect = D2D1::RectF(clientRect.left, clientRect.top, clientRect.right, clientRect.top + 85.0f);
-	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"singleplayer", UIElement::SinglePlayerButton, &containerRect));
-	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"multiplayer", UIElement::MultiPlayerButton, &containerRect));
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"start locally", UIElement::LocalGameButton, &containerRect));
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"start networked", UIElement::NetworkGameButton, &containerRect));
 	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"worldbuilder", UIElement::WorldBuilderButton, &containerRect));
 	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"configuration", UIElement::ConfigurationButton, &containerRect));
 	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"help~about", UIElement::HelpAboutButton, &containerRect));
@@ -740,23 +740,23 @@ void blooDotMain::Update()
 				}
 			}
 
-			if (menuItemToExecute == UIElement::SinglePlayerButton)
+			if (menuItemToExecute == UIElement::LocalGameButton)
 			{
 				this->OnActionEnterLevel();
-			}
-			if (menuItemToExecute == UIElement::MultiPlayerButton)
+			}			
+			else if (menuItemToExecute == UIElement::NetworkGameButton)
 			{
 
 			}
-			if (menuItemToExecute == UIElement::WorldBuilderButton)
+			else if (menuItemToExecute == UIElement::WorldBuilderButton)
 			{
 				this->OnActionEnterLevelEditor();
 			}
-			if (menuItemToExecute == UIElement::ConfigurationButton)
+			else if (menuItemToExecute == UIElement::ConfigurationButton)
 			{
 
 			}
-			if (menuItemToExecute == UIElement::HelpAboutButton)
+			else if (menuItemToExecute == UIElement::HelpAboutButton)
 			{
 
 			}
@@ -952,6 +952,31 @@ UIElement blooDotMain::DetectMenuItemPressed()
 	}
 
 	return lastPressed;
+}
+
+void blooDotMain::OnActionStartLocalGame()
+{
+	bool controllerSetupNeeded = false;
+	/* 1. do we need a controller setup? */
+	if (this->m_myGamepads->Size > 0)
+	{
+		controllerSetupNeeded = true;
+	}
+
+	/* if not, start right away */
+	if (controllerSetupNeeded)
+	{
+		this->SetGameState(GameState::ControllerSelection);
+	}
+	else 
+	{
+		this->OnActionEnterLevel();
+	}
+}
+
+void blooDotMain::OnActionStartNetworkGame()
+{
+
 }
 
 void blooDotMain::OnActionEnterLevel()
