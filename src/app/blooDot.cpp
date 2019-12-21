@@ -1,6 +1,6 @@
 ﻿#include "..\PreCompiledHeaders.h"
 #include "blooDot.h"
-#include <DirectXColors.h> // For named colors
+#include <DirectXColors.h>
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -8,7 +8,7 @@
 #include <ppltasks.h>
 #include <WinUser.h>
 #include <concurrent_unordered_map.h>
-#include "..\dx\DirectXHelper.h" // For ThrowIfFailed
+#include "..\dx\DirectXHelper.h"
 #include "..\dx\TTFLoader.h"
 
 using namespace blooDot;
@@ -24,8 +24,8 @@ const byte blooDotMain::BLOODOTFILE_CONTENTTYPE_LEVEL_DESIGN[2] { 0xd1, 0x71 };
 
 inline D2D1_RECT_F ConvertRect(Windows::Foundation::Size source)
 {
-    // ignore the source.X and source.Y  These are the location on the screen
-    // yet we don't want to use them because all coordinates are window relative.
+    // ignore the source.X and source.Y, these are the location on the screen
+    // yet we don't want to use them because all coordinates are window-relative
     return D2D1::RectF(0.0f, 0.0f, source.Width, source.Height);
 }
 
@@ -117,32 +117,30 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
     */
 
 	// Input
-	m_myGamepads = ref new Vector<Gamepad^>();
-
+	this->m_myGamepads = ref new Vector<Gamepad^>();
 	for (auto gamepad : Gamepad::Gamepads)
 	{
-		m_myGamepads->Append(gamepad);
+		this->m_myGamepads->Append(gamepad);
 	}
 
 	Gamepad::GamepadAdded += ref new EventHandler<Gamepad^>([=](Platform::Object^, Gamepad^ args)
 	{
-		m_myGamepads->Append(args);
-		m_currentGamepadNeedsRefresh = true;
+		this->m_myGamepads->Append(args);
+		this->m_currentGamepadNeedsRefresh = true;
 	});
 
 	Gamepad::GamepadRemoved += ref new EventHandler<Gamepad ^>([=](Platform::Object^, Gamepad^ args)
 	{
 		unsigned int indexRemoved;
-
-		if (m_myGamepads->IndexOf(args, &indexRemoved))
+		if (this->m_myGamepads->IndexOf(args, &indexRemoved))
 		{
-			m_myGamepads->RemoveAt(indexRemoved);
-			m_currentGamepadNeedsRefresh = true;
+			this->m_myGamepads->RemoveAt(indexRemoved);
+			this->m_currentGamepadNeedsRefresh = true;
 		}
 	});
 
-	m_gamepad = GetLastGamepad();
-	m_currentGamepadNeedsRefresh = false;
+	this->m_gamepad = GetLastGamepad();
+	this->m_currentGamepadNeedsRefresh = false;
 }
 
 blooDotMain::~blooDotMain()
@@ -213,10 +211,15 @@ void blooDotMain::CreateWindowSizeDependentResources()
 	m_nerdStatsDisplay.GetTextStyle().SetFontSize(24.0f);
 	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::NerdStatsDisplay, &m_nerdStatsDisplay);
 
-	m_levelEditorHUD.Initialize();
-	m_levelEditorHUD.SetAlignment(AlignType::AlignFar, AlignType::AlignNear);
-	m_levelEditorHUD.SetContainer(clientRect);
+	this->m_levelEditorHUD.Initialize();
+	this->m_levelEditorHUD.SetAlignment(AlignType::AlignFar, AlignType::AlignNear);
+	this->m_levelEditorHUD.SetContainer(clientRect);
 	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::LevelEditorHUD, &m_levelEditorHUD);
+
+	this->m_controllerSetup.Initialize();
+	this->m_controllerSetup.SetAlignment(AlignType::AlignCenter, AlignType::AlignCenter);
+	this->m_levelEditorHUD.SetContainer(clientRect);
+	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::ControllerSetup, &m_controllerSetup);
 
     m_inGameStopwatchTimer.Initialize();
     m_inGameStopwatchTimer.SetAlignment(AlignNear, AlignFar);
@@ -397,9 +400,11 @@ void blooDotMain::SetGameState(GameState nextState)
     switch (m_gameState)
     {
     case GameState::MainMenu:
+	case GameState::ControllerSelection:
 		for (auto iter = this->m_mainMenuButtons.begin(); iter != this->m_mainMenuButtons.end(); ++iter) (*iter)->SetVisible(false);
+		this->m_controllerSetup.SetVisible(false);
 		break;
-
+		
     case GameState::HighScoreDisplay:
         m_highScoreTable.SetVisible(false);
         break;
@@ -419,25 +424,26 @@ void blooDotMain::SetGameState(GameState nextState)
     {
     case GameState::MainMenu:
 		for (auto iter = this->m_mainMenuButtons.begin(); iter != this->m_mainMenuButtons.end(); ++iter) (*iter)->SetVisible(true);
-		m_menuButtonSinglePlayer.SetVisible(true);
         (*this->m_mainMenuButtons.begin())->SetSelected(true);
-
-		m_pausedText.SetVisible(false);
-        m_physics.SetPosition(XMFLOAT3(305, -210, -43));
+		this->m_pausedText.SetVisible(false);
+		this->m_physics.SetPosition(XMFLOAT3(305, -210, -43));
         break;
 
+	case GameState::ControllerSelection:
+		this->m_controllerSetup.SetVisible(true);
+		break;
+
     case GameState::HighScoreDisplay:
-        m_highScoreTable.SetVisible(true);
+		this->m_highScoreTable.SetVisible(true);
         break;
 
     case GameState::PreGameCountdown:
-        m_inGameStopwatchTimer.SetVisible(false);
-        m_preGameCountdownTimer.SetVisible(true);
-        m_preGameCountdownTimer.StartCountdown(3);
-
-        ResetCheckpoints();
-        m_physics.SetPosition(m_checkpoints[0]);
-        m_physics.SetVelocity(XMFLOAT3(0, 0, 0));
+		this->m_inGameStopwatchTimer.SetVisible(false);
+		this->m_preGameCountdownTimer.SetVisible(true);
+		this->m_preGameCountdownTimer.StartCountdown(3);
+		this->ResetCheckpoints();
+		this->m_physics.SetPosition(m_checkpoints[0]);
+		this->m_physics.SetVelocity(XMFLOAT3(0, 0, 0));
         break;
 
     case GameState::InGameActive:
@@ -446,28 +452,25 @@ void blooDotMain::SetGameState(GameState nextState)
         break;
 
     case GameState::InGamePaused:
-        m_pausedText.SetVisible(true);
-        m_inGameStopwatchTimer.Stop();
+		this->m_pausedText.SetVisible(true);
+		this->m_inGameStopwatchTimer.Stop();
         break;
 
     case GameState::PostGameResults:
-        m_inGameStopwatchTimer.Stop();
-        m_inGameStopwatchTimer.SetVisible(false);
-        m_resultsText.SetVisible(true);
-        {
-            WCHAR formattedTime[32];
-            m_inGameStopwatchTimer.GetFormattedTime(formattedTime, m_newHighScore.elapsedTime);
-            WCHAR buffer[64];
-            swprintf_s(
-                buffer,
-                L"%s\nYour time: %s",
-                (m_newHighScore.wasJustAdded ? L"New High Score!" : L"Finished!"),
-                formattedTime
-                );
-            m_resultsText.SetText(buffer);
-            m_resultsText.SetVisible(true);
-        }
-
+		this->m_inGameStopwatchTimer.Stop();
+		this->m_inGameStopwatchTimer.SetVisible(false);
+		this->m_resultsText.SetVisible(true);
+        WCHAR formattedTime[32];
+		this->m_inGameStopwatchTimer.GetFormattedTime(formattedTime, m_newHighScore.elapsedTime);
+        WCHAR buffer[64];
+        swprintf_s(
+            buffer,
+            L"%s\nYour time: %s",
+            (this->m_newHighScore.wasJustAdded ? L"New High Score!" : L"Finished!"),
+            formattedTime
+        );
+		this->m_resultsText.SetText(buffer);
+		this->m_resultsText.SetVisible(true);
 		break;
     }
 
@@ -522,19 +525,19 @@ void blooDotMain::Update()
 #if WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP // Only process controller input when the device is not a phone.
 		if (m_currentGamepadNeedsRefresh)
 		{
-			auto mostRecentGamepad = GetLastGamepad();
-			if (m_gamepad != mostRecentGamepad)
+			auto mostRecentGamepad = this->GetLastGamepad();
+			if (this->m_gamepad != mostRecentGamepad)
 			{
-				m_gamepad = mostRecentGamepad;
+				this->m_gamepad = mostRecentGamepad;
 			}
 
-			m_currentGamepadNeedsRefresh = false;
+			this->m_currentGamepadNeedsRefresh = false;
 		}
 
-		if (m_gamepad != nullptr)
+		if (this->m_gamepad != nullptr)
 		{
-			m_oldReading = m_newReading;
-			m_newReading = m_gamepad->GetCurrentReading();
+			this->m_oldReading = this->m_newReading;
+			this->m_newReading = this->m_gamepad->GetCurrentReading();
 		}
 
 		float leftStickX = static_cast<float>(m_newReading.LeftThumbstickX);
@@ -742,7 +745,7 @@ void blooDotMain::Update()
 
 			if (menuItemToExecute == UIElement::LocalGameButton)
 			{
-				this->OnActionEnterLevel();
+				this->OnActionStartLocalGame();
 			}			
 			else if (menuItemToExecute == UIElement::NetworkGameButton)
 			{
@@ -956,15 +959,9 @@ UIElement blooDotMain::DetectMenuItemPressed()
 
 void blooDotMain::OnActionStartLocalGame()
 {
-	bool controllerSetupNeeded = false;
-	/* 1. do we need a controller setup? */
-	if (this->m_myGamepads->Size > 0)
-	{
-		controllerSetupNeeded = true;
-	}
-
-	/* if not, start right away */
-	if (controllerSetupNeeded)
+	/* 1. do we need a controller setup?
+	 * if not, start right away */
+	if (this->HaveAtLeastOneGamePad())
 	{
 		this->SetGameState(GameState::ControllerSelection);
 	}
@@ -1644,11 +1641,15 @@ bool blooDot::blooDotMain::ButtonJustReleased(GamepadButtons selection)
 Gamepad^ blooDot::blooDotMain::GetLastGamepad()
 {
 	Gamepad^ gamepad = nullptr;
-
-	if (m_myGamepads->Size > 0)
+	if (this->HaveAtLeastOneGamePad())
 	{
-		gamepad = m_myGamepads->GetAt(m_myGamepads->Size - 1);
+		gamepad = this->m_myGamepads->GetAt(m_myGamepads->Size - 1);
 	}
 
 	return gamepad;
+}
+
+bool blooDot::blooDotMain::HaveAtLeastOneGamePad()
+{
+	return this->m_myGamepads->Size > 0;
 }

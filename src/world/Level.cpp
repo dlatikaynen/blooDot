@@ -423,7 +423,7 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 	if (!iF.fail() && iF.is_open())
 	{
 		iF.seekg(0, std::ios::end);
-		size_t length = iF.tellg();
+		auto length = iF.tellg();
 		iF.seekg(0, std::ios::beg);
 		char* srcData = new char[length];
 		iF.read(srcData, length);

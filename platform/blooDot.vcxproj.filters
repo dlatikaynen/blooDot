@@ -165,6 +165,9 @@
     <ClCompile Include="..\src\ui\playground\Player.cpp">
       <Filter>ui\playground</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ui\ControllerSetup.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
@@ -301,6 +304,9 @@
     </ClInclude>
     <ClInclude Include="..\src\ui\playground\Player.h">
       <Filter>ui\playground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\ControllerSetup.h">
+      <Filter>ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -18,18 +18,6 @@
 
 using namespace DirectX;
 
-// Describes the constant buffer that draws the meshes.
-struct ConstantBuffer
-{
-    XMFLOAT4X4 model;
-    XMFLOAT4X4 view;
-    XMFLOAT4X4 projection;
-
-    XMFLOAT3 marblePosition;
-    float marbleRadius;
-    float lightStrength;
-};
-
 enum class GameState
 {
 	Initial,
@@ -42,6 +30,16 @@ enum class GameState
     InGameActive,
     InGamePaused,
     PostGameResults
+};
+
+struct ConstantBuffer
+{
+	XMFLOAT4X4 model;
+	XMFLOAT4X4 view;
+	XMFLOAT4X4 projection;
+	XMFLOAT3 marblePosition;
+	float marbleRadius;
+	float lightStrength;
 };
 
 enum class CheckpointState
@@ -120,14 +118,15 @@ namespace blooDot
         size_t				m_currentCheckpoint;
 		typedef std::vector<TextButton*> Menubuttons;
 		Menubuttons			m_mainMenuButtons;
-		TextButton			m_menuButtonSinglePlayer;
         TextButton			m_highScoreButton;
+
         HighScoreTable		m_highScoreTable;
         CountdownTimer		m_preGameCountdownTimer;
         StopwatchTimer		m_inGameStopwatchTimer;
 		NerdStatsDisplay	m_nerdStatsDisplay;
 		LevelEditorHUD		m_levelEditorHUD;
-        TextElement			m_checkpointText;
+		ControllerSetup		m_controllerSetup;
+		TextElement			m_checkpointText;
         TextButton			m_pausedText;
         TextElement			m_resultsText;
         HighScoreEntry		m_newHighScore;
@@ -196,6 +195,7 @@ namespace blooDot
 		bool ButtonJustPressed(Windows::Gaming::Input::GamepadButtons selection);
 		bool ButtonJustReleased(Windows::Gaming::Input::GamepadButtons selection);
 		Windows::Gaming::Input::Gamepad^ GetLastGamepad();
+		bool HaveAtLeastOneGamePad();
 		TextButton* CreateMainMenuButton(Platform::String^ captionText, UIElement elementKey, D2D1_RECT_F* containerRect);
 		void SelectMainMenu(bool moveUp, bool MoveDown);
 		UIElement DetectMenuItemSelected();
@@ -213,7 +213,6 @@ namespace blooDot
 		// utility
 		void LoadFontCollection();
 		void ResetCheckpoints();
-        CheckpointState UpdateCheckpoints();
 		void ComputeFPS(float timeDelta);
 		int QueryFPS();
 		void LogMessage(Platform::Object^ obj);

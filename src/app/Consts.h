@@ -29,6 +29,7 @@ namespace blooDot
 		WorldBuilderButton = 13,
 		ConfigurationButton = 14,
 		HelpAboutButton = 15,
-		ExterminateButton = 16
+		ExterminateButton = 16,
+		ControllerSetup = 17
 	};
 }
