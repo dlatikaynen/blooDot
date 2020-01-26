@@ -768,6 +768,11 @@ void blooDotMain::Update()
 				this->OnActionTerminate();
 			}
 
+			if (menuItemToExecute != UIElement::None)
+			{
+				this->SwallowKeyPress();
+			}
+
             break;
 		}
 
@@ -894,6 +899,13 @@ void blooDotMain::Update()
 #pragma endregion
     });
 }
+
+void blooDotMain::SwallowKeyPress()
+{
+	this->m_keyEnterActive = false;
+	this->m_keyEnterPressed = false;
+}
+
 
 void blooDotMain::SelectMainMenu(bool moveUp, bool moveDown)
 {
@@ -1300,7 +1312,16 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 
 void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 {
-    if (key == Windows::System::VirtualKey::Home)
+	if (this->m_deferredResourcesReadyPending)
+	{
+		this->m_deferredResourcesReadyPending = false;
+		this->m_deferredResourcesReady = true;
+		this->SwallowKeyPress();
+		this->SetGameState(GameState::MainMenu);
+		return;
+	}
+	
+	if (key == Windows::System::VirtualKey::Home)
     {
         if (this->m_homeKeyActive)
         {
@@ -1465,13 +1486,6 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 	else if (key == Windows::System::VirtualKey::Down)
 	{
 		this->m_keyDownPressed = false;
-	}
-
-	if (this->m_deferredResourcesReadyPending)
-	{
-		this->m_deferredResourcesReadyPending = false;
-		this->m_deferredResourcesReady = true;
-		this->SetGameState(GameState::MainMenu);
 	}
 }
 

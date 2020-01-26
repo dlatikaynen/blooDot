@@ -200,6 +200,7 @@ namespace blooDot
 		void SelectMainMenu(bool moveUp, bool MoveDown);
 		UIElement DetectMenuItemSelected();
 		UIElement DetectMenuItemPressed();
+		void SwallowKeyPress();
 		void SetGameState(GameState nextState);
 		void SaveState();
 		void LoadState();
