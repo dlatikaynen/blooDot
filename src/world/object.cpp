@@ -228,17 +228,20 @@ void Object::DesignSaveToFile(std::ofstream* toFile, Layers ofLayer)
 	{
 		auto dingID = thisDing->ID();
 		auto dingFacing = this->PlacementFacing(ofLayer);
-		if ((dingID & 0x80) || dingFacing != Facings::Shy)
+		bool isExtendedDing = dingID > 0x3f;
+		bool hasPlacementFacing = dingFacing != Facings::Shy;
+		byte prefix = (hasPlacementFacing ? 1 : 0) << 7 | (isExtendedDing ? 1 : 0) << 6 | (dingID & 0x3f);
+		toFile->write((char*)&prefix, sizeof(byte));
+		if (isExtendedDing)
 		{
-			byte dingNum = 0x80 | (dingID & 0x7f);
-			toFile->write((char*)&dingNum, sizeof(byte));
+			byte dingMSB = (dingID & 0xffc0) >> 6;
+			toFile->write((char*)&dingMSB, sizeof(byte));
+		}
+		
+		if(hasPlacementFacing)
+		{		
 			unsigned int facingVal = static_cast<unsigned int>(dingFacing);
 			toFile->write((char*)&facingVal, sizeof(unsigned int));
-		}
-		else
-		{
-			dingID = dingID & 0x7f;
-			toFile->write((char*)&dingID, sizeof(byte));
 		}
 	}
 }

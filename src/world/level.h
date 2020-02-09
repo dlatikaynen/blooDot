@@ -49,7 +49,8 @@ private:
 	void Clear();
 	unsigned GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet);
 	bool HasCompatibleNeighbor(int x, int y, int dingID, Layers ofLayer);
-	void DesignLoadFromFile_version2(char* srcData, size_t length, size_t offset);
+	void DesignLoadFromFile_version2(char* srcData, const size_t length, size_t offset);
+	bool CellLoadFromFile(char *srcData, size_t *offset, const Layers inLayer, const uint32 coordinateX, const uint32 coordinateY);
 
 	Platform::String^									m_Name;
 	D2D1_SIZE_U											m_rectangularBounds;

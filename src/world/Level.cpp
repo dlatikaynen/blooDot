@@ -479,7 +479,7 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 	}
 }
 
-void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t offset)
+void Level::DesignLoadFromFile_version2(char* srcData, const size_t length, size_t offset)
 {
 #ifdef _DEBUG
 	unsigned blockLoadCount = 0;
@@ -496,8 +496,6 @@ void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t off
 		/* read the descriptor stream */
 		while (offset < (length - 1))
 		{
-			Facings placementFacing;
-			unsigned dingID;
 			byte msb = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
 			byte isb = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
 			byte lsb = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
@@ -512,71 +510,17 @@ void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t off
 
 			if (hasFloor)
 			{
-				byte floorDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
-				dingID = static_cast<unsigned>(floorDescriptor & 0x7f);
-				if (dingID > 0 && this->m_dingMap.find(dingID) != this->m_dingMap.end())
-				{
-					if (floorDescriptor & 128)
-					{
-						placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
-					}
-					else
-					{
-						placementFacing = Facings::Shy;
-					}
-
-					this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Floor, &this->m_dingMap.at(dingID), placementFacing);
-				}
-				else
-				{
-					hasFloor = false;
-				}
+				hasFloor = this->CellLoadFromFile(srcData, &offset, Layers::Floor, coordinateX, coordinateY);
 			}
 
 			if (hasWalls)
 			{
-				byte wallsDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
-				dingID = static_cast<unsigned>(wallsDescriptor & 0x7f);
-				if (dingID > 0 && this->m_dingMap.find(dingID) != this->m_dingMap.end())
-				{
-					if (wallsDescriptor & 128)
-					{
-						placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
-					}
-					else
-					{
-						placementFacing = Facings::Shy;
-					}
-
-					this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Walls, &this->m_dingMap.at(dingID), placementFacing);
-				}
-				else
-				{
-					hasWalls = false;
-				}
+				hasWalls = this->CellLoadFromFile(srcData, &offset, Layers::Walls, coordinateX, coordinateY);
 			}
 
 			if (hasRooof)
 			{
-				byte rooofDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
-				dingID = static_cast<unsigned>(rooofDescriptor & 0x7f);
-				if (dingID > 0 && this->m_dingMap.find(dingID) != this->m_dingMap.end())
-				{
-					if (rooofDescriptor & 128)
-					{
-						placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
-					}
-					else
-					{
-						placementFacing = Facings::Shy;
-					}
-
-					this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Rooof, &this->m_dingMap.at(dingID), placementFacing);
-				}
-				else
-				{
-					hasRooof = false;
-				}
+				hasRooof = this->CellLoadFromFile(srcData, &offset, Layers::Rooof, coordinateX, coordinateY);
 			}
 
 #ifdef _DEBUG
@@ -596,4 +540,35 @@ void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t off
 	Platform::String^ string = ref new Platform::String(str, len);
 	OutputDebugStringW(Platform::String::Concat(Platform::String::Concat(L"Number of non-empty squares loaded: ", string), L"\r\n")->Data());
 #endif
+}
+
+bool Level::CellLoadFromFile(char *srcData, size_t *offset, const Layers inLayer, const uint32 coordinateX, const uint32 coordinateY)
+{
+	Facings placementFacing;
+	byte objectDescriptor = *reinterpret_cast<byte*>(srcData + (*offset)); (*offset) += sizeof(const byte);
+	auto dingID = static_cast<unsigned>(objectDescriptor & 0x3f);
+	if (objectDescriptor & 0x40)
+	{
+		/* yes, this format is a bitch. but it is oh so efficient,
+		 * and it contains all of the retro computing flair */
+		byte secondDingByte = *reinterpret_cast<byte*>(srcData + (*offset)); (*offset) += sizeof(const byte);
+		dingID = (secondDingByte << 6) | dingID;
+	}
+	
+	if (dingID > 0 && this->m_dingMap.find(dingID) != this->m_dingMap.end())
+	{
+		if (objectDescriptor & 0x80)
+		{
+			placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + (*offset))); (*offset) += sizeof(const unsigned int);
+		}
+		else
+		{
+			placementFacing = Facings::Shy;
+		}
+
+		this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(inLayer, &this->m_dingMap.at(dingID), placementFacing);
+		return true;
+	}
+
+	return false;
 }
