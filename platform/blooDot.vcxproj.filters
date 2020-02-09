@@ -409,6 +409,9 @@
     <Image Include="Media\Bitmaps\player-1.png">
       <Filter>media\bitmap</Filter>
     </Image>
+    <Image Include="Media\Bitmaps\schaedel.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />

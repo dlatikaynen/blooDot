@@ -299,6 +299,7 @@
     <Image Include="Media\Bitmaps\lettuce.png" />
     <Image Include="Media\Bitmaps\packcover-wallcrack.png" />
     <Image Include="Media\Bitmaps\player-1.png" />
+    <Image Include="Media\Bitmaps\schaedel.png" />
     <Image Include="Media\Bitmaps\snowblock.png" />
     <Image Include="Media\Bitmaps\universe_seamless.png" />
     <Image Include="Media\Bitmaps\notimeforcaution.png" />

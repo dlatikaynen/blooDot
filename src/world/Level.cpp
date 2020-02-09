@@ -105,6 +105,7 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	this->RegisterDing(&Lettuce(deviceResources, brushRegistry),			13, 0);
 	this->RegisterDing(&Player1(deviceResources, brushRegistry),			14, 0);
 	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				18, 0);
+	this->RegisterDing(&Schaedel(deviceResources, brushRegistry),		    14, 1);
 
 	DX::ThrowIfFailed(this->m_dingSheet->EndDraw());
 	this->m_dingSheet->GetBitmap(&this->m_dingSheetBmp);

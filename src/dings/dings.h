@@ -258,6 +258,14 @@ protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
 
+class Schaedel : public Dings
+{
+public:
+	Schaedel(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
 class FloorStoneTile : public Dings
 {
 public:

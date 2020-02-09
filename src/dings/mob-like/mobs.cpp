@@ -13,3 +13,16 @@ Platform::String^ Player1::ShouldLoadFromBitmap()
 {
 	return L"player-1.png";
 }
+
+Schaedel::Schaedel(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(4042, L"Schädel", deviceResources, drawBrushes)
+{
+	m_Facings = Facings::Viech;
+	m_Coalescing = Facings::Shy;
+	m_preferredLayer = Layers::Walls;
+	m_possibleLayers = Layers::Walls;
+}
+
+Platform::String^ Schaedel::ShouldLoadFromBitmap()
+{
+	return L"schaedel.png";
+}
