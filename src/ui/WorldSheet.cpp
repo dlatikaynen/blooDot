@@ -82,10 +82,9 @@ bool WorldSheet::IsPopulated()
 // Draw the Ding Wang Tang onto the sheet
 void WorldSheet::Populate()
 {
-	auto beganDrawWalls = false, beganDrawFloor = false, beganDrawRooof = false;
-
 	if (!this->m_isPopulated)
 	{
+		auto beganDrawWalls = false, beganDrawFloor = false, beganDrawRooof = false;
 		this->FreeBitmaps();
 		if (m_floor == nullptr)
 		{
@@ -111,6 +110,7 @@ void WorldSheet::Populate()
 
 		auto dingSheet = this->m_tiedToLevel->GetDingSheet();
 		ID2D1Bitmap *dingMap = NULL;
+		Dings* dings;
 		dingSheet->GetBitmap(&dingMap);
 		for (unsigned y = 0; y < this->m_sizeUnits.height; ++y)
 		{
@@ -122,8 +122,7 @@ void WorldSheet::Populate()
 				if (objectX != nullptr)
 				{
 					auto layer = objectX->GetLayers();
-					auto dings = objectX->GetDing(layer);
-					if (layer == Layers::Floor)
+					if ((layer & Layers::Floor) == Layers::Floor)
 					{
 						if (!beganDrawFloor)
 						{
@@ -131,9 +130,11 @@ void WorldSheet::Populate()
 							beganDrawFloor = true;
 						}
 
+						dings = objectX->GetDing(Layers::Floor);
 						this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(::Floor), x, y);
 					}
-					else if (layer == Layers::Walls)
+					
+					if ((layer & Layers::Walls) == Layers::Walls)
 					{
 						if (!beganDrawWalls)
 						{
@@ -141,9 +142,11 @@ void WorldSheet::Populate()
 							beganDrawWalls = true;
 						}
 
+						dings = objectX->GetDing(Layers::Walls);
 						this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(::Walls), x, y);
 					}
-					else if (layer == Layers::Rooof)
+					
+					if ((layer & Layers::Rooof) == Layers::Rooof)
 					{
 						if (!beganDrawRooof)
 						{
@@ -151,6 +154,7 @@ void WorldSheet::Populate()
 							beganDrawRooof = true;
 						}
 
+						dings = objectX->GetDing(Layers::Rooof);
 						this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(::Rooof), x, y);
 					}
 				}

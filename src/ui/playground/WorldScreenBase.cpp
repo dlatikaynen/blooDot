@@ -368,26 +368,11 @@ void WorldScreenBase::EvaluateSheetHoveringSituation()
 	}
 
 	/* make sure the sheets have consciousness about their own whereabouts */
-	if (!m_hoveringSheetNW->IsPopulated())
-	{
-		m_hoveringSheetNW->Populate();
-	}
-
-	if (!m_hoveringSheetNE->IsPopulated())
-	{
-		m_hoveringSheetNE->Populate();
-	}
-
-	if (!m_hoveringSheetSW->IsPopulated())
-	{
-		m_hoveringSheetSW->Populate();
-	}
-
-	if (!m_hoveringSheetSE->IsPopulated())
-	{
-		m_hoveringSheetSE->Populate();
-	}
-
+	m_hoveringSheetNW->Populate();
+	m_hoveringSheetNE->Populate();
+	m_hoveringSheetSW->Populate();
+	m_hoveringSheetSE->Populate();
+	
 	/* finally, we have the quadruplet arranged,
 	 * now prime the initial overlap rectangles */
 	auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);

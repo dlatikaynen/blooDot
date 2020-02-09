@@ -238,7 +238,7 @@ void Object::DesignSaveToFile(std::ofstream* toFile, Layers ofLayer)
 		else
 		{
 			dingID = dingID & 0x7f;
-			toFile->write((char*)&dingID, sizeof(uint32));
+			toFile->write((char*)&dingID, sizeof(byte));
 		}
 	}
 }
