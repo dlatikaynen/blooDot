@@ -318,6 +318,7 @@
     <ClCompile Include="..\src\algo\GameOfLifeSprinkler.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeAnimation.cpp" />
     <ClCompile Include="..\src\app\Consts.cpp" />
+    <ClCompile Include="..\src\app\Utility.cpp" />
     <ClCompile Include="..\src\dx\TTFLoader.cpp" />
     <ClCompile Include="..\src\sound\Audio.cpp" />
     <ClCompile Include="..\src\io\BasicLoader.cpp" />
@@ -370,6 +371,7 @@
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h" />
     <ClCompile Include="..\src\algo\ClumsyPacking.h" />
     <ClInclude Include="..\src\app\Consts.h" />
+    <ClInclude Include="..\src\app\Utility.h" />
     <ClInclude Include="..\src\dx\TTFLoader.h" />
     <ClInclude Include="..\src\sound\Audio.h" />
     <ClInclude Include="..\src\io\BasicLoader.h" />

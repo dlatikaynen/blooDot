@@ -1,8 +1,10 @@
-#include "..\PreCompiledHeaders.h"
-#include <DirectXColors.h> // For named colors
+#include <DirectXColors.h>
 #include <intrin.h>
+
+#include "..\PreCompiledHeaders.h"
 #include "..\app\blooDot.h"
 #include "Level.h"
+#include "..\app\Utility.h"
 
 using namespace Windows::Storage;
 using namespace Windows::Storage::Streams;
@@ -489,96 +491,102 @@ void Level::DesignLoadFromFile_version2(char* srcData, size_t length, size_t off
 	this->m_rectangularBounds.width = extentX;
 	this->m_rectangularBounds.height = extentY;
 	this->Clear();
-
-	/* read the descriptor stream */
-	while (offset < (length - 1))
+	try 
 	{
-		Facings placementFacing;
-		unsigned dingID;
-		byte msb = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
-		byte isb = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
-		byte lsb = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
-		int32 placementDescriptor = (msb << 16 | isb << 8 | lsb) & 0xffffff;
-		uint32 coordinateY = (placementDescriptor >> 14) & 0x3ff;
-		byte layerFlags = (placementDescriptor >> 11) & 0x7;
-		uint32 coordinateX = placementDescriptor & 0x3ff;
-		bool
-			hasFloor = layerFlags & Level::floorbit,
-			hasWalls = layerFlags & Level::wallsbit,
-			hasRooof = layerFlags & Level::rooofbit;
-
-		if (hasFloor)
-		{			
-			byte floorDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
-			dingID = static_cast<unsigned>(floorDescriptor & 0x7f);
-			if (dingID > 0)
-			{
-				if (floorDescriptor & 128)
-				{
-					placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
-				}
-				else
-				{
-					placementFacing = Facings::Shy;
-				}
-
-				this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Floor, &this->m_dingMap.at(dingID), placementFacing);
-			}
-			else
-			{
-				hasFloor = false;
-			}
-		}
-
-		if (hasWalls)
+		/* read the descriptor stream */
+		while (offset < (length - 1))
 		{
-			byte wallsDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
-			dingID = static_cast<unsigned>(wallsDescriptor & 0x7f);
-			if (dingID > 0)
+			Facings placementFacing;
+			unsigned dingID;
+			byte msb = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
+			byte isb = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
+			byte lsb = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
+			int32 placementDescriptor = (msb << 16 | isb << 8 | lsb) & 0xffffff;
+			uint32 coordinateY = (placementDescriptor >> 14) & 0x3ff;
+			byte layerFlags = (placementDescriptor >> 11) & 0x7;
+			uint32 coordinateX = placementDescriptor & 0x3ff;
+			bool
+				hasFloor = layerFlags & Level::floorbit,
+				hasWalls = layerFlags & Level::wallsbit,
+				hasRooof = layerFlags & Level::rooofbit;
+
+			if (hasFloor)
 			{
-				if (wallsDescriptor & 128)
+				byte floorDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
+				dingID = static_cast<unsigned>(floorDescriptor & 0x7f);
+				if (dingID > 0 && this->m_dingMap.find(dingID) != this->m_dingMap.end())
 				{
-					placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
+					if (floorDescriptor & 128)
+					{
+						placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
+					}
+					else
+					{
+						placementFacing = Facings::Shy;
+					}
+
+					this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Floor, &this->m_dingMap.at(dingID), placementFacing);
 				}
 				else
 				{
-					placementFacing = Facings::Shy;
+					hasFloor = false;
 				}
-
-				this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Walls, &this->m_dingMap.at(dingID), placementFacing);
 			}
-			else 
-			{
-				hasWalls = false;
-			}
-		}
 
-		if (hasRooof)
-		{
-			byte rooofDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
-			dingID = static_cast<unsigned>(rooofDescriptor & 0x7f);
-			if (dingID > 0)
+			if (hasWalls)
 			{
-				if (rooofDescriptor & 128)
+				byte wallsDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
+				dingID = static_cast<unsigned>(wallsDescriptor & 0x7f);
+				if (dingID > 0 && this->m_dingMap.find(dingID) != this->m_dingMap.end())
 				{
-					placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
+					if (wallsDescriptor & 128)
+					{
+						placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
+					}
+					else
+					{
+						placementFacing = Facings::Shy;
+					}
+
+					this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Walls, &this->m_dingMap.at(dingID), placementFacing);
 				}
 				else
 				{
-					placementFacing = Facings::Shy;
+					hasWalls = false;
 				}
+			}
 
-				this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Rooof, &this->m_dingMap.at(dingID), placementFacing);
-			}
-			else
+			if (hasRooof)
 			{
-				hasRooof = false;
+				byte rooofDescriptor = *reinterpret_cast<byte*>(srcData + offset); offset += sizeof(const byte);
+				dingID = static_cast<unsigned>(rooofDescriptor & 0x7f);
+				if (dingID > 0 && this->m_dingMap.find(dingID) != this->m_dingMap.end())
+				{
+					if (rooofDescriptor & 128)
+					{
+						placementFacing = static_cast<Facings>(*reinterpret_cast<unsigned int*>(srcData + offset)); offset += sizeof(const unsigned int);
+					}
+					else
+					{
+						placementFacing = Facings::Shy;
+					}
+
+					this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(Layers::Rooof, &this->m_dingMap.at(dingID), placementFacing);
+				}
+				else
+				{
+					hasRooof = false;
+				}
 			}
-		}
 
 #ifdef _DEBUG
-		blockLoadCount += static_cast<unsigned>(hasRooof) + static_cast<unsigned>(hasWalls) + static_cast<unsigned>(hasFloor);
+			blockLoadCount += static_cast<unsigned>(hasRooof) + static_cast<unsigned>(hasWalls) + static_cast<unsigned>(hasFloor);
 #endif
+		}
+	}
+	catch (const std::exception& ex)
+	{
+		blooDot::Utility::DebugOutputException(ex);
 	}
 
 #ifdef _DEBUG
