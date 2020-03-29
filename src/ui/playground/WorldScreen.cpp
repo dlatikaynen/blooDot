@@ -15,20 +15,23 @@ WorldScreen::~WorldScreen()
 void WorldScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources)
 {
 	WorldScreenBase::Initialize(deviceResources);
+	/* player(s) positions, and ultimately initial position in level are determined from level metadata */
+	if (this->m_playerData.empty() && this->m_currentLevel != nullptr)
+	{
+		auto player1 = new Player();
+		player1->Name = L"Nepomuk der Nasenbär";
+		player1->PositionSquare = D2D1::Point2U(351, 358);
+		player1->Position = D2D1::RectF(
+			static_cast<float>(player1->PositionSquare.x) * blooDot::Consts::SQUARE_WIDTH,
+			static_cast<float>(player1->PositionSquare.y) * blooDot::Consts::SQUARE_HEIGHT,
+			static_cast<float>(player1->PositionSquare.x + 1) * blooDot::Consts::SQUARE_WIDTH,
+			static_cast<float>(player1->PositionSquare.y + 1) * blooDot::Consts::SQUARE_HEIGHT
+		);
 
-	auto player1 = new Player();
-	player1->Name = L"Nepomuk der Nasenbär";
-	player1->PositionSquare = D2D1::Point2U(351, 358);
-	player1->Position = D2D1::RectF(
-		static_cast<float>(player1->PositionSquare.x) * blooDot::Consts::SQUARE_WIDTH,
-		static_cast<float>(player1->PositionSquare.y) * blooDot::Consts::SQUARE_HEIGHT,
-		static_cast<float>(player1->PositionSquare.x + 1) * blooDot::Consts::SQUARE_WIDTH,
-		static_cast<float>(player1->PositionSquare.y + 1) * blooDot::Consts::SQUARE_HEIGHT
-	);
-
-	auto dingOnSheet = this->m_currentLevel->GetDing(12)->GetSheetPlacement(Facings::East);
-	player1->SpriteSourceRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
-	this->m_playerData.push_back(player1);
+		auto dingOnSheet = this->m_currentLevel->GetDing(12)->GetSheetPlacement(Facings::East);
+		player1->SpriteSourceRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
+		this->m_playerData.push_back(player1);
+	}
 }
 
 void WorldScreen::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down, float scrollDeltaX, float scrollDeltaY)
