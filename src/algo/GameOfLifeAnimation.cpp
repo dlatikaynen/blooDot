@@ -97,7 +97,8 @@ void GameOfLifeAnimation::LoadRecording(Platform::String^ fileName)
 	Platform::Array<byte>^ rawData = m_basicReaderWriter->ReadData(fileName);
 	byte* srcData = rawData->Data;
 
-	/* 1. ask the file how big the matrix is */
+	/* 1. ask the file how big the matrix is 
+	 * -!!- BUG: signature too short, is longer actually! */
 	unsigned short fileSignature = *reinterpret_cast<unsigned short*>(srcData + offset); offset += sizeof(unsigned short);
 	unsigned short boardWidth = *reinterpret_cast<unsigned short*>(srcData + offset); offset += sizeof(unsigned short);
 	unsigned short boardHeight = *reinterpret_cast<unsigned short*>(srcData + offset); offset += sizeof(unsigned short);

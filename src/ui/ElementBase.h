@@ -28,4 +28,4 @@ protected:
 	bool            m_isFadingOut;
 };
 
-typedef std::set<ElementBase*> ElementSet;
+typedef std::map<blooDot::UIElement, ElementBase*> ElementSet;

@@ -29,19 +29,15 @@ void TextButton::Render()
 {
 	ID2D1DeviceContext* d2dContext = UserInterface::GetD2DContext();
 
-	if (m_selected)
+	if (this->m_selected)
 	{
-		D2D1_RECT_F bounds = GetBounds();
-
-		d2dContext->DrawRectangle(
-			bounds,
-			m_textColorBrush.Get(),
-			4.0f
-		);
+		D2D1_RECT_F bounds = this->GetBounds();
+		d2dContext->FillRectangle(bounds, this->m_selectionBackdropBrush.Get());
+		d2dContext->DrawRectangle(bounds, this->m_textColorBrush.Get(), 3.0f);
 	}
 
 	TextElement::Render();
-}
+}	
 
 void TextButton::SetPadding(D2D1_SIZE_F padding)
 {

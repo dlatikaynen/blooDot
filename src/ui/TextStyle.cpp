@@ -1,6 +1,7 @@
 #include "..\PreCompiledHeaders.h"
 #include "UserInterface.h"
 #include "..\dx\DirectXHelper.h"
+#include "..\dx\TTFLoader.h"
 
 using namespace Windows::UI::Core;
 using namespace Windows::Foundation;
@@ -10,7 +11,7 @@ using namespace D2D1;
 
 TextStyle::TextStyle()
 {
-	m_fontName = L"Segoe UI";
+	m_fontName = L"Freckle Face";
 	m_fontSize = 24.0f;
 	m_fontWeight = DWRITE_FONT_WEIGHT_NORMAL;
 	m_fontStyle = DWRITE_FONT_STYLE_NORMAL;
@@ -67,11 +68,10 @@ IDWriteTextFormat* TextStyle::GetTextFormat()
 	if (m_textFormat == nullptr)
 	{
 		IDWriteFactory* dwriteFactory = UserInterface::GetDWriteFactory();
-
 		DX::ThrowIfFailed(
 			dwriteFactory->CreateTextFormat(
 				m_fontName->Data(),
-				nullptr,
+				UserInterface::GetFontCollection(),
 				m_fontWeight,
 				m_fontStyle,
 				DWRITE_FONT_STRETCH_NORMAL,
@@ -81,13 +81,8 @@ IDWriteTextFormat* TextStyle::GetTextFormat()
 			)
 		);
 
-		DX::ThrowIfFailed(
-			m_textFormat->SetTextAlignment(m_textAlignment)
-		);
-
-		DX::ThrowIfFailed(
-			m_textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR)
-		);
+		DX::ThrowIfFailed(m_textFormat->SetTextAlignment(m_textAlignment));
+		DX::ThrowIfFailed(m_textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR));
 	}
 
 	return m_textFormat.Get();

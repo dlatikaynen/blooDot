@@ -1,11 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="..\src\BasicPixelShader.hlsl" />
-    <FxCompile Include="..\src\BasicVertexShader.hlsl" />
+    <FxCompile Include="..\src\BasicPixelShader.hlsl">
+      <Filter>dx\3dx</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\BasicVertexShader.hlsl">
+      <Filter>dx\3dx</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\sound\Audio.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeSprinkler.cpp">
       <Filter>algo</Filter>
     </ClCompile>
@@ -111,12 +114,6 @@
     <ClCompile Include="..\src\ui\NerdStatsDisplay.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\WorldScreenBase.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ui\LevelEditor.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ui\WorldSheet.cpp">
       <Filter>ui</Filter>
     </ClCompile>
@@ -129,10 +126,53 @@
     <ClCompile Include="..\src\app\Consts.cpp">
       <Filter>app</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ui\LevelEditorHUD.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dings\wall-like\bitmapdings.cpp">
+      <Filter>ui\dings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dings\floor-like\wasser.cpp">
+      <Filter>ui\dings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\algo\ClumsyPacking.h">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sound\Audio.cpp">
+      <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dings\looot-like\looot.cpp">
+      <Filter>ui\dings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dings\mob-like\mobs.cpp">
+      <Filter>ui\dings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dx\TTFLoader.cpp">
+      <Filter>dx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\playground\WorldScreenBase.cpp">
+      <Filter>ui\playground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\playground\WorldScreen.cpp">
+      <Filter>ui\playground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\playground\LevelEditor.cpp">
+      <Filter>ui\playground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\playground\PlayerMomentum.h">
+      <Filter>ui\playground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\playground\Player.cpp">
+      <Filter>ui\playground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\ControllerSetup.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\app\Utility.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\sound\Audio.h" />
-    <ClInclude Include="..\src\dx\Primitives.h" />
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
       <Filter>algo</Filter>
     </ClInclude>
@@ -226,13 +266,7 @@
     <ClInclude Include="..\src\physics\BasicMath.h">
       <Filter>algo</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\LevelEditor.h">
-      <Filter>ui</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ui\NerdStatsDisplay.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ui\WorldScreenBase.h">
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\WorldSheet.h">
@@ -250,47 +284,278 @@
     <ClInclude Include="..\src\app\Consts.h">
       <Filter>app</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\ui\LevelEditorHUD.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dx\Primitives.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sound\Audio.h">
+      <Filter>audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dx\TTFLoader.h">
+      <Filter>dx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\playground\WorldScreenBase.h">
+      <Filter>ui\playground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\playground\WorldScreen.h">
+      <Filter>ui\playground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\playground\LevelEditor.h">
+      <Filter>ui\playground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\playground\Player.h">
+      <Filter>ui\playground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\ControllerSetup.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\app\Utility.h">
+      <Filter>app</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="Media\Audio\background.mp3" />
-    <Media Include="Media\Audio\Checkpoint.wav" />
-    <Media Include="Media\Audio\MenuChange.wav" />
-    <Media Include="Media\Audio\MenuSelect.wav" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\src\mediumtile-sdk.png" />
-    <Image Include="..\src\smalltile-phone-sdk.png" />
-    <Image Include="..\src\smalltile-windows-sdk.png" />
-    <Image Include="..\src\splash-phone-sdk.png" />
-    <Image Include="..\src\splash-windows-sdk.png" />
-    <Image Include="..\src\squareTile-sdk.png" />
-    <Image Include="..\src\storeLogo-sdk.png" />
-    <Image Include="..\src\tile-sdk.png" />
-    <Image Include="..\src\windowstitle-sdk.png" />
-    <Image Include="Assets\LockScreenLogo.scale-200.png" />
-    <Image Include="Assets\SplashScreen.scale-200.png" />
-    <Image Include="Assets\Square150x150Logo.scale-200.png" />
-    <Image Include="Assets\Square44x44Logo.scale-200.png" />
-    <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Image Include="Assets\StoreLogo.png" />
-    <Image Include="Assets\Wide310x150Logo.scale-200.png" />
-    <Image Include="Media\Textures\bridge.dds" />
-    <Image Include="Media\Textures\bridge_bump.dds" />
-    <Image Include="Media\Textures\cliff_sides.dds" />
-    <Image Include="Media\Textures\loadscreen.png" />
-    <Image Include="Media\Textures\Marble.dds" />
-    <Image Include="Media\Textures\topwall_color.dds" />
-    <Image Include="Media\Textures\walllevel1.dds" />
-    <Image Include="Media\Bitmaps\universe_seamless.png" />
-    <Image Include="Media\Bitmaps\notimeforcaution.png" />
+    <Image Include="Media\Bitmaps\dalek.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\floorstonetile.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\notimeforcaution.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\mediumtile-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\smalltile-phone-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\smalltile-windows-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\snowblock.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\splash-phone-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.scale-200.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\splash-windows-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.scale-200.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\Square150x150Logo.scale-200.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\squareTile-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\StoreLogo.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\storeLogo-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\tile-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\universe_seamless.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\highgrass.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Textures\loadscreen.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\LockScreenLogo.scale-200.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Assets\Wide310x150Logo.scale-200.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="..\src\windowstitle-sdk.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Textures\bridge.dds">
+      <Filter>dx\3dx</Filter>
+    </Image>
+    <Image Include="Media\Textures\bridge_bump.dds">
+      <Filter>dx\3dx</Filter>
+    </Image>
+    <Image Include="Media\Textures\cliff_sides.dds">
+      <Filter>dx\3dx</Filter>
+    </Image>
+    <Image Include="Media\Textures\Marble.dds">
+      <Filter>dx\3dx</Filter>
+    </Image>
+    <Image Include="Media\Textures\topwall_color.dds">
+      <Filter>dx\3dx</Filter>
+    </Image>
+    <Image Include="Media\Textures\walllevel1.dds">
+      <Filter>dx\3dx</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\floorrocktile.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\packcover-wallcrack.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\lettuce.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\player-1.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\schaedel.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
   </ItemGroup>
   <ItemGroup>
     <None Include="blooDot_TemporaryKey.pfx" />
-    <None Include="Media\Audio\background.wma" />
-    <None Include="Media\Bitmaps\blooDot.bmp" />
+    <None Include="Media\Audio\background.wma">
+      <Filter>media\music</Filter>
+    </None>
+    <None Include="Media\Fonts\FreckleFace-Regular.ttf">
+      <Filter>media\font</Filter>
+    </None>
+    <None Include="Media\Fonts\FredokaOne-Regular.ttf">
+      <Filter>media\font</Filter>
+    </None>
+    <None Include="Media\Fonts\OFL.txt">
+      <Filter>media\font</Filter>
+    </None>
+    <None Include="Media\Audio\onmenuselectionfrustra.wav">
+      <Filter>media\sfx</Filter>
+    </None>
+    <None Include="Media\Audio\onmenuselectionchange.wav">
+      <Filter>media\sfx</Filter>
+    </None>
+    <None Include="Media\Audio\onmenuitempressed.wav">
+      <Filter>media\sfx</Filter>
+    </None>
+    <None Include="Media\Bitmaps\blooDot.bmp">
+      <Filter>media\bitmap</Filter>
+    </None>
+    <None Include="Media\Audio\onsuccessfulsave.wav">
+      <Filter>media\sfx</Filter>
+    </None>
+    <None Include="Media\Legacy\NEPOMUK.BAS">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\NEPOMUK2.BAS">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER3.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER3.DA2">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER12.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER15.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER15.DA2">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER16.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER16.DA2">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER16.DA3">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER16.DA4">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER17.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER17.DA2">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER18.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER19.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER20.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER21.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER22.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER23.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER24.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER25.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER26.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER27.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER28.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER29.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER30.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER30.DA2">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER32.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER33.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER34.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER35.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER36.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\TIMER37.DA1">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Legacy\UBERGANG.DAT">
+      <Filter>media\legacy</Filter>
+    </None>
+    <None Include="Media\Levels\grassmere.bloodot">
+      <Filter>media\levels</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="algo">
@@ -317,5 +582,40 @@
     <Filter Include="world">
       <UniqueIdentifier>{718ea7fb-a814-40ca-98d3-0cc426bad6dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="audio">
+      <UniqueIdentifier>{29991b5a-8268-48ef-adb8-8fa4897b6d09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media">
+      <UniqueIdentifier>{033da9a0-d944-44e7-a785-e528c49199b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\bitmap">
+      <UniqueIdentifier>{b61619e4-f197-4360-90ea-3105f82fed0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\sfx">
+      <UniqueIdentifier>{99a9289e-f26e-4772-942d-4926727bde4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\music">
+      <UniqueIdentifier>{e525a3c6-e753-4314-8e41-5a8d9b5a7c49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\font">
+      <UniqueIdentifier>{92936b36-5994-4916-ab89-e93fef575fa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dx\3dx">
+      <UniqueIdentifier>{a212c7f3-557a-4543-bcfb-cd170556664d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\legacy">
+      <UniqueIdentifier>{5ad9b12e-0441-4ccf-899f-6ae06c107570}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\levels">
+      <UniqueIdentifier>{7bf3c37d-0bbb-4ef1-975c-8b2e4d51717b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\playground">
+      <UniqueIdentifier>{e1b24f93-f12b-45ef-be90-c324090333be}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Media\Audio\background.mp3">
+      <Filter>media\music</Filter>
+    </Media>
   </ItemGroup>
 </Project>

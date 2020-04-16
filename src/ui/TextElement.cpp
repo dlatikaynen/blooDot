@@ -15,20 +15,9 @@ TextElement::TextElement()
 void TextElement::Initialize()
 {
 	ID2D1DeviceContext* d2dContext = UserInterface::GetD2DContext();
-
-	DX::ThrowIfFailed(
-		d2dContext->CreateSolidColorBrush(
-			ColorF(ColorF::White),
-			&m_textColorBrush
-		)
-	);
-
-	DX::ThrowIfFailed(
-		d2dContext->CreateSolidColorBrush(
-			ColorF(ColorF::Black),
-			&m_shadowColorBrush
-		)
-	);
+	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::White), &m_textColorBrush));
+	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::White, 0.2f), &m_selectionBackdropBrush));
+	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::Black), &m_shadowColorBrush));
 }
 
 void TextElement::Update(float timeTotal, float timeDelta)
@@ -78,6 +67,7 @@ void TextElement::Render()
 void TextElement::ReleaseDeviceDependentResources()
 {
 	m_textColorBrush.Reset();
+	m_selectionBackdropBrush.Reset();
 	m_shadowColorBrush.Reset();
 }
 

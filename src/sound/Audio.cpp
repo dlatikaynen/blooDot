@@ -16,19 +16,19 @@ void  _stdcall AudioEngineCallbacks::OnCriticalError(HRESULT Error)
 
 Audio::Audio()
 {
-    m_currentBuffer = 0;
-    m_engineExperiencedCriticalError = false;
-
-    m_isAudioStarted = false;
-    m_musicEngine = nullptr;
-    m_soundEffectEngine = nullptr;
-    m_musicMasteringVoice = nullptr;
-    m_soundEffectMasteringVoice = nullptr;
-    m_musicSourceVoice = nullptr;
-    m_soundEffectReverbVoiceSmallRoom = nullptr;
-    m_soundEffectReverbVoiceLargeRoom = nullptr;
-    m_musicReverbVoiceSmallRoom = nullptr;
-    m_musicReverbVoiceLargeRoom = nullptr;
+	this->m_currentBuffer = 0;
+	this->m_engineExperiencedCriticalError = false;
+	this->m_isAudioStarted = false;
+	this->m_isAudioPaused = false;
+	this->m_musicEngine = nullptr;
+	this->m_soundEffectEngine = nullptr;
+	this->m_musicMasteringVoice = nullptr;
+	this->m_soundEffectMasteringVoice = nullptr;
+	this->m_musicSourceVoice = nullptr;
+	this->m_soundEffectReverbVoiceSmallRoom = nullptr;
+	this->m_soundEffectReverbVoiceLargeRoom = nullptr;
+	this->m_musicReverbVoiceSmallRoom = nullptr;
+	this->m_musicReverbVoiceLargeRoom = nullptr;
 }
 
 Audio::~Audio()
@@ -261,12 +261,10 @@ void Audio::CreateResources()
         CreateReverb(m_soundEffectEngine, m_soundEffectMasteringVoice, &m_reverbParametersSmall, &m_soundEffectReverbVoiceSmallRoom, true);
         CreateReverb(m_soundEffectEngine, m_soundEffectMasteringVoice, &m_reverbParametersLarge, &m_soundEffectReverbVoiceLargeRoom, true);
 
-        //CreateSourceVoice(RollingEvent);
-        //CreateSourceVoice(FallingEvent);
-        //CreateSourceVoice(CollisionEvent);
-        CreateSourceVoice(MenuChangeEvent);
+		CreateSourceVoice(CheckpointEvent);
+		CreateSourceVoice(MenuChangeEvent);
         CreateSourceVoice(MenuSelectedEvent);
-        CreateSourceVoice(CheckpointEvent);
+        CreateSourceVoice(MenuTiltEvent);
     }
     catch (...)
     {
@@ -321,9 +319,21 @@ void Audio::CreateSourceVoice(SoundEvent sound)
     MediaStreamer soundEffectStream;
     switch (sound)
     {
-        case MenuChangeEvent: soundEffectStream.Initialize(L"Media\\Audio\\MenuChange.wav"); break;
-        case MenuSelectedEvent: soundEffectStream.Initialize(L"Media\\Audio\\MenuSelect.wav"); break;
-        case CheckpointEvent: soundEffectStream.Initialize(L"Media\\Audio\\Checkpoint.wav"); break;
+		case CheckpointEvent:
+			soundEffectStream.Initialize(L"Media\\Audio\\onsuccessfulsave.wav");
+			break;
+	
+		case MenuChangeEvent:
+			soundEffectStream.Initialize(L"Media\\Audio\\onmenuselectionchange.wav"); 
+			break;
+
+        case MenuSelectedEvent: 
+			soundEffectStream.Initialize(L"Media\\Audio\\onmenuitempressed.wav"); 			
+			break;
+
+		case MenuTiltEvent:
+			soundEffectStream.Initialize(L"Media\\Audio\\onmenuselectionfrustra.wav"); 
+			break;
     }
 
     m_soundEffects[sound].m_soundEventType = sound;
@@ -441,8 +451,9 @@ void Audio::ReleaseResources()
     m_soundEffectReverbVoiceLargeRoom = nullptr;
     m_musicReverbVoiceSmallRoom = nullptr;
     m_musicReverbVoiceLargeRoom = nullptr;
-    m_musicEngine = nullptr;
-    m_soundEffectEngine = nullptr;
+
+	this->SafeRelease(&m_musicEngine);
+	this->SafeRelease(&m_soundEffectEngine);
 }
 
 void Audio::Start()
@@ -567,13 +578,13 @@ void Audio::PlaySoundEffect(SoundEvent sound)
         // Note that stopping and then flushing could cause a glitch due to the
         // waveform not being at a zero-crossing, but due to the nature of the sound
         // (fast and 'clicky'), we don't mind.
-        if (state.BuffersQueued > 0 && sound == MenuChangeEvent)
-        {
-            soundEffect->m_soundEffectSourceVoice->Stop();
-            soundEffect->m_soundEffectSourceVoice->FlushSourceBuffers();
-            soundEffect->m_soundEffectSourceVoice->SubmitSourceBuffer(&soundEffect->m_audioBuffer);
-            soundEffect->m_soundEffectSourceVoice->Start();
-        }
+		if (state.BuffersQueued > 0 && (sound == MenuChangeEvent || sound == MenuTiltEvent))
+		{
+			soundEffect->m_soundEffectSourceVoice->Stop();
+			soundEffect->m_soundEffectSourceVoice->FlushSourceBuffers();
+			soundEffect->m_soundEffectSourceVoice->SubmitSourceBuffer(&soundEffect->m_audioBuffer);
+			soundEffect->m_soundEffectSourceVoice->Start();
+		}
     }
 
     m_soundEffects[sound].m_soundEffectStarted = true;
@@ -632,6 +643,21 @@ void Audio::SetSoundEffectFilter(SoundEvent sound, float frequency, float oneOve
     }
 }
 
+bool Audio::IsAudioStarted()
+{
+	return this->m_isAudioStarted;
+}
+
+bool Audio::IsAudioSuspended()
+{
+	return this->m_isAudioPaused;
+}
+
+bool Audio::IsAudioPlaying()
+{
+	return this->m_isAudioStarted && !this->m_isAudioPaused;
+}
+
 // Uses the IXAudio2::StopEngine method to stop all audio immediately.
 // It leaves the audio graph untouched, which preserves all effect parameters
 // and effect histories (like reverb effects) voice states, pending buffers,
@@ -640,17 +666,17 @@ void Audio::SetSoundEffectFilter(SoundEvent sound, float frequency, float oneOve
 // never been stopped except for the period of silence.
 void Audio::SuspendAudio()
 {
-    if (m_engineExperiencedCriticalError)
+    if (this->m_engineExperiencedCriticalError)
     {
         return;
     }
 
-    if (m_isAudioStarted)
+    if (this->m_isAudioStarted)
     {
-        m_musicEngine->StopEngine();
-        m_soundEffectEngine->StopEngine();
-    }
-    m_isAudioStarted = false;
+		this->m_musicEngine->StopEngine();
+		this->m_soundEffectEngine->StopEngine();
+		this->m_isAudioPaused = true;
+	}
 }
 
 // Restarts the audio streams. A call to this method must match a previous call
@@ -660,16 +686,20 @@ void Audio::SuspendAudio()
 // reset the audio pipeline.
 void Audio::ResumeAudio()
 {
-    if (m_engineExperiencedCriticalError)
+    if (this->m_engineExperiencedCriticalError || !this->m_isAudioPaused)
     {
         return;
     }
 
-    HRESULT hr = m_musicEngine->StartEngine();
-    HRESULT hr2 = m_soundEffectEngine->StartEngine();
+    HRESULT hr = this->m_musicEngine->StartEngine();
+    HRESULT hr2 = this->m_soundEffectEngine->StartEngine();
 
     if (FAILED(hr) || FAILED(hr2))
     {
-        m_engineExperiencedCriticalError = true;
+		this->m_engineExperiencedCriticalError = true;
     }
+	else
+	{
+		this->m_isAudioPaused = false;
+	}	
 }

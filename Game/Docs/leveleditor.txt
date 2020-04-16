@@ -1,0 +1,20 @@
+key map on level editor
+=======================
+
+<P>... [p]lace currently selected ding on current cursor position, on the first available and suitable layer
+
+<O>... [o]bliterate topmost ding on current cursor position. exposes universe if floor is deleted
+
+<F>... [f]loodfill enclosed area with currently selected ding on lowestmost available layer
+       (does not vertically flow around obstacles even if placed ding would allow)
+
+<->... select previous ding from toolbox
+
+<+>... select next ding from toolbox
+
+<PgDn> select next category/group of dings from toolbox
+
+<PgUp> select previous category/group of dings from toolbox
+
+
+

@@ -59,12 +59,11 @@ void App::Initialize(CoreApplicationView^ applicationView)
 // Called when the CoreWindow object is created (or re-created).
 void App::SetWindow(CoreWindow^ window)
 {
-
     m_deviceResources->SetWindow(window);
     m_Main = std::unique_ptr<blooDot::blooDotMain>(new blooDot::blooDotMain(m_deviceResources));
 
 #if WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP
-    // API's not available on Phone
+    // APIs not available on Phone
     window->PointerCursor = ref new CoreCursor(CoreCursorType::Arrow, 0);
 
     // Disable all pointer visual feedback for better performance when touching.
@@ -74,25 +73,15 @@ void App::SetWindow(CoreWindow^ window)
 #endif
 
     window->Activated += ref new TypedEventHandler<CoreWindow^, WindowActivatedEventArgs^>(this, &App::OnWindowActivationChanged);
-
-    window->SizeChanged +=
-        ref new TypedEventHandler<CoreWindow^, WindowSizeChangedEventArgs^>(this, &App::OnWindowSizeChanged);
-
-    window->VisibilityChanged +=
-        ref new TypedEventHandler<CoreWindow^, VisibilityChangedEventArgs^>(this, &App::OnVisibilityChanged);
-
-    window->Closed +=
-        ref new TypedEventHandler<CoreWindow^, CoreWindowEventArgs^>(this, &App::OnWindowClosed);
-
+    window->SizeChanged += ref new TypedEventHandler<CoreWindow^, WindowSizeChangedEventArgs^>(this, &App::OnWindowSizeChanged);
+    window->VisibilityChanged += ref new TypedEventHandler<CoreWindow^, VisibilityChangedEventArgs^>(this, &App::OnVisibilityChanged);
+    window->Closed += ref new TypedEventHandler<CoreWindow^, CoreWindowEventArgs^>(this, &App::OnWindowClosed);
     window->PointerPressed += ref new TypedEventHandler<CoreWindow^, PointerEventArgs^>(this, &App::OnPointerPressed);
-
     window->PointerReleased += ref new TypedEventHandler<CoreWindow^, PointerEventArgs^>(this, &App::OnPointerReleased);
-
     window->PointerMoved += ref new TypedEventHandler<CoreWindow^, PointerEventArgs^>(this, &App::OnPointerMoved);
-
     window->KeyDown += ref new TypedEventHandler<CoreWindow^, KeyEventArgs^>(this, &App::OnKeyDown);
-
-    window->KeyUp += ref new TypedEventHandler<CoreWindow^, KeyEventArgs^>(this, &App::OnKeyUp);
+    window->KeyUp += ref new TypedEventHandler<CoreWindow^, KeyEventArgs^>(this, &App::OnKeyUp);	
+	window->PointerWheelChanged += ref new TypedEventHandler<CoreWindow^, PointerEventArgs^>(this, &App::OnMouseWheel);
 
     DisplayInformation^ currentDisplayInformation = DisplayInformation::GetForCurrentView();
     currentDisplayInformation->DpiChanged += ref new TypedEventHandler<DisplayInformation^, Platform::Object^>(this, &App::OnDpiChanged);
@@ -123,15 +112,15 @@ void App::Load(Platform::String^ entryPoint)
 // This method is called after the window becomes active.
 void App::Run()
 {
-    while (!m_windowClosed)
+    while (!this->m_windowClosed && !this->m_Main->Suicide())
     {
-        if (m_windowVisible)
+        if (this->m_windowVisible)
         {
             CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
-            m_Main->Update();
-            if (m_Main->Render())
+            this->m_Main->Update();
+            if (this->m_Main->Render())
             {				
-                m_deviceResources->Present();
+                this->m_deviceResources->Present();
             }
         }
         else
@@ -255,6 +244,11 @@ void App::OnPointerMoved(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Cor
 	m_Main->PointerMove(args->CurrentPoint->PointerId, args->CurrentPoint->Position);
 }
 
+void App::OnMouseWheel(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::PointerEventArgs^ args)
+{
+	this->m_Main->MouseWheeled(args->CurrentPoint->PointerId, args->CurrentPoint->Properties->MouseWheelDelta);
+}
+
 void App::OnKeyDown(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::KeyEventArgs^ args)
 {
     m_Main->KeyDown(args->VirtualKey);
@@ -262,7 +256,7 @@ void App::OnKeyDown(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::Ke
 
 
 void App::OnKeyUp(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::KeyEventArgs^ args)
-{
+{		
     m_Main->KeyUp(args->VirtualKey);
 #ifdef _DEBUG
     // Pressing F4 cause the app to exit, so that DumpD3DDebug method gets called on exit.
@@ -271,6 +265,11 @@ void App::OnKeyUp(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::KeyE
         m_windowClosed = true;
     }
 #endif // _DEBUG
+}
+
+void App::Exit()
+{
+	this->m_windowClosed = true;
 }
 
 #ifdef _DEBUG

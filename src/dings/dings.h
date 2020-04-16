@@ -4,10 +4,12 @@
 #include "..\dx\DirectXHelper.h"
 #include "..\dx\DeviceResources.h"
 #include "..\dx\BrushRegistry.h"
+#include "..\io\BasicLoader.h"
 
 // Numeric ordering is relied upon
 enum Layers
 {
+	None = 0,
 	Floor = 1,
 	Walls = 2,
 	Rooof = 4
@@ -16,21 +18,21 @@ enum Layers
 enum Facings
 {
 	Shy = 0,													/* one shy (default placement) */
-	Center = 1,													/* crossing */
-	West = 2,													/* U-bag with opening to the right (westcap) */
-	East = 4,													/* U-bag with opening to the left (eastcap) */
-	South = 8,													/* U-bag with opening upwards (southcap) */
-	North = 16,													/* U-bag with opening downwards (northcap) */
-	Viech = West | North | East | South,
-	SingleEdge = 32,
-	TripleEdge = 64,
-	CornerNear = 128,
-	CornerFar = 256,
-	NW = 512,													/* left-top capping edge */
-	NE = 1024,													/* right-top capping edge */
+	NW = 1,														/* left-top capping edge */
+	North = 2,													/* U-bag with opening downwards (northcap) */
+	NE = 4,														/* right-top capping edge */
+	East = 8,													/* U-bag with opening to the left (eastcap) */
+	SE = 16,													/* right-bottom capping edge */
+	South = 32,													/* U-bag with opening upwards (southcap) */
+	SW = 64,													/* left-bottom capping edge */
+	West = 128,													/* U-bag with opening to the right (westcap) */
+	Viech = West | North | East | South,						/* in fact anything that can orient left-right-up-down, all viech mobs and stuff like chests */
+	Center = 256,												/* crossing */
+	SingleEdge = 512,
+	TripleEdge = 1024,
+	CornerNear = 2048,
+	CornerFar = 4096,
 	WE = West | East,											/* horizontal pipe */
-	SW = 2048,													/* left-bottom capping edge */
-	SE = 4096,													/* right-bottom capping edge */
 	NS = North | South,											/* vertical pipe */
 	EdgeW = West | SingleEdge,									/* straight edge, left-only */
 	EdgeE = East | SingleEdge,									/* straight edge, right-only */
@@ -73,6 +75,13 @@ enum Facings
 	Immersed = NW | North | NE | East | SE | South | SW | West
 };
 
+constexpr inline Facings operator |(const Facings left, const Facings& right) 
+{
+	return static_cast<Facings>(static_cast<int>(left) | static_cast<int>(right));
+}
+
+Facings& operator |=(Facings& a, Facings b);
+
 enum OrientabilityIndexQuadruplet
 {
 	// Sequence is meaningful
@@ -109,18 +118,21 @@ enum OrientabilityIndexDuplex
 class Dings
 {
 public:
-	Dings(int dingID, Platform::String^ dingName, BrushRegistry drawBrushes);
+	Dings(int dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 
-	int					ID();
+	unsigned			ID();
 	Platform::String^	Name();
 	void				Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY);
-	virtual void		DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
-	D2D1_POINT_2U		GetSheetPlacement(Facings coalesced);
+	D2D1_POINT_2U		GetSheetPlacement(Facings orientation);
+	Layers				GetPreferredLayer();
+	Facings				AvailableFacings();
+	bool				CouldCoalesce();
+	static Facings		RotateFromFacing(Facings fromFacing, bool inverseDirection);
 
 protected:
-	int					m_ID;
+	unsigned			m_ID;
 	Platform::String^	m_Name;
-	BrushRegistry		m_Brushes;
+	BrushRegistry*		m_Brushes;
 	Facings				m_Facings;
 	Facings				m_Coalescing;
 	Layers				m_preferredLayer;
@@ -140,9 +152,13 @@ protected:
 	 * four outer-inner 90° corners
 	 * four outer-only 90° corners
 	 * four U-pieces
+	 * four T-pieces
 	 * four straight edges
 	 * four straight edges with one inner corner
 	 * four straight edges with two inner corners (Ts) 
+	 *
+	 * 10 x 4 + 2 x 2 + 3 x 1 = 40 + 4 + 3 = 47, the Wang number
+	 * so we seem to have it somewhat right, exactly, that is.
 	 *
 	 * indices are always orientationwise */
 
@@ -162,23 +178,159 @@ protected:
 	D2D1_POINT_2U		m_lookupU[4];
 	D2D1_POINT_2U		m_lookupTs[4];
 
+	virtual Platform::String^ ShouldLoadFromBitmap();
 	void PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);
+	void PrepareRect7x7(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);
 	void Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation);
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> LoadBitmap(Platform::String^ fileName);
+	virtual void PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) { };
+	virtual void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
+	virtual void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect);
 
 private:
-	void				SetSheetPlacementsFromCoalescability();	
+	void SetSheetPlacementsFromCoalescability();
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> LoadFromBitmap();
+	void Pack7x7(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y);
+	unsigned Pack7x7X(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y);
+	unsigned Pack7x7Y(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y);
+	void DrawShy(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
+	void DrawTwin(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
+	void DrawQuadruplet(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
+	void DrawClumsyPack(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
+
+	std::shared_ptr<DX::DeviceResources> m_deviceResources;
+	Platform::String^ m_fromFile;
 };
 
 class Mauer : public Dings 
 {
 public:
-	Mauer(BrushRegistry drawBrushes);
+	Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+protected:
+	void Mauer::PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+};
+
+class CrackedMauer : public Mauer
+{
+public:
+	CrackedMauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	void PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+};
+
+class Wasser : public Dings
+{
+public:
+	Wasser(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+};
+
+class HighGrass : public Dings
+{
+public:
+	HighGrass(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Snow : public Dings
+{
+public:
+	Snow(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
 };
 
 class Dalek : public Dings
 {
 public:
-	Dalek(BrushRegistry drawBrushes);
+	Dalek(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Player1 : public Dings
+{
+public:
+	Player1(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Player2 : public Player1
+{
+public:
+	Player2(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Player1(deviceResources, drawBrushes) { this->m_ID = 13; m_Name = L"Player-2"; };
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Player3 : public Player1
+{
+public:
+	Player3(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Player1(deviceResources, drawBrushes) { this->m_ID = 14; m_Name = L"Player-3"; };
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+}; 
+
+class Player4 : public Player1
+{
+public:
+	Player4(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Player1(deviceResources, drawBrushes) { this->m_ID = 15; m_Name = L"Player-4"; };
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Schaedel : public Dings
+{
+public:
+	Schaedel(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class FloorStoneTile : public Dings
+{
+public:
+	FloorStoneTile(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class FloorRockTile : public Dings
+{
+public:
+	FloorRockTile(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Coin : public Dings
+{
+public:
+	Coin(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+};
+
+class Chest : public Dings
+{
+public:
+	Chest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect) override;
+};
+
+class Lettuce : public Dings
+{
+public:
+	Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Rail : public Dings
+{
+public:
+	Rail(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect) override;
 };

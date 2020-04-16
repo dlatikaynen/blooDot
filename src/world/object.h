@@ -1,23 +1,37 @@
-#include "..\dings\dings.h"
-
 #pragma once
+
+#include "..\dings\dings.h"
+#include "..\algo\ClumsyPacking.h"
 
 // An object is the runtime incarnation of a Ding on a level map, including actual position in level
 class Object
 {
 public:
 	Object::Object(unsigned posInLevelX, unsigned posInLevelY);
-	Platform::String^	Name();
-	Layers				Layer();
-	Dings*				GetDings();
-	Facings				PlacementFacing();
+	void				Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
+	void				InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
+	void				InstantiateInLayerFacing(Layers inLayer, Dings* templateDing, Facings placementFacing);
+	void				Weed();
+	bool				Object::WeedFromTop(Dings** dingWeeded, Layers* layerWeeded);
+	Layers				GetTopmostPopulatedLayer();
+	Platform::String^	GetName();
+	Layers				GetLayers();
+	Dings*				GetDing(Layers ofLayer);
+	Facings				PlacementFacing(Layers ofLayer);
+	void				AdjustFacing(Layers inLayer, Facings shouldBeFacing);
+	void				RotateInPlace(Layers inLayer, bool inverseDirection);
+	void				DesignSaveToFile(std::ofstream* toFile, Layers ofLayer);
 
 protected:
 
 private:
 	D2D1_POINT_2U		m_positionInLevel;
-	Dings*				m_Dings;
-	Layers				m_Layer;	
-	Facings				m_Facing;
+	Layers				m_Layers;
+	Dings*				m_DingFloor;
+	Dings*				m_DingWalls;
+	Dings*				m_DingRooof;
+	Facings				m_FacingFloor;
+	Facings				m_FacingWalls;
+	Facings				m_FacingRooof;
 };
 

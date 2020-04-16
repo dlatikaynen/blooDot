@@ -1,21 +1,31 @@
 ﻿#include "..\PreCompiledHeaders.h"
 #include "blooDot.h"
-#include <DirectXColors.h> // For named colors
-#include "..\dx\DirectXHelper.h" // For ThrowIfFailed
+#include <DirectXColors.h>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <vector>
+#include <ppltasks.h>
+#include <WinUser.h>
+#include <concurrent_unordered_map.h>
+#include "..\dx\DirectXHelper.h"
+#include "..\dx\TTFLoader.h"
 
 using namespace blooDot;
 using namespace Windows::Gaming::Input;
 using namespace Platform::Collections;
 using namespace Windows::Foundation;
 using namespace Windows::System::Diagnostics;
+using namespace concurrency;
 
-const byte blooDotMain::BLOODOTFILE_SIGNATURE[8]{ 0x03, 'L','S','L', 0x04, 'J','M','L' };
-const byte blooDotMain::BLOODOTFILE_CONTENTTYPE_GOLANIMATION[2]{ 0xc9, 0x05 };
+const byte blooDotMain::BLOODOTFILE_SIGNATURE[8] { 0x03, 'L','S','L', 0x04, 'J','M','L' };
+const byte blooDotMain::BLOODOTFILE_CONTENTTYPE_GOLANIMATION[2] { 0xc9, 0x05 };
+const byte blooDotMain::BLOODOTFILE_CONTENTTYPE_LEVEL_DESIGN[2] { 0xd1, 0x71 };
 
 inline D2D1_RECT_F ConvertRect(Windows::Foundation::Size source)
 {
-    // ignore the source.X and source.Y  These are the location on the screen
-    // yet we don't want to use them because all coordinates are window relative.
+    // ignore the source.X and source.Y, these are the location on the screen
+    // yet we don't want to use them because all coordinates are window-relative
     return D2D1::RectF(0.0f, 0.0f, source.Width, source.Height);
 }
 
@@ -28,10 +38,11 @@ inline void InflateRect(D2D1_RECT_F& rect, float x, float y)
 }
 
 // Loads and initializes application assets when the application is loaded.
-blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResources) : 
+blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResources) :
     m_deviceResources(deviceResources),
     m_gameState(GameState::Initial),
     m_windowActive(false),
+	m_triggerSuicide(false),
 	m_deferredResourcesReadyPending(false),
     m_deferredResourcesReady(false),
 	m_FPSCircular(0),
@@ -39,21 +50,34 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	m_currentLevel(nullptr)
 {
     // Register to be notified if the Device is lost or recreated.
-    m_deviceResources->RegisterDeviceNotify(this);
+	this->m_deviceResources->RegisterDeviceNotify(this);
 
-    ZeroMemory(&m_mazeConstantBufferData, sizeof(m_mazeConstantBufferData));
-    ZeroMemory(&m_marbleConstantBufferData, sizeof(m_marbleConstantBufferData));
-    m_vertexStride = 0;
-    m_resetCamera = false;
-    m_resetMarbleRotation = false;
-    m_currentCheckpoint = 0;
-    m_windowActive = false;
-
-
-    m_lightStrength = 0.0f;
-    m_targetLightStrength = 0.0f;
-    m_resetCamera = true;
-    m_resetMarbleRotation = true;
+    this->m_currentCheckpoint = 0;
+    this->m_windowActive = false;
+	this->m_keyInsertActive = false;
+	this->m_keyDeletePressed = false;
+	this->m_keyMinusActive = false;
+	this->m_keyMinusPressed = false;
+	this->m_keyMusicActive = false;
+	this->m_keyMusicPressed = false;
+	this->m_keyPlusActive = false;
+	this->m_keyPlusPressed = false;
+	this->m_keyPlaceActive = false;
+	this->m_keyPlacePressed = false;
+	this->m_keyObliterateActive = false;
+	this->m_keyObliteratePressed = false;
+	this->m_keySaveActive = false;
+	this->m_keySavePressed = false;
+	this->m_keySaveAsActive = false;
+	this->m_keySaveAsPressed = false;
+	this->m_keyLoadActive = false;
+	this->m_keyLoadPressed = false;
+	this->m_keyEnterActive = false;
+	this->m_keyEnterPressed = false;
+	this->m_keySpaceActive = false;
+	this->m_keySpacePressed = false;
+	this->m_keyEscapeActive = false;
+	this->m_keyEscapePressed = false;
 
     // Checkpoints (from start to goal).
     m_checkpoints.push_back(XMFLOAT3(45.7f, -43.6f, -45.0f)); // Start
@@ -65,31 +89,25 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 
     m_persistentState = ref new PersistentState();
     m_persistentState->Initialize(Windows::Storage::ApplicationData::Current->LocalSettings->Values, "blooDot");
-
-    m_camera = std::unique_ptr<Camera>(new Camera());
     m_sampleOverlay = std::unique_ptr<SampleOverlay>(new SampleOverlay(m_deviceResources, L"Lukas Spiel Test Demo"));
 
-    m_audio.Initialize();
-    m_accelerometer = Windows::Devices::Sensors::Accelerometer::GetDefault();
+	this->LoadFontCollection();
+    this->m_audio.Initialize();
+	this->m_accelerometer = Windows::Devices::Sensors::Accelerometer::GetDefault();
+	this->m_loadScreen = std::unique_ptr<LoadScreen>(new LoadScreen());
+	this->m_loadScreen->Initialize(m_deviceResources);
 
-    m_loadScreen = std::unique_ptr<LoadScreen>(new LoadScreen());
-    m_loadScreen->Initialize(m_deviceResources);
-
-	m_worldScreen = std::unique_ptr<WorldScreenBase>(new LevelEditor());
-	m_currentLevel = new Level(L"Gartenwelt-1", D2D1::SizeU(50, 30), 720, 720);
-	m_worldScreen->EnterLevel(m_currentLevel);
-	m_worldScreen->Initialize(m_deviceResources);
-
-    UserInterface::GetInstance().Initialize(
-        m_deviceResources->GetD2DDevice(),
-        m_deviceResources->GetD2DDeviceContext(),
-        m_deviceResources->GetWicImagingFactory(),
-        m_deviceResources->GetDWriteFactory()
+	UserInterface::GetInstance().Initialize(
+		this->m_deviceResources->GetD2DDevice(),
+		this->m_deviceResources->GetD2DDeviceContext(),
+		this->m_deviceResources->GetWicImagingFactory(),
+		this->m_deviceResources->GetDWriteFactory(),
+		this->m_deviceResources->GetDWriteFactory3(),
+		this->m_fontCollection
     );
 
-    LoadState();
-
-    CreateWindowSizeDependentResources();
+	this->LoadState();
+	this->CreateWindowSizeDependentResources();
 
     // TODO: Change timer settings if you want something other than the default variable timestep mode.
     // eg. for 60 FPS fixed timestep update logic, call:
@@ -99,32 +117,30 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
     */
 
 	// Input
-	m_myGamepads = ref new Vector<Gamepad^>();
-
+	this->m_myGamepads = ref new Vector<Gamepad^>();
 	for (auto gamepad : Gamepad::Gamepads)
 	{
-		m_myGamepads->Append(gamepad);
+		this->m_myGamepads->Append(gamepad);
 	}
 
 	Gamepad::GamepadAdded += ref new EventHandler<Gamepad^>([=](Platform::Object^, Gamepad^ args)
 	{
-		m_myGamepads->Append(args);
-		m_currentGamepadNeedsRefresh = true;
+		this->m_myGamepads->Append(args);
+		this->m_currentGamepadNeedsRefresh = true;
 	});
 
 	Gamepad::GamepadRemoved += ref new EventHandler<Gamepad ^>([=](Platform::Object^, Gamepad^ args)
 	{
 		unsigned int indexRemoved;
-
-		if (m_myGamepads->IndexOf(args, &indexRemoved))
+		if (this->m_myGamepads->IndexOf(args, &indexRemoved))
 		{
-			m_myGamepads->RemoveAt(indexRemoved);
-			m_currentGamepadNeedsRefresh = true;
+			this->m_myGamepads->RemoveAt(indexRemoved);
+			this->m_currentGamepadNeedsRefresh = true;
 		}
 	});
 
-	m_gamepad = GetLastGamepad();
-	m_currentGamepadNeedsRefresh = false;
+	this->m_gamepad = GetLastGamepad();
+	this->m_currentGamepadNeedsRefresh = false;
 }
 
 blooDotMain::~blooDotMain()
@@ -134,26 +150,14 @@ blooDotMain::~blooDotMain()
 	delete m_currentLevel;
 }
 
+bool blooDotMain::Suicide()
+{
+	return this->m_triggerSuicide;
+}
+
 // Updates application state when the window size changes (e.g. device orientation change)
 void blooDotMain::CreateWindowSizeDependentResources()
 {
-    // update the 3D projection matrix
-    m_camera->SetProjectionParameters(
-        40.0f,                                                  // use a 70-degree vertical field of view
-        m_deviceResources->GetOutputSize().Width / m_deviceResources->GetOutputSize().Height,  // specify the aspect ratio of the window
-        50.0f,                                                  // specify the nearest Z-distance at which to draw vertices
-        500.0f                                                  // specify the farthest Z-distance at which to draw vertice
-        );
-
-    // game specific
-    XMFLOAT4X4 projection;
-    m_camera->GetProjectionMatrix(&projection);
-
-    XMStoreFloat4x4(&projection, XMMatrixMultiply(XMMatrixTranspose(XMLoadFloat4x4(&m_deviceResources->GetOrientationTransform3D())), XMLoadFloat4x4(&projection)));
-
-    m_mazeConstantBufferData.projection = projection;
-    m_marbleConstantBufferData.projection = projection;
-
     // user interface
     const float padding = 32.0f;
     D2D1_RECT_F clientRect = ConvertRect(m_deviceResources->GetLogicalSize());
@@ -163,26 +167,24 @@ void blooDotMain::CreateWindowSizeDependentResources()
     topHalfRect.bottom = ((clientRect.top + clientRect.bottom) / 2.0f) - (padding / 2.0f);
     D2D1_RECT_F bottomHalfRect = clientRect;
     bottomHalfRect.top = topHalfRect.bottom + padding;
-
-    m_startGameButton.Initialize();
-    m_startGameButton.SetAlignment(AlignCenter, AlignFar);
-    m_startGameButton.SetContainer(topHalfRect);
-    m_startGameButton.SetText(L"Start Game");
-    m_startGameButton.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
-    m_startGameButton.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
-    m_startGameButton.SetPadding(D2D1::SizeF(32.0f, 16.0f));
-    m_startGameButton.GetTextStyle().SetFontSize(72.0f);
-    UserInterface::GetInstance().RegisterElement(&m_startGameButton);
+	
+	D2D1_RECT_F containerRect = D2D1::RectF(clientRect.left, clientRect.top, clientRect.right, clientRect.top + 85.0f);
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"start locally", UIElement::LocalGameButton, &containerRect));
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"start networked", UIElement::NetworkGameButton, &containerRect));
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"worldbuilder", UIElement::WorldBuilderButton, &containerRect));
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"configuration", UIElement::ConfigurationButton, &containerRect));
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"help~about", UIElement::HelpAboutButton, &containerRect));
+	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"exterminate", UIElement::ExterminateButton, &containerRect));
 
     m_highScoreButton.Initialize();
-    m_highScoreButton.SetAlignment(AlignCenter, AlignNear);
+    m_highScoreButton.SetAlignment(AlignCenter, AlignCenter);
     m_highScoreButton.SetContainer(bottomHalfRect);
-    m_highScoreButton.SetText(L"High Scores");
+    m_highScoreButton.SetText(L"multiplayer");
     m_highScoreButton.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
     m_highScoreButton.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
     m_highScoreButton.SetPadding(D2D1::SizeF(32.0f, 16.0f));
     m_highScoreButton.GetTextStyle().SetFontSize(72.0f);
-    UserInterface::GetInstance().RegisterElement(&m_highScoreButton);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::HighScoreButton, &m_highScoreButton);
 
     m_highScoreTable.Initialize();
     m_highScoreTable.SetAlignment(AlignCenter, AlignCenter);
@@ -191,7 +193,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_highScoreTable.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BOLD);
     m_highScoreTable.GetTextStyle().SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
     m_highScoreTable.GetTextStyle().SetFontSize(60.0f);
-    UserInterface::GetInstance().RegisterElement(&m_highScoreTable);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::HighscoreTable, &m_highScoreTable);
 
     m_preGameCountdownTimer.Initialize();
     m_preGameCountdownTimer.SetAlignment(AlignCenter, AlignCenter);
@@ -199,7 +201,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_preGameCountdownTimer.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
     m_preGameCountdownTimer.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
     m_preGameCountdownTimer.GetTextStyle().SetFontSize(144.0f);
-    UserInterface::GetInstance().RegisterElement(&m_preGameCountdownTimer);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::PreGameCountdownTimer, &m_preGameCountdownTimer);
 
 	m_nerdStatsDisplay.Initialize();
 	m_nerdStatsDisplay.SetAlignment(AlignType::AlignNear, AlignType::AlignNear);
@@ -207,7 +209,17 @@ void blooDotMain::CreateWindowSizeDependentResources()
 	m_nerdStatsDisplay.SetTextColor(D2D1::ColorF(D2D1::ColorF::LightGoldenrodYellow));
 	m_nerdStatsDisplay.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_DEMI_BOLD);
 	m_nerdStatsDisplay.GetTextStyle().SetFontSize(24.0f);
-	UserInterface::GetInstance().RegisterElement(&m_nerdStatsDisplay);
+	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::NerdStatsDisplay, &m_nerdStatsDisplay);
+
+	this->m_levelEditorHUD.Initialize();
+	this->m_levelEditorHUD.SetAlignment(AlignType::AlignFar, AlignType::AlignNear);
+	this->m_levelEditorHUD.SetContainer(clientRect);
+	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::LevelEditorHUD, &m_levelEditorHUD);
+
+	this->m_controllerSetup.Initialize();
+	this->m_controllerSetup.SetAlignment(AlignType::AlignCenter, AlignType::AlignCenter);
+	this->m_levelEditorHUD.SetContainer(clientRect);
+	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::ControllerSetup, &m_controllerSetup);
 
     m_inGameStopwatchTimer.Initialize();
     m_inGameStopwatchTimer.SetAlignment(AlignNear, AlignFar);
@@ -215,7 +227,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_inGameStopwatchTimer.SetTextColor(D2D1::ColorF(D2D1::ColorF::White, 0.75f));
     m_inGameStopwatchTimer.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
     m_inGameStopwatchTimer.GetTextStyle().SetFontSize(96.0f);
-    UserInterface::GetInstance().RegisterElement(&m_inGameStopwatchTimer);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::InGameStopwatchTimer, &m_inGameStopwatchTimer);
 
     m_checkpointText.Initialize();
     m_checkpointText.SetAlignment(AlignCenter, AlignCenter);
@@ -224,7 +236,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_checkpointText.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
     m_checkpointText.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
     m_checkpointText.GetTextStyle().SetFontSize(72.0f);
-    UserInterface::GetInstance().RegisterElement(&m_checkpointText);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::CheckPointText, &m_checkpointText);
 
     m_pausedText.Initialize();
     m_pausedText.SetAlignment(AlignCenter, AlignCenter);
@@ -233,7 +245,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_pausedText.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
     m_pausedText.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BLACK);
     m_pausedText.GetTextStyle().SetFontSize(72.0f);
-    UserInterface::GetInstance().RegisterElement(&m_pausedText);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::PausedText, &m_pausedText);
 
     m_resultsText.Initialize();
     m_resultsText.SetAlignment(AlignCenter, AlignCenter);
@@ -242,7 +254,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_resultsText.GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BOLD);
     m_resultsText.GetTextStyle().SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
     m_resultsText.GetTextStyle().SetFontSize(36.0f);
-    UserInterface::GetInstance().RegisterElement(&m_resultsText);
+    UserInterface::GetInstance().RegisterElement(blooDot::UIElement::ResultsText, &m_resultsText);
 
     if ((!m_deferredResourcesReady) && m_loadScreen != nullptr)
     {
@@ -260,121 +272,51 @@ void blooDotMain::CreateWindowSizeDependentResources()
 	}
 }
 
+TextButton* blooDotMain::CreateMainMenuButton(Platform::String^ captionText, UIElement elementKey, D2D1_RECT_F* containerRect)
+{
+	auto newButton = new TextButton();
+	newButton->Initialize();
+	newButton->SetAlignment(AlignCenter, AlignCenter);
+	newButton->SetContainer(*containerRect);
+	newButton->SetText(captionText);
+	newButton->SetTextColor(D2D1::ColorF(D2D1::ColorF::WhiteSmoke));
+	newButton->GetTextStyle().SetFontWeight(DWRITE_FONT_WEIGHT_BOLD);
+	newButton->SetPadding(D2D1::SizeF(16.0f, 8.0f));
+	newButton->GetTextStyle().SetFontSize(52.0f);
+	UserInterface::GetInstance().RegisterElement(elementKey, newButton);
+	/* next line automatically */
+	auto yDelta = (containerRect->bottom - containerRect->top) + 8.0f;
+	(*containerRect).top += yDelta;
+	(*containerRect).bottom += yDelta;
+	return newButton;
+}
+
+void blooDotMain::LoadFontCollection()
+{
+	MFFontContext fContext(this->m_deviceResources->GetDWriteFactory());
+	std::vector<std::wstring> filePaths;
+	filePaths.push_back(L"Media\\Fonts\\FreckleFace-Regular.ttf");
+	filePaths.push_back(L"Media\\Fonts\\FredokaOne-Regular.ttf");
+	DX::ThrowIfFailed(fContext.CreateFontCollection(filePaths, &this->m_fontCollection));
+}
+
 void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
 {
     DX::StepTimer loadingTimer;
-
     BasicLoader^ loader = ref new BasicLoader(m_deviceResources->GetD3DDevice());
-
-    D3D11_INPUT_ELEMENT_DESC layoutDesc [] =
-    {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    };
-    m_vertexStride = 44; // must set this to match the size of layoutDesc above
-
-    Platform::String^ vertexShaderName = L"BasicVertexShader.cso";
-    loader->LoadShader(
-        vertexShaderName,
-        layoutDesc,
-        ARRAYSIZE(layoutDesc),
-        &m_vertexShader,
-        &m_inputLayout
-    );
-    
-	DX::ThrowIfFailed(m_vertexShader->SetPrivateData(WKPDID_D3DDebugObjectName, vertexShaderName->Length(), vertexShaderName->Data()));
-
 	
-
-    // create the constant buffer for updating model and camera data.
-    D3D11_BUFFER_DESC constantBufferDesc = { 0 };
-    constantBufferDesc.ByteWidth = ((sizeof(ConstantBuffer) + 15) / 16) * 16; // multiple of 16 bytes
-    constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-    constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    constantBufferDesc.CPUAccessFlags = 0;
-    constantBufferDesc.MiscFlags = 0;
-    // this will not be used as a structured buffer, so this parameter is ignored
-    constantBufferDesc.StructureByteStride = 0;
-
-    DX::ThrowIfFailed(
-        m_deviceResources->GetD3DDevice()->CreateBuffer(
-            &constantBufferDesc,
-            nullptr,             // leave the buffer uninitialized
-            &m_constantBuffer
-        )
-    );
-
-    Platform::String^ constantBufferName = "Constant Buffer created in LoadDeferredResources";
-    DX::ThrowIfFailed(m_constantBuffer->SetPrivateData(WKPDID_D3DDebugObjectName, constantBufferName->Length(), constantBufferName->Data()));
-
-    Platform::String^ pixelShaderName = "BasicPixelShader.cso";
-    loader->LoadShader(
-        pixelShaderName,
-        &m_pixelShader
-        );
-    DX::ThrowIfFailed(m_pixelShader->SetPrivateData(WKPDID_D3DDebugObjectName, pixelShaderName->Length(), pixelShaderName->Data()));
-
-    // create the blend state.
-    D3D11_BLEND_DESC blendDesc = { 0 };
-    blendDesc.RenderTarget[0].BlendEnable = TRUE;
-    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-    blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-    blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-    blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-    blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    DX::ThrowIfFailed(
-        m_deviceResources->GetD3DDevice()->CreateBlendState(
-            &blendDesc,
-            &m_blendState
-            )
-        );
-    Platform::String^ blendStateName = "Blend State created in LoadDeferredResources";
-    DX::ThrowIfFailed(m_blendState->SetPrivateData(WKPDID_D3DDebugObjectName, blendStateName->Length(), blendStateName->Data()));
-
-    // create the sampler
-    D3D11_SAMPLER_DESC samplerDesc;
-    samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
-    samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.MipLODBias = 0.0f;
-    samplerDesc.MaxAnisotropy = m_deviceResources->GetDeviceFeatureLevel() > D3D_FEATURE_LEVEL_9_1 ? 4 : 2;
-    samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    samplerDesc.BorderColor[0] = 0.0f;
-    samplerDesc.BorderColor[1] = 0.0f;
-    samplerDesc.BorderColor[2] = 0.0f;
-    samplerDesc.BorderColor[3] = 0.0f;
-    // allow use of all mip levels
-    samplerDesc.MinLOD = 0;
-    samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-    DX::ThrowIfFailed(
-        m_deviceResources->GetD3DDevice()->CreateSamplerState(
-            &samplerDesc,
-            &m_sampler
-        )
-    );
-
-    Platform::String^ samplerName = "Sampler created in LoadDeferredResources";
-    DX::ThrowIfFailed(m_sampler->SetPrivateData(WKPDID_D3DDebugObjectName, samplerName->Length(), samplerName->Data()));
-
     if (!deviceOnly)
     {
-        // When handling device lost, we only need to recreate the graphics-device related
-        // resources. All other delayed resources that only need to be created on app
-        // startup go here.
-
+		/* When handling device lost, we only need to recreate the graphics - device related
+		 * resources.All other delayed resources that only need to be created on app
+		 * startup go here;
+		 * (1) audio */
         m_audio.CreateResources();
     }
 
     if (delay)
     {
-        while (loadingTimer.GetTotalSeconds() < 3.5)
+        while (loadingTimer.GetTotalSeconds() < 0.5)
         {
             // game doesn't take long to load resources,
             // so we're simulating a longer load time to demonstrate
@@ -382,8 +324,7 @@ void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
             loadingTimer.Tick([&]()
             {
                 //do nothing, just wait
-            }
-            );
+            });
         }
 
 		m_deferredResourcesReadyPending = true;
@@ -414,7 +355,7 @@ bool blooDotMain::Render()
     context->ClearRenderTargetView(m_deviceResources->GetBackBufferRenderTargetView(), DirectX::Colors::Black);
     context->ClearDepthStencilView(m_deviceResources->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	if (m_gameState == GameState::LoadScreen)
+	if (m_gameState == GameState::LoadScreen || m_gameState==GameState::MainMenu)
 	{
 		// Only render the loading screen for now.
 		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Loading Screen", 0);
@@ -427,98 +368,20 @@ bool blooDotMain::Render()
 		m_worldScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
 		m_deviceResources->GetD3DDeviceContext()->EndEvent();
 	}
+	else if (m_gameState == GameState::InGameActive)
+	{
+		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render World", 0);
+		m_worldScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
+		m_deviceResources->GetD3DDeviceContext()->EndEvent();
+	}
 	else if (m_deferredResourcesReady)
 	{
 		m_deviceResources->GetD3DDeviceContext()->IASetInputLayout(m_inputLayout.Get());
-
-		FLOAT blendFactors[4] = { 0, };
-		m_deviceResources->GetD3DDeviceContext()->OMSetBlendState(m_blendState.Get(), blendFactors, 0xffffffff);
-
-		// Set the vertex shader stage state.
-		m_deviceResources->GetD3DDeviceContext()->VSSetShader(
-			m_vertexShader.Get(),   // use this vertex shader
-			nullptr,                // don't use shader linkage
-			0                       // don't use shader linkage
-		);
-
-		// Set the pixel shader stage state.
-		m_deviceResources->GetD3DDeviceContext()->PSSetShader(
-			m_pixelShader.Get(),    // use this pixel shader
-			nullptr,                // don't use shader linkage
-			0                       // don't use shader linkage
-		);
-
-		m_deviceResources->GetD3DDeviceContext()->PSSetSamplers(
-			0,                       // starting at the first sampler slot
-			1,                       // set one sampler binding
-			m_sampler.GetAddressOf() // to use this sampler
-		);
-
-#pragma region Rendering Maze
-
-		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Maze", 0);
-		// Update the constant buffer with the new data.
-		m_deviceResources->GetD3DDeviceContext()->UpdateSubresource(
-			m_constantBuffer.Get(),
-			0,
-			nullptr,
-			&m_mazeConstantBufferData,
-			0,
-			0
-		);
-
-		m_deviceResources->GetD3DDeviceContext()->VSSetConstantBuffers(
-			0,                // starting at the first constant buffer slot
-			1,                // set one constant buffer binding
-			m_constantBuffer.GetAddressOf() // to use this buffer
-		);
-
-		m_deviceResources->GetD3DDeviceContext()->PSSetConstantBuffers(
-			0,                // starting at the first constant buffer slot
-			1,                // set one constant buffer binding
-			m_constantBuffer.GetAddressOf() // to use this buffer
-		);
-
-		m_mazeMesh.Render(m_deviceResources->GetD3DDeviceContext(), 0, INVALID_SAMPLER_SLOT, INVALID_SAMPLER_SLOT);
-		m_deviceResources->GetD3DDeviceContext()->EndEvent();
-
-#pragma endregion
-
-#pragma region Rendering Marble
-
-		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Marble", 0);
-
-		// update the constant buffer with the new data
-		m_deviceResources->GetD3DDeviceContext()->UpdateSubresource(
-			m_constantBuffer.Get(),
-			0,
-			nullptr,
-			&m_marbleConstantBufferData,
-			0,
-			0
-		);
-
-		m_deviceResources->GetD3DDeviceContext()->VSSetConstantBuffers(
-			0,                // starting at the first constant buffer slot
-			1,                // set one constant buffer binding
-			m_constantBuffer.GetAddressOf() // to use this buffer
-		);
-
-		m_deviceResources->GetD3DDeviceContext()->PSSetConstantBuffers(
-			0,                // starting at the first constant buffer slot
-			1,                // set one constant buffer binding
-			m_constantBuffer.GetAddressOf() // to use this buffer
-		);
-
-		m_marbleMesh.Render(m_deviceResources->GetD3DDeviceContext(), 0, INVALID_SAMPLER_SLOT, INVALID_SAMPLER_SLOT);
-		m_deviceResources->GetD3DDeviceContext()->EndEvent();
-
-#pragma endregion
 	}
 
-	if (m_audio.m_isAudioStarted)
+	if (this->m_audio.IsAudioPlaying())
 	{
-		m_audio.Render();
+		this->m_audio.Render();
 	}
 
     // Draw the user interface and the overlay.
@@ -537,10 +400,11 @@ void blooDotMain::SetGameState(GameState nextState)
     switch (m_gameState)
     {
     case GameState::MainMenu:
-        m_startGameButton.SetVisible(false);
-        m_highScoreButton.SetVisible(false);
-        break;
-
+	case GameState::ControllerSelection:
+		for (auto iter = this->m_mainMenuButtons.begin(); iter != this->m_mainMenuButtons.end(); ++iter) (*iter)->SetVisible(false);
+		this->m_controllerSetup.SetVisible(false);
+		break;
+		
     case GameState::HighScoreDisplay:
         m_highScoreTable.SetVisible(false);
         break;
@@ -559,66 +423,55 @@ void blooDotMain::SetGameState(GameState nextState)
     switch (nextState)
     {
     case GameState::MainMenu:
-        m_startGameButton.SetVisible(true);
-        m_startGameButton.SetSelected(true);
-        m_highScoreButton.SetVisible(true);
-        m_highScoreButton.SetSelected(false);
-        m_pausedText.SetVisible(false);
-
-        m_resetCamera = true;
-        m_resetMarbleRotation = true;
-        m_physics.SetPosition(XMFLOAT3(305, -210, -43));
-        m_targetLightStrength = 0.6f;
+		for (auto iter = this->m_mainMenuButtons.begin(); iter != this->m_mainMenuButtons.end(); ++iter) (*iter)->SetVisible(true);
+        (*this->m_mainMenuButtons.begin())->SetSelected(true);
+		this->m_pausedText.SetVisible(false);
+		this->m_physics.SetPosition(XMFLOAT3(305, -210, -43));
         break;
 
+	case GameState::ControllerSelection:
+		this->m_controllerSetup.SetVisible(true);
+		break;
+
     case GameState::HighScoreDisplay:
-        m_highScoreTable.SetVisible(true);
+		this->m_highScoreTable.SetVisible(true);
         break;
 
     case GameState::PreGameCountdown:
-        m_inGameStopwatchTimer.SetVisible(false);
-        m_preGameCountdownTimer.SetVisible(true);
-        m_preGameCountdownTimer.StartCountdown(3);
-
-        ResetCheckpoints();
-        m_resetCamera = true;
-        m_resetMarbleRotation = true;
-        m_physics.SetPosition(m_checkpoints[0]);
-        m_physics.SetVelocity(XMFLOAT3(0, 0, 0));
-        m_targetLightStrength = 1.0f;
+		this->m_inGameStopwatchTimer.SetVisible(false);
+		this->m_preGameCountdownTimer.SetVisible(true);
+		this->m_preGameCountdownTimer.StartCountdown(3);
+		this->ResetCheckpoints();
+		this->m_physics.SetPosition(m_checkpoints[0]);
+		this->m_physics.SetVelocity(XMFLOAT3(0, 0, 0));
         break;
 
     case GameState::InGameActive:
-        m_pausedText.SetVisible(false);
-        m_inGameStopwatchTimer.Start();
-        m_targetLightStrength = 1.0f;
+        //m_pausedText.SetVisible(false);
+        //m_inGameStopwatchTimer.Start();
         break;
 
     case GameState::InGamePaused:
-        m_pausedText.SetVisible(true);
-        m_inGameStopwatchTimer.Stop();
-        m_targetLightStrength = 0.6f;
+		this->m_pausedText.SetVisible(true);
+		this->m_inGameStopwatchTimer.Stop();
         break;
 
     case GameState::PostGameResults:
-        m_inGameStopwatchTimer.Stop();
-        m_inGameStopwatchTimer.SetVisible(false);
-        m_resultsText.SetVisible(true);
-        {
-            WCHAR formattedTime[32];
-            m_inGameStopwatchTimer.GetFormattedTime(formattedTime, m_newHighScore.elapsedTime);
-            WCHAR buffer[64];
-            swprintf_s(
-                buffer,
-                L"%s\nYour time: %s",
-                (m_newHighScore.wasJustAdded ? L"New High Score!" : L"Finished!"),
-                formattedTime
-                );
-            m_resultsText.SetText(buffer);
-            m_resultsText.SetVisible(true);
-        }
-        m_targetLightStrength = 0.6f;
-        break;
+		this->m_inGameStopwatchTimer.Stop();
+		this->m_inGameStopwatchTimer.SetVisible(false);
+		this->m_resultsText.SetVisible(true);
+        WCHAR formattedTime[32];
+		this->m_inGameStopwatchTimer.GetFormattedTime(formattedTime, m_newHighScore.elapsedTime);
+        WCHAR buffer[64];
+        swprintf_s(
+            buffer,
+            L"%s\nYour time: %s",
+            (this->m_newHighScore.wasJustAdded ? L"New High Score!" : L"Finished!"),
+            formattedTime
+        );
+		this->m_resultsText.SetText(buffer);
+		this->m_resultsText.SetVisible(true);
+		break;
     }
 
     m_gameState = nextState;
@@ -629,260 +482,306 @@ void blooDotMain::ResetCheckpoints()
     m_currentCheckpoint = 0;
 }
 
-CheckpointState blooDotMain::UpdateCheckpoints()
-{
-    if (m_currentCheckpoint >= (m_checkpoints.size() - 1))
-        return CheckpointState::None;
-
-    const float checkpointRadius = 20.0f;
-    float radius = m_physics.GetRadius();
-    float horizDistSq = (radius + checkpointRadius) * (radius + checkpointRadius);
-    XMVECTOR horizDistSqLimit = XMVectorSet(horizDistSq, horizDistSq, horizDistSq, horizDistSq);
-    float vertDistSq = radius * radius;
-    XMVECTOR vertDistSqLimit = XMVectorSet(vertDistSq, vertDistSq, vertDistSq, vertDistSq);
-
-    XMVECTOR position = XMLoadFloat3(&m_physics.GetPosition());
-    XMVECTOR up = XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f);
-
-    for (size_t i = m_currentCheckpoint + 1; i < m_checkpoints.size(); ++i)
-    {
-        XMVECTOR checkpointPos = XMLoadFloat3(&m_checkpoints[i]);
-        XMVECTOR posCheckSpace = position - checkpointPos;
-        XMVECTOR posVertical = up * XMVector3Dot(up, posCheckSpace);
-        XMVECTOR posHorizontal = posCheckSpace - posVertical;
-        XMVECTOR vHorizDistSq = XMVector3LengthSq(posHorizontal);
-        XMVECTOR vVertDistSq = XMVector3LengthSq(posVertical);
-
-        XMVECTOR check = XMVectorAndInt(
-            XMVectorLessOrEqual(vHorizDistSq, horizDistSqLimit),
-            XMVectorLessOrEqual(vVertDistSq, vertDistSqLimit)
-            );
-        if (XMVector3EqualInt(check, XMVectorTrueInt()))
-        {
-            m_currentCheckpoint = i;
-
-            if (i == (m_checkpoints.size() - 1))
-                return CheckpointState::Goal;
-            else
-                return CheckpointState::Save;
-        }
-    }
-
-    return CheckpointState::None;
-}
-
 // Updates the application state once per frame.
 void blooDotMain::Update()
 {
 	float timerTotal;
 	float timerElapsed;
 
-	if (m_gameState == GameState::Initial)
+	if (this->m_gameState == GameState::Initial)
 	{
-		SetGameState(GameState::LoadScreen);
+		this->SetGameState(GameState::LoadScreen);
 	}
 
 	// Update scene objects.
-    m_timer.Tick([&]()
+	this->m_timer.Tick([&]()
     {
-		timerTotal = static_cast<float>(m_timer.GetTotalSeconds());
-		timerElapsed = static_cast<float>(m_timer.GetElapsedSeconds());
+		timerTotal = static_cast<float>(this->m_timer.GetTotalSeconds());
+		timerElapsed = static_cast<float>(this->m_timer.GetElapsedSeconds());
 
 		/* compute FPS for for Lukas */
-		ComputeFPS(timerElapsed);
-		if (m_timer.GetFrameCount() % 100 == 0)
+		this->ComputeFPS(timerElapsed);
+		if (this->m_timer.GetFrameCount() % 100 == 0)
 		{
-			m_nerdStatsDisplay.UpdateFPS(QueryFPS());
+			this->m_nerdStatsDisplay.UpdateFPS(this->QueryFPS());
 		}
 
 		UserInterface::GetInstance().Update(timerTotal, timerElapsed);
 
+		if (this->m_keyMusicPressed)
+		{
+			this->m_keyMusicPressed = false;
+			if (this->m_audio.IsAudioSuspended())
+			{
+				this->m_audio.ResumeAudio();
+			}
+			else
+			{
+				this->m_audio.SuspendAudio();
+			}
+		}
+
+		// Process controller input.
+#if WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP // Only process controller input when the device is not a phone.
+		if (m_currentGamepadNeedsRefresh)
+		{
+			auto mostRecentGamepad = this->GetLastGamepad();
+			if (this->m_gamepad != mostRecentGamepad)
+			{
+				this->m_gamepad = mostRecentGamepad;
+			}
+
+			this->m_currentGamepadNeedsRefresh = false;
+		}
+
+		if (this->m_gamepad != nullptr)
+		{
+			this->m_oldReading = this->m_newReading;
+			this->m_newReading = this->m_gamepad->GetCurrentReading();
+		}
+
+		float leftStickX = static_cast<float>(m_newReading.LeftThumbstickX);
+		float leftStickY = static_cast<float>(m_newReading.LeftThumbstickY);
+#endif
+
 		// When the game is first loaded, we display a load screen
         // and load any deferred resources that might be too expensive
         // to load during initialization.
-        if (m_gameState==GameState::LoadScreen)
-        {			
-            // At this point we can draw a progress bar, or if we had
-            // loaded audio, we could play audio during the loading process.
-			m_loadScreen->Update(timerTotal, timerElapsed);
-			return;
-        }
-		else if (m_gameState == GameState::LevelEditor)
+		if (this->m_gameState == GameState::LoadScreen || this->m_gameState == GameState::MainMenu)
 		{
-			if (!m_audio.m_isAudioStarted)
-			{
-				m_audio.Start();
-			}
-
-			m_worldScreen->SetControl(m_keyLeftPressed, m_keyRightPressed, m_keyUpPressed, m_keyDownPressed);
-			m_worldScreen->Update(timerTotal, timerElapsed);
-			return;
+			// At this point we can draw a progress bar, or if we had
+			// loaded audio, we could play audio during the loading process.
+			this->m_loadScreen->Update(timerTotal, timerElapsed);
 		}
-
-        
-
-        switch (m_gameState)
-        {
-			case GameState::PreGameCountdown:
-				if (m_preGameCountdownTimer.IsCountdownComplete())
-				{
-					SetGameState(GameState::InGameActive);
-				}
-				break;
-        }
-
-#pragma region Process Input
-
-        float combinedTiltX = 0.0f;
-        float combinedTiltY = 0.0f;
-
-        // Check whether the user paused or resumed the game.
-        if (ButtonJustPressed(GamepadButtons::Menu) || m_pauseKeyPressed)
-        {
-            m_pauseKeyPressed = false;
-
-			if (m_gameState == GameState::InGameActive)
+		else if (this->m_gameState == GameState::InGameActive)
+		{
+			if (!this->m_audio.IsAudioStarted())
 			{
-				SetGameState(GameState::InGamePaused);
-			}  
-			else if (m_gameState == GameState::InGamePaused)
-			{
-				SetGameState(GameState::InGameActive);
+				this->m_audio.Start();
 			}
-        }
 
-        // Check whether the user restarted the game or cleared the high score table.
-        if (ButtonJustPressed(GamepadButtons::View) || m_homeKeyPressed)
-        {
-            m_homeKeyPressed = false;
+			this->m_worldScreen->SetControl(
+				this->m_pointerPosition,
+				&this->m_touches,
+				this->m_shiftKeyActive,
+				this->m_keyLeftPressed || this->ButtonJustPressed(GamepadButtons::DPadLeft),
+				this->m_keyRightPressed || this->ButtonJustPressed(GamepadButtons::DPadRight),
+				this->m_keyUpPressed || this->ButtonJustPressed(GamepadButtons::DPadUp),
+				this->m_keyDownPressed || this->ButtonJustPressed(GamepadButtons::DPadDown),
+				leftStickX,
+				leftStickY
+			);
 
-            if (m_gameState == GameState::InGameActive ||
-                m_gameState == GameState::InGamePaused ||
-                m_gameState == GameState::PreGameCountdown)
-            {
-                SetGameState(GameState::MainMenu);
-                m_inGameStopwatchTimer.SetVisible(false);
-                m_preGameCountdownTimer.SetVisible(false);
-            }
-            else if (m_gameState == GameState::HighScoreDisplay)
-            {
-                m_highScoreTable.Reset();
-            }
-        }
+			this->m_worldScreen->Update(timerTotal, timerElapsed);
+		}
+		else if (this->m_gameState == GameState::LevelEditor)
+		{
+			if (!this->m_audio.IsAudioStarted())
+			{
+				this->m_audio.Start();
+			}
 
+			if (!this->m_levelEditorHUD.IsVisible())
+			{
+				this->m_levelEditorHUD.SetVisible(true);
+			}
+
+			this->m_worldScreen->SetControl(
+				this->m_pointerPosition,
+				&this->m_touches,
+				this->m_shiftKeyActive,
+				this->m_keyLeftPressed || this->ButtonJustPressed(GamepadButtons::DPadLeft),
+				this->m_keyRightPressed || this->ButtonJustPressed(GamepadButtons::DPadRight),
+				this->m_keyUpPressed || this->ButtonJustPressed(GamepadButtons::DPadUp),
+				this->m_keyDownPressed || this->ButtonJustPressed(GamepadButtons::DPadDown),
+				leftStickX,
+				leftStickY
+			);
+
+			if (this->m_keyPlacePressed || this->ButtonJustPressed(GamepadButtons::A))
+			{
+				this->m_keyPlacePressed = false;
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->ConsiderPlacement(this->m_shiftKeyActive);
+			}
+
+			if (this->m_keyGridPressed)
+			{
+				this->m_keyGridPressed = false;
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->DoToggleGrid();
+			}
+
+			if (this->m_keyRotatePressed || this->ButtonJustPressed(GamepadButtons::Y))
+			{
+				this->m_keyRotatePressed = false;
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->DoRotate(this->m_shiftKeyActive, this->m_ctrlKeyActive);
+			}
+
+			if (this->m_keyScrollLockStateChanged)
+			{
+				this->m_keyScrollLockStateChanged = false;
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->DoSetScrollLock(this->m_keyScrollLockState);
+			}
+
+			if (this->m_keyObliteratePressed || this->ButtonJustPressed(GamepadButtons::B))
+			{
+				this->m_keyObliteratePressed = false;
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->DoObliterateDing();
+			}
+
+			if (this->m_keyDeletePressed)
+			{
+				this->m_keyDeletePressed = false;
+				this->m_levelEditorHUD.ToggleEraser();
+			}
+
+			if (this->m_keyInsertPressed)
+			{
+				this->m_keyInsertPressed = false;
+				this->m_levelEditorHUD.ToggleOverwrite();
+			}
+
+			if (this->m_keyGridPressed)
+			{
+				this->m_keyGridPressed = false;
+				this->m_levelEditorHUD.ToggleGrid();
+			}
+
+			if (this->m_keyScrollLockStateChanged)
+			{
+				this->m_keyScrollLockStateChanged = false;
+				this->m_levelEditorHUD.SetScrollLock(this->m_keyScrollLockState);
+			}
+
+			if (this->m_keyPlusPressed || this->ButtonJustPressed(GamepadButtons::RightShoulder))
+			{
+				this->m_keyPlusPressed = false;
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->SelectNextDingForPlacement();
+			}
+
+			if (this->m_keyMinusPressed || this->ButtonJustPressed(GamepadButtons::LeftShoulder))
+			{
+				this->m_keyMinusPressed = false;
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->SelectPreviousDingForPlacement();
+			}
+
+			if (this->m_keySavePressed)
+			{
+				this->m_keySavePressed = false;
+				this->OnActionSaveLevel(false);
+			}
+
+			if (this->m_keySaveAsPressed)
+			{
+				this->m_keySaveAsPressed = false;
+				this->OnActionSaveLevel(true);
+			}
+
+			if (this->m_keyLoadPressed)
+			{
+				this->m_keyLoadPressed = false;
+				this->OnActionLoadLevel();
+			}
+
+			this->m_worldScreen->Update(timerTotal, timerElapsed);
+		}
+		
         // Check whether the user chose a button from the UI.
         bool anyPoints = !m_pointQueue.empty();
-
         while (!m_pointQueue.empty())
         {
             UserInterface::GetInstance().HitTest(m_pointQueue.front());
             m_pointQueue.pop();
         }
 
-        // Handle menu navigation.
-        bool chooseSelection = (ButtonJustPressed(GamepadButtons::A) || ButtonJustPressed(GamepadButtons::Menu));
-		bool moveUp = ButtonJustPressed(GamepadButtons::DPadUp);
-		bool moveDown = ButtonJustPressed(GamepadButtons::DPadDown);
-
-        switch (m_gameState)
+        switch (this->m_gameState)
         {
         case GameState::MainMenu:
-            if (chooseSelection)
-            {
-                m_audio.PlaySoundEffect(MenuSelectedEvent);
-				if (m_startGameButton.GetSelected())
+			auto menuItemToExecute = UIElement::None;
+			if (anyPoints)
+			{
+				menuItemToExecute = this->DetectMenuItemPressed();
+			}
+			else if (this->m_keySpacePressed || this->m_keyEnterPressed || this->ButtonJustPressed(GamepadButtons::A))
+			{
+				menuItemToExecute = this->DetectMenuItemSelected();
+			}
+			else if (this->m_keyEscapePressed)
+			{
+				menuItemToExecute = UIElement::ExterminateButton;
+			}
+			else 
+			{
+				/* navigate the menu with keyboard / gamepad */
+				bool moveUp = this->ButtonJustPressed(GamepadButtons::DPadUp);
+				if (!moveUp && this->m_keyUpPressed)
 				{
-					m_startGameButton.SetPressed(true);
+					this->m_keyUpPressed = false;
+					moveUp = true;
 				}
-				if (m_highScoreButton.GetSelected())
+				
+				bool moveDown = false;
+				if (!moveUp)
 				{
-					m_highScoreButton.SetPressed(true);
+					moveDown = this->ButtonJustPressed(GamepadButtons::DPadDown);
+					if (!moveDown && this->m_keyDownPressed)
+					{
+						this->m_keyDownPressed = false;
+						moveDown = true;
+					}
 				}
-            }
-            if (moveUp || moveDown)
-            {
-                m_startGameButton.SetSelected(!m_startGameButton.GetSelected());
-                m_highScoreButton.SetSelected(!m_startGameButton.GetSelected());
-                m_audio.PlaySoundEffect(MenuChangeEvent);
-            }
-            break;
 
-        case GameState::HighScoreDisplay:
-			if (chooseSelection || anyPoints)
-			{
-				SetGameState(GameState::MainMenu);
-			}
-            break;
-
-        case GameState::PostGameResults:
-			if (chooseSelection || anyPoints)
-			{
-				SetGameState(GameState::HighScoreDisplay);
-			}
-            break;
-
-        case GameState::InGamePaused:
-            if (m_pausedText.IsPressed())
-            {
-                m_pausedText.SetPressed(false);
-                SetGameState(GameState::InGameActive);
-            }
-            break;
-        }
-
-        // Update the game state if the user chose a menu option.
-        if (m_startGameButton.IsPressed())
-        {
-            SetGameState(GameState::PreGameCountdown);
-            m_startGameButton.SetPressed(false);
-        }
-
-        if (m_highScoreButton.IsPressed())
-        {
-            SetGameState(GameState::HighScoreDisplay);
-            m_highScoreButton.SetPressed(false);
-        }
-
-		// Process controller input.
-#if WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP // Only process controller input when the device is not a phone.
-
-		if (m_currentGamepadNeedsRefresh)
-		{
-			auto mostRecentGamepad = GetLastGamepad();
-
-			if (m_gamepad != mostRecentGamepad)
-			{
-				m_gamepad = mostRecentGamepad;
+				if (moveUp || moveDown)
+				{
+					this->SelectMainMenu(moveUp, moveDown);
+				}
 			}
 
-			m_currentGamepadNeedsRefresh = false;
+			if (menuItemToExecute == UIElement::LocalGameButton)
+			{
+				this->OnActionStartLocalGame();
+			}			
+			else if (menuItemToExecute == UIElement::NetworkGameButton)
+			{
+
+			}
+			else if (menuItemToExecute == UIElement::WorldBuilderButton)
+			{
+				this->OnActionEnterLevelEditor();
+			}
+			else if (menuItemToExecute == UIElement::ConfigurationButton)
+			{
+
+			}
+			else if (menuItemToExecute == UIElement::HelpAboutButton)
+			{
+
+			}
+			else if (menuItemToExecute == UIElement::ExterminateButton)
+			{
+				this->OnActionTerminate();
+			}
+
+			if (menuItemToExecute != UIElement::None)
+			{
+				this->SwallowKeyPress();
+			}
+
+            break;
 		}
 
-		if (m_gamepad != nullptr)
-		{
-			m_oldReading = m_newReading;
-			m_newReading = m_gamepad->GetCurrentReading();
-		}
-
-		float leftStickX = static_cast<float>(m_newReading.LeftThumbstickX);
-		float leftStickY = static_cast<float>(m_newReading.LeftThumbstickY);
-
-		auto oppositeSquared = leftStickY * leftStickY;
-		auto adjacentSquared = leftStickX * leftStickX;
-
-		if ((oppositeSquared + adjacentSquared) > m_deadzoneSquared)
-		{
-			combinedTiltX += leftStickX * m_controllerScaleFactor;
-			combinedTiltY += leftStickY * m_controllerScaleFactor;
-		}
-
-#endif
 
         // Account for touch input.
         for (TouchMap::const_iterator iter = m_touches.cbegin(); iter != m_touches.cend(); ++iter)
         {
-            combinedTiltX += iter->second.x * m_touchScaleFactor;
-            combinedTiltY += iter->second.y * m_touchScaleFactor;
+            //combinedTiltX += iter->second.x * m_touchScaleFactor;
+            //combinedTiltY += iter->second.y * m_touchScaleFactor;
         }
 
         // Account for sensors.
@@ -893,247 +792,302 @@ void blooDotMain::Update()
 
             if (reading != nullptr)
             {
-                combinedTiltX += static_cast<float>(reading->AccelerationX) * m_accelerometerScaleFactor;
-                combinedTiltY += static_cast<float>(reading->AccelerationY) * m_accelerometerScaleFactor;
+                //combinedTiltX += static_cast<float>(reading->AccelerationX) * m_accelerometerScaleFactor;
+                //combinedTiltY += static_cast<float>(reading->AccelerationY) * m_accelerometerScaleFactor;
             }
         }
 
         // Clamp input.
-        combinedTiltX = max(-1, min(1, combinedTiltX));
-        combinedTiltY = max(-1, min(1, combinedTiltY));
+        //combinedTiltX = max(-1, min(1, combinedTiltX));
+        //combinedTiltY = max(-1, min(1, combinedTiltY));
 
-        if (m_gameState != GameState::PreGameCountdown &&
-            m_gameState != GameState::InGameActive &&
-            m_gameState != GameState::InGamePaused)
-        {
-            // Ignore tilt when the menu is active.
-            combinedTiltX = 0.0f;
-            combinedTiltY = 0.0f;
-        }
+        //if (m_gameState != GameState::PreGameCountdown &&
+        //    m_gameState != GameState::InGameActive &&
+        //    m_gameState != GameState::InGamePaused)
+        //{
+        //    // Ignore tilt when the menu is active.
+        //    combinedTiltX = 0.0f;
+        //    combinedTiltY = 0.0f;
+        //}
 
+		if (this->m_keyEscapePressed)
+		{
+			this->m_keyEscapePressed = false;
+		}
+
+		if (this->m_keyEnterPressed)
+		{
+			this->m_keyEnterPressed = false;
+		}
+
+		if (this->m_keySpacePressed)
+		{
+			this->m_keySpacePressed = false;
+		}
 #pragma endregion
 
-#pragma region Physics
 
-        const float maxTilt = 1.0f / 8.0f;
-        XMVECTOR gravity = XMVectorSet(combinedTiltX * maxTilt, combinedTiltY * maxTilt, 1.0f, 0.0f);
-        gravity = XMVector3Normalize(gravity);
-
-        XMFLOAT3A g;
-        XMStoreFloat3(&g, gravity);
-        m_physics.SetGravity(g);
-
-        if (m_gameState == GameState::InGameActive)
-        {
-            // Only update physics when gameplay is active.
-            m_physics.UpdatePhysicsSimulation(static_cast<float>(m_timer.GetElapsedSeconds()));
-
-            // Handle checkpoints.
-            switch (UpdateCheckpoints())
-            {
-            case CheckpointState::Save:
-                // Display checkpoint notice.
-                m_checkpointText.SetVisible(true);
-                m_checkpointText.SetTextOpacity(1.0f);
-                m_checkpointText.FadeOut(2.0f);
-                m_audio.PlaySoundEffect(CheckpointEvent);
-                SaveState();
-                break;
-
-            case CheckpointState::Goal:
-                m_inGameStopwatchTimer.Stop();
-                m_newHighScore.elapsedTime = m_inGameStopwatchTimer.GetElapsedTime();
-                SYSTEMTIME systemTime;
-                GetLocalTime(&systemTime);
-                WCHAR buffer[64];
-                swprintf_s(buffer, L"%d/%d/%d", systemTime.wYear, systemTime.wMonth, systemTime.wDay);
-                m_newHighScore.tag = ref new Platform::String(buffer);
-                m_highScoreTable.AddScoreToTable(m_newHighScore);
-
-                m_audio.PlaySoundEffect(CheckpointEvent);
-                m_audio.StopSoundEffect(RollingEvent);
-
-                // Display game results.
-                SetGameState(GameState::PostGameResults);
-                SaveState();
-                break;
-            }
-        }
-
-        XMFLOAT3A marblePosition;
-        memcpy(&marblePosition, &m_physics.GetPosition(), sizeof(XMFLOAT3));
-        static XMFLOAT3A oldMarblePosition = marblePosition;
-
-        const XMMATRIX initialMarbleRotationMatrix = XMMatrixMultiply( XMMatrixRotationY(90.0f * (XM_PI / 180.0f)) , XMMatrixRotationX(90.0f * (XM_PI / 180.0f)));
-
-        static XMMATRIX marbleRotationMatrix = initialMarbleRotationMatrix;
-
-        // Check whether the marble fell off of the maze.
-        const float fadeOutDepth = 0.0f;
-        const float resetDepth = 80.0f;
-        if (marblePosition.z >= fadeOutDepth)
-        {
-            m_targetLightStrength = 0.0f;
-        }
-        if (marblePosition.z >= resetDepth)
-        {
-            // Reset marble.
-            memcpy(&marblePosition, &m_checkpoints[m_currentCheckpoint], sizeof(XMFLOAT3));
-            oldMarblePosition = marblePosition;
-            m_physics.SetPosition((const XMFLOAT3&) marblePosition);
-            m_physics.SetVelocity(XMFLOAT3(0, 0, 0));
-            m_lightStrength = 0.0f;
-            m_targetLightStrength = 1.0f;
-
-            m_resetCamera = true;
-            m_resetMarbleRotation = true;
-            m_audio.PlaySoundEffect(FallingEvent);
-        }
-
-        XMFLOAT3A marbleRotation;
-        XMStoreFloat3A(&marbleRotation, (XMLoadFloat3A(&oldMarblePosition) - XMLoadFloat3A(&marblePosition)) / m_physics.GetRadius());
-        oldMarblePosition = marblePosition;
-
-        if (m_resetMarbleRotation)
-        {
-            marbleRotationMatrix = initialMarbleRotationMatrix;
-            m_resetMarbleRotation = false;
-        }
-        else
-        {
-            marbleRotationMatrix = XMMatrixMultiply(marbleRotationMatrix, XMMatrixRotationY(marbleRotation.x /** 180.0f / 3.1415926535f*/));
-            marbleRotationMatrix = XMMatrixMultiply(marbleRotationMatrix, XMMatrixRotationX(-marbleRotation.y /** -180.0f / 3.1415926535f*/));
-        }
-
-#pragma endregion
-
-#pragma region Update Camera
-
-        static float eyeDistance = 200.0f;
-        static XMFLOAT3A eyePosition = XMFLOAT3A(0, 0, 0);
-
-        // Gradually move the camera above the marble.
-        XMFLOAT3A targetEyePosition;
-        XMStoreFloat3A(&targetEyePosition, XMLoadFloat3A(&marblePosition) - (XMLoadFloat3A(&g) * eyeDistance));
-
-        if (m_resetCamera)
-        {
-            eyePosition = targetEyePosition;
-            m_resetCamera = false;
-        }
-        else
-        {
-            XMStoreFloat3A(&eyePosition, XMLoadFloat3A(&eyePosition) + ((XMLoadFloat3A(&targetEyePosition) - XMLoadFloat3A(&eyePosition)) * min(1, static_cast<float>(m_timer.GetElapsedSeconds()) * 8)));
-        }
-
-        // Look at the marble.
-        if ((m_gameState == GameState::MainMenu) || (m_gameState == GameState::HighScoreDisplay))
-        {
-            // Override camera position for menus.
-            XMStoreFloat3A(&eyePosition, XMLoadFloat3A(&marblePosition) + XMVectorSet(75.0f, -150.0f, -75.0f, 0.0f));
-            m_camera->SetViewParameters(eyePosition, marblePosition, XMFLOAT3(0.0f, 0.0f, -1.0f));
-        }
-        else
-        {
-            m_camera->SetViewParameters(eyePosition, marblePosition, XMFLOAT3(0.0f, 1.0f, 0.0f));
-        }
-
-#pragma endregion
-
-#pragma region Update Constant Buffers
-
-        // Update the model matrices based on the simulation.
-        XMStoreFloat4x4(&m_mazeConstantBufferData.model, XMMatrixIdentity());
-        XMStoreFloat4x4(&m_marbleConstantBufferData.model, XMMatrixTranspose(XMMatrixMultiply(marbleRotationMatrix, XMMatrixTranslationFromVector(XMLoadFloat3A(&marblePosition)))));
-
-        // Update the view matrix based on the camera.
-        XMFLOAT4X4 view;
-        m_camera->GetViewMatrix(&view);
-        m_mazeConstantBufferData.view = view;
-        m_marbleConstantBufferData.view = view;
-
-        // Update lighting constants.
-        m_lightStrength += (m_targetLightStrength - m_lightStrength) * min(1, static_cast<float>(m_timer.GetElapsedSeconds()) * 4);
-
-        m_mazeConstantBufferData.marblePosition = marblePosition;
-        m_mazeConstantBufferData.marbleRadius = m_physics.GetRadius();
-        m_mazeConstantBufferData.lightStrength = m_lightStrength;
-        m_marbleConstantBufferData.marblePosition = marblePosition;
-        m_marbleConstantBufferData.marbleRadius = m_physics.GetRadius();
-        m_marbleConstantBufferData.lightStrength = m_lightStrength;
-
-#pragma endregion
 
 #pragma region Update Audio
 
         if (!m_audio.HasEngineExperiencedCriticalError())
         {
-            if (m_gameState == GameState::InGameActive)
-            {
-                float wallDistances[8];
-                int returnedCount = m_physics.GetRoomDimensions(wallDistances, ARRAYSIZE(wallDistances));
-                assert(returnedCount == ARRAYSIZE(wallDistances));
-                m_audio.SetRoomSize(m_physics.GetRoomSize(), wallDistances);
-                CollisionInfo ci = m_physics.GetCollisionInfo();
+            //if (m_gameState == GameState::InGameActive)
+            //{
+            //    float wallDistances[8];
+            //    int returnedCount = m_physics.GetRoomDimensions(wallDistances, ARRAYSIZE(wallDistances));
+            //    assert(returnedCount == ARRAYSIZE(wallDistances));
+            //    m_audio.SetRoomSize(m_physics.GetRoomSize(), wallDistances);
+            //    CollisionInfo ci = m_physics.GetCollisionInfo();
 
-                // Calculate roll sound, and pitch according to velocity.
-                XMFLOAT3 velocity = m_physics.GetVelocity();
-                XMFLOAT3 position = m_physics.GetPosition();
-                float volumeX = abs(velocity.x) / 200;
-                if (volumeX > 1.0) volumeX = 1.0;
-                if (volumeX < 0.0) volumeX = 0.0;
-                float volumeY = abs(velocity.y) / 200;
-                if (volumeY > 1.0) volumeY = 1.0;
-                if (volumeY < 0.0) volumeY = 0.0;
-                float volume = max(volumeX, volumeY);
+            //    // Calculate roll sound, and pitch according to velocity.
+            //    XMFLOAT3 velocity = m_physics.GetVelocity();
+            //    XMFLOAT3 position = m_physics.GetPosition();
+            //    float volumeX = abs(velocity.x) / 200;
+            //    if (volumeX > 1.0) volumeX = 1.0;
+            //    if (volumeX < 0.0) volumeX = 0.0;
+            //    float volumeY = abs(velocity.y) / 200;
+            //    if (volumeY > 1.0) volumeY = 1.0;
+            //    if (volumeY < 0.0) volumeY = 0.0;
+            //    float volume = max(volumeX, volumeY);
 
-                // Pitch of the rolling sound ranges from .85 to 1.05f,
-                // increasing logarithmically.
-                float pitch = .85f + (volume * volume / 5.0f);
+            //    // Pitch of the rolling sound ranges from .85 to 1.05f,
+            //    // increasing logarithmically.
+            //    float pitch = .85f + (volume * volume / 5.0f);
 
-                // Play the roll sound only if the marble is actually rolling.
-                if (ci.isRollingOnFloor && volume > 0)
-                {
-                    if (!m_audio.IsSoundEffectStarted(RollingEvent))
-                    {
-                        m_audio.PlaySoundEffect(RollingEvent);
-                    }
+            //    // Play the roll sound only if the marble is actually rolling.
+            //    if (ci.isRollingOnFloor && volume > 0)
+            //    {
+            //        if (!m_audio.IsSoundEffectStarted(RollingEvent))
+            //        {
+            //            m_audio.PlaySoundEffect(RollingEvent);
+            //        }
 
-                    // Update the volume and pitch by the velocity.
-                    m_audio.SetSoundEffectVolume(RollingEvent, volume);
-                    m_audio.SetSoundEffectPitch(RollingEvent, pitch);
+            //        // Update the volume and pitch by the velocity.
+            //        m_audio.SetSoundEffectVolume(RollingEvent, volume);
+            //        m_audio.SetSoundEffectPitch(RollingEvent, pitch);
 
-                    // The rolling sound has at most 8000Hz sounds, so we linearly
-                    // ramp up the low-pass filter the faster we go.
-                    // We also reduce the Q-value of the filter, starting with a
-                    // relatively broad cutoff and get progressively tighter.
-                    m_audio.SetSoundEffectFilter(
-                        RollingEvent,
-                        600.0f + 8000.0f * volume,
-                        XAUDIO2_MAX_FILTER_ONEOVERQ - volume*volume
-                        );
-                }
-                else
-                {
-                    m_audio.SetSoundEffectVolume(RollingEvent, 0);
-                }
+            //        // The rolling sound has at most 8000Hz sounds, so we linearly
+            //        // ramp up the low-pass filter the faster we go.
+            //        // We also reduce the Q-value of the filter, starting with a
+            //        // relatively broad cutoff and get progressively tighter.
+            //        m_audio.SetSoundEffectFilter(
+            //            RollingEvent,
+            //            600.0f + 8000.0f * volume,
+            //            XAUDIO2_MAX_FILTER_ONEOVERQ - volume*volume
+            //            );
+            //    }
+            //    else
+            //    {
+            //        m_audio.SetSoundEffectVolume(RollingEvent, 0);
+            //    }
 
-                if (ci.elasticCollision && ci.maxCollisionSpeed > 10)
-                {
-                    m_audio.PlaySoundEffect(CollisionEvent);
+            //    if (ci.elasticCollision && ci.maxCollisionSpeed > 10)
+            //    {
+            //        m_audio.PlaySoundEffect(CollisionEvent);
 
-                    float collisionVolume = ci.maxCollisionSpeed / 150.0f;
-                    collisionVolume = min(collisionVolume * collisionVolume, 1.0f);
-                    m_audio.SetSoundEffectVolume(CollisionEvent, collisionVolume);
-                }
-            }
-            else
-            {
-                m_audio.SetSoundEffectVolume(RollingEvent, 0);
-            }
+            //        float collisionVolume = ci.maxCollisionSpeed / 150.0f;
+            //        collisionVolume = min(collisionVolume * collisionVolume, 1.0f);
+            //        m_audio.SetSoundEffectVolume(CollisionEvent, collisionVolume);
+            //    }
+            //}
+            //else
+            //{
+            //    m_audio.SetSoundEffectVolume(RollingEvent, 0);
+            //}
         }
 #pragma endregion
     });
+}
+
+void blooDotMain::SwallowKeyPress()
+{
+	this->m_keyEnterActive = false;
+	this->m_keyEnterPressed = false;
+}
+
+
+void blooDotMain::SelectMainMenu(bool moveUp, bool moveDown)
+{
+	auto didMove = false;
+	if (moveUp)
+	{
+		for (auto iter = this->m_mainMenuButtons.crbegin(); std::next(iter) != this->m_mainMenuButtons.crend(); ++iter)
+		{
+			if ((*iter)->GetSelected())
+			{
+				(*iter)->SetSelected(false);
+				(*(++iter))->SetSelected(true);
+				didMove = true;
+				break;
+			}
+		}
+	}
+	else if (moveDown)
+	{
+		for (auto iter = this->m_mainMenuButtons.cbegin(); std::next(iter) != this->m_mainMenuButtons.cend(); ++iter)
+		{
+			if ((*iter)->GetSelected())
+			{
+				(*iter)->SetSelected(false);
+				(*(++iter))->SetSelected(true);
+				didMove = true;
+				break;
+			}
+		}
+	}
+
+	if (didMove)
+	{
+		this->m_audio.PlaySoundEffect(MenuChangeEvent);
+	}
+	else if (moveUp || moveDown)
+	{
+		this->m_audio.PlaySoundEffect(MenuTiltEvent);
+	}
+}
+
+UIElement blooDotMain::DetectMenuItemSelected()
+{
+	auto currentlySelected = UserInterface::GetInstance().GetSelectedButton();
+	if (currentlySelected != blooDot::UIElement::None)
+	{
+		this->m_audio.PlaySoundEffect(MenuSelectedEvent);
+	}
+	
+	return currentlySelected;
+}
+
+UIElement blooDotMain::DetectMenuItemPressed()
+{
+	auto lastPressed = UserInterface::GetInstance().PopPressed();
+	if (lastPressed != blooDot::UIElement::None)
+	{
+		this->m_audio.PlaySoundEffect(MenuSelectedEvent);
+	}
+
+	return lastPressed;
+}
+
+void blooDotMain::OnActionStartLocalGame()
+{
+	/* 1. do we need a controller setup?
+	 * if not, start right away */
+	if (this->HaveAtLeastOneGamePad())
+	{
+		this->SetGameState(GameState::ControllerSelection);
+	}
+	else 
+	{
+		this->OnActionEnterLevel();
+	}
+}
+
+void blooDotMain::OnActionStartNetworkGame()
+{
+
+}
+
+void blooDotMain::OnActionEnterLevel()
+{
+	this->m_worldScreen = std::unique_ptr<WorldScreenBase>(new WorldScreen());
+	this->m_currentLevel = new Level(L"Grassmere-1", D2D1::SizeU(50, 30), 720, 720);
+	this->m_worldScreen->EnterLevel(m_currentLevel);
+	this->m_worldScreen->Initialize(m_deviceResources);
+	this->m_currentLevel->DesignLoadFromFile(L"Media\\Levels\\grassmere.bloodot");
+	this->SetGameState(GameState::InGameActive);
+}
+
+void blooDotMain::OnActionEnterLevelEditor()
+{
+	this->m_worldScreen = std::unique_ptr<WorldScreenBase>(new LevelEditor());
+	this->m_currentLevel = new Level(L"Gartenwelt-1", D2D1::SizeU(50, 30), 720, 720);
+	this->m_worldScreen->EnterLevel(m_currentLevel);
+	this->m_worldScreen->Initialize(m_deviceResources);
+
+	auto newObject = m_currentLevel->GetObjectAt(353, 361, true);
+	newObject->Instantiate(m_currentLevel->GetDing(1), ClumsyPacking::ConfigurationFromNeighbors(Facings::Shy));
+	newObject = m_currentLevel->GetObjectAt(355, 361, true);
+	newObject->Instantiate(m_currentLevel->GetDing(1), ClumsyPacking::ConfigurationFromNeighbors(Facings::Shy));
+	this->SetGameState(GameState::LevelEditor);
+}
+
+void blooDotMain::OnActionTerminate()
+{
+	this->m_audio.SuspendAudio();
+	this->m_audio.ReleaseResources();
+	this->m_triggerSuicide = true;
+}
+
+void blooDotMain::OnActionSaveLevel(bool forcePrompt)
+{
+	if (this->m_currentLevel != nullptr)
+	{
+		if (!forcePrompt && this->m_currentLevel->HasSaveFileNameBeenSpecifiedBefore())
+		{
+			this->SaveLevelInternal();
+		}
+		else
+		{
+			auto savePicker = ref new Windows::Storage::Pickers::FileSavePicker();
+			savePicker->DefaultFileExtension = L".bloodot";
+			savePicker->SuggestedStartLocation = Windows::Storage::Pickers::PickerLocationId::ComputerFolder;
+			auto blooDotExtensions = ref new Platform::Collections::Vector<Platform::String^>();
+			blooDotExtensions->Append(L".bloodot");
+			savePicker->FileTypeChoices->Insert(L"blooDot Level File", blooDotExtensions);
+			savePicker->SuggestedFileName = L"New Document";
+			::create_task(savePicker->PickSaveFileAsync()).then([this](Windows::Storage::StorageFile^ destFile)
+			{
+				if (destFile)
+				{
+					this->m_knownLevelSaveTarget = destFile;
+					this->SaveLevelInternal();
+				}
+			});
+		}
+	}
+}
+
+void blooDotMain::SaveLevelInternal()
+{
+	auto tempFolder = Windows::Storage::ApplicationData::Current->TemporaryFolder;
+	auto fullTempFile = Platform::String::Concat(Platform::String::Concat(tempFolder->Path, L"\\"), this->m_knownLevelSaveTarget->Name);
+	this->m_currentLevel->DesignSaveToFile(fullTempFile);
+	auto openFileTask = tempFolder->GetFileAsync(this->m_knownLevelSaveTarget->Name);
+	::create_task(openFileTask).then([this](Windows::Storage::StorageFile^ tempFile)
+	{
+		auto moveFileTask = tempFile->CopyAndReplaceAsync(this->m_knownLevelSaveTarget);
+		::create_task(moveFileTask).then([this]()
+		{
+			this->m_audio.PlaySoundEffect(SoundEvent::CheckpointEvent);
+		});
+	});
+}
+
+void blooDotMain::OnActionLoadLevel()
+{
+	Windows::Storage::Pickers::FileOpenPicker^ openPicker = ref new Windows::Storage::Pickers::FileOpenPicker();
+	openPicker->ViewMode = Windows::Storage::Pickers::PickerViewMode::Thumbnail;
+	openPicker->SuggestedStartLocation = Windows::Storage::Pickers::PickerLocationId::ComputerFolder;
+	openPicker->FileTypeFilter->Append(L".bloodot");
+	create_task(openPicker->PickSingleFileAsync()).then([this](Windows::Storage::StorageFile^ sourceFile)
+	{
+		if (sourceFile)
+		{
+			Windows::Storage::StorageFolder^ targetFolder = Windows::Storage::ApplicationData::Current->TemporaryFolder;
+			auto copyFileTask = sourceFile->CopyAsync(targetFolder, sourceFile->Name, Windows::Storage::NameCollisionOption::ReplaceExisting);
+			create_task(copyFileTask).then([this, sourceFile](Windows::Storage::StorageFile^ copiedFile)
+			{
+				auto newLevel = this->m_worldScreen->LoadAndEnterLevel(copiedFile->Path);
+				if (newLevel != nullptr)
+				{
+					delete this->m_currentLevel;
+					this->m_currentLevel = newLevel;
+					this->m_knownLevelSaveTarget = sourceFile;
+				}
+			});
+		}
+	});
 }
 
 void blooDotMain::SaveState()
@@ -1141,7 +1095,6 @@ void blooDotMain::SaveState()
     m_persistentState->SaveXMFLOAT3(":Position", m_physics.GetPosition());
     m_persistentState->SaveXMFLOAT3(":Velocity", m_physics.GetVelocity());
     m_persistentState->SaveSingle(":ElapsedTime", m_inGameStopwatchTimer.GetElapsedTime());
-
     m_persistentState->SaveInt32(":GameState", static_cast<int>(m_gameState));
     m_persistentState->SaveInt32(":Checkpoint", static_cast<int>(m_currentCheckpoint));
 
@@ -1183,7 +1136,9 @@ void blooDotMain::LoadState()
         break;
 
     case GameState::InGameActive:
-    case GameState::InGamePaused:
+		break;
+
+	case GameState::InGamePaused:
         m_inGameStopwatchTimer.SetVisible(true);
         m_inGameStopwatchTimer.SetElapsedTime(elapsedTime);
         m_physics.SetPosition(position);
@@ -1221,21 +1176,41 @@ inline XMFLOAT2 PointToTouch(Windows::Foundation::Point point, Windows::Foundati
 
 void blooDotMain::AddTouch(int id, Windows::Foundation::Point point)
 {
-    m_touches[id] = PointToTouch(point, m_deviceResources->GetLogicalSize());
-
-    m_pointQueue.push(D2D1::Point2F(point.X, point.Y));
+	m_touches[id] = PointToTouch(point, m_deviceResources->GetLogicalSize());
+	m_pointQueue.push(D2D1::Point2F(point.X, point.Y));
 }
 
 void blooDotMain::UpdateTouch(int id, Windows::Foundation::Point point)
 {
-    if (m_touches.find(id) != m_touches.end())
-        m_touches[id] = PointToTouch(point, m_deviceResources->GetLogicalSize());
+	if (m_touches.find(id) != m_touches.end())
+	{
+		m_touches[id] = PointToTouch(point, m_deviceResources->GetLogicalSize());
+	}
 }
 
 void blooDotMain::PointerMove(int id, Windows::Foundation::Point point)
 {
-	//m_pointerPosition = PointToTouch(point, m_deviceResources->GetLogicalSize());
-	m_pointerPosition = XMFLOAT2(point.X, point.Y);
+	//this->m_pointerPosition = PointToTouch(point, m_deviceResources->GetLogicalSize());
+	this->m_pointerPosition = XMFLOAT2(point.X, point.Y);
+}
+
+void blooDotMain::MouseWheeled(int pointerID, int detentCount)
+{
+	if (this->m_gameState == GameState::MainMenu)
+	{
+		if (detentCount < 0 && !this->m_keyDownPressed)
+		{
+			this->m_keyDownPressed = true;
+		}
+		else if (detentCount > 0 && !this->m_keyUpPressed)
+		{
+			this->m_keyUpPressed = true;
+		}
+	}
+	else if (m_gameState == GameState::LevelEditor || m_gameState == GameState::InGameActive)
+	{
+		this->m_worldScreen->SetControl(detentCount, this->m_shiftKeyActive);
+	}
 }
 
 void blooDotMain::RemoveTouch(int id)
@@ -1245,14 +1220,78 @@ void blooDotMain::RemoveTouch(int id)
 
 void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 {
-    if (key == Windows::System::VirtualKey::P)       // Pause
-    {
-        m_pauseKeyActive = true;
-    }
-    else if (key == Windows::System::VirtualKey::Home)
+	if (key == Windows::System::VirtualKey::Shift)
+	{
+		m_shiftKeyActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Control)
+	{
+		m_ctrlKeyActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Home)
     {
         m_homeKeyActive = true;
     }
+	else if (key == Windows::System::VirtualKey::Enter)
+	{
+		m_keyEnterActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Space)
+	{
+		m_keySpaceActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Escape)
+	{
+		m_keyEscapeActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::P)
+	{
+		m_keyPlaceActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::O)
+	{
+		m_keyObliterateActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Subtract)
+	{
+		m_keyMinusActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Add)
+	{
+		m_keyPlusActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::M)
+	{
+		m_keyMusicActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Insert)
+	{
+		m_keyInsertActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::Delete)
+	{
+		m_keyDeleteActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::G)
+	{
+		m_keyGridActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::R)
+	{
+		m_keyRotateActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::S)
+	{
+		m_keySaveActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::A)
+	{
+		m_keySaveAsActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::L)
+	{
+		m_keyLoadActive = true;
+	}
 	else if (key == Windows::System::VirtualKey::Left)
 	{
 		m_keyLeftPressed = true;
@@ -1273,44 +1312,180 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 
 void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 {
-    if (key == Windows::System::VirtualKey::P)
+	if (this->m_deferredResourcesReadyPending)
+	{
+		this->m_deferredResourcesReadyPending = false;
+		this->m_deferredResourcesReady = true;
+		this->SwallowKeyPress();
+		this->SetGameState(GameState::MainMenu);
+		return;
+	}
+	
+	if (key == Windows::System::VirtualKey::Home)
     {
-        if (m_pauseKeyActive)
+        if (this->m_homeKeyActive)
         {
-            // trigger pause only once on button release
-            m_pauseKeyPressed = true;
-            m_pauseKeyActive = false;
+			this->m_homeKeyPressed = true;
+			this->m_homeKeyActive = false;
         }
     }
-    else if (key == Windows::System::VirtualKey::Home)
-    {
-        if (m_homeKeyActive)
-        {
-            m_homeKeyPressed = true;
-            m_homeKeyActive = false;
-        }
-    }
+	else if (key == Windows::System::VirtualKey::Enter)
+	{
+		if (this->m_keyEnterActive)
+		{
+			this->m_keyEnterPressed = true;
+			this->m_keyEnterActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Space)
+	{
+		if (this->m_keySpaceActive)
+		{
+			this->m_keySpacePressed = true;
+			this->m_keySpaceActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Escape)
+	{
+		if (this->m_keyEscapeActive)
+		{
+			this->m_keyEscapePressed = true;
+			this->m_keyEscapeActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::M)
+	{
+		if (this->m_keyMusicActive)
+		{
+			this->m_keyMusicPressed = true;
+			this->m_keyMusicActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::P)
+	{
+		if (this->m_keyPlaceActive)
+		{
+			this->m_keyPlacePressed = true;
+			this->m_keyPlaceActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::O)
+	{
+		if (this->m_keyObliterateActive)
+		{
+			this->m_keyObliteratePressed = true;
+			this->m_keyObliterateActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Subtract)
+	{
+		if (this->m_keyMinusActive)
+		{
+			this->m_keyMinusPressed = true;
+			this->m_keyMinusActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Add)
+	{
+		if (this->m_keyPlusActive)
+		{
+			this->m_keyPlusPressed = true;
+			this->m_keyPlusActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Insert)
+	{
+		if (this->m_keyInsertActive)
+		{
+			this->m_keyInsertPressed = true;
+			this->m_keyInsertActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Delete)
+	{
+		if (this->m_keyDeleteActive)
+		{
+			this->m_keyDeletePressed = true;
+			this->m_keyDeleteActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::G)
+	{
+		if (this->m_keyGridActive)
+		{
+			this->m_keyGridPressed = true;
+			this->m_keyGridActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::R)
+	{
+		if (this->m_keyRotateActive)
+		{
+			this->m_keyRotatePressed = true;
+			this->m_keyRotateActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Scroll)
+	{
+		if (!this->m_keyScrollLockStateChanged)
+		{
+			auto hostWindow = m_deviceResources->GetWindow();
+			auto vrkeyState = hostWindow->GetKeyState(key);
+			bool newState = static_cast<bool>(vrkeyState & Windows::UI::Core::CoreVirtualKeyStates::Locked);
+			if (this->m_keyScrollLockState != newState)
+			{
+				this->m_keyScrollLockState = newState;
+				this->m_keyScrollLockStateChanged = true;
+			}
+		}
+	}
+	else if (key == Windows::System::VirtualKey::S)
+	{
+		if (this->m_keySaveActive)
+		{
+			this->m_keySavePressed = true;
+			this->m_keySaveActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::A)
+	{
+		if (this->m_keySaveAsActive)
+		{
+			this->m_keySaveAsPressed = true;
+			this->m_keySaveAsActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::L)
+	{
+		if (this->m_keyLoadActive)
+		{
+			this->m_keyLoadPressed = true;
+			this->m_keyLoadActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::Shift)
+	{
+		this->m_shiftKeyActive = false;
+	}
+	else if (key == Windows::System::VirtualKey::Control)
+	{
+		this->m_ctrlKeyActive = false;
+	}
 	else if (key == Windows::System::VirtualKey::Left)
 	{
-		m_keyLeftPressed = false;
+		this->m_keyLeftPressed = false;
 	}
 	else if (key == Windows::System::VirtualKey::Right)
 	{
-		m_keyRightPressed = false;
+		this->m_keyRightPressed = false;
 	}
 	else if (key == Windows::System::VirtualKey::Up)
 	{
-		m_keyUpPressed = false;
+		this->m_keyUpPressed = false;
 	}
 	else if (key == Windows::System::VirtualKey::Down)
 	{
-		m_keyDownPressed = false;
-	}
-
-	if (m_deferredResourcesReadyPending)
-	{
-		m_deferredResourcesReady = true;
-		SetGameState(GameState::LevelEditor);
+		this->m_keyDownPressed = false;
 	}
 }
 
@@ -1339,16 +1514,20 @@ void blooDotMain::OnFocusChange(bool active)
                 if ((m_gameState == GameState::InGamePaused) && lostFocusPause)
                 {
                     SetGameState(GameState::InGameActive);
-                }
-            }
+                }			
+				else if ((m_gameState == GameState::LevelEditor) && !this->m_levelEditorHUD.IsVisible())
+				{
+					this->m_levelEditorHUD.SetVisible(true);
+				}
+			}
             else
             {
                 m_audio.SuspendAudio();
                 if (m_gameState == GameState::InGameActive)
                 {
-                    SetGameState(GameState::InGamePaused);
-                    lostFocusPause = true;
-                    SaveState();
+                    //SetGameState(GameState::InGamePaused);
+                    //lostFocusPause = true;
+                    //SaveState();
                 }
                 else if (m_gameState == GameState::PreGameCountdown)
                 {
@@ -1357,6 +1536,7 @@ void blooDotMain::OnFocusChange(bool active)
                     m_preGameCountdownTimer.SetVisible(false);
                 }
             }
+
             m_windowActive = active;
         }
     }
@@ -1425,40 +1605,6 @@ void blooDot::blooDotMain::LogMessage(Platform::Object^ obj)
 	OutputDebugString(formattedText.c_str());
 }
 
-HRESULT blooDotMain::ExtractTrianglesFromMesh(
-    Mesh& mesh,
-    const char* meshName,
-    std::vector<Triangle>& triangles
-    )
-{
-    triangles.clear();
-
-    int meshIndex = FindMeshIndexByName(mesh, meshName);
-    if (meshIndex < 0)
-    {
-        return E_FAIL;
-    }
-    MESH_MESH *currentmesh = mesh.GetMesh(meshIndex);
-
-    for (UINT i = 0; i < currentmesh->NumSubsets; ++i)
-    {
-        MESH_SUBSET *subsetmesh = mesh.GetSubset(meshIndex, i);
-
-        USHORT *indices = (USHORT*) mesh.GetRawIndicesAt(currentmesh->IndexBuffer) + subsetmesh->IndexStart;
-        BYTE *vertices = mesh.GetRawVerticesAt(currentmesh->VertexBuffers[0]) + (subsetmesh->VertexStart * m_vertexStride);
-        for (UINT j = 0; j < subsetmesh->IndexCount; j += 3)
-        {
-            XMFLOAT3 a, b, c;
-            memcpy(&a, vertices + (*(indices++) * m_vertexStride), sizeof(XMFLOAT3));
-            memcpy(&b, vertices + (*(indices++) * m_vertexStride), sizeof(XMFLOAT3));
-            memcpy(&c, vertices + (*(indices++) * m_vertexStride), sizeof(XMFLOAT3));
-            triangles.push_back(Triangle(a, b, c));
-        }
-    }
-
-    return S_OK;
-}
-
 // Notifies renderers that device resources need to be released.
 void blooDotMain::OnDeviceLost()
 {
@@ -1466,16 +1612,7 @@ void blooDotMain::OnDeviceLost()
     m_loadScreen->ReleaseDeviceDependentResources();
 	m_worldScreen->ReleaseDeviceDependentResources();
     UserInterface::ReleaseDeviceDependentResources();
-
     m_inputLayout.Reset();
-    m_vertexShader.Reset();
-    m_pixelShader.Reset();
-    m_sampler.Reset();
-    m_constantBuffer.Reset();
-    m_blendState.Reset();
-
-    m_mazeMesh.Destroy();
-    m_marbleMesh.Destroy();
 
 	m_deferredResourcesReadyPending = false;
     m_deferredResourcesReady = false;
@@ -1484,21 +1621,21 @@ void blooDotMain::OnDeviceLost()
 // Notifies renderers that device resources may now be re-created.
 void blooDotMain::OnDeviceRestored()
 {
-	m_worldScreen->CreateDeviceDependentResources();
-	m_sampleOverlay->CreateDeviceDependentResources();
-
-    m_loadScreen->Initialize(m_deviceResources);
-	m_worldScreen->Initialize(m_deviceResources);
-
+	this->m_worldScreen->CreateDeviceDependentResources();
+	this->m_sampleOverlay->CreateDeviceDependentResources();
+	this->m_loadScreen->Initialize(this->m_deviceResources);
+	this->m_worldScreen->Initialize(this->m_deviceResources);
     UserInterface::GetInstance().Initialize(
-        m_deviceResources->GetD2DDevice(),
-        m_deviceResources->GetD2DDeviceContext(),
-        m_deviceResources->GetWicImagingFactory(),
-        m_deviceResources->GetDWriteFactory()
+		this->m_deviceResources->GetD2DDevice(),
+		this->m_deviceResources->GetD2DDeviceContext(),
+		this->m_deviceResources->GetWicImagingFactory(),
+		this->m_deviceResources->GetDWriteFactory(),
+		this->m_deviceResources->GetDWriteFactory3(),
+		this->m_fontCollection
     );
 
-    CreateWindowSizeDependentResources();
-    LoadDeferredResources(true, true);
+	this->CreateWindowSizeDependentResources();
+	this->LoadDeferredResources(true, true);
 }
 
 bool blooDot::blooDotMain::ButtonJustPressed(GamepadButtons selection)
@@ -1518,11 +1655,15 @@ bool blooDot::blooDotMain::ButtonJustReleased(GamepadButtons selection)
 Gamepad^ blooDot::blooDotMain::GetLastGamepad()
 {
 	Gamepad^ gamepad = nullptr;
-
-	if (m_myGamepads->Size > 0)
+	if (this->HaveAtLeastOneGamePad())
 	{
-		gamepad = m_myGamepads->GetAt(m_myGamepads->Size - 1);
+		gamepad = this->m_myGamepads->GetAt(m_myGamepads->Size - 1);
 	}
 
 	return gamepad;
+}
+
+bool blooDot::blooDotMain::HaveAtLeastOneGamePad()
+{
+	return this->m_myGamepads->Size > 0;
 }

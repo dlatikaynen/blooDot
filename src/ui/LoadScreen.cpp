@@ -115,12 +115,12 @@ void LoadScreen::UpdateForWindowSizeChange()
 	m_d2dContext->GetDpi(&dpiX, &dpiY);
 	Windows::Foundation::Rect viewportBounds = Windows::Foundation::Rect(
 		Windows::Foundation::Point(
-			DipsToPixelsX(windowBounds.Left, dpiX),
-			DipsToPixelsY(windowBounds.Top, dpiY)
+			(float)DipsToPixelsX(windowBounds.Left, dpiX),
+			(float)DipsToPixelsY(windowBounds.Top, dpiY)
 		),
 		Windows::Foundation::Point(
-			DipsToPixelsX(windowBounds.Right, dpiX),
-			DipsToPixelsY(windowBounds.Bottom, dpiY)
+			(float)DipsToPixelsX(windowBounds.Right, dpiX),
+			(float)DipsToPixelsY(windowBounds.Bottom, dpiY)
 		)
 	);
 

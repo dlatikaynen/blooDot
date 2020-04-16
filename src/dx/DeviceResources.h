@@ -46,7 +46,8 @@ namespace DX
         ID2D1DeviceContext1*    GetD2DDeviceContext() const             { return m_d2dContext.Get(); }
         ID2D1Bitmap1*           GetD2DTargetBitmap() const              { return m_d2dTargetBitmap.Get(); }
         IDWriteFactory2*        GetDWriteFactory() const                { return m_dwriteFactory.Get(); }
-        IWICImagingFactory2*    GetWicImagingFactory() const            { return m_wicFactory.Get(); }
+		IDWriteFactory3*        GetDWriteFactory3() const				{ return m_dwriteFactory3.Get(); }
+		IWICImagingFactory2*    GetWicImagingFactory() const            { return m_wicFactory.Get(); }
         D2D1::Matrix3x2F        GetOrientationTransform2D() const       { return m_orientationTransform2D; }
 
     private:
@@ -74,7 +75,8 @@ namespace DX
 
         // DirectWrite drawing components.
         Microsoft::WRL::ComPtr<IDWriteFactory2>     m_dwriteFactory;
-        Microsoft::WRL::ComPtr<IWICImagingFactory2> m_wicFactory;
+		Microsoft::WRL::ComPtr<IDWriteFactory3>     m_dwriteFactory3;
+		Microsoft::WRL::ComPtr<IWICImagingFactory2> m_wicFactory;
 
         // Cached reference to the Window.
         Platform::Agile<Windows::UI::Core::CoreWindow>  m_window;
