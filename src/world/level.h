@@ -23,6 +23,7 @@ public:
 	Object* GetObjectAt(unsigned levelX, unsigned levelY, bool createIfNull);
 	ClumsyPacking::NeighborConfiguration GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, unsigned dingID, Layers inLayer);
 	Dings* WeedObjectAt(unsigned levelX, unsigned levelY, Layers* cullCoalescableInLayer);
+	void SetupRuntimeState();
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> GetDingSheet();
 	ID2D1Bitmap* GetDingSheetBmp();
 	Dings* GetDing(unsigned dingID);

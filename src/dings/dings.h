@@ -5,6 +5,7 @@
 #include "..\dx\DeviceResources.h"
 #include "..\dx\BrushRegistry.h"
 #include "..\io\BasicLoader.h"
+#include "ObjectProperties.h"
 
 // Numeric ordering is relied upon
 enum Layers
@@ -126,6 +127,7 @@ public:
 	D2D1_POINT_2U		GetSheetPlacement(Facings orientation);
 	Layers				GetPreferredLayer();
 	Facings				AvailableFacings();
+	ObjectBehaviors		GetInherenBehaviors();
 	bool				CouldCoalesce();
 	static Facings		RotateFromFacing(Facings fromFacing, bool inverseDirection);
 
@@ -188,6 +190,8 @@ protected:
 	virtual void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect);
 
 private:
+	ObjectBehaviors m_Behaviors;
+
 	void SetSheetPlacementsFromCoalescability();
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> LoadFromBitmap();
 	void Pack7x7(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y);

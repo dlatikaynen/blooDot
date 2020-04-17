@@ -995,6 +995,7 @@ void blooDotMain::OnActionEnterLevel()
 	this->m_worldScreen->EnterLevel(m_currentLevel);
 	this->m_worldScreen->Initialize(m_deviceResources);
 	this->m_currentLevel->DesignLoadFromFile(L"Media\\Levels\\grassmere.bloodot");
+	this->m_currentLevel->SetupRuntimeState();
 	this->SetGameState(GameState::InGameActive);
 }
 

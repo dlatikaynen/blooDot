@@ -23,6 +23,7 @@ Dings::Dings(int dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceR
 	this->m_Name = dingName;
 	this->m_deviceResources = deviceResources;
 	this->m_Brushes = drawBrushes;
+	this->m_Behaviors = ObjectBehaviors::Boring;
 }
 
 unsigned Dings::ID() 
@@ -38,6 +39,11 @@ Platform::String^ Dings::Name()
 Layers Dings::GetPreferredLayer()
 {
 	return this->m_preferredLayer;
+}
+
+ObjectBehaviors Dings::GetInherenBehaviors()
+{
+	return this->m_Behaviors;
 }
 
 void Dings::Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY)

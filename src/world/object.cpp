@@ -5,6 +5,9 @@ Object::Object(unsigned posInLevelX, unsigned posInLevelY)
 {
 	this->Weed();
 	this->m_positionInLevel = D2D1::Point2U(posInLevelX, posInLevelY);
+	this->m_BehaviorsFloor = ObjectBehaviors::Boring;
+	this->m_BehaviorsWalls = ObjectBehaviors::Boring;
+	this->m_BehaviorsRooof = ObjectBehaviors::Boring;
 }
 
 void Object::Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
@@ -23,20 +26,20 @@ void Object::InstantiateInLayerFacing(Layers inLayer, Dings* templateDing, Facin
 {
 	switch (inLayer)
 	{
-	case Layers::Floor:
-		this->m_DingFloor = templateDing;
-		this->m_FacingFloor = placementFacing;
-		break;
+		case Layers::Floor:
+			this->m_DingFloor = templateDing;
+			this->m_FacingFloor = placementFacing;
+			break;
 
-	case Layers::Walls:
-		this->m_DingWalls = templateDing;
-		this->m_FacingWalls = placementFacing;
-		break;
+		case Layers::Walls:
+			this->m_DingWalls = templateDing;
+			this->m_FacingWalls = placementFacing;
+			break;
 
-	case Layers::Rooof:
-		this->m_DingRooof = templateDing;
-		this->m_FacingRooof = placementFacing;
-		break;
+		case Layers::Rooof:
+			this->m_DingRooof = templateDing;
+			this->m_FacingRooof = placementFacing;
+			break;
 	}
 	
 	this->m_Layers = static_cast<Layers>(this->m_Layers | inLayer);
@@ -84,6 +87,24 @@ bool Object::WeedFromTop(Dings** dingWeeded, Layers* layerWeeded)
 	}
 
 	return this->m_DingRooof == nullptr && this->m_DingWalls == nullptr && this->m_DingFloor == nullptr;
+}
+
+void Object::SetupRuntimeState(Dings* floorDing, Dings* wallsDing, Dings* rooofDing)
+{
+	if (floorDing != nullptr)
+	{
+		this->m_BehaviorsFloor = floorDing->GetInherenBehaviors();
+	}
+
+	if (wallsDing != nullptr)
+	{
+		this->m_BehaviorsWalls = floorDing->GetInherenBehaviors();
+	}
+
+	if (rooofDing != nullptr)
+	{
+		this->m_BehaviorsRooof = floorDing->GetInherenBehaviors();
+	}
 }
 
 Layers Object::GetTopmostPopulatedLayer()

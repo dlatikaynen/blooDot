@@ -257,6 +257,30 @@ Dings* Level::WeedObjectAt(unsigned levelX, unsigned levelY, Layers* cullCoalesc
 	return dingWeeded;
 }
 
+void Level::SetupRuntimeState()
+{
+	for (unsigned y = 0; y < this->m_rectangularBounds.height; ++y)
+	{
+		for (unsigned x = 0; x < this->m_rectangularBounds.width; ++x)
+		{
+			auto objectAddress = y * this->m_rectangularBounds.width + x;
+			if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
+			{
+				auto allocatedObject = this->m_Objects[objectAddress];
+				if (allocatedObject != nullptr)
+				{					
+					auto layers = allocatedObject->GetLayers();
+					allocatedObject->SetupRuntimeState(
+						allocatedObject->GetDing(Layers::Floor),
+						allocatedObject->GetDing(Layers::Walls),
+						allocatedObject->GetDing(Layers::Rooof)
+					);
+				}
+			}
+		}
+	}
+}
+
 ClumsyPacking::NeighborConfiguration Level::GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, unsigned dingID, Layers inLayer)
 {
 	if (dingID > 0)
@@ -456,15 +480,15 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 		unsigned versionByte = static_cast<unsigned>(*reinterpret_cast<byte*>(srcData + offset)); offset += sizeof(byte);
 		switch (versionByte)
 		{
-		case 1:
-			throw ref new Platform::FailureException(L"deprecated level design file version");
+			case 1:
+				throw ref new Platform::FailureException(L"deprecated level design file version");
 
-		case 2:
-			this->DesignLoadFromFile_version2(srcData, length, offset);
-			break;
+			case 2:
+				this->DesignLoadFromFile_version2(srcData, length, offset);
+				break;
 
-		default:
-			throw ref new Platform::FailureException(L"invalid level design file version");
+			default:
+				throw ref new Platform::FailureException(L"invalid level design file version");
 		}
 
 		delete[] srcData;

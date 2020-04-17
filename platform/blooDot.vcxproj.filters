@@ -108,9 +108,6 @@
     <ClCompile Include="..\src\dings\mob-like\dalek.cpp">
       <Filter>ui\dings</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\dings.cpp">
-      <Filter>ui\dings</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ui\NerdStatsDisplay.cpp">
       <Filter>ui</Filter>
     </ClCompile>
@@ -170,6 +167,9 @@
     </ClCompile>
     <ClCompile Include="..\src\app\Utility.cpp">
       <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dings\Dings.cpp">
+      <Filter>ui\dings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,9 +260,6 @@
     <ClInclude Include="..\src\app\blooDot.h">
       <Filter>app</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dings\dings.h">
-      <Filter>ui\dings</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\physics\BasicMath.h">
       <Filter>algo</Filter>
     </ClInclude>
@@ -271,9 +268,6 @@
     </ClInclude>
     <ClInclude Include="..\src\ui\WorldSheet.h">
       <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\world\world.h">
-      <Filter>world</Filter>
     </ClInclude>
     <ClInclude Include="..\src\world\Level.h">
       <Filter>world</Filter>
@@ -313,6 +307,12 @@
     </ClInclude>
     <ClInclude Include="..\src\app\Utility.h">
       <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dings\ObjectProperties.h">
+      <Filter>ui\dings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dings\Dings.h">
+      <Filter>ui\dings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
