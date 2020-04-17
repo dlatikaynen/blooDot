@@ -3,18 +3,30 @@ key map on level editor
 
 <P>... [p]lace currently selected ding on current cursor position, on the first available and suitable layer
 
-<O>... [o]bliterate topmost ding on current cursor position. exposes universe if floor is deleted
+<O>.... [o]bliterate topmost ding on current cursor position. exposes universe if floor is deleted
 
-<F>... [f]loodfill enclosed area with currently selected ding on lowestmost available layer
+<F>.... [f]loodfill enclosed area with currently selected ding on lowestmost available layer
        (does not vertically flow around obstacles even if placed ding would allow)
 
-<->... select previous ding from toolbox
+<R>.... rotate in place (orientable only). Mousewheel supported
 
-<+>... select next ding from toolbox
+<->.... select previous ding from toolbox
 
-<PgDn> select next category/group of dings from toolbox
+<+>.... select next ding from toolbox
 
-<PgUp> select previous category/group of dings from toolbox
+<PgDn>. select next category/group of dings from toolbox
+
+<PgUp>. select previous category/group of dings from toolbox
+
+<ScrL>. toggles navigation
+
+<↓→↑←↑> navigate
+
+<L>.... loads from a file
+
+<S>.... saves to a file. prompts for location and name the first time
+
+<A>.... save as
 
 
 
