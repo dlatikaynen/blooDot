@@ -12,7 +12,7 @@ using namespace D2D1;
 LevelEditorHUD::LevelEditorHUD()
 {
 	this->m_isEraserChosen = false;
-	this->m_selectedDingID = 0;
+	this->m_selectedDingID = Dings::DingIDs::Void;
 	this->m_isGridShown = true;
 	this->m_isSelectedDingRotatable = false;
 }
@@ -38,7 +38,7 @@ void LevelEditorHUD::CalculateSize()
 
 bool LevelEditorHUD::IsDingSelected()
 {
-	return this->m_selectedDingID > 0;
+	return this->m_selectedDingID > Dings::DingIDs::Void;
 }
 
 void LevelEditorHUD::SelectDing(Dings* ding, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage, bool resetFacing)
@@ -97,7 +97,7 @@ void LevelEditorHUD::Render()
 	D2D1_RECT_F bounds = this->GetBounds();
 	d2dContext->FillRectangle(&bounds, this->m_shadowColorBrush.Get());
 
-	if (this->m_selectedDingID > 0)
+	if (this->m_selectedDingID > Dings::DingIDs::Void)
 	{
 		auto dingPic = this->m_selectedDingImage.Get();
 		auto placementRect = D2D1::RectF(
@@ -127,7 +127,7 @@ void LevelEditorHUD::ReleaseDeviceDependentResources()
 	this->m_selectedDingImage.Reset();
 }
 
-unsigned LevelEditorHUD::SelectedDingID()
+Dings::DingIDs LevelEditorHUD::SelectedDingID()
 {
 	return this->m_selectedDingID;
 }
@@ -174,7 +174,7 @@ bool LevelEditorHUD::IsScrollLocked()
 
 void LevelEditorHUD::Rotate()
 {
-	if (this->m_selectedDingID > 0 && this->m_isSelectedDingRotatable)
+	if (this->m_selectedDingID > Dings::DingIDs::Void && this->m_isSelectedDingRotatable)
 	{
 		this->m_selectedDingFacing = Dings::RotateFromFacing(this->m_selectedDingFacing, false);
 	}
@@ -182,7 +182,7 @@ void LevelEditorHUD::Rotate()
 
 void LevelEditorHUD::RotateInverse()
 {
-	if (this->m_selectedDingID > 0 && this->m_isSelectedDingRotatable)
+	if (this->m_selectedDingID > Dings::DingIDs::Void && this->m_isSelectedDingRotatable)
 	{
 		this->m_selectedDingFacing = Dings::RotateFromFacing(this->m_selectedDingFacing, true);
 	}

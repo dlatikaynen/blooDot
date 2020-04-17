@@ -21,16 +21,16 @@ public:
 	unsigned GetNumOfSheetsWE();
 	unsigned GetNumOfSheetsNS();
 	Object* GetObjectAt(unsigned levelX, unsigned levelY, bool createIfNull);
-	ClumsyPacking::NeighborConfiguration GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, unsigned dingID, Layers inLayer);
+	ClumsyPacking::NeighborConfiguration GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, Dings::DingIDs dingID, Layers inLayer);
 	Dings* WeedObjectAt(unsigned levelX, unsigned levelY, Layers* cullCoalescableInLayer);
 	void SetupRuntimeState();
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> GetDingSheet();
 	ID2D1Bitmap* GetDingSheetBmp();
-	Dings* GetDing(unsigned dingID);
-	unsigned GetNextDingID(unsigned dingID);
-	unsigned GetPreviousDingID(unsigned dingID);
-	unsigned ConfirmDingID(unsigned dingID);
-	Microsoft::WRL::ComPtr<ID2D1Bitmap> CreateDingImage(unsigned dingID, Facings placementOrientation);
+	Dings* GetDing(Dings::DingIDs dingID);
+	Dings::DingIDs GetNextDingID(Dings::DingIDs dingID);
+	Dings::DingIDs GetPreviousDingID(Dings::DingIDs dingID);
+	Dings::DingIDs ConfirmDingID(Dings::DingIDs dingID);
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> CreateDingImage(Dings::DingIDs dingID, Facings placementOrientation);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> GetFloorBackground();
 
 	void SetDesignTime();
@@ -49,13 +49,13 @@ private:
 
 	void Clear();
 	unsigned GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet);
-	bool HasCompatibleNeighbor(int x, int y, int dingID, Layers ofLayer);
+	bool HasCompatibleNeighbor(int x, int y, Dings::DingIDs dingID, Layers ofLayer);
 	void DesignLoadFromFile_version2(char* srcData, const size_t length, size_t offset);
 	bool CellLoadFromFile(char *srcData, size_t *offset, const Layers inLayer, const uint32 coordinateX, const uint32 coordinateY);
 
 	Platform::String^									m_Name;
 	D2D1_SIZE_U											m_rectangularBounds;
-	std::map<unsigned, Dings>							m_dingMap;
+	std::map<Dings::DingIDs, Dings>						m_dingMap;
 	D2D1_SIZE_U											m_sheetSize;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_floorBackground;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_dingSheet;

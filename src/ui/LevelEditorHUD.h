@@ -13,7 +13,7 @@ public:
 	bool IsDingSelected();
 	void SelectDing(Dings* ding, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage, bool resetFacing);
 
-	unsigned SelectedDingID();
+	Dings::DingIDs SelectedDingID();
 	void ToggleEraser();
 	bool IsInEraserMode();
 	void ToggleOverwrite();
@@ -42,7 +42,7 @@ protected:
 private:
 	void CreateTextLayout();
 
-	unsigned										m_selectedDingID;
+	Dings::DingIDs									m_selectedDingID;
 	Platform::String^								m_dingName;
 	bool											m_isEraserChosen;
 	bool											m_isInOverwriteMode;

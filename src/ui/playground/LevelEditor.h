@@ -9,7 +9,7 @@ public:
 	virtual void Update(float timeTotal, float timeDelta) override;
 	void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition) override;
 
-	void SelectDingForPlacement(unsigned dingID);
+	void SelectDingForPlacement(Dings::DingIDs dingID);
 	void SelectNextDingForPlacement();
 	void SelectPreviousDingForPlacement();
 	Dings* SelectedDing();
@@ -25,11 +25,11 @@ public:
 private:
 	void DrawLevelEditorRaster();
 	void CreateTextLayout(D2D1_RECT_F* rect, Platform::String^ text);
-	void ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration neighborHood, unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, unsigned dingID);
-	void ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, unsigned dingID);
+	void ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration neighborHood, unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID);
+	void ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID);
 	void RedrawSingleSquare(unsigned levelX, unsigned levelY, Layers inLayer);
 
-	unsigned										m_selectedDingID;
+	Dings::DingIDs									m_selectedDingID;
 	Facings											m_selectedDingOrientation;
 	bool											m_IsErasing;
 	bool											m_IsOverwriting;

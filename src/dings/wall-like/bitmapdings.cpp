@@ -1,7 +1,7 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\dings.h"
 
-HighGrass::HighGrass(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(3, "High grass", deviceResources, drawBrushes)
+HighGrass::HighGrass(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::GrassHigh, "High grass", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Shy;
 	this->m_Coalescing = Facings::Shy;
@@ -14,7 +14,7 @@ Platform::String^ HighGrass::ShouldLoadFromBitmap()
 	return L"highgrass.png";
 }
 
-Snow::Snow(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(4, "Snow area", deviceResources, drawBrushes)
+Snow::Snow(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::SnowArea, "Snow area", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Shy;
 	this->m_Coalescing = Facings::Shy;
@@ -27,7 +27,7 @@ Platform::String^ Snow::ShouldLoadFromBitmap()
 	return L"snowblock.png";
 }
 
-FloorStoneTile::FloorStoneTile(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(5, "Floor stone tiling", deviceResources, drawBrushes)
+FloorStoneTile::FloorStoneTile(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::FloorTilingStone, "Floor stone tiling", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Shy;
 	this->m_Coalescing = Facings::Shy;
@@ -40,7 +40,7 @@ Platform::String^ FloorStoneTile::ShouldLoadFromBitmap()
 	return L"floorstonetile.png";
 }
 
-FloorRockTile::FloorRockTile(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(10, "Floor rock tiling", deviceResources, drawBrushes)
+FloorRockTile::FloorRockTile(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::FloorTilingRock, "Floor rock tiling", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Shy;
 	this->m_Coalescing = Facings::Shy;

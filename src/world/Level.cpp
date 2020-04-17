@@ -94,20 +94,21 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT), &this->m_dingImage));
 	
 	this->m_dingSheet->BeginDraw();
-	this->RegisterDing(&Mauer(deviceResources, brushRegistry),				00, 1);
-	this->RegisterDing(&Wasser(deviceResources, brushRegistry),				01, 0);
+	this->RegisterDing(&Mauer::Mauer(deviceResources, brushRegistry),		00, 1);
+	this->RegisterDing(&Wasser::Wasser(deviceResources, brushRegistry),		01, 0);
 	this->RegisterDing(&HighGrass(deviceResources, brushRegistry),			02, 0);
 	this->RegisterDing(&Snow(deviceResources, brushRegistry),				03, 0);
 	this->RegisterDing(&FloorStoneTile(deviceResources, brushRegistry),		04, 0);
-	this->RegisterDing(&Coin(deviceResources, brushRegistry),				05, 0);
-	this->RegisterDing(&Chest(deviceResources, brushRegistry),				06, 0);
-	this->RegisterDing(&Rail(deviceResources, brushRegistry),				10, 0);
+	this->RegisterDing(&Coin::Coin(deviceResources, brushRegistry),			05, 0);
+	this->RegisterDing(&Chest::Chest(deviceResources, brushRegistry),		06, 0);
+	this->RegisterDing(&SilverChest(deviceResources, brushRegistry),		10, 0);
+	this->RegisterDing(&Rail::Rail(deviceResources, brushRegistry),			14, 0);
 	this->RegisterDing(&CrackedMauer(deviceResources, brushRegistry),		07, 1);
 	this->RegisterDing(&FloorRockTile(deviceResources, brushRegistry),		12, 0);
-	this->RegisterDing(&Lettuce(deviceResources, brushRegistry),			13, 0);
+	this->RegisterDing(&Lettuce::Lettuce(deviceResources, brushRegistry),	13, 0);
 	this->RegisterDing(&Player1(deviceResources, brushRegistry),			14, 0);
-	this->RegisterDing(&Dalek(deviceResources, brushRegistry),				18, 0);
-	this->RegisterDing(&Schaedel(deviceResources, brushRegistry),		    14, 1);
+	this->RegisterDing(&Dalek::Dalek(deviceResources, brushRegistry),		18, 0);
+	this->RegisterDing(&Schaedel::Schaedel(deviceResources, brushRegistry),	14, 1);
 
 	DX::ThrowIfFailed(this->m_dingSheet->EndDraw());
 	this->m_dingSheet->GetBitmap(&this->m_dingSheetBmp);
@@ -119,17 +120,17 @@ void Level::RegisterDing(Dings* dingDef, unsigned xOnSheet, unsigned yOnSheet)
 	this->m_dingMap.emplace(dingDef->ID(), *dingDef);
 }
 
-Dings* Level::GetDing(unsigned dingID)
+Dings* Level::GetDing(Dings::DingIDs dingID)
 {
 	return &(this->m_dingMap.at(dingID));
 }
 
-unsigned Level::GetPreviousDingID(unsigned dingID)
+Dings::DingIDs Level::GetPreviousDingID(Dings::DingIDs dingID)
 {
 	auto dingPointer = this->m_dingMap.find(dingID);
 	if (dingPointer == this->m_dingMap.end())
 	{
-		return 0;
+		return Dings::DingIDs::Void;
 	}
 	else
 	{
@@ -144,12 +145,12 @@ unsigned Level::GetPreviousDingID(unsigned dingID)
 	}
 }
 
-unsigned Level::GetNextDingID(unsigned dingID)
+Dings::DingIDs Level::GetNextDingID(Dings::DingIDs dingID)
 {
 	auto dingPointer = this->m_dingMap.find(dingID);
 	if (dingPointer == this->m_dingMap.end())
 	{
-		return 0;
+		return Dings::DingIDs::Void;
 	}
 	else
 	{
@@ -165,12 +166,12 @@ unsigned Level::GetNextDingID(unsigned dingID)
 	}
 }
 
-unsigned Level::ConfirmDingID(unsigned dingID)
+Dings::DingIDs Level::ConfirmDingID(Dings::DingIDs dingID)
 {
-	return this->m_dingMap.count(dingID) ? dingID : 0;
+	return this->m_dingMap.count(dingID) ? dingID : Dings::DingIDs::Void;
 }
 
-Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::CreateDingImage(unsigned dingID, Facings placementOrientation)
+Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::CreateDingImage(Dings::DingIDs dingID, Facings placementOrientation)
 {
 	auto dingToRender = this->GetDing(dingID);
 	auto dingOnSheet = dingToRender->GetSheetPlacement(placementOrientation);
@@ -281,9 +282,9 @@ void Level::SetupRuntimeState()
 	}
 }
 
-ClumsyPacking::NeighborConfiguration Level::GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, unsigned dingID, Layers inLayer)
+ClumsyPacking::NeighborConfiguration Level::GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, Dings::DingIDs dingID, Layers inLayer)
 {
-	if (dingID > 0)
+	if (dingID > Dings::DingIDs::Void)
 	{
 		return ClumsyPacking::ConfigurationFromNeighbors(
 			this->HasCompatibleNeighbor((int)levelX - 1, (int)levelY - 1, dingID, inLayer),
@@ -300,7 +301,7 @@ ClumsyPacking::NeighborConfiguration Level::GetNeighborConfigurationOf(unsigned 
 	return Facings::Shy;
 }
 
-bool Level::HasCompatibleNeighbor(int x, int y, int dingID, Layers ofLayer)
+bool Level::HasCompatibleNeighbor(int x, int y, Dings::DingIDs dingID, Layers ofLayer)
 {
 	if (!(x < 0 || y < 0 || x >= (int)this->m_rectangularBounds.width || y >= (int)this->m_rectangularBounds.height))
 	{
@@ -570,16 +571,16 @@ bool Level::CellLoadFromFile(char *srcData, size_t *offset, const Layers inLayer
 {
 	Facings placementFacing;
 	byte objectDescriptor = *reinterpret_cast<byte*>(srcData + (*offset)); (*offset) += sizeof(const byte);
-	auto dingID = static_cast<unsigned>(objectDescriptor & 0x3f);
+	auto dingID = static_cast<Dings::DingIDs>(objectDescriptor & 0x3f);
 	if (objectDescriptor & 0x40)
 	{
 		/* yes, this format is a bitch. but it is oh so efficient,
 		 * and it contains all of the retro computing flair */
 		byte secondDingByte = *reinterpret_cast<byte*>(srcData + (*offset)); (*offset) += sizeof(const byte);
-		dingID = (secondDingByte << 6) | dingID;
+		dingID = static_cast<Dings::DingIDs>((secondDingByte << 6) | static_cast<unsigned>(dingID));
 	}
 	
-	if (dingID > 0 && this->m_dingMap.find(dingID) != this->m_dingMap.end())
+	if (dingID > Dings::DingIDs::Void && this->m_dingMap.find(dingID) != this->m_dingMap.end())
 	{
 		if (objectDescriptor & 0x80)
 		{

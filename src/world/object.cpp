@@ -93,17 +93,17 @@ void Object::SetupRuntimeState(Dings* floorDing, Dings* wallsDing, Dings* rooofD
 {
 	if (floorDing != nullptr)
 	{
-		this->m_BehaviorsFloor = floorDing->GetInherenBehaviors();
+		this->m_BehaviorsFloor = floorDing->GetInherentBehaviors();
 	}
 
 	if (wallsDing != nullptr)
 	{
-		this->m_BehaviorsWalls = floorDing->GetInherenBehaviors();
+		this->m_BehaviorsWalls = wallsDing->GetInherentBehaviors();
 	}
 
 	if (rooofDing != nullptr)
 	{
-		this->m_BehaviorsRooof = floorDing->GetInherenBehaviors();
+		this->m_BehaviorsRooof = rooofDing->GetInherentBehaviors();
 	}
 }
 
@@ -249,13 +249,13 @@ void Object::DesignSaveToFile(std::ofstream* toFile, Layers ofLayer)
 	{
 		auto dingID = thisDing->ID();
 		auto dingFacing = this->PlacementFacing(ofLayer);
-		bool isExtendedDing = dingID > 0x3f;
+		bool isExtendedDing = static_cast<unsigned>(dingID) > 0x3f;
 		bool hasPlacementFacing = dingFacing != Facings::Shy;
-		byte prefix = (hasPlacementFacing ? 1 : 0) << 7 | (isExtendedDing ? 1 : 0) << 6 | (dingID & 0x3f);
+		byte prefix = (hasPlacementFacing ? 1 : 0) << 7 | (isExtendedDing ? 1 : 0) << 6 | (static_cast<unsigned>(dingID) & 0x3f);
 		toFile->write((char*)&prefix, sizeof(byte));
 		if (isExtendedDing)
 		{
-			byte dingMSB = (dingID & 0xffc0) >> 6;
+			byte dingMSB = (static_cast<unsigned>(dingID) & 0xffc0) >> 6;
 			toFile->write((char*)&dingMSB, sizeof(byte));
 		}
 		

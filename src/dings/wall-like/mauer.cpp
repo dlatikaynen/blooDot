@@ -1,7 +1,7 @@
 ﻿#include "..\..\PreCompiledHeaders.h"
 #include "..\dings.h"
 
-Mauer::Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(1, "Mauer", deviceResources, drawBrushes)
+Mauer::Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Mauer, "Mauer", deviceResources, drawBrushes)
 {
 	m_Facings = Facings::Shy;
 	m_Coalescing = Facings::Immersed;
@@ -154,7 +154,7 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 
 CrackedMauer::CrackedMauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Mauer(deviceResources, drawBrushes)
 {
-	this->m_ID = 9;
+	this->m_ID = Dings::DingIDs::MauerCracked;
 	this->m_Name = L"Cracked";
 	m_Facings = Facings::Shy;
 	m_Coalescing = Facings::Immersed;

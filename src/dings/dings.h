@@ -119,20 +119,45 @@ enum OrientabilityIndexDuplex
 class Dings
 {
 public:
-	Dings(int dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	enum class DingIDs : unsigned
+	{
+		Void = 0,
+		Mauer = 1,
+		Wasser = 2,
+		Rail = 3,
+		GrassHigh = 4,
+		SnowArea = 5,
+		Coin = 6,
+		Chest = 7,
+		ChestSilver = 8,
+		MauerCracked = 9,
+		FloorTilingStone = 10,
+		FloorTilingRock = 11,
+		Lettuce = 12,
+		Player = 13,
+		Player2 = 14,
+		Player3 = 15,
+		Player4 = 16,
 
-	unsigned			ID();
+		Dalek = 34,
+		Schaedel = 35
+
+	};
+
+	Dings(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+
+	Dings::DingIDs		ID();
 	Platform::String^	Name();
 	void				Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY);
 	D2D1_POINT_2U		GetSheetPlacement(Facings orientation);
 	Layers				GetPreferredLayer();
 	Facings				AvailableFacings();
-	ObjectBehaviors		GetInherenBehaviors();
+	ObjectBehaviors		GetInherentBehaviors();
 	bool				CouldCoalesce();
 	static Facings		RotateFromFacing(Facings fromFacing, bool inverseDirection);
 
 protected:
-	unsigned			m_ID;
+	DingIDs				m_ID;
 	Platform::String^	m_Name;
 	BrushRegistry*		m_Brushes;
 	Facings				m_Facings;
@@ -265,7 +290,7 @@ protected:
 class Player2 : public Player1
 {
 public:
-	Player2(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Player1(deviceResources, drawBrushes) { this->m_ID = 13; m_Name = L"Player-2"; };
+	Player2(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Player1(deviceResources, drawBrushes) { this->m_ID = Dings::DingIDs::Player2; m_Name = L"Player-2"; };
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
@@ -273,7 +298,7 @@ protected:
 class Player3 : public Player1
 {
 public:
-	Player3(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Player1(deviceResources, drawBrushes) { this->m_ID = 14; m_Name = L"Player-3"; };
+	Player3(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Player1(deviceResources, drawBrushes) { this->m_ID = Dings::DingIDs::Player3; m_Name = L"Player-3"; };
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 }; 
@@ -281,7 +306,7 @@ protected:
 class Player4 : public Player1
 {
 public:
-	Player4(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Player1(deviceResources, drawBrushes) { this->m_ID = 15; m_Name = L"Player-4"; };
+	Player4(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Player1(deviceResources, drawBrushes) { this->m_ID = Dings::DingIDs::Player4; m_Name = L"Player-4"; };
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
@@ -322,6 +347,18 @@ class Chest : public Dings
 public:
 	Chest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect) override;
+
+protected:
+	virtual int ColorVariation();
+};
+
+class SilverChest : public Chest
+{
+public:
+	SilverChest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+
+protected:
+	int ColorVariation() override;
 };
 
 class Lettuce : public Dings

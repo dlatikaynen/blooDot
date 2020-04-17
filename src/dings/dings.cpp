@@ -17,7 +17,7 @@ Facings& operator |=(Facings& a, Facings b)
 	return a = a | b;
 }
 
-Dings::Dings(int dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes)
+Dings::Dings(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes)
 {
 	this->m_ID = dingID;
 	this->m_Name = dingName;
@@ -26,7 +26,7 @@ Dings::Dings(int dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceR
 	this->m_Behaviors = ObjectBehaviors::Boring;
 }
 
-unsigned Dings::ID() 
+Dings::DingIDs Dings::ID()
 {
 	return this->m_ID;
 }
@@ -41,7 +41,7 @@ Layers Dings::GetPreferredLayer()
 	return this->m_preferredLayer;
 }
 
-ObjectBehaviors Dings::GetInherenBehaviors()
+ObjectBehaviors Dings::GetInherentBehaviors()
 {
 	return this->m_Behaviors;
 }

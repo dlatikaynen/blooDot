@@ -4,7 +4,7 @@
 
 LevelEditor::LevelEditor() : WorldScreenBase() 
 {
-	this->m_selectedDingID = 1;
+	this->m_selectedDingID = Dings::DingIDs::Mauer;
 	this->m_selectedDingOrientation = Facings::Shy;
 	this->m_isGridShown = true;
 	this->m_lastPlacementPositionValid = false;
@@ -37,7 +37,7 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 	auto newOrientation = myHUD->SelectedDingOrientation();
 	auto curDingID = myHUD->SelectedDingID();
 	this->m_isGridShown = myHUD->IsGridShown();
-	if (this->m_selectedDingID > 0 && (this->m_selectedDingID != curDingID || this->m_selectedDingOrientation != newOrientation))
+	if (this->m_selectedDingID > Dings::DingIDs::Void && (this->m_selectedDingID != curDingID || this->m_selectedDingOrientation != newOrientation))
 	{
 		auto dingPic = this->m_currentLevel->CreateDingImage(this->m_selectedDingID, newOrientation);
 		auto needResetOrientation = this->m_selectedDingID != curDingID;
@@ -88,7 +88,7 @@ void LevelEditor::SetControl(int detentCount, bool shiftKeyActive)
 
 void LevelEditor::ConsiderPlacement(bool fillArea)
 {
-	if (this->m_currentLevelEditorCellKnown && this->m_selectedDingID > 0)
+	if (this->m_currentLevelEditorCellKnown && this->m_selectedDingID > Dings::DingIDs::Void)
 	{
 		if (fillArea && m_lastPlacementPositionValid)
 		{
@@ -121,7 +121,7 @@ void LevelEditor::ConsiderPlacement(bool fillArea)
 
 void LevelEditor::DoPlaceDing()
 {
-	if (this->m_currentLevelEditorCellKnown && this->m_selectedDingID > 0)
+	if (this->m_currentLevelEditorCellKnown && this->m_selectedDingID > Dings::DingIDs::Void)
 	{
 		auto newCell = this->m_currentLevel->GetObjectAt(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, true);
 		auto newDings = this->m_currentLevel->GetDing(this->m_selectedDingID);
@@ -186,7 +186,7 @@ void LevelEditor::DoObliterateDing()
 	}
 }
 
-void LevelEditor::ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration neighborHood, unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, unsigned dingID)
+void LevelEditor::ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration neighborHood, unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID)
 {
 	if ((neighborHood & 1) == 1)
 	{
@@ -229,7 +229,7 @@ void LevelEditor::ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration 
 	}
 }
 
-void LevelEditor::ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, unsigned dingID)
+void LevelEditor::ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID)
 {
 	auto centerObject = this->m_currentLevel->GetObjectAt(aroundLevelX, aroundLevelY, false);
 	if (centerObject != nullptr)
@@ -469,7 +469,7 @@ void LevelEditor::CreateTextLayout(D2D1_RECT_F* rect, Platform::String^ text)
 
 Dings* LevelEditor::SelectedDing()
 {
-	if (this->m_selectedDingID > 0)
+	if (this->m_selectedDingID > Dings::DingIDs::Void)
 	{
 		return this->m_currentLevel->GetDing(m_selectedDingID);
 	}
@@ -477,7 +477,7 @@ Dings* LevelEditor::SelectedDing()
 	return nullptr;
 }
 
-void LevelEditor::SelectDingForPlacement(unsigned dingID)
+void LevelEditor::SelectDingForPlacement(Dings::DingIDs dingID)
 {
 	this->m_selectedDingID = this->m_currentLevel->ConfirmDingID(dingID);
 }
@@ -485,7 +485,7 @@ void LevelEditor::SelectDingForPlacement(unsigned dingID)
 void LevelEditor::SelectNextDingForPlacement()
 {
 	auto nextDing = this->m_currentLevel->GetNextDingID(this->m_selectedDingID);
-	if (nextDing > 0)
+	if (nextDing > Dings::DingIDs::Void)
 	{
 		this->SelectDingForPlacement(nextDing);
 	}
@@ -494,7 +494,7 @@ void LevelEditor::SelectNextDingForPlacement()
 void LevelEditor::SelectPreviousDingForPlacement()
 {
 	auto prevDing = this->m_currentLevel->GetPreviousDingID(this->m_selectedDingID);
-	if (prevDing > 0)
+	if (prevDing > Dings::DingIDs::Void)
 	{
 		this->SelectDingForPlacement(prevDing);
 	}

@@ -28,7 +28,7 @@ void WorldScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceRe
 			static_cast<float>(player1->PositionSquare.y + 1) * blooDot::Consts::SQUARE_HEIGHT
 		);
 
-		auto dingOnSheet = this->m_currentLevel->GetDing(12)->GetSheetPlacement(Facings::East);
+		auto dingOnSheet = this->m_currentLevel->GetDing(Dings::DingIDs::Player)->GetSheetPlacement(Facings::East);
 		player1->SpriteSourceRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
 		this->m_playerData.push_back(player1);
 	}
