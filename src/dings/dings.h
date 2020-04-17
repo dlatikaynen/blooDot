@@ -124,23 +124,23 @@ public:
 		Void = 0,
 		Mauer = 1,
 		Wasser = 2,
-		Rail = 3,
-		GrassHigh = 4,
-		SnowArea = 5,
+		GrassHigh = 3,
+		SnowArea = 4,
+		FloorTilingStone = 5,
 		Coin = 6,
 		Chest = 7,
-		ChestSilver = 8,
+		Rail = 8,
 		MauerCracked = 9,
-		FloorTilingStone = 10,
-		FloorTilingRock = 11,
-		Lettuce = 12,
-		Player = 13,
-		Player2 = 14,
-		Player3 = 15,
-		Player4 = 16,
+		FloorTilingRock = 10,
+		Lettuce = 11,
+		Player = 12,
+		Player2 = 13,
+		Player3 = 14,
+		Player4 = 15,
+		ChestSilver = 16,
 
 		Dalek = 34,
-		Schaedel = 35
+		Schaedel = 4042
 
 	};
 
