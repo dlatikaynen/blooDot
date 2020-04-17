@@ -440,13 +440,13 @@ bool Level::DesignLoadFromFile(Platform::String^ fileName)
 		}
 
 		unsigned char sigByte = *reinterpret_cast<unsigned char*>(srcData + offset); offset += sizeof(unsigned char);
-		if (sigByte != sigbyte)
+		if (sigByte != Level::sigbyte)
 		{
 			return false;
 		}
 
 		uint16 fileType = *reinterpret_cast<uint16*>(srcData + offset); offset += sizeof(uint16);
-		uint64 tToMatch = (uint16_t)(*(uint16_t*)&blooDot::blooDotMain::BLOODOTFILE_CONTENTTYPE_LEVEL_DESIGN[0]);
+		uint16 tToMatch = (uint16_t)(*(uint16_t*)&blooDot::blooDotMain::BLOODOTFILE_CONTENTTYPE_LEVEL_DESIGN[0]);
 		if (fileType != tToMatch)
 		{
 			return false;

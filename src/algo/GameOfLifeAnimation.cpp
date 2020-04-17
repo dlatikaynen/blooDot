@@ -97,9 +97,27 @@ void GameOfLifeAnimation::LoadRecording(Platform::String^ fileName)
 	Platform::Array<byte>^ rawData = m_basicReaderWriter->ReadData(fileName);
 	byte* srcData = rawData->Data;
 
-	/* 1. ask the file how big the matrix is 
-	 * -!!- BUG: signature too short, is longer actually! */
-	unsigned short fileSignature = *reinterpret_cast<unsigned short*>(srcData + offset); offset += sizeof(unsigned short);
+	uint64 fileSignature = *reinterpret_cast<uint64*>(srcData + offset); offset += sizeof(uint64);
+	uint64 signatToMatch = (uint64_t)(*(uint64_t*)&blooDot::blooDotMain::BLOODOTFILE_SIGNATURE[0]);
+	if (fileSignature != signatToMatch)
+	{
+		return;
+	}
+
+	unsigned char sigByte = *reinterpret_cast<unsigned char*>(srcData + offset); offset += sizeof(unsigned char);
+	if (sigByte != GameOfLifeAnimation::sigbyte)
+	{
+		return;
+	}
+
+	uint16 fileType = *reinterpret_cast<uint16*>(srcData + offset); offset += sizeof(uint16);
+	uint16 tToMatch = (uint16_t)(*(uint16_t*)&blooDot::blooDotMain::BLOODOTFILE_CONTENTTYPE_GOLANIMATION[0]);
+	if (fileType != tToMatch)
+	{
+		return;
+	}
+
+	/* ask the file how big the matrix is */
 	unsigned short boardWidth = *reinterpret_cast<unsigned short*>(srcData + offset); offset += sizeof(unsigned short);
 	unsigned short boardHeight = *reinterpret_cast<unsigned short*>(srcData + offset); offset += sizeof(unsigned short);
 
@@ -219,7 +237,7 @@ void GameOfLifeAnimation::SaveRecording(Platform::String^ fileName)
 	std::ofstream oF;
 	oF.open(fName, ios_base::out | ios_base::binary);
 	oF.write((char*)&blooDot::blooDotMain::BLOODOTFILE_SIGNATURE, sizeof(blooDot::blooDotMain::BLOODOTFILE_SIGNATURE));
-	const unsigned char sigbyte = 42;
+	const unsigned char sigbyte = GameOfLifeAnimation::sigbyte;
 	oF.write((char *)&sigbyte, sizeof(unsigned char));
 	oF.write((char*)&blooDot::blooDotMain::BLOODOTFILE_CONTENTTYPE_GOLANIMATION, sizeof(blooDot::blooDotMain::BLOODOTFILE_CONTENTTYPE_GOLANIMATION));
 	const unsigned short uwidth = GetCurrentMatrix()->GetWidth();

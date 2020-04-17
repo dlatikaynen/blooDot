@@ -168,6 +168,8 @@ public:
 	};
 
 private:
+	const unsigned char sigbyte = 42;
+
 	BasicReaderWriter^ m_basicReaderWriter;
 	GameOfLifePlane* m_initialMatrix;
 	GameOfLifePlane* m_currentMatrix;
