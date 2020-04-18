@@ -10,6 +10,8 @@ key map on level editor
 
 <R>.... rotate in place (orientable only). Mousewheel supported
 
+<D>.... show Ding sheet
+
 <->.... select previous ding from toolbox
 
 <+>.... select next ding from toolbox
