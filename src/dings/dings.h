@@ -125,7 +125,7 @@ public:
 		Mauer = 1,
 		Wasser = 2,
 		GrassHigh = 3,
-		SnowArea = 4,
+		SnowTile = 4,
 		FloorTilingStone = 5,
 		Coin = 6,
 		Chest = 7,

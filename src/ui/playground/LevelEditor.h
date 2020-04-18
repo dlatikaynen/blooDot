@@ -19,11 +19,13 @@ public:
 	void DoObliterateDing();
 	void DoSetScrollLock(bool scrollLocked);
 	void DoToggleGrid();
+	void DoToggleDingSheet();
 	void SetControl(int detentCount, bool shiftKeyActive) override;
 	void DoRotate(bool affectPlacement, bool inverse);
 
 private:
 	void DrawLevelEditorRaster();
+	void DrawDingSheet();
 	void CreateTextLayout(D2D1_RECT_F* rect, Platform::String^ text);
 	void ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration neighborHood, unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID);
 	void ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID);
@@ -34,7 +36,11 @@ private:
 	bool											m_IsErasing;
 	bool											m_IsOverwriting;
 	bool											m_isGridShown;
+	bool											m_isDingSheetShown;
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>	m_textColorBrush;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>	m_coverBrush;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>	m_blackBrush;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>	m_chromeBrush;
 	Microsoft::WRL::ComPtr<IDWriteTextLayout>		m_textLayout;
 	D2D1_RECT_F										m_textExtents;
 	TextStyle										m_textStyle;

@@ -154,6 +154,8 @@ namespace blooDot
 		bool				m_keyInsertPressed;
 		bool				m_keyGridActive;
 		bool				m_keyGridPressed;
+		bool				m_keyDingSheetActive;
+		bool				m_keyDingSheetPressed;
 		bool				m_keyDeleteActive;
 		bool				m_keyDeletePressed;
 		bool				m_keyRotateActive;

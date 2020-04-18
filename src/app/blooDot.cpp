@@ -612,6 +612,13 @@ void blooDotMain::Update()
 				levelEditor->DoToggleGrid();
 			}
 
+			if (this->m_keyDingSheetPressed)
+			{
+				this->m_keyDingSheetPressed = false;
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				levelEditor->DoToggleDingSheet();
+			}
+
 			if (this->m_keyRotatePressed || this->ButtonJustPressed(GamepadButtons::Y))
 			{
 				this->m_keyRotatePressed = false;
@@ -649,6 +656,12 @@ void blooDotMain::Update()
 			{
 				this->m_keyGridPressed = false;
 				this->m_levelEditorHUD.ToggleGrid();
+			}
+
+			if (this->m_keyDingSheetPressed)
+			{
+				this->m_keyDingSheetPressed = false;
+				this->m_levelEditorHUD.ToggleDingSheet();
 			}
 
 			if (this->m_keyScrollLockStateChanged)
@@ -1277,6 +1290,10 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 	{
 		m_keyGridActive = true;
 	}
+	else if (key == Windows::System::VirtualKey::D)
+	{
+		m_keyDingSheetActive = true;
+	}
 	else if (key == Windows::System::VirtualKey::R)
 	{
 		m_keyRotateActive = true;
@@ -1416,6 +1433,14 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 		{
 			this->m_keyGridPressed = true;
 			this->m_keyGridActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::D)
+	{
+		if (this->m_keyDingSheetActive)
+		{
+			this->m_keyDingSheetPressed = true;
+			this->m_keyDingSheetActive = false;
 		}
 	}
 	else if (key == Windows::System::VirtualKey::R)

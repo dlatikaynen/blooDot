@@ -90,7 +90,7 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	auto loader = ref new BasicLoader(resources);
 	loader->LoadPngToBitmap(L"Media\\Bitmaps\\universe_seamless.png", deviceResources, &this->m_floorBackground);
 
-	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(2048.0f, 600.0f), &this->m_dingSheet));
+	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(1000.0f, 600.0f), &this->m_dingSheet));
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT), &this->m_dingImage));
 	
 	this->m_dingSheet->BeginDraw();
@@ -104,11 +104,11 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	this->RegisterDing(&SilverChest(deviceResources, brushRegistry),		10, 0);
 	this->RegisterDing(&Rail::Rail(deviceResources, brushRegistry),			14, 0);
 	this->RegisterDing(&CrackedMauer(deviceResources, brushRegistry),		07, 1);
-	this->RegisterDing(&FloorRockTile(deviceResources, brushRegistry),		12, 0);
-	this->RegisterDing(&Lettuce::Lettuce(deviceResources, brushRegistry),	13, 0);
-	this->RegisterDing(&Player1(deviceResources, brushRegistry),			14, 0);
-	this->RegisterDing(&Dalek::Dalek(deviceResources, brushRegistry),		18, 0);
-	this->RegisterDing(&Schaedel::Schaedel(deviceResources, brushRegistry),	14, 1);
+	this->RegisterDing(&FloorRockTile(deviceResources, brushRegistry),		14, 1);
+	this->RegisterDing(&Lettuce::Lettuce(deviceResources, brushRegistry),	14, 2);
+	this->RegisterDing(&Player1(deviceResources, brushRegistry),			16, 0);
+	this->RegisterDing(&Dalek::Dalek(deviceResources, brushRegistry),		15, 1);
+	this->RegisterDing(&Schaedel::Schaedel(deviceResources, brushRegistry),	15, 2);
 
 	DX::ThrowIfFailed(this->m_dingSheet->EndDraw());
 	this->m_dingSheet->GetBitmap(&this->m_dingSheetBmp);

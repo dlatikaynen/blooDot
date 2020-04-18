@@ -18,7 +18,7 @@ Platform::String^ HighGrass::ShouldLoadFromBitmap()
 	return L"highgrass.png";
 }
 
-Snow::Snow(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::SnowArea, "Snow area", deviceResources, drawBrushes)
+Snow::Snow(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::SnowTile, "Snow area", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Shy;
 	this->m_Coalescing = Facings::Shy;

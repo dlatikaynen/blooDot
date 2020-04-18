@@ -7,6 +7,7 @@ LevelEditor::LevelEditor() : WorldScreenBase()
 	this->m_selectedDingID = Dings::DingIDs::Mauer;
 	this->m_selectedDingOrientation = Facings::Shy;
 	this->m_isGridShown = true;
+	this->m_isDingSheetShown = false;
 	this->m_lastPlacementPositionValid = false;
 	this->m_lastActiveGridPositionValid = false;
 	this->m_keyShiftDown = false;
@@ -15,6 +16,9 @@ LevelEditor::LevelEditor() : WorldScreenBase()
 LevelEditor::~LevelEditor()
 {	
 	this->m_textColorBrush.Reset();
+	this->m_coverBrush.Reset();
+	this->m_chromeBrush.Reset();
+	this->m_blackBrush.Reset();
 }
 
 void LevelEditor::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources)
@@ -22,6 +26,10 @@ void LevelEditor::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceRe
 	WorldScreenBase::Initialize(deviceResources);
 	DX::ThrowIfFailed(deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &this->m_textColorBrush));
 	this->m_textColorBrush->SetOpacity(m_textColorBrush->GetOpacity() * blooDot::Consts::GOLDEN_RATIO);
+	DX::ThrowIfFailed(deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &this->m_blackBrush));
+	DX::ThrowIfFailed(deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::PaleGoldenrod), &this->m_chromeBrush));
+	DX::ThrowIfFailed(deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::GhostWhite), &this->m_coverBrush));
+	this->m_coverBrush->SetOpacity(m_coverBrush->GetOpacity() * blooDot::Consts::INVERSE_GOLDEN_RATIO);
 	this->m_textStyle.SetFontName(L"Segoe UI");
 	this->m_textStyle.SetFontSize(11.0f);
 	this->m_textStyle.SetFontWeight(DWRITE_FONT_WEIGHT_LIGHT);
@@ -37,6 +45,7 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 	auto newOrientation = myHUD->SelectedDingOrientation();
 	auto curDingID = myHUD->SelectedDingID();
 	this->m_isGridShown = myHUD->IsGridShown();
+	this->m_isDingSheetShown = myHUD->IsDingSheetShown();
 	if (this->m_selectedDingID > Dings::DingIDs::Void && (this->m_selectedDingID != curDingID || this->m_selectedDingOrientation != newOrientation))
 	{
 		auto dingPic = this->m_currentLevel->CreateDingImage(this->m_selectedDingID, newOrientation);
@@ -312,6 +321,11 @@ void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 	}
 
 	this->DrawLevelEditorRaster();
+	if (this->m_isDingSheetShown)
+	{
+		this->DrawDingSheet();
+	}
+
 	HRESULT hr = m_d2dContext->EndDraw();
 	if (hr != D2DERR_RECREATE_TARGET)
 	{
@@ -341,41 +355,41 @@ void LevelEditor::DrawLevelEditorRaster()
 	MFARGB colhigh = { 255, 0, 0, 255 };
 	MFARGB coltuch = { 5, 151, 251,255 };
 	MFARGB coleras = { 18, 7, 231, 255 };
-	auto brgrid = m_Brushes.WannaHave(m_d2dContext, colgrid);
+	auto brgrid = this->m_Brushes.WannaHave(m_d2dContext, colgrid);
 	auto cursor = m_Brushes.WannaHave(m_d2dContext, colhigh);
 	auto touchdown = m_Brushes.WannaHave(m_d2dContext, coltuch);
 	auto eraser = m_Brushes.WannaHave(m_d2dContext, coleras);
 	auto brusherl = brgrid.Get();
 
 	/* the next multiple of the grid height less than the viewport top */
-	auto yAdjust = static_cast<float>(static_cast<unsigned>(m_viewportOffset.y) % static_cast<unsigned>(blooDot::Consts::SQUARE_HEIGHT));
-	auto xAdjust = static_cast<float>(static_cast<unsigned>(m_viewportOffset.x) % static_cast<unsigned>(blooDot::Consts::SQUARE_WIDTH));
+	auto yAdjust = static_cast<float>(static_cast<unsigned>(this->m_viewportOffset.y) % static_cast<unsigned>(blooDot::Consts::SQUARE_HEIGHT));
+	auto xAdjust = static_cast<float>(static_cast<unsigned>(this->m_viewportOffset.x) % static_cast<unsigned>(blooDot::Consts::SQUARE_WIDTH));
 	if (this->m_isGridShown)
 	{
 		for (
 			int y = -static_cast<int>(yAdjust);
-			y < static_cast<int>(m_viewportSize.height + blooDot::Consts::SQUARE_HEIGHT);
+			y < static_cast<int>(this->m_viewportSize.height + blooDot::Consts::SQUARE_HEIGHT);
 			y += static_cast<int>(blooDot::Consts::SQUARE_HEIGHT)
 			)
 		{
 			point0.x = (float)0;
 			point0.y = (float)y;
-			point1.x = (float)static_cast<int>(m_viewportSize.width);
+			point1.x = (float)static_cast<int>(this->m_viewportSize.width);
 			point1.y = (float)y;
-			m_d2dContext->DrawLine(point0, point1, brusherl, 1.0F, NULL);
+			this->m_d2dContext->DrawLine(point0, point1, brusherl, 1.0F, NULL);
 		}
 
 		for (
 			int x = -static_cast<int>(xAdjust);
-			x < static_cast<int>(m_viewportSize.width + blooDot::Consts::SQUARE_WIDTH);
+			x < static_cast<int>(this->m_viewportSize.width + blooDot::Consts::SQUARE_WIDTH);
 			x += static_cast<int>(blooDot::Consts::SQUARE_WIDTH)
 			)
 		{
 			point0.x = (float)x;
 			point0.y = (float)0;
 			point1.x = (float)x;
-			point1.y = (float)static_cast<int>(m_viewportSize.height);
-			m_d2dContext->DrawLine(point0, point1, brusherl, 1.0F, NULL);
+			point1.y = (float)static_cast<int>(this->m_viewportSize.height);
+			this->m_d2dContext->DrawLine(point0, point1, brusherl, 1.0F, NULL);
 		}
 	}
 
@@ -447,6 +461,33 @@ void LevelEditor::DrawLevelEditorRaster()
 	);
 }
 
+void LevelEditor::DrawDingSheet()
+{
+	if (this->m_currentLevel != nullptr)
+	{
+		auto dingSheet = this->m_currentLevel->GetDingSheet();
+		auto dingSheetSize = dingSheet->GetSize();		
+		auto screenSize = this->m_d2dContext->GetSize();
+		auto screenRect = D2D1::RectF(0.0F, 0.0F, screenSize.width - 1.0F, screenSize.height - 1.0F);
+		auto xCenterOffset = screenSize.width / 2.0F - dingSheetSize.width / 2.0F;
+		auto yCenterOffset = screenSize.height / 2.0F - dingSheetSize.height / 2.0F;
+		auto sourceRect = D2D1::RectF(0.0F, 0.0F, dingSheetSize.width - 1.0F, dingSheetSize.height - 1.0F);
+		auto dingRect = D2D1::RectF(xCenterOffset, yCenterOffset, xCenterOffset + dingSheetSize.width - 1.0F, yCenterOffset + dingSheetSize.height - 1.0F);
+		auto windowRect = D2D1::RectF(dingRect.left - 10.0F, dingRect.top - 10.0F, dingRect.right + 10.0F, dingRect.bottom + 10.0F);
+		this->m_d2dContext->FillRectangle(screenRect, this->m_coverBrush.Get());
+		this->m_d2dContext->FillRectangle(windowRect, this->m_chromeBrush.Get());
+		this->m_d2dContext->FillRectangle(dingRect, this->m_blackBrush.Get());
+		this->m_d2dContext->DrawRectangle(windowRect, this->m_blackBrush.Get());
+		this->m_d2dContext->DrawBitmap(
+			this->m_currentLevel->GetDingSheetBmp(),
+			dingRect,
+			1.0f,
+			D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+			sourceRect
+		);
+	}
+}
+
 void LevelEditor::CreateTextLayout(D2D1_RECT_F* rect, Platform::String^ text)
 {
 	if (this->m_textLayout == nullptr)
@@ -515,6 +556,15 @@ void LevelEditor::DoToggleGrid()
 	if (myHUD != nullptr)
 	{
 		myHUD->ToggleGrid();
+	}
+}
+
+void LevelEditor::DoToggleDingSheet()
+{
+	auto myHUD = static_cast<LevelEditorHUD*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::LevelEditorHUD));
+	if (myHUD != nullptr)
+	{
+		myHUD->ToggleDingSheet();
 	}
 }
 

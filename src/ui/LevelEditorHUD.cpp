@@ -14,6 +14,7 @@ LevelEditorHUD::LevelEditorHUD()
 	this->m_isEraserChosen = false;
 	this->m_selectedDingID = Dings::DingIDs::Void;
 	this->m_isGridShown = true;
+	this->m_isDingSheetShown = false;
 	this->m_isSelectedDingRotatable = false;
 }
 
@@ -147,6 +148,11 @@ void LevelEditorHUD::ToggleGrid()
 	this->m_isGridShown = !this->m_isGridShown;
 }
 
+void LevelEditorHUD::ToggleDingSheet()
+{
+	this->m_isDingSheetShown = !this->m_isDingSheetShown;
+}
+
 void LevelEditorHUD::SetScrollLock(bool scrollLock)
 {
 	this->m_isScrollLocked = scrollLock;
@@ -165,6 +171,11 @@ bool LevelEditorHUD::IsInOverwriteMode()
 bool LevelEditorHUD::IsGridShown()
 {
 	return this->m_isGridShown;
+}
+
+bool LevelEditorHUD::IsDingSheetShown()
+{
+	return this->m_isDingSheetShown;
 }
 
 bool LevelEditorHUD::IsScrollLocked()

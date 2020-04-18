@@ -19,10 +19,12 @@ public:
 	void ToggleOverwrite();
 	bool IsInOverwriteMode();
 	void ToggleGrid();
+	void ToggleDingSheet();
 	void SetScrollLock(bool scrollLock);
 	void Rotate();
 	void RotateInverse();
 	bool LevelEditorHUD::IsGridShown();
+	bool LevelEditorHUD::IsDingSheetShown();
 	bool LevelEditorHUD::IsScrollLocked();
 	Facings LevelEditorHUD::SelectedDingOrientation();
 
@@ -47,6 +49,7 @@ private:
 	bool											m_isEraserChosen;
 	bool											m_isInOverwriteMode;
 	bool											m_isGridShown;
+	bool											m_isDingSheetShown;
 	bool											m_isScrollLocked;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>				m_selectedDingImage;
 	bool											m_isSelectedDingRotatable;
