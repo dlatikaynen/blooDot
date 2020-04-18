@@ -340,7 +340,6 @@
     <ClCompile Include="..\src\io\MediaStreamer.cpp" />
     <ClCompile Include="..\src\io\PersistentState.cpp" />
     <ClCompile Include="..\src\physics\Physics.cpp" />
-    <ClCompile Include="..\src\ui\SampleOverlay.cpp" />
     <ClCompile Include="..\src\dx\Mesh.cpp" />
     <ClCompile Include="..\src\ui\UserInterface.cpp" />
     <ClCompile Include="..\src\ui\ElementBase.cpp" />
@@ -399,7 +398,6 @@
     <ClInclude Include="..\src\io\PersistentState.h" />
     <ClInclude Include="..\src\physics\Physics.h" />
     <ClInclude Include="..\src\dx\Primitives.h" />
-    <ClInclude Include="..\src\ui\SampleOverlay.h" />
     <ClInclude Include="..\src\dx\Mesh.h" />
     <ClInclude Include="..\src\app\StepTimer.h" />
     <ClInclude Include="..\src\ui\UserInterface.h" />

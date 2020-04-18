@@ -39,9 +39,6 @@
     <ClCompile Include="..\src\ui\TextButton.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\SampleOverlay.cpp">
-      <Filter>ui</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ui\HighScoreTable.cpp">
       <Filter>ui</Filter>
     </ClCompile>
@@ -201,9 +198,6 @@
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\TextButton.h">
-      <Filter>ui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ui\SampleOverlay.h">
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\HighScoreTable.h">
@@ -620,6 +614,9 @@
     </Filter>
     <Filter Include="ui\playground">
       <UniqueIdentifier>{e1b24f93-f12b-45ef-be90-c324090333be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\dialogs">
+      <UniqueIdentifier>{703a3674-9f4d-492c-a744-eb62c0bd6240}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

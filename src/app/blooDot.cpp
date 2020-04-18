@@ -89,7 +89,6 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 
     m_persistentState = ref new PersistentState();
     m_persistentState->Initialize(Windows::Storage::ApplicationData::Current->LocalSettings->Values, "blooDot");
-    m_sampleOverlay = std::unique_ptr<SampleOverlay>(new SampleOverlay(m_deviceResources, L"Lukas Spiel Test Demo"));
 
 	this->LoadFontCollection();
     this->m_audio.Initialize();
@@ -264,11 +263,6 @@ void blooDotMain::CreateWindowSizeDependentResources()
 	if (m_worldScreen != nullptr)
 	{
 		m_worldScreen->CreateDeviceDependentResources();
-	}
-
-	if (m_sampleOverlay != nullptr)
-	{
-		m_sampleOverlay->CreateWindowSizeDependentResources();
 	}
 }
 
@@ -1634,7 +1628,6 @@ void blooDot::blooDotMain::LogMessage(Platform::Object^ obj)
 // Notifies renderers that device resources need to be released.
 void blooDotMain::OnDeviceLost()
 {
-    m_sampleOverlay->ReleaseDeviceDependentResources();
     m_loadScreen->ReleaseDeviceDependentResources();
 	m_worldScreen->ReleaseDeviceDependentResources();
     UserInterface::ReleaseDeviceDependentResources();
@@ -1648,7 +1641,6 @@ void blooDotMain::OnDeviceLost()
 void blooDotMain::OnDeviceRestored()
 {
 	this->m_worldScreen->CreateDeviceDependentResources();
-	this->m_sampleOverlay->CreateDeviceDependentResources();
 	this->m_loadScreen->Initialize(this->m_deviceResources);
 	this->m_worldScreen->Initialize(this->m_deviceResources);
     UserInterface::GetInstance().Initialize(

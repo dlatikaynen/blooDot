@@ -10,7 +10,6 @@
 #include "..\physics\Physics.h"
 #include "..\sound\Audio.h"
 #include "..\ui\UserInterface.h"
-#include "..\ui\SampleOverlay.h"
 #include "..\ui\LoadScreen.h"
 #include "..\ui\playground\WorldScreenBase.h"
 #include "..\algo\ClumsyPacking.h"
@@ -99,7 +98,6 @@ namespace blooDot
 
 		// Cached pointer to device resources.
         std::shared_ptr<DX::DeviceResources>		m_deviceResources;
-        std::unique_ptr<SampleOverlay>				m_sampleOverlay;
         DX::StepTimer								m_timer;
         std::unique_ptr<LoadScreen>					m_loadScreen;
 		std::unique_ptr<WorldScreenBase>			m_worldScreen;
