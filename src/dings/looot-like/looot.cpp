@@ -7,6 +7,10 @@ Coin::Coin(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* 
 	m_Coalescing = Facings::Shy;
 	m_preferredLayer = Layers::Walls;
 	m_possibleLayers = Layers::Walls;
+	this->m_Behaviors = 
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::Takeable;
+
 }
 
 void Coin::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
@@ -35,6 +39,13 @@ Chest::Chest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry
 	m_Coalescing = Facings::Shy;
 	m_preferredLayer = Layers::Walls;
 	m_possibleLayers = Layers::Walls;
+	this->m_Behaviors =
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::Pushable |
+		ObjectBehaviors::Openable |
+		ObjectBehaviors::Closeable |
+		ObjectBehaviors::CanPutStuffIn |
+		ObjectBehaviors::CanTakeStuffOut;
 }
 
 int Chest::ColorVariation()
@@ -117,6 +128,9 @@ Lettuce::Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegi
 	this->m_Coalescing = Facings::Shy;
 	this->m_preferredLayer = Layers::Walls;
 	this->m_possibleLayers = Layers::Walls;
+	this->m_Behaviors =
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::Takeable;
 }
 
 Platform::String^ Lettuce::ShouldLoadFromBitmap()

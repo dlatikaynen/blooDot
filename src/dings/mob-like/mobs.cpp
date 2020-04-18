@@ -7,6 +7,12 @@ Player1::Player1(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegi
 	m_Coalescing = Facings::Shy;
 	m_preferredLayer = Layers::Walls;
 	m_possibleLayers = Layers::Walls;
+	this->m_Behaviors =
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::Pushable |
+		ObjectBehaviors::Pullable |
+		ObjectBehaviors::ActiveMoving |
+		ObjectBehaviors::CanPutStuffIn;
 }
 
 Platform::String^ Player1::ShouldLoadFromBitmap()
@@ -35,6 +41,11 @@ Schaedel::Schaedel(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRe
 	m_Coalescing = Facings::Shy;
 	m_preferredLayer = Layers::Walls;
 	m_possibleLayers = Layers::Walls;
+	this->m_Behaviors =
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::Shootable |
+		ObjectBehaviors::ActiveMoving |
+		ObjectBehaviors::Lethal;
 }
 
 Platform::String^ Schaedel::ShouldLoadFromBitmap()

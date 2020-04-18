@@ -2,9 +2,12 @@
 
 #include "..\dings\dings.h"
 #include "..\algo\ClumsyPacking.h"
-#include "..\dings\ObjectProperties.h"
+//#include "..\dings\ObjectProperties.h"
 
-// An object is the runtime incarnation of a Ding on a level map, including actual position in level
+class ObjectProperties;
+
+/// An object is the design-time or runtime incarnation of a Ding on a level map,
+/// including it's actual position in level
 class Object
 {
 public:
@@ -38,5 +41,6 @@ private:
 	ObjectBehaviors		m_BehaviorsFloor;
 	ObjectBehaviors		m_BehaviorsWalls;
 	ObjectBehaviors		m_BehaviorsRooof;
+	ObjectProperties*	m_objectProperties;
 };
 

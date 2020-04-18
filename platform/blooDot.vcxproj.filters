@@ -171,6 +171,12 @@
     <ClCompile Include="..\src\dings\Dings.cpp">
       <Filter>ui\dings</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\dings\ObjectProperties.cpp">
+      <Filter>ui\dings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dings\ObjectBehaviors.cpp">
+      <Filter>ui\dings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
@@ -308,10 +314,13 @@
     <ClInclude Include="..\src\app\Utility.h">
       <Filter>app</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dings\ObjectProperties.h">
+    <ClInclude Include="..\src\dings\Dings.h">
       <Filter>ui\dings</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dings\Dings.h">
+    <ClInclude Include="..\src\dings\ObjectBehaviors.h">
+      <Filter>ui\dings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\dings\ObjectProperties.h">
       <Filter>ui\dings</Filter>
     </ClInclude>
   </ItemGroup>

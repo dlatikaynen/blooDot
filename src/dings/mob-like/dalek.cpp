@@ -7,6 +7,12 @@ Dalek::Dalek(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry
 	this->m_Coalescing = Facings::Shy;
 	this->m_preferredLayer = Layers::Walls;
 	this->m_possibleLayers = Layers::Walls;
+	this->m_Behaviors =
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::ActiveMoving |
+		ObjectBehaviors::Pullable |
+		ObjectBehaviors::Pushable |
+		ObjectBehaviors::Lethal;
 }
 
 Platform::String^ Dalek::ShouldLoadFromBitmap()

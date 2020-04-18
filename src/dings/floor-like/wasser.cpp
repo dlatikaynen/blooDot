@@ -3,10 +3,13 @@
 
 Wasser::Wasser(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Wasser, "Wasser", deviceResources, drawBrushes)
 {
-	m_Facings = Facings::Shy;
-	m_Coalescing = Facings::Shy;
-	m_preferredLayer = Layers::Floor;
-	m_possibleLayers = Layers::Floor;
+	this->m_Facings = Facings::Shy;
+	this->m_Coalescing = Facings::Shy;
+	this->m_preferredLayer = Layers::Floor;
+	this->m_possibleLayers = Layers::Floor;
+	this->m_Behaviors =
+		ObjectBehaviors::Immersible |
+		ObjectBehaviors::CreatesDrag;
 }
 
 void Wasser::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
@@ -23,10 +26,11 @@ void Wasser::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo
 
 Rail::Rail(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Rail, "Rail", deviceResources, drawBrushes)
 {
-	m_Facings = Facings::Center;
-	m_Coalescing = Facings::Shy;
-	m_preferredLayer = Layers::Floor;
-	m_possibleLayers = Layers::Floor;
+	this->m_Facings = Facings::Center;
+	this->m_Coalescing = Facings::Shy;
+	this->m_preferredLayer = Layers::Floor;
+	this->m_possibleLayers = Layers::Floor;
+	this->m_Behaviors = ObjectBehaviors::Solid;
 }
 
 // the horizontal one is needed, vertical one is created by the framework through rotation

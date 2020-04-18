@@ -1,4 +1,6 @@
 #include "Object.h"
+#include "..\dings\ObjectProperties.h"
+
 #include <fstream>
 
 Object::Object(unsigned posInLevelX, unsigned posInLevelY)

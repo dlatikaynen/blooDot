@@ -7,6 +7,10 @@ HighGrass::HighGrass(std::shared_ptr<DX::DeviceResources> deviceResources, Brush
 	this->m_Coalescing = Facings::Shy;
 	this->m_preferredLayer = Layers::Walls;
 	this->m_possibleLayers = (Layers)(Layers::Walls | Layers::Floor);
+	this->m_Behaviors =
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::CreatesDrag |
+		ObjectBehaviors::ImpairsVisibility;
 }
 
 Platform::String^ HighGrass::ShouldLoadFromBitmap()
@@ -20,6 +24,9 @@ Snow::Snow(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* 
 	this->m_Coalescing = Facings::Shy;
 	this->m_preferredLayer = Layers::Floor;
 	this->m_possibleLayers = (Layers)(Layers::Walls | Layers::Floor);
+	this->m_Behaviors =
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::CreatesDrag;
 }
 
 Platform::String^ Snow::ShouldLoadFromBitmap()
@@ -33,6 +40,7 @@ FloorStoneTile::FloorStoneTile(std::shared_ptr<DX::DeviceResources> deviceResour
 	this->m_Coalescing = Facings::Shy;
 	this->m_preferredLayer = Layers::Floor;
 	this->m_possibleLayers = Layers::Floor;
+	this->m_Behaviors = ObjectBehaviors::Solid;
 }
 
 Platform::String^ FloorStoneTile::ShouldLoadFromBitmap()
@@ -46,6 +54,7 @@ FloorRockTile::FloorRockTile(std::shared_ptr<DX::DeviceResources> deviceResource
 	this->m_Coalescing = Facings::Shy;
 	this->m_preferredLayer = Layers::Floor;
 	this->m_possibleLayers = Layers::Floor;
+	this->m_Behaviors = ObjectBehaviors::Solid;
 }
 
 Platform::String^ FloorRockTile::ShouldLoadFromBitmap()
