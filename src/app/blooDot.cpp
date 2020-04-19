@@ -220,10 +220,10 @@ void blooDotMain::CreateWindowSizeDependentResources()
 	this->m_dialogDingSheet.SetContainer(clientRect);
 	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::DingSheetDialog, &m_dialogDingSheet);
 
-	this->m_controllerSetup.Initialize();
-	this->m_controllerSetup.SetAlignment(AlignType::AlignCenter, AlignType::AlignCenter);
-	this->m_controllerSetup.SetContainer(clientRect);
-	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::ControllerSetup, &m_controllerSetup);
+	//this->m_controllerSetup.Initialize();
+	//this->m_controllerSetup.SetAlignment(AlignType::AlignCenter, AlignType::AlignCenter);
+	//this->m_controllerSetup.SetContainer(clientRect);
+	//UserInterface::GetInstance().RegisterElement(blooDot::UIElement::ControllerSetup, &m_controllerSetup);
 
     m_inGameStopwatchTimer.Initialize();
     m_inGameStopwatchTimer.SetAlignment(AlignNear, AlignFar);
