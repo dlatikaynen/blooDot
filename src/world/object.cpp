@@ -5,6 +5,7 @@
 
 Object::Object(unsigned posInLevelX, unsigned posInLevelY)
 {
+	this->m_boundingBoxes = nullptr;
 	this->Weed();
 	this->m_positionInLevel = D2D1::Point2U(posInLevelX, posInLevelY);
 	this->m_BehaviorsFloor = ObjectBehaviors::Boring;
@@ -52,6 +53,11 @@ void Object::Weed()
 	Dings* tempDing = nullptr;
 	Layers tempLayer = Layers::None;
 	while (!this->WeedFromTop(&tempDing, &tempLayer));
+	if (this->m_boundingBoxes != nullptr)
+	{
+		delete this->m_boundingBoxes;
+		this->m_boundingBoxes = nullptr;
+	}
 }
 
 // returns true, if nothing left
@@ -267,4 +273,25 @@ void Object::DesignSaveToFile(std::ofstream* toFile, Layers ofLayer)
 			toFile->write((char*)&facingVal, sizeof(unsigned int));
 		}
 	}
+}
+
+bool Object::GetBoundingBox(_Out_ D2D1_RECT_F* boundingBox)
+{
+	*boundingBox = this->m_boundingBox;
+	if (this->m_boundingBoxes == nullptr)
+	{
+		return false;
+	}
+	else
+	{
+		this->m_boundingBoxIter = this->m_boundingBoxes->begin();
+		return true;
+	}
+}
+
+bool Object::GetBoundingBoxNext(_Out_ D2D1_RECT_F* boundingBox)
+{
+	*boundingBox = *(this->m_boundingBoxIter);
+	++this->m_boundingBoxIter;
+	return this->m_boundingBoxIter != this->m_boundingBoxes->end();
 }

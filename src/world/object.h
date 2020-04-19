@@ -28,19 +28,24 @@ public:
 	void				DesignSaveToFile(std::ofstream* toFile, Layers ofLayer);
 
 protected:
+	bool				GetBoundingBox(_Out_ D2D1_RECT_F* boundingBox);
+	bool				GetBoundingBoxNext(_Out_ D2D1_RECT_F* boundingBox);
 
 private:
-	D2D1_POINT_2U		m_positionInLevel;
-	Layers				m_Layers;
-	Dings*				m_DingFloor;
-	Dings*				m_DingWalls;
-	Dings*				m_DingRooof;
-	Facings				m_FacingFloor;
-	Facings				m_FacingWalls;
-	Facings				m_FacingRooof;
-	ObjectBehaviors		m_BehaviorsFloor;
-	ObjectBehaviors		m_BehaviorsWalls;
-	ObjectBehaviors		m_BehaviorsRooof;
-	ObjectProperties*	m_objectProperties;
+	D2D1_POINT_2U						m_positionInLevel;
+	D2D1_RECT_F							m_boundingBox;
+	std::vector<D2D1_RECT_F>*			m_boundingBoxes;
+	std::vector<D2D1_RECT_F>::iterator	m_boundingBoxIter;
+	Layers								m_Layers;
+	Dings*								m_DingFloor;
+	Dings*								m_DingWalls;
+	Dings*								m_DingRooof;
+	Facings								m_FacingFloor;
+	Facings								m_FacingWalls;
+	Facings								m_FacingRooof;
+	ObjectBehaviors						m_BehaviorsFloor;
+	ObjectBehaviors						m_BehaviorsWalls;
+	ObjectBehaviors						m_BehaviorsRooof;
+	ObjectProperties*					m_objectProperties;
 };
 
