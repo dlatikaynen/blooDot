@@ -14,6 +14,9 @@ public:
 	void SetCaption(Platform::String^ value) { this->m_Caption = value; }
 
 protected:
+	const float CHROMEWIDTH = 8.0F;
+	const float CAPTIONHEIGHT = 20.0F;
+
 	void SetClientareaSize(D2D1_SIZE_F clientArea);
 	virtual void CalculateSize() override;
 	virtual Platform::String^ StaticCaption();
@@ -27,6 +30,7 @@ protected:
 	Microsoft::WRL::ComPtr<IDWriteTextLayout>       m_textLayout;
 	D2D1_RECT_F										m_textExtents;
 	TextStyle										m_textStyle;
+	D2D1_RECT_F										m_clientArea;
 
 private:
 	void CreateTextLayout();

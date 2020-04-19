@@ -34,21 +34,27 @@ Platform::String^ DialogOverlay::StaticCaption()
 	return L"";
 }
 
-void DialogOverlay::CalculateSize()
-{
-	ElementBase::CalculateSize();
-	auto d2dContext = UserInterface::GetD2DContext();
-	this->m_size = SizeF(
-		this->m_sizeClientarea.width + 20.0F,
-		this->m_sizeClientarea.height + 40.0F
-	);
-
-	this->CreateTextLayout();
-}
-
 void DialogOverlay::SetClientareaSize(D2D1_SIZE_F clientAreaSize)
 {
 	this->m_sizeClientarea = clientAreaSize;
+	auto d2dContext = UserInterface::GetD2DContext();
+	auto chromePadding = 2.0F * CHROMEWIDTH;
+	this->m_size = SizeF(
+		this->m_sizeClientarea.width + chromePadding,
+		this->m_sizeClientarea.height + chromePadding + CAPTIONHEIGHT
+	);
+
+	auto windowBounds = this->GetBounds();
+	this->m_clientArea.left = windowBounds.left + CHROMEWIDTH;
+	this->m_clientArea.top = windowBounds.top + CHROMEWIDTH + CAPTIONHEIGHT;
+	this->m_clientArea.right = windowBounds.right - CHROMEWIDTH;
+	this->m_clientArea.bottom = windowBounds.bottom - CHROMEWIDTH;
+}
+
+void DialogOverlay::CalculateSize()
+{
+	ElementBase::CalculateSize();
+	this->CreateTextLayout();
 }
 
 void DialogOverlay::CreateTextLayout()
@@ -84,30 +90,27 @@ void DialogOverlay::Render()
 	ElementBase::Render();
 	auto d2dContext = UserInterface::GetD2DContext();
 	D2D1_RECT_F bounds = this->GetBounds();
-	d2dContext->FillRectangle(&bounds, this->m_shadowColorBrush.Get());
-
-	d2dContext->DrawTextLayout(
-		Point2F(
-			bounds.left + blooDot::Consts::DIALOG_PADDING,
-			bounds.top + blooDot::Consts::DIALOG_PADDING / 2.0f + blooDot::Consts::SQUARE_HEIGHT + blooDot::Consts::DIALOG_PADDING
-		),
-		this->m_textLayout.Get(),
-		this->m_textColorBrush.Get(),
-		D2D1_DRAW_TEXT_OPTIONS_NO_SNAP
-	);
-
 	auto screenSize = d2dContext->GetSize();
 	auto screenRect = D2D1::RectF(0.0F, 0.0F, screenSize.width - 1.0F, screenSize.height - 1.0F);
 	d2dContext->FillRectangle(screenRect, this->m_coverBrush.Get());
 	d2dContext->FillRectangle(bounds, this->m_chromeBrush.Get());
 	d2dContext->DrawRectangle(bounds, this->m_blackBrush.Get());
-	//d2dContext->DrawRectangle(D2D1::RectF(this->client.left - 1.0F, bounds.top - ), this->m_blackBrush.Get());
+	d2dContext->DrawRectangle(D2D1::RectF(this->m_clientArea.left - 1.0F, this->m_clientArea.top - 1.0F, this->m_clientArea.right + 1.0F, this->m_clientArea.bottom + 1.0F), this->m_blackBrush.Get());
 	this->RenderClientarea(d2dContext);
+	d2dContext->DrawTextLayout(
+		Point2F(
+			bounds.left + CHROMEWIDTH,
+			bounds.top + CHROMEWIDTH
+		),
+		this->m_textLayout.Get(),
+		this->m_textColorBrush.Get(),
+		D2D1_DRAW_TEXT_OPTIONS_NO_SNAP
+	);
 }
 
 void DialogOverlay::RenderClientarea(ID2D1DeviceContext* d2dContext)
 {
-
+	d2dContext->FillRectangle(this->m_clientArea, this->m_blackBrush.Get());
 }
 
 void DialogOverlay::ReleaseDeviceDependentResources()
