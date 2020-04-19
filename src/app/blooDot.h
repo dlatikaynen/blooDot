@@ -123,6 +123,7 @@ namespace blooDot
         StopwatchTimer		m_inGameStopwatchTimer;
 		NerdStatsDisplay	m_nerdStatsDisplay;
 		LevelEditorHUD		m_levelEditorHUD;
+		//DialogDingSheet		m_dialogDingSheet;
 		ControllerSetup		m_controllerSetup;
 		TextElement			m_checkpointText;
         TextButton			m_pausedText;

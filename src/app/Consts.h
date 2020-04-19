@@ -31,6 +31,7 @@ namespace blooDot
 		ConfigurationButton = 14,
 		HelpAboutButton = 15,
 		ExterminateButton = 16,
-		ControllerSetup = 17
+		ControllerSetup = 17,
+		DingSheetDialog = 18 
 	};
 }

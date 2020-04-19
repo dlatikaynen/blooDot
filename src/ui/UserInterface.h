@@ -12,6 +12,7 @@
 #include "playground\WorldScreen.h"
 #include "playground\LevelEditor.h"
 #include "LevelEditorHUD.h"
+#include "DialogOverlay.h"
 #include "ControllerSetup.h"
 
 class UserInterface

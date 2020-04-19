@@ -40,12 +40,20 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 {
 	WorldScreenBase::Update(timeTotal, timeDelta);
 
-	/* we would have a HUD showing the currently selected toolbox ding */
+	/* we would have a HUD showing the currently selected toolbox ding,
+	 * and controlling the visibility of the ding sheet modal dialog */
 	auto myHUD = static_cast<LevelEditorHUD*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::LevelEditorHUD));
 	auto newOrientation = myHUD->SelectedDingOrientation();
 	auto curDingID = myHUD->SelectedDingID();
 	this->m_isGridShown = myHUD->IsGridShown();
-	this->m_isDingSheetShown = myHUD->IsDingSheetShown();
+	auto newDingSheetShown = myHUD->IsDingSheetShown();
+	if (this->m_isDingSheetShown != newDingSheetShown)
+	{
+		this->m_isDingSheetShown = newDingSheetShown;
+		/*auto dlgDingSheet = static_cast<DialogDingSheet*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::DingSheetDialog));
+		dlgDingSheet->SetVisible(newDingSheetShown);*/
+	}
+
 	if (this->m_selectedDingID > Dings::DingIDs::Void && (this->m_selectedDingID != curDingID || this->m_selectedDingOrientation != newOrientation))
 	{
 		auto dingPic = this->m_currentLevel->CreateDingImage(this->m_selectedDingID, newOrientation);
@@ -320,12 +328,7 @@ void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 #endif
 	}
 
-	this->DrawLevelEditorRaster();
-	if (this->m_isDingSheetShown)
-	{
-		this->DrawDingSheet();
-	}
-
+	this->DrawLevelEditorRaster();	
 	HRESULT hr = m_d2dContext->EndDraw();
 	if (hr != D2DERR_RECREATE_TARGET)
 	{
@@ -459,33 +462,6 @@ void LevelEditor::DrawLevelEditorRaster()
 		this->m_textColorBrush.Get(),
 		D2D1_DRAW_TEXT_OPTIONS_NO_SNAP
 	);
-}
-
-void LevelEditor::DrawDingSheet()
-{
-	if (this->m_currentLevel != nullptr)
-	{
-		auto dingSheet = this->m_currentLevel->GetDingSheet();
-		auto dingSheetSize = dingSheet->GetSize();		
-		auto screenSize = this->m_d2dContext->GetSize();
-		auto screenRect = D2D1::RectF(0.0F, 0.0F, screenSize.width - 1.0F, screenSize.height - 1.0F);
-		auto xCenterOffset = screenSize.width / 2.0F - dingSheetSize.width / 2.0F;
-		auto yCenterOffset = screenSize.height / 2.0F - dingSheetSize.height / 2.0F;
-		auto sourceRect = D2D1::RectF(0.0F, 0.0F, dingSheetSize.width - 1.0F, dingSheetSize.height - 1.0F);
-		auto dingRect = D2D1::RectF(xCenterOffset, yCenterOffset, xCenterOffset + dingSheetSize.width - 1.0F, yCenterOffset + dingSheetSize.height - 1.0F);
-		auto windowRect = D2D1::RectF(dingRect.left - 10.0F, dingRect.top - 10.0F, dingRect.right + 10.0F, dingRect.bottom + 10.0F);
-		this->m_d2dContext->FillRectangle(screenRect, this->m_coverBrush.Get());
-		this->m_d2dContext->FillRectangle(windowRect, this->m_chromeBrush.Get());
-		this->m_d2dContext->FillRectangle(dingRect, this->m_blackBrush.Get());
-		this->m_d2dContext->DrawRectangle(windowRect, this->m_blackBrush.Get());
-		this->m_d2dContext->DrawBitmap(
-			this->m_currentLevel->GetDingSheetBmp(),
-			dingRect,
-			1.0f,
-			D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
-			sourceRect
-		);
-	}
 }
 
 void LevelEditor::CreateTextLayout(D2D1_RECT_F* rect, Platform::String^ text)

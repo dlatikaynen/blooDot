@@ -24,8 +24,7 @@ public:
 	void DoRotate(bool affectPlacement, bool inverse);
 
 private:
-	void DrawLevelEditorRaster();
-	void DrawDingSheet();
+	void DrawLevelEditorRaster();	
 	void CreateTextLayout(D2D1_RECT_F* rect, Platform::String^ text);
 	void ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration neighborHood, unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID);
 	void ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID);
