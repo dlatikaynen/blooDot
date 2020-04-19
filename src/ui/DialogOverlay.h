@@ -14,8 +14,10 @@ public:
 	void SetCaption(Platform::String^ value) { this->m_Caption = value; }
 
 protected:
+	void SetClientareaSize(D2D1_RECT_F clientArea);
 	virtual void CalculateSize() override;
 	virtual Platform::String^ StaticCaption();
+	virtual void RenderClientarea(ID2D1DeviceContext* d2dContext);
 
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_shadowColorBrush;
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_textColorBrush;
@@ -30,4 +32,5 @@ private:
 	void CreateTextLayout();
 
 	Platform::String^								m_Caption;
+	D2D1_RECT_F										m_sizeClientarea;
 };

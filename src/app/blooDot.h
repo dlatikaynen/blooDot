@@ -12,6 +12,7 @@
 #include "..\ui\UserInterface.h"
 #include "..\ui\LoadScreen.h"
 #include "..\ui\playground\WorldScreenBase.h"
+#include "..\ui\DialogDingSheet.h"
 #include "..\algo\ClumsyPacking.h"
 #include "StepTimer.h"
 
@@ -123,7 +124,7 @@ namespace blooDot
         StopwatchTimer		m_inGameStopwatchTimer;
 		NerdStatsDisplay	m_nerdStatsDisplay;
 		LevelEditorHUD		m_levelEditorHUD;
-		//DialogDingSheet		m_dialogDingSheet;
+		DialogDingSheet		m_dialogDingSheet;
 		ControllerSetup		m_controllerSetup;
 		TextElement			m_checkpointText;
         TextButton			m_pausedText;

@@ -43,6 +43,11 @@ void DialogOverlay::CalculateSize()
 	this->CreateTextLayout();
 }
 
+void DialogOverlay::SetClientareaSize(D2D1_RECT_F clientArea)
+{
+	this->m_sizeClientarea = clientArea;
+}
+
 void DialogOverlay::CreateTextLayout()
 {	
 	if (this->m_textLayout == nullptr)
@@ -88,13 +93,13 @@ void DialogOverlay::Render()
 		D2D1_DRAW_TEXT_OPTIONS_NO_SNAP
 	);
 
-	//this->RenderClientarea(d2dContext);
+	this->RenderClientarea(d2dContext);
 }
 
-//void DialogOverlay::RenderClientarea(ID2D1DeviceContext* d2dContext)
-//{
-//
-//}
+void DialogOverlay::RenderClientarea(ID2D1DeviceContext* d2dContext)
+{
+
+}
 
 void DialogOverlay::ReleaseDeviceDependentResources()
 {

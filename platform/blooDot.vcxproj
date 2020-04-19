@@ -332,6 +332,7 @@
     <ClCompile Include="..\src\io\DDSTextureLoader.cpp" />
     <ClCompile Include="..\src\dx\DeviceResources.cpp" />
     <ClCompile Include="..\src\ui\ControllerSetup.cpp" />
+    <ClCompile Include="..\src\ui\DialogDingSheet.cpp" />
     <ClCompile Include="..\src\ui\DialogOverlay.cpp" />
     <ClCompile Include="..\src\ui\LoadScreen.cpp" />
     <ClCompile Include="..\src\ui\playground\Player.cpp" />
@@ -389,6 +390,7 @@
     <ClInclude Include="..\src\dx\DeviceResources.h" />
     <ClInclude Include="..\src\dx\DirectXHelper.h" />
     <ClInclude Include="..\src\ui\ControllerSetup.h" />
+    <ClInclude Include="..\src\ui\DialogDingSheet.h" />
     <ClInclude Include="..\src\ui\DialogOverlay.h" />
     <ClInclude Include="..\src\ui\LoadScreen.h" />
     <ClInclude Include="..\src\ui\playground\Player.h" />

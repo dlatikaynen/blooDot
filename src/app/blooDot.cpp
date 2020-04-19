@@ -215,10 +215,10 @@ void blooDotMain::CreateWindowSizeDependentResources()
 	this->m_levelEditorHUD.SetContainer(clientRect);
 	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::LevelEditorHUD, &m_levelEditorHUD);
 
-	/*this->m_dialogDingSheet.Initialize();
+	this->m_dialogDingSheet.Initialize();
 	this->m_dialogDingSheet.SetAlignment(AlignType::AlignCenter, AlignType::AlignCenter);	
 	this->m_dialogDingSheet.SetContainer(clientRect);
-	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::DingSheetDialog, &m_dialogDingSheet);*/
+	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::DingSheetDialog, &m_dialogDingSheet);
 
 	this->m_controllerSetup.Initialize();
 	this->m_controllerSetup.SetAlignment(AlignType::AlignCenter, AlignType::AlignCenter);

@@ -177,6 +177,9 @@
     <ClCompile Include="..\src\ui\DialogOverlay.cpp">
       <Filter>ui\dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ui\DialogDingSheet.cpp">
+      <Filter>ui\dialogs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
@@ -321,6 +324,9 @@
       <Filter>ui\dings</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\DialogOverlay.h">
+      <Filter>ui\dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\DialogDingSheet.h">
       <Filter>ui\dialogs</Filter>
     </ClInclude>
   </ItemGroup>

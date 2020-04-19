@@ -1,6 +1,7 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\..\dx\DirectXHelper.h"
 #include "..\UserInterface.h"
+#include "..\DialogDingSheet.h"
 
 LevelEditor::LevelEditor() : WorldScreenBase() 
 {
@@ -50,8 +51,13 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 	if (this->m_isDingSheetShown != newDingSheetShown)
 	{
 		this->m_isDingSheetShown = newDingSheetShown;
-		/*auto dlgDingSheet = static_cast<DialogDingSheet*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::DingSheetDialog));
-		dlgDingSheet->SetVisible(newDingSheetShown);*/
+		auto dlgDingSheet = static_cast<DialogDingSheet*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::DingSheetDialog));
+		if (newDingSheetShown && this->m_currentLevel != nullptr)
+		{
+			dlgDingSheet->SetContent(this->m_currentLevel->GetDingSheet());
+		}
+
+		dlgDingSheet->SetVisible(newDingSheetShown);
 	}
 
 	if (this->m_selectedDingID > Dings::DingIDs::Void && (this->m_selectedDingID != curDingID || this->m_selectedDingOrientation != newOrientation))
