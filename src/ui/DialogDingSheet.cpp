@@ -11,7 +11,6 @@ void DialogDingSheet::SetContent(ID2D1Bitmap* dingSheetBitmap)
 {	
 	this->m_dingSheetBitmap = dingSheetBitmap;
 	this->SetClientareaSize(this->m_dingSheetBitmap->GetSize());
-	this->CalculateSize();
 }
 
 void DialogDingSheet::RenderClientarea(ID2D1DeviceContext* d2dContext)

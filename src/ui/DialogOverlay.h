@@ -36,5 +36,6 @@ private:
 	void CreateTextLayout();
 
 	Platform::String^								m_Caption;
+	D2D1_RECT_F										m_outerBounds;
 	D2D1_SIZE_F										m_sizeClientarea;
 };

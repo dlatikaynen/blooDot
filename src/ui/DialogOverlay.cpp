@@ -21,7 +21,7 @@ void DialogOverlay::Initialize()
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::White), &this->m_textColorBrush));
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::Black), &this->m_shadowColorBrush));
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &this->m_blackBrush));
-	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::PaleGoldenrod), &this->m_chromeBrush));
+	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &this->m_chromeBrush));
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &this->m_coverBrush));
 	this->m_shadowColorBrush->SetOpacity(m_shadowColorBrush->GetOpacity() * blooDot::Consts::GOLDEN_RATIO);
 	this->m_coverBrush->SetOpacity(m_coverBrush->GetOpacity() * blooDot::Consts::INVERSE_GOLDEN_RATIO);
@@ -31,7 +31,7 @@ void DialogOverlay::Initialize()
 
 Platform::String^ DialogOverlay::StaticCaption()
 {
-	return L"";
+	return L"eew, pure virtual dialog caption";
 }
 
 void DialogOverlay::SetClientareaSize(D2D1_SIZE_F clientAreaSize)
@@ -44,17 +44,17 @@ void DialogOverlay::SetClientareaSize(D2D1_SIZE_F clientAreaSize)
 		this->m_sizeClientarea.height + chromePadding + CAPTIONHEIGHT
 	);
 
-	auto windowBounds = this->GetBounds();
-	this->m_clientArea.left = windowBounds.left + CHROMEWIDTH;
-	this->m_clientArea.top = windowBounds.top + CHROMEWIDTH + CAPTIONHEIGHT;
-	this->m_clientArea.right = windowBounds.right - CHROMEWIDTH;
-	this->m_clientArea.bottom = windowBounds.bottom - CHROMEWIDTH;
+	this->m_outerBounds = this->GetBounds();
+	this->m_clientArea.left = this->m_outerBounds.left + CHROMEWIDTH;
+	this->m_clientArea.top = this->m_outerBounds.top + CHROMEWIDTH + CAPTIONHEIGHT;
+	this->m_clientArea.right = this->m_outerBounds.right - CHROMEWIDTH;
+	this->m_clientArea.bottom = this->m_outerBounds.bottom - CHROMEWIDTH;
+	this->CreateTextLayout();
 }
 
 void DialogOverlay::CalculateSize()
 {
 	ElementBase::CalculateSize();
-	this->CreateTextLayout();
 }
 
 void DialogOverlay::CreateTextLayout()
@@ -63,18 +63,21 @@ void DialogOverlay::CreateTextLayout()
 	{
 		auto dwriteFactory = UserInterface::GetDWriteFactory();
 		this->m_textStyle.SetFontName(L"Fredoka One");
+		this->m_textStyle.SetFontSize(12.0F);
 		DX::ThrowIfFailed(
 			dwriteFactory->CreateTextLayout(
 				this->GetCaption()->Data(),
 				this->GetCaption()->Length(),
 				this->m_textStyle.GetTextFormat(),
-				this->m_container.right - this->m_container.left,
-				this->m_container.bottom - this->m_container.top,
+				this->m_outerBounds.right - this->m_outerBounds.left,
+				CAPTIONHEIGHT,
 				&this->m_textLayout
 			)
 		);
 
-		this->m_textColorBrush->SetColor(ColorF(ColorF::Aquamarine));
+		this->m_textLayout->SetTextAlignment(DWRITE_TEXT_ALIGNMENT::DWRITE_TEXT_ALIGNMENT_LEADING);
+		this->m_textLayout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT::DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+		this->m_textColorBrush->SetColor(D2D1::ColorF(RGB(10, 10, 10)));
 	}
 }
 
@@ -89,18 +92,17 @@ void DialogOverlay::Render()
 {
 	ElementBase::Render();
 	auto d2dContext = UserInterface::GetD2DContext();
-	D2D1_RECT_F bounds = this->GetBounds();
 	auto screenSize = d2dContext->GetSize();
 	auto screenRect = D2D1::RectF(0.0F, 0.0F, screenSize.width - 1.0F, screenSize.height - 1.0F);
 	d2dContext->FillRectangle(screenRect, this->m_coverBrush.Get());
-	d2dContext->FillRectangle(bounds, this->m_chromeBrush.Get());
-	d2dContext->DrawRectangle(bounds, this->m_blackBrush.Get());
+	d2dContext->FillRectangle(this->m_outerBounds, this->m_chromeBrush.Get());
+	d2dContext->DrawRectangle(this->m_outerBounds, this->m_blackBrush.Get());
 	d2dContext->DrawRectangle(D2D1::RectF(this->m_clientArea.left - 1.0F, this->m_clientArea.top - 1.0F, this->m_clientArea.right + 1.0F, this->m_clientArea.bottom + 1.0F), this->m_blackBrush.Get());
 	this->RenderClientarea(d2dContext);
 	d2dContext->DrawTextLayout(
 		Point2F(
-			bounds.left + CHROMEWIDTH,
-			bounds.top + CHROMEWIDTH
+			this->m_outerBounds.left + CHROMEWIDTH - 2.0F,
+			this->m_outerBounds.top + CHROMEWIDTH / 2.0F
 		),
 		this->m_textLayout.Get(),
 		this->m_textColorBrush.Get(),
