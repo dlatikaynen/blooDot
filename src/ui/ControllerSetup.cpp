@@ -41,10 +41,10 @@ void ControllerSetup::Render()
 
 void ControllerSetup::ReleaseDeviceDependentResources()
 {
-	m_textColorBrush.Reset();
+	/*m_textColorBrush.Reset();
 	m_selectionBackdropBrush.Reset();
 	m_shadowColorBrush.Reset();
-	m_borderBrush.Reset();
+	m_borderBrush.Reset();*/
 }
 
 void ControllerSetup::CalculateSize()

@@ -92,15 +92,15 @@ void LoadScreen::ResetDirectXResources()
 
 void LoadScreen::ReleaseDeviceDependentResources()
 {
-    m_d2dDevice.Reset();
+    /*m_d2dDevice.Reset();
     m_d2dContext.Reset();
     m_bitmap.Reset();
     m_d2dFactory.Reset();
     m_stateBlock.Reset();
     m_wicFactory.Reset();
-	m_Brushes.Reset();
-	m_moved.width = m_moved.height = 0;
+	m_Brushes.Reset();*/
 
+	m_moved.width = m_moved.height = 0;
 	delete m_Sprinkler;
 }
 

@@ -109,15 +109,15 @@ void WorldScreenBase::ComputeViewportOffset()
 
 void WorldScreenBase::ReleaseDeviceDependentResources()
 {
-	this->m_d2dDevice.Reset();
-	this->m_d2dContext.Reset();	
-	this->m_d2dFactory.Reset();
-	this->m_stateBlock.Reset();
-	this->m_wicFactory.Reset();
-	this->m_Brushes.Reset();
-#ifdef _DEBUG
-	this->m_debugBorderBrush.Reset();
-#endif
+//	this->m_d2dDevice.Reset();
+//	this->m_d2dContext.Reset();	
+//	this->m_d2dFactory.Reset();
+//	this->m_stateBlock.Reset();
+//	this->m_wicFactory.Reset();
+//	this->m_Brushes.Reset();
+//#ifdef _DEBUG
+//	this->m_debugBorderBrush.Reset();
+//#endif
 }
 
 void WorldScreenBase::UpdateForWindowSizeChange()

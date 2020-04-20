@@ -66,9 +66,9 @@ void TextElement::Render()
 
 void TextElement::ReleaseDeviceDependentResources()
 {
-	m_textColorBrush.Reset();
+	/*m_textColorBrush.Reset();
 	m_selectionBackdropBrush.Reset();
-	m_shadowColorBrush.Reset();
+	m_shadowColorBrush.Reset();*/
 }
 
 void TextElement::SetTextColor(const D2D1_COLOR_F& textColor)

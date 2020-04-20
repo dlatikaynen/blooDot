@@ -311,6 +311,11 @@ void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
 		 * startup go here;
 		 * (1) audio */
         m_audio.CreateResources();
+
+		/* cycle the whole engine once. not doing so fucks up the audio engine on exit. whatevs. */
+		m_audio.Start();
+		m_audio.Render();
+		m_audio.SuspendAudio();
     }
 
     if (delay)
@@ -1637,7 +1642,6 @@ void blooDotMain::OnDeviceLost()
 	m_worldScreen->ReleaseDeviceDependentResources();
     UserInterface::ReleaseDeviceDependentResources();
     m_inputLayout.Reset();
-
 	m_deferredResourcesReadyPending = false;
     m_deferredResourcesReady = false;
 }
@@ -1645,7 +1649,7 @@ void blooDotMain::OnDeviceLost()
 // Notifies renderers that device resources may now be re-created.
 void blooDotMain::OnDeviceRestored()
 {
-	this->m_worldScreen->CreateDeviceDependentResources();
+	//this->m_worldScreen->CreateDeviceDependentResources();
 	this->m_loadScreen->Initialize(this->m_deviceResources);
 	this->m_worldScreen->Initialize(this->m_deviceResources);
     UserInterface::GetInstance().Initialize(

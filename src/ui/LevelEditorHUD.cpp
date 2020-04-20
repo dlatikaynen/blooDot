@@ -123,9 +123,9 @@ void LevelEditorHUD::Render()
 
 void LevelEditorHUD::ReleaseDeviceDependentResources()
 {
-	this->m_textColorBrush.Reset();
+	/*this->m_textColorBrush.Reset();
 	this->m_shadowColorBrush.Reset();
-	this->m_selectedDingImage.Reset();
+	this->m_selectedDingImage.Reset();*/
 }
 
 Dings::DingIDs LevelEditorHUD::SelectedDingID()

@@ -411,47 +411,54 @@ void Audio::ReleaseResources()
     {
         m_musicSourceVoice->DestroyVoice();
     }
+
     if (m_soundEffectReverbVoiceSmallRoom != nullptr)
     {
         m_soundEffectReverbVoiceSmallRoom->DestroyVoice();
     }
+
     if (m_soundEffectReverbVoiceLargeRoom != nullptr)
     {
         m_soundEffectReverbVoiceLargeRoom->DestroyVoice();
     }
+
     if (m_musicReverbVoiceSmallRoom != nullptr)
     {
         m_musicReverbVoiceSmallRoom->DestroyVoice();
     }
+
     if (m_musicReverbVoiceLargeRoom != nullptr)
     {
         m_musicReverbVoiceLargeRoom->DestroyVoice();
     }
+
     for (int i = 0; i < ARRAYSIZE(m_soundEffects); i++)
     {
         if (m_soundEffects[i].m_soundEffectSourceVoice != nullptr)
         {
             m_soundEffects[i].m_soundEffectSourceVoice->DestroyVoice();
         }
+
         m_soundEffects[i].m_soundEffectSourceVoice = nullptr;
     }
+
     if (m_musicMasteringVoice != nullptr)
     {
             m_musicMasteringVoice->DestroyVoice();
     }
+
     if (m_soundEffectMasteringVoice != nullptr)
     {
         m_soundEffectMasteringVoice->DestroyVoice();
     }
 
-    m_musicSourceVoice = nullptr;
-    m_musicMasteringVoice = nullptr;
-    m_soundEffectMasteringVoice = nullptr;
-    m_soundEffectReverbVoiceSmallRoom = nullptr;
-    m_soundEffectReverbVoiceLargeRoom = nullptr;
-    m_musicReverbVoiceSmallRoom = nullptr;
-    m_musicReverbVoiceLargeRoom = nullptr;
-
+	this->m_musicSourceVoice = nullptr;
+	this->m_musicMasteringVoice = nullptr;
+	this->m_soundEffectMasteringVoice = nullptr;
+	this->m_soundEffectReverbVoiceSmallRoom = nullptr;
+	this->m_soundEffectReverbVoiceLargeRoom = nullptr;
+	this->m_musicReverbVoiceSmallRoom = nullptr;
+	this->m_musicReverbVoiceLargeRoom = nullptr;
 	this->SafeRelease(&m_musicEngine);
 	this->SafeRelease(&m_soundEffectEngine);
 }
@@ -464,7 +471,6 @@ void Audio::Start()
     }
 
     HRESULT hr = m_musicSourceVoice->Start(0);
-
     if SUCCEEDED(hr) {
         m_isAudioStarted = true;
     }
@@ -482,12 +488,12 @@ void Audio::Render()
 {
     if (m_engineExperiencedCriticalError)
     {
-        m_engineExperiencedCriticalError = false;
-        ReleaseResources();
-        Initialize();
-        CreateResources();
-        Start();
-        if (m_engineExperiencedCriticalError)
+        this->m_engineExperiencedCriticalError = false;
+        this->ReleaseResources();
+        this->Initialize();
+        this->CreateResources();
+        this->Start();
+        if (this->m_engineExperiencedCriticalError)
         {
             return;
         }
@@ -501,7 +507,7 @@ void Audio::Render()
         XAUDIO2_BUFFER buf = {0};
 
         // Use MediaStreamer to stream the buffers.
-        m_musicSourceVoice->GetState(&state);
+        this->m_musicSourceVoice->GetState(&state);
         while (state.BuffersQueued <= MAX_BUFFER_COUNT - 1)
         {
             streamComplete = m_musicStreamer.GetNextBuffer(
