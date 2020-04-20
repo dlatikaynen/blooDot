@@ -20,6 +20,11 @@ GameOfLifeTransition::GameOfLifeTransition()
 
 }
 
+GameOfLifeTransition::~GameOfLifeTransition()
+{
+	this->m_Coordinates.clear();
+}
+
 int GameOfLifeTransition::FromBytes(byte* inBytes, unsigned long long offset, _Out_ Transition* transitionKey, _Out_ GameOfLifeTransition* transitionItem)
 {
 	int offsetDelta = 0;

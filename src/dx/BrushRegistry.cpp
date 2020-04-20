@@ -17,6 +17,7 @@ BrushRegistry::BrushRegistry()
 
 BrushRegistry::~BrushRegistry()
 {
+	this->Reset();
 }
 
 Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> BrushRegistry::WannaHave(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, MFARGB color)

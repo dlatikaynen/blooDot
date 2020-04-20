@@ -19,6 +19,11 @@ GameOfLifeStep::GameOfLifeStep()
 
 }
 
+GameOfLifeStep::~GameOfLifeStep()
+{
+	this->m_Transitions.clear();
+}
+
 int GameOfLifeStep::FromBytes(byte* srcData, unsigned long long offset, _Out_ GameOfLifeStep* decodedStep, _Out_ int* numberOfTransitionKeysInStep)
 {
 	int offsetDelta = 0;;

@@ -1033,7 +1033,6 @@ void blooDotMain::OnActionEnterLevelEditor()
 void blooDotMain::OnActionTerminate()
 {
 	this->m_audio.SuspendAudio();
-	this->m_audio.ReleaseResources();
 	this->m_triggerSuicide = true;
 }
 

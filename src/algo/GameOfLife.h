@@ -111,6 +111,7 @@ class GameOfLifeTransition
 {
 public:
 	GameOfLifeTransition::GameOfLifeTransition();
+	GameOfLifeTransition::~GameOfLifeTransition();
 
 	static int FromBytes(byte* inBytes, unsigned long long offset, _Out_ Transition* transitionKey, _Out_ GameOfLifeTransition* transitionItem);
 	void AddAtom(int x, int y, MFARGB color);
@@ -127,6 +128,8 @@ class GameOfLifeStep
 {
 public:
 	GameOfLifeStep::GameOfLifeStep();
+	GameOfLifeStep::~GameOfLifeStep();
+
 	static int FromBytes(byte* srcData, unsigned long long offset, _Out_ GameOfLifeStep* decodedStep, _Out_ int* numberOfTransitionKeysInStep);
 	void AddTransition(Transition transition, int x, int y, MFARGB color);
 	void SetTransition(Transition transition, GameOfLifeTransition transitionToAdd);

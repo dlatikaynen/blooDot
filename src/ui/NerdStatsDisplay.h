@@ -11,4 +11,7 @@ public:
 protected:
 	int m_averageFPS;
 	int m_lastShownFPS;
+
+private:
+	Platform::String^ m_Buffer;
 };

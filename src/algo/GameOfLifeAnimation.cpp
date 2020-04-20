@@ -24,9 +24,10 @@ GameOfLifeAnimation::GameOfLifeAnimation()
 
 GameOfLifeAnimation::~GameOfLifeAnimation()
 {
-	CancelRecording();
+	this->CancelRecording();
 	delete m_initialMatrix;
 	delete m_currentMatrix;
+	this->m_Steps.clear();
 }
 
 void GameOfLifeAnimation::Reset(int matrixWidth, int matrixHeight)

@@ -26,7 +26,8 @@ void NerdStatsDisplay::Update(float timeTotal, float timeDelta)
 		m_lastShownFPS = m_averageFPS;
 		WCHAR buffer[10];
 		swprintf_s(buffer, L"%d fps", m_averageFPS);
-		SetText(buffer);
+		this->m_Buffer = ref new Platform::String(buffer);
+		SetText(this->m_Buffer);
 		SetTextOpacity(1.0f);
 		SetVisible(true);
 		FadeOut(2.0f);
