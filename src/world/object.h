@@ -12,6 +12,8 @@ class Object
 {
 public:
 	Object::Object(unsigned posInLevelX, unsigned posInLevelY);
+	Object::~Object();
+
 	void				Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
 	void				InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
 	void				InstantiateInLayerFacing(Layers inLayer, Dings* templateDing, Facings placementFacing);

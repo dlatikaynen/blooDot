@@ -13,6 +13,14 @@ Object::Object(unsigned posInLevelX, unsigned posInLevelY)
 	this->m_BehaviorsRooof = ObjectBehaviors::Boring;
 }
 
+Object::~Object()
+{
+	if (this->m_boundingBoxes != nullptr)
+	{
+		delete this->m_boundingBoxes;
+	}
+}
+
 void Object::Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
 {
 	auto preferredLayer = templateDing->GetPreferredLayer();

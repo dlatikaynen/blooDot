@@ -18,7 +18,7 @@ void DialogOverlay::Initialize()
 {
 	ElementBase::Initialize();
 	auto d2dContext = UserInterface::GetD2DContext();
-	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::White), &this->m_textColorBrush));
+	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(RGB(10,10,10)), &this->m_textColorBrush));
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::Black), &this->m_shadowColorBrush));
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &this->m_blackBrush));
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &this->m_chromeBrush));
@@ -76,8 +76,7 @@ void DialogOverlay::CreateTextLayout()
 		);
 
 		this->m_textLayout->SetTextAlignment(DWRITE_TEXT_ALIGNMENT::DWRITE_TEXT_ALIGNMENT_LEADING);
-		this->m_textLayout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT::DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-		this->m_textColorBrush->SetColor(D2D1::ColorF(RGB(10, 10, 10)));
+		this->m_textLayout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT::DWRITE_PARAGRAPH_ALIGNMENT_CENTER);		
 	}
 }
 
