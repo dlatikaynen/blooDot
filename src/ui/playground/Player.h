@@ -3,13 +3,13 @@
 
 #pragma once
 
-class Player
+class Player : Object
 {
 public:
 	Player(const Player& obj) { };
 	Player& operator=(const Player& obj) { return *this; };
 	Player();
-	Player(Player&& obj) {};
+	Player(Player&& obj) { };
 	~Player() {};
 
 	void PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
@@ -22,4 +22,7 @@ public:
 	PlayerMomentum Momentum;
 	Facings Facing;
 	D2D1_RECT_F SpriteSourceRect;
+
+protected:
+	Level* m_Level;
 };

@@ -1,3 +1,6 @@
+#include "..\src\world\Object.h"
+#include "..\src\world\Level.h"
+
 #include "Player.h"
 
 Player::Player()
@@ -7,7 +10,7 @@ Player::Player()
 	this->Momentum.accelerationX = 0.0f;
 	this->Momentum.accelerationY = 0.0f;
 	this->Momentum.attenuationX = 0.0f;
-	this->Momentum.attenuationY = 0.0f;
+	this->Momentum.attenuationY = 0.0f;	
 }
 
 void Player::PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity)

@@ -137,9 +137,7 @@ void TextElement::CreateTextLayout()
 	if ((m_textLayout == nullptr) || m_textStyle.HasTextFormatChanged())
 	{
 		m_textLayout = nullptr;
-
 		IDWriteFactory* dwriteFactory = UserInterface::GetDWriteFactory();
-
 		DX::ThrowIfFailed(
 			dwriteFactory->CreateTextLayout(
 				m_text->Data(),
