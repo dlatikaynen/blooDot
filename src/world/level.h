@@ -13,6 +13,11 @@ class Level
 {
 public:
 	Level::Level(Platform::String^ levelName, D2D1_SIZE_U sheetSize, unsigned extentWE, unsigned extentNS);
+
+	Level::Level(const Object& obj) { };
+	Level& operator=(const Level& obj) { return *this; };
+	Level::Level() { };
+	Level::Level(Level&& obj) { };
 	Level::~Level();
 
 	void Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* brushRegistry);

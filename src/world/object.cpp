@@ -56,6 +56,11 @@ void Object::InstantiateInLayerFacing(Layers inLayer, Dings* templateDing, Facin
 	this->m_Layers = static_cast<Layers>(this->m_Layers | inLayer);
 }
 
+void Object::PlaceInLevel(std::shared_ptr<Level> hostLevel)
+{
+	this->m_Level = hostLevel;
+}
+
 void Object::Weed()
 {
 	Dings* tempDing = nullptr;

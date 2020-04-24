@@ -76,8 +76,8 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 
 	/* update player positions */
 	for (auto mob = this->m_playerData.begin(); mob != this->m_playerData.end(); ++mob)
-	{
-		(*mob)->Update();
+	{		
+		(*mob)->Update(this->m_currentLevel);
 	}
 }
 

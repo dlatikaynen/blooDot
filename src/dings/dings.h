@@ -215,7 +215,9 @@ protected:
 	virtual void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect);
 
 protected:
-	ObjectBehaviors m_Behaviors;
+	ObjectBehaviors				m_Behaviors;
+	D2D1_RECT_F					m_boundingBox;
+	std::vector<D2D1_RECT_F>*	m_boundingBoxes;
 
 private:
 	void SetSheetPlacementsFromCoalescability();

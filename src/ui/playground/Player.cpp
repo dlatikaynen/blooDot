@@ -13,6 +13,10 @@ Player::Player()
 	this->Momentum.attenuationY = 0.0f;	
 }
 
+Player::~Player()
+{	
+}
+
 void Player::PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity)
 {
 	this->Momentum.accelerationX = accelerationRate;
@@ -29,8 +33,10 @@ void Player::PushY(float accelerationRate, float attenuationRate, float gripFact
 	this->Momentum.mediumViscosity = mediumViscosity;
 }
 
-void Player::Update()
+void Player::Update(Level* hostLevel)
 {
+	D2D1_RECT_F myBoundingBox;
+
 	/* accelerate with momentary acceleration */
 	this->Momentum.speedX += this->Momentum.accelerationX;
 	this->Momentum.speedY += this->Momentum.accelerationY;
@@ -85,8 +91,33 @@ void Player::Update()
 	/* linear relocation depending on momentary velocity */
 	auto deltaX = this->Momentum.speedX;
 	auto deltaY = this->Momentum.speedY;
-	this->Position.left += deltaX;
-	this->Position.right += deltaX;
-	this->Position.top += deltaY;
-	this->Position.bottom += deltaY;
+	auto newPosition = D2D1::RectF(this->Position.left + deltaX, this->Position.top + deltaY, this->Position.right + deltaX, this->Position.bottom + deltaY);
+	
+	/* hit testing */
+	auto additionalBoundingBoxes = this->GetBoundingBox(&myBoundingBox);
+	if (deltaX < 0.0F)
+	{
+		/* hit something int the west? */
+
+	}
+	
+	if (deltaX > 0.0F)
+	{
+		/* hit something in the east? */
+
+	}
+
+	if (deltaY < 0.0F)
+	{
+		/* hit something to the north? */
+
+	}
+
+	if (deltaY > 0.0F)
+	{
+		/* hit something in the south? */
+		
+	}
+
+	this->Position = newPosition;
 }

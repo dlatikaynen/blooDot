@@ -2,9 +2,9 @@
 
 #include "..\dings\dings.h"
 #include "..\algo\ClumsyPacking.h"
-//#include "..\dings\ObjectProperties.h"
 
 class ObjectProperties;
+class Level;
 
 /// An object is the design-time or runtime incarnation of a Ding on a level map,
 /// including it's actual position in level
@@ -21,6 +21,7 @@ public:
 	void				Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
 	void				InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
 	void				InstantiateInLayerFacing(Layers inLayer, Dings* templateDing, Facings placementFacing);
+	void				PlaceInLevel(std::shared_ptr<Level> hostLevel);
 	void				Weed();
 	bool				WeedFromTop(Dings** dingWeeded, Layers* layerWeeded);
 	void				SetupRuntimeState(Dings* floorDing, Dings* wallsDing, Dings* rooofDing);
@@ -54,5 +55,6 @@ private:
 	Facings								m_FacingRooof;
 	ObjectBehaviors						m_BehaviorsFloor;
 	ObjectBehaviors						m_BehaviorsRooof;
+	std::shared_ptr<Level> m_Level;
 };
 

@@ -10,11 +10,11 @@ public:
 	Player& operator=(const Player& obj) { return *this; };
 	Player();
 	Player(Player&& obj) { };
-	~Player() {};
+	virtual ~Player();
 
 	void PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
 	void PushY(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
-	void Update();
+	void Update(Level* hostLevel);
 
 	Platform::String^ Name;
 	D2D1_RECT_F Position;
@@ -22,7 +22,4 @@ public:
 	PlayerMomentum Momentum;
 	Facings Facing;
 	D2D1_RECT_F SpriteSourceRect;
-
-protected:
-	Level* m_Level;
 };
