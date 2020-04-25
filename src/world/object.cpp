@@ -21,19 +21,19 @@ Object::~Object()
 	}
 }
 
-void Object::Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
+void Object::Instantiate(std::shared_ptr<Level> placeInLevel, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
 {
 	auto preferredLayer = templateDing->GetPreferredLayer();
-	this->InstantiateInLayer(preferredLayer, templateDing, neighborHood);
+	this->InstantiateInLayer(placeInLevel, preferredLayer, templateDing, neighborHood);
 }
 
-void Object::InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
+void Object::InstantiateInLayer(std::shared_ptr<Level> placeInLevel, Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
 {
 	auto facingVariation = templateDing->CouldCoalesce() ? ClumsyPacking::FacingFromConfiguration(neighborHood) : Facings::Shy;
-	this->InstantiateInLayerFacing(inLayer, templateDing, facingVariation);
+	this->InstantiateInLayerFacing(placeInLevel, inLayer, templateDing, facingVariation);
 }
 
-void Object::InstantiateInLayerFacing(Layers inLayer, Dings* templateDing, Facings placementFacing)
+void Object::InstantiateInLayerFacing(std::shared_ptr<Level> placeInLevel, Layers inLayer, Dings* templateDing, Facings placementFacing)
 {
 	switch (inLayer)
 	{
@@ -54,6 +54,7 @@ void Object::InstantiateInLayerFacing(Layers inLayer, Dings* templateDing, Facin
 	}
 	
 	this->m_Layers = static_cast<Layers>(this->m_Layers | inLayer);
+	this->PlaceInLevel(placeInLevel);
 }
 
 void Object::PlaceInLevel(std::shared_ptr<Level> hostLevel)

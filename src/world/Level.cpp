@@ -220,6 +220,7 @@ Object* Level::GetObjectAt(unsigned levelX, unsigned levelY, bool createIfNull)
 		if (retrievedObject == nullptr && createIfNull)
 		{
 			auto newObject = new Object(levelX, levelY);
+			newObject->PlaceInLevel(this->shared_from_this());
 			this->m_Objects[objectAddress] = newObject;
 			retrievedObject = newObject;
 			if (this->m_isDesignTime)
@@ -591,7 +592,7 @@ bool Level::CellLoadFromFile(char *srcData, size_t *offset, const Layers inLayer
 			placementFacing = Facings::Shy;
 		}
 
-		this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(inLayer, &this->m_dingMap.at(dingID), placementFacing);
+		this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(this->shared_from_this(), inLayer, &this->m_dingMap.at(dingID), placementFacing);
 		return true;
 	}
 

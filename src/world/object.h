@@ -18,9 +18,9 @@ public:
 	Object(Object&& obj) { };
 	Object::~Object();
 
-	void				Instantiate(Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
-	void				InstantiateInLayer(Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
-	void				InstantiateInLayerFacing(Layers inLayer, Dings* templateDing, Facings placementFacing);
+	void				Instantiate(std::shared_ptr<Level> placeInLevel, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
+	void				InstantiateInLayer(std::shared_ptr<Level> placeInLevel, Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
+	void				InstantiateInLayerFacing(std::shared_ptr<Level> placeInLevel, Layers inLayer, Dings* templateDing, Facings placementFacing);
 	void				PlaceInLevel(std::shared_ptr<Level> hostLevel);
 	void				Weed();
 	bool				WeedFromTop(Dings** dingWeeded, Layers* layerWeeded);

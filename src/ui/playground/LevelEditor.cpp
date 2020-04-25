@@ -156,12 +156,12 @@ void LevelEditor::DoPlaceDing()
 			auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingID, newDingLayer);
 			if (newDings->CouldCoalesce())
 			{
-				newCell->Instantiate(newDings, neighborHood);
+				newCell->Instantiate(this->m_currentLevel->shared_from_this(), newDings, neighborHood);
 				this->ClumsyPackNeighborhoodOf(neighborHood, this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingLayer, newDingID);
 			}
 			else
 			{
-				newCell->InstantiateInLayerFacing(newDingLayer, newDings, this->m_selectedDingOrientation);
+				newCell->InstantiateInLayerFacing(this->m_currentLevel->shared_from_this(), newDingLayer, newDings, this->m_selectedDingOrientation);
 			}
 
 			this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingLayer);

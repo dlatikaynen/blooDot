@@ -9,7 +9,7 @@
 #include "Object.h"
 
 /* A level is a set of worldsheets belonging to the same floor level, hence its name :) */
-class Level
+class Level : public std::enable_shared_from_this<Level>
 {
 public:
 	Level::Level(Platform::String^ levelName, D2D1_SIZE_U sheetSize, unsigned extentWE, unsigned extentNS);
