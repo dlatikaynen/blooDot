@@ -147,15 +147,18 @@ public:
 
 	Dings(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 
-	Dings::DingIDs		ID();
-	Platform::String^	Name();
-	void				Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY);
-	D2D1_POINT_2U		GetSheetPlacement(Facings orientation);
-	Layers				GetPreferredLayer();
-	Facings				AvailableFacings();
-	ObjectBehaviors		GetInherentBehaviors();
-	bool				CouldCoalesce();
-	static Facings		RotateFromFacing(Facings fromFacing, bool inverseDirection);
+	Dings::DingIDs				ID();
+	Platform::String^			Name();
+	void						Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY);
+	D2D1_POINT_2U				GetSheetPlacement(Facings orientation);
+	Layers						GetPreferredLayer();
+	Facings						AvailableFacings();
+	ObjectBehaviors				GetInherentBehaviors();
+	bool						BoundingIsDefaultRect();
+	D2D1_RECT_F					GetBoundingOuterRim();
+	std::shared_ptr<Bounding>	GetBoundingInfo();
+	bool						CouldCoalesce();
+	static Facings				RotateFromFacing(Facings fromFacing, bool inverseDirection);
 
 protected:
 	DingIDs				m_ID;
@@ -209,9 +212,6 @@ protected:
 	virtual Platform::String^ ShouldLoadFromBitmap();
 	void PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);
 	void PrepareRect7x7(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);
-	bool BoundingIsDefaultRect();
-	D2D1_RECT_F GetBoundingOuterRim();
-	std::shared_ptr<Bounding> GetBoundingInfo();
 	void Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> LoadBitmap(Platform::String^ fileName);
 	virtual void PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) { };

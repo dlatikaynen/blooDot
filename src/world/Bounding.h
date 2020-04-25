@@ -6,6 +6,9 @@ class Bounding
 {
 public:
 	Bounding::Bounding();
+	Bounding(const Bounding& obj) { };
+	Bounding& operator=(const Bounding& obj) { return *this; };
+	Bounding(Bounding&& obj) { };
 
 	D2D1_RECT_F OuterRim;
 	std::vector<BoundingGeometry> Geometries;

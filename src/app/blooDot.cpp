@@ -404,7 +404,11 @@ void blooDotMain::SetGameState(GameState nextState)
     {
     case GameState::MainMenu:
 	case GameState::ControllerSelection:
-		for (auto iter = this->m_mainMenuButtons.begin(); iter != this->m_mainMenuButtons.end(); ++iter) (*iter)->SetVisible(false);
+		for (auto iter = this->m_mainMenuButtons.begin(); iter != this->m_mainMenuButtons.end(); ++iter)
+		{
+			(*iter)->SetVisible(false);
+		}
+
 		this->m_controllerSetup.SetVisible(false);
 		break;
 		

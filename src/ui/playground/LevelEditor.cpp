@@ -54,7 +54,7 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 		auto dlgDingSheet = static_cast<DialogDingSheet*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::DingSheetDialog));
 		if (newDingSheetShown && this->m_currentLevel != nullptr)
 		{
-			dlgDingSheet->SetContent(this->m_currentLevel->GetDingSheetBmp());
+			dlgDingSheet->SetContent(this->m_currentLevel);
 		}
 
 		dlgDingSheet->SetVisible(newDingSheetShown);

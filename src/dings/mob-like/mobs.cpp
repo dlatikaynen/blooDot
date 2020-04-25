@@ -13,6 +13,20 @@ Player1::Player1(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegi
 		ObjectBehaviors::Pullable |
 		ObjectBehaviors::ActiveMoving |
 		ObjectBehaviors::CanPutStuffIn;
+
+	/* semi-complex bounding here */
+	this->m_Bounding = std::make_shared<Bounding>();
+	this->m_Bounding->OuterRim = D2D1::RectF(3, 9, 47, 40);
+
+	BoundingGeometry headCircle;
+	headCircle.Shape = BoundingGeometry::Primitive::Circle;
+	headCircle.Bounds = D2D1::RectF(10, 9, 40, 40);
+	this->m_Bounding->Geometries.push_back(headCircle);
+
+	BoundingGeometry innerRect;
+	innerRect.Shape = BoundingGeometry::Primitive::Rectangle;
+	innerRect.Bounds = D2D1::RectF(3, 16, 47, 28);
+	this->m_Bounding->Geometries.push_back(innerRect);
 }
 
 Platform::String^ Player1::ShouldLoadFromBitmap()
