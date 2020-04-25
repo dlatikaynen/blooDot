@@ -180,6 +180,9 @@
     <ClCompile Include="..\src\ui\DialogDingSheet.cpp">
       <Filter>ui\dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\world\Bounding.cpp">
+      <Filter>world</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
@@ -328,6 +331,12 @@
     </ClInclude>
     <ClInclude Include="..\src\ui\DialogDingSheet.h">
       <Filter>ui\dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\world\Bounding.h">
+      <Filter>world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\world\World.h">
+      <Filter>world</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

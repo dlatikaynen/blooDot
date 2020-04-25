@@ -5,6 +5,7 @@
 #include "..\dx\DeviceResources.h"
 #include "..\dx\BrushRegistry.h"
 #include "..\io\BasicLoader.h"
+#include "..\world\Bounding.h"
 #include "ObjectBehaviors.h"
 
 // Numeric ordering is relied upon
@@ -208,6 +209,9 @@ protected:
 	virtual Platform::String^ ShouldLoadFromBitmap();
 	void PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);
 	void PrepareRect7x7(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);
+	bool BoundingIsDefaultRect();
+	D2D1_RECT_F GetBoundingOuterRim();
+	std::shared_ptr<Bounding> GetBoundingInfo();
 	void Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> LoadBitmap(Platform::String^ fileName);
 	virtual void PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) { };
@@ -216,8 +220,7 @@ protected:
 
 protected:
 	ObjectBehaviors				m_Behaviors;
-	D2D1_RECT_F					m_boundingBox;
-	std::vector<D2D1_RECT_F>*	m_boundingBoxes;
+	std::shared_ptr<Bounding>	m_Bounding;
 
 private:
 	void SetSheetPlacementsFromCoalescability();

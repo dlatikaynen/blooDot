@@ -1,5 +1,5 @@
 #include "..\PreCompiledHeaders.h"
-#include "dings.h"
+#include "Dings.h"
 
 using namespace Windows::Storage;
 using namespace Windows::Storage::Streams;
@@ -351,6 +351,35 @@ void Dings::PrepareRect7x7(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet
 	rectToSet.top = 49.0f * lookupLocation->y;
 	rectToSet.right = rectToSet.left + 7.0f * 49.0f;
 	rectToSet.bottom = rectToSet.top + 7.0f * 49.0f;
+}
+
+bool Dings::BoundingIsDefaultRect()
+{
+	return this->m_Bounding == nullptr;
+}
+
+D2D1_RECT_F Dings::GetBoundingOuterRim()
+{
+	if (this->m_Bounding == nullptr)
+	{
+		return D2D1::RectF(0.0F, 0.0F, blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT);
+	}
+	else
+	{
+		return this->m_Bounding->OuterRim;
+	}
+}
+
+std::shared_ptr<Bounding> Dings::GetBoundingInfo()
+{
+	if (this->m_Bounding == nullptr)
+	{
+		/* actually construct a default boundary object and deliver that */
+		this->m_Bounding = std::make_shared<Bounding>();
+		this->m_Bounding->OuterRim = D2D1::RectF(0.0F, 0.0F, blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT);
+	}
+
+	return this->m_Bounding;
 }
 
 void Dings::Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation)

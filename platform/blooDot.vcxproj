@@ -357,6 +357,7 @@
     <ClCompile Include="..\src\algo\GameOfLifeStep.cpp" />
     <ClCompile Include="..\src\algo\GameOfLifeTransition.cpp" />
     <ClCompile Include="..\src\ui\WorldSheet.cpp" />
+    <ClCompile Include="..\src\world\Bounding.cpp" />
     <ClCompile Include="..\src\world\Level.cpp" />
     <ClCompile Include="..\src\world\Object.cpp" />
     <ClCompile Include="..\src\dings\wall-like\mauer.cpp" />
@@ -416,10 +417,12 @@
     <ClInclude Include="..\src\dx\BrushRegistry.h" />
     <ClInclude Include="..\src\algo\BitmapPixelator.h" />
     <ClInclude Include="..\src\ui\WorldSheet.h" />
+    <ClInclude Include="..\src\world\Bounding.h" />
     <ClInclude Include="..\src\world\Object.h" />
     <ClInclude Include="..\src\world\Level.h" />
     <ClInclude Include="..\src\ui\playground\LevelEditor.h" />
     <ClInclude Include="..\src\ui\LevelEditorHUD.h" />
+    <ClInclude Include="..\src\world\World.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\src\BasicPixelShader.hlsl">
