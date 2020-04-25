@@ -144,9 +144,8 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 
 blooDotMain::~blooDotMain()
 {
-    // Deregister device notification
-    m_deviceResources->RegisterDeviceNotify(nullptr);
-	delete m_currentLevel;
+    // deregister device notification
+    m_deviceResources->RegisterDeviceNotify(nullptr);	
 }
 
 bool blooDotMain::Suicide()
@@ -1007,8 +1006,9 @@ void blooDotMain::OnActionStartNetworkGame()
 
 void blooDotMain::OnActionEnterLevel()
 {
+	auto levelName = ref new Platform::String(L"Grassmere-1");
 	this->m_worldScreen = std::unique_ptr<WorldScreenBase>(new WorldScreen());
-	this->m_currentLevel = new Level(L"Grassmere-1", D2D1::SizeU(50, 30), 720, 720);
+	this->m_currentLevel = std::make_shared<Level>(levelName, D2D1::SizeU(50, 30), 720, 720);
 	this->m_worldScreen->EnterLevel(m_currentLevel);
 	this->m_worldScreen->Initialize(m_deviceResources);
 	this->m_currentLevel->DesignLoadFromFile(L"Media\\Levels\\grassmere.bloodot");
@@ -1018,8 +1018,9 @@ void blooDotMain::OnActionEnterLevel()
 
 void blooDotMain::OnActionEnterLevelEditor()
 {
+	auto levelName = ref new Platform::String(L"Gartenwelt-1");
 	this->m_worldScreen = std::unique_ptr<WorldScreenBase>(new LevelEditor());
-	this->m_currentLevel = new Level(L"Gartenwelt-1", D2D1::SizeU(50, 30), 720, 720);
+	this->m_currentLevel = std::make_shared<Level>(levelName, D2D1::SizeU(50, 30), 720, 720);
 	this->m_worldScreen->EnterLevel(m_currentLevel);
 	this->m_worldScreen->Initialize(m_deviceResources);
 
@@ -1097,8 +1098,7 @@ void blooDotMain::OnActionLoadLevel()
 			{
 				auto newLevel = this->m_worldScreen->LoadAndEnterLevel(copiedFile->Path);
 				if (newLevel != nullptr)
-				{
-					delete this->m_currentLevel;
+				{					
 					this->m_currentLevel = newLevel;
 					this->m_knownLevelSaveTarget = sourceFile;
 				}

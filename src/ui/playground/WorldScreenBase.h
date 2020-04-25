@@ -27,8 +27,8 @@ public:
 	virtual void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition) { };
 
 	/* logical */
-	Level* LoadAndEnterLevel(Platform::String^ loadFromFile);
-	void EnterLevel(Level* level);
+	std::shared_ptr<Level> LoadAndEnterLevel(Platform::String^ loadFromFile);
+	void EnterLevel(std::shared_ptr<Level> level);
 
 protected:
 	const float										SCROLL_TRESHOLD_FACT = 0.61F;
@@ -57,7 +57,7 @@ protected:
 	D2D1_POINT_2U									m_currentLevelEditorCell;
 	bool											m_currentLevelEditorCellKnown;
 
-	Level*											m_currentLevel;
+	std::shared_ptr<Level>							m_currentLevel;
 	std::vector<WorldSheet*>						m_Sheets;
 	bool											m_sheetHoveringSituationKnown;
 	WorldSheet*										m_hoveringSheetNW;

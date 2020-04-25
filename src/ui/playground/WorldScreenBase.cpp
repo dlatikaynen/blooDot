@@ -259,16 +259,17 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 	}
 }
 
-Level* WorldScreenBase::LoadAndEnterLevel(Platform::String^ loadFromFile)
+std::shared_ptr<Level> WorldScreenBase::LoadAndEnterLevel(Platform::String^ loadFromFile)
 {
-	auto loadedLevel = new Level(L"Gartenwelt-1", D2D1::SizeU(50, 30), 720, 720);
+	auto levelName = ref new Platform::String(L"Gartenwelt-1");
+	auto loadedLevel = std::make_shared<Level>(levelName, D2D1::SizeU(50, 30), 720, 720);
 	loadedLevel->Initialize(this->m_deviceResources, &this->m_Brushes);
 	loadedLevel->DesignLoadFromFile(loadFromFile);
 	this->EnterLevel(loadedLevel);
 	return loadedLevel;
 }
 
-void WorldScreenBase::EnterLevel(Level* level)
+void WorldScreenBase::EnterLevel(std::shared_ptr<Level> level)
 {
 	this->m_currentLevel = level;
 	this->m_sheetHoveringSituationKnown = false;

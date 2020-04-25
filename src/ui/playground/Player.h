@@ -14,7 +14,7 @@ public:
 
 	void PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
 	void PushY(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
-	void Update(Level* hostLevel);
+	void Update(std::shared_ptr<Level> hostLevel);
 
 	Platform::String^ Name;
 	D2D1_RECT_F Position;

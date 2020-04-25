@@ -21,7 +21,7 @@ WorldSheet::~WorldSheet()
 	this->Discard();
 }
 
-void WorldSheet::PrepareThyself(Level* forLevel, int amSheetX, int amSheetY)
+void WorldSheet::PrepareThyself(std::shared_ptr<Level> forLevel, int amSheetX, int amSheetY)
 {
 	this->m_d2dContext = this->m_deviceResources->GetD2DDeviceContext();
 	this->m_d2dFactory = this->m_deviceResources->GetD2DFactory();

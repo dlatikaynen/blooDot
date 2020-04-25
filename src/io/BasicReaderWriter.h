@@ -24,7 +24,7 @@ internal:
         _In_ Platform::String^ filename
     );
 
-	/* implementatio here, lacking a better idea https://stackoverflow.com/q/21468737/1132334 */
+	/* implementation here, lacking a better idea https://stackoverflow.com/q/21468737/1132334 */
 	template<typename T>
 	uint32 WriteData(Microsoft::WRL::Wrappers::FileHandle* fileHandle, const T fileData)
 	{

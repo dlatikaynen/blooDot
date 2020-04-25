@@ -14,7 +14,7 @@ public:
 	WorldSheet::WorldSheet(std::shared_ptr<DX::DeviceResources> deviceResources);
 	WorldSheet::~WorldSheet();
 
-	void											PrepareThyself(Level* forLevel, int amSheetX, int amSheetY);
+	void											PrepareThyself(std::shared_ptr<Level> forLevel, int amSheetX, int amSheetY);
 
 	D2D1_POINT_2U									TheSheetIAm();
 	D2D1_POINT_2U									CornerNW();
@@ -52,7 +52,7 @@ protected:
 
 private:
 	bool											m_isPopulated;
-	Level*											m_tiedToLevel;
+	std::shared_ptr<Level>							m_tiedToLevel;
 	D2D1_POINT_2U									m_theSheetIAm;
 	std::shared_ptr<DX::DeviceResources>			m_deviceResources;
 	Microsoft::WRL::ComPtr<ID2D1Factory1>           m_d2dFactory;

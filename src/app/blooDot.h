@@ -102,7 +102,7 @@ namespace blooDot
         DX::StepTimer								m_timer;
         std::unique_ptr<LoadScreen>					m_loadScreen;
 		std::unique_ptr<WorldScreenBase>			m_worldScreen;
-		Level*										m_currentLevel;
+		std::shared_ptr<Level>						m_currentLevel;
 		Microsoft::WRL::ComPtr<ID3D11InputLayout>	m_inputLayout;
         Windows::Devices::Sensors::Accelerometer^	m_accelerometer;
 		Windows::Storage::IStorageFile^				m_knownLevelSaveTarget;

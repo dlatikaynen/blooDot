@@ -33,7 +33,7 @@ void Player::PushY(float accelerationRate, float attenuationRate, float gripFact
 	this->Momentum.mediumViscosity = mediumViscosity;
 }
 
-void Player::Update(Level* hostLevel)
+void Player::Update(std::shared_ptr<Level> hostLevel)
 {
 	D2D1_RECT_F myBoundingBox;
 
