@@ -136,8 +136,8 @@ void Dings::DrawQuadruplet(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawT
 
 	for (int facing = OrientabilityIndexQuadruplet::Uppy; facing >= OrientabilityIndexQuadruplet::Lefty; --facing)
 	{
-		PrepareRect(&this->m_lookupSides[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupSides[facing], rect);
+		this->Rotate(rendEr, rect, facing);
 		if (this->m_fromFile == nullptr)
 		{
 			this->DrawInternal(drawTo, rect);
@@ -390,7 +390,7 @@ void Dings::Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation)
 	}
 	else
 	{
-		/* take anything else but 90° and funny stuff happens */
+		/* take anything else but 90° and funny stuff happens (heap corruption) */
 		rendEr->SetTransform(D2D1::Matrix3x2F::Rotation(static_cast<float>(rotation * -90), D2D1::Point2F(rect.left + 24.5f, rect.top + 24.5f)));
 	}
 }

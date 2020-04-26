@@ -7,6 +7,13 @@ DialogDingSheet::DialogDingSheet()
 {
 }
 
+void DialogDingSheet::Initialize()
+{
+	auto d2dContext = UserInterface::GetD2DContext();
+	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Crimson), &this->m_boundsBrush));
+	DialogOverlay::Initialize();
+}
+
 void DialogDingSheet::SetContent(std::shared_ptr<Level> levelInfo)
 {	
 	this->m_LevelInfo = levelInfo;
@@ -44,7 +51,7 @@ void DialogDingSheet::RenderClientarea(ID2D1DeviceContext* d2dContext)
 				this->m_clientArea.top + (sheetPlacement.y * blooDot::Consts::SQUARE_HEIGHT) + boundingGeometry->OuterRim.bottom
 			);
 
-			d2dContext->DrawRectangle(outerRim, this->m_chromeBrush.Get(), 0.7F);
+			d2dContext->DrawRectangle(outerRim, this->m_boundsBrush.Get(), 0.7F);
 			for (auto iter = boundingGeometry->Geometries.begin(); iter != boundingGeometry->Geometries.end(); ++iter)
 			{
 				switch (iter->Shape)
@@ -57,7 +64,7 @@ void DialogDingSheet::RenderClientarea(ID2D1DeviceContext* d2dContext)
 						this->m_clientArea.top + (sheetPlacement.y * blooDot::Consts::SQUARE_HEIGHT) + iter->Bounds.bottom
 					);
 
-					d2dContext->DrawRectangle(innerBound, this->m_chromeBrush.Get(), 0.7F);
+					d2dContext->DrawRectangle(innerBound, this->m_boundsBrush.Get(), 0.7F);
 					break;
 
 				case BoundingGeometry::Primitive::Circle:
@@ -72,7 +79,7 @@ void DialogDingSheet::RenderClientarea(ID2D1DeviceContext* d2dContext)
 						radiusY
 					);
 
-					d2dContext->DrawEllipse(circularBound, this->m_chromeBrush.Get(), 0.7F);
+					d2dContext->DrawEllipse(circularBound, this->m_boundsBrush.Get(), 0.7F);
 					break;
 				}
 			}
@@ -84,4 +91,10 @@ void DialogDingSheet::RenderClientarea(ID2D1DeviceContext* d2dContext)
 			break;
 		}
 	}
+}
+
+void DialogDingSheet::ReleaseDeviceDependentResources()
+{
+	this->m_boundsBrush.Reset();
+	DialogOverlay::ReleaseDeviceDependentResources();
 }
