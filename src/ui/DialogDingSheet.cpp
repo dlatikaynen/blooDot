@@ -83,5 +83,15 @@ void DialogDingSheet::RenderClientarea(ID2D1DeviceContext* d2dContext)
 		{
 			break;
 		}
-	}
+	} 
+	auto Kurt = m_chromeBrush->GetColor();
+
+	m_chromeBrush->SetColor(D2D1::ColorF(D2D1::ColorF::Crimson));
+	d2dContext->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(425, 687), 100, 100), m_chromeBrush.Get(), 70);
+	m_chromeBrush->SetColor(D2D1::ColorF(D2D1::ColorF::DarkBlue));
+	d2dContext->DrawRectangle(D2D1::RectF(500, 440, 640, 700), m_chromeBrush.Get(), 30);
+	m_chromeBrush->SetColor(Kurt);
+	
+
+	
 }
