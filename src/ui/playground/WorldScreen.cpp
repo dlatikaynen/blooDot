@@ -20,7 +20,7 @@ void WorldScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceRe
 	{
 		auto player1 = new Player();
 		player1->Name = L"Nepomuk der Nasenbär";
-		player1->PositionSquare = D2D1::Point2U(351, 358);
+		player1->PositionSquare = D2D1::Point2U(355, 358);
 		player1->Position = D2D1::RectF(
 			static_cast<float>(player1->PositionSquare.x) * blooDot::Consts::SQUARE_WIDTH,
 			static_cast<float>(player1->PositionSquare.y) * blooDot::Consts::SQUARE_HEIGHT,

@@ -104,6 +104,13 @@ void Player::Update(std::shared_ptr<Level> hostLevel)
 	if (deltaX > 0.0F)
 	{
 		/* hit something in the east? */
+		// yet bullshit. must identify candidate collision victims first
+		if (newPosition.right > myBoundingBox.left)
+		{
+			auto width = newPosition.right - newPosition.left;
+			newPosition.left = newPosition.left - (newPosition.right - myBoundingBox.left);
+			newPosition.right = newPosition.left + width;
+		}
 
 	}
 
