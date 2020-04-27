@@ -102,6 +102,7 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	this->RegisterDing(&Coin::Coin(deviceResources, brushRegistry),			05, 0);
 	this->RegisterDing(&Chest::Chest(deviceResources, brushRegistry),		06, 0);
 	this->RegisterDing(&SilverChest(deviceResources, brushRegistry),		10, 0);
+	this->RegisterDing(&GoldChest(deviceResources, brushRegistry),			16, 3);
 	this->RegisterDing(&Rail::Rail(deviceResources, brushRegistry),			14, 0);
 	this->RegisterDing(&CrackedMauer(deviceResources, brushRegistry),		07, 1);
 	this->RegisterDing(&FloorRockTile(deviceResources, brushRegistry),		14, 1);

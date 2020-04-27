@@ -139,7 +139,7 @@ public:
 		Player3 = 14,
 		Player4 = 15,
 		ChestSilver = 16,
-
+		ChestGold = 17,
 		Dalek = 34,
 		Schaedel = 4042
 
@@ -367,6 +367,16 @@ protected:
 	int ColorVariation() override;
 };
 
+
+class GoldChest : public Chest
+{
+public:
+	GoldChest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+
+protected:
+	int ColorVariation() override;
+};
+
 class Lettuce : public Dings
 {
 public:
@@ -381,3 +391,5 @@ public:
 	Rail(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect) override;
 };
+
+
