@@ -5,6 +5,8 @@
 
 DialogDingSheet::DialogDingSheet()
 {
+	this->der_boese_kurtx = 0;
+	this->der_boese_kurty = 0;
 }
 
 void DialogDingSheet::Initialize()
@@ -93,12 +95,12 @@ void DialogDingSheet::RenderClientarea(ID2D1DeviceContext* d2dContext)
 	} 
 	auto Kurt = m_chromeBrush->GetColor();
 
-	m_chromeBrush->SetColor(D2D1::ColorF(D2D1::ColorF::Crimson));
-	d2dContext->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(425, 687), 100, 100), m_chromeBrush.Get(), 70);
+	
 	m_chromeBrush->SetColor(D2D1::ColorF(D2D1::ColorF::DarkBlue));
 	d2dContext->DrawRectangle(D2D1::RectF(500, 440, 640, 700), m_chromeBrush.Get(), 30);
+	m_chromeBrush->SetColor(D2D1::ColorF(D2D1::ColorF::Crimson));
+	d2dContext->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(der_boese_kurtx, der_boese_kurty), 100, 100), m_chromeBrush.Get(), 70);
 	m_chromeBrush->SetColor(Kurt);
-	
 
 	
 }
@@ -107,4 +109,23 @@ void DialogDingSheet::ReleaseDeviceDependentResources()
 {
 	this->m_boundsBrush.Reset();
 	DialogOverlay::ReleaseDeviceDependentResources();
+}
+
+
+
+void DialogDingSheet::Update(float timeTotal, float timeDelta)
+{
+	DialogOverlay::Update(timeTotal, timeDelta);
+	this->der_boese_kurtx += 16;
+	this->der_boese_kurty -= 7;
+	if (this->der_boese_kurtx > 1000)
+	{
+		this->der_boese_kurtx = 0;
+
+	}
+
+	if (this->der_boese_kurty < 0) {
+		this->der_boese_kurty = 768;
+
+	}
 }

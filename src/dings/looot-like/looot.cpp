@@ -56,17 +56,28 @@ int Chest::ColorVariation()
 // the lefty representation (assuming placement against a wall)
 void Chest::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect)
 {
+
 	/* prepare */
 	auto rendEr = drawTo.Get();
 	Microsoft::WRL::ComPtr<ID2D1Brush> brusherl;
 	Microsoft::WRL::ComPtr<ID2D1Brush> brusherl2;
 	Microsoft::WRL::ComPtr<ID2D1Brush> brusherl3;
-	if (this->ColorVariation() == 2)
+	Microsoft::WRL::ComPtr<ID2D1Brush> brusherl4;
+	if (this->ColorVariation() == 3)
+	{
+		/* gold */
+		brusherl = m_Brushes->WannaHave(drawTo, MFARGB{ 0, 225, 255, 255 });
+		brusherl2 = m_Brushes->WannaHave(drawTo, MFARGB{ 128, 128, 128, 255 });
+		brusherl3 = m_Brushes->WannaHave(drawTo, MFARGB{ 205, 205, 205, 255 });
+		brusherl4 = m_Brushes->WannaHave(drawTo, MFARGB{ 5,5,84, 255 });
+	}
+	else if (this->ColorVariation() == 2)
 	{
 		/* silver */
 		brusherl = m_Brushes->WannaHave(drawTo, MFARGB{ 140, 140, 140, 255 });
 		brusherl2 = m_Brushes->WannaHave(drawTo, MFARGB{ 128, 128, 128, 255 });
 		brusherl3 = m_Brushes->WannaHave(drawTo, MFARGB{ 205, 205, 205, 255 });
+		brusherl4 = m_Brushes->WannaHave(drawTo, MFARGB{ 121, 132, 132, 255 });
 	}
 	else
 	{
@@ -74,9 +85,10 @@ void Chest::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo,
 		brusherl = m_Brushes->WannaHave(drawTo, MFARGB{ 0, 102, 153, 255 });
 		brusherl2 = m_Brushes->WannaHave(drawTo, MFARGB{ 0, 91, 143, 255 });
 		brusherl3 = m_Brushes->WannaHave(drawTo, MFARGB{ 51, 102, 102, 255 });
+		brusherl4 = m_Brushes->WannaHave(drawTo, MFARGB{ 121, 132, 132, 255 });
 	}
 
-	Microsoft::WRL::ComPtr<ID2D1Brush> brusherl4 = m_Brushes->WannaHave(drawTo, MFARGB{ 121, 132, 132, 255 });
+	
 	auto brushBase = brusherl.Get();
 	auto brushDark = brusherl2.Get();
 	auto brushBark = brusherl3.Get();
@@ -120,6 +132,21 @@ SilverChest::SilverChest(std::shared_ptr<DX::DeviceResources> deviceResources, B
 int SilverChest::ColorVariation()
 {
 	return 2;
+}
+
+GoldChest::GoldChest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Chest(deviceResources, drawBrushes)
+{
+	this->m_ID = Dings::DingIDs::ChestGold;
+	this->m_Name = "Gold Chest";
+	m_Facings = Facings::Viech;
+	m_Coalescing = Facings::Shy;
+	m_preferredLayer = Layers::Walls;
+	m_possibleLayers = Layers::Walls;
+}
+
+int GoldChest::ColorVariation()
+{
+	return 3;
 }
 
 Lettuce::Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Lettuce, "Lettuce", deviceResources, drawBrushes)
