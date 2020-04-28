@@ -7,7 +7,7 @@ Object::Object(unsigned posInLevelX, unsigned posInLevelY)
 {
 	this->m_boundingBoxes = nullptr;
 	this->Weed();
-	this->m_positionInLevel = D2D1::Point2U(posInLevelX, posInLevelY);
+	this->PositionSquare = D2D1::Point2U(posInLevelX, posInLevelY);
 	this->m_BehaviorsFloor = ObjectBehaviors::Boring;
 	this->m_BehaviorsWalls = ObjectBehaviors::Boring;
 	this->m_BehaviorsRooof = ObjectBehaviors::Boring;
@@ -60,6 +60,17 @@ void Object::InstantiateInLayerFacing(std::shared_ptr<Level> placeInLevel, Layer
 void Object::PlaceInLevel(std::shared_ptr<Level> hostLevel)
 {
 	this->m_Level = hostLevel;
+	this->SetPosition(this->PositionSquare);
+}
+
+void Object::SetPosition(D2D1_POINT_2U gridPosition)
+{
+	
+}
+
+void Object::SetPosition(D2D1_POINT_2F pixelPosition)
+{
+
 }
 
 void Object::Weed()

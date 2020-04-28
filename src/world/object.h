@@ -32,7 +32,12 @@ public:
 	Facings				PlacementFacing(Layers ofLayer);
 	void				AdjustFacing(Layers inLayer, Facings shouldBeFacing);
 	void				RotateInPlace(Layers inLayer, bool inverseDirection);
+	void				SetPosition(D2D1_POINT_2U gridPosition);
+	void				SetPosition(D2D1_POINT_2F pixelPosition);
 	void				DesignSaveToFile(std::ofstream* toFile, Layers ofLayer);
+
+	D2D1_RECT_F			Position;
+	D2D1_POINT_2U		PositionSquare;
 
 protected:
 	bool				GetBoundingBox(_Out_ D2D1_RECT_F* boundingBox);
@@ -41,8 +46,7 @@ protected:
 	Dings*								m_DingWalls;
 	ObjectBehaviors						m_BehaviorsWalls;
 	ObjectProperties*					m_objectProperties;
-	Facings								m_FacingWalls;
-	D2D1_POINT_2U						m_positionInLevel;
+	Facings								m_FacingWalls;	
 	D2D1_RECT_F							m_boundingBox;
 	std::vector<D2D1_RECT_F>*			m_boundingBoxes;
 

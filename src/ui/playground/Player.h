@@ -3,7 +3,7 @@
 
 #pragma once
 
-class Player : Object
+class Player : public Object
 {
 public:
 	Player(const Player& obj) { };
@@ -16,9 +16,7 @@ public:
 	void PushY(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
 	void Update(std::shared_ptr<Level> hostLevel);
 
-	Platform::String^ Name;
-	D2D1_RECT_F Position;
-	D2D1_POINT_2U PositionSquare;
+	Platform::String^ Name;	
 	PlayerMomentum Momentum;
 	Facings Facing;
 	D2D1_RECT_F SpriteSourceRect;
