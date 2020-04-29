@@ -33,7 +33,7 @@ void Player::PushY(float accelerationRate, float attenuationRate, float gripFact
 	this->Momentum.mediumViscosity = mediumViscosity;
 }
 
-void Player::Update(std::shared_ptr<Level> hostLevel)
+void Player::Update()
 {
 	D2D1_RECT_F myBoundingBox;
 
@@ -103,14 +103,23 @@ void Player::Update(std::shared_ptr<Level> hostLevel)
 	
 	if (deltaX > 0.0F)
 	{
-		/* hit something in the east? */
-		// yet bullshit. must identify candidate collision victims first
-		if (newPosition.right > myBoundingBox.left)
+		/* hit something in the east?
+		 * we browse the environment in the order of most likely interaction,
+		 * so in this case this will be next-to-right first */
+		auto eastCenterTerrain = this->m_Level->GetObjectAt(this->PositionSquare.x + 1, this->PositionSquare.y, false);
+		if (eastCenterTerrain != nullptr && eastCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
 		{
-			auto width = newPosition.right - newPosition.left;
-			newPosition.left = newPosition.left - (newPosition.right - myBoundingBox.left);
-			newPosition.right = newPosition.left + width;
+			D2D1_RECT_F eastCenterBoundingBox;
+			eastCenterTerrain->GetBoundingBox(&eastCenterBoundingBox);
+			if (eastCenterBoundingBox.left < myBoundingBox.right)
+			{
+				auto originalWidth = newPosition.right - newPosition.left;
+				auto wouldPenetrate = myBoundingBox.right - eastCenterBoundingBox.left;
+				newPosition.left = newPosition.left - wouldPenetrate;
+				newPosition.right = newPosition.left + originalWidth;
+			}
 		}
+		
 
 	}
 
@@ -126,5 +135,5 @@ void Player::Update(std::shared_ptr<Level> hostLevel)
 		
 	}
 
-	this->Position = newPosition;
+	this->SetPosition(newPosition);
 }

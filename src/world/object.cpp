@@ -61,16 +61,50 @@ void Object::PlaceInLevel(std::shared_ptr<Level> hostLevel)
 {
 	this->m_Level = hostLevel;
 	this->SetPosition(this->PositionSquare);
+
+	/* attention: objects that need to move their bounding box along,
+	 * need to actively do so. SetPosition does not take care of it for them */
+	auto wallDing = this->GetDing(Layers::Walls);
+	if (wallDing != nullptr)
+	{
+		auto relativeBoundingBox = wallDing->GetBoundingOuterRim();
+		this->m_boundingBox = D2D1::RectF(
+			relativeBoundingBox.left + this->Position.left,
+			relativeBoundingBox.top + this->Position.top,
+			relativeBoundingBox.right + this->Position.left,
+			relativeBoundingBox.bottom + this->Position.top
+		);
+	}
 }
 
 void Object::SetPosition(D2D1_POINT_2U gridPosition)
 {
-	
+	this->PositionSquare.x = gridPosition.x;
+	this->PositionSquare.y = gridPosition.y;
+	this->Position.left = gridPosition.x * blooDot::Consts::SQUARE_WIDTH;
+	this->Position.top = gridPosition.y * blooDot::Consts::SQUARE_HEIGHT;
+	this->Position.right = this->Position.left + blooDot::Consts::SQUARE_WIDTH;
+	this->Position.bottom = this->Position.top + blooDot::Consts::SQUARE_HEIGHT;
 }
 
 void Object::SetPosition(D2D1_POINT_2F pixelPosition)
 {
+	this->Position.left = pixelPosition.x;
+	this->Position.top = pixelPosition.y;
+	this->Position.right = this->Position.left + blooDot::Consts::SQUARE_WIDTH;
+	this->Position.bottom = this->Position.top + blooDot::Consts::SQUARE_HEIGHT;
+	this->PositionSquare.x = (this->Position.left + blooDot::Consts::SQUARE_WIDTH / 2.0F) / blooDot::Consts::SQUARE_WIDTH;
+	this->PositionSquare.y = (this->Position.top + blooDot::Consts::SQUARE_HEIGHT / 2.0F) / blooDot::Consts::SQUARE_HEIGHT;
+}
 
+void Object::SetPosition(D2D1_RECT_F pixelPosition)
+{
+	this->Position.left = pixelPosition.left;
+	this->Position.top = pixelPosition.top;
+	this->Position.right = pixelPosition.right;
+	this->Position.bottom = pixelPosition.bottom;
+	this->PositionSquare.x = (this->Position.left + blooDot::Consts::SQUARE_WIDTH / 2.0F) / blooDot::Consts::SQUARE_WIDTH;
+	this->PositionSquare.y = (this->Position.top + blooDot::Consts::SQUARE_HEIGHT / 2.0F) / blooDot::Consts::SQUARE_HEIGHT;
 }
 
 void Object::Weed()

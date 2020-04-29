@@ -7,6 +7,7 @@ Mauer::Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry
 	m_Coalescing = Facings::Immersed;
 	m_preferredLayer = Layers::Walls;
 	m_possibleLayers = Layers::Walls;
+	this->m_Behaviors = ObjectBehaviors::Solid;
 }
 
 void Mauer::PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)

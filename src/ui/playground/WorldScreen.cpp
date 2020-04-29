@@ -21,12 +21,7 @@ void WorldScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceRe
 		auto player1 = new Player();
 		player1->Name = L"Nepomuk der Nasenbär";
 		player1->PositionSquare = D2D1::Point2U(355, 358);
-		player1->Position = D2D1::RectF(
-			static_cast<float>(player1->PositionSquare.x) * blooDot::Consts::SQUARE_WIDTH,
-			static_cast<float>(player1->PositionSquare.y) * blooDot::Consts::SQUARE_HEIGHT,
-			static_cast<float>(player1->PositionSquare.x + 1) * blooDot::Consts::SQUARE_WIDTH,
-			static_cast<float>(player1->PositionSquare.y + 1) * blooDot::Consts::SQUARE_HEIGHT
-		);
+		player1->PlaceInLevel(this->m_currentLevel);
 
 		auto dingOnSheet = this->m_currentLevel->GetDing(Dings::DingIDs::Player)->GetSheetPlacement(Facings::East);
 		player1->SpriteSourceRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
@@ -77,7 +72,7 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 	/* update player positions */
 	for (auto mob = this->m_playerData.begin(); mob != this->m_playerData.end(); ++mob)
 	{		
-		(*mob)->Update(this->m_currentLevel);
+		(*mob)->Update();
 	}
 }
 
@@ -166,5 +161,19 @@ void WorldScreen::RenderSprites()
 			D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, 
 			(*mob)->SpriteSourceRect
 		);
+
+#ifdef _DEBUG
+		auto gridPosition = (*mob)->PositionSquare;
+		auto gridLocked = D2D1::RectF(
+			gridPosition.x * blooDot::Consts::SQUARE_WIDTH - this->m_viewportOffset.x,
+			gridPosition.y * blooDot::Consts::SQUARE_HEIGHT - this->m_viewportOffset.y,
+			0,
+			0
+		);
+
+		gridLocked.right = gridLocked.left + blooDot::Consts::SQUARE_WIDTH;
+		gridLocked.bottom = gridLocked.top + blooDot::Consts::SQUARE_HEIGHT;
+		this->m_d2dContext->DrawRectangle(gridLocked, this->m_debugBorderBrush.Get(), 0.7F);
+#endif
 	}
 }
