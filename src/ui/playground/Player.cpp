@@ -115,8 +115,11 @@ void Player::Update()
 			{
 				auto originalWidth = newPosition.right - newPosition.left;
 				auto wouldPenetrate = myBoundingBox.right - eastCenterBoundingBox.left;
-				newPosition.left = newPosition.left - wouldPenetrate;
-				newPosition.right = newPosition.left + originalWidth;
+				//newPosition.left = newPosition.left - wouldPenetrate;
+				//newPosition.right = newPosition.left + originalWidth;
+
+				newPosition.right = eastCenterBoundingBox.left - 1.0F;
+				newPosition.left = newPosition.right - originalWidth;
 			}
 		}
 		
