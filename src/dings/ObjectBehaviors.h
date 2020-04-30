@@ -5,7 +5,7 @@
 /// Design-time and runtime state primitives for tiles/blocks in blooDot
 enum ObjectBehaviors : UINT32
 {
-	Boring = 0,		// block with no properties
+	Boring = 0,		// block with no properties (yeah, that sense of boring)
 	Solid = 1 << 0,	// block where you can bang your head against
 	Immersible = 1 << 1,  // block where mobs can walk inside (liquids, gases, loose solids)
 	SluiceNS = 1 << 2,  // oneway 270° 

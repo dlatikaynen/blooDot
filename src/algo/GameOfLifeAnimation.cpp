@@ -123,12 +123,12 @@ void GameOfLifeAnimation::LoadRecording(Platform::String^ fileName)
 	unsigned short boardHeight = *reinterpret_cast<unsigned short*>(srcData + offset); offset += sizeof(unsigned short);
 
 	/* 2. create an initial matrix of this size */
-	Reset(boardWidth, boardHeight);
+	this->Reset(boardWidth, boardHeight);
 
 	/* 3. read the other properties */
 	MFARGB colorCell = *reinterpret_cast<MFARGB*>(srcData + offset); offset += sizeof(MFARGB);
 	MFARGB colorRain = *reinterpret_cast<MFARGB*>(srcData + offset); offset += sizeof(MFARGB);
-	m_initialMatrix->SetDefaultColors(colorCell, colorRain);
+	this->m_initialMatrix->SetDefaultColors(colorCell, colorRain);
 
 	/* 4. read the steps. the first step is always the set of transitions
 	 * to get from an empty board to the initial board. if the initial board is an empty board,
@@ -155,21 +155,21 @@ void GameOfLifeAnimation::LoadRecording(Platform::String^ fileName)
 		}
 		else 
 		{
-			m_Steps.push_back(stepItem);
+			this->m_Steps.push_back(stepItem);
 		}
 	}	
 
 	/* clone this initial status to the current status */
-	m_initialMatrix->CopyTo(m_currentMatrix);
+	this->m_initialMatrix->CopyTo(m_currentMatrix);
 
 }
 
 GameOfLifePlane* GameOfLifeAnimation::GetCurrentMatrix()
 {
-	if (m_currentMatrix == NULL)
+	if (this->m_currentMatrix == NULL)
 	{
-		m_currentMatrix = new GameOfLifePlane(m_initialMatrix->GetWidth(), m_initialMatrix->GetHeight());
-		m_initialMatrix->CopyTo(m_currentMatrix);
+		this->m_currentMatrix = new GameOfLifePlane(this->m_initialMatrix->GetWidth(), this->m_initialMatrix->GetHeight());
+		this->m_initialMatrix->CopyTo(this->m_currentMatrix);
 	}
 
 	return m_currentMatrix;
@@ -288,16 +288,16 @@ GameOfLifeStep GameOfLifeAnimation::ComputeFromCurrent()
 	GameOfLifeStep step;
 
 	/*
+		In memory of John H. Conway
 		Births: Each dead cell adjacent to exactly three live neighbors will become live in the next generation.
 		Death by isolation: Each live cell with one or fewer live neighbors will die in the next generation.
 		Death by overcrowding: Each live cell with four or more live neighbors will die in the next generation.
 		Survival: Each live cell with either two or three live neighbors will remain alive for the next generation.
 	*/
 
-	auto currentMatrix = GetCurrentMatrix();
+	auto currentMatrix = this->GetCurrentMatrix();
 	int width = currentMatrix->GetWidth();
 	int height = currentMatrix->GetHeight();
-
 	for (int i = 0; i < width; ++i) for (int j = 0; j < height; ++j)
 	{
 		bool curState = currentMatrix->CellAt(i, j)->IsAlive();

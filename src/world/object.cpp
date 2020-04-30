@@ -60,20 +60,11 @@ void Object::InstantiateInLayerFacing(std::shared_ptr<Level> placeInLevel, Layer
 void Object::PlaceInLevel(std::shared_ptr<Level> hostLevel)
 {
 	this->m_Level = hostLevel;
-	this->SetPosition(this->PositionSquare);
-
-	/* attention: objects that need to move their bounding box along,
-	 * need to actively do so. SetPosition does not take care of it for them */
+	this->SetPosition(this->PositionSquare);	
 	auto wallDing = this->GetDing(Layers::Walls);
 	if (wallDing != nullptr)
-	{
-		auto relativeBoundingBox = wallDing->GetBoundingOuterRim();
-		this->m_boundingBox = D2D1::RectF(
-			relativeBoundingBox.left + this->Position.left,
-			relativeBoundingBox.top + this->Position.top,
-			relativeBoundingBox.right + this->Position.left,
-			relativeBoundingBox.bottom + this->Position.top
-		);
+	{		
+		this->m_boundingBox  = wallDing->GetBoundingOuterRim();
 	}
 }
 
@@ -336,7 +327,13 @@ void Object::DesignSaveToFile(std::ofstream* toFile, Layers ofLayer)
 
 bool Object::GetBoundingBox(_Out_ D2D1_RECT_F* boundingBox)
 {
-	*boundingBox = this->m_boundingBox;
+	*boundingBox = D2D1::RectF(
+		this->m_boundingBox.left + this->Position.left,
+		this->m_boundingBox.top + this->Position.top,
+		this->m_boundingBox.right + this->Position.left,
+		this->m_boundingBox.bottom + this->Position.top
+	);
+				
 	if (this->m_boundingBoxes == nullptr)
 	{
 		return false;
@@ -350,7 +347,14 @@ bool Object::GetBoundingBox(_Out_ D2D1_RECT_F* boundingBox)
 
 bool Object::GetBoundingBoxNext(_Out_ D2D1_RECT_F* boundingBox)
 {
-	*boundingBox = *(this->m_boundingBoxIter);
+	auto relativeBox =  *(this->m_boundingBoxIter);
+	*boundingBox = D2D1::RectF(
+		relativeBox.left + this->Position.left,
+		relativeBox.top + this->Position.top,
+		relativeBox.right + this->Position.left,
+		relativeBox.bottom + this->Position.top
+	);
+
 	++this->m_boundingBoxIter;
 	return this->m_boundingBoxIter != this->m_boundingBoxes->end();
 }
