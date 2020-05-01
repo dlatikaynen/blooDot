@@ -183,6 +183,9 @@
     <ClCompile Include="..\src\world\Bounding.cpp">
       <Filter>world</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ui\playground\PlayerMomentum.cpp">
+      <Filter>ui\playground</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">

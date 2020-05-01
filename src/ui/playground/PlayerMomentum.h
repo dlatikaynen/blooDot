@@ -5,6 +5,8 @@
 class PlayerMomentum
 {
 public:
+	void HitTheWall(Facings directionFacing);
+
 	/* logical pixels per frame */
 	float speedX; //vectorial
 	float speedY; //vectorial

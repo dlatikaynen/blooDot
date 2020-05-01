@@ -98,7 +98,20 @@ void Player::Update()
 	if (deltaX < 0.0F)
 	{
 		/* hit something int the west? */
-
+		auto westCenterTerrain = this->m_Level->GetObjectAt(this->PositionSquare.x + 1, this->PositionSquare.y, false);
+		if (westCenterTerrain != nullptr && westCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+		{
+			D2D1_RECT_F westCenterBoundingBox;
+			westCenterTerrain->GetBoundingBox(&westCenterBoundingBox);
+			if (westCenterBoundingBox.right < myBoundingBox.left)
+			{
+				auto originalWidth = newPosition.right - newPosition.left;
+				auto wouldPenetrate = myBoundingBox.left - westCenterBoundingBox.right;
+				newPosition.left = westCenterBoundingBox.right + 1.0F;
+				newPosition.right = newPosition.left + originalWidth;
+				this->Momentum.HitTheWall(Facings::East);
+			}
+		}
 	}
 	
 	if (deltaX > 0.0F)
@@ -115,27 +128,49 @@ void Player::Update()
 			{
 				auto originalWidth = newPosition.right - newPosition.left;
 				auto wouldPenetrate = myBoundingBox.right - eastCenterBoundingBox.left;
-				//newPosition.left = newPosition.left - wouldPenetrate;
-				//newPosition.right = newPosition.left + originalWidth;
-
 				newPosition.right = eastCenterBoundingBox.left - 1.0F;
 				newPosition.left = newPosition.right - originalWidth;
+				this->Momentum.HitTheWall(Facings::East);
 			}
-		}
-		
-
+		}		
 	}
 
 	if (deltaY < 0.0F)
 	{
 		/* hit something to the north? */
-
+		auto northCenterTerrain = this->m_Level->GetObjectAt(this->PositionSquare.x, this->PositionSquare.y - 1, false);
+		if (northCenterTerrain != nullptr && northCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+		{
+			D2D1_RECT_F northCenterBoundingBox;
+			northCenterTerrain->GetBoundingBox(&northCenterBoundingBox);
+			if (northCenterBoundingBox.bottom < myBoundingBox.top)
+			{
+				auto originalHeight = newPosition.bottom - newPosition.top;
+				auto wouldPenetrate = myBoundingBox.top - northCenterBoundingBox.bottom;
+				newPosition.bottom = northCenterBoundingBox.top - 1.0F;
+				newPosition.top = newPosition.bottom - originalHeight;
+				this->Momentum.HitTheWall(Facings::North);
+			}
+		}
 	}
 
 	if (deltaY > 0.0F)
 	{
 		/* hit something in the south? */
-		
+		auto southCenterTerrain = this->m_Level->GetObjectAt(this->PositionSquare.x, this->PositionSquare.y + 1, false);
+		if (southCenterTerrain != nullptr && southCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+		{
+			D2D1_RECT_F southCenterBoundingBox;
+			southCenterTerrain->GetBoundingBox(&southCenterBoundingBox);
+			if (southCenterBoundingBox.top < myBoundingBox.bottom)
+			{
+				auto originalHeight = newPosition.bottom - newPosition.top;
+				auto wouldPenetrate = myBoundingBox.bottom - southCenterBoundingBox.top;
+				newPosition.top = southCenterBoundingBox.bottom + 1.0F;
+				newPosition.bottom = newPosition.top + originalHeight;
+				this->Momentum.HitTheWall(Facings::South);
+			}
+		}
 	}
 
 	this->SetPosition(newPosition);

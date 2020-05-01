@@ -336,6 +336,7 @@
     <ClCompile Include="..\src\ui\DialogOverlay.cpp" />
     <ClCompile Include="..\src\ui\LoadScreen.cpp" />
     <ClCompile Include="..\src\ui\playground\Player.cpp" />
+    <ClCompile Include="..\src\ui\playground\PlayerMomentum.cpp" />
     <ClCompile Include="..\src\ui\playground\WorldScreen.cpp" />
     <ClCompile Include="..\src\ui\playground\WorldScreenBase.cpp" />
     <ClCompile Include="..\src\app\blooDot.cpp" />
