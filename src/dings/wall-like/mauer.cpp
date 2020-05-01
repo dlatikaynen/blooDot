@@ -60,26 +60,26 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	 * after the loop ends the context is rotation-free */
 	for (int facing = OrientabilityIndexQuadruplet::Uppy; facing >= OrientabilityIndexQuadruplet::Lefty; --facing)
 	{
-		PrepareRect(&this->m_lookupU[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupU[facing], rect);
+		this->Rotate90(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5.0f, rect.top + 5.0f), D2D1::Point2F(rect.right, rect.top + 5.0f), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5.0f, rect.top + 5.0f), D2D1::Point2F(rect.left + 5, rect.bottom - 5.0f), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5.0f, rect.bottom - 5.0f), D2D1::Point2F(rect.right, rect.bottom - 5.0f), innerBrush, 2.5f, 0);
 		/* Ts */
-		PrepareRect(&this->m_lookupTs[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupTs[facing], rect);
+		this->Rotate90(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top), D2D1::Point2F(rect.left + 5, rect.bottom), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top + 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right, rect.bottom - 5), D2D1::Point2F(rect.right - 5, rect.bottom - 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.bottom - 5), D2D1::Point2F(rect.right - 5, rect.bottom), innerBrush, 2.5f, 0);
 		/* single outer edges (sides) */
-		PrepareRect(&this->m_lookupSides[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupSides[facing], rect);
+		this->Rotate90(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top), D2D1::Point2F(rect.left + 5, rect.bottom), innerBrush, 2.5f, 0);
 		/* double corners */
-		PrepareRect(&this->m_lookupCornersInner2[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupCornersInner2[facing], rect);
+		this->Rotate90(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.right, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top + 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right, rect.bottom - 5), D2D1::Point2F(rect.right - 5, rect.bottom - 5), innerBrush, 2.5f, 0);
@@ -89,12 +89,12 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	/* pipes and double inner corners (dually oriented specialities) */
 	for (int facing = OrientabilityIndexDuplex::Vertically; facing >= OrientabilityIndexDuplex::Horizontally; --facing)
 	{
-		PrepareRect(&this->m_lookupPipes[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupPipes[facing], rect);
+		this->Rotate90(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.left, rect.top + 5), D2D1::Point2F(rect.right, rect.top + 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.left, rect.bottom - 5), D2D1::Point2F(rect.right, rect.bottom - 5), innerBrush, 2.5f, 0);
-		PrepareRect(&this->m_lookupCornersDiag[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupCornersDiag[facing], rect);
+		this->Rotate90(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.right, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top + 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.left, rect.bottom - 5), D2D1::Point2F(rect.left + 5, rect.bottom - 5), innerBrush, 2.5f, 0);
@@ -104,32 +104,32 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	for (int facing = OrientabilityIndexDiagon::DiagNE; facing >= OrientabilityIndexDiagon::DiagNW; --facing)
 	{
 		/* outer-only edges (diagonal) */
-		PrepareRect(&this->m_lookupEdgesOuter90[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupEdgesOuter90[facing], rect);
+		this->Rotate90(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top + 5), D2D1::Point2F(rect.right, rect.top + 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top + 5), D2D1::Point2F(rect.left + 5, rect.bottom), innerBrush, 2.5f, 0);
 		/* genuine edges (knees) */
-		PrepareRect(&this->m_lookupEdges[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupEdges[facing], rect);
+		this->Rotate90(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top + 5), D2D1::Point2F(rect.right, rect.top + 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top + 5), D2D1::Point2F(rect.left + 5, rect.bottom), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right, rect.bottom - 5), D2D1::Point2F(rect.right - 5, rect.bottom - 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.bottom - 5), D2D1::Point2F(rect.right - 5, rect.bottom), innerBrush, 2.5f, 0);
 		/* single edges with one inner corner, near */
-		PrepareRect(&this->m_lookupEdgesInner1[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupEdgesInner1[facing], rect);
+		this->Rotate90(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top), D2D1::Point2F(rect.left + 5, rect.bottom), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top + 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top), innerBrush, 2.5f, 0);
 		/* single edges with one inner corner, far */
-		PrepareRect(&this->m_lookupEdgesInner1[facing + FAR_OFFSET], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupEdgesInner1[facing + FAR_OFFSET], rect);
+		this->Rotate90(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top), D2D1::Point2F(rect.left + 5, rect.bottom), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right, rect.bottom - 5), D2D1::Point2F(rect.right - 5, rect.bottom - 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.bottom - 5), D2D1::Point2F(rect.right - 5, rect.bottom), innerBrush, 2.5f, 0);
 		/* double edges with opposing single corner */
-		PrepareRect(&this->m_lookupCornersBoth90[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupCornersBoth90[facing], rect);
+		this->Rotate90(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top + 5), D2D1::Point2F(rect.right, rect.top + 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.left + 5, rect.top + 5), D2D1::Point2F(rect.left + 5, rect.bottom), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right, rect.bottom - 5), D2D1::Point2F(rect.right - 5, rect.bottom - 5), innerBrush, 2.5f, 0);
@@ -137,13 +137,13 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 		rendEr->DrawLine(D2D1::Point2F(rect.right, rect.bottom - 5), D2D1::Point2F(rect.right - 5, rect.bottom - 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.bottom - 5), D2D1::Point2F(rect.right - 5, rect.bottom), innerBrush, 2.5f, 0);
 		/* single corners */
-		PrepareRect(&this->m_lookupCornersInner1[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupCornersInner1[facing], rect);
+		this->Rotate90(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.right, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top + 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top), innerBrush, 2.5f, 0);
 		/* triple corners */
-		PrepareRect(&this->m_lookupCornersInner3[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupCornersInner3[facing], rect);
+		this->Rotate90(rendEr, rect, facing);
 		rendEr->DrawLine(D2D1::Point2F(rect.right, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top + 5), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.right - 5, rect.top + 5), D2D1::Point2F(rect.right - 5, rect.top), innerBrush, 2.5f, 0);
 		rendEr->DrawLine(D2D1::Point2F(rect.left, rect.top + 5), D2D1::Point2F(rect.left + 5, rect.top + 5), innerBrush, 2.5f, 0);

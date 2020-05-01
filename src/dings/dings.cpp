@@ -53,9 +53,13 @@ void Dings::Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int can
 	this->SetSheetPlacementsFromCoalescability();
 	this->m_fromFile = this->ShouldLoadFromBitmap();
 	this->PrepareBackground(drawTo);
-	if (this->m_Facings == Facings::Viech)
+	if (this->m_Facings == Facings::Cross)
 	{
 		this->DrawQuadruplet(drawTo);
+	}
+	else if (this->m_Facings == Facings::Viech)
+	{
+		this->DrawRotatory(drawTo);
 	}
 	else if (this->m_Facings == Facings::Center)
 	{
@@ -107,10 +111,10 @@ void Dings::DrawTwin(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 		bitMap = this->LoadFromBitmap();
 	}
 
-	for (int facing = OrientabilityIndexDuplex::Vertically; facing >= OrientabilityIndexDuplex::Horizontally; --facing)
+	for (int orientationDent = OrientabilityIndexDuplex::Vertically; orientationDent >= OrientabilityIndexDuplex::Horizontally; --orientationDent)
 	{
-		PrepareRect(&this->m_lookupPipes[facing], rect);
-		Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupPipes[orientationDent], rect);
+		this->Rotate90(rendEr, rect, orientationDent);
 		if (this->m_fromFile == nullptr)
 		{
 			this->DrawInternal(drawTo, rect);
@@ -134,10 +138,10 @@ void Dings::DrawQuadruplet(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawT
 		bitMap = this->LoadFromBitmap();
 	}
 
-	for (int facing = OrientabilityIndexQuadruplet::Uppy; facing >= OrientabilityIndexQuadruplet::Lefty; --facing)
+	for (int orientationDent = OrientabilityIndexQuadruplet::Uppy; orientationDent >= OrientabilityIndexQuadruplet::Lefty; --orientationDent)
 	{
-		this->PrepareRect(&this->m_lookupSides[facing], rect);
-		this->Rotate(rendEr, rect, facing);
+		this->PrepareRect(&this->m_lookupSides[orientationDent], rect);
+		this->Rotate90(rendEr, rect, orientationDent);
 		if (this->m_fromFile == nullptr)
 		{
 			this->DrawInternal(drawTo, rect);
@@ -148,6 +152,33 @@ void Dings::DrawQuadruplet(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawT
 		}
 	}
 	
+	bitMap.Reset();
+}
+
+void Dings::DrawRotatory(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
+{
+	D2D1_RECT_F rect;
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> bitMap;
+	auto rendEr = drawTo.Get();
+	if (this->m_fromFile != nullptr)
+	{
+		bitMap = this->LoadFromBitmap();
+	}
+
+	for (int orientationDent = OrientabilityIndexRotatory::HDG360; orientationDent <= OrientabilityIndexRotatory::HDG337_5; ++orientationDent)
+	{
+		this->PrepareRect(&this->m_lookupSides[orientationDent], rect);
+		this->Rotate(rendEr, rect, static_cast<float>(orientationDent) * 22.5F);
+		if (this->m_fromFile == nullptr)
+		{
+			this->DrawInternal(drawTo, rect);
+		}
+		else
+		{
+			drawTo->DrawBitmap(bitMap.Get(), rect);
+		}
+	}
+
 	bitMap.Reset();
 }
 
@@ -189,7 +220,7 @@ void Dings::SetSheetPlacementsFromCoalescability()
 {
 	auto oX = this->m_lookupShy.x, oY = this->m_lookupShy.y;
 	auto x = oX, y = oY;
-	if (this->m_Facings == Facings::Viech)
+	if (this->m_Facings == Facings::Cross)
 	{
 		this->m_lookupSides[OrientabilityIndexQuadruplet::Lefty].x = x++;
 		this->m_lookupSides[OrientabilityIndexQuadruplet::Lefty].y = y;
@@ -199,6 +230,41 @@ void Dings::SetSheetPlacementsFromCoalescability()
 		this->m_lookupSides[OrientabilityIndexQuadruplet::Righty].y = y;
 		this->m_lookupSides[OrientabilityIndexQuadruplet::Downy].x = x++;
 		this->m_lookupSides[OrientabilityIndexQuadruplet::Downy].y = y;
+	}
+	else if (this->m_Facings == Facings::Viech)
+	{
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG360].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG360].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG22_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG22_5].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG45].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG45].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG67_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG67_5].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG90].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG90].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG112_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG112_5].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG135].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG135].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG157_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG157_5].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG180].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG180].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG202_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG202_5].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG225].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG225].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG247_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG247_5].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG270].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG270].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG292_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG292_5].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG315].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG315].y = y;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG337_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG337_5].y = y;
 	}
 	else if (this->m_Facings == Facings::Center)
 	{
@@ -382,22 +448,35 @@ std::shared_ptr<Bounding> Dings::GetBoundingInfo()
 	return this->m_Bounding;
 }
 
-void Dings::Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation)
+void Dings::Rotate90(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotateTimes)
 {
-	if (rotation == OrientabilityIndexQuadruplet::Lefty)
+	if (rotateTimes == 0)
 	{
 		rendEr->SetTransform(D2D1::Matrix3x2F::Identity());
 	}
 	else
 	{
 		/* take anything else but 90° and funny stuff happens (heap corruption) */
-		rendEr->SetTransform(D2D1::Matrix3x2F::Rotation(static_cast<float>(rotation * -90), D2D1::Point2F(rect.left + 24.5f, rect.top + 24.5f)));
+		rendEr->SetTransform(D2D1::Matrix3x2F::Rotation(static_cast<float>(-90 * rotateTimes), D2D1::Point2F(rect.left + 24.5f, rect.top + 24.5f)));
+	}
+}
+
+void Dings::Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, float rotationAngle)
+{
+	if (rotationAngle < 0.1F)
+	{
+		rendEr->SetTransform(D2D1::Matrix3x2F::Identity());
+	}
+	else
+	{
+		/* take anything else but 90° and funny stuff happens (heap corruption) */
+		rendEr->SetTransform(D2D1::Matrix3x2F::Rotation(rotationAngle, D2D1::Point2F(rect.left + 24.5f, rect.top + 24.5f)));
 	}
 }
 
 D2D1_POINT_2U Dings::GetSheetPlacement(Facings orientation)
 {
-	if (this->m_Facings == Facings::Viech)
+	if (this->m_Facings == Facings::Cross)
 	{
 		switch (orientation)
 		{
@@ -405,6 +484,28 @@ D2D1_POINT_2U Dings::GetSheetPlacement(Facings orientation)
 			case Facings::North:return this->m_lookupSides[OrientabilityIndexQuadruplet::Uppy];
 			case Facings::East: return this->m_lookupSides[OrientabilityIndexQuadruplet::Righty];
 			case Facings::South: return this->m_lookupSides[OrientabilityIndexQuadruplet::Downy];
+		}
+	}
+	else if (this->m_Facings == Facings::Viech)
+	{
+		switch (orientation)
+		{
+			case Facings::North: return this->m_lookupSides[OrientabilityIndexRotatory::HDG360];
+			case Facings::NNE: return this->m_lookupSides[OrientabilityIndexRotatory::HDG22_5];
+			case Facings::NE: return this->m_lookupSides[OrientabilityIndexRotatory::HDG45];
+			case Facings::NEE: return this->m_lookupSides[OrientabilityIndexRotatory::HDG67_5];
+			case Facings::East: return this->m_lookupSides[OrientabilityIndexRotatory::HDG90];
+			case Facings::SEE: return this->m_lookupSides[OrientabilityIndexRotatory::HDG112_5];
+			case Facings::SE: return this->m_lookupSides[OrientabilityIndexRotatory::HDG135];
+			case Facings::SSE: return this->m_lookupSides[OrientabilityIndexRotatory::HDG157_5];
+			case Facings::South: return this->m_lookupSides[OrientabilityIndexRotatory::HDG180];
+			case Facings::SSW: return this->m_lookupSides[OrientabilityIndexRotatory::HDG202_5];
+			case Facings::SW: return this->m_lookupSides[OrientabilityIndexRotatory::HDG225];
+			case Facings::SWW: return this->m_lookupSides[OrientabilityIndexRotatory::HDG247_5];
+			case Facings::West: return this->m_lookupSides[OrientabilityIndexRotatory::HDG270];
+			case Facings::NWW: return this->m_lookupSides[OrientabilityIndexRotatory::HDG292_5];
+			case Facings::NW: return this->m_lookupSides[OrientabilityIndexRotatory::HDG315];
+			case Facings::NNW: return this->m_lookupSides[OrientabilityIndexRotatory::HDG337_5];
 		}
 	}
 	else if ((this->m_Facings == Facings::Shy && this->m_Coalescing == Facings::Immersed) || this->m_Facings == Facings::Center)
@@ -475,7 +576,15 @@ Facings Dings::AvailableFacings()
 
 bool Dings::CouldCoalesce()
 {
-	return this->m_Coalescing != Facings::Shy && this->m_Coalescing != Facings::Viech;
+	switch (this->m_Coalescing)
+	{
+		case Facings::Shy:
+		case Facings::Cross:
+		case Facings::Viech:
+			return false;
+	}
+
+	return true;
 }
 
 Facings Dings::RotateFromFacing(Facings fromFacing, bool inverseDirection)

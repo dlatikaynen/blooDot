@@ -35,7 +35,7 @@ void Coin::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 
 Chest::Chest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Chest, "Chest", deviceResources, drawBrushes)
 {
-	m_Facings = Facings::Viech;
+	m_Facings = Facings::Cross;
 	m_Coalescing = Facings::Shy;
 	m_preferredLayer = Layers::Walls;
 	m_possibleLayers = Layers::Walls;
@@ -123,7 +123,7 @@ SilverChest::SilverChest(std::shared_ptr<DX::DeviceResources> deviceResources, B
 {
 	this->m_ID = Dings::DingIDs::ChestSilver;
 	this->m_Name = "Silver Chest";
-	m_Facings = Facings::Viech;
+	m_Facings = Facings::Cross;
 	m_Coalescing = Facings::Shy;
 	m_preferredLayer = Layers::Walls;
 	m_possibleLayers = Layers::Walls;
@@ -138,7 +138,7 @@ GoldChest::GoldChest(std::shared_ptr<DX::DeviceResources> deviceResources, Brush
 {
 	this->m_ID = Dings::DingIDs::ChestGold;
 	this->m_Name = "Gold Chest";
-	m_Facings = Facings::Viech;
+	m_Facings = Facings::Cross;
 	m_Coalescing = Facings::Shy;
 	m_preferredLayer = Layers::Walls;
 	m_possibleLayers = Layers::Walls;

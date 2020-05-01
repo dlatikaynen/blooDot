@@ -17,7 +17,7 @@ enum Layers
 	Rooof = 4
 };
 
-enum Facings
+enum Facings : unsigned int
 {
 	Shy = 0,													/* one shy (default placement) */
 	NW = 1,														/* left-top capping edge */
@@ -28,12 +28,21 @@ enum Facings
 	South = 32,													/* U-bag with opening upwards (southcap) */
 	SW = 64,													/* left-bottom capping edge */
 	West = 128,													/* U-bag with opening to the right (westcap) */
-	Viech = West | North | East | South,						/* in fact anything that can orient left-right-up-down, all viech mobs and stuff like chests */
+	Cross = West | North | East | South,						/* stuff like chests */
 	Center = 256,												/* crossing */
 	SingleEdge = 512,
 	TripleEdge = 1024,
 	CornerNear = 2048,
 	CornerFar = 4096,
+	NNW = 8192,
+	NWW = 16384,
+	SSW = 32768,
+	SWW = 65536,
+	NEE = 131072,
+	NNE = 262144,
+	SEE = 524288,
+	SSE = 1048576,
+	Viech = SSE | SEE | NEE | NNE | SWW | SSW | SEE | SSE,		/* anything that can orient in 16 headings, all viech mobs and players */
 	WE = West | East,											/* horizontal pipe */
 	NS = North | South,											/* vertical pipe */
 	EdgeW = West | SingleEdge,									/* straight edge, left-only */
@@ -74,7 +83,7 @@ enum Facings
 	Corner3NE = North | East | CornerFar,						/* triple inner corner pointing top right */
 	Corner3SW = South | West | CornerFar,						/* triple inner corner pointing bottom left */
 	Corner3SE = South | East | CornerFar,						/* triple inner corner pointing bottom right */
-	Immersed = NW | North | NE | East | SE | South | SW | West
+	Immersed = NW | North | NE | East | SE | South | SW | West	/* non-directional, all-coalescing joker polyomino */
 };
 
 constexpr inline Facings operator |(const Facings left, const Facings& right) 
@@ -114,6 +123,30 @@ enum OrientabilityIndexDuplex
 {
 	Horizontally = 0,
 	Vertically = 1
+};
+
+enum OrientabilityIndexRotatory
+{
+	// Sequence is meaningful
+	// and must remain so we increment
+	// rotation with single step
+	// multiple field value by 22.5 to get aviation heading in degrees
+	HDG360 = 0, // aviation: north
+	HDG22_5 = 1,
+	HDG45= 2,
+	HDG67_5 = 3,
+	HDG90 = 4, // aviation: east
+	HDG112_5 = 5,
+	HDG135 = 6,
+	HDG157_5 = 7,
+	HDG180 = 8, // aviation: south
+	HDG202_5 = 9,
+	HDG225 = 10,
+	HDG247_5= 11,
+	HDG270 = 12,
+	HDG292_5 = 13,
+	HDG315 = 14,
+	HDG337_5 = 15
 };
 
 // A Ding Wang Tile descriptor, and a candidate for clumsy packing on a 2-topology
@@ -208,11 +241,13 @@ protected:
 	D2D1_POINT_2U		m_lookupEdgesInner1[8];
 	D2D1_POINT_2U		m_lookupU[4];
 	D2D1_POINT_2U		m_lookupTs[4];
+	D2D1_POINT_2U		m_lookupViech[16];
 
 	virtual Platform::String^ ShouldLoadFromBitmap();
 	void PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);
 	void PrepareRect7x7(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);
-	void Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotation);
+	void Rotate90(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotateTimes);
+	void Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, float rotationAngle);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> LoadBitmap(Platform::String^ fileName);
 	virtual void PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) { };
 	virtual void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
@@ -231,6 +266,7 @@ private:
 	void DrawShy(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	void DrawTwin(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	void DrawQuadruplet(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
+	void DrawRotatory(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	void DrawClumsyPack(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 
 	std::shared_ptr<DX::DeviceResources> m_deviceResources;
