@@ -88,9 +88,9 @@ void Player::Update()
 		}
 	}
 	
-	/* linear relocation depending on momentary velocity */
-	auto deltaX = this->Momentum.speedX;
-	auto deltaY = this->Momentum.speedY;
+	/* linear relocation depending on momentary velocity */	
+	auto deltaX = abs(this->Momentum.speedX) > this->Momentum.speedCapX ? std::copysignf(this->Momentum.speedCapX, this->Momentum.speedX) : this->Momentum.speedX;
+	auto deltaY = abs(this->Momentum.speedY) > this->Momentum.speedCapY ? std::copysignf(this->Momentum.speedCapY, this->Momentum.speedY) : this->Momentum.speedY;
 	auto newPosition = D2D1::RectF(this->Position.left + deltaX, this->Position.top + deltaY, this->Position.right + deltaX, this->Position.bottom + deltaY);
 	
 	/* hit testing */
@@ -98,15 +98,15 @@ void Player::Update()
 	if (deltaX < 0.0F)
 	{
 		/* hit something int the west? */
-		auto westCenterTerrain = this->m_Level->GetObjectAt(this->PositionSquare.x + 1, this->PositionSquare.y, false);
+		auto westCenterTerrain = this->m_Level->GetObjectAt(this->PositionSquare.x - 1, this->PositionSquare.y, false);
 		if (westCenterTerrain != nullptr && westCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
 		{
 			D2D1_RECT_F westCenterBoundingBox;
 			westCenterTerrain->GetBoundingBox(&westCenterBoundingBox);
-			if (westCenterBoundingBox.right < myBoundingBox.left)
+			if (westCenterBoundingBox.right > myBoundingBox.left)
 			{
 				auto originalWidth = newPosition.right - newPosition.left;
-				auto wouldPenetrate = myBoundingBox.left - westCenterBoundingBox.right;
+				auto wouldPenetrate = westCenterBoundingBox.right - myBoundingBox.left;
 				newPosition.left = westCenterBoundingBox.right + 1.0F;
 				newPosition.right = newPosition.left + originalWidth;
 				this->Momentum.HitTheWall(Facings::East);

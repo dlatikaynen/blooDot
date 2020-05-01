@@ -5,6 +5,9 @@
 class PlayerMomentum
 {
 public:
+	static const float speedCapX;
+	static const float speedCapY;
+
 	void HitTheWall(Facings directionFacing);
 
 	/* logical pixels per frame */
