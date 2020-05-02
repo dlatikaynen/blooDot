@@ -143,12 +143,12 @@ void Player::Update()
 		{
 			D2D1_RECT_F northCenterBoundingBox;
 			northCenterTerrain->GetBoundingBox(&northCenterBoundingBox);
-			if (northCenterBoundingBox.bottom < myBoundingBox.top)
+			if (northCenterBoundingBox.bottom > myBoundingBox.top)
 			{
 				auto originalHeight = newPosition.bottom - newPosition.top;
-				auto wouldPenetrate = myBoundingBox.top - northCenterBoundingBox.bottom;
-				newPosition.bottom = northCenterBoundingBox.top - 1.0F;
-				newPosition.top = newPosition.bottom - originalHeight;
+				auto wouldPenetrate = northCenterBoundingBox.bottom - myBoundingBox.top;
+				newPosition.top = northCenterBoundingBox.bottom + 1.0F;
+				newPosition.bottom = newPosition.top + originalHeight;
 				this->Momentum.HitTheWall(Facings::North);
 			}
 		}
@@ -166,8 +166,8 @@ void Player::Update()
 			{
 				auto originalHeight = newPosition.bottom - newPosition.top;
 				auto wouldPenetrate = myBoundingBox.bottom - southCenterBoundingBox.top;
-				newPosition.top = southCenterBoundingBox.bottom + 1.0F;
-				newPosition.bottom = newPosition.top + originalHeight;
+				newPosition.bottom = southCenterBoundingBox.top - 1.0F;
+				newPosition.top = newPosition.bottom - originalHeight;
 				this->Momentum.HitTheWall(Facings::South);
 			}
 		}
