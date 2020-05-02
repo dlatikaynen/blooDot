@@ -153,9 +153,6 @@
     <ClCompile Include="..\src\ui\playground\LevelEditor.cpp">
       <Filter>ui\playground</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\playground\PlayerMomentum.h">
-      <Filter>ui\playground</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ui\playground\Player.cpp">
       <Filter>ui\playground</Filter>
     </ClCompile>
@@ -340,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="..\src\world\World.h">
       <Filter>world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\playground\PlayerMomentum.h">
+      <Filter>ui\playground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

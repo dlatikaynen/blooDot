@@ -19,5 +19,4 @@ public:
 	Platform::String^ Name;	
 	PlayerMomentum Momentum;
 	Facings Facing;
-	D2D1_RECT_F SpriteSourceRect;
 };

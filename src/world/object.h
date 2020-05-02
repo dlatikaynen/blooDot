@@ -44,6 +44,7 @@ public:
 	bool				GetBoundingBoxNext(_Out_ D2D1_RECT_F* boundingBox);
 
 	ObjectBehaviors						m_BehaviorsWalls;
+	D2D1_RECT_F							m_spriteSourceRect;
 
 protected:
 	Dings*								m_DingWalls;
@@ -52,6 +53,8 @@ protected:
 	std::shared_ptr<Level>				m_Level;
 	D2D1_RECT_F							m_boundingBox;
 	std::vector<D2D1_RECT_F>*			m_boundingBoxes;
+
+	void SetMobRotation(OrientabilityIndexRotatory rotationDent);
 
 private:
 	std::vector<D2D1_RECT_F>::iterator	m_boundingBoxIter;
@@ -62,5 +65,7 @@ private:
 	Facings								m_FacingRooof;
 	ObjectBehaviors						m_BehaviorsFloor;
 	ObjectBehaviors						m_BehaviorsRooof;
+	Facings								m_orientationSpinTo;
+	Facings								m_orientationCurrent;
 };
 

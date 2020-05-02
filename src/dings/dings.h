@@ -125,7 +125,7 @@ enum OrientabilityIndexDuplex
 	Vertically = 1
 };
 
-enum OrientabilityIndexRotatory
+enum OrientabilityIndexRotatory : int
 {
 	// Sequence is meaningful
 	// and must remain so we increment
@@ -146,13 +146,16 @@ enum OrientabilityIndexRotatory
 	HDG270 = 12,
 	HDG292_5 = 13,
 	HDG315 = 14,
-	HDG337_5 = 15
+	HDG337_5 = 15,
+	NumberOfSectors = 16
 };
 
 // A Ding Wang Tile descriptor, and a candidate for clumsy packing on a 2-topology
 class Dings
 {
 public:
+	static const Facings DefaultMobFacing = Facings::West;
+
 	enum class DingIDs : unsigned
 	{
 		Void = 0,
@@ -180,18 +183,28 @@ public:
 
 	Dings(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 
-	Dings::DingIDs				ID();
-	Platform::String^			Name();
-	void						Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY);
-	D2D1_POINT_2U				GetSheetPlacement(Facings orientation);
-	Layers						GetPreferredLayer();
-	Facings						AvailableFacings();
-	ObjectBehaviors				GetInherentBehaviors();
-	bool						BoundingIsDefaultRect();
-	D2D1_RECT_F					GetBoundingOuterRim();
-	std::shared_ptr<Bounding>	GetBoundingInfo();
-	bool						CouldCoalesce();
-	static Facings				RotateFromFacing(Facings fromFacing, bool inverseDirection);
+	Dings::DingIDs								ID();
+	Platform::String^							Name();
+	void										Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY);
+	D2D1_POINT_2U								GetSheetPlacement(Facings orientation);
+	D2D1_POINT_2U								GetSheetPlacement(OrientabilityIndexRotatory rotationDent);
+	Layers										GetPreferredLayer();
+	Facings										AvailableFacings();
+	ObjectBehaviors								GetInherentBehaviors();
+	bool										BoundingIsDefaultRect();
+	D2D1_RECT_F									GetBoundingOuterRim();
+	std::shared_ptr<Bounding>					GetBoundingInfo();
+	bool										CouldCoalesce();
+	static Facings								RotateFromFacing(Facings fromFacing, bool inverseDirection);
+	static OrientabilityIndexRotatory			HeadingFromFacing(Facings orientationFacing);
+
+	static inline OrientabilityIndexRotatory	HeadingFromVector(float vectorX, float vectorY)
+	{
+		/* unit atan defaults to 135° south east; since we use aviation headings,
+		 * we swap the sign of the x component to land into the right quadrant */
+		const float sectorScale = static_cast<float>(OrientabilityIndexRotatory::NumberOfSectors) / (2.0F * static_cast<float>(M_PI));
+		return static_cast<OrientabilityIndexRotatory>(int(floor((atan2(vectorY, -vectorX) + static_cast<float>(M_PI)) * sectorScale)));
+	};
 
 protected:
 	DingIDs				m_ID;

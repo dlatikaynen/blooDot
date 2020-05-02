@@ -60,12 +60,16 @@ void Object::InstantiateInLayerFacing(std::shared_ptr<Level> placeInLevel, Layer
 void Object::PlaceInLevel(std::shared_ptr<Level> hostLevel)
 {
 	this->m_Level = hostLevel;
-	this->SetPosition(this->PositionSquare);	
+	this->SetPosition(this->PositionSquare);
 	auto wallDing = this->GetDing(Layers::Walls);
 	if (wallDing != nullptr)
 	{		
 		this->m_boundingBox  = wallDing->GetBoundingOuterRim();
-	}
+		if (wallDing->AvailableFacings() == Facings::Viech && this->m_FacingWalls != Facings::Shy)
+		{
+			this->SetMobRotation(Dings::HeadingFromFacing(this->m_FacingWalls));
+		}
+	}	
 }
 
 void Object::SetPosition(D2D1_POINT_2U gridPosition)
@@ -84,8 +88,8 @@ void Object::SetPosition(D2D1_POINT_2F pixelPosition)
 	this->Position.top = pixelPosition.y;
 	this->Position.right = this->Position.left + blooDot::Consts::SQUARE_WIDTH;
 	this->Position.bottom = this->Position.top + blooDot::Consts::SQUARE_HEIGHT;
-	this->PositionSquare.x = (this->Position.left + blooDot::Consts::SQUARE_WIDTH / 2.0F) / blooDot::Consts::SQUARE_WIDTH;
-	this->PositionSquare.y = (this->Position.top + blooDot::Consts::SQUARE_HEIGHT / 2.0F) / blooDot::Consts::SQUARE_HEIGHT;
+	this->PositionSquare.x = static_cast<int>((this->Position.left + blooDot::Consts::SQUARE_WIDTH / 2.0F) / blooDot::Consts::SQUARE_WIDTH);
+	this->PositionSquare.y = static_cast<int>((this->Position.top + blooDot::Consts::SQUARE_HEIGHT / 2.0F) / blooDot::Consts::SQUARE_HEIGHT);
 }
 
 void Object::SetPosition(D2D1_RECT_F pixelPosition)
@@ -94,8 +98,17 @@ void Object::SetPosition(D2D1_RECT_F pixelPosition)
 	this->Position.top = pixelPosition.top;
 	this->Position.right = pixelPosition.right;
 	this->Position.bottom = pixelPosition.bottom;
-	this->PositionSquare.x = (this->Position.left + blooDot::Consts::SQUARE_WIDTH / 2.0F) / blooDot::Consts::SQUARE_WIDTH;
-	this->PositionSquare.y = (this->Position.top + blooDot::Consts::SQUARE_HEIGHT / 2.0F) / blooDot::Consts::SQUARE_HEIGHT;
+	this->PositionSquare.x = static_cast<int>((this->Position.left + blooDot::Consts::SQUARE_WIDTH / 2.0F) / blooDot::Consts::SQUARE_WIDTH);
+	this->PositionSquare.y = static_cast<int>((this->Position.top + blooDot::Consts::SQUARE_HEIGHT / 2.0F) / blooDot::Consts::SQUARE_HEIGHT);
+}
+
+void Object::SetMobRotation(OrientabilityIndexRotatory rotationDent)
+{
+	auto spriteOnSheet = this->m_DingWalls->GetSheetPlacement(rotationDent);
+	this->m_spriteSourceRect.left = spriteOnSheet.x * blooDot::Consts::SQUARE_WIDTH;
+	this->m_spriteSourceRect.top = spriteOnSheet.y * blooDot::Consts::SQUARE_HEIGHT;
+	this->m_spriteSourceRect.right = this->m_spriteSourceRect.left + blooDot::Consts::SQUARE_WIDTH;
+	this->m_spriteSourceRect.bottom = this->m_spriteSourceRect.top + blooDot::Consts::SQUARE_HEIGHT;
 }
 
 void Object::Weed()

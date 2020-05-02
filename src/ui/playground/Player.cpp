@@ -93,6 +93,13 @@ void Player::Update()
 	auto deltaY = abs(this->Momentum.speedY) > this->Momentum.speedCapY ? std::copysignf(this->Momentum.speedCapY, this->Momentum.speedY) : this->Momentum.speedY;
 	auto newPosition = D2D1::RectF(this->Position.left + deltaX, this->Position.top + deltaY, this->Position.right + deltaX, this->Position.bottom + deltaY);
 	
+	/* orient the sprite based on the intented vector */
+	if (abs(deltaX) > 0.1F || abs(deltaY) > 0.1F)
+	{
+		auto calcResult = Dings::HeadingFromVector(deltaX, deltaY);
+		this->SetMobRotation(calcResult);
+	}
+
 	/* hit testing */
 	auto additionalBoundingBoxes = this->GetBoundingBox(&myBoundingBox);
 	if (deltaX < 0.0F)

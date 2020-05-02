@@ -396,7 +396,7 @@
     <ClInclude Include="..\src\ui\DialogOverlay.h" />
     <ClInclude Include="..\src\ui\LoadScreen.h" />
     <ClInclude Include="..\src\ui\playground\Player.h" />
-    <ClCompile Include="..\src\ui\playground\PlayerMomentum.h" />
+    <ClInclude Include="..\src\ui\playground\PlayerMomentum.h" />
     <ClInclude Include="..\src\ui\playground\WorldScreen.h" />
     <ClInclude Include="..\src\ui\playground\WorldScreenBase.h" />
     <ClInclude Include="..\src\app\blooDot.h" />

@@ -22,11 +22,8 @@ void WorldScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceRe
 		auto player1 = new Player();
 		player1->Name = L"Nepomuk der Nasenbär";
 		player1->PositionSquare = D2D1::Point2U(355, 358);
-		player1->InstantiateInLayer(this->m_currentLevel, Layers::Walls, playerTemplate, (ClumsyPacking::NeighborConfiguration)0);
+		player1->InstantiateInLayerFacing(this->m_currentLevel, Layers::Walls, playerTemplate, Facings::East);
 		player1->PlaceInLevel(this->m_currentLevel);
-
-		auto dingOnSheet = this->m_currentLevel->GetDing(Dings::DingIDs::Player)->GetSheetPlacement(Facings::East);
-		player1->SpriteSourceRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
 		this->m_playerData.push_back(player1);
 	}
 }
@@ -161,7 +158,7 @@ void WorldScreen::RenderSprites()
 			screenRect,
 			1.0f, 
 			D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, 
-			(*mob)->SpriteSourceRect
+			(*mob)->m_spriteSourceRect
 		);
 
 #ifdef _DEBUG

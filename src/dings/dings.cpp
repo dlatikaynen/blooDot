@@ -1,5 +1,6 @@
 #include "..\PreCompiledHeaders.h"
 #include "Dings.h"
+#include <math.h>
 
 using namespace Windows::Storage;
 using namespace Windows::Storage::Streams;
@@ -167,8 +168,10 @@ void Dings::DrawRotatory(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 
 	for (int orientationDent = OrientabilityIndexRotatory::HDG360; orientationDent <= OrientabilityIndexRotatory::HDG337_5; ++orientationDent)
 	{
+		/* all base mobs are lefty, while our starting index is a HDG 360,
+		 * so we add 90° to initial rotation to match it with reality */
 		this->PrepareRect(&this->m_lookupSides[orientationDent], rect);
-		this->Rotate(rendEr, rect, static_cast<float>(orientationDent) * 22.5F);
+		this->Rotate(rendEr, rect, static_cast<float>(orientationDent) * 22.5F + 90.0F);
 		if (this->m_fromFile == nullptr)
 		{
 			this->DrawInternal(drawTo, rect);
@@ -474,6 +477,38 @@ void Dings::Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, float rotationAn
 	}
 }
 
+D2D1_POINT_2U Dings::GetSheetPlacement(OrientabilityIndexRotatory rotationDent)
+{
+	return this->m_lookupSides[rotationDent];
+}
+
+inline OrientabilityIndexRotatory Dings::HeadingFromFacing(Facings orientationFacing)
+{
+	switch (orientationFacing)
+	{
+		case Facings::North: return OrientabilityIndexRotatory::HDG360;
+		case Facings::NNE: return OrientabilityIndexRotatory::HDG22_5;
+		case Facings::NE: return OrientabilityIndexRotatory::HDG45;
+		case Facings::NEE: return OrientabilityIndexRotatory::HDG67_5;
+		case Facings::East: return OrientabilityIndexRotatory::HDG90;
+		case Facings::SEE: return OrientabilityIndexRotatory::HDG112_5;
+		case Facings::SE: return OrientabilityIndexRotatory::HDG135;
+		case Facings::SSE: return OrientabilityIndexRotatory::HDG157_5;
+		case Facings::South: return OrientabilityIndexRotatory::HDG180;
+		case Facings::SSW: return OrientabilityIndexRotatory::HDG202_5;
+		case Facings::SW: return OrientabilityIndexRotatory::HDG225;
+		case Facings::SWW: return OrientabilityIndexRotatory::HDG247_5;
+		case Facings::West: return OrientabilityIndexRotatory::HDG270;
+		case Facings::NWW: return OrientabilityIndexRotatory::HDG292_5;
+		case Facings::NW: return OrientabilityIndexRotatory::HDG315;
+		case Facings::NNW: return OrientabilityIndexRotatory::HDG337_5;
+#ifdef _DEBUG
+		default:
+			throw ref new Platform::FailureException(L"Invalid orientation in HeadingFromFacing function");
+#endif
+	}
+}
+
 D2D1_POINT_2U Dings::GetSheetPlacement(Facings orientation)
 {
 	if (this->m_Facings == Facings::Cross)
@@ -488,25 +523,12 @@ D2D1_POINT_2U Dings::GetSheetPlacement(Facings orientation)
 	}
 	else if (this->m_Facings == Facings::Viech)
 	{
-		switch (orientation)
+		if (orientation == Facings::Shy)
 		{
-			case Facings::North: return this->m_lookupSides[OrientabilityIndexRotatory::HDG360];
-			case Facings::NNE: return this->m_lookupSides[OrientabilityIndexRotatory::HDG22_5];
-			case Facings::NE: return this->m_lookupSides[OrientabilityIndexRotatory::HDG45];
-			case Facings::NEE: return this->m_lookupSides[OrientabilityIndexRotatory::HDG67_5];
-			case Facings::East: return this->m_lookupSides[OrientabilityIndexRotatory::HDG90];
-			case Facings::SEE: return this->m_lookupSides[OrientabilityIndexRotatory::HDG112_5];
-			case Facings::SE: return this->m_lookupSides[OrientabilityIndexRotatory::HDG135];
-			case Facings::SSE: return this->m_lookupSides[OrientabilityIndexRotatory::HDG157_5];
-			case Facings::South: return this->m_lookupSides[OrientabilityIndexRotatory::HDG180];
-			case Facings::SSW: return this->m_lookupSides[OrientabilityIndexRotatory::HDG202_5];
-			case Facings::SW: return this->m_lookupSides[OrientabilityIndexRotatory::HDG225];
-			case Facings::SWW: return this->m_lookupSides[OrientabilityIndexRotatory::HDG247_5];
-			case Facings::West: return this->m_lookupSides[OrientabilityIndexRotatory::HDG270];
-			case Facings::NWW: return this->m_lookupSides[OrientabilityIndexRotatory::HDG292_5];
-			case Facings::NW: return this->m_lookupSides[OrientabilityIndexRotatory::HDG315];
-			case Facings::NNW: return this->m_lookupSides[OrientabilityIndexRotatory::HDG337_5];
+			orientation = Dings::DefaultMobFacing;
 		}
+
+		return this->m_lookupSides[Dings::HeadingFromFacing(orientation)];
 	}
 	else if ((this->m_Facings == Facings::Shy && this->m_Coalescing == Facings::Immersed) || this->m_Facings == Facings::Center)
 	{
