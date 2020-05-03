@@ -1,6 +1,9 @@
+#include <Windows.h>
+#include <iostream>
+#include <sstream>
+
 #include "..\src\world\Object.h"
 #include "..\src\world\Level.h"
-
 #include "Player.h"
 
 Player::Player()
@@ -97,6 +100,11 @@ void Player::Update()
 	if (abs(deltaX) > 0.1F || abs(deltaY) > 0.1F)
 	{
 		auto calcResult = Dings::HeadingFromVector(deltaX, deltaY);
+
+		std::wostringstream os_;
+		os_ << calcResult << " (" << deltaX << ", " << deltaY << ")" << std::endl ;
+		OutputDebugStringW(os_.str().c_str());
+		
 		this->SetMobRotation(calcResult);
 	}
 

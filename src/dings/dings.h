@@ -200,10 +200,11 @@ public:
 
 	static inline OrientabilityIndexRotatory	HeadingFromVector(float vectorX, float vectorY)
 	{
-		/* unit atan defaults to 135° south east; since we use aviation headings,
-		 * we swap the sign of the x component to land into the right quadrant */
+		/* unity atan evaluates to 135° south east; since we use aviation headings,
+		 * we flip atan2 the bird to land it into the right quadrant */
 		const float sectorScale = static_cast<float>(OrientabilityIndexRotatory::NumberOfSectors) / (2.0F * static_cast<float>(M_PI));
-		return static_cast<OrientabilityIndexRotatory>(int(floor((atan2(vectorY, -vectorX) + static_cast<float>(M_PI)) * sectorScale)));
+		auto scaledAngle = int((atan2(-vectorX, vectorY) + static_cast<float>(M_PI)) * sectorScale) % static_cast<int>(OrientabilityIndexRotatory::NumberOfSectors);
+		return static_cast<OrientabilityIndexRotatory>(scaledAngle);
 	};
 
 protected:
