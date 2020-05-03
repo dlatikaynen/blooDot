@@ -155,6 +155,7 @@ class Dings
 {
 public:
 	static const Facings DefaultMobFacing = Facings::West;
+	static const float sectorScale;
 
 	enum class DingIDs : unsigned
 	{
@@ -202,8 +203,7 @@ public:
 	{
 		/* unity atan evaluates to 135° south east; since we use aviation headings,
 		 * we flip atan2 the bird to land it into the right quadrant */
-		const float sectorScale = static_cast<float>(OrientabilityIndexRotatory::NumberOfSectors) / (2.0F * static_cast<float>(M_PI));
-		auto scaledAngle = int((atan2(-vectorX, vectorY) + static_cast<float>(M_PI)) * sectorScale) % static_cast<int>(OrientabilityIndexRotatory::NumberOfSectors);
+		auto scaledAngle = int((atan2(-vectorX, vectorY) + static_cast<float>(M_PI)) * Dings::sectorScale) % static_cast<int>(OrientabilityIndexRotatory::NumberOfSectors);
 		return static_cast<OrientabilityIndexRotatory>(scaledAngle);
 	};
 
