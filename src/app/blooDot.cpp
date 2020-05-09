@@ -72,6 +72,7 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	this->m_keySaveAsPressed = false;
 	this->m_keyLoadActive = false;
 	this->m_keyLoadPressed = false;
+	this->m_keyImportPressed = false;
 	this->m_keyEnterActive = false;
 	this->m_keyEnterPressed = false;
 	this->m_keySpaceActive = false;
@@ -571,10 +572,10 @@ void blooDotMain::Update()
 				this->m_pointerPosition,
 				&this->m_touches,
 				this->m_shiftKeyActive,
-				this->m_keyLeftPressed || this->ButtonJustPressed(GamepadButtons::DPadLeft),
-				this->m_keyRightPressed || this->ButtonJustPressed(GamepadButtons::DPadRight),
-				this->m_keyUpPressed || this->ButtonJustPressed(GamepadButtons::DPadUp),
-				this->m_keyDownPressed || this->ButtonJustPressed(GamepadButtons::DPadDown),
+				this->m_keyLeftArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadLeft),
+				this->m_keyRightArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadRight),
+				this->m_keyUpArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadUp),
+				this->m_keyDownArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadDown),
 				leftStickX,
 				leftStickY
 			);
@@ -597,10 +598,10 @@ void blooDotMain::Update()
 				this->m_pointerPosition,
 				&this->m_touches,
 				this->m_shiftKeyActive,
-				this->m_keyLeftPressed || this->ButtonJustPressed(GamepadButtons::DPadLeft),
-				this->m_keyRightPressed || this->ButtonJustPressed(GamepadButtons::DPadRight),
-				this->m_keyUpPressed || this->ButtonJustPressed(GamepadButtons::DPadUp),
-				this->m_keyDownPressed || this->ButtonJustPressed(GamepadButtons::DPadDown),
+				this->m_keyLeftArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadLeft),
+				this->m_keyRightArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadRight),
+				this->m_keyUpArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadUp),
+				this->m_keyDownArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadDown),
 				leftStickX,
 				leftStickY
 			);
@@ -709,6 +710,12 @@ void blooDotMain::Update()
 				this->OnActionLoadLevel();
 			}
 
+			if (this->m_keyImportPressed)
+			{
+				this->m_keyImportPressed = false;
+				this->OnActionImportLevel();
+			}
+
 			this->m_worldScreen->Update(timerTotal, timerElapsed);
 		}
 		
@@ -740,9 +747,9 @@ void blooDotMain::Update()
 			{
 				/* navigate the menu with keyboard / gamepad */
 				bool moveUp = this->ButtonJustPressed(GamepadButtons::DPadUp);
-				if (!moveUp && this->m_keyUpPressed)
+				if (!moveUp && this->m_keyUpArrowPressed)
 				{
-					this->m_keyUpPressed = false;
+					this->m_keyUpArrowPressed = false;
 					moveUp = true;
 				}
 				
@@ -750,9 +757,9 @@ void blooDotMain::Update()
 				if (!moveUp)
 				{
 					moveDown = this->ButtonJustPressed(GamepadButtons::DPadDown);
-					if (!moveDown && this->m_keyDownPressed)
+					if (!moveDown && this->m_keyDownArrowPressed)
 					{
-						this->m_keyDownPressed = false;
+						this->m_keyDownArrowPressed = false;
 						moveDown = true;
 					}
 				}
@@ -1111,6 +1118,34 @@ void blooDotMain::OnActionLoadLevel()
 	});
 }
 
+void blooDotMain::OnActionImportLevel()
+{
+	Windows::Storage::Pickers::FileOpenPicker^ importPicker = ref new Windows::Storage::Pickers::FileOpenPicker();
+	importPicker->ViewMode = Windows::Storage::Pickers::PickerViewMode::Thumbnail;
+	importPicker->SuggestedStartLocation = Windows::Storage::Pickers::PickerLocationId::ComputerFolder;
+	importPicker->FileTypeFilter->Append(L".bloodot");
+	create_task(importPicker->PickSingleFileAsync()).then([this](Windows::Storage::StorageFile^ importFile)
+	{
+		if (importFile)
+		{
+			Windows::Storage::StorageFolder^ targetFolder = Windows::Storage::ApplicationData::Current->TemporaryFolder;
+			auto copyFileTask = importFile->CopyAsync(targetFolder, importFile->Name, Windows::Storage::NameCollisionOption::ReplaceExisting);
+			create_task(copyFileTask).then([this, importFile](Windows::Storage::StorageFile^ copiedFile)
+			{
+				auto levelEditor = dynamic_cast<LevelEditor*>(this->m_worldScreen.get());
+				if (levelEditor != nullptr)
+				{
+					auto importedLevel = levelEditor->LoadLevel(copiedFile->Path);
+					if (importedLevel != nullptr)
+					{
+						levelEditor->ImportIntoCurrentLevel(importedLevel);
+					}
+				}
+			});
+		}
+	});
+}
+
 void blooDotMain::SaveState()
 {
     m_persistentState->SaveXMFLOAT3(":Position", m_physics.GetPosition());
@@ -1219,13 +1254,13 @@ void blooDotMain::MouseWheeled(int pointerID, int detentCount)
 {
 	if (this->m_gameState == GameState::MainMenu)
 	{
-		if (detentCount < 0 && !this->m_keyDownPressed)
+		if (detentCount < 0 && !this->m_keyDownArrowPressed)
 		{
-			this->m_keyDownPressed = true;
+			this->m_keyDownArrowPressed = true;
 		}
-		else if (detentCount > 0 && !this->m_keyUpPressed)
+		else if (detentCount > 0 && !this->m_keyUpArrowPressed)
 		{
-			this->m_keyUpPressed = true;
+			this->m_keyUpArrowPressed = true;
 		}
 	}
 	else if (m_gameState == GameState::LevelEditor || m_gameState == GameState::InGameActive)
@@ -1317,21 +1352,25 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 	{
 		m_keyLoadActive = true;
 	}
+	else if (key == Windows::System::VirtualKey::I)
+	{
+		m_keyImportActive = true;
+	}
 	else if (key == Windows::System::VirtualKey::Left)
 	{
-		m_keyLeftPressed = true;
+		m_keyLeftArrowPressed = true;
 	}
 	else if (key == Windows::System::VirtualKey::Right)
 	{
-		m_keyRightPressed = true;
+		m_keyRightArrowPressed = true;
 	}
 	else if (key == Windows::System::VirtualKey::Up)
 	{
-		m_keyUpPressed = true;
+		m_keyUpArrowPressed = true;
 	}
 	else if (key == Windows::System::VirtualKey::Down)
 	{
-		m_keyDownPressed = true;
+		m_keyDownArrowPressed = true;
 	}
 }
 
@@ -1496,6 +1535,14 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 			this->m_keyLoadActive = false;
 		}
 	}
+	else if (key == Windows::System::VirtualKey::I)
+	{
+		if (this->m_keyImportActive)
+		{
+			this->m_keyImportPressed = true;
+			this->m_keyImportActive = false;
+		}
+	}
 	else if (key == Windows::System::VirtualKey::Shift)
 	{
 		this->m_shiftKeyActive = false;
@@ -1506,19 +1553,19 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 	}
 	else if (key == Windows::System::VirtualKey::Left)
 	{
-		this->m_keyLeftPressed = false;
+		this->m_keyLeftArrowPressed = false;
 	}
 	else if (key == Windows::System::VirtualKey::Right)
 	{
-		this->m_keyRightPressed = false;
+		this->m_keyRightArrowPressed = false;
 	}
 	else if (key == Windows::System::VirtualKey::Up)
 	{
-		this->m_keyUpPressed = false;
+		this->m_keyUpArrowPressed = false;
 	}
 	else if (key == Windows::System::VirtualKey::Down)
 	{
-		this->m_keyDownPressed = false;
+		this->m_keyDownArrowPressed = false;
 	}
 }
 

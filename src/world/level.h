@@ -37,6 +37,7 @@ public:
 	Dings::DingIDs ConfirmDingID(Dings::DingIDs dingID);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> CreateDingImage(Dings::DingIDs dingID, Facings placementOrientation);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> GetFloorBackground();
+	D2D1_RECT_U DeterminePopulatedAreaBounds();
 
 	void SetDesignTime();
 	bool DesignLoadFromFile(Platform::String^ fileName);

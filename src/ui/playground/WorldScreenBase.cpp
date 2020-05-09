@@ -259,12 +259,18 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 	}
 }
 
-std::shared_ptr<Level> WorldScreenBase::LoadAndEnterLevel(Platform::String^ loadFromFile)
+std::shared_ptr<Level> WorldScreenBase::LoadLevel(Platform::String^ loadFromFile)
 {
 	auto levelName = ref new Platform::String(L"Gartenwelt-1");
 	auto loadedLevel = std::make_shared<Level>(levelName, D2D1::SizeU(50, 30), 720, 720);
 	loadedLevel->Initialize(this->m_deviceResources, &this->m_Brushes);
 	loadedLevel->DesignLoadFromFile(loadFromFile);
+	return loadedLevel;
+}
+
+std::shared_ptr<Level> WorldScreenBase::LoadAndEnterLevel(Platform::String^ loadFromFile)
+{
+	auto loadedLevel = this->LoadLevel(loadFromFile);
 	this->EnterLevel(loadedLevel);
 	return loadedLevel;
 }
@@ -272,16 +278,21 @@ std::shared_ptr<Level> WorldScreenBase::LoadAndEnterLevel(Platform::String^ load
 void WorldScreenBase::EnterLevel(std::shared_ptr<Level> level)
 {
 	this->m_currentLevel = level;
-	this->m_sheetHoveringSituationKnown = false;
+	this->InvalidateLevelViewport();
+}
 
-	/* generate the sheets for this level */
+void WorldScreenBase::InvalidateLevelViewport()
+{
+	this->InvalidateSheetHoveringSituation();
+
+	/* (re-)generate the sheets for this level */
 	if (!this->m_Sheets.empty())
 	{
 		this->m_Sheets.clear();
 	}
 
-	auto subscriptX = level->GetNumOfSheetsWE();
-	auto subscriptY = level->GetNumOfSheetsNS();
+	auto subscriptX = this->m_currentLevel->GetNumOfSheetsWE();
+	auto subscriptY = this->m_currentLevel->GetNumOfSheetsNS();
 	for (unsigned y = 0; y < subscriptY; ++y)
 	{
 		for (unsigned x = 0; x < subscriptX; ++x)
@@ -394,7 +405,10 @@ D2D1_POINT_2U WorldScreenBase::GetViewportCenterInLevel()
 
 void WorldScreenBase::InvalidateSheetHoveringSituation()
 {
-	this->m_sheetHoveringSituationKnown = false;
+	if (this->m_sheetHoveringSituationKnown)
+	{
+		this->m_sheetHoveringSituationKnown = false;
+	}
 }
 
 WorldSheet*	WorldScreenBase::GetSheet(unsigned sheetX, unsigned sheetY)

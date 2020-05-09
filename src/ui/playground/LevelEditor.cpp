@@ -572,3 +572,75 @@ void LevelEditor::DoRotate(bool affectPlacement, bool inverse)
 		}
 	}
 }
+
+void LevelEditor::ImportIntoCurrentLevel(std::shared_ptr<Level> sourceLevel)
+{
+	auto anyChanges = false;
+	if (this->m_currentLevelEditorCellKnown)
+	{
+		unsigned targetX, targetY;
+		auto importBounds = sourceLevel->DeterminePopulatedAreaBounds();
+		for (auto originY = importBounds.top; originY <= importBounds.bottom; ++originY)
+		{
+			targetY = this->m_currentLevelEditorCell.y + originY - importBounds.top;
+			for (auto originX = importBounds.left; originX <= importBounds.right; ++originX)
+			{
+				auto originObject = sourceLevel->GetObjectAt(originX, originY, false);
+				if (originObject != nullptr)
+				{
+					targetX = this->m_currentLevelEditorCell.x + originX - importBounds.left;
+					auto newCell = this->m_currentLevel->GetObjectAt(targetX, targetY, true);
+					if (newCell == nullptr)
+					{
+						/* not placeable in target (out of bounds, most likely --> gets clipped) */
+					}
+					else
+					{
+						auto originLayers = originObject->GetLayers();
+						if (originLayers & Layers::Floor)
+						{
+							this->CloneObjectToCell(originObject, newCell, Layers::Floor, targetX, targetY);
+							anyChanges = true;
+						}
+
+						if (originLayers & Layers::Walls)
+						{
+							this->CloneObjectToCell(originObject, newCell, Layers::Walls, targetX, targetY);
+							anyChanges = true;
+						}
+
+						if (originLayers & Layers::Rooof)
+						{
+							this->CloneObjectToCell(originObject, newCell, Layers::Rooof, targetX, targetY);
+							anyChanges = true;
+						}
+					}
+				}
+			}
+		}
+
+		if (anyChanges)
+		{
+			/* forces a redraw by simple invalidating the entire viewport */
+			this->InvalidateLevelViewport();
+		}
+	}
+}
+
+void LevelEditor::CloneObjectToCell(Object* sourceCell, Object* targetCell, Layers inLayer, unsigned targetX, unsigned targetY)
+{
+	auto newDingID = sourceCell->GetDing(inLayer)->ID();
+	auto newDings = this->m_currentLevel->GetDing(newDingID);
+	auto curDings = targetCell->GetDing(inLayer);
+	if (curDings == nullptr || (this->m_IsOverwriting && curDings->ID() != newDingID))
+	{
+		auto intendedFacing = sourceCell->PlacementFacing(inLayer);
+		auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(targetX, targetY, newDingID, inLayer);
+		targetCell->InstantiateInLayerFacing(this->m_currentLevel->shared_from_this(), inLayer, newDings, intendedFacing);
+		if (newDings->CouldCoalesce())
+		{
+			this->ClumsyPackNeighborhoodOf(neighborHood, targetX, targetY, inLayer, newDingID);
+		}
+	}
+}
+

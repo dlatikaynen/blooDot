@@ -236,7 +236,7 @@ Platform::String^ Object::GetName()
 
 Layers Object::GetLayers()
 {
-	return m_Layers;
+	return this->m_Layers;
 }
 
 Dings* Object::GetDing(Layers ofLayer)

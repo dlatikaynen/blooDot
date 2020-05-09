@@ -22,6 +22,10 @@ public:
 	void DoToggleDingSheet();
 	void SetControl(int detentCount, bool shiftKeyActive) override;
 	void DoRotate(bool affectPlacement, bool inverse);
+	void ImportIntoCurrentLevel(std::shared_ptr<Level> sourceLevel);
+
+protected:
+	void CloneObjectToCell(Object* sourceCell, Object* targetCell, Layers inLayer, unsigned targetX, unsigned targetY);
 
 private:
 	void DrawLevelEditorRaster();	

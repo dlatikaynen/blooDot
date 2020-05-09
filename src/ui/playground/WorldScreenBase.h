@@ -27,6 +27,7 @@ public:
 	virtual void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition) { };
 
 	/* logical */
+	std::shared_ptr<Level> LoadLevel(Platform::String^ loadFromFile);
 	std::shared_ptr<Level> LoadAndEnterLevel(Platform::String^ loadFromFile);
 	void EnterLevel(std::shared_ptr<Level> level);
 
@@ -75,6 +76,7 @@ protected:
 	WorldSheet*	GetSheet(unsigned sheetX, unsigned sheetY);
 	void EvaluateSheetHoveringSituation();
 	void InvalidateSheetHoveringSituation();
+	void InvalidateLevelViewport();
 	bool PeekTouchdown();
 	bool PopTouchdown();
 

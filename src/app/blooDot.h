@@ -87,6 +87,7 @@ namespace blooDot
 
 	protected:
 		void OnActionLoadLevel();
+		void OnActionImportLevel();
 		void OnActionSaveLevel(bool forcePrompt);
 
     private:
@@ -146,10 +147,10 @@ namespace blooDot
 		bool				m_keyEscapePressed;
 		bool				m_keySpaceActive;
 		bool				m_keySpacePressed;
-		bool				m_keyRightPressed;
-		bool				m_keyLeftPressed;
-		bool				m_keyUpPressed;
-		bool				m_keyDownPressed;
+		bool				m_keyRightArrowPressed;
+		bool				m_keyLeftArrowPressed;
+		bool				m_keyUpArrowPressed;
+		bool				m_keyDownArrowPressed;
 		bool				m_keyInsertActive;
 		bool				m_keyInsertPressed;
 		bool				m_keyGridActive;
@@ -168,6 +169,8 @@ namespace blooDot
 		bool				m_keySaveAsPressed;
 		bool				m_keyLoadActive;
 		bool				m_keyLoadPressed;
+		bool				m_keyImportActive;
+		bool				m_keyImportPressed;
 		bool				m_keyMinusActive;
 		bool				m_keyMinusPressed;
 		bool				m_keyPlusActive;

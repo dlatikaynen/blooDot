@@ -341,6 +341,46 @@ Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::GetFloorBackground()
 	return this->m_floorBackground;
 }
 
+D2D1_RECT_U Level::DeterminePopulatedAreaBounds()
+{
+	auto outerBounds = D2D1::RectU(UINT32_MAX, UINT32_MAX, 0, 0);
+	for (unsigned y = 0; y < this->m_rectangularBounds.height; ++y)
+	{
+		for (unsigned x = 0; x < this->m_rectangularBounds.width; ++x)
+		{
+			auto objectAddress = y * this->m_rectangularBounds.width + x;
+			if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
+			{
+				auto existingObject = this->m_Objects[objectAddress];
+				if (existingObject != nullptr && existingObject->GetLayers() > Layers::None && existingObject->GetLayers()!=Layers::Rooof)
+				{
+					if (outerBounds.left > x)
+					{
+						outerBounds.left = x;
+					}
+
+					if (outerBounds.top > y)
+					{
+						outerBounds.top = y;
+					}
+
+					if (outerBounds.right < x)
+					{
+						outerBounds.right = x;
+					}
+
+					if (outerBounds.bottom < y)
+					{
+						outerBounds.bottom = y;
+					}
+				}
+			}
+		}
+	}
+
+	return outerBounds;
+}
+
 void Level::SetDesignTime()
 {
 	this->m_isDesignTime = true;

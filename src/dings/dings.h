@@ -8,7 +8,7 @@
 #include "..\world\Bounding.h"
 #include "ObjectBehaviors.h"
 
-// Numeric ordering is relied upon
+// flagset bitfield. numeric ordering is relied upon
 enum Layers
 {
 	None = 0,
