@@ -147,10 +147,19 @@ namespace blooDot
 		bool				m_keyEscapePressed;
 		bool				m_keySpaceActive;
 		bool				m_keySpacePressed;
+
+		/* coarse (dented) motion control - corresponds to directional pad */
 		bool				m_keyRightArrowPressed;
 		bool				m_keyLeftArrowPressed;
-		bool				m_keyUpArrowPressed;
 		bool				m_keyDownArrowPressed;
+		bool				m_keyUpArrowPressed;
+
+		/* fine ("analog") motion control - corresponds to joystick */
+		bool				m_keyRightFineActive;
+		bool				m_keyLeftFineActive;
+		bool				m_keyDownFineActive;
+		bool				m_keyUpFineActive;
+
 		bool				m_keyInsertActive;
 		bool				m_keyInsertPressed;
 		bool				m_keyGridActive;

@@ -576,8 +576,8 @@ void blooDotMain::Update()
 				this->m_keyRightArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadRight),
 				this->m_keyUpArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadUp),
 				this->m_keyDownArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadDown),
-				leftStickX,
-				leftStickY
+				this->m_keyLeftFineActive ? -1.0F : this->m_keyRightFineActive ? 1.0F : leftStickX,
+				this->m_keyUpFineActive ? -1.0F : this->m_keyDownFineActive ? 1.0F : leftStickY
 			);
 
 			this->m_worldScreen->Update(timerTotal, timerElapsed);
@@ -1284,6 +1284,38 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 	{
 		m_ctrlKeyActive = true;
 	}
+	else if (key == Windows::System::VirtualKey::S && this->m_ctrlKeyActive)
+	{
+		m_keySaveActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::A && this->m_ctrlKeyActive)
+	{
+		m_keySaveAsActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::A)
+	{
+		this->m_keyLeftFineActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::D)
+	{
+		this->m_keyRightFineActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::S)
+	{
+		this->m_keyDownFineActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::W)
+	{
+		this->m_keyUpFineActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::L && this->m_ctrlKeyActive)
+	{
+		m_keyLoadActive = true;
+	}
+	else if (key == Windows::System::VirtualKey::I && this->m_ctrlKeyActive)
+	{
+		m_keyImportActive = true;
+	}
 	else if (key == Windows::System::VirtualKey::Home)
     {
         m_homeKeyActive = true;
@@ -1332,29 +1364,13 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 	{
 		m_keyGridActive = true;
 	}
-	else if (key == Windows::System::VirtualKey::D)
+	else if (key == Windows::System::VirtualKey::F4)
 	{
 		m_keyDingSheetActive = true;
 	}
 	else if (key == Windows::System::VirtualKey::R)
 	{
 		m_keyRotateActive = true;
-	}
-	else if (key == Windows::System::VirtualKey::S)
-	{
-		m_keySaveActive = true;
-	}
-	else if (key == Windows::System::VirtualKey::A)
-	{
-		m_keySaveAsActive = true;
-	}
-	else if (key == Windows::System::VirtualKey::L)
-	{
-		m_keyLoadActive = true;
-	}
-	else if (key == Windows::System::VirtualKey::I)
-	{
-		m_keyImportActive = true;
 	}
 	else if (key == Windows::System::VirtualKey::Left)
 	{
@@ -1376,6 +1392,8 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 
 void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 {
+	/* move this away from here as soon as "press any key" logic is done,
+	 * or just have it depend on a timer */
 	if (this->m_deferredResourcesReadyPending)
 	{
 		this->m_deferredResourcesReadyPending = false;
@@ -1488,6 +1506,12 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 			this->m_keyDingSheetPressed = true;
 			this->m_keyDingSheetActive = false;
 		}
+
+		this->m_keyRightFineActive = false;
+	}
+	else if (key == Windows::System::VirtualKey::W)
+	{
+		this->m_keyUpFineActive = false;
 	}
 	else if (key == Windows::System::VirtualKey::R)
 	{
@@ -1518,6 +1542,8 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 			this->m_keySavePressed = true;
 			this->m_keySaveActive = false;
 		}
+
+		this->m_keyDownFineActive = false;
 	}
 	else if (key == Windows::System::VirtualKey::A)
 	{
@@ -1526,6 +1552,8 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 			this->m_keySaveAsPressed = true;
 			this->m_keySaveAsActive = false;
 		}
+
+		this->m_keyLeftFineActive = false;
 	}
 	else if (key == Windows::System::VirtualKey::L)
 	{

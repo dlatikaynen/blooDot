@@ -511,6 +511,59 @@ inline OrientabilityIndexRotatory Dings::HeadingFromFacing(Facings orientationFa
 	}
 }
 
+Facings Dings::RotateMobFine(Facings currentFacing, bool counterClockwise)
+{
+	auto orientabilityIndex = Dings::HeadingFromFacing(currentFacing);
+	if (counterClockwise)
+	{
+		if (orientabilityIndex == OrientabilityIndexRotatory::HDG360)
+		{
+			orientabilityIndex = OrientabilityIndexRotatory::HDG337_5;
+		}
+		else
+		{
+			orientabilityIndex = static_cast<OrientabilityIndexRotatory>(orientabilityIndex - 1);
+		}
+	}
+	else
+	{
+		orientabilityIndex = static_cast<OrientabilityIndexRotatory>(orientabilityIndex + 1);
+		if (orientabilityIndex == OrientabilityIndexRotatory::NumberOfSectors)
+		{
+			orientabilityIndex = OrientabilityIndexRotatory::HDG360;
+		}
+	}
+
+	return FacingFromHeading(orientabilityIndex);
+}
+
+Facings Dings::FacingFromHeading(OrientabilityIndexRotatory orientabilityIndex)
+{
+	switch (orientabilityIndex)
+	{
+		case OrientabilityIndexRotatory::HDG360: return Facings::North;
+		case OrientabilityIndexRotatory::HDG22_5: return Facings::NNE;
+		case OrientabilityIndexRotatory::HDG45: return Facings::NE;
+		case OrientabilityIndexRotatory::HDG67_5: return Facings::NEE;
+		case OrientabilityIndexRotatory::HDG90: return Facings::East;
+		case OrientabilityIndexRotatory::HDG112_5: return Facings::SEE;
+		case OrientabilityIndexRotatory::HDG135: return Facings::SE;
+		case OrientabilityIndexRotatory::HDG157_5: return Facings::SSE;
+		case OrientabilityIndexRotatory::HDG180: return Facings::South;
+		case OrientabilityIndexRotatory::HDG202_5: return Facings::SSW;
+		case OrientabilityIndexRotatory::HDG225: return Facings::SW;
+		case OrientabilityIndexRotatory::HDG247_5: return Facings::SWW;
+		case OrientabilityIndexRotatory::HDG270: return Facings::West;
+		case OrientabilityIndexRotatory::HDG292_5: return Facings::NWW;
+		case OrientabilityIndexRotatory::HDG315: return Facings::NW;
+		case OrientabilityIndexRotatory::HDG337_5: return Facings::NNW;
+#ifdef _DEBUG
+		default:
+			throw ref new Platform::FailureException(L"Invalid facing in FacingFromHeading function");
+#endif
+	}
+}
+
 D2D1_POINT_2U Dings::GetSheetPlacement(Facings orientation)
 {
 	if (this->m_Facings == Facings::Cross)

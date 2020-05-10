@@ -198,6 +198,8 @@ public:
 	bool										CouldCoalesce();
 	static Facings								RotateFromFacing(Facings fromFacing, bool inverseDirection);
 	static OrientabilityIndexRotatory			HeadingFromFacing(Facings orientationFacing);
+	static Facings								FacingFromHeading(OrientabilityIndexRotatory orientabilityIndex);
+	static Facings								RotateMobFine(Facings currentFacing, bool counterClockwise);
 
 	static inline OrientabilityIndexRotatory	HeadingFromVector(float vectorX, float vectorY)
 	{

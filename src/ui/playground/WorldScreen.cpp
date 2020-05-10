@@ -61,7 +61,8 @@ void WorldScreen::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchM
 // mousewheeled
 void WorldScreen::SetControl(int detentCount, bool shiftKeyActive)
 {
-
+	auto keyboardPlayer = *this->m_playerData.begin();
+	keyboardPlayer->Facing = Dings::RotateMobFine(keyboardPlayer->Facing, shiftKeyActive);
 }
 
 void WorldScreen::Update(float timeTotal, float timeDelta)
