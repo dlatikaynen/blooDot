@@ -66,10 +66,10 @@ void Chest::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo,
 	if (this->ColorVariation() == 3)
 	{
 		/* gold */
-		brusherl = m_Brushes->WannaHave(drawTo, MFARGB{ 0, 225, 255, 255 });
-		brusherl2 = m_Brushes->WannaHave(drawTo, MFARGB{ 128, 128, 128, 255 });
-		brusherl3 = m_Brushes->WannaHave(drawTo, MFARGB{ 205, 205, 205, 255 });
-		brusherl4 = m_Brushes->WannaHave(drawTo, MFARGB{ 5,5,84, 255 });
+		brusherl = m_Brushes->WannaHave(drawTo, MFARGB{ 0, 230, 190, 255 });   /*yellow*/
+		brusherl2 = m_Brushes->WannaHave(drawTo, MFARGB{ 140, 150, 128, 255 });  /*yellow*/
+		brusherl3 = m_Brushes->WannaHave(drawTo, MFARGB{ 0, 160, 220, 255 });  /*i think red*/
+		brusherl4 = m_Brushes->WannaHave(drawTo, MFARGB{ 5,5,84, 255 });  /*red*/
 	}
 	else if (this->ColorVariation() == 2)
 	{
