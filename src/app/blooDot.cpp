@@ -580,6 +580,13 @@ void blooDotMain::Update()
 				this->m_keyUpFineActive ? -1.0F : this->m_keyDownFineActive ? 1.0F : leftStickY
 			);
 
+			if (this->m_keyEnterActive)
+			{
+				dynamic_cast<WorldScreen*>(this->m_worldScreen.get())->SetControl(true);
+
+
+			}
+
 			this->m_worldScreen->Update(timerTotal, timerElapsed);
 		}
 		else if (this->m_gameState == GameState::LevelEditor)
