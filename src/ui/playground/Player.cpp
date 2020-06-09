@@ -98,14 +98,15 @@ void Player::Update()
 	
 	/* orient the sprite based on the intented vector */
 	if (abs(deltaX) > 0.1F || abs(deltaY) > 0.1F)
-	{
-		auto calcResult = Dings::HeadingFromVector(deltaX, deltaY);
+	{		
+		this->m_Orientation = Dings::HeadingFromVector(deltaX, deltaY);
 
 		std::wostringstream os_;
-		os_ << calcResult << " (" << deltaX << ", " << deltaY << ")" << std::endl ;
+
+		os_ << this->m_Orientation << " (" << deltaX << ", " << deltaY << ")" << std::endl ;
 		OutputDebugStringW(os_.str().c_str());
 		
-		this->SetMobRotation(calcResult);
+		this->SetMobRotation(this->m_Orientation);
 	}
 
 	/* hit testing */

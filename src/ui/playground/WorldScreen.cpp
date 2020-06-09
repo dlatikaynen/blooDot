@@ -95,7 +95,10 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 	/* update player positions */
 	for (auto mob = this->m_playerData.begin(); mob != this->m_playerData.end(); ++mob)
 	{		
-		(*mob)->Update();
+		auto Player = (*mob);
+		Player->Update();
+		this->m_shoot_directionX = 2.0f * cos(static_cast<float>( 2.0f * M_PI / 16.0f * Player->m_Orientation)); 
+		this->m_shoot_directionY = 2.0f * sin(static_cast<float>( 2.0f * M_PI / 16.0f * Player->m_Orientation));		 
 	}
 
 	if (this->m_shooting)
