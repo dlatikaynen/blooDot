@@ -14,7 +14,7 @@ public:
 
 	void PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
 	void PushY(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
-	void Update();	
+	void Update();
 
 	Platform::String^ Name;	
 	PlayerMomentum Momentum;

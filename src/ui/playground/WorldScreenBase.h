@@ -21,8 +21,6 @@ public:
 	void ResetDirectXResources();
     void ReleaseDeviceDependentResources();
     void UpdateForWindowSizeChange();
-	virtual void SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down, float scrollDeltaX, float scrollDeltaY);
-	virtual void SetControl(int detentCount, bool shiftKeyActive);
 	virtual void Update(float timeTotal, float timeDelta);
 	virtual void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition) { };
 
@@ -30,6 +28,8 @@ public:
 	std::shared_ptr<Level> LoadLevel(Platform::String^ loadFromFile);
 	std::shared_ptr<Level> LoadAndEnterLevel(Platform::String^ loadFromFile);
 	void EnterLevel(std::shared_ptr<Level> level);
+	virtual void SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down, float scrollDeltaX, float scrollDeltaY);
+	virtual void SetControl(int detentCount, bool shiftKeyActive);
 
 protected:
 	const float										SCROLL_TRESHOLD_FACT = 0.61F;

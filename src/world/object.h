@@ -5,6 +5,7 @@
 
 class ObjectProperties;
 class Level;
+class WorldScreenBase;
 
 /// An object is the design-time or runtime incarnation of a Ding on a level map,
 /// including it's actual position in level

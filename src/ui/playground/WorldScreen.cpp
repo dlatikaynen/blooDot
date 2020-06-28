@@ -66,14 +66,15 @@ void WorldScreen::SetControl(int detentCount, bool shiftKeyActive)
 }
 
 void WorldScreen::Update(float timeTotal, float timeDelta)
-{
-	WorldScreenBase::Update(timeTotal, timeDelta);
-
+{	
 	/* update player positions */
 	for (auto mob = this->m_playerData.begin(); mob != this->m_playerData.end(); ++mob)
 	{		
 		(*mob)->Update();
 	}
+
+	/* scroll the viewport through the world, essentially */
+	WorldScreenBase::Update(timeTotal, timeDelta);
 }
 
 void WorldScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)
