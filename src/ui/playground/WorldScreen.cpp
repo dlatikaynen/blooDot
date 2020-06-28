@@ -30,6 +30,7 @@ void WorldScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceRe
 
 void WorldScreen::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down, float scrollDeltaX, float scrollDeltaY)
 {
+
 	this->m_pointerPosition.x = pointerPosition.x;
 	this->m_pointerPosition.y = pointerPosition.y;
 	this->m_touchMap = touchMap;
@@ -65,12 +66,49 @@ void WorldScreen::SetControl(int detentCount, bool shiftKeyActive)
 	keyboardPlayer->Facing = Dings::RotateMobFine(keyboardPlayer->Facing, shiftKeyActive);
 }
 
+void WorldScreen::SetControl(bool triggershoot) {
+	if (triggershoot && !this->m_shooting)
+	{
+		auto Player = *this->m_playerData.begin();
+		this->m_shooting = true;
+		this->m_shootx = Player->Position.left;
+		this->m_shooty = Player->Position.top;
+		this->m_shoot_directionX = 4.0;
+		this->m_shoot_directionY = 0.0;
+		this->m_blockstravelled = 0;
+
+
+
+
+	}
+
+
+
+}
+
+
+
 void WorldScreen::Update(float timeTotal, float timeDelta)
 {	
 	/* update player positions */
 	for (auto mob = this->m_playerData.begin(); mob != this->m_playerData.end(); ++mob)
 	{		
-		(*mob)->Update();
+		auto Player = (*mob);
+		Player->Update();
+		this->m_shoot_directionX = 2.0f * cos(static_cast<float>( 2.0f * M_PI / 16.0f * Player->m_Orientation)); 
+		this->m_shoot_directionY = 2.0f * sin(static_cast<float>( 2.0f * M_PI / 16.0f * Player->m_Orientation));		 
+	}
+
+	if (this->m_shooting)
+	{
+		this->m_shootx += this->m_shoot_directionX;
+		this->m_shooty += this->m_shoot_directionY;
+		if (this->m_blockstravelled++ > (196))
+		{
+			this->m_shooting = false;
+		}
+
+
 	}
 
 	/* scroll the viewport through the world, essentially */
@@ -112,6 +150,14 @@ void WorldScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 
 	/* blit all mob-level sprites */
 	this->RenderSprites();
+	
+	if (this->m_shooting)
+	{
+		this->m_d2dContext->FillEllipse(D2D1::Ellipse(D2D1::Point2F(this->m_shootx- this->m_viewportOffset.x, this->m_shooty- this->m_viewportOffset.y), 3.0, 3.0), this->m_debugBorderBrush.Get());
+
+	}
+
+
 
 	/* blit all wall and rooof parts */
 	if (this->m_hoveringSheetNW != nullptr)

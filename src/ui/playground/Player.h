@@ -19,4 +19,7 @@ public:
 	Platform::String^ Name;	
 	PlayerMomentum Momentum;
 	Facings Facing;
+
+	OrientabilityIndexRotatory m_Orientation;
 };
+
