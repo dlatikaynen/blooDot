@@ -22,4 +22,3 @@ public:
 
 	OrientabilityIndexRotatory m_Orientation;
 };
-

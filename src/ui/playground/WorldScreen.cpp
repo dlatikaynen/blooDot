@@ -66,20 +66,17 @@ void WorldScreen::SetControl(int detentCount, bool shiftKeyActive)
 	keyboardPlayer->Facing = Dings::RotateMobFine(keyboardPlayer->Facing, shiftKeyActive);
 }
 
-void WorldScreen::SetControl(bool triggershoot) {
+void WorldScreen::SetControl(bool triggershoot)
+{
 	if (triggershoot && !this->m_shooting)
 	{
 		auto Player = *this->m_playerData.begin();
 		this->m_shooting = true;
 		this->m_shootx = Player->Position.left;
 		this->m_shooty = Player->Position.top;
-		this->m_shoot_directionX = 4.0;
-		this->m_shoot_directionY = 0.0;
+		this->m_shoot_directionX = 2.0f * cos(static_cast<float>(2.0f * M_PI / 16.0f * Player->m_Orientation));
+		this->m_shoot_directionY = 2.0f * sin(static_cast<float>(2.0f * M_PI / 16.0f * Player->m_Orientation));
 		this->m_blockstravelled = 0;
-
-
-
-
 	}
 
 
@@ -95,8 +92,6 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 	{		
 		auto Player = (*mob);
 		Player->Update();
-		this->m_shoot_directionX = 2.0f * cos(static_cast<float>( 2.0f * M_PI / 16.0f * Player->m_Orientation)); 
-		this->m_shoot_directionY = 2.0f * sin(static_cast<float>( 2.0f * M_PI / 16.0f * Player->m_Orientation));		 
 	}
 
 	if (this->m_shooting)
@@ -107,8 +102,6 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 		{
 			this->m_shooting = false;
 		}
-
-
 	}
 
 	/* scroll the viewport through the world, essentially */
