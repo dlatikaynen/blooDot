@@ -20,6 +20,16 @@ Player::~Player()
 {	
 }
 
+void Player::InitializeIn(Platform::String^ playerName, std::shared_ptr<Level> inLevel, unsigned positionInLevelX, unsigned positionInLevelY, Facings mobFacing)
+{
+	this->Name = playerName;
+	this->PositionSquare = D2D1::Point2U(positionInLevelX, positionInLevelY);
+	auto playerTemplate = inLevel->GetDing(Dings::DingIDs::Player);
+	this->InstantiateInLayerFacing(inLevel, Layers::Walls, playerTemplate, mobFacing);
+	this->m_Orientation = Dings::HeadingFromFacing(mobFacing);
+	this->PlaceInLevel(inLevel);
+}
+
 void Player::PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity)
 {
 	this->Momentum.accelerationX = accelerationRate;
@@ -101,11 +111,12 @@ void Player::Update()
 	{		
 		this->m_Orientation = Dings::HeadingFromVector(deltaX, deltaY);
 
+#if DEBUG
 		std::wostringstream os_;
-
 		os_ << this->m_Orientation << " (" << deltaX << ", " << deltaY << ")" << std::endl ;
 		OutputDebugStringW(os_.str().c_str());
-		
+#endif
+
 		this->SetMobRotation(this->m_Orientation);
 	}
 

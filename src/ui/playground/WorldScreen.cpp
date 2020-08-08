@@ -18,12 +18,15 @@ void WorldScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceRe
 	/* player(s) positions, and ultimately initial position in level are determined from level metadata */
 	if (this->m_playerData.empty() && this->m_currentLevel != nullptr)
 	{
-		auto playerTemplate = this->m_currentLevel->GetDing(Dings::DingIDs::Player);
 		auto player1 = new Player();
-		player1->Name = L"Nepomuk der Nasenbär";
-		player1->PositionSquare = D2D1::Point2U(355, 358);
-		player1->InstantiateInLayerFacing(this->m_currentLevel, Layers::Walls, playerTemplate, Facings::East);
-		player1->PlaceInLevel(this->m_currentLevel);
+		player1->InitializeIn(
+			L"Nepomuk der Nasenbär",
+			this->m_currentLevel,
+			355,
+			358,
+			Facings::East
+		);
+
 		this->m_playerData.push_back(player1);
 	}
 }

@@ -12,6 +12,7 @@ public:
 	Player(Player&& obj) { };
 	virtual ~Player();
 
+	void InitializeIn(Platform::String^ playerName, std::shared_ptr<Level> inLevel, unsigned positionInLevelX, unsigned positionInLevelY, Facings mobFacing);
 	void PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
 	void PushY(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
 	void Update();
