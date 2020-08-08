@@ -17,6 +17,7 @@ public:
 
 private:
 	void RenderSprites();
+	void UpdateParticles(float timeTotal, float timeDelta);
 
 	std::vector<Player*> m_playerData;
 

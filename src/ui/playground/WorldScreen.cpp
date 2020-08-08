@@ -83,8 +83,6 @@ void WorldScreen::SetControl(bool triggershoot)
 	}
 }
 
-
-
 void WorldScreen::Update(float timeTotal, float timeDelta)
 {	
 	/* update player positions */
@@ -96,16 +94,117 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 
 	if (this->m_shooting)
 	{
-		this->m_shootx += this->m_shoot_directionX;
-		this->m_shooty += this->m_shoot_directionY;
-		if (this->m_blockstravelled++ > (196))
-		{
-			this->m_shooting = false;
-		}
+		this->UpdateParticles(timeTotal, timeDelta);
 	}
 
 	/* scroll the viewport through the world, essentially */
 	WorldScreenBase::Update(timeTotal, timeDelta);
+}
+
+void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
+{
+	auto deltaX = this->m_shoot_directionX;
+	auto deltaY = this->m_shoot_directionY;
+	if (this->m_blockstravelled++ > (196))
+	{
+		this->m_shooting = false;
+	}
+	else
+	{
+		auto squareX = this->m_shootx / blooDot::Consts::SQUARE_WIDTH;
+		auto squareY = this->m_shooty / blooDot::Consts::SQUARE_HEIGHT;
+		auto newPosition = D2D1::RectF(
+			this->m_shootx - blooDot::Consts::LASERBULLET_RADIUS + deltaX, 
+			this->m_shooty - blooDot::Consts::LASERBULLET_RADIUS + deltaY, 
+			this->m_shootx + blooDot::Consts::LASERBULLET_RADIUS + deltaX, 
+			this->m_shooty + blooDot::Consts::LASERBULLET_RADIUS + deltaY
+		);
+
+		if (deltaX < 0.0F)
+		{
+			/* hit something int the west? */
+			auto westCenterTerrain = this->m_currentLevel->GetObjectAt(squareX - 1, squareY, false);
+			if (westCenterTerrain != nullptr && westCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+			{
+				D2D1_RECT_F westCenterBoundingBox;
+				westCenterTerrain->GetBoundingBox(&westCenterBoundingBox);
+				if (westCenterBoundingBox.right > newPosition.left)
+				{
+					auto originalWidth = newPosition.right - newPosition.left;
+					auto wouldPenetrate = westCenterBoundingBox.right - newPosition.left;
+					newPosition.left = westCenterBoundingBox.right + 1.0F;
+					newPosition.right = newPosition.left + originalWidth;
+					
+					this->m_shooting = false;
+				}
+			}
+		}
+
+		if (deltaX > 0.0F)
+		{
+			/* hit something in the east?
+			 * we browse the environment in the order of most likely interaction,
+			 * so in this case this will be next-to-right first */
+			auto eastCenterTerrain = this->m_currentLevel->GetObjectAt(squareX + 1, squareY, false);
+			if (eastCenterTerrain != nullptr && eastCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+			{
+				D2D1_RECT_F eastCenterBoundingBox;
+				eastCenterTerrain->GetBoundingBox(&eastCenterBoundingBox);
+				if (eastCenterBoundingBox.left < newPosition.right)
+				{
+					auto originalWidth = newPosition.right - newPosition.left;
+					auto wouldPenetrate = newPosition.right - eastCenterBoundingBox.left;
+					newPosition.right = eastCenterBoundingBox.left - 1.0F;
+					newPosition.left = newPosition.right - originalWidth;
+					
+					this->m_shooting = false;
+				}
+			}
+		}
+
+		if (deltaY < 0.0F)
+		{
+			/* hit something to the north? */
+			auto northCenterTerrain = this->m_currentLevel->GetObjectAt(squareX, squareY - 1, false);
+			if (northCenterTerrain != nullptr && northCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+			{
+				D2D1_RECT_F northCenterBoundingBox;
+				northCenterTerrain->GetBoundingBox(&northCenterBoundingBox);
+				if (northCenterBoundingBox.bottom > newPosition.top)
+				{
+					auto originalHeight = newPosition.bottom - newPosition.top;
+					auto wouldPenetrate = northCenterBoundingBox.bottom - newPosition.top;
+					newPosition.top = northCenterBoundingBox.bottom + 1.0F;
+					newPosition.bottom = newPosition.top + originalHeight;
+					
+					this->m_shooting = false;
+				}
+			}
+		}
+
+		if (deltaY > 0.0F)
+		{
+			/* hit something in the south? */
+			auto southCenterTerrain = this->m_currentLevel->GetObjectAt(squareX, squareY + 1, false);
+			if (southCenterTerrain != nullptr && southCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+			{
+				D2D1_RECT_F southCenterBoundingBox;
+				southCenterTerrain->GetBoundingBox(&southCenterBoundingBox);
+				if (southCenterBoundingBox.top < newPosition.bottom)
+				{
+					auto originalHeight = newPosition.bottom - newPosition.top;
+					auto wouldPenetrate = newPosition.bottom - southCenterBoundingBox.top;
+					newPosition.bottom = southCenterBoundingBox.top - 1.0F;
+					newPosition.top = newPosition.bottom - originalHeight;
+					
+					this->m_shooting = false;
+				}
+			}
+		}
+
+		this->m_shootx += deltaX;
+		this->m_shooty += deltaY;
+	}
 }
 
 void WorldScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)
