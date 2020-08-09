@@ -34,7 +34,7 @@ WorldScreenBase::~WorldScreenBase()
 	//delete this->m_currentLevel;
 }
 
-void WorldScreenBase::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources)
+void WorldScreenBase::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>& deviceResources)
 {
 	this->m_deviceResources = deviceResources;
 	this->m_wicFactory = deviceResources->GetWicImagingFactory();
@@ -42,7 +42,7 @@ void WorldScreenBase::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	devi
 	this->m_d2dContext = deviceResources->GetD2DDeviceContext();	
 	this->m_viewportSize = D2D1::SizeF(0.0f, 0.0f);
 	this->m_viewportSizeSquares = D2D1::SizeU(0, 0);
-
+	this->m_audio = audioEngine;
     ComPtr<ID2D1Factory> factory;
 	this->m_d2dDevice->GetFactory(&factory);
     DX::ThrowIfFailed(factory.As(&this->m_d2dFactory));

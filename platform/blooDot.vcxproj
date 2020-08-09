@@ -468,6 +468,10 @@
   </ItemGroup>
   <ItemGroup>
     <Media Include="Media\Audio\background.mp3" />
+    <Media Include="Media\Audio\click-slap.wav" />
+    <Media Include="Media\Audio\click-tikk.wav" />
+    <Media Include="Media\Audio\decay-crumble.wav" />
+    <Media Include="Media\Audio\projectile-decay.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

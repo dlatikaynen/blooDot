@@ -647,5 +647,17 @@
     <Media Include="Media\Audio\background.mp3">
       <Filter>media\music</Filter>
     </Media>
+    <Media Include="Media\Audio\projectile-decay.wav">
+      <Filter>media\sfx</Filter>
+    </Media>
+    <Media Include="Media\Audio\click-slap.wav">
+      <Filter>media\sfx</Filter>
+    </Media>
+    <Media Include="Media\Audio\click-tikk.wav">
+      <Filter>media\sfx</Filter>
+    </Media>
+    <Media Include="Media\Audio\decay-crumble.wav">
+      <Filter>media\sfx</Filter>
+    </Media>
   </ItemGroup>
 </Project>

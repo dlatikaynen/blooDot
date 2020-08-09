@@ -18,8 +18,10 @@ Audio::Audio()
 {
 	this->m_currentBuffer = 0;
 	this->m_engineExperiencedCriticalError = false;
-	this->m_isAudioStarted = false;
-	this->m_isAudioPaused = false;
+	this->m_isMusicStarted = false;
+	this->m_isSfxStarted = false;
+	this->m_isMusicPaused = false;
+	this->m_isSfxPaused = false;
 	this->m_musicEngine = nullptr;
 	this->m_soundEffectEngine = nullptr;
 	this->m_musicMasteringVoice = nullptr;
@@ -33,13 +35,15 @@ Audio::Audio()
 
 Audio::~Audio()
 {
-    SuspendAudio();
+	this->SuspendSfx();
+	this->SuspendMusic();
 }
 
 void Audio::Initialize()
 {
-    m_isAudioStarted = false;
-    m_musicEngine = nullptr;
+    m_isMusicStarted = false;
+	m_isSfxStarted = false;
+	m_musicEngine = nullptr;
     m_soundEffectEngine = nullptr;
     m_musicMasteringVoice = nullptr;
     m_soundEffectMasteringVoice = nullptr;
@@ -92,7 +96,6 @@ void Audio::Initialize()
     m_reverbParametersLarge.RoomSize = 100;
     m_reverbParametersLarge.WetDryMix = XAUDIO2FX_REVERB_DEFAULT_WET_DRY_MIX;
     m_reverbParametersLarge.DisableLateField = FALSE;
-
     for (int i = 0; i < ARRAYSIZE(m_soundEffects); i++)
     {
         m_soundEffects[i].m_soundEffectBufferData = nullptr;
@@ -100,6 +103,7 @@ void Audio::Initialize()
         m_soundEffects[i].m_soundEffectStarted = false;
         ZeroMemory(&m_soundEffects[i].m_audioBuffer, sizeof(m_soundEffects[i].m_audioBuffer));
     }
+
     ZeroMemory(m_audioBuffers, sizeof(m_audioBuffers));
 }
 
@@ -261,11 +265,15 @@ void Audio::CreateResources()
         CreateReverb(m_soundEffectEngine, m_soundEffectMasteringVoice, &m_reverbParametersSmall, &m_soundEffectReverbVoiceSmallRoom, true);
         CreateReverb(m_soundEffectEngine, m_soundEffectMasteringVoice, &m_reverbParametersLarge, &m_soundEffectReverbVoiceLargeRoom, true);
 
-		CreateSourceVoice(CheckpointEvent);
-		CreateSourceVoice(MenuChangeEvent);
-        CreateSourceVoice(MenuSelectedEvent);
-        CreateSourceVoice(MenuTiltEvent);
-    }
+		CreateSourceVoice(SoundEvent::CheckpointEvent);
+		CreateSourceVoice(SoundEvent::MenuChangeEvent);
+        CreateSourceVoice(SoundEvent::MenuSelectedEvent);
+        CreateSourceVoice(SoundEvent::MenuTiltEvent);
+		CreateSourceVoice(SoundEvent::HitCrumble);
+		CreateSourceVoice(SoundEvent::ProjectileDecay);
+		CreateSourceVoice(SoundEvent::ClickSlap);
+		CreateSourceVoice(SoundEvent::ClickTikk);
+	}
     catch (...)
     {
         m_engineExperiencedCriticalError = true;
@@ -319,22 +327,38 @@ void Audio::CreateSourceVoice(SoundEvent sound)
     MediaStreamer soundEffectStream;
     switch (sound)
     {
-		case CheckpointEvent:
+		case SoundEvent::CheckpointEvent:
 			soundEffectStream.Initialize(L"Media\\Audio\\onsuccessfulsave.wav");
 			break;
 	
-		case MenuChangeEvent:
+		case SoundEvent::MenuChangeEvent:
 			soundEffectStream.Initialize(L"Media\\Audio\\onmenuselectionchange.wav"); 
 			break;
 
-        case MenuSelectedEvent: 
-			soundEffectStream.Initialize(L"Media\\Audio\\onmenuitempressed.wav"); 			
+        case SoundEvent::MenuSelectedEvent:
+			soundEffectStream.Initialize(L"Media\\Audio\\onmenuitempressed.wav");
 			break;
 
-		case MenuTiltEvent:
+		case SoundEvent::MenuTiltEvent:
 			soundEffectStream.Initialize(L"Media\\Audio\\onmenuselectionfrustra.wav"); 
 			break;
-    }
+	
+		case SoundEvent::HitCrumble:
+			soundEffectStream.Initialize(L"Media\\Audio\\decay-crumble.wav");
+			break;
+
+		case SoundEvent::ProjectileDecay:
+			soundEffectStream.Initialize(L"Media\\Audio\\projectile-decay.wav");
+			break;
+
+		case SoundEvent::ClickSlap:
+			soundEffectStream.Initialize(L"Media\\Audio\\click-slap.wav");
+			break;
+
+		case SoundEvent::ClickTikk:
+			soundEffectStream.Initialize(L"Media\\Audio\\click-tikk.wav");
+			break;
+	}
 
     m_soundEffects[sound].m_soundEventType = sound;
     uint32 bufferLength = soundEffectStream.GetMaxStreamLengthInBytes();
@@ -377,11 +401,11 @@ void Audio::CreateSourceVoice(SoundEvent sound)
                 &sends)
             );
     }
+
     m_soundEffects[sound].m_soundEffectSampleRate = soundEffectStream.GetOutputWaveFormatEx().nSamplesPerSec;
 
     // Queue in-memory buffer for playback
     ZeroMemory(&m_soundEffects[sound].m_audioBuffer, sizeof(m_soundEffects[sound].m_audioBuffer));
-
     m_soundEffects[sound].m_audioBuffer.AudioBytes = m_soundEffects[sound].m_soundEffectBufferLength;
     m_soundEffects[sound].m_audioBuffer.pAudioData = m_soundEffects[sound].m_soundEffectBufferData;
     m_soundEffects[sound].m_audioBuffer.pContext = &m_soundEffects[sound];
@@ -400,9 +424,10 @@ void Audio::CreateSourceVoice(SoundEvent sound)
         m_soundEffects[sound].m_soundEffectSourceVoice->SetVolume(0.4f);
     }
 
-    DX::ThrowIfFailed(
+    DX::ThrowIfFailed
+	(
         m_soundEffects[sound].m_soundEffectSourceVoice->SubmitSourceBuffer(&m_soundEffects[sound].m_audioBuffer)
-        );
+    );
 }
 
 void Audio::ReleaseResources()
@@ -471,8 +496,9 @@ void Audio::Start()
     }
 
     HRESULT hr = m_musicSourceVoice->Start(0);
-    if SUCCEEDED(hr) {
-        m_isAudioStarted = true;
+    if SUCCEEDED(hr) 
+	{
+        m_isMusicStarted = true;
     }
     else
     {
@@ -550,10 +576,9 @@ void Audio::PlaySoundEffect(SoundEvent sound)
 {
     XAUDIO2_BUFFER buf = {0};
     XAUDIO2_VOICE_STATE state = {0};
-
-    if (m_engineExperiencedCriticalError) {
-        // If there's an error, then we'll recreate the engine on the next
-        // render pass.
+    if (m_engineExperiencedCriticalError) 
+	{
+        /* if there's an error, then we'll recreate the engine on the next render pass */
         return;
     }
 
@@ -649,19 +674,34 @@ void Audio::SetSoundEffectFilter(SoundEvent sound, float frequency, float oneOve
     }
 }
 
-bool Audio::IsAudioStarted()
+bool Audio::IsMusicStarted()
 {
-	return this->m_isAudioStarted;
+	return this->m_isMusicStarted;
 }
 
-bool Audio::IsAudioSuspended()
+bool Audio::IsSfxStarted()
 {
-	return this->m_isAudioPaused;
+	return this->m_isSfxStarted;
 }
 
-bool Audio::IsAudioPlaying()
+bool Audio::IsMusicSuspended()
 {
-	return this->m_isAudioStarted && !this->m_isAudioPaused;
+	return this->m_isMusicPaused;
+}
+
+bool Audio::IsSfxSuspended()
+{
+	return this->m_isSfxPaused;
+}
+
+bool Audio::IsMusicPlaying()
+{
+	return this->m_isMusicStarted && !this->m_isMusicPaused;
+}
+
+bool Audio::IsSfxPlaying()
+{
+	return this->m_isSfxStarted && !this->m_isSfxPaused;
 }
 
 // Uses the IXAudio2::StopEngine method to stop all audio immediately.
@@ -670,18 +710,31 @@ bool Audio::IsAudioPlaying()
 // cursor positions and so on.
 // When the engines are restarted, the resulting audio will sound as if it had
 // never been stopped except for the period of silence.
-void Audio::SuspendAudio()
+void Audio::SuspendMusic()
 {
     if (this->m_engineExperiencedCriticalError)
     {
         return;
     }
 
-    if (this->m_isAudioStarted)
+    if (this->m_isMusicStarted)
     {
 		this->m_musicEngine->StopEngine();
+		this->m_isMusicPaused = true;
+	}
+}
+
+void Audio::SuspendSfx()
+{
+	if (this->m_engineExperiencedCriticalError)
+	{
+		return;
+	}
+
+	if (this->m_isSfxStarted)
+	{
 		this->m_soundEffectEngine->StopEngine();
-		this->m_isAudioPaused = true;
+		this->m_isSfxPaused = true;
 	}
 }
 
@@ -690,22 +743,38 @@ void Audio::SuspendAudio()
 // If there is a problem with the restart, the m_engineExperiencedCriticalError
 // flag is set. The next call to Render will recreate all the resources and
 // reset the audio pipeline.
-void Audio::ResumeAudio()
+void Audio::ResumeMusic()
 {
-    if (this->m_engineExperiencedCriticalError || !this->m_isAudioPaused)
+    if (this->m_engineExperiencedCriticalError || !this->m_isMusicPaused)
     {
         return;
     }
 
     HRESULT hr = this->m_musicEngine->StartEngine();
-    HRESULT hr2 = this->m_soundEffectEngine->StartEngine();
-
-    if (FAILED(hr) || FAILED(hr2))
+    if (FAILED(hr))
     {
 		this->m_engineExperiencedCriticalError = true;
     }
 	else
 	{
-		this->m_isAudioPaused = false;
+		this->m_isMusicPaused = false;
 	}	
+}
+
+void Audio::ResumeSfx()
+{
+	if (this->m_engineExperiencedCriticalError || !this->m_isSfxPaused)
+	{
+		return;
+	}
+
+	HRESULT hr = this->m_soundEffectEngine->StartEngine();
+	if (FAILED(hr))
+	{
+		this->m_engineExperiencedCriticalError = true;
+	}
+	else
+	{
+		this->m_isSfxPaused = false;
+	}
 }

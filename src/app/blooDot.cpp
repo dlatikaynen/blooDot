@@ -315,7 +315,8 @@ void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
 		/* cycle the whole engine once. not doing so fucks up the audio engine on exit. whatevs. */
 		m_audio.Start();
 		m_audio.Render();
-		m_audio.SuspendAudio();
+		m_audio.SuspendSfx();
+		m_audio.SuspendMusic();
     }
 
     if (delay)
@@ -383,7 +384,7 @@ bool blooDotMain::Render()
 		m_deviceResources->GetD3DDeviceContext()->IASetInputLayout(m_inputLayout.Get());
 	}
 
-	if (this->m_audio.IsAudioPlaying())
+	if (this->m_audio.IsMusicPlaying())
 	{
 		this->m_audio.Render();
 	}
@@ -519,13 +520,13 @@ void blooDotMain::Update()
 		if (this->m_keyMusicPressed)
 		{
 			this->m_keyMusicPressed = false;
-			if (this->m_audio.IsAudioSuspended())
+			if (this->m_audio.IsMusicSuspended())
 			{
-				this->m_audio.ResumeAudio();
+				this->m_audio.ResumeMusic();
 			}
 			else
 			{
-				this->m_audio.SuspendAudio();
+				this->m_audio.SuspendMusic();
 			}
 		}
 
@@ -563,7 +564,7 @@ void blooDotMain::Update()
 		}
 		else if (this->m_gameState == GameState::InGameActive)
 		{
-			if (!this->m_audio.IsAudioStarted())
+			if (!this->m_audio.IsMusicStarted())
 			{
 				this->m_audio.Start();
 			}
@@ -591,11 +592,6 @@ void blooDotMain::Update()
 		}
 		else if (this->m_gameState == GameState::LevelEditor)
 		{
-			if (!this->m_audio.IsAudioStarted())
-			{
-				this->m_audio.Start();
-			}
-
 			if (!this->m_levelEditorHUD.IsVisible())
 			{
 				this->m_levelEditorHUD.SetVisible(true);
@@ -1028,7 +1024,7 @@ void blooDotMain::OnActionEnterLevel()
 	this->m_worldScreen = std::unique_ptr<WorldScreenBase>(new WorldScreen());
 	this->m_currentLevel = std::make_shared<Level>(levelName, D2D1::SizeU(50, 30), 720, 720);
 	this->m_worldScreen->EnterLevel(m_currentLevel);
-	this->m_worldScreen->Initialize(m_deviceResources);
+	this->m_worldScreen->Initialize(std::shared_ptr<Audio>(&m_audio), this->m_deviceResources);
 	this->m_currentLevel->DesignLoadFromFile(L"Media\\Levels\\grassmere.bloodot");
 	this->m_currentLevel->SetupRuntimeState();
 	this->SetGameState(GameState::InGameActive);
@@ -1039,8 +1035,8 @@ void blooDotMain::OnActionEnterLevelEditor()
 	auto levelName = ref new Platform::String(L"Gartenwelt-1");
 	this->m_worldScreen = std::unique_ptr<WorldScreenBase>(new LevelEditor());
 	this->m_currentLevel = std::make_shared<Level>(levelName, D2D1::SizeU(50, 30), 720, 720);
-	this->m_worldScreen->EnterLevel(m_currentLevel);
-	this->m_worldScreen->Initialize(m_deviceResources);
+	this->m_worldScreen->EnterLevel(this->m_currentLevel);
+	this->m_worldScreen->Initialize(std::shared_ptr<Audio>(&m_audio), this->m_deviceResources);
 
 	auto newObject = m_currentLevel->GetObjectAt(353, 361, true);
 	newObject->Instantiate(this->m_currentLevel->shared_from_this(), m_currentLevel->GetDing(Dings::DingIDs::Mauer), ClumsyPacking::ConfigurationFromNeighbors(Facings::Shy));
@@ -1051,7 +1047,8 @@ void blooDotMain::OnActionEnterLevelEditor()
 
 void blooDotMain::OnActionTerminate()
 {
-	this->m_audio.SuspendAudio();
+	this->m_audio.SuspendSfx();
+	this->m_audio.SuspendMusic();
 	this->m_triggerSuicide = true;
 }
 
@@ -1606,27 +1603,29 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 
 void blooDotMain::OnSuspending()
 {
-    SaveState();
-    m_audio.SuspendAudio();
+	this->SaveState();
+	this->m_audio.SuspendSfx();
+	this->m_audio.SuspendMusic();
 }
 
 void blooDotMain::OnResuming()
 {
-    m_audio.ResumeAudio();
+	this->m_audio.ResumeMusic();
+	this->m_audio.ResumeSfx();
 }
 
 void blooDotMain::OnFocusChange(bool active)
 {
     static bool lostFocusPause = false;
-
     if (m_deferredResourcesReady)
     {
         if (m_windowActive != active)
         {
             if (active)
             {
-                m_audio.ResumeAudio();
-                if ((m_gameState == GameState::InGamePaused) && lostFocusPause)
+                m_audio.ResumeMusic();
+				m_audio.ResumeSfx();
+				if ((m_gameState == GameState::InGamePaused) && lostFocusPause)
                 {
                     SetGameState(GameState::InGameActive);
                 }			
@@ -1637,8 +1636,9 @@ void blooDotMain::OnFocusChange(bool active)
 			}
             else
             {
-                m_audio.SuspendAudio();
-                if (m_gameState == GameState::InGameActive)
+                m_audio.SuspendSfx();
+				m_audio.SuspendMusic();
+				if (m_gameState == GameState::InGameActive)
                 {
                     //SetGameState(GameState::InGamePaused);
                     //lostFocusPause = true;
@@ -1736,7 +1736,7 @@ void blooDotMain::OnDeviceRestored()
 {
 	//this->m_worldScreen->CreateDeviceDependentResources();
 	this->m_loadScreen->Initialize(this->m_deviceResources);
-	this->m_worldScreen->Initialize(this->m_deviceResources);
+	this->m_worldScreen->Initialize(std::shared_ptr<Audio>(&m_audio), this->m_deviceResources);
     UserInterface::GetInstance().Initialize(
 		this->m_deviceResources->GetD2DDevice(),
 		this->m_deviceResources->GetD2DDeviceContext(),

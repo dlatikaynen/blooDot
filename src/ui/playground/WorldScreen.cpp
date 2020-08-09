@@ -12,9 +12,9 @@ WorldScreen::~WorldScreen()
 
 }
 
-void WorldScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources)
+void WorldScreen::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>& deviceResources)
 {
-	WorldScreenBase::Initialize(deviceResources);
+	WorldScreenBase::Initialize(audioEngine, deviceResources);
 	/* player(s) positions, and ultimately initial position in level are determined from level metadata */
 	if (this->m_playerData.empty() && this->m_currentLevel != nullptr)
 	{
@@ -227,7 +227,12 @@ bool WorldScreen::OnHit(Object* hitTarget)
 		auto dingProps = underlyingDing->GetInherentBehaviors();
 		if (dingProps & ObjectBehaviors::Shootable)
 		{
+			this->m_audio->PlaySoundEffect(SoundEvent::HitCrumble);
 			this->ObliterateObject(hitTarget->PositionSquare);
+		}
+		else if (dingProps & ObjectBehaviors::Solid)
+		{
+			this->m_audio->PlaySoundEffect(SoundEvent::ProjectileDecay);
 		}
 
 		/* return value: true to decay the projectile */

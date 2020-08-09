@@ -6,6 +6,7 @@
 #include "..\..\dx\BrushRegistry.h"
 #include "..\..\dings\dings.h"
 #include "..\WorldSheet.h"
+#include "..\..\sound\Audio.h"
 
 class WorldScreenBase
 {
@@ -16,7 +17,7 @@ public:
 	typedef std::map<int, DirectX::XMFLOAT2> TouchMap;
 
 	/* graphical */
-	virtual void Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources);
+	virtual void Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>&	deviceResources);
 	void CreateDeviceDependentResources();
 	void ResetDirectXResources();
     void ReleaseDeviceDependentResources();
@@ -38,6 +39,7 @@ protected:
 	Microsoft::WRL::ComPtr<ID2D1Factory1>			m_d2dFactory;
     Microsoft::WRL::ComPtr<ID2D1Device>				m_d2dDevice;
     Microsoft::WRL::ComPtr<ID2D1DeviceContext>		m_d2dContext;
+	std::shared_ptr<Audio>							m_audio;
     Microsoft::WRL::ComPtr<ID2D1DrawingStateBlock>	m_stateBlock;
 	BrushRegistry									m_Brushes;
     Microsoft::WRL::ComPtr<IWICImagingFactory>		m_wicFactory;

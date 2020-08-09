@@ -15,7 +15,11 @@ enum SoundEvent
     MenuChangeEvent		= 4,
     MenuSelectedEvent	= 5,
 	MenuTiltEvent		= 6,
-    LastSoundEvent		= 7,
+	HitCrumble			= 7,
+	ProjectileDecay		= 8,
+	ClickSlap			= 9,
+	ClickTikk			= 10,
+    LastSoundEvent		= 11
 };
 
 // Make sure this matches the number of entries in the SoundEvent enum above
@@ -92,11 +96,18 @@ public:
 	void ReleaseResources();
 	void Start();
 	void Render();
-	bool IsAudioStarted();
-	bool IsAudioPlaying();
-	void SuspendAudio();
-	bool IsAudioSuspended();
-	void ResumeAudio();
+	
+	bool IsMusicStarted();
+	bool IsMusicPlaying();
+	void SuspendMusic();
+	bool IsMusicSuspended();
+	void ResumeMusic();
+
+	bool IsSfxStarted();
+	bool IsSfxPlaying();
+	void SuspendSfx();
+	bool IsSfxSuspended();
+	void ResumeSfx();
 
 	// This flag can be used to tell when the audio system
 	// is experiencing critial errors.
@@ -140,8 +151,10 @@ private:
     bool                        m_engineExperiencedCriticalError;
     AudioEngineCallbacks        m_musicEngineCallback;
     AudioEngineCallbacks        m_soundEffectEngineCallback;
-	bool						m_isAudioStarted;
-	bool						m_isAudioPaused;
+	bool						m_isMusicStarted;
+	bool						m_isMusicPaused;
+	bool						m_isSfxStarted;
+	bool						m_isSfxPaused;
 
     void CreateSourceVoice(SoundEvent);
     void CreateReverb(

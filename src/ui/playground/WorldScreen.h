@@ -8,7 +8,7 @@ public:
 	WorldScreen();
 	~WorldScreen() override;
 	
-	void Initialize(_In_ std::shared_ptr<DX::DeviceResources>&	deviceResources) override;
+	void Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>&	deviceResources) override;
 	void SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down, float scrollDeltaX, float scrollDeltaY) override;
 	void SetControl(int detentCount, bool shiftKeyActive) override;
 	void SetControl(bool triggershoot);
