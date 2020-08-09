@@ -132,6 +132,7 @@ void App::Run()
     // The app is exiting so do the same thing as would if app was being suspended.
     m_Main->OnSuspending();
 	m_Main->OnDeviceLost();
+	m_Main.release();
 
 #ifdef _DEBUG
     // Dump debug info when exiting.

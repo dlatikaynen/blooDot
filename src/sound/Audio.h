@@ -45,13 +45,16 @@ struct StreamingVoiceContext : public IXAudio2VoiceCallback
     {
         ResetEvent(hBufferEndEvent);
     }
+
     STDMETHOD_(void, OnBufferEnd)(void* pContext)
     {
         // Trigger the event for the music stream.
-        if (pContext == 0) {
+        if (pContext == 0) 
+		{
             SetEvent(hBufferEndEvent);
         }
     }
+
     STDMETHOD_(void, OnLoopEnd)(void*){}
     STDMETHOD_(void, OnVoiceError)(void*, HRESULT){}
 
@@ -59,6 +62,7 @@ struct StreamingVoiceContext : public IXAudio2VoiceCallback
     StreamingVoiceContext() : hBufferEndEvent(CreateEventEx(NULL, FALSE, FALSE, NULL))
     {
     }
+
     virtual ~StreamingVoiceContext()
     {
         CloseHandle(hBufferEndEvent);

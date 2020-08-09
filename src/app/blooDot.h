@@ -109,16 +109,16 @@ namespace blooDot
 		Windows::Storage::IStorageFile^				m_knownLevelSaveTarget;
 		IDWriteFontCollection*						m_fontCollection;
 
-        Collision			m_collision;
-        Physics				m_physics;
-        Audio				m_audio;
-        GameState			m_gameState;
+        Collision				m_collision;
+        Physics					m_physics;
+        std::shared_ptr<Audio>	m_audio;
+        GameState				m_gameState;
         typedef std::vector<XMFLOAT3> Checkpoints;
-        Checkpoints			m_checkpoints;
-        size_t				m_currentCheckpoint;
+        Checkpoints				m_checkpoints;
+        size_t					m_currentCheckpoint;
 		typedef std::vector<TextButton*> Menubuttons;
-		Menubuttons			m_mainMenuButtons;
-        TextButton			m_highScoreButton;
+		Menubuttons				m_mainMenuButtons;
+        TextButton				m_highScoreButton;
 
         HighScoreTable		m_highScoreTable;
         CountdownTimer		m_preGameCountdownTimer;
