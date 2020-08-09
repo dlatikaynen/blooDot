@@ -457,3 +457,93 @@ bool WorldScreenBase::PopTouchdown()
 
 	return false;
 }
+
+void WorldScreenBase::ObliterateObject(D2D1_POINT_2U levelCoordinate)
+{
+	Layers layerToCull;
+	auto dingWeeded = this->m_currentLevel->WeedObjectAt(levelCoordinate.x, levelCoordinate.y, &layerToCull);
+	if (dingWeeded != nullptr)
+	{
+		this->RedrawSingleSquare(levelCoordinate.x, levelCoordinate.y, layerToCull);
+		if (dingWeeded->CouldCoalesce())
+		{
+			auto weededDingID = dingWeeded->ID();
+			auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(levelCoordinate.x, levelCoordinate.y, weededDingID, layerToCull);
+			this->ClumsyPackNeighborhoodOf(neighborHood, levelCoordinate.x, levelCoordinate.y, layerToCull, weededDingID);
+		}
+	}
+}
+
+void WorldScreenBase::ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration neighborHood, unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID)
+{
+	if ((neighborHood & 1) == 1)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX - 1, aroundLevelY - 1, inLayer, dingID);
+	}
+
+	if ((neighborHood & 2) == 2)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX, aroundLevelY - 1, inLayer, dingID);
+	}
+
+	if ((neighborHood & 4) == 4)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX + 1, aroundLevelY - 1, inLayer, dingID);
+	}
+
+	if ((neighborHood & 8) == 8)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX + 1, aroundLevelY, inLayer, dingID);
+	}
+
+	if ((neighborHood & 16) == 16)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX + 1, aroundLevelY + 1, inLayer, dingID);
+	}
+
+	if ((neighborHood & 32) == 32)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX, aroundLevelY + 1, inLayer, dingID);
+	}
+
+	if ((neighborHood & 64) == 64)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX - 1, aroundLevelY + 1, inLayer, dingID);
+	}
+
+	if ((neighborHood & 128) == 128)
+	{
+		this->ClumsyPackNeighborhoodOf(aroundLevelX - 1, aroundLevelY, inLayer, dingID);
+	}
+}
+
+void WorldScreenBase::ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID)
+{
+	auto centerObject = this->m_currentLevel->GetObjectAt(aroundLevelX, aroundLevelY, false);
+	if (centerObject != nullptr)
+	{
+		auto centerDings = centerObject->GetDing(inLayer);
+		if (centerDings != nullptr && centerDings->ID() == dingID)
+		{
+			auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(aroundLevelX, aroundLevelY, dingID, inLayer);
+			auto shouldBeFacing = ClumsyPacking::FacingFromConfiguration(neighborHood);
+			if (centerObject->PlacementFacing(inLayer) != shouldBeFacing)
+			{
+				centerObject->AdjustFacing(inLayer, shouldBeFacing);
+				this->RedrawSingleSquare(aroundLevelX, aroundLevelY, inLayer);
+				this->ClumsyPackNeighborhoodOf(neighborHood, aroundLevelX, aroundLevelY, inLayer, dingID);
+			}
+		}
+	}
+}
+
+void WorldScreenBase::RedrawSingleSquare(unsigned levelX, unsigned levelY, Layers inLayer)
+{
+	auto sheetSize = this->m_currentLevel->GetSheetSizeUnits();
+	auto intersectedSheetX = levelX / sheetSize.width;
+	auto cellInSheetX = levelX % sheetSize.width;
+	auto intersectedSheetY = levelY / sheetSize.height;
+	auto cellInSheetY = levelY % sheetSize.height;
+	auto placementSheet = this->GetSheet(intersectedSheetX, intersectedSheetY);
+	placementSheet->RedrawSingleSquare(cellInSheetX, cellInSheetY, inLayer);
+}

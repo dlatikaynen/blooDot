@@ -30,9 +30,6 @@ protected:
 private:
 	void DrawLevelEditorRaster();	
 	void CreateTextLayout(D2D1_RECT_F* rect, Platform::String^ text);
-	void ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration neighborHood, unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID);
-	void ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID);
-	void RedrawSingleSquare(unsigned levelX, unsigned levelY, Layers inLayer);
 
 	Dings::DingIDs									m_selectedDingID;
 	Facings											m_selectedDingOrientation;

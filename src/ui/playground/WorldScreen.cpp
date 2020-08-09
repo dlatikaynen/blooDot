@@ -134,8 +134,10 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 					auto wouldPenetrate = westCenterBoundingBox.right - newPosition.left;
 					newPosition.left = westCenterBoundingBox.right + 1.0F;
 					newPosition.right = newPosition.left + originalWidth;
-					
-					this->m_shooting = false;
+					if (this->OnHit(westCenterTerrain))
+					{
+						this->m_shooting = false;
+					}
 				}
 			}
 		}
@@ -156,8 +158,10 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 					auto wouldPenetrate = newPosition.right - eastCenterBoundingBox.left;
 					newPosition.right = eastCenterBoundingBox.left - 1.0F;
 					newPosition.left = newPosition.right - originalWidth;
-					
-					this->m_shooting = false;
+					if (this->OnHit(eastCenterTerrain))
+					{
+						this->m_shooting = false;
+					}
 				}
 			}
 		}
@@ -176,8 +180,10 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 					auto wouldPenetrate = northCenterBoundingBox.bottom - newPosition.top;
 					newPosition.top = northCenterBoundingBox.bottom + 1.0F;
 					newPosition.bottom = newPosition.top + originalHeight;
-					
-					this->m_shooting = false;
+					if (this->OnHit(northCenterTerrain))
+					{
+						this->m_shooting = false;
+					}
 				}
 			}
 		}
@@ -196,8 +202,10 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 					auto wouldPenetrate = newPosition.bottom - southCenterBoundingBox.top;
 					newPosition.bottom = southCenterBoundingBox.top - 1.0F;
 					newPosition.top = newPosition.bottom - originalHeight;
-					
-					this->m_shooting = false;
+					if (this->OnHit(southCenterTerrain))
+					{
+						this->m_shooting = false;
+					}
 				}
 			}
 		}
@@ -205,6 +213,12 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 		this->m_shootx += deltaX;
 		this->m_shooty += deltaY;
 	}
+}
+
+bool WorldScreen::OnHit(Object* hitTarget)
+{	
+	this->ObliterateObject(hitTarget->PositionSquare);
+	return true;
 }
 
 void WorldScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)

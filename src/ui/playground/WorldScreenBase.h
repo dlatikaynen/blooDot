@@ -79,6 +79,10 @@ protected:
 	void InvalidateLevelViewport();
 	bool PeekTouchdown();
 	bool PopTouchdown();
+	void ObliterateObject(D2D1_POINT_2U levelCoordinate);
+	void ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfiguration neighborHood, unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID);
+	void ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID);
+	void RedrawSingleSquare(unsigned levelX, unsigned levelY, Layers inLayer);
 
 private:
 	void ComputeWorldSize();
