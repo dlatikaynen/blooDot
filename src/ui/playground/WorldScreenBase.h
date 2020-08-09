@@ -67,6 +67,7 @@ protected:
 	WorldSheet*										m_hoveringSheetNE;
 	WorldSheet*										m_hoveringSheetSW;
 	WorldSheet*										m_hoveringSheetSE;
+	Microsoft::WRL::ComPtr<ID2D1Brush>				m_projectileBrush;
 #ifdef _DEBUG
 	Microsoft::WRL::ComPtr<ID2D1Brush>				m_debugBorderBrush;
 	unsigned										m_lastBlitSheetCount;

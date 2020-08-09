@@ -129,15 +129,19 @@ void App::Run()
         }
     }
 
-    // The app is exiting so do the same thing as would if app was being suspended.
+    // The app is exiting so do the same thing as would if app was being suspended, plus destroy audio etc. instances
     m_Main->OnSuspending();
 	m_Main->OnDeviceLost();
-	m_Main.release();
 
 #ifdef _DEBUG
-    // Dump debug info when exiting.
-    DumpD3DDebug();
-#endif //_DEGBUG
+	// dump debug info when exiting
+	m_Main.release();
+	DumpD3DDebug();
+#else
+	UserInterface::GetInstance().Release();
+	m_Main.reset();
+	m_deviceResources = nullptr;
+#endif
 }
 
 // Required for IFrameworkView.
@@ -163,7 +167,6 @@ void App::OnSuspending(Platform::Object^ sender, SuspendingEventArgs^ args)
     // aware that a deferral may not be held indefinitely. After about five seconds,
     // the app will be forced to exit.
     SuspendingDeferral^ deferral = args->SuspendingOperation->GetDeferral();
-
     create_task([this, deferral]()
     {
         m_deviceResources->Trim();
@@ -266,7 +269,7 @@ void App::OnKeyUp(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::KeyE
     {
         m_windowClosed = true;
     }
-#endif // _DEBUG
+#endif 
 }
 
 void App::Exit()

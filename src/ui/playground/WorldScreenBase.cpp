@@ -60,10 +60,12 @@ void WorldScreenBase::ResetDirectXResources()
 {
 	auto loader = ref new BasicLoader(this->m_deviceResources->GetD3DDevice());
 	loader->LoadPngToBitmap(L"Media\\Bitmaps\\notimeforcaution.png", m_deviceResources,	&this->m_notimeforcaution);
+	this->m_projectileBrush = this->m_Brushes.WannaHave(this->m_d2dContext, { 0,0,250,255 });
 
 #ifdef _DEBUG
 	this->m_debugBorderBrush = this->m_Brushes.WannaHave(this->m_d2dContext, { 0,0,255,255 });
 #endif
+
 	/* rest of initialization */
 	D2D1_SIZE_F canvasSize = this->m_d2dContext->GetSize();
 	this->m_viewportSize.width = canvasSize.width;
