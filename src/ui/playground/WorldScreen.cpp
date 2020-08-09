@@ -217,8 +217,22 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 
 bool WorldScreen::OnHit(Object* hitTarget)
 {	
-	this->ObliterateObject(hitTarget->PositionSquare);
-	return true;
+	auto underlyingDing = hitTarget->GetDing(Layers::Walls);
+	if (underlyingDing == nullptr)
+	{
+		return false;
+	}
+	else
+	{
+		auto dingProps = underlyingDing->GetInherentBehaviors();
+		if (dingProps & ObjectBehaviors::Shootable)
+		{
+			this->ObliterateObject(hitTarget->PositionSquare);
+		}
+
+		/* return value: true to decay the projectile */
+		return !(dingProps & ObjectBehaviors::Immersible);
+	}
 }
 
 void WorldScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)
