@@ -86,12 +86,76 @@ void WorldScreen::SetControl(bool triggershoot)
 void WorldScreen::Update(float timeTotal, float timeDelta)
 {	
 	/* update player positions */
+	bool scrollTresholdExceeded = false;
+	bool scrollTresholdHandledX = false;
+	bool scrollTresholdHandledY = false;
+	float scrollTresholdExcessX = 0.0f;
+	float scrollTresholdExcessY = 0.0f;
 	for (auto mob = this->m_playerData.begin(); mob != this->m_playerData.end(); ++mob)
 	{		
 		auto Player = (*mob);
 		Player->Update();
+		if ((Player->Position.left - this->m_viewportOffset.x) < this->m_viewportScrollTreshold.left)
+		{
+			scrollTresholdExceeded = true;
+			scrollTresholdExcessX = -(this->m_viewportScrollTreshold.left - (Player->Position.left - this->m_viewportOffset.x));
+			scrollTresholdHandledX = true;
+		}
+
+		if ((Player->Position.top - this->m_viewportOffset.y) < this->m_viewportScrollTreshold.top)
+		{
+			scrollTresholdExceeded = true;
+			scrollTresholdExcessY = -(this->m_viewportScrollTreshold.top - (Player->Position.top - this->m_viewportOffset.y));
+			scrollTresholdHandledY = true;
+		}
+
+		if (!scrollTresholdHandledX && (Player->Position.right - this->m_viewportOffset.x) > this->m_viewportScrollTreshold.right)
+		{
+			scrollTresholdExceeded = true;
+			scrollTresholdExcessX = Player->Position.right - this->m_viewportOffset.x - this->m_viewportScrollTreshold.right;
+			scrollTresholdHandledX = true;
+		}
+
+		if (!scrollTresholdHandledY && (Player->Position.bottom - this->m_viewportOffset.y) > this->m_viewportScrollTreshold.bottom)
+		{
+			scrollTresholdExceeded = true;
+			scrollTresholdExcessY = Player->Position.bottom - this->m_viewportOffset.y - this->m_viewportScrollTreshold.bottom;
+			scrollTresholdHandledY = true;
+		}
 	}
 
+	/* set the viewport in motion, if a protagonist mob crosses the scroll treshold */
+	if (scrollTresholdExceeded)
+	{
+		this->m_viewportOffset = D2D1::Point2F(this->m_viewportOffset.x + static_cast<float>(scrollTresholdExcessX), this->m_viewportOffset.y + static_cast<float>(scrollTresholdExcessY));
+		this->m_viewportOffsetSquares = D2D1::Point2U(
+			static_cast<unsigned>(this->m_viewportOffset.x / blooDot::Consts::SQUARE_WIDTH),
+			static_cast<unsigned>(this->m_viewportOffset.y / blooDot::Consts::SQUARE_HEIGHT)
+		);
+
+		auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);
+		if (this->m_hoveringSheetNW != nullptr)
+		{
+			this->m_hoveringSheetNW->Translate(viewPort, 0, 0);
+		}
+
+		if (this->m_hoveringSheetNE != nullptr)
+		{
+			this->m_hoveringSheetNE->Translate(viewPort, 0, 0);
+		}
+
+		if (this->m_hoveringSheetSE != nullptr)
+		{
+			this->m_hoveringSheetSE->Translate(viewPort, 0, 0);
+		}
+
+		if (this->m_hoveringSheetSW != nullptr)
+		{
+			this->m_hoveringSheetSW->Translate(viewPort, 0, 0);
+		}
+	}
+
+	/* slock'em */
 	if (this->m_shooting)
 	{
 		this->UpdateParticles(timeTotal, timeDelta);

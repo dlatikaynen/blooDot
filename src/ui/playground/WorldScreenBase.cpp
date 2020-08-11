@@ -122,7 +122,7 @@ void WorldScreenBase::ComputeViewportOffset()
 void WorldScreenBase::ReleaseDeviceDependentResources()
 {
 //	this->m_d2dDevice.Reset();
-//	this->m_d2dContext.Reset();	
+//	this->m_d2dContext.Reset();
 //	this->m_d2dFactory.Reset();
 //	this->m_stateBlock.Reset();
 //	this->m_wicFactory.Reset();
@@ -134,11 +134,10 @@ void WorldScreenBase::ReleaseDeviceDependentResources()
 
 void WorldScreenBase::UpdateForWindowSizeChange()
 {
-	m_isResizing = true;
+	this->m_isResizing = true;
     Windows::Foundation::Rect windowBounds = CoreWindow::GetForCurrentThread()->Bounds;
-	D2D1_SIZE_F canvasSize = m_d2dContext->GetSize();
-
-	m_isResizing = false;
+	D2D1_SIZE_F canvasSize = this->m_d2dContext->GetSize();
+	this->m_isResizing = false;
 }
 
 void WorldScreenBase::SetControl(
