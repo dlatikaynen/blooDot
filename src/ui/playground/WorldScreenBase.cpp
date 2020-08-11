@@ -60,10 +60,11 @@ void WorldScreenBase::ResetDirectXResources()
 {
 	auto loader = ref new BasicLoader(this->m_deviceResources->GetD3DDevice());
 	loader->LoadPngToBitmap(L"Media\\Bitmaps\\notimeforcaution.png", m_deviceResources,	&this->m_notimeforcaution);
-	this->m_projectileBrush = this->m_Brushes.WannaHave(this->m_d2dContext, { 0,0,250,255 });
+	this->m_projectileBrush = this->m_Brushes.WannaHave(this->m_d2dContext, { 0, 0, 250, 255 });
 
 #ifdef _DEBUG
-	this->m_debugBorderBrush = this->m_Brushes.WannaHave(this->m_d2dContext, { 0,0,255,255 });
+	this->m_debugBorderBrush = this->m_Brushes.WannaHave(this->m_d2dContext, { 0, 0, 255, 255 });
+	this->m_debugTresholdBrush = this->m_Brushes.WannaHave(this->m_d2dContext, { 0, 240, 247, 255 });
 #endif
 
 	/* rest of initialization */
@@ -93,19 +94,28 @@ void WorldScreenBase::ComputeWorldCenter()
 
 void WorldScreenBase::ComputeViewportOffset()
 {
-	m_viewportSizeSquares = D2D1::SizeU(
-		static_cast<unsigned>(ceil(m_viewportSize.width / static_cast<float>(blooDot::Consts::SQUARE_WIDTH))),
-		static_cast<unsigned>(ceil(m_viewportSize.height / static_cast<float>(blooDot::Consts::SQUARE_HEIGHT)))
+	this->m_viewportSizeSquares = D2D1::SizeU(
+		static_cast<unsigned>(ceil(this->m_viewportSize.width / static_cast<float>(blooDot::Consts::SQUARE_WIDTH))),
+		static_cast<unsigned>(ceil(this->m_viewportSize.height / static_cast<float>(blooDot::Consts::SQUARE_HEIGHT)))
 	);
 
-	m_viewportOffset = D2D1::Point2F(
-		m_worldCenter.x - m_viewportSize.width / 2.0F,
-		m_worldCenter.y - m_viewportSize.height / 2.0F
+	this->m_viewportOffset = D2D1::Point2F(
+		this->m_worldCenter.x - m_viewportSize.width / 2.0F,
+		this->m_worldCenter.y - m_viewportSize.height / 2.0F
 	);
 
 	this->m_viewportOffsetSquares = D2D1::Point2U(
 		static_cast<unsigned>(this->m_viewportOffset.x / blooDot::Consts::SQUARE_WIDTH),
 		static_cast<unsigned>(this->m_viewportOffset.y / blooDot::Consts::SQUARE_HEIGHT)
+	);
+
+	auto tresholdWidth = this->m_viewportSize.width * SCROLL_TRESHOLD_FACT / 2.0f;
+	auto tresholdHeight = this->m_viewportSize.height * SCROLL_TRESHOLD_FACT / 2.0f;
+	this->m_viewportScrollTreshold = D2D1::RectF(
+		this->m_viewportSize.width / 2.0f - tresholdWidth,
+		this->m_viewportSize.height / 2.0f - tresholdHeight,
+		this->m_viewportSize.width / 2.0f + tresholdWidth,
+		this->m_viewportSize.height / 2.0f + tresholdHeight
 	);
 }
 

@@ -303,6 +303,10 @@ void WorldScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 		this->m_hoveringSheetSE->BlitToViewportWallsRooof();
 	}
 
+#if _DEBUG
+	this->m_d2dContext->DrawRectangle(this->m_viewportScrollTreshold, this->m_debugTresholdBrush.Get(), 0.75f);
+#endif
+
 	HRESULT hr = m_d2dContext->EndDraw();
 	if (hr != D2DERR_RECREATE_TARGET)
 	{
@@ -343,7 +347,7 @@ void WorldScreen::RenderSprites()
 
 		gridLocked.right = gridLocked.left + blooDot::Consts::SQUARE_WIDTH;
 		gridLocked.bottom = gridLocked.top + blooDot::Consts::SQUARE_HEIGHT;
-		this->m_d2dContext->DrawRectangle(gridLocked, this->m_debugBorderBrush.Get(), 0.7F);
+		this->m_d2dContext->DrawRectangle(gridLocked, this->m_debugBorderBrush.Get(), 0.7F);	
 #endif
 	}
 }

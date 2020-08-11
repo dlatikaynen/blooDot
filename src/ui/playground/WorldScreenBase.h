@@ -56,7 +56,7 @@ protected:
 	D2D1_POINT_2U									m_worldCenterSquares;
 	D2D1_POINT_2F									m_viewportOffset;
 	D2D1_POINT_2U									m_viewportOffsetSquares;
-	D2D1_SIZE_F										m_viewportScrollTreshold;
+	D2D1_RECT_F										m_viewportScrollTreshold;
 	D2D1_POINT_2U									m_currentLevelEditorCell;
 	bool											m_currentLevelEditorCellKnown;
 
@@ -70,6 +70,7 @@ protected:
 	Microsoft::WRL::ComPtr<ID2D1Brush>				m_projectileBrush;
 #ifdef _DEBUG
 	Microsoft::WRL::ComPtr<ID2D1Brush>				m_debugBorderBrush;
+	Microsoft::WRL::ComPtr<ID2D1Brush>				m_debugTresholdBrush;
 	unsigned										m_lastBlitSheetCount;
 #endif
 	D2D1_POINT_2F									m_pointerPosition;
