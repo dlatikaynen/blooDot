@@ -42,42 +42,17 @@ D2D1_POINT_2U WorldSheet::TheSheetIAm()
 	return this->m_theSheetIAm;
 }
 
-D2D1_POINT_2U WorldSheet::CornerNW()
-{
-	return this->m_NWcornerInWorldSquares;
-}
-
-D2D1_POINT_2U WorldSheet::CornerNE()
-{
-	return D2D1::Point2U(this->m_NWcornerInWorldSquares.x + this->m_sizeUnits.width, this->m_NWcornerInWorldSquares.y);
-}
-
-D2D1_POINT_2U WorldSheet::CornerSW()
-{
-	return D2D1::Point2U(this->m_NWcornerInWorldSquares.x, this->m_NWcornerInWorldSquares.y + this->m_sizeUnits.height);
-}
-
-D2D1_POINT_2U WorldSheet::CornerSE()
-{
-	return D2D1::Point2U(this->m_NWcornerInWorldSquares.x + this->m_sizeUnits.width, this->m_NWcornerInWorldSquares.y + this->m_sizeUnits.height);
-}
-
-D2D1_POINT_2U WorldSheet::GetCorner(Facings whichOne)
-{
-	switch (whichOne) 
-	{
-		case Facings::NW: return this->CornerNW();
-		case Facings::NE: return this->CornerNE();
-		case Facings::SW: return this->CornerSW();
-		case Facings::SE: return this->CornerSE();
-	}
-
-	return D2D1_POINT_2U();
-}
-
 bool WorldSheet::IsPopulated()
 {
 	return this->m_isPopulated;
+}
+
+void WorldSheet::ForceRePopulate()
+{
+	this->m_isPopulated = false;
+	this->FreeBitmaps();
+	this->m_floor.Reset();
+	this->Populate();
 }
 
 // Draw the Ding Wang Tang onto the sheet
@@ -87,7 +62,7 @@ void WorldSheet::Populate()
 	{
 		auto beganDrawWalls = false, beganDrawFloor = false, beganDrawRooof = false;
 		this->FreeBitmaps();
-		if (m_floor == nullptr)
+		if (this->m_floor == nullptr)
 		{
 			DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_floor));
 			if (!beganDrawFloor)
@@ -99,12 +74,12 @@ void WorldSheet::Populate()
 			}
 		}
 
-		if (m_walls == nullptr)
+		if (this->m_walls == nullptr)
 		{
 			DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_walls));
-		}
+		}		
 
-		if (m_rooof == nullptr)
+		if (this->m_rooof == nullptr)
 		{
 			DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_rooof));
 		}
@@ -141,6 +116,7 @@ void WorldSheet::Populate()
 						{
 							this->m_walls->BeginDraw();
 							beganDrawWalls = true;
+							this->m_walls->Clear();
 						}
 
 						dings = objectX->GetDing(Layers::Walls);
@@ -153,6 +129,7 @@ void WorldSheet::Populate()
 						{
 							this->m_rooof->BeginDraw();
 							beganDrawRooof = true;
+							this->m_rooof->Clear();
 						}
 
 						dings = objectX->GetDing(Layers::Rooof);
@@ -168,10 +145,23 @@ void WorldSheet::Populate()
 			DX::ThrowIfFailed(this->m_floor->EndDraw());
 		}
 
+		if (!beganDrawWalls)
+		{
+			this->m_walls->BeginDraw();
+			beganDrawWalls = true;
+			this->m_walls->Clear();
+		}
+
 		if (beganDrawWalls)
 		{
 			DX::ThrowIfFailed(this->m_walls->EndDraw());
+		}
 
+		if (!beganDrawRooof)
+		{
+			this->m_rooof->BeginDraw();
+			beganDrawRooof = true;
+			this->m_rooof->Clear();
 		}
 
 		if (beganDrawRooof)
@@ -425,6 +415,21 @@ void WorldSheet::Translate(D2D1_RECT_F viewPort, float deltaX, float deltaY)
 	this->ComputeViewportOverlap(viewPort);
 }
 
+void WorldSheet::UpdatePositionInLevel(int numSheetsX, int numSheetsY)
+{
+	if (numSheetsX != 0)
+	{
+		this->m_NWcornerInWorldSquares.x += numSheetsX * this->m_sizeUnits.width;
+		this->m_theSheetIAm.x += numSheetsX;
+	}
+
+	if (numSheetsY != 0)
+	{
+		this->m_NWcornerInWorldSquares.y += numSheetsY * this->m_sizeUnits.height;
+		this->m_theSheetIAm.y += numSheetsY;
+	}
+}
+
 void WorldSheet::BlitToViewport()
 {	
 	this->m_d2dContext->DrawBitmap(this->m_floorBitmap, this->m_blitTo, 1.0F, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, this->m_blitFrom);
@@ -460,7 +465,7 @@ void WorldSheet::FreeBitmaps()
 
 	if (!(this->m_floorBitmap == nullptr))
 	{
-		this->SafeRelease(&this->m_wallsBitmap);	
+		this->SafeRelease(&this->m_wallsBitmap);
 	}
 
 	if (!(this->m_floorBitmap == nullptr))

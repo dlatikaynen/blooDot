@@ -419,24 +419,87 @@ void WorldScreenBase::ReflapBlitterSheets(D2D1_RECT_F viewPort, Facings towardsD
 	switch (towardsDirection)
 	{
 		case Facings::West:
+		{
+			sheetSwap = WORLDSHEET_NW.release();
+			WORLDSHEET_NW = std::unique_ptr<WorldSheet>(WORLDSHEET_NE.release());
+			WORLDSHEET_NE = std::unique_ptr<WorldSheet>(sheetSwap);
+			WORLDSHEET_NW->Translate(viewPort, WORLDSHEET_NE->PhysicalWidth() * 2.0f, 0);
+			WORLDSHEET_NW->UpdatePositionInLevel(-2, 0);
+			this->RePopulateSheet(WORLDSHEET_NW.get());
 
-			break;
+			sheetSwap = WORLDSHEET_SW.release();
+			WORLDSHEET_SW = std::unique_ptr<WorldSheet>(WORLDSHEET_SE.release());
+			WORLDSHEET_SE = std::unique_ptr<WorldSheet>(sheetSwap);			
+			WORLDSHEET_SW->Translate(viewPort, WORLDSHEET_SE->PhysicalWidth() * 2.0f, 0);
+			WORLDSHEET_SW->UpdatePositionInLevel(-2, 0);
+			this->RePopulateSheet(WORLDSHEET_SW.get());
+		}
+
+		break;
 
 		case Facings::East:
+		{
 			sheetSwap = WORLDSHEET_NE.release();
 			WORLDSHEET_NE = std::unique_ptr<WorldSheet>(WORLDSHEET_NW.release());
 			WORLDSHEET_NW = std::unique_ptr<WorldSheet>(sheetSwap);
-			WORLDSHEET_NE->Translate(viewPort, -WORLDSHEET_NW->PhysicalWidth(), 0);
-			break;
+			WORLDSHEET_NE->Translate(viewPort, -WORLDSHEET_NW->PhysicalWidth() * 2.0f, 0);
+			WORLDSHEET_NE->UpdatePositionInLevel(2, 0);
+			this->RePopulateSheet(WORLDSHEET_NE.get());
+
+			sheetSwap = WORLDSHEET_SE.release();
+			WORLDSHEET_SE = std::unique_ptr<WorldSheet>(WORLDSHEET_SW.release());
+			WORLDSHEET_SW = std::unique_ptr<WorldSheet>(sheetSwap);
+			WORLDSHEET_SE->Translate(viewPort, -WORLDSHEET_SW->PhysicalWidth() * 2.0f, 0);
+			WORLDSHEET_SE->UpdatePositionInLevel(2, 0);
+			this->RePopulateSheet(WORLDSHEET_SE.get());
+		}
+
+		break;
 
 		case Facings::North:
-			
-			break;
+		{
+			sheetSwap = WORLDSHEET_NW.release();
+			WORLDSHEET_NW = std::unique_ptr<WorldSheet>(WORLDSHEET_SW.release());
+			WORLDSHEET_SW = std::unique_ptr<WorldSheet>(sheetSwap);
+			WORLDSHEET_NW->Translate(viewPort, 0, WORLDSHEET_SW->PhysicalWidth() * 2.0f);
+			WORLDSHEET_NW->UpdatePositionInLevel(0, -2);
+			this->RePopulateSheet(WORLDSHEET_NW.get());
+
+			sheetSwap = WORLDSHEET_NE.release();
+			WORLDSHEET_NE = std::unique_ptr<WorldSheet>(WORLDSHEET_SE.release());
+			WORLDSHEET_SE = std::unique_ptr<WorldSheet>(sheetSwap);
+			WORLDSHEET_NE->Translate(viewPort, 0, WORLDSHEET_SE->PhysicalWidth() * 2.0f);
+			WORLDSHEET_NE->UpdatePositionInLevel(0, -2);
+			this->RePopulateSheet(WORLDSHEET_NE.get());
+		}
+
+		break;
 
 		case Facings::South:
+		{
+			sheetSwap = WORLDSHEET_SW.release();
+			WORLDSHEET_SW = std::unique_ptr<WorldSheet>(WORLDSHEET_NW.release());
+			WORLDSHEET_NW = std::unique_ptr<WorldSheet>(sheetSwap);
+			WORLDSHEET_SW->Translate(viewPort, 0, -WORLDSHEET_NW->PhysicalWidth() * 2.0f);
+			WORLDSHEET_SW->UpdatePositionInLevel(0, 2);
+			this->RePopulateSheet(WORLDSHEET_SW.get());
+
+			sheetSwap = WORLDSHEET_SE.release();
+			WORLDSHEET_SE = std::unique_ptr<WorldSheet>(WORLDSHEET_NE.release());
+			WORLDSHEET_NE = std::unique_ptr<WorldSheet>(sheetSwap);
+			WORLDSHEET_SE->Translate(viewPort, 0, -WORLDSHEET_NE->PhysicalWidth() * 2.0f);
+			WORLDSHEET_SE->UpdatePositionInLevel(0, 2);
+			this->RePopulateSheet(WORLDSHEET_SE.get());
+		}
 		
-			break;
+		break;
 	}
+}
+
+// Make this async, so it would not lag
+void WorldScreenBase::RePopulateSheet(WorldSheet* targetSheet)
+{
+	targetSheet->ForceRePopulate();
 }
 
 D2D1_POINT_2U WorldScreenBase::GetViewportCenterInLevel()

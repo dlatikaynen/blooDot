@@ -159,6 +159,22 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 		{
 			this->ReflapBlitterSheets(viewPort, Facings::East);
 		}
+		else if ((WORLDSHEET_NW->PhysicalPosition.left + 2.0f * blooDot::Consts::SQUARE_WIDTH) > viewPort.left)
+		{
+			/* to the left? */
+			this->ReflapBlitterSheets(viewPort, Facings::West);
+		}
+
+		/* down? */
+		if ((WORLDSHEET_SW->PhysicalPosition.bottom - 2.0f * blooDot::Consts::SQUARE_HEIGHT) < viewPort.bottom)
+		{
+			this->ReflapBlitterSheets(viewPort, Facings::South);
+		}
+		else if ((WORLDSHEET_NW->PhysicalPosition.top + 2.0f * blooDot::Consts::SQUARE_HEIGHT) > viewPort.top)
+		{
+			/* or even up? */
+			this->ReflapBlitterSheets(viewPort, Facings::North);
+		}
 	}
 
 	/* slock'em */

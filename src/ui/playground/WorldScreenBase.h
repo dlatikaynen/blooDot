@@ -1,4 +1,6 @@
-	#pragma once
+#pragma once
+
+#include <thread>
 
 #include "..\..\dx\DirectXHelper.h"
 #include "..\..\dx\DeviceResources.h"
@@ -83,6 +85,7 @@ protected:
 	void InvalidateSheetHoveringSituation();
 	void InvalidateLevelViewport();
 	void ReflapBlitterSheets(D2D1_RECT_F viewPort, Facings towardsDirection);
+	void RePopulateSheet(WorldSheet* targetSheet);
 	bool PeekTouchdown();
 	bool PopTouchdown();
 	void ObliterateObject(D2D1_POINT_2U levelCoordinate);
