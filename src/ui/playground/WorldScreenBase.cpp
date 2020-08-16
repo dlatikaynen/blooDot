@@ -11,10 +11,6 @@ using namespace D2D1;
 WorldScreenBase::WorldScreenBase() 
 {
 	this->m_currentLevel = nullptr;	
-	this->m_hoveringSheetNW = nullptr;
-	this->m_hoveringSheetNE = nullptr;
-	this->m_hoveringSheetSE = nullptr;
-	this->m_hoveringSheetSW = nullptr;
 	this->m_currentLevelEditorCell = D2D1::Point2U(0, 0);
 	this->m_currentLevelEditorCellKnown = false;
 	this->m_touchMap = nullptr;
@@ -25,12 +21,10 @@ WorldScreenBase::WorldScreenBase()
 
 WorldScreenBase::~WorldScreenBase()
 {	
-	while (!this->m_Sheets.empty())
-	{
-		delete this->m_Sheets.back();
-		this->m_Sheets.pop_back();
-	}
-
+	WORLDSHEET_NW.reset();
+	WORLDSHEET_NE.reset();
+	WORLDSHEET_SE.reset();
+	WORLDSHEET_SW.reset();
 	//delete this->m_currentLevel;
 }
 
@@ -257,24 +251,24 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 		);
 
 		auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);
-		if (this->m_hoveringSheetNW != nullptr)
+		if (WORLDSHEET_NW != nullptr)
 		{
-			this->m_hoveringSheetNW->Translate(viewPort, 0, 0);
+			WORLDSHEET_NW->Translate(viewPort, 0, 0);
 		}
 
-		if (this->m_hoveringSheetNE != nullptr)
+		if (WORLDSHEET_NE != nullptr)
 		{
-			this->m_hoveringSheetNE->Translate(viewPort, 0, 0);
+			WORLDSHEET_NE->Translate(viewPort, 0, 0);
 		}
 
-		if (this->m_hoveringSheetSE != nullptr)
+		if (WORLDSHEET_SE != nullptr)
 		{
-			this->m_hoveringSheetSE->Translate(viewPort, 0, 0);
+			WORLDSHEET_SE->Translate(viewPort, 0, 0);
 		}
 
-		if (this->m_hoveringSheetSW != nullptr)
+		if (WORLDSHEET_SW != nullptr)
 		{
-			this->m_hoveringSheetSW->Translate(viewPort, 0, 0);
+			WORLDSHEET_SW->Translate(viewPort, 0, 0);
 		}
 	}
 }
@@ -303,22 +297,26 @@ void WorldScreenBase::EnterLevel(std::shared_ptr<Level> level)
 
 void WorldScreenBase::InvalidateLevelViewport()
 {
-	this->InvalidateSheetHoveringSituation();
-
 	/* (re-)generate the sheets for this level */
-	if (!this->m_Sheets.empty())
+	this->InvalidateSheetHoveringSituation();
+	if (WORLDSHEET_NW != nullptr) 
 	{
-		this->m_Sheets.clear();
+		WORLDSHEET_NW.reset();
 	}
 
-	auto subscriptX = this->m_currentLevel->GetNumOfSheetsWE();
-	auto subscriptY = this->m_currentLevel->GetNumOfSheetsNS();
-	for (unsigned y = 0; y < subscriptY; ++y)
+	if (WORLDSHEET_NE != nullptr)
 	{
-		for (unsigned x = 0; x < subscriptX; ++x)
-		{
-			this->m_Sheets.push_back((WorldSheet*)nullptr);
-		}
+		WORLDSHEET_NE.reset();
+	}
+
+	if (WORLDSHEET_SW != nullptr)
+	{
+		WORLDSHEET_SW.reset();
+	}
+
+	if (WORLDSHEET_SE != nullptr)
+	{
+		WORLDSHEET_SE.reset();
 	}
 }
 
@@ -330,7 +328,8 @@ void WorldScreenBase::EvaluateSheetHoveringSituation()
 	 * current viewport's center point in world coordinates,
 	 * then we visit its neighbors and ask if they also intersect.
 	 * given the minimal size per sheet is viewport size, this can
-	 * never be more than 8 additional in close vicinity */
+	 * never be more than 8 additional in close vicinity,
+	 * practically limited to the edge case of four */
 	auto centerIntersectsSheet = this->GetViewportCenterInLevel();
 	auto sheetSize = this->m_currentLevel->GetSheetSizeUnits();
 	auto intersectedSheetX = centerIntersectsSheet.x / sheetSize.width;
@@ -359,24 +358,23 @@ void WorldScreenBase::EvaluateSheetHoveringSituation()
 
 	/* depending on where the center is inside the centersheet, we shall
 	 * know where we are and which are our neighbor sheets */
-	auto centerSheet = this->GetSheet(intersectedSheetX, intersectedSheetY);	
 	if (cellInSheetX > sheetSize.width / 2)
 	{
 		if (cellInSheetY > sheetSize.height / 2)
 		{
 			/* we are hit in our right, bottom, thus we are NW */
-			this->m_hoveringSheetNW = centerSheet;
-			this->m_hoveringSheetNE = this->GetSheet(intersectedSheetX + 1, intersectedSheetY);
-			this->m_hoveringSheetSW = this->GetSheet(intersectedSheetX, intersectedSheetY + 1);
-			this->m_hoveringSheetSE = this->GetSheet(intersectedSheetX + 1, intersectedSheetY + 1);
+			WORLDSHEET_NW = this->InstantiateViewportSheet(intersectedSheetX, intersectedSheetY);
+			WORLDSHEET_NE = this->InstantiateViewportSheet(intersectedSheetX + 1, intersectedSheetY);
+			WORLDSHEET_SW = this->InstantiateViewportSheet(intersectedSheetX, intersectedSheetY + 1);
+			WORLDSHEET_SE = this->InstantiateViewportSheet(intersectedSheetX + 1, intersectedSheetY + 1);
 		}
 		else
 		{
 			/* we are hit in out right, top, thus we are SW */
-			this->m_hoveringSheetSW = centerSheet;
-			this->m_hoveringSheetNW = this->GetSheet(intersectedSheetX, intersectedSheetY -1 );
-			this->m_hoveringSheetNE = this->GetSheet(intersectedSheetX + 1, intersectedSheetY - 1);
-			this->m_hoveringSheetSE = this->GetSheet(intersectedSheetX + 1, intersectedSheetY);
+			WORLDSHEET_SW = this->InstantiateViewportSheet(intersectedSheetX, intersectedSheetY);
+			WORLDSHEET_NW = this->InstantiateViewportSheet(intersectedSheetX, intersectedSheetY -1 );
+			WORLDSHEET_NE = this->InstantiateViewportSheet(intersectedSheetX + 1, intersectedSheetY - 1);
+			WORLDSHEET_SE = this->InstantiateViewportSheet(intersectedSheetX + 1, intersectedSheetY);
 		}
 	}
 	else
@@ -384,35 +382,61 @@ void WorldScreenBase::EvaluateSheetHoveringSituation()
 		if (cellInSheetY > sheetSize.height / 2)
 		{
 			/* we are hit in our left, bottom, so we are NE */
-			this->m_hoveringSheetNE = centerSheet;
-			this->m_hoveringSheetNW = this->GetSheet(intersectedSheetX - 1, intersectedSheetY);
-			this->m_hoveringSheetSE = this->GetSheet(intersectedSheetX, intersectedSheetY + 1);
-			this->m_hoveringSheetSW = this->GetSheet(intersectedSheetX - 1, intersectedSheetY + 1);
+			WORLDSHEET_NE = this->InstantiateViewportSheet(intersectedSheetX, intersectedSheetY);
+			WORLDSHEET_NW = this->InstantiateViewportSheet(intersectedSheetX - 1, intersectedSheetY);
+			WORLDSHEET_SE = this->InstantiateViewportSheet(intersectedSheetX, intersectedSheetY + 1);
+			WORLDSHEET_SW = this->InstantiateViewportSheet(intersectedSheetX - 1, intersectedSheetY + 1);
 		}
 		else
 		{
 			/* we are hit in our left, top, so we are SE */
-			this->m_hoveringSheetSE = centerSheet;
-			this->m_hoveringSheetSW = this->GetSheet(intersectedSheetX - 1, intersectedSheetY);
-			this->m_hoveringSheetNW = this->GetSheet(intersectedSheetX - 1, intersectedSheetY - 1);
-			this->m_hoveringSheetNE = this->GetSheet(intersectedSheetX, intersectedSheetY - 1);
+			WORLDSHEET_SE = this->InstantiateViewportSheet(intersectedSheetX, intersectedSheetY);
+			WORLDSHEET_SW = this->InstantiateViewportSheet(intersectedSheetX - 1, intersectedSheetY);
+			WORLDSHEET_NW = this->InstantiateViewportSheet(intersectedSheetX - 1, intersectedSheetY - 1);
+			WORLDSHEET_NE = this->InstantiateViewportSheet(intersectedSheetX, intersectedSheetY - 1);
 		}
 	}
 
 	/* make sure the sheets have consciousness about their own whereabouts */
-	m_hoveringSheetNW->Populate();
-	m_hoveringSheetNE->Populate();
-	m_hoveringSheetSW->Populate();
-	m_hoveringSheetSE->Populate();
+	WORLDSHEET_NW->Populate();
+	WORLDSHEET_NE->Populate();
+	WORLDSHEET_SW->Populate();
+	WORLDSHEET_SE->Populate();
 	
 	/* finally, we have the quadruplet arranged,
 	 * now prime the initial overlap rectangles */
 	auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);
-	m_hoveringSheetNW->ComputeViewportOverlap(viewPort);
-	m_hoveringSheetNE->ComputeViewportOverlap(viewPort);
-	m_hoveringSheetSW->ComputeViewportOverlap(viewPort);
-	m_hoveringSheetSE->ComputeViewportOverlap(viewPort);
+	WORLDSHEET_NW->ComputeViewportOverlap(viewPort);
+	WORLDSHEET_NE->ComputeViewportOverlap(viewPort);
+	WORLDSHEET_SW->ComputeViewportOverlap(viewPort);
+	WORLDSHEET_SE->ComputeViewportOverlap(viewPort);
 	this->m_sheetHoveringSituationKnown = true;
+}
+
+void WorldScreenBase::ReflapBlitterSheets(D2D1_RECT_F viewPort, Facings towardsDirection)
+{
+	WorldSheet* sheetSwap;
+	switch (towardsDirection)
+	{
+		case Facings::West:
+
+			break;
+
+		case Facings::East:
+			sheetSwap = WORLDSHEET_NE.release();
+			WORLDSHEET_NE = std::unique_ptr<WorldSheet>(WORLDSHEET_NW.release());
+			WORLDSHEET_NW = std::unique_ptr<WorldSheet>(sheetSwap);
+			WORLDSHEET_NE->Translate(viewPort, -WORLDSHEET_NW->PhysicalWidth(), 0);
+			break;
+
+		case Facings::North:
+			
+			break;
+
+		case Facings::South:
+		
+			break;
+	}
 }
 
 D2D1_POINT_2U WorldScreenBase::GetViewportCenterInLevel()
@@ -431,19 +455,11 @@ void WorldScreenBase::InvalidateSheetHoveringSituation()
 	}
 }
 
-WorldSheet*	WorldScreenBase::GetSheet(unsigned sheetX, unsigned sheetY)
+std::unique_ptr<WorldSheet>	WorldScreenBase::InstantiateViewportSheet(unsigned sheetX, unsigned sheetY)
 {
-	auto sheetAddress = sheetY * m_currentLevel->GetNumOfSheetsWE() + sheetX;
-	auto retrievedSheet = this->m_Sheets[sheetAddress];
-	if (retrievedSheet == nullptr) 	
-	{
-		auto newSheet = new WorldSheet(m_deviceResources);
-		newSheet->PrepareThyself(m_currentLevel, sheetX, sheetY);
-		this->m_Sheets[sheetAddress] = newSheet;
-		retrievedSheet = newSheet;
-	}
-
-	return retrievedSheet;
+	auto newSheet = std::make_unique<WorldSheet>(m_deviceResources);
+	newSheet->PrepareThyself(m_currentLevel, sheetX, sheetY);
+	return newSheet;
 }
 
 bool WorldScreenBase::PeekTouchdown()
@@ -555,6 +571,33 @@ void WorldScreenBase::RedrawSingleSquare(unsigned levelX, unsigned levelY, Layer
 	auto cellInSheetX = levelX % sheetSize.width;
 	auto intersectedSheetY = levelY / sheetSize.height;
 	auto cellInSheetY = levelY % sheetSize.height;
-	auto placementSheet = this->GetSheet(intersectedSheetX, intersectedSheetY);
-	placementSheet->RedrawSingleSquare(cellInSheetX, cellInSheetY, inLayer);
+	auto intersectNW = WORLDSHEET_NW->TheSheetIAm();
+	if (intersectNW.x == intersectedSheetX && intersectNW.y == intersectedSheetY)
+	{
+		WORLDSHEET_NW->RedrawSingleSquare(cellInSheetX, cellInSheetY, inLayer);
+	}
+	else
+	{
+		auto intersectNE = WORLDSHEET_NE->TheSheetIAm();
+		if (intersectNE.x == intersectedSheetX && intersectNE.y == intersectedSheetY)
+		{
+			WORLDSHEET_NE->RedrawSingleSquare(cellInSheetX, cellInSheetY, inLayer);
+		}
+		else
+		{
+			auto intersectSE = WORLDSHEET_SE->TheSheetIAm();
+			if (intersectSE.x == intersectedSheetX && intersectSE.y == intersectedSheetY)
+			{
+				WORLDSHEET_SE->RedrawSingleSquare(cellInSheetX, cellInSheetY, inLayer);
+			}
+			else
+			{
+				auto intersectSW = WORLDSHEET_SW->TheSheetIAm();
+				if (intersectSW.x == intersectedSheetX && intersectSW.y == intersectedSheetY)
+				{
+					WORLDSHEET_SW->RedrawSingleSquare(cellInSheetX, cellInSheetY, inLayer);
+				}
+			}
+		}
+	}
 }

@@ -274,7 +274,7 @@ protected:
 	std::shared_ptr<Bounding>	m_Bounding;
 
 private:
-	void SetSheetPlacementsFromCoalescability();
+	void SetOnSheetPlacementsFromCoalescability();
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> LoadFromBitmap();
 	void Pack7x7(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y);
 	unsigned Pack7x7X(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y);

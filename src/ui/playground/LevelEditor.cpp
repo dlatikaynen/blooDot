@@ -213,38 +213,39 @@ void LevelEditor::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 		m_viewportSize.height
 	);
 
-	if (this->m_hoveringSheetNW != nullptr)
+	/* -!- don't blit if entirely off viewport. no need. */
+	if (WORLDSHEET_NW != nullptr)
 	{
-		this->m_hoveringSheetNW->BlitToViewport();
+		WORLDSHEET_NW->BlitToViewport();
 #ifdef _DEBUG
-		this->m_hoveringSheetNW->DebugDrawBorder(this->m_debugBorderBrush);
+		WORLDSHEET_NW->DebugDrawBorder(this->m_debugBorderBrush);
 		++blitSheetCount;
 #endif
 	}
 
-	if (this->m_hoveringSheetNE != nullptr)
+	if (WORLDSHEET_NE != nullptr)
 	{
-		this->m_hoveringSheetNE->BlitToViewport();
+		WORLDSHEET_NE->BlitToViewport();
 #ifdef _DEBUG
-		this->m_hoveringSheetNE->DebugDrawBorder(this->m_debugBorderBrush);
+		WORLDSHEET_NE->DebugDrawBorder(this->m_debugBorderBrush);
 		++blitSheetCount;
 #endif
 	}
 
-	if (this->m_hoveringSheetSW != nullptr)
+	if (WORLDSHEET_SW != nullptr)
 	{
-		this->m_hoveringSheetSW->BlitToViewport();
+		WORLDSHEET_SW->BlitToViewport();
 #ifdef _DEBUG
-		this->m_hoveringSheetSW->DebugDrawBorder(this->m_debugBorderBrush);
+		WORLDSHEET_SW->DebugDrawBorder(this->m_debugBorderBrush);
 		++blitSheetCount;
 #endif
 	}
 
-	if (this->m_hoveringSheetSE != nullptr)
+	if (WORLDSHEET_SE != nullptr)
 	{
-		this->m_hoveringSheetSE->BlitToViewport();
+		WORLDSHEET_SE->BlitToViewport();
 #ifdef _DEBUG
-		this->m_hoveringSheetSE->DebugDrawBorder(this->m_debugBorderBrush);
+		WORLDSHEET_SE->DebugDrawBorder(this->m_debugBorderBrush);
 		++blitSheetCount;
 #endif
 	}
@@ -558,4 +559,3 @@ void LevelEditor::CloneObjectToCell(Object* sourceCell, Object* targetCell, Laye
 		}
 	}
 }
-

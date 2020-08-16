@@ -16,11 +16,14 @@ public:
 
 	void											PrepareThyself(std::shared_ptr<Level> forLevel, int amSheetX, int amSheetY);
 
+	D2D1_RECT_F										PhysicalPosition;
 	D2D1_POINT_2U									TheSheetIAm();
 	D2D1_POINT_2U									CornerNW();
 	D2D1_POINT_2U									CornerNE();
 	D2D1_POINT_2U									CornerSW();
 	D2D1_POINT_2U									CornerSE();
+	float											PhysicalWidth();
+	float											PhysicalHeight();
 	D2D1_POINT_2U									GetCorner(Facings whichOne);
 
 	bool											IsPopulated();
@@ -28,7 +31,7 @@ public:
 	void											RedrawSingleSquare(unsigned relativeX, unsigned relativeY, Layers inLayer);
 	void											ComputeViewportOverlap(D2D1_RECT_F viewPort);
 	void											SetBlittingArea(D2D1_RECT_F blitFrom, D2D1_RECT_F blitTo);
-	void											Translate(D2D1_RECT_F viewPort, unsigned deltaX, unsigned deltaY);
+	void											Translate(D2D1_RECT_F viewPort, float deltaX, float deltaY);
 	void											BlitToViewport();
 	void											BlitToViewportFloor();
 	void											BlitToViewportWallsRooof();

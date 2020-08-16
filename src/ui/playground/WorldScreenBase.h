@@ -8,6 +8,11 @@
 #include "..\WorldSheet.h"
 #include "..\..\sound\Audio.h"
 
+#define WORLDSHEET_NW this->m_Sheets[0][0]
+#define WORLDSHEET_NE this->m_Sheets[1][0]
+#define WORLDSHEET_SW this->m_Sheets[0][1]
+#define WORLDSHEET_SE this->m_Sheets[1][1]
+
 class WorldScreenBase
 {
 public:
@@ -61,12 +66,8 @@ protected:
 	bool											m_currentLevelEditorCellKnown;
 
 	std::shared_ptr<Level>							m_currentLevel;
-	std::vector<WorldSheet*>						m_Sheets;
 	bool											m_sheetHoveringSituationKnown;
-	WorldSheet*										m_hoveringSheetNW;
-	WorldSheet*										m_hoveringSheetNE;
-	WorldSheet*										m_hoveringSheetSW;
-	WorldSheet*										m_hoveringSheetSE;
+	std::unique_ptr<WorldSheet>						m_Sheets[2][2] = { {nullptr, nullptr}, {nullptr, nullptr} };
 	Microsoft::WRL::ComPtr<ID2D1Brush>				m_projectileBrush;
 #ifdef _DEBUG
 	Microsoft::WRL::ComPtr<ID2D1Brush>				m_debugBorderBrush;
@@ -77,10 +78,11 @@ protected:
 	bool											m_keyShiftDown;
 	TouchMap* 										m_touchMap;
 
-	WorldSheet*	GetSheet(unsigned sheetX, unsigned sheetY);
+	std::unique_ptr<WorldSheet>	InstantiateViewportSheet(unsigned sheetX, unsigned sheetY);
 	void EvaluateSheetHoveringSituation();
 	void InvalidateSheetHoveringSituation();
 	void InvalidateLevelViewport();
+	void ReflapBlitterSheets(D2D1_RECT_F viewPort, Facings towardsDirection);
 	bool PeekTouchdown();
 	bool PopTouchdown();
 	void ObliterateObject(D2D1_POINT_2U levelCoordinate);

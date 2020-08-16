@@ -14,6 +14,7 @@ WorldSheet::WorldSheet(std::shared_ptr<DX::DeviceResources> deviceResources)
 	this->m_floorBitmap = nullptr;
 	this->m_wallsBitmap = nullptr;
 	this->m_rooofBitmap = nullptr;
+	this->m_isPopulated = false;
 }
 
 WorldSheet::~WorldSheet()
@@ -334,6 +335,16 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 	}
 }
 
+float WorldSheet::PhysicalWidth()
+{
+	return this->m_sizePixle.width;
+}
+
+float WorldSheet::PhysicalHeight()
+{
+	return this->m_sizePixle.height;
+}
+
 D2D1_RECT_F WorldSheet::GetFloorBounds()
 {
 	auto size = this->m_floor->GetSize();
@@ -363,28 +374,26 @@ void WorldSheet::EraseSquare(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> ren
 
 void WorldSheet::ComputeViewportOverlap(D2D1_RECT_F viewPort)
 {
-	auto sheetRect = D2D1::RectF(
-		this->m_NWcornerInWorld.x, 
-		this->m_NWcornerInWorld.y, 
-		this->m_NWcornerInWorld.x + this->m_sizePixle.width, 
-		this->m_NWcornerInWorld.y + this->m_sizePixle.height
-	);
+	this->PhysicalPosition.left = this->m_NWcornerInWorld.x;
+	this->PhysicalPosition.top = this->m_NWcornerInWorld.y;
+	this->PhysicalPosition.right = this->m_NWcornerInWorld.x + this->m_sizePixle.width;
+	this->PhysicalPosition.bottom = this->m_NWcornerInWorld.y + this->m_sizePixle.height;
 
 	/* gives bottom-left point of intersection rectangle */
-	auto x5 = max(viewPort.left, sheetRect.left);
-	auto y5 = min(viewPort.bottom, sheetRect.bottom);
+	auto x5 = max(viewPort.left, this->PhysicalPosition.left);
+	auto y5 = min(viewPort.bottom, this->PhysicalPosition.bottom);
 	/* gives top-right point of intersection rectangle */
-	auto x6 = min(viewPort.right, sheetRect.right);
-	auto y6 = max(viewPort.top, sheetRect.top);
+	auto x6 = min(viewPort.right, this->PhysicalPosition.right);
+	auto y6 = max(viewPort.top, this->PhysicalPosition.top);
 	auto overlapRect = D2D1::RectF(x5, y6, x6, y5);
 	/* source is the overlap translated to co-ordinates locally relative to the sheet 
 	 * destination is the overlap translated to co-ordinates locally relative to the viewport */
 	this->SetBlittingArea(
 		D2D1::RectF(
-			overlapRect.left - sheetRect.left,
-			overlapRect.top - sheetRect.top,
-			overlapRect.right - sheetRect.left,
-			overlapRect.bottom - sheetRect.top
+			overlapRect.left - this->PhysicalPosition.left,
+			overlapRect.top - this->PhysicalPosition.top,
+			overlapRect.right - this->PhysicalPosition.left,
+			overlapRect.bottom - this->PhysicalPosition.top
 		),
 		D2D1::RectF(
 			overlapRect.left - viewPort.left,
@@ -401,7 +410,7 @@ void WorldSheet::SetBlittingArea(D2D1_RECT_F blitFrom, D2D1_RECT_F blitTo)
 	this->m_blitTo = blitTo;
 }
 
-void WorldSheet::Translate(D2D1_RECT_F viewPort, unsigned deltaX, unsigned deltaY)
+void WorldSheet::Translate(D2D1_RECT_F viewPort, float deltaX, float deltaY)
 {
 	if (deltaX != 0)
 	{
@@ -451,7 +460,7 @@ void WorldSheet::FreeBitmaps()
 
 	if (!(this->m_floorBitmap == nullptr))
 	{
-		this->SafeRelease(&this->m_wallsBitmap);
+		this->SafeRelease(&this->m_wallsBitmap);	
 	}
 
 	if (!(this->m_floorBitmap == nullptr))

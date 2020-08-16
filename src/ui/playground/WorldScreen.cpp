@@ -134,24 +134,30 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 		);
 
 		auto viewPort = D2D1::RectF(this->m_viewportOffset.x, this->m_viewportOffset.y, this->m_viewportOffset.x + this->m_viewportSize.width, this->m_viewportOffset.y + this->m_viewportSize.height);
-		if (this->m_hoveringSheetNW != nullptr)
+		if (WORLDSHEET_NW != nullptr)
 		{
-			this->m_hoveringSheetNW->Translate(viewPort, 0, 0);
+			WORLDSHEET_NW->Translate(viewPort, 0, 0);
 		}
 
-		if (this->m_hoveringSheetNE != nullptr)
+		if (WORLDSHEET_NE != nullptr)
 		{
-			this->m_hoveringSheetNE->Translate(viewPort, 0, 0);
+			WORLDSHEET_NE->Translate(viewPort, 0, 0);
 		}
 
-		if (this->m_hoveringSheetSE != nullptr)
+		if (WORLDSHEET_SE != nullptr)
 		{
-			this->m_hoveringSheetSE->Translate(viewPort, 0, 0);
+			WORLDSHEET_SE->Translate(viewPort, 0, 0);
 		}
 
-		if (this->m_hoveringSheetSW != nullptr)
+		if (WORLDSHEET_SW != nullptr)
 		{
-			this->m_hoveringSheetSW->Translate(viewPort, 0, 0);
+			WORLDSHEET_SW->Translate(viewPort, 0, 0);
+		}
+
+		/* will this trigger an blittersheet treshold transgression to the right? */
+		if ((WORLDSHEET_NE->PhysicalPosition.right - 2.0f * blooDot::Consts::SQUARE_WIDTH) < viewPort.right)
+		{
+			this->ReflapBlitterSheets(viewPort, Facings::East);
 		}
 	}
 
@@ -317,54 +323,57 @@ void WorldScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 	);
 
 	/* blit all floor regions */
-	if (this->m_hoveringSheetNW != nullptr)
+	if (WORLDSHEET_NW != nullptr)
 	{
-		this->m_hoveringSheetNW->BlitToViewportFloor();
+		WORLDSHEET_NW->BlitToViewportFloor();
 	}
 
-	if (this->m_hoveringSheetNE != nullptr)
+	if (WORLDSHEET_NE != nullptr)
 	{
-		this->m_hoveringSheetNE->BlitToViewportFloor();
+		WORLDSHEET_NE->BlitToViewportFloor();
 	}
 
-	if (this->m_hoveringSheetSW != nullptr)
+	if (WORLDSHEET_SW != nullptr)
 	{
-		this->m_hoveringSheetSW->BlitToViewportFloor();
+		WORLDSHEET_SW->BlitToViewportFloor();
 	}
 
-	if (this->m_hoveringSheetSE != nullptr)
+	if (WORLDSHEET_SE != nullptr)
 	{
-		this->m_hoveringSheetSE->BlitToViewportFloor();
+		WORLDSHEET_SE->BlitToViewportFloor();
 	}
 
 	/* most particles are below the player's head */
 	if (this->m_shooting)
 	{
-		this->m_d2dContext->FillEllipse(D2D1::Ellipse(D2D1::Point2F(this->m_shootx - this->m_viewportOffset.x, this->m_shooty - this->m_viewportOffset.y), 3.0, 3.0), this->m_projectileBrush.Get());
+		this->m_d2dContext->FillEllipse(D2D1::Ellipse(D2D1::Point2F(
+			this->m_shootx - this->m_viewportOffset.x, 
+			this->m_shooty - this->m_viewportOffset.y
+		), 3.0, 3.0), this->m_projectileBrush.Get());
 	}
 
 	/* blit all mob-level sprites */
 	this->RenderSprites();
 
 	/* blit all wall and rooof parts */
-	if (this->m_hoveringSheetNW != nullptr)
+	if (WORLDSHEET_NW != nullptr)
 	{
-		this->m_hoveringSheetNW->BlitToViewportWallsRooof();
+		WORLDSHEET_NW->BlitToViewportWallsRooof();
 	}
 
-	if (this->m_hoveringSheetNE != nullptr)
+	if (WORLDSHEET_NE != nullptr)
 	{
-		this->m_hoveringSheetNE->BlitToViewportWallsRooof();
+		WORLDSHEET_NE->BlitToViewportWallsRooof();
 	}
 
-	if (this->m_hoveringSheetSW != nullptr)
+	if (WORLDSHEET_SW != nullptr)
 	{
-		this->m_hoveringSheetSW->BlitToViewportWallsRooof();
+		WORLDSHEET_SW->BlitToViewportWallsRooof();
 	}
 
-	if (this->m_hoveringSheetSE != nullptr)
+	if (WORLDSHEET_SE != nullptr)
 	{
-		this->m_hoveringSheetSE->BlitToViewportWallsRooof();
+		WORLDSHEET_SE->BlitToViewportWallsRooof();
 	}
 
 #if _DEBUG

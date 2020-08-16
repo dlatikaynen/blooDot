@@ -53,7 +53,7 @@ void Dings::Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int can
 {
 	this->m_lookupShy.x = canvasX;
 	this->m_lookupShy.y = canvasY;
-	this->SetSheetPlacementsFromCoalescability();
+	this->SetOnSheetPlacementsFromCoalescability();
 	this->m_fromFile = this->ShouldLoadFromBitmap();
 	this->PrepareBackground(drawTo);
 	if (this->m_Facings == Facings::Cross)
@@ -221,7 +221,7 @@ void Dings::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo,
 	/* pure virtual */
 }
 
-void Dings::SetSheetPlacementsFromCoalescability()
+void Dings::SetOnSheetPlacementsFromCoalescability()
 {
 	auto oX = this->m_lookupShy.x, oY = this->m_lookupShy.y;
 	auto x = oX, y = oY;
