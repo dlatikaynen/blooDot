@@ -9,17 +9,18 @@ static const int MAX_BUFFER_COUNT = 3;
 enum SoundEvent
 {
 	RollingEvent		= 0,
-    FallingEvent		= 1,
-    CollisionEvent		= 2,
-    CheckpointEvent		= 3,
-    MenuChangeEvent		= 4,
-    MenuSelectedEvent	= 5,
+	FallingEvent		= 1,
+	CollisionEvent		= 2,
+	CheckpointEvent		= 3,
+	MenuChangeEvent		= 4,
+	MenuSelectedEvent	= 5,
 	MenuTiltEvent		= 6,
 	HitCrumble			= 7,
 	ProjectileDecay		= 8,
 	ClickSlap			= 9,
 	ClickTikk			= 10,
-    LastSoundEvent		= 11
+	Kaching				= 11,
+	LastSoundEvent		= 12
 };
 
 // Make sure this matches the number of entries in the SoundEvent enum above
@@ -27,13 +28,13 @@ static const int SOUND_EVENTS = LastSoundEvent;
 
 struct SoundEffectData
 {
-    SoundEvent                  m_soundEventType;
-    IXAudio2SourceVoice*        m_soundEffectSourceVoice;
-    XAUDIO2_BUFFER              m_audioBuffer;
-    byte*                       m_soundEffectBufferData;
-    uint32                      m_soundEffectBufferLength;
-    uint32                      m_soundEffectSampleRate;
-    bool                        m_soundEffectStarted;
+	SoundEvent                  m_soundEventType;
+	IXAudio2SourceVoice*        m_soundEffectSourceVoice;
+	XAUDIO2_BUFFER              m_audioBuffer;
+	byte*                       m_soundEffectBufferData;
+	uint32                      m_soundEffectBufferLength;
+	uint32                      m_soundEffectSampleRate;
+	bool                        m_soundEffectStarted;
 };
 
 struct StreamingVoiceContext : public IXAudio2VoiceCallback

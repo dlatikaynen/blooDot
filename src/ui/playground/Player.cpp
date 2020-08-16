@@ -46,9 +46,10 @@ void Player::PushY(float accelerationRate, float attenuationRate, float gripFact
 	this->Momentum.mediumViscosity = mediumViscosity;
 }
 
-void Player::Update()
+Object* Player::Update()
 {
 	D2D1_RECT_F myBoundingBox;
+	Object* collidedWith = nullptr;
 
 	/* accelerate with momentary acceleration */
 	this->Momentum.speedX += this->Momentum.accelerationX;
@@ -136,7 +137,15 @@ void Player::Update()
 				auto wouldPenetrate = westCenterBoundingBox.right - myBoundingBox.left;
 				newPosition.left = westCenterBoundingBox.right + 1.0F;
 				newPosition.right = newPosition.left + originalWidth;
-				this->Momentum.HitTheWall(Facings::East);
+				if (westCenterTerrain->m_BehaviorsWalls & ObjectBehaviors::Solid)
+				{
+					this->Momentum.HitTheWall(Facings::East);
+				}
+
+				if (westCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Solid)
+				{
+					collidedWith = westCenterTerrain;
+				}
 			}
 		}
 	}
@@ -157,7 +166,15 @@ void Player::Update()
 				auto wouldPenetrate = myBoundingBox.right - eastCenterBoundingBox.left;
 				newPosition.right = eastCenterBoundingBox.left - 1.0F;
 				newPosition.left = newPosition.right - originalWidth;
-				this->Momentum.HitTheWall(Facings::East);
+				if (eastCenterTerrain->m_BehaviorsWalls & ObjectBehaviors::Solid)
+				{
+					this->Momentum.HitTheWall(Facings::East);
+				}
+
+				if (eastCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Solid)
+				{
+					collidedWith = eastCenterTerrain;
+				}
 			}
 		}		
 	}
@@ -176,7 +193,15 @@ void Player::Update()
 				auto wouldPenetrate = northCenterBoundingBox.bottom - myBoundingBox.top;
 				newPosition.top = northCenterBoundingBox.bottom + 1.0F;
 				newPosition.bottom = newPosition.top + originalHeight;
-				this->Momentum.HitTheWall(Facings::North);
+				if (northCenterTerrain->m_BehaviorsWalls & ObjectBehaviors::Solid)
+				{
+					this->Momentum.HitTheWall(Facings::North);
+				}
+
+				if (northCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Solid)
+				{
+					collidedWith = northCenterTerrain;
+				}
 			}
 		}
 	}
@@ -195,10 +220,19 @@ void Player::Update()
 				auto wouldPenetrate = myBoundingBox.bottom - southCenterBoundingBox.top;
 				newPosition.bottom = southCenterBoundingBox.top - 1.0F;
 				newPosition.top = newPosition.bottom - originalHeight;
-				this->Momentum.HitTheWall(Facings::South);
+				if (southCenterTerrain->m_BehaviorsWalls & ObjectBehaviors::Solid)
+				{
+					this->Momentum.HitTheWall(Facings::South);
+				}
+
+				if (southCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Solid)
+				{
+					collidedWith = southCenterTerrain;
+				}
 			}
 		}
 	}
 
 	this->SetPosition(newPosition);
+	return collidedWith;
 }

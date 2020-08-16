@@ -94,7 +94,16 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 	for (auto mob = this->m_playerData.begin(); mob != this->m_playerData.end(); ++mob)
 	{		
 		auto Player = (*mob);
-		Player->Update();
+		auto collidedWith = Player->Update();
+		if (collidedWith != nullptr)
+		{
+			if(collidedWith->m_BehaviorsWalls & ObjectBehaviors::Takeable)
+			{
+				this->m_audio->PlaySoundEffect(SoundEvent::Kaching);
+				this->ObliterateObject(collidedWith->PositionSquare);
+			}
+		}
+
 		if ((Player->Position.left - this->m_viewportOffset.x) < this->m_viewportScrollTreshold.left)
 		{
 			scrollTresholdExceeded = true;

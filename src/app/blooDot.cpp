@@ -311,13 +311,13 @@ void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
 		 * resources.All other delayed resources that only need to be created on app
 		 * startup go here;
 		 * (1) audio */
-        m_audio->CreateResources();
+        this->m_audio->CreateResources();
 
 		/* cycle the whole engine once. not doing so fucks up the audio engine on exit. whatevs. */
-		m_audio->Start();
-		m_audio->Render();
-		m_audio->SuspendSfx();
-		m_audio->SuspendMusic();
+		this->m_audio->Start();
+		this->m_audio->Render();
+		this->m_audio->SuspendSfx();
+		this->m_audio->SuspendMusic();
     }
 
     if (delay)
