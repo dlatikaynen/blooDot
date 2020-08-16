@@ -376,7 +376,7 @@ void Audio::CreateSourceVoice(SoundEvent sound)
 			break;
 
 		case SoundEvent::Kaching:
-			soundEffectStream.Initialize(L"Media\\Audio\\click-slap.wav");
+			soundEffectStream.Initialize(L"Media\\Audio\\kaching.wav");
 			break;
 
 		default:
