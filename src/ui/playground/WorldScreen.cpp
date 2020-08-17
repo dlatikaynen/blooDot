@@ -404,6 +404,21 @@ void WorldScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 #if _DEBUG
 	this->m_d2dContext->DrawRectangle(this->m_viewportScrollTreshold, this->m_debugTresholdBrush.Get(), 0.75f);
 #endif
+	auto leben = 5.0f;
+	auto black = this->m_Brushes.WannaHave(this->m_d2dContext, MFARGB{0, 0, 0, 255});
+	auto red = this->m_Brushes.WannaHave(this->m_d2dContext, MFARGB{0, 0, 250, 255});
+	auto darkred = this->m_Brushes.WannaHave(this->m_d2dContext, MFARGB{0, 0, 70, 175});
+
+	this->m_d2dContext->FillRectangle(D2D1::RectF(101+(leben) * 7.0f, 101, 135, 109), darkred.Get());
+	this->m_d2dContext->FillRectangle(D2D1::RectF(101, 101, 100 + (leben) * 7.0f, 109), red.Get());
+	this->m_d2dContext->DrawRoundedRectangle(D2D1::RoundedRect(D2D1::RectF(100, 100, 135, 110), 1.5, 1.5), black.Get());
+	
+	this->m_d2dContext->DrawLine(D2D1::Point2F(107, 100), D2D1::Point2F(107, 110), black.Get());
+	this->m_d2dContext->DrawLine(D2D1::Point2F(114, 100), D2D1::Point2F(114, 110), black.Get());
+	this->m_d2dContext->DrawLine(D2D1::Point2F(121, 100), D2D1::Point2F(121, 110), black.Get());
+	this->m_d2dContext->DrawLine(D2D1::Point2F(128, 100), D2D1::Point2F(128, 110), black.Get());
+	
+
 
 	HRESULT hr = m_d2dContext->EndDraw();
 	if (hr != D2DERR_RECREATE_TARGET)
