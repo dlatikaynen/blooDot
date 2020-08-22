@@ -29,7 +29,7 @@ enum Facings : unsigned int
 	SW = 64,													/* left-bottom capping edge */
 	West = 128,													/* U-bag with opening to the right (westcap) */
 	Cross = West | North | East | South,						/* stuff like chests */
-	Center = 256,												/* crossing */
+	Center = 256,												/* crossing; in a sense that there is a NS and a WE ("pipes") */
 	SingleEdge = 512,
 	TripleEdge = 1024,
 	CornerNear = 2048,
@@ -178,6 +178,7 @@ public:
 		ChestSilver = 16,
 		ChestGold = 17,
 		MauerLoose = 20,
+		Door = 21,
 		Dalek = 34,
 		Schaedel = 4042
 
@@ -268,7 +269,7 @@ protected:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> LoadBitmap(Platform::String^ fileName);
 	virtual void PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) { };
 	virtual void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
-	virtual void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect);
+	virtual void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, const D2D1_RECT_F *rect);
 
 protected:
 	static const int Dings::MAUER_GRAY_SOLID;
@@ -320,6 +321,14 @@ public:
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 protected:
 	void LooseMauer::PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+};
+
+class Door : public Dings
+{
+public:
+	Door(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, const D2D1_RECT_F *rect) override;
+protected:
 };
 
 class Wasser : public Dings
@@ -420,7 +429,7 @@ class Chest : public Dings
 {
 public:
 	Chest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
-	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect) override;
+	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, const D2D1_RECT_F *rect) override;
 
 protected:
 	virtual int ColorVariation();
@@ -457,5 +466,5 @@ class Rail : public Dings
 {
 public:
 	Rail(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
-	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect) override;
+	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, const D2D1_RECT_F *rect) override;
 };

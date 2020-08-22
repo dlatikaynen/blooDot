@@ -322,6 +322,7 @@
     <ClCompile Include="..\src\dings\Dings.cpp" />
     <ClCompile Include="..\src\dings\ObjectBehaviors.cpp" />
     <ClCompile Include="..\src\dings\ObjectProperties.cpp" />
+    <ClCompile Include="..\src\dings\wall-like\doors.cpp" />
     <ClCompile Include="..\src\dx\TTFLoader.cpp" />
     <ClCompile Include="..\src\sound\Audio.cpp" />
     <ClCompile Include="..\src\io\BasicLoader.cpp" />

@@ -108,6 +108,7 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	this->RegisterDing(&FloorRockTile(deviceResources, brushRegistry),		14,  1);
 	this->RegisterDing(&Lettuce::Lettuce(deviceResources, brushRegistry),	14,  2);
 	this->RegisterDing(&LooseMauer(deviceResources, brushRegistry),			14,  3);
+	this->RegisterDing(&Door(deviceResources, brushRegistry),				14,  4);
 	this->RegisterDing(&Player1(deviceResources, brushRegistry),			00,  8);
 	this->RegisterDing(&Dalek::Dalek(deviceResources, brushRegistry),		00,  9);
 	this->RegisterDing(&Schaedel::Schaedel(deviceResources, brushRegistry),	00, 10);

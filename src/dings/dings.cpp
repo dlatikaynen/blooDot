@@ -101,7 +101,7 @@ void Dings::DrawShy(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 {
 	D2D1_RECT_F rect;
 	PrepareRect(&this->m_lookupShy, rect);
-	this->DrawInternal(drawTo, rect);
+	this->DrawInternal(drawTo, &rect);
 }
 
 void Dings::DrawTwin(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
@@ -120,7 +120,7 @@ void Dings::DrawTwin(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 		this->Rotate90(rendEr, rect, orientationDent);
 		if (this->m_fromFile == nullptr)
 		{
-			this->DrawInternal(drawTo, rect);
+			this->DrawInternal(drawTo, &rect);
 		}
 		else
 		{
@@ -147,7 +147,7 @@ void Dings::DrawQuadruplet(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawT
 		this->Rotate90(rendEr, rect, orientationDent);
 		if (this->m_fromFile == nullptr)
 		{
-			this->DrawInternal(drawTo, rect);
+			this->DrawInternal(drawTo, &rect);
 		}
 		else
 		{
@@ -176,7 +176,7 @@ void Dings::DrawRotatory(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 		this->Rotate(rendEr, rect, static_cast<float>(orientationDent) * 22.5F + 90.0F);
 		if (this->m_fromFile == nullptr)
 		{
-			this->DrawInternal(drawTo, rect);
+			this->DrawInternal(drawTo, &rect);
 		}
 		else
 		{
@@ -200,7 +200,7 @@ void Dings::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	PrepareRect(&this->m_lookupShy, rect);
 	if (this->m_fromFile == nullptr)
 	{
-		this->DrawInternal(drawTo, rect);
+		this->DrawInternal(drawTo, &rect);
 	}
 	else
 	{
@@ -216,9 +216,9 @@ void Dings::DrawClumsyPack(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawT
 	this->DrawInternal(drawTo);
 }
 
-void Dings::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect)
+void Dings::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, const D2D1_RECT_F *rect)
 {
-	/* pure virtual */
+	/* virtual */
 }
 
 void Dings::SetOnSheetPlacementsFromCoalescability()
@@ -504,6 +504,8 @@ inline OrientabilityIndexRotatory Dings::HeadingFromFacing(Facings orientationFa
 		case Facings::NWW: return OrientabilityIndexRotatory::HDG292_5;
 		case Facings::NW: return OrientabilityIndexRotatory::HDG315;
 		case Facings::NNW: return OrientabilityIndexRotatory::HDG337_5;
+		case Facings::NS: return OrientabilityIndexRotatory::HDG270;
+		case Facings::WE: return OrientabilityIndexRotatory::HDG360;
 #ifdef _DEBUG
 		default:
 			throw ref new Platform::FailureException(L"Invalid orientation in HeadingFromFacing function");
