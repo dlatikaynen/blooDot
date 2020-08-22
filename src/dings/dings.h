@@ -177,6 +177,7 @@ public:
 		Player4 = 15,
 		ChestSilver = 16,
 		ChestGold = 17,
+		MauerLoose = 20,
 		Dalek = 34,
 		Schaedel = 4042
 
@@ -270,8 +271,15 @@ protected:
 	virtual void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect);
 
 protected:
-	ObjectBehaviors				m_Behaviors;
-	std::shared_ptr<Bounding>	m_Bounding;
+	static const int Dings::MAUER_GRAY_SOLID;
+	static const int Dings::MAUER_GRAY_LOOSE;
+	static const float Dings::MAUER_INDENT;
+	static const float Dings::MAUER_BEZIER_X;
+	static const float Dings::MAUER_BEZIER_Y;
+
+	std::shared_ptr<DX::DeviceResources>	m_deviceResources;
+	ObjectBehaviors							m_Behaviors;
+	std::shared_ptr<Bounding>				m_Bounding;
 
 private:
 	void SetOnSheetPlacementsFromCoalescability();
@@ -285,7 +293,6 @@ private:
 	void DrawRotatory(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	void DrawClumsyPack(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 
-	std::shared_ptr<DX::DeviceResources> m_deviceResources;
 	Platform::String^ m_fromFile;
 };
 
@@ -304,6 +311,15 @@ public:
 	CrackedMauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 protected:
 	void PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+};
+
+class LooseMauer : public Dings
+{
+public:
+	LooseMauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+protected:
+	void LooseMauer::PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 };
 
 class Wasser : public Dings
@@ -443,5 +459,3 @@ public:
 	Rail(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, D2D1_RECT_F rect) override;
 };
-
-

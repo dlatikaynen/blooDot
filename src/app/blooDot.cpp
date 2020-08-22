@@ -333,7 +333,7 @@ void blooDotMain::LoadDeferredResources(bool delay, bool deviceOnly)
             });
         }
 
-		m_deferredResourcesReadyPending = true;
+		this->m_deferredResourcesReadyPending = true;
     }
 }
 
@@ -361,28 +361,28 @@ bool blooDotMain::Render()
     context->ClearRenderTargetView(m_deviceResources->GetBackBufferRenderTargetView(), DirectX::Colors::Black);
     context->ClearDepthStencilView(m_deviceResources->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	if (m_gameState == GameState::LoadScreen || m_gameState==GameState::MainMenu)
+	if (this->m_gameState == GameState::LoadScreen || this->m_gameState==GameState::MainMenu)
 	{
 		// Only render the loading screen for now.
-		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Loading Screen", 0);
-		m_loadScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
-		m_deviceResources->GetD3DDeviceContext()->EndEvent();
+		this->m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Loading Screen", 0);
+		this->m_loadScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
+		this->m_deviceResources->GetD3DDeviceContext()->EndEvent();
 	}
-	else if (m_gameState == GameState::LevelEditor)
+	else if (this->m_gameState == GameState::LevelEditor)
 	{
-		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Level Editor", 0);
-		m_worldScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
-		m_deviceResources->GetD3DDeviceContext()->EndEvent();
+		this->m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Level Editor", 0);
+		this->m_worldScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
+		this->m_deviceResources->GetD3DDeviceContext()->EndEvent();
 	}
-	else if (m_gameState == GameState::InGameActive)
+	else if (this->m_gameState == GameState::InGameActive)
 	{
-		m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render World", 0);
-		m_worldScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
-		m_deviceResources->GetD3DDeviceContext()->EndEvent();
+		this->m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render World", 0);
+		this->m_worldScreen->Render(m_deviceResources->GetOrientationTransform2D(), m_pointerPosition);
+		this->m_deviceResources->GetD3DDeviceContext()->EndEvent();
 	}
-	else if (m_deferredResourcesReady)
+	else if (this->m_deferredResourcesReady)
 	{
-		m_deviceResources->GetD3DDeviceContext()->IASetInputLayout(m_inputLayout.Get());
+		this->m_deviceResources->GetD3DDeviceContext()->IASetInputLayout(m_inputLayout.Get());
 	}
 
 	if (this->m_audio->IsMusicPlaying())
@@ -1369,7 +1369,7 @@ void blooDotMain::KeyDown(Windows::System::VirtualKey key)
 	{
 		m_keyGridActive = true;
 	}
-	else if (key == Windows::System::VirtualKey::F4)
+	else if (key == Windows::System::VirtualKey::F7)
 	{
 		m_keyDingSheetActive = true;
 	}
@@ -1504,7 +1504,7 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 			this->m_keyGridActive = false;
 		}
 	}
-	else if (key == Windows::System::VirtualKey::D)
+	else if (key == Windows::System::VirtualKey::F7)
 	{
 		if (this->m_keyDingSheetActive)
 		{

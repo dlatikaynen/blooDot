@@ -1,5 +1,5 @@
 #include "..\PreCompiledHeaders.h"
-#include <DirectXColors.h> // For named colors
+#include <DirectXColors.h>
 #include "..\app\blooDot.h"
 #include "GameOfLife.h"
 
@@ -272,7 +272,7 @@ void GameOfLifeAnimation::SaveRecording(Platform::String^ fileName)
 	oF.close();	
 	if (!oF) 
 	{
-		OutputDebugStringW(L"mist.");
+		OutputDebugStringW(L"frick.");
 	}
 }
 
@@ -327,4 +327,3 @@ GameOfLifeStep GameOfLifeAnimation::ComputeFromCurrent()
 
 	return step;
 }
-

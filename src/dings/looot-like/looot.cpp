@@ -7,9 +7,7 @@ Coin::Coin(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* 
 	m_Coalescing = Facings::Shy;
 	m_preferredLayer = Layers::Walls;
 	m_possibleLayers = Layers::Walls;
-	this->m_Behaviors = 
-		ObjectBehaviors::Solid |
-		ObjectBehaviors::Takeable;
+	this->m_Behaviors = ObjectBehaviors::Takeable;
 
 }
 
