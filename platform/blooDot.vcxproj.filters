@@ -451,6 +451,18 @@
     <Image Include="Media\Bitmaps\schaedel.png">
       <Filter>media\bitmap</Filter>
     </Image>
+    <Image Include="Media\Bitmaps\floorrocktile-cracked.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\floorstonetile-ochre.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\floorstonetile-purple.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\floorstonetile-slate.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />

@@ -292,7 +292,11 @@
     <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Image Include="Assets\StoreLogo.png" />
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Image Include="Media\Bitmaps\floorrocktile-cracked.png" />
     <Image Include="Media\Bitmaps\floorrocktile.png" />
+    <Image Include="Media\Bitmaps\floorstonetile-ochre.png" />
+    <Image Include="Media\Bitmaps\floorstonetile-purple.png" />
+    <Image Include="Media\Bitmaps\floorstonetile-slate.png" />
     <Image Include="Media\Bitmaps\highgrass.png" />
     <Image Include="Media\Bitmaps\floorstonetile.png" />
     <Image Include="Media\Bitmaps\dalek.png" />

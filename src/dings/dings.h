@@ -165,11 +165,15 @@ public:
 		GrassHigh = 3,
 		SnowTile = 4,
 		FloorTilingStone = 5,
+		FloorTilingStonePurple = 23,
+		FloorTilingStoneOchre = 24,
+		FloorTilingStoneSlate = 25,
 		Coin = 6,
 		Chest = 7,
 		Rail = 8,
 		MauerCracked = 9,
 		FloorTilingRock = 10,
+		FloorTilingRockCracked = 22,
 		Lettuce = 11,
 		Player = 12,
 		Player2 = 13,
@@ -411,10 +415,42 @@ protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
 
+class FloorStoneTilePurple : public Dings
+{
+public:
+	FloorStoneTilePurple(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class FloorStoneTileOchre : public Dings
+{
+public:
+	FloorStoneTileOchre(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class FloorStoneTileSlate : public Dings
+{
+public:
+	FloorStoneTileSlate(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
 class FloorRockTile : public Dings
 {
 public:
 	FloorRockTile(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class FloorRockTileCracked : public Dings
+{
+public:
+	FloorRockTileCracked(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
