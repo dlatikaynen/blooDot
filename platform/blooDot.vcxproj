@@ -320,6 +320,7 @@
     <ClCompile Include="..\src\app\Consts.cpp" />
     <ClCompile Include="..\src\app\Utility.cpp" />
     <ClCompile Include="..\src\dings\Dings.cpp" />
+    <ClCompile Include="..\src\dings\floor-like\flooring.cpp" />
     <ClCompile Include="..\src\dings\ObjectBehaviors.cpp" />
     <ClCompile Include="..\src\dings\ObjectProperties.cpp" />
     <ClCompile Include="..\src\dings\wall-like\doors.cpp" />
