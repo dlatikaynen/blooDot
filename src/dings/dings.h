@@ -183,6 +183,8 @@ public:
 		ChestGold = 17,
 		MauerLoose = 20,
 		Door = 21,
+		BarrelWood = 26,
+		BarrelIndigo = 27,
 		Dalek = 34,
 		Schaedel = 4042
 
@@ -495,6 +497,22 @@ class Lettuce : public Dings
 {
 public:
 	Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class BarrelWooden : public Dings
+{
+public:
+	BarrelWooden(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class BarrelIndigo : public Dings
+{
+public:
+	BarrelIndigo(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };

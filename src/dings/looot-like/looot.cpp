@@ -162,3 +162,35 @@ Platform::String^ Lettuce::ShouldLoadFromBitmap()
 {
 	return L"lettuce.png";
 }
+
+BarrelWooden::BarrelWooden(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::BarrelWood, "Wooden barrel", deviceResources, drawBrushes)
+{
+	this->m_Facings = Facings::Shy;
+	this->m_Coalescing = Facings::Shy;
+	this->m_preferredLayer = Layers::Walls;
+	this->m_possibleLayers = Layers::Walls;
+	this->m_Behaviors =
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::Takeable;
+}
+
+Platform::String^ BarrelWooden::ShouldLoadFromBitmap()
+{
+	return L"barrel-wooden.png";
+}
+
+BarrelIndigo::BarrelIndigo(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::BarrelIndigo, "Indigo barrel", deviceResources, drawBrushes)
+{
+	this->m_Facings = Facings::Shy;
+	this->m_Coalescing = Facings::Shy;
+	this->m_preferredLayer = Layers::Walls;
+	this->m_possibleLayers = Layers::Walls;
+	this->m_Behaviors =
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::Takeable;
+}
+
+Platform::String^ BarrelIndigo::ShouldLoadFromBitmap()
+{
+	return L"barrel-indigo.png";
+}

@@ -292,6 +292,8 @@
     <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Image Include="Assets\StoreLogo.png" />
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Image Include="Media\Bitmaps\barrel-indigo.png" />
+    <Image Include="Media\Bitmaps\barrel-wooden.png" />
     <Image Include="Media\Bitmaps\floorrocktile-cracked.png" />
     <Image Include="Media\Bitmaps\floorrocktile.png" />
     <Image Include="Media\Bitmaps\floorstonetile-ochre.png" />

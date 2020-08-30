@@ -111,6 +111,8 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	this->RegisterDing(&FloorStoneTileOchre(deviceResources, brushRegistry),	17,  1);
 	this->RegisterDing(&FloorStoneTileSlate(deviceResources, brushRegistry),	18,  1);
 	this->RegisterDing(&Lettuce::Lettuce(deviceResources, brushRegistry),		14,  2);
+	this->RegisterDing(&BarrelWooden::BarrelWooden(deviceResources, brushRegistry), 15, 2);
+	this->RegisterDing(&BarrelIndigo::BarrelIndigo(deviceResources, brushRegistry), 16, 2);
 	this->RegisterDing(&LooseMauer(deviceResources, brushRegistry),				14,  3);
 	this->RegisterDing(&Door(deviceResources, brushRegistry),					14,  4);
 	this->RegisterDing(&Player1(deviceResources, brushRegistry),				00,  8);
