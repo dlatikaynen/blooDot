@@ -386,6 +386,7 @@
     <ClInclude Include="..\src\app\Consts.h" />
     <ClInclude Include="..\src\app\Utility.h" />
     <ClInclude Include="..\src\dings\Dings.h" />
+    <ClInclude Include="..\src\dings\mobs.h" />
     <ClInclude Include="..\src\dings\ObjectBehaviors.h" />
     <ClInclude Include="..\src\dings\ObjectProperties.h" />
     <ClInclude Include="..\src\dx\TTFLoader.h" />

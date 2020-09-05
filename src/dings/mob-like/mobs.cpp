@@ -1,7 +1,16 @@
 #include "..\..\PreCompiledHeaders.h"
-#include "..\dings.h"
+#include "..\mobs.h"
 
-Player1::Player1(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Player, "Player-1", deviceResources, drawBrushes)
+Mob::Mob(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(dingID, dingName, deviceResources, drawBrushes)
+{
+}
+
+bool Mob::IsMob()
+{
+	return true;
+}
+
+Player1::Player1(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Mob(Dings::DingIDs::Player, "Player-1", deviceResources, drawBrushes)
 {
 	m_Facings = Facings::Viech;
 	m_Coalescing = Facings::Shy;
@@ -49,7 +58,7 @@ Platform::String^ Player4::ShouldLoadFromBitmap()
 	return L"player-4.png";
 }
 
-Schaedel::Schaedel(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Schaedel, L"Schädel", deviceResources, drawBrushes)
+Schaedel::Schaedel(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Mob(Dings::DingIDs::Schaedel, L"Schädel", deviceResources, drawBrushes)
 {
 	m_Facings = Facings::Viech;
 	m_Coalescing = Facings::Shy;

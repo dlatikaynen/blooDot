@@ -27,15 +27,18 @@ public:
 	unsigned GetNumOfSheetsNS();
 	Object* GetObjectAt(unsigned levelX, unsigned levelY, bool createIfNull);
 	ClumsyPacking::NeighborConfiguration GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, Dings::DingIDs dingID, Layers inLayer);
-	Dings* WeedObjectAt(unsigned levelX, unsigned levelY, Layers* cullCoalescableInLayer);
+	std::shared_ptr<Dings> WeedObjectAt(unsigned levelX, unsigned levelY, Layers* cullCoalescableInLayer);
 	void SetupRuntimeState();
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> GetDingSheet();
+	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> GetMobsSheet();
 	ID2D1Bitmap* GetDingSheetBmp();
-	Dings* GetDing(Dings::DingIDs dingID);
+	ID2D1Bitmap* GetMobsSheetBmp();
+	std::shared_ptr<Dings> GetDing(Dings::DingIDs dingID);
 	Dings::DingIDs GetNextDingID(Dings::DingIDs dingID);
 	Dings::DingIDs GetPreviousDingID(Dings::DingIDs dingID);
 	Dings::DingIDs ConfirmDingID(Dings::DingIDs dingID);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> CreateDingImage(Dings::DingIDs dingID, Facings placementOrientation);
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> CreateMobImage(Dings::DingIDs dingID, Facings placementOrientation);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> GetFloorBackground();
 	D2D1_RECT_U DeterminePopulatedAreaBounds();
 
@@ -45,7 +48,7 @@ public:
 	bool HasSaveFileNameBeenSpecifiedBefore();
 
 protected:
-	void RegisterDing(Dings* dingDef, unsigned xOnSheet, unsigned yOnSheet);
+	void RegisterDing(std::shared_ptr<Dings> dingDef, unsigned xOnSheet, unsigned yOnSheet);
 
 private:
 	const unsigned char sigbyte = 42;
@@ -61,12 +64,15 @@ private:
 
 	Platform::String^									m_Name;
 	D2D1_SIZE_U											m_rectangularBounds;
-	std::map<Dings::DingIDs, Dings>						m_dingMap;
+	std::map<Dings::DingIDs, const std::shared_ptr<Dings>>	m_dingMap;
 	D2D1_SIZE_U											m_sheetSize;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_floorBackground;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_dingSheet;
+	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_mobsSheet;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_dingImage;
+	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_mobsImage;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_dingSheetBmp;
+	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_mobsSheetBmp;
 
 	std::vector<Object*>								m_Objects;
 	bool												m_isDesignTime;

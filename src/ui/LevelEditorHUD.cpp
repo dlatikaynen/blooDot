@@ -42,7 +42,7 @@ bool LevelEditorHUD::IsDingSelected()
 	return this->m_selectedDingID > Dings::DingIDs::Void;
 }
 
-void LevelEditorHUD::SelectDing(Dings* ding, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage, bool resetFacing)
+void LevelEditorHUD::SelectDing(std::shared_ptr<Dings> ding, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage, bool resetFacing)
 {
 	this->m_selectedDingID = ding->ID();
 	this->m_dingName = ding->Name();

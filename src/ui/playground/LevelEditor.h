@@ -12,7 +12,7 @@ public:
 	void SelectDingForPlacement(Dings::DingIDs dingID);
 	void SelectNextDingForPlacement();
 	void SelectPreviousDingForPlacement();
-	Dings* SelectedDing();
+	std::shared_ptr<Dings> SelectedDing();
 	void ConsiderPlacement(bool fillArea);
 	void DoPlaceDing();
 	void DoRotateObject(bool inverse);

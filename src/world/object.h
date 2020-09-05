@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\dings\dings.h"
+#include "..\dings\mobs.h"
 #include "..\algo\ClumsyPacking.h"
 
 class ObjectProperties;
@@ -19,36 +19,36 @@ public:
 	Object(Object&& obj) { };
 	Object::~Object();
 
-	void				Instantiate(std::shared_ptr<Level> placeInLevel, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
-	void				InstantiateInLayer(std::shared_ptr<Level> placeInLevel, Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
-	void				InstantiateInLayerFacing(std::shared_ptr<Level> placeInLevel, Layers inLayer, Dings* templateDing, Facings placementFacing);
-	void				PlaceInLevel(std::shared_ptr<Level> hostLevel);
-	void				Weed();
-	bool				WeedFromTop(Dings** dingWeeded, Layers* layerWeeded);
-	void				SetupRuntimeState(Dings* floorDing, Dings* wallsDing, Dings* rooofDing);
-	Layers				GetTopmostPopulatedLayer();
-	Platform::String^	GetName();
-	Layers				GetLayers();
-	Dings*				GetDing(Layers ofLayer);
-	Facings				PlacementFacing(Layers ofLayer);
-	void				AdjustFacing(Layers inLayer, Facings shouldBeFacing);
-	void				RotateInPlace(Layers inLayer, bool inverseDirection);
-	void				SetPosition(const D2D1_POINT_2U gridPosition);
-	void				SetPosition(const D2D1_POINT_2F pixelPosition);
-	void				SetPosition(const D2D1_RECT_F pixelPosition);
-	void				DesignSaveToFile(std::ofstream* toFile, Layers ofLayer);
+	void					Instantiate(std::shared_ptr<Level> placeInLevel, std::shared_ptr<Dings> templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
+	void					InstantiateInLayer(std::shared_ptr<Level> placeInLevel, Layers inLayer, std::shared_ptr<Dings> templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
+	void					InstantiateInLayerFacing(std::shared_ptr<Level> placeInLevel, Layers inLayer, std::shared_ptr<Dings> templateDing, Facings placementFacing);
+	void					PlaceInLevel(std::shared_ptr<Level> hostLevel);
+	void					Weed();
+	bool					WeedFromTop(std::shared_ptr<Dings>* dingWeeded, Layers* layerWeeded);
+	void					SetupRuntimeState(std::shared_ptr<Dings> floorDing, std::shared_ptr<Dings> wallsDing, std::shared_ptr<Dings> rooofDing);
+	Layers					GetTopmostPopulatedLayer();
+	Platform::String^		GetName();
+	Layers					GetLayers();
+	std::shared_ptr<Dings>	GetDing(Layers ofLayer);
+	Facings					PlacementFacing(Layers ofLayer);
+	void					AdjustFacing(Layers inLayer, Facings shouldBeFacing);
+	void					RotateInPlace(Layers inLayer, bool inverseDirection);
+	void					SetPosition(const D2D1_POINT_2U gridPosition);
+	void					SetPosition(const D2D1_POINT_2F pixelPosition);
+	void					SetPosition(const D2D1_RECT_F pixelPosition);
+	void					DesignSaveToFile(std::ofstream* toFile, Layers ofLayer);
 
-	D2D1_RECT_F			Position;
-	D2D1_POINT_2U		PositionSquare;
+	D2D1_RECT_F				Position;
+	D2D1_POINT_2U			PositionSquare;
 
-	bool				GetBoundingBox(_Out_ D2D1_RECT_F* boundingBox);
-	bool				GetBoundingBoxNext(_Out_ D2D1_RECT_F* boundingBox);
+	bool					GetBoundingBox(_Out_ D2D1_RECT_F* boundingBox);
+	bool					GetBoundingBoxNext(_Out_ D2D1_RECT_F* boundingBox);
 
 	ObjectBehaviors						m_BehaviorsWalls;
 	D2D1_RECT_F							m_spriteSourceRect;
 
 protected:
-	Dings*								m_DingWalls;
+	std::shared_ptr<Dings>				m_DingWalls;
 	ObjectProperties*					m_objectProperties;
 	Facings								m_FacingWalls;	
 	std::shared_ptr<Level>				m_Level;
@@ -60,8 +60,8 @@ protected:
 private:
 	std::vector<D2D1_RECT_F>::iterator	m_boundingBoxIter;
 	Layers								m_Layers;
-	Dings*								m_DingFloor;
-	Dings*								m_DingRooof;
+	std::shared_ptr<Dings>				m_DingFloor;
+	std::shared_ptr<Dings>				m_DingRooof;
 	Facings								m_FacingFloor;
 	Facings								m_FacingRooof;
 	ObjectBehaviors						m_BehaviorsFloor;

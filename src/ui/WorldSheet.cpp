@@ -86,7 +86,7 @@ void WorldSheet::Populate()
 
 		auto dingSheet = this->m_tiedToLevel->GetDingSheet();
 		ID2D1Bitmap *dingMap = NULL;
-		Dings* dings;
+		std::shared_ptr<Dings> dings;
 		dingSheet->GetBitmap(&dingMap);
 		for (unsigned y = 0; y < this->m_sizeUnits.height; ++y)
 		{
@@ -180,7 +180,7 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 {
 	auto beganDrawWalls = false, beganDrawFloor = false, beganDrawRooof = false;
 	auto doFloor = inLayer & Layers::Floor, doWalls = inLayer & Layers::Walls, doRooof = inLayer & Layers::Rooof;
-	Dings* dings = nullptr;
+	std::shared_ptr<Dings> dings = nullptr;
 
 	if (doFloor)
 	{
@@ -207,9 +207,6 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 		DX::ThrowIfFailed(this->m_d2dContext->CreateCompatibleRenderTarget(this->m_sizePixle, &this->m_rooof));
 	}
 
-	auto dingSheet = this->m_tiedToLevel->GetDingSheet();
-	ID2D1Bitmap *dingMap = NULL;
-	dingSheet->GetBitmap(&dingMap);
 	auto worldX = x + this->m_NWcornerInWorldSquares.x;
 	auto worldY = y + this->m_NWcornerInWorldSquares.y;
 	auto objectX = this->m_tiedToLevel->GetObjectAt(worldX, worldY, false);
@@ -254,6 +251,9 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 	else
 	{
 		auto layers = objectX->GetLayers();
+		auto dingSheet = this->m_tiedToLevel->GetDingSheet();
+		auto mobsSheet = this->m_tiedToLevel->GetMobsSheet();
+		ID2D1Bitmap *dingMap = NULL;
 		if (doFloor)
 		{
 			if (!beganDrawFloor)
@@ -269,9 +269,11 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 				D2D1_RECT_F replacementRect = D2D1::RectF(x * 49.0f, y * 49.0f, x * 49.0f + 49.0f, y * 49.0f + 49.0f);
 				this->m_floor->DrawBitmap(floorBackground, replacementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, replacementRect);
 			}
-			else			
+			else
 			{
+				dingSheet->GetBitmap(&dingMap);
 				this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(::Floor), x, y);
+				dingMap->Release();
 			}
 		}
 		
@@ -287,7 +289,17 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 			dings = objectX->GetDing(Layers::Walls);
 			if (dings != nullptr)
 			{
+				if (dings->IsMob())
+				{
+					mobsSheet->GetBitmap(&dingMap);
+				}
+				else
+				{
+					dingSheet->GetBitmap(&dingMap);
+				}
+
 				this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(::Walls), x, y);
+				dingMap->Release();
 			}
 		}
 		
@@ -303,12 +315,13 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 			dings = objectX->GetDing(Layers::Rooof);
 			if (dings != nullptr)
 			{
+				dingSheet->GetBitmap(&dingMap);
 				this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(::Rooof), x, y);
-			}			
+				dingMap->Release();
+			}
 		}
 	}
 
-	dingMap->Release();
 	if (beganDrawFloor)
 	{
 		DX::ThrowIfFailed(this->m_floor->EndDraw());
@@ -346,12 +359,12 @@ D2D1_RECT_F WorldSheet::GetFloorBounds()
 	);
 }
 
-void WorldSheet::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, Dings* ding, Facings coalesce, int placementX, int placementY)
+void WorldSheet::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, std::shared_ptr<Dings> ding, Facings coalesce, int placementX, int placementY)
 {
 	auto dingOnSheet = ding->GetSheetPlacement(coalesce);
 	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
 	D2D1_RECT_F placementRect = D2D1::RectF(placementX * 49.0f, placementY * 49.0f, placementX * 49.0f + 49.0f, placementY * 49.0f + 49.0f);
-	renderTarget->DrawBitmap(dingSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);	
+	renderTarget->DrawBitmap(dingSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
 }
 
 void WorldSheet::EraseSquare(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, int placementX, int placementY)

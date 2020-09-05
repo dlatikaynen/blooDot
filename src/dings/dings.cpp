@@ -39,6 +39,11 @@ Platform::String^ Dings::Name()
 	return this->m_Name;
 }
 
+bool Dings::IsMob()
+{
+	return false;
+}
+
 Layers Dings::GetPreferredLayer()
 {
 	return this->m_preferredLayer;

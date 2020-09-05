@@ -21,19 +21,19 @@ Object::~Object()
 	}
 }
 
-void Object::Instantiate(std::shared_ptr<Level> placeInLevel, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
+void Object::Instantiate(std::shared_ptr<Level> placeInLevel, std::shared_ptr<Dings> templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
 {
 	auto preferredLayer = templateDing->GetPreferredLayer();
 	this->InstantiateInLayer(placeInLevel, preferredLayer, templateDing, neighborHood);
 }
 
-void Object::InstantiateInLayer(std::shared_ptr<Level> placeInLevel, Layers inLayer, Dings* templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
+void Object::InstantiateInLayer(std::shared_ptr<Level> placeInLevel, Layers inLayer, std::shared_ptr<Dings> templateDing, ClumsyPacking::NeighborConfiguration neighborHood)
 {
 	auto facingVariation = templateDing->CouldCoalesce() ? ClumsyPacking::FacingFromConfiguration(neighborHood) : Facings::Shy;
 	this->InstantiateInLayerFacing(placeInLevel, inLayer, templateDing, facingVariation);
 }
 
-void Object::InstantiateInLayerFacing(std::shared_ptr<Level> placeInLevel, Layers inLayer, Dings* templateDing, Facings placementFacing)
+void Object::InstantiateInLayerFacing(std::shared_ptr<Level> placeInLevel, Layers inLayer, std::shared_ptr<Dings> templateDing, Facings placementFacing)
 {
 	switch (inLayer)
 	{
@@ -113,7 +113,7 @@ void Object::SetMobRotation(OrientabilityIndexRotatory rotationDent)
 
 void Object::Weed()
 {
-	Dings* tempDing = nullptr;
+	std::shared_ptr<Dings> tempDing = nullptr;
 	Layers tempLayer = Layers::None;
 	while (!this->WeedFromTop(&tempDing, &tempLayer));
 	if (this->m_boundingBoxes != nullptr)
@@ -125,7 +125,7 @@ void Object::Weed()
 
 // returns true, if nothing left
 // Dings are placement-created, don't delete them
-bool Object::WeedFromTop(Dings** dingWeeded, Layers* layerWeeded)
+bool Object::WeedFromTop(std::shared_ptr<Dings>* dingWeeded, Layers* layerWeeded)
 {
 	if (this->m_DingRooof != nullptr)
 	{
@@ -163,7 +163,7 @@ bool Object::WeedFromTop(Dings** dingWeeded, Layers* layerWeeded)
 	return this->m_DingRooof == nullptr && this->m_DingWalls == nullptr && this->m_DingFloor == nullptr;
 }
 
-void Object::SetupRuntimeState(Dings* floorDing, Dings* wallsDing, Dings* rooofDing)
+void Object::SetupRuntimeState(std::shared_ptr<Dings> floorDing, std::shared_ptr<Dings> wallsDing, std::shared_ptr<Dings> rooofDing)
 {
 	if (floorDing != nullptr)
 	{
@@ -242,7 +242,7 @@ Layers Object::GetLayers()
 	return this->m_Layers;
 }
 
-Dings* Object::GetDing(Layers ofLayer)
+std::shared_ptr<Dings> Object::GetDing(Layers ofLayer)
 {
 	switch (ofLayer)
 	{

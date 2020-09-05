@@ -194,6 +194,7 @@ public:
 
 	Dings::DingIDs								ID();
 	Platform::String^							Name();
+	virtual bool								IsMob();
 	void										Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY);
 	D2D1_POINT_2U								GetSheetPlacement(Facings orientation);
 	D2D1_POINT_2U								GetSheetPlacement(OrientabilityIndexRotatory rotationDent);
@@ -357,54 +358,6 @@ class Snow : public Dings
 {
 public:
 	Snow(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
-protected:
-	Platform::String^ ShouldLoadFromBitmap() override;
-};
-
-class Dalek : public Dings
-{
-public:
-	Dalek(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
-protected:
-	Platform::String^ ShouldLoadFromBitmap() override;
-};
-
-class Player1 : public Dings
-{
-public:
-	Player1(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
-protected:
-	Platform::String^ ShouldLoadFromBitmap() override;
-};
-
-class Player2 : public Player1
-{
-public:
-	Player2(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Player1(deviceResources, drawBrushes) { this->m_ID = Dings::DingIDs::Player2; m_Name = L"Player-2"; };
-protected:
-	Platform::String^ ShouldLoadFromBitmap() override;
-};
-
-class Player3 : public Player1
-{
-public:
-	Player3(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Player1(deviceResources, drawBrushes) { this->m_ID = Dings::DingIDs::Player3; m_Name = L"Player-3"; };
-protected:
-	Platform::String^ ShouldLoadFromBitmap() override;
-}; 
-
-class Player4 : public Player1
-{
-public:
-	Player4(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Player1(deviceResources, drawBrushes) { this->m_ID = Dings::DingIDs::Player4; m_Name = L"Player-4"; };
-protected:
-	Platform::String^ ShouldLoadFromBitmap() override;
-};
-
-class Schaedel : public Dings
-{
-public:
-	Schaedel(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };

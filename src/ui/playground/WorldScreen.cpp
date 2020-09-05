@@ -77,8 +77,8 @@ void WorldScreen::SetControl(bool triggershoot)
 		this->m_shooting = true;
 		this->m_shootx = Player->Position.left + blooDot::Consts::SQUARE_WIDTH / 2.0f;
 		this->m_shooty = Player->Position.top + blooDot::Consts::SQUARE_HEIGHT / 2.0f;
-		this->m_shoot_directionX = 4.5f * cos(static_cast<float>(2.0f * M_PI / 16.0f * Player->m_Orientation) - M_PI / 2.0f);
-		this->m_shoot_directionY = 4.5f * sin(static_cast<float>(2.0f * M_PI / 16.0f * Player->m_Orientation) - M_PI / 2.0f);
+		this->m_shoot_directionX = 4.5f * cosf(static_cast<float>(2.0f * M_PI / 16.0f * Player->m_Orientation) - M_PI / 2.0f);
+		this->m_shoot_directionY = 4.5f * sinf(static_cast<float>(2.0f * M_PI / 16.0f * Player->m_Orientation) - M_PI / 2.0f);
 		this->m_blockstravelled = 0;
 	}
 }
@@ -442,7 +442,7 @@ void WorldScreen::RenderSprites()
 		);
 
 		this->m_d2dContext->DrawBitmap(
-			this->m_currentLevel->GetDingSheetBmp(), 
+			this->m_currentLevel->GetMobsSheetBmp(), 
 			screenRect,
 			1.0f, 
 			D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, 

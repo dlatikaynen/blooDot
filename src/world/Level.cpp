@@ -42,16 +42,34 @@ Level::~Level()
 		this->m_dingSheet = nullptr;
 	}
 
+	if (this->m_mobsSheet != nullptr)
+	{
+		this->m_mobsSheet.Reset();
+		this->m_mobsSheet = nullptr;
+	}
+
 	if (this->m_dingSheetBmp != nullptr)
 	{
 		this->m_dingSheetBmp.Reset();
 		this->m_dingSheetBmp = nullptr;
 	}
 
+	if (this->m_mobsSheetBmp != nullptr)
+	{
+		this->m_mobsSheetBmp.Reset();
+		this->m_mobsSheetBmp = nullptr;
+	}
+
 	if (this->m_dingImage != nullptr)
 	{
 		this->m_dingImage.Reset();
 		this->m_dingImage = nullptr;
+	}
+
+	if (this->m_mobsImage != nullptr)
+	{
+		this->m_mobsImage.Reset();
+		this->m_mobsImage = nullptr;
 	}
 
 	if (this->m_floorBackground != nullptr)
@@ -91,47 +109,62 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	loader->LoadPngToBitmap(L"Media\\Bitmaps\\universe_seamless.png", deviceResources, &this->m_floorBackground);
 
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(1000.0f, 600.0f), &this->m_dingSheet));
+	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(1000.0f, 600.0f), &this->m_mobsSheet));
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT), &this->m_dingImage));
-	
-	this->m_dingSheet->BeginDraw();
-	this->RegisterDing(&Mauer::Mauer(deviceResources, brushRegistry),			00,  1);
-	this->RegisterDing(&Wasser::Wasser(deviceResources, brushRegistry),			01,  0);
-	this->RegisterDing(&HighGrass(deviceResources, brushRegistry),				02,  0);
-	this->RegisterDing(&Snow(deviceResources, brushRegistry),					03,  0);
-	this->RegisterDing(&FloorStoneTile(deviceResources, brushRegistry),			04,  0);
-	this->RegisterDing(&Coin::Coin(deviceResources, brushRegistry),				05,  0);
-	this->RegisterDing(&Chest::Chest(deviceResources, brushRegistry),			06,  0);
-	this->RegisterDing(&SilverChest(deviceResources, brushRegistry),			10,  0);
-	this->RegisterDing(&GoldChest(deviceResources, brushRegistry),				16,  3);
-	this->RegisterDing(&Rail::Rail(deviceResources, brushRegistry),				14,  0);
-	this->RegisterDing(&CrackedMauer(deviceResources, brushRegistry),			07,  1);
-	this->RegisterDing(&FloorRockTile(deviceResources, brushRegistry),			14,  1);
-	this->RegisterDing(&FloorRockTileCracked(deviceResources, brushRegistry),	15,  1);
-	this->RegisterDing(&FloorStoneTilePurple(deviceResources, brushRegistry),	16,  1);
-	this->RegisterDing(&FloorStoneTileOchre(deviceResources, brushRegistry),	17,  1);
-	this->RegisterDing(&FloorStoneTileSlate(deviceResources, brushRegistry),	18,  1);
-	this->RegisterDing(&Lettuce::Lettuce(deviceResources, brushRegistry),		14,  2);
-	this->RegisterDing(&BarrelWooden::BarrelWooden(deviceResources, brushRegistry), 15, 2);
-	this->RegisterDing(&BarrelIndigo::BarrelIndigo(deviceResources, brushRegistry), 16, 2);
-	this->RegisterDing(&LooseMauer(deviceResources, brushRegistry),				14,  3);
-	this->RegisterDing(&Door(deviceResources, brushRegistry),					14,  4);
-	this->RegisterDing(&Player1(deviceResources, brushRegistry),				00,  8);
-	this->RegisterDing(&Dalek::Dalek(deviceResources, brushRegistry),			00,  9);
-	this->RegisterDing(&Schaedel::Schaedel(deviceResources, brushRegistry),		00, 10);
+	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH * 3.f, blooDot::Consts::SQUARE_HEIGHT * 3.f), &this->m_mobsImage));
 
+	this->m_dingSheet->BeginDraw();
+	this->RegisterDing(std::make_shared<Mauer>(deviceResources, brushRegistry),					00,  1);
+	this->RegisterDing(std::make_shared<Wasser>(deviceResources, brushRegistry),				01,  0);
+	this->RegisterDing(std::make_shared<HighGrass>(deviceResources, brushRegistry),				02,  0);
+	this->RegisterDing(std::make_shared<Snow>(deviceResources, brushRegistry),					03,  0);
+	this->RegisterDing(std::make_shared<FloorStoneTile>(deviceResources, brushRegistry),		04,  0);
+	this->RegisterDing(std::make_shared<Coin>(deviceResources, brushRegistry),					05,  0);
+	this->RegisterDing(std::make_shared<Chest>(deviceResources, brushRegistry),					06,  0);
+	this->RegisterDing(std::make_shared<SilverChest>(deviceResources, brushRegistry),			10,  0);
+	this->RegisterDing(std::make_shared<GoldChest>(deviceResources, brushRegistry),				16,  3);
+	this->RegisterDing(std::make_shared<Rail>(deviceResources, brushRegistry),					14,  0);
+	this->RegisterDing(std::make_shared<CrackedMauer>(deviceResources, brushRegistry),			07,  1);
+	this->RegisterDing(std::make_shared<FloorRockTile>(deviceResources, brushRegistry),			14,  1);
+	this->RegisterDing(std::make_shared<FloorRockTileCracked>(deviceResources, brushRegistry),	15,  1);
+	this->RegisterDing(std::make_shared<FloorStoneTilePurple>(deviceResources, brushRegistry),	16,  1);
+	this->RegisterDing(std::make_shared<FloorStoneTileOchre>(deviceResources, brushRegistry),	17,  1);
+	this->RegisterDing(std::make_shared<FloorStoneTileSlate>(deviceResources, brushRegistry),	18,  1);
+	this->RegisterDing(std::make_shared<Lettuce>(deviceResources, brushRegistry),				14,  2);
+	this->RegisterDing(std::make_shared<BarrelWooden>(deviceResources, brushRegistry),			15,  2);
+	this->RegisterDing(std::make_shared<BarrelIndigo>(deviceResources, brushRegistry),			16,  2);
+	this->RegisterDing(std::make_shared<LooseMauer>(deviceResources, brushRegistry),			14,  3);
+	this->RegisterDing(std::make_shared<Door>(deviceResources, brushRegistry),					14,  4);
 	DX::ThrowIfFailed(this->m_dingSheet->EndDraw());
 	this->m_dingSheet->GetBitmap(&this->m_dingSheetBmp);
+
+	this->m_mobsSheet->BeginDraw();
+	this->RegisterDing(std::make_shared<Player1>(deviceResources, brushRegistry),	00,  8);
+	this->RegisterDing(std::make_shared<Dalek>(deviceResources, brushRegistry),		00,  9);
+	this->RegisterDing(std::make_shared<Schaedel>(deviceResources, brushRegistry),	00, 10);
+	DX::ThrowIfFailed(this->m_mobsSheet->EndDraw());
+	this->m_mobsSheet->GetBitmap(&this->m_mobsSheetBmp);
 }
 
-void Level::RegisterDing(Dings* dingDef, unsigned xOnSheet, unsigned yOnSheet)
+void Level::RegisterDing(std::shared_ptr<Dings> dingDef, unsigned xOnSheet, unsigned yOnSheet)
 {
-	dingDef->Draw(this->m_dingSheet, xOnSheet, yOnSheet);
-	this->m_dingMap.emplace(dingDef->ID(), *dingDef);
+	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> ontoSheet;
+	if (dingDef->IsMob())
+	{
+		ontoSheet = this->m_mobsSheet;
+	}
+	else
+	{
+		ontoSheet = this->m_dingSheet;
+	}
+
+	dingDef->Draw(ontoSheet, xOnSheet, yOnSheet);
+	this->m_dingMap.emplace(dingDef->ID(), dingDef);
 }
 
-Dings* Level::GetDing(Dings::DingIDs dingID)
+std::shared_ptr<Dings> Level::GetDing(Dings::DingIDs dingID)
 {
-	return &(this->m_dingMap.at(dingID));
+	return this->m_dingMap.at(dingID);
 }
 
 Dings::DingIDs Level::GetPreviousDingID(Dings::DingIDs dingID)
@@ -145,11 +178,11 @@ Dings::DingIDs Level::GetPreviousDingID(Dings::DingIDs dingID)
 	{
 		if (dingPointer == this->m_dingMap.begin())
 		{
-			return this->m_dingMap.rbegin()->second.ID();
+			return this->m_dingMap.rbegin()->second->ID();
 		}
 		else
 		{
-			return (--dingPointer)->second.ID();
+			return (--dingPointer)->second->ID();
 		}
 	}
 }
@@ -166,11 +199,11 @@ Dings::DingIDs Level::GetNextDingID(Dings::DingIDs dingID)
 		++dingPointer;
 		if (dingPointer == this->m_dingMap.end())
 		{
-			return m_dingMap.begin()->second.ID();
+			return m_dingMap.begin()->second->ID();
 		}
 		else
 		{
-			return dingPointer->second.ID();
+			return dingPointer->second->ID();
 		}
 	}
 }
@@ -185,14 +218,29 @@ Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::CreateDingImage(Dings::DingIDs dingID
 	auto dingToRender = this->GetDing(dingID);
 	auto dingOnSheet = dingToRender->GetSheetPlacement(placementOrientation);
 	ID2D1Bitmap *resultBitmap = NULL;
-
-	m_dingImage->BeginDraw();
-	m_dingImage->Clear();
+	this->m_dingImage->BeginDraw();
+	this->m_dingImage->Clear();
 	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
 	D2D1_RECT_F placementRect = D2D1::RectF(0, 0, blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT);
-	m_dingImage->DrawBitmap(this->m_dingSheetBmp.Get(), placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
-	DX::ThrowIfFailed(m_dingImage->EndDraw());
-	m_dingImage->GetBitmap(&resultBitmap);
+	this->m_dingImage->DrawBitmap(this->m_dingSheetBmp.Get(), placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
+	DX::ThrowIfFailed(this->m_dingImage->EndDraw());
+	this->m_dingImage->GetBitmap(&resultBitmap);
+	Microsoft::WRL::ComPtr<ID2D1Bitmap> resultPointer = resultBitmap;
+	return resultPointer;
+}
+
+Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::CreateMobImage(Dings::DingIDs dingID, Facings placementOrientation)
+{
+	auto dingToRender = this->GetDing(dingID);
+	auto dingOnSheet = dingToRender->GetSheetPlacement(placementOrientation);
+	ID2D1Bitmap *resultBitmap = NULL;
+	this->m_mobsImage->BeginDraw();
+	this->m_mobsImage->Clear();
+	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
+	D2D1_RECT_F placementRect = D2D1::RectF(0, 0, blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT);
+	this->m_mobsImage->DrawBitmap(this->m_mobsSheetBmp.Get(), placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
+	DX::ThrowIfFailed(this->m_mobsImage->EndDraw());
+	this->m_mobsImage->GetBitmap(&resultBitmap);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> resultPointer = resultBitmap;
 	return resultPointer;
 }
@@ -242,9 +290,9 @@ Object* Level::GetObjectAt(unsigned levelX, unsigned levelY, bool createIfNull)
 	return retrievedObject;
 }
 
-Dings* Level::WeedObjectAt(unsigned levelX, unsigned levelY, Layers* cullCoalescableInLayer)
+std::shared_ptr<Dings> Level::WeedObjectAt(unsigned levelX, unsigned levelY, Layers* cullCoalescableInLayer)
 {
-	Dings* dingWeeded = nullptr;
+	std::shared_ptr<Dings> dingWeeded = nullptr;
 	(*cullCoalescableInLayer) = Layers::None;
 	auto objectAddress = levelY * this->m_rectangularBounds.width + levelX;
 	if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
@@ -334,9 +382,19 @@ Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> Level::GetDingSheet()
 	return this->m_dingSheet;
 }
 
+Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> Level::GetMobsSheet()
+{
+	return this->m_mobsSheet;
+}
+
 ID2D1Bitmap* Level::GetDingSheetBmp()
 {
 	return this->m_dingSheetBmp.Get();
+}
+
+ID2D1Bitmap* Level::GetMobsSheetBmp()
+{
+	return this->m_mobsSheetBmp.Get();
 }
 
 unsigned Level::GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet)
@@ -641,7 +699,7 @@ bool Level::CellLoadFromFile(char *srcData, size_t *offset, const Layers inLayer
 			placementFacing = Facings::Shy;
 		}
 
-		this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(this->shared_from_this(), inLayer, &this->m_dingMap.at(dingID), placementFacing);
+		this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(this->shared_from_this(), inLayer, this->GetDing(dingID), placementFacing);
 		return true;
 	}
 

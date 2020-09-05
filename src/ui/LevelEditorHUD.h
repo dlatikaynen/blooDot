@@ -11,7 +11,7 @@ public:
 	virtual void ReleaseDeviceDependentResources();
 
 	bool IsDingSelected();
-	void SelectDing(Dings* ding, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage, bool resetFacing);
+	void SelectDing(std::shared_ptr<Dings> ding, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage, bool resetFacing);
 
 	Dings::DingIDs SelectedDingID();
 	void ToggleEraser();

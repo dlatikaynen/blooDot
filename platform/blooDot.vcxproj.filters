@@ -347,6 +347,9 @@
     <ClInclude Include="..\src\ui\playground\PlayerMomentum.h">
       <Filter>ui\playground</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\dings\mobs.h">
+      <Filter>ui\dings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Media\Bitmaps\dalek.png">

@@ -62,9 +62,19 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 
 	if (this->m_selectedDingID > Dings::DingIDs::Void && (this->m_selectedDingID != curDingID || this->m_selectedDingOrientation != newOrientation))
 	{
-		auto dingPic = this->m_currentLevel->CreateDingImage(this->m_selectedDingID, newOrientation);
+		Microsoft::WRL::ComPtr<ID2D1Bitmap> dingPic;
+		auto selectedDing = this->SelectedDing();
+		if (selectedDing->IsMob())
+		{
+			dingPic = this->m_currentLevel->CreateMobImage(this->m_selectedDingID, newOrientation);
+		}
+		else
+		{
+			dingPic = this->m_currentLevel->CreateDingImage(this->m_selectedDingID, newOrientation);
+		}
+
 		auto needResetOrientation = this->m_selectedDingID != curDingID;
-		myHUD->SelectDing(this->SelectedDing(), dingPic, needResetOrientation);
+		myHUD->SelectDing(selectedDing, dingPic, needResetOrientation);
 	}
 
 	this->m_selectedDingOrientation = newOrientation;
@@ -406,7 +416,7 @@ void LevelEditor::CreateTextLayout(D2D1_RECT_F* rect, Platform::String^ text)
 	}
 }
 
-Dings* LevelEditor::SelectedDing()
+std::shared_ptr<Dings> LevelEditor::SelectedDing()
 {
 	if (this->m_selectedDingID > Dings::DingIDs::Void)
 	{
