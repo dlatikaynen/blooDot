@@ -12,6 +12,7 @@ public:
 
 	virtual Platform::String^ GetCaption() { return this->m_Caption; }
 	void SetCaption(Platform::String^ value) { this->m_Caption = value; }
+	void ScheduleDialogCommand(blooDot::DialogCommand dialogCommand);
 
 protected:
 	const float CHROMEWIDTH = 8.0F;
@@ -21,6 +22,7 @@ protected:
 	virtual void CalculateSize() override;
 	virtual Platform::String^ StaticCaption();
 	virtual void RenderClientarea(ID2D1DeviceContext* d2dContext);
+	blooDot::DialogCommand DequeDialogCommand();
 
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_shadowColorBrush;
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_textColorBrush;
@@ -38,4 +40,5 @@ private:
 	Platform::String^								m_Caption;
 	D2D1_RECT_F										m_outerBounds;
 	D2D1_SIZE_F										m_sizeClientarea;
+	blooDot::DialogCommand							m_pendingDialogCommand;
 };

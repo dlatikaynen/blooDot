@@ -60,6 +60,15 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 		dlgDingSheet->SetVisible(newDingSheetShown);
 	}
 
+	if (this->m_isDingSheetShown)
+	{
+		auto dialogCommand = myHUD->DequeDingSheetCommand();
+		if (dialogCommand != blooDot::DialogCommand::None)
+		{
+			this->ProcessDialogCommand(blooDot::UIElement::DingSheetDialog, dialogCommand);
+		}
+	}
+
 	if (this->m_selectedDingID > Dings::DingIDs::Void && (this->m_selectedDingID != curDingID || this->m_selectedDingOrientation != newOrientation))
 	{
 		Microsoft::WRL::ComPtr<ID2D1Bitmap> dingPic;
@@ -117,6 +126,18 @@ void LevelEditor::SetControl(int detentCount, bool shiftKeyActive)
 	}
 
 	this->m_keyShiftDown = shiftKeyActive;
+}
+
+void LevelEditor::ProcessDialogCommand(blooDot::UIElement dialogElement, blooDot::DialogCommand dialogCommand)
+{
+	if (dialogCommand != blooDot::DialogCommand::None)
+	{
+		auto dialogWindow = static_cast<DialogOverlay*>(UserInterface::GetInstance().GetElement(dialogElement));
+		if (dialogWindow != nullptr)
+		{
+			dialogWindow->ScheduleDialogCommand(dialogCommand);
+		}
+	}
 }
 
 void LevelEditor::ConsiderPlacement(bool fillArea)
@@ -473,6 +494,18 @@ void LevelEditor::DoToggleDingSheet()
 	if (myHUD != nullptr)
 	{
 		myHUD->ToggleDingSheet();
+	}
+}
+
+void LevelEditor::SendDialogCommand(blooDot::DialogCommand dialogCommand)
+{
+	auto myHUD = static_cast<LevelEditorHUD*>(UserInterface::GetInstance().GetElement(blooDot::UIElement::LevelEditorHUD));
+	if (myHUD != nullptr)
+	{
+		if (this->m_isDingSheetShown)
+		{
+			myHUD->SetDingSheetCommand(dialogCommand);
+		}
 	}
 }
 

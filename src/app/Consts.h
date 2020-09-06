@@ -35,4 +35,14 @@ namespace blooDot
 		ControllerSetup = 17,
 		DingSheetDialog = 18 
 	};
+
+	enum class DialogCommand
+	{
+		None = 0,
+		NextPane = 1,
+		PreviousPane = 2,
+		Down = 3,
+		Up = 4,
+		Close = 5
+	};
 }

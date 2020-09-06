@@ -8,13 +8,23 @@ public:
 	virtual void Initialize() override;
 	virtual Platform::String^ StaticCaption() override { return L"Ding Sheet"; }
 	void SetContent(std::shared_ptr<Level> levelInfo);
-	virtual void ReleaseDeviceDependentResources() override;
-	
+	virtual void ReleaseDeviceDependentResources() override;	
+
 protected:
+	void Update(float timeTotal, float timeDelta) override;
 	void RenderClientarea(ID2D1DeviceContext* d2dContext) override;
 
-private:	
+	enum Pane 
+	{
+		Dings,
+		Mobs
+	};
+
+private:
+	void TogglePane();
+
 	ID2D1Bitmap*									m_dingSheetBitmap;
 	std::shared_ptr<Level>							m_LevelInfo;
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>	m_boundsBrush;
+	Pane											m_currentPane;
 };

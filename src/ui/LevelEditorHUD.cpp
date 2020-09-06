@@ -16,6 +16,7 @@ LevelEditorHUD::LevelEditorHUD()
 	this->m_isGridShown = true;
 	this->m_isDingSheetShown = false;
 	this->m_isSelectedDingRotatable = false;
+	this->m_pendingDingSheetCommand = blooDot::DialogCommand::None;
 }
 
 void LevelEditorHUD::Initialize()
@@ -23,7 +24,7 @@ void LevelEditorHUD::Initialize()
 	auto d2dContext = UserInterface::GetD2DContext();
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::White), &this->m_textColorBrush));
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::Black), &this->m_shadowColorBrush));
-	this->m_shadowColorBrush->SetOpacity(m_shadowColorBrush->GetOpacity() * blooDot::Consts::GOLDEN_RATIO);	
+	this->m_shadowColorBrush->SetOpacity(m_shadowColorBrush->GetOpacity() * blooDot::Consts::GOLDEN_RATIO);
 }
 
 void LevelEditorHUD::CalculateSize()
@@ -153,6 +154,14 @@ void LevelEditorHUD::ToggleDingSheet()
 	this->m_isDingSheetShown = !this->m_isDingSheetShown;
 }
 
+void LevelEditorHUD::SetDingSheetCommand(blooDot::DialogCommand dialogCommand)
+{
+	if (this->m_pendingDingSheetCommand == blooDot::DialogCommand::None)
+	{
+		this->m_pendingDingSheetCommand = dialogCommand;
+	}
+}
+
 void LevelEditorHUD::SetScrollLock(bool scrollLock)
 {
 	this->m_isScrollLocked = scrollLock;
@@ -202,4 +211,15 @@ void LevelEditorHUD::RotateInverse()
 Facings LevelEditorHUD::SelectedDingOrientation()
 {
 	return this->m_selectedDingFacing;
+}
+
+blooDot::DialogCommand LevelEditorHUD::DequeDingSheetCommand()
+{
+	auto pendingCommand = this->m_pendingDingSheetCommand;
+	if (this->m_pendingDingSheetCommand != blooDot::DialogCommand::None)
+	{
+		this->m_pendingDingSheetCommand = blooDot::DialogCommand::None;
+	}
+
+	return pendingCommand;
 }

@@ -5,6 +5,7 @@
 
 DialogDingSheet::DialogDingSheet()
 {
+	this->m_currentPane = Pane::Dings;
 }
 
 void DialogDingSheet::Initialize()
@@ -17,8 +18,26 @@ void DialogDingSheet::Initialize()
 void DialogDingSheet::SetContent(std::shared_ptr<Level> levelInfo)
 {	
 	this->m_LevelInfo = levelInfo;
-	this->m_dingSheetBitmap = levelInfo->GetDingSheetBmp();
+	this->m_dingSheetBitmap = this->m_currentPane == Pane::Mobs ? levelInfo->GetMobsSheetBmp() : levelInfo->GetDingSheetBmp();
 	this->SetClientareaSize(this->m_dingSheetBitmap->GetSize());
+}
+
+void DialogDingSheet::Update(float timeTotal, float timeDelta)
+{
+	DialogOverlay::Update(timeTotal, timeDelta);
+	switch (this->DequeDialogCommand())
+	{
+		case blooDot::DialogCommand::NextPane:
+		case blooDot::DialogCommand::PreviousPane:
+			this->TogglePane();
+			break;
+	}
+}
+
+void DialogDingSheet::TogglePane()
+{
+	this->m_currentPane = this->m_currentPane == Pane::Mobs ? Pane::Dings : Pane::Mobs;
+	this->SetContent(this->m_LevelInfo);
 }
 
 void DialogDingSheet::RenderClientarea(ID2D1DeviceContext* d2dContext)
@@ -34,13 +53,13 @@ void DialogDingSheet::RenderClientarea(ID2D1DeviceContext* d2dContext)
 		sourceRect
 	);
 
-	/* bother to draw the mobs' bounding boxes, that is,
+	/* bother to draw the weirdo dings' bounding boxes, that is,
 	 * bounding geometries of all dings that have nontrivial outer rim bounds */
 	auto dingIter = Dings::DingIDs::Mauer;
 	while (dingIter != Dings::DingIDs::Void)
 	{
 		auto thisDing = this->m_LevelInfo->GetDing(dingIter);
-		if (thisDing != nullptr && !thisDing->BoundingIsDefaultRect())
+		if (thisDing != nullptr && !thisDing->BoundingIsDefaultRect() && (thisDing->IsMob() || this->m_currentPane!=Pane::Mobs))
 		{
 			auto sheetPlacement = thisDing->GetSheetPlacement(Facings::North);
 			auto boundingGeometry = thisDing->GetBoundingInfo();

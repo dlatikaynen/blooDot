@@ -80,6 +80,25 @@ void DialogOverlay::CreateTextLayout()
 	}
 }
 
+void DialogOverlay::ScheduleDialogCommand(blooDot::DialogCommand dialogCommand)
+{
+	if (this->m_pendingDialogCommand == blooDot::DialogCommand::None)
+	{
+		this->m_pendingDialogCommand = dialogCommand;
+	}
+}
+
+blooDot::DialogCommand DialogOverlay::DequeDialogCommand()
+{
+	auto pendingCommand = this->m_pendingDialogCommand;
+	if (pendingCommand != blooDot::DialogCommand::None)
+	{
+		this->m_pendingDialogCommand = blooDot::DialogCommand::None;
+	}
+
+	return pendingCommand;
+}
+
 void DialogOverlay::Update(float timeTotal, float timeDelta)
 {
 	ElementBase::Update(timeTotal, timeDelta);

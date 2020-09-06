@@ -20,6 +20,7 @@ public:
 	void DoSetScrollLock(bool scrollLocked);
 	void DoToggleGrid();
 	void DoToggleDingSheet();
+	void SendDialogCommand(blooDot::DialogCommand dialogCommand);
 	void SetControl(int detentCount, bool shiftKeyActive) override;
 	void DoRotate(bool affectPlacement, bool inverse);
 	void ImportIntoCurrentLevel(std::shared_ptr<Level> sourceLevel);
@@ -30,6 +31,7 @@ protected:
 private:
 	void DrawLevelEditorRaster();	
 	void CreateTextLayout(D2D1_RECT_F* rect, Platform::String^ text);
+	void ProcessDialogCommand(blooDot::UIElement dialogElement, blooDot::DialogCommand dialogCommand);
 
 	Dings::DingIDs									m_selectedDingID;
 	Facings											m_selectedDingOrientation;

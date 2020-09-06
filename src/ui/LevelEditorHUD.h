@@ -21,12 +21,14 @@ public:
 	void ToggleGrid();
 	void ToggleDingSheet();
 	void SetScrollLock(bool scrollLock);
+	void SetDingSheetCommand(blooDot::DialogCommand dialogCommand);
 	void Rotate();
 	void RotateInverse();
 	bool LevelEditorHUD::IsGridShown();
 	bool LevelEditorHUD::IsDingSheetShown();
 	bool LevelEditorHUD::IsScrollLocked();
 	Facings LevelEditorHUD::SelectedDingOrientation();
+	blooDot::DialogCommand DequeDingSheetCommand();
 
 protected:
 	virtual void CalculateSize();
@@ -54,4 +56,5 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>				m_selectedDingImage;
 	bool											m_isSelectedDingRotatable;
 	Facings											m_selectedDingFacing;
+	blooDot::DialogCommand							m_pendingDingSheetCommand;
 };
