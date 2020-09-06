@@ -32,5 +32,6 @@
     <Capability Name="internetClient" />
     <uap:Capability Name="documentsLibrary" />
     <uap:Capability Name="picturesLibrary" />
+    <DeviceCapability Name="bluetooth" />
   </Capabilities>
 </Package>
