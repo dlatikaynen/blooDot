@@ -265,13 +265,13 @@ D2D1_SIZE_U Level::GetSheetSizeUnits()
 	return this->m_sheetSize;
 }
 
-Object* Level::GetObjectAt(unsigned levelX, unsigned levelY, bool createIfNull)
+Object* Level::GetObjectAt(int levelX, int levelY, bool createIfNull)
 {
 	auto objectAddress = levelY * this->m_rectangularBounds.width + levelX;
 	auto retrievedObject = (Object*)nullptr;
 
 	/* we create lazily, on demand */
-	if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
+	if (objectAddress >= 0 && levelX > 0 && objectAddress < this->m_Objects.size())
 	{
 		retrievedObject = this->m_Objects[objectAddress];
 		if (retrievedObject == nullptr && createIfNull)

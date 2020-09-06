@@ -104,7 +104,7 @@
   <PropertyGroup>
     <!-- <PackageCertificateKeyFile>blooDot_TemporaryKey.pfx</PackageCertificateKeyFile> -->
     <!-- <PackageCertificateThumbprint>B02D54DB942A9048219D95F3CE0E8997F1E80476</PackageCertificateThumbprint> -->
-    <PackageCertificateThumbprint>5F46784090D3C50B2BA55674704215CA062F2EE0</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>C273273CA478E9829E784DC85D9731E973850111</PackageCertificateThumbprint>
     <PackageCertificateKeyFile>blooDot_TemporaryKey.pfx</PackageCertificateKeyFile>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>

@@ -77,8 +77,8 @@ void WorldScreen::SetControl(bool triggershoot)
 		this->m_shooting = true;
 		this->m_shootx = Player->Position.left + blooDot::Consts::SQUARE_WIDTH / 2.0f;
 		this->m_shooty = Player->Position.top + blooDot::Consts::SQUARE_HEIGHT / 2.0f;
-		this->m_shoot_directionX = 4.5f * cosf(static_cast<float>(2.0f * M_PI / 16.0f * Player->m_Orientation) - M_PI / 2.0f);
-		this->m_shoot_directionY = 4.5f * sinf(static_cast<float>(2.0f * M_PI / 16.0f * Player->m_Orientation) - M_PI / 2.0f);
+		this->m_shoot_directionX = 4.5f * cosf(static_cast<float>(2.0f * static_cast<float>(M_PI) / 16.0f * Player->m_Orientation) - static_cast<float>(M_PI) / 2.0f);
+		this->m_shoot_directionY = 4.5f * sinf(static_cast<float>(2.0f * static_cast<float>(M_PI) / 16.0f * Player->m_Orientation) - static_cast<float>(M_PI) / 2.0f);
 		this->m_blockstravelled = 0;
 	}
 }
@@ -206,8 +206,8 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 	}
 	else
 	{
-		auto squareX = this->m_shootx / blooDot::Consts::SQUARE_WIDTH;
-		auto squareY = this->m_shooty / blooDot::Consts::SQUARE_HEIGHT;
+		auto squareX = static_cast<int>(this->m_shootx / blooDot::Consts::SQUARE_WIDTH);
+		auto squareY = static_cast<int>(this->m_shooty / blooDot::Consts::SQUARE_HEIGHT);
 		auto newPosition = D2D1::RectF(
 			this->m_shootx - blooDot::Consts::LASERBULLET_RADIUS + deltaX, 
 			this->m_shooty - blooDot::Consts::LASERBULLET_RADIUS + deltaY, 

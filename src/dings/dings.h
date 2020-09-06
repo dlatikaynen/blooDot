@@ -198,6 +198,7 @@ public:
 	void										Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY);
 	D2D1_POINT_2U								GetSheetPlacement(Facings orientation);
 	D2D1_POINT_2U								GetSheetPlacement(OrientabilityIndexRotatory rotationDent);
+	D2D1_SIZE_U									GetExtentOnSheet();
 	Layers										GetPreferredLayer();
 	Facings										AvailableFacings();
 	ObjectBehaviors								GetInherentBehaviors();
@@ -287,6 +288,7 @@ protected:
 	static const float Dings::MAUER_BEZIER_Y;
 
 	std::shared_ptr<DX::DeviceResources>	m_deviceResources;
+	D2D1_SIZE_U								m_extentOnSheet;
 	ObjectBehaviors							m_Behaviors;
 	std::shared_ptr<Bounding>				m_Bounding;
 

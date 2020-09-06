@@ -27,6 +27,7 @@ Dings::Dings(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<
 	this->m_deviceResources = deviceResources;
 	this->m_Brushes = drawBrushes;
 	this->m_Behaviors = ObjectBehaviors::Boring;
+	this->m_extentOnSheet = D2D1::SizeU(1, 1);
 }
 
 Dings::DingIDs Dings::ID()
@@ -415,18 +416,23 @@ void Dings::Pack7x7(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y
 
 void Dings::PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet)
 {
-	rectToSet.left = 49.0f * lookupLocation->x;
-	rectToSet.top = 49.0f * lookupLocation->y;
-	rectToSet.right = rectToSet.left + 49.0f;
-	rectToSet.bottom = rectToSet.top + 49.0f;
+	rectToSet.left = blooDot::Consts::SQUARE_WIDTH * lookupLocation->x;
+	rectToSet.top = blooDot::Consts::SQUARE_HEIGHT * lookupLocation->y;
+	rectToSet.right = rectToSet.left + blooDot::Consts::SQUARE_WIDTH;
+	rectToSet.bottom = rectToSet.top + blooDot::Consts::SQUARE_HEIGHT;
 }
 
 void Dings::PrepareRect7x7(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet)
 {
-	rectToSet.left = 49.0f * lookupLocation->x;
-	rectToSet.top = 49.0f * lookupLocation->y;
-	rectToSet.right = rectToSet.left + 7.0f * 49.0f;
-	rectToSet.bottom = rectToSet.top + 7.0f * 49.0f;
+	rectToSet.left = blooDot::Consts::SQUARE_WIDTH * lookupLocation->x;
+	rectToSet.top = blooDot::Consts::SQUARE_HEIGHT * lookupLocation->y;
+	rectToSet.right = rectToSet.left + 7.0f * blooDot::Consts::SQUARE_WIDTH;
+	rectToSet.bottom = rectToSet.top + 7.0f * blooDot::Consts::SQUARE_HEIGHT;
+}
+
+D2D1_SIZE_U Dings::GetExtentOnSheet()
+{
+	return this->m_extentOnSheet;
 }
 
 bool Dings::BoundingIsDefaultRect()
