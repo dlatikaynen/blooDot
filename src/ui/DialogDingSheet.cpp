@@ -15,6 +15,13 @@ void DialogDingSheet::Initialize()
 	DialogOverlay::Initialize();
 }
 
+Platform::String^ DialogDingSheet::StaticCaption()
+{
+	return this->m_currentPane == Pane::Mobs
+		? L"Mobs Sheet"
+		: L"Ding Sheet";
+}
+
 void DialogDingSheet::SetContent(std::shared_ptr<Level> levelInfo)
 {	
 	this->m_LevelInfo = levelInfo;
@@ -37,6 +44,7 @@ void DialogDingSheet::Update(float timeTotal, float timeDelta)
 void DialogDingSheet::TogglePane()
 {
 	this->m_currentPane = this->m_currentPane == Pane::Mobs ? Pane::Dings : Pane::Mobs;
+	this->SetCaption(this->StaticCaption());
 	this->SetContent(this->m_LevelInfo);
 }
 

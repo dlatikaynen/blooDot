@@ -34,6 +34,17 @@ Platform::String^ DialogOverlay::StaticCaption()
 	return L"eew, pure virtual dialog caption";
 }
 
+void DialogOverlay::SetCaption(Platform::String^ value)
+{ 
+	this->m_Caption = value; 
+	if (this->m_textLayout != nullptr)
+	{
+		this->m_textLayout.Reset();
+		this->m_textLayout = nullptr;
+		this->CreateTextLayout();
+	}
+}
+
 void DialogOverlay::SetClientareaSize(D2D1_SIZE_F clientAreaSize)
 {
 	this->m_sizeClientarea = clientAreaSize;

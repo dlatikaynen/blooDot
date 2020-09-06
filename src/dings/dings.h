@@ -283,6 +283,8 @@ protected:
 protected:
 	static const int Dings::MAUER_GRAY_SOLID;
 	static const int Dings::MAUER_GRAY_LOOSE;
+	static const float Dings::HAIRLINE;
+	static const float Dings::WEDGE_STROKE;
 	static const float Dings::MAUER_STROKE;
 	static const float Dings::MAUER_INDENT;
 	static const float Dings::MAUER_BEZIER_X;

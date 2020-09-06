@@ -6,9 +6,9 @@ public:
 	DialogDingSheet();
 
 	virtual void Initialize() override;
-	virtual Platform::String^ StaticCaption() override { return L"Ding Sheet"; }
+	virtual Platform::String^ StaticCaption() override;
 	void SetContent(std::shared_ptr<Level> levelInfo);
-	virtual void ReleaseDeviceDependentResources() override;	
+	virtual void ReleaseDeviceDependentResources() override;
 
 protected:
 	void Update(float timeTotal, float timeDelta) override;

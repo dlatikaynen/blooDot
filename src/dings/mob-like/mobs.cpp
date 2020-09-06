@@ -1,6 +1,9 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\mobs.h"
 
+const float Dings::WEDGE_STROKE = 1.5f;
+const float Dings::HAIRLINE = 0.72f;
+
 Mob::Mob(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(dingID, dingName, deviceResources, drawBrushes)
 {
 }
@@ -92,38 +95,73 @@ FlameGhost::FlameGhost(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 
 void FlameGhost::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, const D2D1_RECT_F *rect)
 {
-	MFARGB colrect{ 11, 137, 221, 255 };
+	MFARGB colitor{ 11, 137, 221, 255 };
 	MFARGB colring{ 12, 12, 12, 255 };
+	MFARGB colwedg{ 240, 242, 237, 255 };
 	Microsoft::WRL::ComPtr<ID2D1Brush> brusherl;
-	auto rimRadius = blooDot::Consts::GOLDEN_RATIO * (this->m_extentOnSheet.width * blooDot::Consts::SQUARE_HEIGHT / 2.f);
+	Microsoft::WRL::ComPtr<ID2D1Brush> brushWedge;
+	auto rimRadius = blooDot::Consts::GOLDEN_RATIO * (this->m_extentOnSheet.width * blooDot::Consts::SQUARE_HEIGHT / 2.f) - 1.8f;
 	D2D1_ELLIPSE elli = D2D1::Ellipse(D2D1::Point2F(rect->left + (rect->right - rect->left) / 2.0f, rect->top + (rect->bottom - rect->top) / 2.0f), rimRadius, rimRadius);
-	brusherl = m_Brushes->WannaHave(drawTo, colrect);
+	brusherl = m_Brushes->WannaHave(drawTo, colitor);
+	brushWedge = m_Brushes->WannaHave(drawTo, colwedg);
 	auto rimBrush = brusherl.Get();
+	auto wedgeBrush = brushWedge.Get();
 	auto rendEr = drawTo.Get();
 	rendEr->FillEllipse(elli, rimBrush);
 	
 	/* flame spikes */
-	auto innerRadius = rimRadius;
+	auto innerRadius = rimRadius + 1.8f;
 	auto outerRadius = rimRadius + 15.f;
 	auto twoPi = static_cast<float>(M_PI) * 2.f;
 	auto piStep = twoPi / 11.f;
-	auto endTreshold = twoPi - (piStep / 2.f);
-	for (float roundRobin = 0.f; roundRobin < endTreshold; roundRobin += piStep)
+	auto anglePadding = piStep / 5.f;	
+	for (int spikeIndex = 0; spikeIndex < 11; ++spikeIndex)
 	{
+		auto roundRobin = spikeIndex * piStep;
+		auto startpointAngle = roundRobin + anglePadding;
 		auto midpointAngle = roundRobin + (piStep / 2.f);
-		auto endpointAngle = roundRobin + piStep;
-		rendEr->DrawLine(
-			D2D1::Point2F(elli.point.x + innerRadius * cosf(roundRobin), elli.point.y + innerRadius * sinf(roundRobin)),
-			D2D1::Point2F(elli.point.x + outerRadius * cosf(midpointAngle), elli.point.y + outerRadius * sinf(midpointAngle)),
-			rimBrush, 
-			1.5f
+		auto endpointAngle = roundRobin + piStep - anglePadding;
+
+		Microsoft::WRL::ComPtr<ID2D1PathGeometry> spikeSegments;
+		Microsoft::WRL::ComPtr<ID2D1GeometrySink> geometrySink;
+		DX::ThrowIfFailed
+		(
+			this->m_deviceResources->GetD2DFactory()->CreatePathGeometry(spikeSegments.GetAddressOf())
 		);
 
+		DX::ThrowIfFailed
+		(
+			spikeSegments->Open(geometrySink.GetAddressOf())
+		);
+
+		geometrySink->BeginFigure(
+			D2D1::Point2F(elli.point.x + innerRadius * cosf(startpointAngle), elli.point.y + innerRadius * sinf(startpointAngle)),
+			D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED
+		);
+
+		geometrySink->AddLine(D2D1::Point2F(elli.point.x + outerRadius * cosf(midpointAngle), elli.point.y + outerRadius * sinf(midpointAngle)));
+		geometrySink->AddLine(D2D1::Point2F(elli.point.x + innerRadius * cosf(endpointAngle), elli.point.y + innerRadius * sinf(endpointAngle)));
+		geometrySink->AddArc(D2D1::ArcSegment(
+			D2D1::Point2F(elli.point.x + innerRadius * cosf(startpointAngle), elli.point.y + innerRadius * sinf(startpointAngle)),
+			D2D1::SizeF(innerRadius, innerRadius),
+			0.f,
+			D2D1_SWEEP_DIRECTION::D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE,
+			D2D1_ARC_SIZE::D2D1_ARC_SIZE_SMALL
+		));
+
+		geometrySink->EndFigure(D2D1_FIGURE_END::D2D1_FIGURE_END_CLOSED);
+		DX::ThrowIfFailed
+		(
+			geometrySink->Close()
+		);
+
+		rendEr->FillGeometry(spikeSegments.Get(), wedgeBrush);
+		rendEr->DrawGeometry(spikeSegments.Get(), rimBrush, Mob::WEDGE_STROKE);
 		rendEr->DrawLine(
-			D2D1::Point2F(elli.point.x + outerRadius * cosf(midpointAngle), elli.point.y + outerRadius * sinf(midpointAngle)),
-			D2D1::Point2F(elli.point.x + innerRadius * cosf(endpointAngle), elli.point.y + innerRadius * sinf(endpointAngle)),
+			D2D1::Point2F(0, 0),
+			D2D1::Point2F(0, 0),
 			rimBrush,
-			1.5f
+			Mob::HAIRLINE
 		);
 	}
 

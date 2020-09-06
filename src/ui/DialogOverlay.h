@@ -11,7 +11,7 @@ public:
 	virtual void ReleaseDeviceDependentResources() override;
 
 	virtual Platform::String^ GetCaption() { return this->m_Caption; }
-	void SetCaption(Platform::String^ value) { this->m_Caption = value; }
+	void SetCaption(Platform::String^ value);
 	void ScheduleDialogCommand(blooDot::DialogCommand dialogCommand);
 
 protected:
