@@ -106,7 +106,7 @@ Microsoft::WRL::ComPtr<ID2D1Bitmap> Dings::LoadFromBitmap()
 void Dings::DrawShy(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 {
 	D2D1_RECT_F rect;
-	PrepareRect(&this->m_lookupShy, rect);
+	this->PrepareRect(&this->m_lookupShy, rect);
 	this->DrawInternal(drawTo, &rect);
 }
 
@@ -244,37 +244,37 @@ void Dings::SetOnSheetPlacementsFromCoalescability()
 	}
 	else if (this->m_Facings == Facings::Viech)
 	{
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG360].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG360].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG360].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG22_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG22_5].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG22_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG45].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG45].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG45].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG67_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG67_5].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG67_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG90].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG90].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG90].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG112_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG112_5].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG112_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG135].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG135].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG135].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG157_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG157_5].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG157_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG180].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG180].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG180].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG202_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG202_5].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG202_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG225].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG225].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG225].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG247_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG247_5].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG247_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG270].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG270].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG270].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG292_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG292_5].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG292_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG315].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG315].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG315].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG337_5].x = x++;
+		this->m_lookupSides[OrientabilityIndexRotatory::HDG337_5].x = this->StepX(&x);
 		this->m_lookupSides[OrientabilityIndexRotatory::HDG337_5].y = y;
 	}
 	else if (this->m_Facings == Facings::Center)
@@ -390,6 +390,13 @@ void Dings::SetOnSheetPlacementsFromCoalescability()
 	}
 }
 
+unsigned Dings::StepX(unsigned *oldValue)
+{
+	unsigned curValue = *oldValue;
+	*oldValue = *oldValue + this->m_extentOnSheet.width;
+	return curValue;
+}
+
 unsigned Dings::Pack7x7X(unsigned offsetX, unsigned offsetY, unsigned* x, unsigned* y)
 {
 	auto xCoord = *x;
@@ -418,8 +425,8 @@ void Dings::PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet)
 {
 	rectToSet.left = blooDot::Consts::SQUARE_WIDTH * lookupLocation->x;
 	rectToSet.top = blooDot::Consts::SQUARE_HEIGHT * lookupLocation->y;
-	rectToSet.right = rectToSet.left + blooDot::Consts::SQUARE_WIDTH;
-	rectToSet.bottom = rectToSet.top + blooDot::Consts::SQUARE_HEIGHT;
+	rectToSet.right = rectToSet.left + this->m_extentOnSheet.width * blooDot::Consts::SQUARE_WIDTH;
+	rectToSet.bottom = rectToSet.top + this->m_extentOnSheet.height * blooDot::Consts::SQUARE_HEIGHT;
 }
 
 void Dings::PrepareRect7x7(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet)
@@ -473,20 +480,23 @@ void Dings::Rotate90(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, int rotateTime
 	else
 	{
 		/* take anything else but 90° and funny stuff happens (heap corruption) */
-		rendEr->SetTransform(D2D1::Matrix3x2F::Rotation(static_cast<float>(-90 * rotateTimes), D2D1::Point2F(rect.left + 24.5f, rect.top + 24.5f)));
+		auto halfWidth = (this->m_extentOnSheet.width * blooDot::Consts::SQUARE_WIDTH) / 2.f;
+		auto halfHeight = (this->m_extentOnSheet.height * blooDot::Consts::SQUARE_HEIGHT) / 2.f;
+		rendEr->SetTransform(D2D1::Matrix3x2F::Rotation(static_cast<float>(-90 * rotateTimes), D2D1::Point2F(rect.left + halfWidth, rect.top + halfHeight)));
 	}
 }
 
 void Dings::Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, float rotationAngle)
 {
-	if (rotationAngle < 0.1F)
+	if (rotationAngle < .1F)
 	{
 		rendEr->SetTransform(D2D1::Matrix3x2F::Identity());
 	}
 	else
-	{
-		/* take anything else but 90° and funny stuff happens (heap corruption) */
-		rendEr->SetTransform(D2D1::Matrix3x2F::Rotation(rotationAngle, D2D1::Point2F(rect.left + 24.5f, rect.top + 24.5f)));
+	{		
+		auto halfWidth = (this->m_extentOnSheet.width * blooDot::Consts::SQUARE_WIDTH) / 2.f;
+		auto halfHeight = (this->m_extentOnSheet.height * blooDot::Consts::SQUARE_HEIGHT) / 2.f;
+		rendEr->SetTransform(D2D1::Matrix3x2F::Rotation(rotationAngle, D2D1::Point2F(rect.left + halfWidth, rect.top + halfHeight)));
 	}
 }
 

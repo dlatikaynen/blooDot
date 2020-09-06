@@ -186,6 +186,7 @@ public:
 		BarrelWood = 26,
 		BarrelIndigo = 27,
 		Dalek = 34,
+		FlameGhost = 35,
 		Schaedel = 4042
 
 	};
@@ -303,6 +304,7 @@ private:
 	void DrawQuadruplet(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	void DrawRotatory(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	void DrawClumsyPack(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
+	unsigned StepX(unsigned *oldValue);
 
 	Platform::String^ m_fromFile;
 };

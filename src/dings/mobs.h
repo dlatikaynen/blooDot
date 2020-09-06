@@ -56,3 +56,10 @@ public:
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
+
+class FlameGhost : public Mob
+{
+public:
+	FlameGhost(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, const D2D1_RECT_F *rect) override;
+};
