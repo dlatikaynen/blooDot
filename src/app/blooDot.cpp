@@ -1047,10 +1047,11 @@ void blooDotMain::OnActionEnterLevelEditor()
 	this->m_worldScreen->EnterLevel(this->m_currentLevel);
 	this->m_worldScreen->Initialize(this->m_audio, this->m_deviceResources);
 
+#ifdef _DEBUG
 	auto newObject = m_currentLevel->GetObjectAt(353, 361, true);
 	newObject->Instantiate(this->m_currentLevel->shared_from_this(), m_currentLevel->GetDing(Dings::DingIDs::Mauer), ClumsyPacking::ConfigurationFromNeighbors(Facings::Shy));
-	newObject = m_currentLevel->GetObjectAt(355, 361, true);
-	newObject->Instantiate(this->m_currentLevel->shared_from_this(), this->m_currentLevel->GetDing(Dings::DingIDs::Mauer), ClumsyPacking::ConfigurationFromNeighbors(Facings::Shy));
+#endif 
+
 	this->SetGameState(GameState::LevelEditor);
 }
 

@@ -63,8 +63,8 @@ void Object::PlaceInLevel(std::shared_ptr<Level> hostLevel)
 	this->SetPosition(this->PositionSquare);
 	auto wallDing = this->GetDing(Layers::Walls);
 	if (wallDing != nullptr)
-	{		
-		this->m_boundingBox  = wallDing->GetBoundingOuterRim();
+	{
+		this->m_boundingBox = wallDing->GetBoundingOuterRim();
 		if (wallDing->AvailableFacings() == Facings::Viech && this->m_FacingWalls != Facings::Shy)
 		{
 			this->SetMobRotation(Dings::HeadingFromFacing(this->m_FacingWalls));
