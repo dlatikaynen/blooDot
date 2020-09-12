@@ -8,9 +8,10 @@ using namespace Windows::UI::ViewManagement;
 using namespace Windows::Graphics::Display;
 using namespace D2D1;
 
-WorldSheet::WorldSheet(std::shared_ptr<DX::DeviceResources> deviceResources)
+WorldSheet::WorldSheet(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> brushRegistry)
 {
 	this->m_deviceResources = deviceResources;
+	this->m_brushes = brushRegistry;
 	this->m_floorBitmap = nullptr;
 	this->m_wallsBitmap = nullptr;
 	this->m_rooofBitmap = nullptr;
@@ -222,7 +223,13 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 			}
 
 			auto floorBackground = this->m_tiedToLevel->GetFloorBackground().Get();
-			D2D1_RECT_F replacementRect = D2D1::RectF(x * 49.0f, y * 49.0f, x * 49.0f + 49.0f, y * 49.0f + 49.0f);
+			D2D1_RECT_F replacementRect = D2D1::RectF(
+				x * blooDot::Consts::SQUARE_WIDTH,
+				y * blooDot::Consts::SQUARE_HEIGHT,
+				(x + 1) * blooDot::Consts::SQUARE_WIDTH,
+				(y + 1) * blooDot::Consts::SQUARE_HEIGHT
+			);
+
 			this->m_floor->DrawBitmap(floorBackground, replacementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, replacementRect);
 		}
 
@@ -266,13 +273,19 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 			if (dings == nullptr)
 			{
 				auto floorBackground = this->m_tiedToLevel->GetFloorBackground().Get();
-				D2D1_RECT_F replacementRect = D2D1::RectF(x * 49.0f, y * 49.0f, x * 49.0f + 49.0f, y * 49.0f + 49.0f);
+				D2D1_RECT_F replacementRect = D2D1::RectF(
+					x * blooDot::Consts::SQUARE_WIDTH,
+					y * blooDot::Consts::SQUARE_HEIGHT,
+					(x + 1) * blooDot::Consts::SQUARE_WIDTH,
+					(y + 1) * blooDot::Consts::SQUARE_HEIGHT
+				);
+
 				this->m_floor->DrawBitmap(floorBackground, replacementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, replacementRect);
 			}
 			else
 			{
 				dingSheet->GetBitmap(&dingMap);
-				this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(::Floor), x, y);
+				this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(Layers::Floor), x, y);
 				dingMap->Release();
 			}
 		}
@@ -289,6 +302,22 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 			dings = objectX->GetDing(Layers::Walls);
 			if (dings != nullptr)
 			{
+				auto dingExtent = dings->GetExtentOnSheet();
+				auto isMultiBlock = dingExtent.width != 1 || dingExtent.height != 1;
+				if (isMultiBlock)
+				{
+					for (int eraseX = 0; eraseX < dingExtent.width; ++eraseX)
+					{
+						for (int eraseY = 0; eraseY < dingExtent.height; ++eraseY)
+						{
+							if (!(eraseX == 0 && eraseY == 0))
+							{
+								this->EraseSquare(this->m_walls, x + eraseX, y + eraseY);
+							}
+						}
+					}
+				}
+
 				if (dings->IsMob())
 				{
 					mobsSheet->GetBitmap(&dingMap);
@@ -298,8 +327,18 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 					dingSheet->GetBitmap(&dingMap);
 				}
 
-				this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(::Walls), x, y);
+				this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(Layers::Walls), x, y);
 				dingMap->Release();
+				if (isMultiBlock && this->m_tiedToLevel->IsDesignMode())
+				{
+					auto anchorBrush = this->m_brushes->WannaHave(this->m_walls, MFARGB{ 128, 128, 192, 255});
+					this->m_walls->DrawRectangle(D2D1::RectF(
+						x * blooDot::Consts::SQUARE_WIDTH + 5.f,
+						y * blooDot::Consts::SQUARE_HEIGHT + 5.f,
+						x * blooDot::Consts::SQUARE_WIDTH + 10.f,
+						y * blooDot::Consts::SQUARE_HEIGHT + 10.f
+					), anchorBrush.Get(), 0.75f);
+				}
 			}
 		}
 		
@@ -316,7 +355,7 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 			if (dings != nullptr)
 			{
 				dingSheet->GetBitmap(&dingMap);
-				this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(::Rooof), x, y);
+				this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(Layers::Rooof), x, y);
 				dingMap->Release();
 			}
 		}
@@ -362,8 +401,27 @@ D2D1_RECT_F WorldSheet::GetFloorBounds()
 void WorldSheet::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, std::shared_ptr<Dings> ding, Facings coalesce, int placementX, int placementY)
 {
 	auto dingOnSheet = ding->GetSheetPlacement(coalesce);
-	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
-	D2D1_RECT_F placementRect = D2D1::RectF(placementX * 49.0f, placementY * 49.0f, placementX * 49.0f + 49.0f, placementY * 49.0f + 49.0f);
+	auto dingExtent = ding->GetExtentOnSheet();
+	auto dingOriginX = dingOnSheet.x * blooDot::Consts::SQUARE_WIDTH;
+	auto dingOriginY = dingOnSheet.y * blooDot::Consts::SQUARE_HEIGHT;
+	auto dingWidth = dingExtent.width * blooDot::Consts::SQUARE_WIDTH;
+	auto dingHeight = dingExtent.height * blooDot::Consts::SQUARE_HEIGHT;
+	D2D1_RECT_F dingRect = D2D1::RectF(
+		dingOriginX,
+		dingOriginY,
+		dingOriginX + dingWidth,
+		dingOriginY + dingHeight
+	);
+
+	auto placementCoX = placementX * blooDot::Consts::SQUARE_WIDTH;
+	auto placementCoY = placementY * blooDot::Consts::SQUARE_HEIGHT;
+	D2D1_RECT_F placementRect = D2D1::RectF(
+		placementCoX,
+		placementCoY,
+		placementCoX + dingWidth,
+		placementCoY + dingWidth
+	);
+
 	renderTarget->DrawBitmap(dingSurface, placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
 }
 

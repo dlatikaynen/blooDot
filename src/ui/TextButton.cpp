@@ -33,7 +33,7 @@ void TextButton::Render()
 	{
 		D2D1_RECT_F bounds = this->GetBounds();
 		d2dContext->FillRectangle(bounds, this->m_selectionBackdropBrush.Get());
-		d2dContext->DrawRectangle(bounds, this->m_textColorBrush.Get(), 3.0f);
+		d2dContext->DrawRectangle(bounds, this->m_textColorBrush.Get(), 3.f);
 	}
 
 	TextElement::Render();

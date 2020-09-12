@@ -520,8 +520,8 @@ void WorldScreenBase::InvalidateSheetHoveringSituation()
 
 std::unique_ptr<WorldSheet>	WorldScreenBase::InstantiateViewportSheet(unsigned sheetX, unsigned sheetY)
 {
-	auto newSheet = std::make_unique<WorldSheet>(m_deviceResources);
-	newSheet->PrepareThyself(m_currentLevel, sheetX, sheetY);
+	auto newSheet = std::make_unique<WorldSheet>(this->m_deviceResources, std::shared_ptr<BrushRegistry>(&this->m_Brushes));
+	newSheet->PrepareThyself(this->m_currentLevel, sheetX, sheetY);
 	return newSheet;
 }
 
@@ -539,9 +539,9 @@ bool WorldScreenBase::PeekTouchdown()
 
 bool WorldScreenBase::PopTouchdown()
 {
-	if (m_touchMap != nullptr && !m_touchMap->empty())
+	if (this->m_touchMap != nullptr && !this->m_touchMap->empty())
 	{
-		m_touchMap->erase(std::prev(m_touchMap->end()));
+		this->m_touchMap->erase(std::prev(this->m_touchMap->end()));
 		return true;
 	}
 
@@ -555,6 +555,21 @@ void WorldScreenBase::ObliterateObject(D2D1_POINT_2U levelCoordinate)
 	if (dingWeeded != nullptr)
 	{
 		this->RedrawSingleSquare(levelCoordinate.x, levelCoordinate.y, layerToCull);
+		auto dingExtent = dingWeeded->GetExtentOnSheet();
+		if (dingExtent.width != 1 || dingExtent.height != 1)
+		{
+			for (int multiX = 0; multiX < dingExtent.width; ++multiX)
+			{
+				for (int multiY = 0; multiY < dingExtent.height; ++multiY)
+				{
+					if (!(multiX == 0 && multiY == 0))
+					{
+						this->RedrawSingleSquare(levelCoordinate.x + multiX, levelCoordinate.y + multiY, layerToCull);
+					}
+				}
+			}
+		}
+
 		if (dingWeeded->CouldCoalesce())
 		{
 			auto weededDingID = dingWeeded->ID();

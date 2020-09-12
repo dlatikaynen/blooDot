@@ -11,7 +11,7 @@
 class WorldSheet
 {
 public:
-	WorldSheet::WorldSheet(std::shared_ptr<DX::DeviceResources> deviceResources);
+	WorldSheet::WorldSheet(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> brushRegistry);
 	WorldSheet::~WorldSheet();
 
 	void											PrepareThyself(std::shared_ptr<Level> forLevel, int amSheetX, int amSheetY);
@@ -58,6 +58,7 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Factory1>           m_d2dFactory;
 	Microsoft::WRL::ComPtr<ID2D1Device>             m_d2dDevice;
 	Microsoft::WRL::ComPtr<ID2D1DeviceContext>      m_d2dContext;
+	std::shared_ptr<BrushRegistry>					m_brushes;
 	D2D1_RECT_F										m_blitFrom;
 	D2D1_RECT_F										m_blitTo;
 

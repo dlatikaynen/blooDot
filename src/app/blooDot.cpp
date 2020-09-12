@@ -1043,6 +1043,7 @@ void blooDotMain::OnActionEnterLevelEditor()
 	auto levelName = ref new Platform::String(L"Gartenwelt-1");
 	this->m_worldScreen = std::unique_ptr<WorldScreenBase>(new LevelEditor());
 	this->m_currentLevel = std::make_shared<Level>(levelName, D2D1::SizeU(50, 30), 720, 720);
+	this->m_currentLevel->SetDesignTime();
 	this->m_worldScreen->EnterLevel(this->m_currentLevel);
 	this->m_worldScreen->Initialize(this->m_audio, this->m_deviceResources);
 

@@ -109,9 +109,17 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	loader->LoadPngToBitmap(L"Media\\Bitmaps\\universe_seamless.png", deviceResources, &this->m_floorBackground);
 
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(1000.0f, 600.0f), &this->m_dingSheet));
-	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH * 3.f * OrientabilityIndexRotatory::NumberOfSectors, 600.0f), &this->m_mobsSheet));
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT), &this->m_dingImage));
-	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH * 3.f, blooDot::Consts::SQUARE_HEIGHT * 3.f), &this->m_mobsImage));
+
+	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(
+		blooDot::Consts::SQUARE_WIDTH * blooDot::Consts::MAX_MOB_BLOCKS * OrientabilityIndexRotatory::NumberOfSectors,
+		600.0f
+	), &this->m_mobsSheet));
+
+	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(
+		blooDot::Consts::SQUARE_WIDTH * blooDot::Consts::MAX_MOB_BLOCKS,
+		blooDot::Consts::SQUARE_HEIGHT * blooDot::Consts::MAX_MOB_BLOCKS
+	), &this->m_mobsImage));
 
 	this->m_dingSheet->BeginDraw();
 	this->RegisterDing(std::make_shared<Mauer>(deviceResources, brushRegistry),					00,  1);
@@ -145,6 +153,11 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	this->RegisterDing(std::make_shared<FlameGhost>(deviceResources, brushRegistry),	00,  3);
 	DX::ThrowIfFailed(this->m_mobsSheet->EndDraw());
 	this->m_mobsSheet->GetBitmap(&this->m_mobsSheetBmp);
+}
+
+bool Level::IsDesignMode()
+{
+	return this->m_isDesignTime;
 }
 
 void Level::RegisterDing(std::shared_ptr<Dings> dingDef, unsigned xOnSheet, unsigned yOnSheet)

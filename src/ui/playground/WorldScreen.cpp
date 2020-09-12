@@ -374,7 +374,7 @@ void WorldScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 		this->m_d2dContext->FillEllipse(D2D1::Ellipse(D2D1::Point2F(
 			this->m_shootx - this->m_viewportOffset.x, 
 			this->m_shooty - this->m_viewportOffset.y
-		), 3.0, 3.0), this->m_projectileBrush.Get());
+		), 3.f, 3.f), this->m_projectileBrush.Get());
 	}
 
 	/* blit all mob-level sprites */

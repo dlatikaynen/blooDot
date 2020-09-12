@@ -22,7 +22,7 @@ LevelEditor::~LevelEditor()
 	this->m_blackBrush.Reset();
 }
 
-void LevelEditor::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>&	deviceResources)
+void LevelEditor::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>& deviceResources)
 {
 	WorldScreenBase::Initialize(audioEngine, deviceResources);
 	DX::ThrowIfFailed(deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &this->m_textColorBrush));

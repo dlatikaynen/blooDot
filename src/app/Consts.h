@@ -11,6 +11,7 @@ namespace blooDot
 		static const float INVERSE_GOLDEN_RATIO;
 		static const float DIALOG_PADDING;
 		static const float LASERBULLET_RADIUS;
+		static const float MAX_MOB_BLOCKS;
 	};
 
 	enum class UIElement
