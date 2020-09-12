@@ -268,7 +268,7 @@ protected:
 	D2D1_POINT_2U		m_lookupEdgesInner1[8];
 	D2D1_POINT_2U		m_lookupU[4];
 	D2D1_POINT_2U		m_lookupTs[4];
-	D2D1_POINT_2U		m_lookupViech[16];
+	D2D1_POINT_2U		m_lookupViech[OrientabilityIndexRotatory::NumberOfSectors];
 
 	virtual Platform::String^ ShouldLoadFromBitmap();
 	void PrepareRect(D2D1_POINT_2U *lookupLocation, D2D1_RECT_F &rectToSet);

@@ -56,5 +56,6 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>				m_selectedDingImage;
 	bool											m_isSelectedDingRotatable;
 	Facings											m_selectedDingFacing;
+	D2D1_SIZE_U										m_selectedDingExtent;
 	blooDot::DialogCommand							m_pendingDingSheetCommand;
 };

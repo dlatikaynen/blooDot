@@ -91,6 +91,18 @@ FlameGhost::FlameGhost(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 		ObjectBehaviors::Shootable |
 		ObjectBehaviors::ActiveMoving |
 		ObjectBehaviors::Lethal;
+
+	this->rimRadius = blooDot::Consts::GOLDEN_RATIO * (this->m_extentOnSheet.width * blooDot::Consts::SQUARE_HEIGHT / 2.f) - 1.8f;
+	this->innerRadius = this->rimRadius + 1.8f;
+	this->outerRadius = this->rimRadius + 15.f;
+	this->m_Bounding = std::make_shared<Bounding>();
+	auto midPointX = (this->m_extentOnSheet.width * blooDot::Consts::SQUARE_WIDTH) / 2.f;
+	auto midPointY = (this->m_extentOnSheet.height * blooDot::Consts::SQUARE_HEIGHT) / 2.f;
+	this->m_Bounding->OuterRim = D2D1::RectF(midPointX - this->outerRadius, midPointY - this->outerRadius, midPointX + this->outerRadius, midPointY + this->outerRadius);
+	BoundingGeometry circularBounds;
+	circularBounds.Shape = BoundingGeometry::Primitive::Circle;
+	circularBounds.Bounds = D2D1_RECT_F(this->m_Bounding->OuterRim);
+	this->m_Bounding->Geometries.push_back(circularBounds);
 }
 
 void FlameGhost::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, const D2D1_RECT_F *rect)
@@ -100,8 +112,7 @@ void FlameGhost::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> dr
 	MFARGB colwedg{ 240, 242, 237, 255 };
 	Microsoft::WRL::ComPtr<ID2D1Brush> brusherl;
 	Microsoft::WRL::ComPtr<ID2D1Brush> brushWedge;
-	auto rimRadius = blooDot::Consts::GOLDEN_RATIO * (this->m_extentOnSheet.width * blooDot::Consts::SQUARE_HEIGHT / 2.f) - 1.8f;
-	D2D1_ELLIPSE elli = D2D1::Ellipse(D2D1::Point2F(rect->left + (rect->right - rect->left) / 2.0f, rect->top + (rect->bottom - rect->top) / 2.0f), rimRadius, rimRadius);
+	D2D1_ELLIPSE elli = D2D1::Ellipse(D2D1::Point2F(rect->left + (rect->right - rect->left) / 2.0f, rect->top + (rect->bottom - rect->top) / 2.0f), this->rimRadius, this->rimRadius);
 	brusherl = m_Brushes->WannaHave(drawTo, colitor);
 	brushWedge = m_Brushes->WannaHave(drawTo, colwedg);
 	auto rimBrush = brusherl.Get();
@@ -110,8 +121,6 @@ void FlameGhost::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> dr
 	rendEr->FillEllipse(elli, rimBrush);
 	
 	/* flame spikes */
-	auto innerRadius = rimRadius + 1.8f;
-	auto outerRadius = rimRadius + 15.f;
 	auto twoPi = static_cast<float>(M_PI) * 2.f;
 	auto piStep = twoPi / 11.f;
 	auto anglePadding = piStep / 5.f;	
@@ -135,15 +144,15 @@ void FlameGhost::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> dr
 		);
 
 		geometrySink->BeginFigure(
-			D2D1::Point2F(elli.point.x + innerRadius * cosf(startpointAngle), elli.point.y + innerRadius * sinf(startpointAngle)),
+			D2D1::Point2F(elli.point.x + innerRadius * cosf(startpointAngle), elli.point.y + this->innerRadius * sinf(startpointAngle)),
 			D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED
 		);
 
-		geometrySink->AddLine(D2D1::Point2F(elli.point.x + outerRadius * cosf(midpointAngle), elli.point.y + outerRadius * sinf(midpointAngle)));
-		geometrySink->AddLine(D2D1::Point2F(elli.point.x + innerRadius * cosf(endpointAngle), elli.point.y + innerRadius * sinf(endpointAngle)));
+		geometrySink->AddLine(D2D1::Point2F(elli.point.x + this->outerRadius * cosf(midpointAngle), elli.point.y + this->outerRadius * sinf(midpointAngle)));
+		geometrySink->AddLine(D2D1::Point2F(elli.point.x + this->innerRadius * cosf(endpointAngle), elli.point.y + this->innerRadius * sinf(endpointAngle)));
 		geometrySink->AddArc(D2D1::ArcSegment(
-			D2D1::Point2F(elli.point.x + innerRadius * cosf(startpointAngle), elli.point.y + innerRadius * sinf(startpointAngle)),
-			D2D1::SizeF(innerRadius, innerRadius),
+			D2D1::Point2F(elli.point.x + this->innerRadius * cosf(startpointAngle), elli.point.y + this->innerRadius * sinf(startpointAngle)),
+			D2D1::SizeF(this->innerRadius, this->innerRadius),
 			0.f,
 			D2D1_SWEEP_DIRECTION::D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE,
 			D2D1_ARC_SIZE::D2D1_ARC_SIZE_SMALL

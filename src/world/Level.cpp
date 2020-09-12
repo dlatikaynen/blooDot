@@ -109,7 +109,7 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, Bru
 	loader->LoadPngToBitmap(L"Media\\Bitmaps\\universe_seamless.png", deviceResources, &this->m_floorBackground);
 
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(1000.0f, 600.0f), &this->m_dingSheet));
-	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(1000.0f, 600.0f), &this->m_mobsSheet));
+	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH * 3.f * OrientabilityIndexRotatory::NumberOfSectors, 600.0f), &this->m_mobsSheet));
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT), &this->m_dingImage));
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH * 3.f, blooDot::Consts::SQUARE_HEIGHT * 3.f), &this->m_mobsImage));
 
@@ -237,9 +237,24 @@ Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::CreateMobImage(Dings::DingIDs dingID,
 	ID2D1Bitmap *resultBitmap = NULL;
 	this->m_mobsImage->BeginDraw();
 	this->m_mobsImage->Clear();
-	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
-	D2D1_RECT_F placementRect = D2D1::RectF(0, 0, blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT);
+	auto sheetExtent = dingToRender->GetExtentOnSheet();
+	D2D1_RECT_F dingRect = D2D1::RectF(
+		dingOnSheet.x * blooDot::Consts::SQUARE_WIDTH,
+		dingOnSheet.y * blooDot::Consts::SQUARE_HEIGHT,
+		dingOnSheet.x * blooDot::Consts::SQUARE_WIDTH + (sheetExtent.width * blooDot::Consts::SQUARE_WIDTH),
+		dingOnSheet.y * blooDot::Consts::SQUARE_HEIGHT + (sheetExtent.height * blooDot::Consts::SQUARE_HEIGHT)
+	);
+
+	D2D1_RECT_F placementRect = D2D1::RectF(
+		0,
+		0,
+		sheetExtent.width * blooDot::Consts::SQUARE_WIDTH,
+		sheetExtent.height * blooDot::Consts::SQUARE_HEIGHT
+	);
+
 	this->m_mobsImage->DrawBitmap(this->m_mobsSheetBmp.Get(), placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
+
+	
 	DX::ThrowIfFailed(this->m_mobsImage->EndDraw());
 	this->m_mobsImage->GetBitmap(&resultBitmap);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> resultPointer = resultBitmap;

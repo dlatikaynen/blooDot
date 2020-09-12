@@ -46,6 +46,7 @@ bool LevelEditorHUD::IsDingSelected()
 void LevelEditorHUD::SelectDing(std::shared_ptr<Dings> ding, Microsoft::WRL::ComPtr<ID2D1Bitmap> dingImage, bool resetFacing)
 {
 	this->m_selectedDingID = ding->ID();
+	this->m_selectedDingExtent = ding->GetExtentOnSheet();
 	this->m_dingName = ding->Name();
 	this->m_selectedDingImage = dingImage;
 	this->m_textLayout = nullptr;
@@ -98,7 +99,6 @@ void LevelEditorHUD::Render()
 	auto d2dContext = UserInterface::GetD2DContext();
 	D2D1_RECT_F bounds = this->GetBounds();
 	d2dContext->FillRectangle(&bounds, this->m_shadowColorBrush.Get());
-
 	if (this->m_selectedDingID > Dings::DingIDs::Void)
 	{
 		auto dingPic = this->m_selectedDingImage.Get();
@@ -107,9 +107,17 @@ void LevelEditorHUD::Render()
 			bounds.top + blooDot::Consts::DIALOG_PADDING,
 			bounds.left + blooDot::Consts::DIALOG_PADDING + blooDot::Consts::SQUARE_WIDTH,
 			bounds.top + blooDot::Consts::DIALOG_PADDING + blooDot::Consts::SQUARE_HEIGHT
+		);		
+
+		auto originRect = D2D1::RectF(
+			0.f,
+			0.f,
+			this->m_selectedDingExtent.width * blooDot::Consts::SQUARE_WIDTH,
+			this->m_selectedDingExtent.height * blooDot::Consts::SQUARE_HEIGHT
 		);
 
-		d2dContext->DrawBitmap(dingPic, placementRect);
+		auto interpolationMode = (this->m_selectedDingExtent.width == 1 && this->m_selectedDingExtent.height == 1) ? D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR : D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR;
+		d2dContext->DrawBitmap(dingPic, placementRect, 1.f, interpolationMode, originRect);
 		d2dContext->DrawTextLayout(
 			Point2F(
 				bounds.left + blooDot::Consts::DIALOG_PADDING,

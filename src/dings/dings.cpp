@@ -178,7 +178,7 @@ void Dings::DrawRotatory(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	{
 		/* all base mobs are lefty, while our starting index is a HDG 360,
 		 * so we add 90° to initial rotation to match it with reality */
-		this->PrepareRect(&this->m_lookupSides[orientationDent], rect);
+		this->PrepareRect(&this->m_lookupViech[orientationDent], rect);
 		this->Rotate(rendEr, rect, static_cast<float>(orientationDent) * 22.5F + 90.0F);
 		if (this->m_fromFile == nullptr)
 		{
@@ -244,38 +244,38 @@ void Dings::SetOnSheetPlacementsFromCoalescability()
 	}
 	else if (this->m_Facings == Facings::Viech)
 	{
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG360].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG360].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG22_5].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG22_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG45].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG45].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG67_5].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG67_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG90].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG90].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG112_5].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG112_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG135].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG135].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG157_5].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG157_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG180].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG180].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG202_5].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG202_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG225].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG225].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG247_5].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG247_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG270].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG270].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG292_5].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG292_5].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG315].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG315].y = y;
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG337_5].x = this->StepX(&x);
-		this->m_lookupSides[OrientabilityIndexRotatory::HDG337_5].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG360].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG360].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG22_5].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG22_5].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG45].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG45].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG67_5].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG67_5].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG90].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG90].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG112_5].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG112_5].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG135].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG135].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG157_5].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG157_5].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG180].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG180].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG202_5].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG202_5].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG225].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG225].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG247_5].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG247_5].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG270].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG270].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG292_5].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG292_5].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG315].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG315].y = y;
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG337_5].x = this->StepX(&x);
+		this->m_lookupViech[OrientabilityIndexRotatory::HDG337_5].y = y;
 	}
 	else if (this->m_Facings == Facings::Center)
 	{
@@ -606,7 +606,7 @@ D2D1_POINT_2U Dings::GetSheetPlacement(Facings orientation)
 			orientation = Dings::DefaultMobFacing;
 		}
 
-		return this->m_lookupSides[Dings::HeadingFromFacing(orientation)];
+		return this->m_lookupViech[Dings::HeadingFromFacing(orientation)];
 	}
 	else if ((this->m_Facings == Facings::Shy && this->m_Coalescing == Facings::Immersed) || this->m_Facings == Facings::Center)
 	{

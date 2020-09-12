@@ -4,8 +4,8 @@
 
 MediaStreamer::MediaStreamer()
 {
-    m_reader = nullptr;
-    m_audioType = nullptr;
+    this->m_reader = nullptr;
+    this->m_audioType = nullptr;
     ZeroMemory(&m_waveFormat, sizeof(m_waveFormat));
 }
 
@@ -51,6 +51,16 @@ void MediaStreamer::Initialize(_In_ const WCHAR* url)
     );
 }
 
+WAVEFORMATEX& MediaStreamer::GetOutputWaveFormatEx()
+{
+	return this->m_waveFormat;
+}
+
+UINT32 MediaStreamer::GetMaxStreamLengthInBytes()
+{
+	return this->m_maxStreamLengthInBytes;
+}
+
 bool MediaStreamer::GetNextBuffer(uint8* buffer, uint32 maxBufferSize, uint32* bufferLength)
 {
     Microsoft::WRL::ComPtr<IMFSample> sample;
@@ -58,73 +68,56 @@ bool MediaStreamer::GetNextBuffer(uint8* buffer, uint32 maxBufferSize, uint32* b
     BYTE *audioData = nullptr;
     DWORD sampleBufferLength = 0;
     DWORD flags = 0;
-
     *bufferLength = 0;
-
     if (m_reader == nullptr)
     {
         return false;
     }
 
     DX::ThrowIfFailed(
-        m_reader->ReadSample(MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, nullptr, &flags, nullptr, &sample)
-        );
+        this->m_reader->ReadSample(MF_SOURCE_READER_FIRST_AUDIO_STREAM, 0, nullptr, &flags, nullptr, &sample)
+    );
 
     if (sample == nullptr)
     {
-        if (flags & MF_SOURCE_READERF_ENDOFSTREAM)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+		return flags & MF_SOURCE_READERF_ENDOFSTREAM;
     }
 
     DX::ThrowIfFailed(
         sample->ConvertToContiguousBuffer(&mediaBuffer)
-        );
+    );
 
     DX::ThrowIfFailed(
         mediaBuffer->Lock(&audioData, nullptr, &sampleBufferLength)
-        );
+    );
 
-    // Only copy the sample if the remaining buffer is large enough.
+    // Only copy the sample if the remaining buffer is large enough
     if (sampleBufferLength <= maxBufferSize)
     {
         CopyMemory(buffer, audioData, sampleBufferLength);
         *bufferLength = sampleBufferLength;
     }
 
-    if (flags & MF_SOURCE_READERF_ENDOFSTREAM)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+	return flags & MF_SOURCE_READERF_ENDOFSTREAM;
 }
 
 void MediaStreamer::ReadAll(uint8* buffer, uint32 maxBufferSize, uint32* bufferLength)
 {
     uint32 valuesWritten = 0;
     uint32 sampleBufferLength = 0;
-
-    if (m_reader == nullptr)
+    if (this->m_reader == nullptr)
     {
         return;
     }
 
     *bufferLength = 0;
     // If buffer isn't large enough, return
-    if (maxBufferSize < m_maxStreamLengthInBytes)
+    if (maxBufferSize < this->m_maxStreamLengthInBytes)
     {
         return;
     }
 
-    while (!GetNextBuffer(buffer + valuesWritten, maxBufferSize - valuesWritten, &sampleBufferLength))
+    while (!this->GetNextBuffer(buffer + valuesWritten, maxBufferSize - valuesWritten, &sampleBufferLength))
     {
         valuesWritten += sampleBufferLength;
     }
@@ -134,15 +127,14 @@ void MediaStreamer::ReadAll(uint8* buffer, uint32 maxBufferSize, uint32* bufferL
 
 void MediaStreamer::Restart()
 {
-    if (m_reader == nullptr)
+    if (this->m_reader == nullptr)
     {
         return;
     }
 
     PROPVARIANT var = {0};
     var.vt = VT_I8;
-
     DX::ThrowIfFailed(
-        m_reader->SetCurrentPosition(GUID_NULL, var)
-        );
+        this->m_reader->SetCurrentPosition(GUID_NULL, var)
+    );
 }
