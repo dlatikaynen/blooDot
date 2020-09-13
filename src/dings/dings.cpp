@@ -20,6 +20,11 @@ Facings& operator |=(Facings& a, Facings b)
 	return a = a | b;
 }
 
+Layers& operator |=(Layers& a, Layers b)
+{
+	return a = a | b;
+}
+
 Dings::Dings(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes)
 {
 	this->m_ID = dingID;

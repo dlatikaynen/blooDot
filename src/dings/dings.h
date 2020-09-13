@@ -93,6 +93,13 @@ constexpr inline Facings operator |(const Facings left, const Facings& right)
 
 Facings& operator |=(Facings& a, Facings b);
 
+constexpr inline Layers operator |(const Layers top, const Layers& bottom)
+{
+	return static_cast<Layers>(static_cast<int>(top) | static_cast<int>(bottom));
+}
+
+Layers& operator |=(Layers& a, Layers b);
+
 enum OrientabilityIndexQuadruplet
 {
 	// Sequence is meaningful

@@ -6,7 +6,7 @@
 #include "..\dx\BrushRegistry.h"
 #include "..\dings\dings.h"
 #include "..\algo\ClumsyPacking.h"
-#include "Object.h"
+#include "World.h"
 
 /* A level is a set of worldsheets belonging to the same floor level, hence its name :) */
 class Level : public std::enable_shared_from_this<Level>
@@ -14,7 +14,7 @@ class Level : public std::enable_shared_from_this<Level>
 public:
 	Level::Level(Platform::String^ levelName, D2D1_SIZE_U sheetSize, unsigned extentWE, unsigned extentNS);
 
-	Level::Level(const Object& obj) { };
+	Level::Level(const Level& obj) { };
 	Level& operator=(const Level& obj) { return *this; };
 	Level::Level() { };
 	Level::Level(Level&& obj) { };
@@ -26,7 +26,7 @@ public:
 	D2D1_SIZE_U GetSheetSizeUnits();
 	unsigned GetNumOfSheetsWE();
 	unsigned GetNumOfSheetsNS();
-	Object* GetObjectAt(int levelX, int levelY, bool createIfNull);
+	Blocks* GetBlocksAt(int levelX, int levelY, bool createIfNull);
 	ClumsyPacking::NeighborConfiguration GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, Dings::DingIDs dingID, Layers inLayer);
 	std::shared_ptr<Dings> WeedObjectAt(unsigned levelX, unsigned levelY, Layers* cullCoalescableInLayer);
 	void SetupRuntimeState();
@@ -75,7 +75,7 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_dingSheetBmp;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_mobsSheetBmp;
 
-	std::vector<Object*>								m_Objects;
+	std::vector<Blocks*>								m_Blocks;
 	bool												m_isDesignTime;
 	Platform::String^									m_lastSavedAsFileName;
 	bool												m_designTimeDirty;

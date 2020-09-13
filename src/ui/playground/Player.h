@@ -3,7 +3,7 @@
 
 #pragma once
 
-class Player : public Object
+class Player : public BlockObject
 {
 public:
 	Player(const Player& obj) { };
@@ -15,7 +15,7 @@ public:
 	void InitializeIn(Platform::String^ playerName, std::shared_ptr<Level> inLevel, unsigned positionInLevelX, unsigned positionInLevelY, Facings mobFacing);
 	void PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
 	void PushY(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
-	Object* Update();
+	std::shared_ptr<BlockObject> Update();
 
 	Platform::String^ Name;	
 	PlayerMomentum Momentum;

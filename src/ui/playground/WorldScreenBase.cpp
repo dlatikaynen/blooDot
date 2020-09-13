@@ -624,17 +624,17 @@ void WorldScreenBase::ClumsyPackNeighborhoodOf(ClumsyPacking::NeighborConfigurat
 
 void WorldScreenBase::ClumsyPackNeighborhoodOf(unsigned aroundLevelX, unsigned aroundLevelY, Layers inLayer, Dings::DingIDs dingID)
 {
-	auto centerObject = this->m_currentLevel->GetObjectAt(aroundLevelX, aroundLevelY, false);
+	auto centerObject = this->m_currentLevel->GetBlocksAt(aroundLevelX, aroundLevelY, false)->GetObject(inLayer);
 	if (centerObject != nullptr)
 	{
-		auto centerDings = centerObject->GetDing(inLayer);
+		auto centerDings = centerObject->GetDing();
 		if (centerDings != nullptr && centerDings->ID() == dingID)
 		{
 			auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(aroundLevelX, aroundLevelY, dingID, inLayer);
 			auto shouldBeFacing = ClumsyPacking::FacingFromConfiguration(neighborHood);
-			if (centerObject->PlacementFacing(inLayer) != shouldBeFacing)
+			if (centerObject->PlacementFacing() != shouldBeFacing)
 			{
-				centerObject->AdjustFacing(inLayer, shouldBeFacing);
+				centerObject->AdjustFacing(shouldBeFacing);
 				this->RedrawSingleSquare(aroundLevelX, aroundLevelY, inLayer);
 				this->ClumsyPackNeighborhoodOf(neighborHood, aroundLevelX, aroundLevelY, inLayer, dingID);
 			}

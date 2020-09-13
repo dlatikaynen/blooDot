@@ -1,5 +1,5 @@
 #include "ObjectProperties.h"
-#include "..\world\Object.h"
+#include "..\world\BlockObject.h"
 
 ObjectProperties::ObjectProperties()
 {
@@ -10,11 +10,11 @@ ObjectProperties::ObjectProperties()
 	this->m_wieldingTool = nullptr;
 }
 
-void ObjectProperties::InventoryEmplace(Object* objectToAdd)
+void ObjectProperties::InventoryEmplace(BlockObject* objectToAdd)
 {
 	if (objectToAdd != nullptr)
 	{
-		auto dingID = objectToAdd->GetDing(Layers::Walls)->ID();
+		auto dingID = objectToAdd->GetDing()->ID();
 		auto existingItem = this->m_inventoryContent.find(dingID);
 		if (existingItem == this->m_inventoryContent.end())
 		{

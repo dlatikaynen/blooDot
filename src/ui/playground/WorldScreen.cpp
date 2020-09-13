@@ -97,7 +97,7 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 		auto collidedWith = Player->Update();
 		if (collidedWith != nullptr)
 		{
-			if(collidedWith->m_BehaviorsWalls & ObjectBehaviors::Takeable)
+			if(collidedWith->m_Behaviors & ObjectBehaviors::Takeable)
 			{
 				this->m_audio->PlaySoundEffect(SoundEvent::Kaching);
 				this->ObliterateObject(collidedWith->PositionSquare);
@@ -218,8 +218,8 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 		if (deltaX < 0.0F)
 		{
 			/* hit something int the west? */
-			auto westCenterTerrain = this->m_currentLevel->GetObjectAt(squareX - 1, squareY, false);
-			if (westCenterTerrain != nullptr && westCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+			auto westCenterTerrain = this->m_currentLevel->GetBlocksAt(squareX - 1, squareY, false)->GetObject(Layers::Walls);
+			if (westCenterTerrain != nullptr && westCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 			{
 				D2D1_RECT_F westCenterBoundingBox;
 				westCenterTerrain->GetBoundingBox(&westCenterBoundingBox);
@@ -242,8 +242,8 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 			/* hit something in the east?
 			 * we browse the environment in the order of most likely interaction,
 			 * so in this case this will be next-to-right first */
-			auto eastCenterTerrain = this->m_currentLevel->GetObjectAt(squareX + 1, squareY, false);
-			if (eastCenterTerrain != nullptr && eastCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+			auto eastCenterTerrain = this->m_currentLevel->GetBlocksAt(squareX + 1, squareY, false)->GetObject(Layers::Walls);
+			if (eastCenterTerrain != nullptr && eastCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 			{
 				D2D1_RECT_F eastCenterBoundingBox;
 				eastCenterTerrain->GetBoundingBox(&eastCenterBoundingBox);
@@ -264,8 +264,8 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 		if (deltaY < 0.0F)
 		{
 			/* hit something to the north? */
-			auto northCenterTerrain = this->m_currentLevel->GetObjectAt(squareX, squareY - 1, false);
-			if (northCenterTerrain != nullptr && northCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+			auto northCenterTerrain = this->m_currentLevel->GetBlocksAt(squareX, squareY - 1, false)->GetObject(Layers::Walls);
+			if (northCenterTerrain != nullptr && northCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 			{
 				D2D1_RECT_F northCenterBoundingBox;
 				northCenterTerrain->GetBoundingBox(&northCenterBoundingBox);
@@ -286,8 +286,8 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 		if (deltaY > 0.0F)
 		{
 			/* hit something in the south? */
-			auto southCenterTerrain = this->m_currentLevel->GetObjectAt(squareX, squareY + 1, false);
-			if (southCenterTerrain != nullptr && southCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+			auto southCenterTerrain = this->m_currentLevel->GetBlocksAt(squareX, squareY + 1, false)->GetObject(Layers::Walls);
+			if (southCenterTerrain != nullptr && southCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 			{
 				D2D1_RECT_F southCenterBoundingBox;
 				southCenterTerrain->GetBoundingBox(&southCenterBoundingBox);
@@ -310,9 +310,9 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 	}
 }
 
-bool WorldScreen::OnHit(Object* hitTarget)
+bool WorldScreen::OnHit(std::shared_ptr<BlockObject> hitTarget)
 {	
-	auto underlyingDing = hitTarget->GetDing(Layers::Walls);
+	auto underlyingDing = hitTarget->GetDing();
 	if (underlyingDing == nullptr)
 	{
 		return false;

@@ -26,7 +26,7 @@ public:
 	void ImportIntoCurrentLevel(std::shared_ptr<Level> sourceLevel);
 
 protected:
-	void CloneObjectToCell(Object* sourceCell, Object* targetCell, Layers inLayer, unsigned targetX, unsigned targetY);
+	void CloneObjectToCell(Blocks* sourceCell, Blocks* targetCell, Layers inLayer, unsigned targetX, unsigned targetY);
 
 private:
 	void DrawLevelEditorRaster();	

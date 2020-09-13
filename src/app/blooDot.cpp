@@ -1048,7 +1048,7 @@ void blooDotMain::OnActionEnterLevelEditor()
 	this->m_worldScreen->Initialize(this->m_audio, this->m_deviceResources);
 
 #ifdef _DEBUG
-	auto newObject = m_currentLevel->GetObjectAt(353, 361, true);
+	auto newObject = m_currentLevel->GetBlocksAt(353, 361, true);
 	newObject->Instantiate(this->m_currentLevel->shared_from_this(), m_currentLevel->GetDing(Dings::DingIDs::Mauer), ClumsyPacking::ConfigurationFromNeighbors(Facings::Shy));
 #endif 
 

@@ -114,9 +114,6 @@
     <ClCompile Include="..\src\world\Level.cpp">
       <Filter>world</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\world\Object.cpp">
-      <Filter>world</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\app\Consts.cpp">
       <Filter>app</Filter>
     </ClCompile>
@@ -188,6 +185,12 @@
     </ClCompile>
     <ClCompile Include="..\src\dings\floor-like\flooring.cpp">
       <Filter>ui\dings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\world\Blocks.cpp">
+      <Filter>world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\world\BlockObject.cpp">
+      <Filter>world</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -287,9 +290,6 @@
     <ClInclude Include="..\src\world\Level.h">
       <Filter>world</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\world\Object.h">
-      <Filter>world</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\app\Consts.h">
       <Filter>app</Filter>
     </ClInclude>
@@ -349,6 +349,12 @@
     </ClInclude>
     <ClInclude Include="..\src\dings\mobs.h">
       <Filter>ui\dings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\world\Blocks.h">
+      <Filter>world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\world\BlockObject.h">
+      <Filter>world</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "..\src\world\Object.h"
+#include "..\src\world\World.h"
 #include "..\src\world\Level.h"
 #include "Player.h"
 
@@ -25,9 +25,9 @@ void Player::InitializeIn(Platform::String^ playerName, std::shared_ptr<Level> i
 	this->Name = playerName;
 	this->PositionSquare = D2D1::Point2U(positionInLevelX, positionInLevelY);
 	auto playerTemplate = inLevel->GetDing(Dings::DingIDs::Player);
-	this->InstantiateInLayerFacing(inLevel, Layers::Walls, playerTemplate, mobFacing);
+	this->InstantiateFacing(playerTemplate, mobFacing);
 	this->m_Orientation = Dings::HeadingFromFacing(mobFacing);
-	this->PlaceInLevel(inLevel);
+	this->PlaceInLevel();
 }
 
 void Player::PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity)
@@ -46,10 +46,10 @@ void Player::PushY(float accelerationRate, float attenuationRate, float gripFact
 	this->Momentum.mediumViscosity = mediumViscosity;
 }
 
-Object* Player::Update()
+std::shared_ptr<BlockObject> Player::Update()
 {
 	D2D1_RECT_F myBoundingBox;
-	Object* collidedWith = nullptr;
+	std::shared_ptr<BlockObject> collidedWith = nullptr;
 
 	/* accelerate with momentary acceleration */
 	this->Momentum.speedX += this->Momentum.accelerationX;
@@ -104,8 +104,13 @@ Object* Player::Update()
 	
 	/* linear relocation depending on momentary velocity */	
 	auto deltaX = abs(this->Momentum.speedX) > this->Momentum.speedCapX ? std::copysignf(this->Momentum.speedCapX, this->Momentum.speedX) : this->Momentum.speedX;
-	auto deltaY = abs(this->Momentum.speedY) > this->Momentum.speedCapY ? std::copysignf(this->Momentum.speedCapY, this->Momentum.speedY) : this->Momentum.speedY;
-	auto newPosition = D2D1::RectF(this->Position.left + deltaX, this->Position.top + deltaY, this->Position.right + deltaX, this->Position.bottom + deltaY);
+	auto deltaY = abs(this->Momentum.speedY) > this->Momentum.speedCapY ? std::copysignf(this->Momentum.speedCapY, this->Momentum.speedY) : this->Momentum.speedY;	
+	auto newPosition = D2D1::RectF(
+		this->Position.left + deltaX,
+		this->Position.top + deltaY,
+		this->Position.right + deltaX,
+		this->Position.bottom + deltaY
+	);
 	
 	/* orient the sprite based on the intented vector */
 	if (abs(deltaX) > 0.1F || abs(deltaY) > 0.1F)
@@ -126,8 +131,8 @@ Object* Player::Update()
 	if (deltaX < 0.0F)
 	{
 		/* hit something int the west? */
-		auto westCenterTerrain = this->m_Level->GetObjectAt(this->PositionSquare.x - 1, this->PositionSquare.y, false);
-		if (westCenterTerrain != nullptr && westCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+		auto westCenterTerrain = this->m_Level->GetBlocksAt(this->PositionSquare.x - 1, this->PositionSquare.y, false)->GetObject(Layers::Walls);
+		if (westCenterTerrain != nullptr && westCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 		{
 			D2D1_RECT_F westCenterBoundingBox;
 			westCenterTerrain->GetBoundingBox(&westCenterBoundingBox);
@@ -137,12 +142,12 @@ Object* Player::Update()
 				auto wouldPenetrate = westCenterBoundingBox.right - myBoundingBox.left;
 				newPosition.left = westCenterBoundingBox.right + 1.0F;
 				newPosition.right = newPosition.left + originalWidth;
-				if (westCenterTerrain->m_BehaviorsWalls & ObjectBehaviors::Solid)
+				if (westCenterTerrain->m_Behaviors & ObjectBehaviors::Solid)
 				{
 					this->Momentum.HitTheWall(Facings::East);
 				}
 
-				if (westCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Solid)
+				if (westCenterTerrain->m_Behaviors != ObjectBehaviors::Solid)
 				{
 					collidedWith = westCenterTerrain;
 				}
@@ -155,8 +160,8 @@ Object* Player::Update()
 		/* hit something in the east?
 		 * we browse the environment in the order of most likely interaction,
 		 * so in this case this will be next-to-right first */
-		auto eastCenterTerrain = this->m_Level->GetObjectAt(this->PositionSquare.x + 1, this->PositionSquare.y, false);
-		if (eastCenterTerrain != nullptr && eastCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+		auto eastCenterTerrain = this->m_Level->GetBlocksAt(this->PositionSquare.x + 1, this->PositionSquare.y, false)->GetObject(Layers::Walls);
+		if (eastCenterTerrain != nullptr && eastCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 		{
 			D2D1_RECT_F eastCenterBoundingBox;
 			eastCenterTerrain->GetBoundingBox(&eastCenterBoundingBox);
@@ -166,12 +171,12 @@ Object* Player::Update()
 				auto wouldPenetrate = myBoundingBox.right - eastCenterBoundingBox.left;
 				newPosition.right = eastCenterBoundingBox.left - 1.0F;
 				newPosition.left = newPosition.right - originalWidth;
-				if (eastCenterTerrain->m_BehaviorsWalls & ObjectBehaviors::Solid)
+				if (eastCenterTerrain->m_Behaviors & ObjectBehaviors::Solid)
 				{
 					this->Momentum.HitTheWall(Facings::East);
 				}
 
-				if (eastCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Solid)
+				if (eastCenterTerrain->m_Behaviors != ObjectBehaviors::Solid)
 				{
 					collidedWith = eastCenterTerrain;
 				}
@@ -182,8 +187,8 @@ Object* Player::Update()
 	if (deltaY < 0.0F)
 	{
 		/* hit something to the north? */
-		auto northCenterTerrain = this->m_Level->GetObjectAt(this->PositionSquare.x, this->PositionSquare.y - 1, false);
-		if (northCenterTerrain != nullptr && northCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+		auto northCenterTerrain = this->m_Level->GetBlocksAt(this->PositionSquare.x, this->PositionSquare.y - 1, false)->GetObject(Layers::Walls);
+		if (northCenterTerrain != nullptr && northCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 		{
 			D2D1_RECT_F northCenterBoundingBox;
 			northCenterTerrain->GetBoundingBox(&northCenterBoundingBox);
@@ -193,12 +198,12 @@ Object* Player::Update()
 				auto wouldPenetrate = northCenterBoundingBox.bottom - myBoundingBox.top;
 				newPosition.top = northCenterBoundingBox.bottom + 1.0F;
 				newPosition.bottom = newPosition.top + originalHeight;
-				if (northCenterTerrain->m_BehaviorsWalls & ObjectBehaviors::Solid)
+				if (northCenterTerrain->m_Behaviors & ObjectBehaviors::Solid)
 				{
 					this->Momentum.HitTheWall(Facings::North);
 				}
 
-				if (northCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Solid)
+				if (northCenterTerrain->m_Behaviors != ObjectBehaviors::Solid)
 				{
 					collidedWith = northCenterTerrain;
 				}
@@ -209,8 +214,8 @@ Object* Player::Update()
 	if (deltaY > 0.0F)
 	{
 		/* hit something in the south? */
-		auto southCenterTerrain = this->m_Level->GetObjectAt(this->PositionSquare.x, this->PositionSquare.y + 1, false);
-		if (southCenterTerrain != nullptr && southCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Boring)
+		auto southCenterTerrain = this->m_Level->GetBlocksAt(this->PositionSquare.x, this->PositionSquare.y + 1, false)->GetObject(Layers::Walls);
+		if (southCenterTerrain != nullptr && southCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 		{
 			D2D1_RECT_F southCenterBoundingBox;
 			southCenterTerrain->GetBoundingBox(&southCenterBoundingBox);
@@ -220,12 +225,12 @@ Object* Player::Update()
 				auto wouldPenetrate = myBoundingBox.bottom - southCenterBoundingBox.top;
 				newPosition.bottom = southCenterBoundingBox.top - 1.0F;
 				newPosition.top = newPosition.bottom - originalHeight;
-				if (southCenterTerrain->m_BehaviorsWalls & ObjectBehaviors::Solid)
+				if (southCenterTerrain->m_Behaviors & ObjectBehaviors::Solid)
 				{
 					this->Momentum.HitTheWall(Facings::South);
 				}
 
-				if (southCenterTerrain->m_BehaviorsWalls != ObjectBehaviors::Solid)
+				if (southCenterTerrain->m_Behaviors != ObjectBehaviors::Solid)
 				{
 					collidedWith = southCenterTerrain;
 				}

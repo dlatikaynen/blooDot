@@ -30,10 +30,10 @@ Level::Level(Platform::String^ levelName, D2D1_SIZE_U sheetSize, unsigned extent
 
 Level::~Level()
 {
-	while (!this->m_Objects.empty()) 
+	while (!this->m_Blocks.empty()) 
 	{
-		delete this->m_Objects.back();
-		this->m_Objects.pop_back();
+		delete this->m_Blocks.back();
+		this->m_Blocks.pop_back();
 	}
 
 	if (this->m_dingSheet != nullptr)
@@ -81,9 +81,9 @@ Level::~Level()
 
 void Level::Clear()
 {
-	if (!this->m_Objects.empty())
+	if (!this->m_Blocks.empty())
 	{
-		this->m_Objects.clear();
+		this->m_Blocks.clear();
 	}
 
 	/* generates the matrix for this level, lazy-loading */
@@ -91,7 +91,7 @@ void Level::Clear()
 	{
 		for (unsigned x = 0; x < this->m_rectangularBounds.width; ++x)
 		{
-			this->m_Objects.push_back((Object*)nullptr);
+			this->m_Blocks.push_back((Blocks*)nullptr);
 		}
 	}
 
@@ -294,20 +294,20 @@ D2D1_SIZE_U Level::GetSheetSizeUnits()
 	return this->m_sheetSize;
 }
 
-Object* Level::GetObjectAt(int levelX, int levelY, bool createIfNull)
+Blocks* Level::GetBlocksAt(int levelX, int levelY, bool createIfNull)
 {
 	auto objectAddress = levelY * this->m_rectangularBounds.width + levelX;
-	auto retrievedObject = (Object*)nullptr;
+	auto retrievedObject = (Blocks*)nullptr;
 
 	/* we create lazily, on demand */
-	if (objectAddress >= 0 && levelX > 0 && objectAddress < this->m_Objects.size())
+	if (objectAddress >= 0 && levelX > 0 && objectAddress < this->m_Blocks.size())
 	{
-		retrievedObject = this->m_Objects[objectAddress];
+		retrievedObject = this->m_Blocks[objectAddress];
 		if (retrievedObject == nullptr && createIfNull)
 		{
-			auto newObject = new Object(levelX, levelY);
+			auto newObject = new Blocks(levelX, levelY);
 			newObject->PlaceInLevel(this->shared_from_this());
-			this->m_Objects[objectAddress] = newObject;
+			this->m_Blocks[objectAddress] = newObject;
 			retrievedObject = newObject;
 			if (this->m_isDesignTime)
 			{
@@ -324,15 +324,15 @@ std::shared_ptr<Dings> Level::WeedObjectAt(unsigned levelX, unsigned levelY, Lay
 	std::shared_ptr<Dings> dingWeeded = nullptr;
 	(*cullCoalescableInLayer) = Layers::None;
 	auto objectAddress = levelY * this->m_rectangularBounds.width + levelX;
-	if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
+	if (objectAddress >= 0 && objectAddress < this->m_Blocks.size())
 	{
-		auto existingObject = this->m_Objects[objectAddress];
+		auto existingObject = this->m_Blocks[objectAddress];
 		if (existingObject != nullptr)
 		{
 			auto weedComplete = existingObject->WeedFromTop(&dingWeeded, cullCoalescableInLayer);
 			if (weedComplete)
 			{
-				this->m_Objects[objectAddress] = nullptr;
+				this->m_Blocks[objectAddress] = nullptr;
 			}
 
 			if (dingWeeded != nullptr && this->m_isDesignTime)
@@ -352,17 +352,26 @@ void Level::SetupRuntimeState()
 		for (unsigned x = 0; x < this->m_rectangularBounds.width; ++x)
 		{
 			auto objectAddress = y * this->m_rectangularBounds.width + x;
-			if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
+			if (objectAddress >= 0 && objectAddress < this->m_Blocks.size())
 			{
-				auto allocatedObject = this->m_Objects[objectAddress];
+				auto allocatedObject = this->m_Blocks[objectAddress];
 				if (allocatedObject != nullptr)
 				{					
 					auto layers = allocatedObject->GetLayers();
-					allocatedObject->SetupRuntimeState(
-						allocatedObject->GetDing(Layers::Floor),
-						allocatedObject->GetDing(Layers::Walls),
-						allocatedObject->GetDing(Layers::Rooof)
-					);
+					if (layers & Layers::Floor)
+					{
+						allocatedObject->GetObject(Layers::Floor)->SetupRuntimeState();
+					}
+
+					if (layers & Layers::Walls)
+					{
+						allocatedObject->GetObject(Layers::Walls)->SetupRuntimeState();
+					}
+
+					if (layers & Layers::Rooof)
+					{
+						allocatedObject->GetObject(Layers::Rooof)->SetupRuntimeState();
+					}
 				}
 			}
 		}
@@ -392,10 +401,10 @@ bool Level::HasCompatibleNeighbor(int x, int y, Dings::DingIDs dingID, Layers of
 {
 	if (!(x < 0 || y < 0 || x >= (int)this->m_rectangularBounds.width || y >= (int)this->m_rectangularBounds.height))
 	{
-		auto thereObject = this->GetObjectAt(x, y, false);
+		auto thereObject = this->GetBlocksAt(x, y, false);
 		if (thereObject != nullptr && ((thereObject->GetLayers() & ofLayer) == ofLayer))
 		{
-			auto thereDing = thereObject->GetDing(ofLayer);
+			auto thereDing = thereObject->GetObject(ofLayer)->GetDing();
 			if (thereDing != nullptr && thereDing->ID() == dingID)
 			{
 				return true;
@@ -444,9 +453,9 @@ D2D1_RECT_U Level::DeterminePopulatedAreaBounds()
 		for (unsigned x = 0; x < this->m_rectangularBounds.width; ++x)
 		{
 			auto objectAddress = y * this->m_rectangularBounds.width + x;
-			if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
+			if (objectAddress >= 0 && objectAddress < this->m_Blocks.size())
 			{
-				auto existingObject = this->m_Objects[objectAddress];
+				auto existingObject = this->m_Blocks[objectAddress];
 				if (existingObject != nullptr && existingObject->GetLayers() > Layers::None && existingObject->GetLayers()!=Layers::Rooof)
 				{
 					if (outerBounds.left > x)
@@ -509,9 +518,9 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 		for (unsigned x = 0; x < this->m_rectangularBounds.width; ++x)
 		{
 			auto objectAddress = y * this->m_rectangularBounds.width + x;
-			if (objectAddress >= 0 && objectAddress < this->m_Objects.size())
+			if (objectAddress >= 0 && objectAddress < this->m_Blocks.size())
 			{
-				auto allocatedObject = this->m_Objects[objectAddress];
+				auto allocatedObject = this->m_Blocks[objectAddress];
 				if (allocatedObject != nullptr)
 				{
 					whatsthere = 0x0;
@@ -728,7 +737,7 @@ bool Level::CellLoadFromFile(char *srcData, size_t *offset, const Layers inLayer
 			placementFacing = Facings::Shy;
 		}
 
-		this->GetObjectAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(this->shared_from_this(), inLayer, this->GetDing(dingID), placementFacing);
+		this->GetBlocksAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(this->shared_from_this(), inLayer, this->GetDing(dingID), placementFacing);
 		return true;
 	}
 

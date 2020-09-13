@@ -95,7 +95,7 @@ void WorldSheet::Populate()
 			{
 				auto worldX = x + this->m_NWcornerInWorldSquares.x;
 				auto worldY = y + this->m_NWcornerInWorldSquares.y;
-				auto objectX = this->m_tiedToLevel->GetObjectAt(worldX, worldY, false);
+				auto objectX = this->m_tiedToLevel->GetBlocksAt(worldX, worldY, false);
 				if (objectX != nullptr)
 				{
 					auto layer = objectX->GetLayers();
@@ -107,8 +107,9 @@ void WorldSheet::Populate()
 							beganDrawFloor = true;
 						}
 
-						dings = objectX->GetDing(Layers::Floor);
-						this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(::Floor), x, y);
+						auto objectFloor = objectX->GetObject(Layers::Floor);
+						dings = objectFloor->GetDing();
+						this->PlacePrimitive(dingMap, this->m_floor, dings, objectFloor->PlacementFacing(), x, y);
 					}
 					
 					if ((layer & Layers::Walls) == Layers::Walls)
@@ -120,8 +121,9 @@ void WorldSheet::Populate()
 							this->m_walls->Clear();
 						}
 
-						dings = objectX->GetDing(Layers::Walls);
-						this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(::Walls), x, y);
+						auto objectWalls = objectX->GetObject(Layers::Walls);
+						dings = objectWalls->GetDing();
+						this->PlacePrimitive(dingMap, this->m_walls, dings, objectWalls->PlacementFacing(), x, y);
 					}
 					
 					if ((layer & Layers::Rooof) == Layers::Rooof)
@@ -133,8 +135,9 @@ void WorldSheet::Populate()
 							this->m_rooof->Clear();
 						}
 
-						dings = objectX->GetDing(Layers::Rooof);
-						this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(::Rooof), x, y);
+						auto objectRooof = objectX->GetObject(Layers::Rooof);
+						dings = objectRooof->GetDing();
+						this->PlacePrimitive(dingMap, this->m_rooof, dings, objectRooof->PlacementFacing(), x, y);
 					}
 				}
 			}
@@ -210,7 +213,7 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 
 	auto worldX = x + this->m_NWcornerInWorldSquares.x;
 	auto worldY = y + this->m_NWcornerInWorldSquares.y;
-	auto objectX = this->m_tiedToLevel->GetObjectAt(worldX, worldY, false);
+	auto objectX = this->m_tiedToLevel->GetBlocksAt(worldX, worldY, false);
 	if (objectX == nullptr)
 	{
 		/* erase by transparenting everything on that layer */
@@ -269,7 +272,8 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 				beganDrawFloor = true;
 			}
 
-			dings = objectX->GetDing(Layers::Floor);
+			auto objectFloor = objectX->GetObject(Layers::Floor);
+			dings = objectFloor->GetDing();
 			if (dings == nullptr)
 			{
 				auto floorBackground = this->m_tiedToLevel->GetFloorBackground().Get();
@@ -285,7 +289,7 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 			else
 			{
 				dingSheet->GetBitmap(&dingMap);
-				this->PlacePrimitive(dingMap, this->m_floor, dings, objectX->PlacementFacing(Layers::Floor), x, y);
+				this->PlacePrimitive(dingMap, this->m_floor, dings, objectFloor->PlacementFacing(), x, y);
 				dingMap->Release();
 			}
 		}
@@ -299,7 +303,8 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 				this->EraseSquare(this->m_walls, x, y);
 			}
 
-			dings = objectX->GetDing(Layers::Walls);
+			auto objectWalls = objectX->GetObject(Layers::Walls);
+			dings = objectWalls->GetDing();
 			if (dings != nullptr)
 			{
 				auto dingExtent = dings->GetExtentOnSheet();
@@ -327,7 +332,7 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 					dingSheet->GetBitmap(&dingMap);
 				}
 
-				this->PlacePrimitive(dingMap, this->m_walls, dings, objectX->PlacementFacing(Layers::Walls), x, y);
+				this->PlacePrimitive(dingMap, this->m_walls, dings, objectWalls->PlacementFacing(), x, y);
 				dingMap->Release();
 				if (isMultiBlock && this->m_tiedToLevel->IsDesignMode())
 				{
@@ -351,11 +356,12 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 				this->EraseSquare(this->m_rooof, x, y);
 			}
 
-			dings = objectX->GetDing(Layers::Rooof);
+			auto objectRooof = objectX->GetObject(Layers::Rooof);
+			dings = objectRooof->GetDing();
 			if (dings != nullptr)
 			{
 				dingSheet->GetBitmap(&dingMap);
-				this->PlacePrimitive(dingMap, this->m_rooof, dings, objectX->PlacementFacing(Layers::Rooof), x, y);
+				this->PlacePrimitive(dingMap, this->m_rooof, dings, objectRooof->PlacementFacing(), x, y);
 				dingMap->Release();
 			}
 		}
