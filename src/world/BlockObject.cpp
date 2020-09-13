@@ -39,7 +39,12 @@ void BlockObject::PlaceInLevel()
 		{
 			this->SetMobRotation(Dings::HeadingFromFacing(this->m_Facing));
 		}
-	}	
+	}
+
+	if (this->m_blocksContainer != nullptr)
+	{
+		this->SetPosition(this->m_blocksContainer->Position);
+	}
 }
 
 void BlockObject::SetPosition(D2D1_POINT_2U gridPosition)
@@ -111,13 +116,12 @@ void BlockObject::AdjustFacing(Facings shouldBeFacing)
 }
 
 bool BlockObject::GetBoundingBox(_Out_ D2D1_RECT_F* boundingBox)
-{
-	auto containerPos = this->m_blocksContainer->Position;
+{	
 	*boundingBox = D2D1::RectF(
-		this->m_boundingBox.left + containerPos.left,
-		this->m_boundingBox.top + containerPos.top,
-		this->m_boundingBox.right + containerPos.left,
-		this->m_boundingBox.bottom + containerPos.top
+		this->m_boundingBox.left + this->Position.left,
+		this->m_boundingBox.top + this->Position.top,
+		this->m_boundingBox.right + this->Position.left,
+		this->m_boundingBox.bottom + this->Position.top
 	);
 
 	if (this->m_boundingBoxes == nullptr)
@@ -134,12 +138,11 @@ bool BlockObject::GetBoundingBox(_Out_ D2D1_RECT_F* boundingBox)
 bool BlockObject::GetBoundingBoxNext(_Out_ D2D1_RECT_F* boundingBox)
 {
 	auto relativeBox =  *(this->m_boundingBoxIter);
-	auto containerPos = this->m_blocksContainer->Position;
 	*boundingBox = D2D1::RectF(
-		relativeBox.left + containerPos.left,
-		relativeBox.top + containerPos.top,
-		relativeBox.right + containerPos.left,
-		relativeBox.bottom + containerPos.top
+		relativeBox.left + this->Position.left,
+		relativeBox.top + this->Position.top,
+		relativeBox.right + this->Position.left,
+		relativeBox.bottom + this->Position.top
 	);
 
 	++this->m_boundingBoxIter;

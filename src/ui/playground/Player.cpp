@@ -8,6 +8,7 @@
 
 Player::Player()
 {
+	this->m_blocksContainer = nullptr;
 	this->Momentum.speedX = 0.0f;
 	this->Momentum.speedY = 0.0f;
 	this->Momentum.accelerationX = 0.0f;
@@ -27,6 +28,7 @@ void Player::InitializeIn(Platform::String^ playerName, std::shared_ptr<Level> i
 	auto playerTemplate = inLevel->GetDing(Dings::DingIDs::Player);
 	this->InstantiateFacing(playerTemplate, mobFacing);
 	this->m_Orientation = Dings::HeadingFromFacing(mobFacing);
+	this->m_Level = inLevel;
 	this->PlaceInLevel();
 }
 
@@ -131,7 +133,8 @@ std::shared_ptr<BlockObject> Player::Update()
 	if (deltaX < 0.0F)
 	{
 		/* hit something int the west? */
-		auto westCenterTerrain = this->m_Level->GetBlocksAt(this->PositionSquare.x - 1, this->PositionSquare.y, false)->GetObject(Layers::Walls);
+		auto westCenterBlocks = this->m_Level->GetBlocksAt(this->PositionSquare.x - 1, this->PositionSquare.y, false);
+		auto westCenterTerrain = westCenterBlocks == nullptr ? nullptr : westCenterBlocks->GetObject(Layers::Walls);
 		if (westCenterTerrain != nullptr && westCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 		{
 			D2D1_RECT_F westCenterBoundingBox;
@@ -160,7 +163,8 @@ std::shared_ptr<BlockObject> Player::Update()
 		/* hit something in the east?
 		 * we browse the environment in the order of most likely interaction,
 		 * so in this case this will be next-to-right first */
-		auto eastCenterTerrain = this->m_Level->GetBlocksAt(this->PositionSquare.x + 1, this->PositionSquare.y, false)->GetObject(Layers::Walls);
+		auto eastCenterBlocks = this->m_Level->GetBlocksAt(this->PositionSquare.x + 1, this->PositionSquare.y, false);
+		auto eastCenterTerrain = eastCenterBlocks==nullptr ? nullptr : eastCenterBlocks->GetObject(Layers::Walls);
 		if (eastCenterTerrain != nullptr && eastCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 		{
 			D2D1_RECT_F eastCenterBoundingBox;
@@ -187,7 +191,8 @@ std::shared_ptr<BlockObject> Player::Update()
 	if (deltaY < 0.0F)
 	{
 		/* hit something to the north? */
-		auto northCenterTerrain = this->m_Level->GetBlocksAt(this->PositionSquare.x, this->PositionSquare.y - 1, false)->GetObject(Layers::Walls);
+		auto northCenterBlocks = this->m_Level->GetBlocksAt(this->PositionSquare.x, this->PositionSquare.y - 1, false);
+		auto northCenterTerrain = northCenterBlocks == nullptr ? nullptr : northCenterBlocks->GetObject(Layers::Walls);
 		if (northCenterTerrain != nullptr && northCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 		{
 			D2D1_RECT_F northCenterBoundingBox;
@@ -214,7 +219,8 @@ std::shared_ptr<BlockObject> Player::Update()
 	if (deltaY > 0.0F)
 	{
 		/* hit something in the south? */
-		auto southCenterTerrain = this->m_Level->GetBlocksAt(this->PositionSquare.x, this->PositionSquare.y + 1, false)->GetObject(Layers::Walls);
+		auto southCenterBlocks = this->m_Level->GetBlocksAt(this->PositionSquare.x, this->PositionSquare.y + 1, false);
+		auto southCenterTerrain = southCenterBlocks == nullptr ? nullptr : southCenterBlocks->GetObject(Layers::Walls);
 		if (southCenterTerrain != nullptr && southCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 		{
 			D2D1_RECT_F southCenterBoundingBox;

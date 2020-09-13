@@ -164,22 +164,22 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 		}
 
 		/* will this trigger an blittersheet treshold transgression to the right? */
-		if ((WORLDSHEET_NE->PhysicalPosition.right - 2.0f * blooDot::Consts::SQUARE_WIDTH) < viewPort.right)
+		if (WORLDSHEET_NE != nullptr && (WORLDSHEET_NE->PhysicalPosition.right - 2.0f * blooDot::Consts::SQUARE_WIDTH) < viewPort.right)
 		{
 			this->ReflapBlitterSheets(viewPort, Facings::East);
 		}
-		else if ((WORLDSHEET_NW->PhysicalPosition.left + 2.0f * blooDot::Consts::SQUARE_WIDTH) > viewPort.left)
+		else if (WORLDSHEET_NW != nullptr && (WORLDSHEET_NW->PhysicalPosition.left + 2.0f * blooDot::Consts::SQUARE_WIDTH) > viewPort.left)
 		{
 			/* to the left? */
 			this->ReflapBlitterSheets(viewPort, Facings::West);
 		}
 
 		/* down? */
-		if ((WORLDSHEET_SW->PhysicalPosition.bottom - 2.0f * blooDot::Consts::SQUARE_HEIGHT) < viewPort.bottom)
+		if (WORLDSHEET_SW != nullptr && (WORLDSHEET_SW->PhysicalPosition.bottom - 2.0f * blooDot::Consts::SQUARE_HEIGHT) < viewPort.bottom)
 		{
 			this->ReflapBlitterSheets(viewPort, Facings::South);
 		}
-		else if ((WORLDSHEET_NW->PhysicalPosition.top + 2.0f * blooDot::Consts::SQUARE_HEIGHT) > viewPort.top)
+		else if (WORLDSHEET_NW != nullptr && (WORLDSHEET_NW->PhysicalPosition.top + 2.0f * blooDot::Consts::SQUARE_HEIGHT) > viewPort.top)
 		{
 			/* or even up? */
 			this->ReflapBlitterSheets(viewPort, Facings::North);

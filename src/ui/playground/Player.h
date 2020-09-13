@@ -6,10 +6,10 @@
 class Player : public BlockObject
 {
 public:
-	Player(const Player& obj) { };
+	Player::Player();
+	Player::Player(const Player& obj) { };
 	Player& operator=(const Player& obj) { return *this; };
-	Player();
-	Player(Player&& obj) { };
+	Player::Player(Player&& obj) { };
 	virtual ~Player();
 
 	void InitializeIn(Platform::String^ playerName, std::shared_ptr<Level> inLevel, unsigned positionInLevelX, unsigned positionInLevelY, Facings mobFacing);
