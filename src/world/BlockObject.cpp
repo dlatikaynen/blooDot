@@ -27,7 +27,7 @@ void BlockObject::Instantiate(std::shared_ptr<Dings> templateDing, ClumsyPacking
 void BlockObject::InstantiateFacing(std::shared_ptr<Dings> templateDing, Facings placementFacing)
 {
 	this->m_Ding = templateDing;
-	this->m_Facing = placementFacing;	
+	this->m_Facing = placementFacing;
 }
 
 void BlockObject::PlaceInLevel()

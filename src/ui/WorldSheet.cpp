@@ -311,9 +311,9 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 				auto isMultiBlock = dingExtent.width != 1 || dingExtent.height != 1;
 				if (isMultiBlock)
 				{
-					for (int eraseX = 0; eraseX < dingExtent.width; ++eraseX)
+					for (unsigned eraseX = 0; eraseX < dingExtent.width; ++eraseX)
 					{
-						for (int eraseY = 0; eraseY < dingExtent.height; ++eraseY)
+						for (unsigned eraseY = 0; eraseY < dingExtent.height; ++eraseY)
 						{
 							if (!(eraseX == 0 && eraseY == 0))
 							{

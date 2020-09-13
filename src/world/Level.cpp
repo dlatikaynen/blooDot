@@ -32,7 +32,7 @@ Level::~Level()
 {
 	while (!this->m_Blocks.empty()) 
 	{
-		delete this->m_Blocks.back();
+		this->m_Blocks.back().reset();
 		this->m_Blocks.pop_back();
 	}
 
@@ -91,7 +91,7 @@ void Level::Clear()
 	{
 		for (unsigned x = 0; x < this->m_rectangularBounds.width; ++x)
 		{
-			this->m_Blocks.push_back((Blocks*)nullptr);
+			this->m_Blocks.push_back((std::shared_ptr<Blocks>)nullptr);
 		}
 	}
 
@@ -294,10 +294,10 @@ D2D1_SIZE_U Level::GetSheetSizeUnits()
 	return this->m_sheetSize;
 }
 
-Blocks* Level::GetBlocksAt(int levelX, int levelY, bool createIfNull)
+std::shared_ptr<Blocks> Level::GetBlocksAt(int levelX, int levelY, bool createIfNull)
 {
 	auto objectAddress = levelY * this->m_rectangularBounds.width + levelX;
-	auto retrievedObject = (Blocks*)nullptr;
+	auto retrievedObject = (std::shared_ptr<Blocks>)nullptr;
 
 	/* we create lazily, on demand */
 	if (objectAddress >= 0 && levelX > 0 && objectAddress < this->m_Blocks.size())
@@ -305,7 +305,7 @@ Blocks* Level::GetBlocksAt(int levelX, int levelY, bool createIfNull)
 		retrievedObject = this->m_Blocks[objectAddress];
 		if (retrievedObject == nullptr && createIfNull)
 		{
-			auto newObject = new Blocks(levelX, levelY);
+			auto newObject = std::make_shared<Blocks>(levelX, levelY);
 			newObject->PlaceInLevel(this->shared_from_this());
 			this->m_Blocks[objectAddress] = newObject;
 			retrievedObject = newObject;
@@ -737,7 +737,8 @@ bool Level::CellLoadFromFile(char *srcData, size_t *offset, const Layers inLayer
 			placementFacing = Facings::Shy;
 		}
 
-		this->GetBlocksAt(coordinateX, coordinateY, true)->InstantiateInLayerFacing(this->shared_from_this(), inLayer, this->GetDing(dingID), placementFacing);
+		auto containerBlock = this->GetBlocksAt(coordinateX, coordinateY, true);
+		containerBlock->InstantiateInLayerFacing(this->shared_from_this(), inLayer, this->GetDing(dingID), placementFacing);
 		return true;
 	}
 

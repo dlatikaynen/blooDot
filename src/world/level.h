@@ -26,7 +26,7 @@ public:
 	D2D1_SIZE_U GetSheetSizeUnits();
 	unsigned GetNumOfSheetsWE();
 	unsigned GetNumOfSheetsNS();
-	Blocks* GetBlocksAt(int levelX, int levelY, bool createIfNull);
+	std::shared_ptr<Blocks> GetBlocksAt(int levelX, int levelY, bool createIfNull);
 	ClumsyPacking::NeighborConfiguration GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, Dings::DingIDs dingID, Layers inLayer);
 	std::shared_ptr<Dings> WeedObjectAt(unsigned levelX, unsigned levelY, Layers* cullCoalescableInLayer);
 	void SetupRuntimeState();
@@ -75,7 +75,7 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_dingSheetBmp;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_mobsSheetBmp;
 
-	std::vector<Blocks*>								m_Blocks;
+	std::vector<std::shared_ptr<Blocks>>				m_Blocks;
 	bool												m_isDesignTime;
 	Platform::String^									m_lastSavedAsFileName;
 	bool												m_designTimeDirty;

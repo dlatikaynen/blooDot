@@ -181,18 +181,19 @@ void LevelEditor::DoPlaceDing()
 		auto newDings = this->m_currentLevel->GetDing(this->m_selectedDingID);
 		auto newDingID = newDings->ID();
 		auto newDingLayer = newDings->GetPreferredLayer();
-		auto curDings = newCell->GetObject(newDingLayer)->GetDing();
+		auto curObject = newCell->GetObject(newDingLayer);
+		auto curDings = curObject == nullptr ? nullptr : curObject->GetDing();
 		if (curDings == nullptr || (this->m_IsOverwriting && curDings->ID() != newDingID))
 		{
 			auto neighborHood = this->m_currentLevel->GetNeighborConfigurationOf(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingID, newDingLayer);
 			if (newDings->CouldCoalesce())
 			{
-				newCell->Instantiate(this->m_currentLevel->shared_from_this(), newDings, neighborHood);
+				newCell->Instantiate(this->m_currentLevel, newDings, neighborHood);
 				this->ClumsyPackNeighborhoodOf(neighborHood, this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingLayer, newDingID);
 			}
 			else
 			{
-				newCell->InstantiateInLayerFacing(this->m_currentLevel->shared_from_this(), newDingLayer, newDings, this->m_selectedDingOrientation);
+				newCell->InstantiateInLayerFacing(this->m_currentLevel, newDingLayer, newDings, this->m_selectedDingOrientation);
 			}
 
 			this->RedrawSingleSquare(this->m_currentLevelEditorCell.x, this->m_currentLevelEditorCell.y, newDingLayer);
@@ -586,7 +587,7 @@ void LevelEditor::ImportIntoCurrentLevel(std::shared_ptr<Level> sourceLevel)
 	}
 }
 
-void LevelEditor::CloneObjectToCell(Blocks* sourceCell, Blocks* targetCell, Layers inLayer, unsigned targetX, unsigned targetY)
+void LevelEditor::CloneObjectToCell(std::shared_ptr<Blocks> sourceCell, std::shared_ptr<Blocks> targetCell, Layers inLayer, unsigned targetX, unsigned targetY)
 {
 	auto newDingID = sourceCell->GetObject(inLayer)->GetDing()->ID();
 	auto newDings = this->m_currentLevel->GetDing(newDingID);

@@ -558,9 +558,9 @@ void WorldScreenBase::ObliterateObject(D2D1_POINT_2U levelCoordinate)
 		auto dingExtent = dingWeeded->GetExtentOnSheet();
 		if (dingExtent.width != 1 || dingExtent.height != 1)
 		{
-			for (int multiX = 0; multiX < dingExtent.width; ++multiX)
+			for (unsigned multiX = 0; multiX < dingExtent.width; ++multiX)
 			{
-				for (int multiY = 0; multiY < dingExtent.height; ++multiY)
+				for (unsigned multiY = 0; multiY < dingExtent.height; ++multiY)
 				{
 					if (!(multiX == 0 && multiY == 0))
 					{

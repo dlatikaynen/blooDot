@@ -218,7 +218,8 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 		if (deltaX < 0.0F)
 		{
 			/* hit something int the west? */
-			auto westCenterTerrain = this->m_currentLevel->GetBlocksAt(squareX - 1, squareY, false)->GetObject(Layers::Walls);
+			auto westCenterBlocks = this->m_currentLevel->GetBlocksAt(squareX - 1, squareY, false);
+			auto westCenterTerrain = westCenterBlocks == nullptr ? nullptr : westCenterBlocks->GetObject(Layers::Walls);
 			if (westCenterTerrain != nullptr && westCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 			{
 				D2D1_RECT_F westCenterBoundingBox;
@@ -242,7 +243,8 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 			/* hit something in the east?
 			 * we browse the environment in the order of most likely interaction,
 			 * so in this case this will be next-to-right first */
-			auto eastCenterTerrain = this->m_currentLevel->GetBlocksAt(squareX + 1, squareY, false)->GetObject(Layers::Walls);
+			auto eastCenterBlocks = this->m_currentLevel->GetBlocksAt(squareX + 1, squareY, false);
+			auto eastCenterTerrain = eastCenterBlocks == nullptr ? nullptr : eastCenterBlocks->GetObject(Layers::Walls);
 			if (eastCenterTerrain != nullptr && eastCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 			{
 				D2D1_RECT_F eastCenterBoundingBox;
@@ -264,7 +266,8 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 		if (deltaY < 0.0F)
 		{
 			/* hit something to the north? */
-			auto northCenterTerrain = this->m_currentLevel->GetBlocksAt(squareX, squareY - 1, false)->GetObject(Layers::Walls);
+			auto northCenterBlocks = this->m_currentLevel->GetBlocksAt(squareX, squareY - 1, false);
+			auto northCenterTerrain = northCenterBlocks == nullptr ? nullptr : northCenterBlocks->GetObject(Layers::Walls);
 			if (northCenterTerrain != nullptr && northCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 			{
 				D2D1_RECT_F northCenterBoundingBox;
@@ -286,7 +289,8 @@ void WorldScreen::UpdateParticles(float timeTotal, float timeDelta)
 		if (deltaY > 0.0F)
 		{
 			/* hit something in the south? */
-			auto southCenterTerrain = this->m_currentLevel->GetBlocksAt(squareX, squareY + 1, false)->GetObject(Layers::Walls);
+			auto southCenterBlocks = this->m_currentLevel->GetBlocksAt(squareX, squareY + 1, false);
+			auto southCenterTerrain = southCenterBlocks == nullptr ? nullptr : southCenterBlocks->GetObject(Layers::Walls);
 			if (southCenterTerrain != nullptr && southCenterTerrain->m_Behaviors != ObjectBehaviors::Boring)
 			{
 				D2D1_RECT_F southCenterBoundingBox;
