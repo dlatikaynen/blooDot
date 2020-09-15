@@ -8,7 +8,7 @@
 
 Player::Player()
 {
-	this->m_blocksContainer = nullptr;
+	BlockObject::BlockObject((std::shared_ptr<Blocks>)nullptr);
 	this->Momentum.speedX = 0.0f;
 	this->Momentum.speedY = 0.0f;
 	this->Momentum.accelerationX = 0.0f;
@@ -24,7 +24,8 @@ Player::~Player()
 void Player::InitializeIn(Platform::String^ playerName, std::shared_ptr<Level> inLevel, unsigned positionInLevelX, unsigned positionInLevelY, Facings mobFacing)
 {
 	this->Name = playerName;
-	this->PositionSquare = D2D1::Point2U(positionInLevelX, positionInLevelY);
+	this->SetPosition(D2D1::Point2U(positionInLevelX, positionInLevelY));
+	//this->PositionSquare = D2D1::Point2U(positionInLevelX, positionInLevelY);
 	auto playerTemplate = inLevel->GetDing(Dings::DingIDs::Player);
 	this->InstantiateFacing(playerTemplate, mobFacing);
 	this->m_Orientation = Dings::HeadingFromFacing(mobFacing);

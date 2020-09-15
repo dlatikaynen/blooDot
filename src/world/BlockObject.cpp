@@ -5,6 +5,7 @@
 
 BlockObject::BlockObject(std::shared_ptr<Blocks> container)
 {
+	this->m_objectProperties = nullptr;
 	this->m_blocksContainer = container;
 	this->m_boundingBoxes = nullptr;
 	this->m_Behaviors = ObjectBehaviors::Boring;

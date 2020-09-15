@@ -273,7 +273,7 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 			}
 
 			auto objectFloor = objectX->GetObject(Layers::Floor);
-			dings = objectFloor->GetDing();
+			auto dings = objectFloor == nullptr ? nullptr : objectFloor->GetDing();
 			if (dings == nullptr)
 			{
 				auto floorBackground = this->m_tiedToLevel->GetFloorBackground().Get();
@@ -304,7 +304,7 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 			}
 
 			auto objectWalls = objectX->GetObject(Layers::Walls);
-			dings = objectWalls->GetDing();
+			auto dings = objectWalls == nullptr ? nullptr : objectWalls->GetDing();
 			if (dings != nullptr)
 			{
 				auto dingExtent = dings->GetExtentOnSheet();
@@ -357,7 +357,7 @@ void WorldSheet::RedrawSingleSquare(unsigned x, unsigned y, Layers inLayer)
 			}
 
 			auto objectRooof = objectX->GetObject(Layers::Rooof);
-			dings = objectRooof->GetDing();
+			auto dings = objectRooof == nullptr ? nullptr : objectRooof->GetDing();
 			if (dings != nullptr)
 			{
 				dingSheet->GetBitmap(&dingMap);
