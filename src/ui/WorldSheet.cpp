@@ -86,9 +86,12 @@ void WorldSheet::Populate()
 		}
 
 		auto dingSheet = this->m_tiedToLevel->GetDingSheet();
+		auto mobsSheet = this->m_tiedToLevel->GetMobsSheet();
 		ID2D1Bitmap *dingMap = NULL;
+		ID2D1Bitmap *mobsMap = NULL;
 		std::shared_ptr<Dings> dings;
 		dingSheet->GetBitmap(&dingMap);
+		mobsSheet->GetBitmap(&mobsMap);
 		for (unsigned y = 0; y < this->m_sizeUnits.height; ++y)
 		{
 			for (unsigned x = 0; x < this->m_sizeUnits.width; ++x)
@@ -109,7 +112,7 @@ void WorldSheet::Populate()
 
 						auto objectFloor = objectX->GetObject(Layers::Floor);
 						dings = objectFloor->GetDing();
-						this->PlacePrimitive(dingMap, this->m_floor, dings, objectFloor->PlacementFacing(), x, y);
+						this->PlacePrimitive(dings->IsMob() ? mobsMap : dingMap, this->m_floor, dings, objectFloor->PlacementFacing(), x, y);
 					}
 					
 					if ((layer & Layers::Walls) == Layers::Walls)
@@ -123,7 +126,7 @@ void WorldSheet::Populate()
 
 						auto objectWalls = objectX->GetObject(Layers::Walls);
 						dings = objectWalls->GetDing();
-						this->PlacePrimitive(dingMap, this->m_walls, dings, objectWalls->PlacementFacing(), x, y);
+						this->PlacePrimitive(dings->IsMob() ? mobsMap : dingMap, this->m_walls, dings, objectWalls->PlacementFacing(), x, y);
 					}
 					
 					if ((layer & Layers::Rooof) == Layers::Rooof)
@@ -137,12 +140,13 @@ void WorldSheet::Populate()
 
 						auto objectRooof = objectX->GetObject(Layers::Rooof);
 						dings = objectRooof->GetDing();
-						this->PlacePrimitive(dingMap, this->m_rooof, dings, objectRooof->PlacementFacing(), x, y);
+						this->PlacePrimitive(dings->IsMob() ? mobsMap : dingMap, this->m_rooof, dings, objectRooof->PlacementFacing(), x, y);
 					}
 				}
 			}
 		}
 
+		mobsMap->Release();
 		dingMap->Release();
 		if (beganDrawFloor)
 		{
