@@ -19,7 +19,7 @@ public:
 	GameOfLifeSprinkler::~GameOfLifeSprinkler();
 
 	void Create(int radius);
-	void Render(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int midPointX, int midPointY, int cellSideLength, BrushRegistry* brushRegistry);
+	void Render(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int midPointX, int midPointY, int cellSideLength, std::shared_ptr<BrushRegistry> brushRegistry);
 
 protected:
 	bool PointInCircle(D2D1_POINT_2L point);

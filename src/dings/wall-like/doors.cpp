@@ -1,7 +1,7 @@
 ﻿#include "..\..\PreCompiledHeaders.h"
 #include "..\dings.h"
 
-Door::Door(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Door, "Door", deviceResources, drawBrushes)
+Door::Door(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Door, "Door", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Center;
 	this->m_Coalescing = Facings::Shy;

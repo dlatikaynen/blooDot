@@ -25,7 +25,7 @@ Layers& operator |=(Layers& a, Layers b)
 	return a = a | b;
 }
 
-Dings::Dings(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes)
+Dings::Dings(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes)
 {
 	this->m_ID = dingID;
 	this->m_Name = dingName;

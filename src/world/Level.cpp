@@ -101,7 +101,7 @@ void Level::Clear()
 	}
 }
 
-void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* brushRegistry)
+void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> brushRegistry)
 {	
 	auto resources = deviceResources->GetD3DDevice();
 	auto device = deviceResources->GetD2DDeviceContext();

@@ -76,5 +76,5 @@ Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> BrushRegistry::WannaHave(Microsoft:
 
 void BrushRegistry::Reset()
 {
-	m_Registry.clear();
+	this->m_Registry.clear();
 }

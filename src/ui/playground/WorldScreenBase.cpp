@@ -14,6 +14,7 @@ WorldScreenBase::WorldScreenBase()
 	this->m_currentLevelEditorCell = D2D1::Point2U(0, 0);
 	this->m_currentLevelEditorCellKnown = false;
 	this->m_touchMap = nullptr;
+	this->m_Brushes = std::make_shared<BrushRegistry>();
 #ifdef _DEBUG
 	this->m_lastBlitSheetCount = 0;
 #endif
@@ -25,7 +26,6 @@ WorldScreenBase::~WorldScreenBase()
 	WORLDSHEET_NE.reset();
 	WORLDSHEET_SE.reset();
 	WORLDSHEET_SW.reset();
-	//delete this->m_currentLevel;
 }
 
 void WorldScreenBase::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>& deviceResources)
@@ -40,7 +40,7 @@ void WorldScreenBase::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ s
     ComPtr<ID2D1Factory> factory;
 	this->m_d2dDevice->GetFactory(&factory);
     DX::ThrowIfFailed(factory.As(&this->m_d2dFactory));
-	this->m_currentLevel->Initialize(this->m_deviceResources, &this->m_Brushes);
+	this->m_currentLevel->Initialize(this->m_deviceResources, this->m_Brushes);
 	this->CreateDeviceDependentResources();
 	this->ResetDirectXResources();
 }
@@ -54,11 +54,11 @@ void WorldScreenBase::ResetDirectXResources()
 {
 	auto loader = ref new BasicLoader(this->m_deviceResources->GetD3DDevice());
 	loader->LoadPngToBitmap(L"Media\\Bitmaps\\notimeforcaution.png", m_deviceResources,	&this->m_notimeforcaution);
-	this->m_projectileBrush = this->m_Brushes.WannaHave(this->m_d2dContext, { 0, 0, 250, 255 });
+	this->m_projectileBrush = this->m_Brushes->WannaHave(this->m_d2dContext, { 0, 0, 250, 255 });
 
 #ifdef _DEBUG
-	this->m_debugBorderBrush = this->m_Brushes.WannaHave(this->m_d2dContext, { 0, 0, 255, 255 });
-	this->m_debugTresholdBrush = this->m_Brushes.WannaHave(this->m_d2dContext, { 0, 240, 247, 255 });
+	this->m_debugBorderBrush = this->m_Brushes->WannaHave(this->m_d2dContext, { 0, 0, 255, 255 });
+	this->m_debugTresholdBrush = this->m_Brushes->WannaHave(this->m_d2dContext, { 0, 240, 247, 255 });
 #endif
 
 	/* rest of initialization */
@@ -277,7 +277,7 @@ std::shared_ptr<Level> WorldScreenBase::LoadLevel(Platform::String^ loadFromFile
 {
 	auto levelName = ref new Platform::String(L"Gartenwelt-1");
 	auto loadedLevel = std::make_shared<Level>(levelName, D2D1::SizeU(50, 30), 720, 720);
-	loadedLevel->Initialize(this->m_deviceResources, &this->m_Brushes);
+	loadedLevel->Initialize(this->m_deviceResources, this->m_Brushes);
 	loadedLevel->DesignLoadFromFile(loadFromFile);
 	return loadedLevel;
 }
@@ -520,7 +520,7 @@ void WorldScreenBase::InvalidateSheetHoveringSituation()
 
 std::unique_ptr<WorldSheet>	WorldScreenBase::InstantiateViewportSheet(unsigned sheetX, unsigned sheetY)
 {
-	auto newSheet = std::make_unique<WorldSheet>(this->m_deviceResources, std::shared_ptr<BrushRegistry>(&this->m_Brushes));
+	auto newSheet = std::make_unique<WorldSheet>(this->m_deviceResources, this->m_Brushes);
 	newSheet->PrepareThyself(this->m_currentLevel, sheetX, sheetY);
 	return newSheet;
 }

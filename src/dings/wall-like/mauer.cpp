@@ -8,7 +8,7 @@ const float Dings::MAUER_INDENT = 5.f;
 const float Dings::MAUER_BEZIER_X = 8.f;
 const float Dings::MAUER_BEZIER_Y = 20.f;
 
-Mauer::Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Mauer, "Mauer", deviceResources, drawBrushes)
+Mauer::Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Mauer, "Mauer", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Shy;
 	this->m_Coalescing = Facings::Immersed;
@@ -166,7 +166,7 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	}
 }
 
-CrackedMauer::CrackedMauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Mauer(deviceResources, drawBrushes)
+CrackedMauer::CrackedMauer(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Mauer(deviceResources, drawBrushes)
 {
 	this->m_ID = Dings::DingIDs::MauerCracked;
 	this->m_Name = L"Cracked";
@@ -190,7 +190,7 @@ void CrackedMauer::PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTar
 	rendEr->DrawBitmap(backPic.Get(), rect);
 }
 
-LooseMauer::LooseMauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::MauerLoose, "Loose", deviceResources, drawBrushes)
+LooseMauer::LooseMauer(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::MauerLoose, "Loose", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Shy;
 	this->m_Coalescing = Facings::Shy;

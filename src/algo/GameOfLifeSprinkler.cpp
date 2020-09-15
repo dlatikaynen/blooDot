@@ -61,7 +61,7 @@ void GameOfLifeSprinkler::Create(int radius)
 	}
 }
 
-void GameOfLifeSprinkler::Render(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int midPointX, int midPointY, int cellSideLength, BrushRegistry* brushRegistry)
+void GameOfLifeSprinkler::Render(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int midPointX, int midPointY, int cellSideLength, std::shared_ptr<BrushRegistry> brushRegistry)
 {
 	int cellStride = cellSideLength + 1;
 

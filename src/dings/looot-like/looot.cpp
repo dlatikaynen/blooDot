@@ -1,7 +1,7 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\dings.h"
 
-Coin::Coin(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Coin, "Coin", deviceResources, drawBrushes)
+Coin::Coin(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Coin, "Coin", deviceResources, drawBrushes)
 {
 	m_Facings = Facings::Shy;
 	m_Coalescing = Facings::Shy;
@@ -31,7 +31,7 @@ void Coin::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	rendEr->DrawLine(D2D1::Point2F(elli.point.x - 2.5f, elli.point.y - 3.0f), D2D1::Point2F(elli.point.x + 0.5f, elli.point.y - 5.0f), ringBrush, 1.5f);
 }
 
-Chest::Chest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Chest, "Chest", deviceResources, drawBrushes)
+Chest::Chest(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Chest, "Chest", deviceResources, drawBrushes)
 {
 	m_Facings = Facings::Cross;
 	m_Coalescing = Facings::Shy;
@@ -117,7 +117,7 @@ void Chest::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo,
 	rendEr->FillRectangle(D2D1::RectF(rite, yctr - 1.8f, rite + 1.5f, yctr + 1.8f), brushNail);
 }
 
-SilverChest::SilverChest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Chest(deviceResources, drawBrushes)
+SilverChest::SilverChest(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Chest(deviceResources, drawBrushes)
 {
 	this->m_ID = Dings::DingIDs::ChestSilver;
 	this->m_Name = "Silver Chest";
@@ -132,7 +132,7 @@ int SilverChest::ColorVariation()
 	return 2;
 }
 
-GoldChest::GoldChest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Chest(deviceResources, drawBrushes)
+GoldChest::GoldChest(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Chest(deviceResources, drawBrushes)
 {
 	this->m_ID = Dings::DingIDs::ChestGold;
 	this->m_Name = "Gold Chest";
@@ -147,7 +147,7 @@ int GoldChest::ColorVariation()
 	return 3;
 }
 
-Lettuce::Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Lettuce, "Lettuce", deviceResources, drawBrushes)
+Lettuce::Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Lettuce, "Lettuce", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Shy;
 	this->m_Coalescing = Facings::Shy;
@@ -163,7 +163,7 @@ Platform::String^ Lettuce::ShouldLoadFromBitmap()
 	return L"lettuce.png";
 }
 
-BarrelWooden::BarrelWooden(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::BarrelWood, "Wooden barrel", deviceResources, drawBrushes)
+BarrelWooden::BarrelWooden(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::BarrelWood, "Wooden barrel", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Shy;
 	this->m_Coalescing = Facings::Shy;
@@ -179,7 +179,7 @@ Platform::String^ BarrelWooden::ShouldLoadFromBitmap()
 	return L"barrel-wooden.png";
 }
 
-BarrelIndigo::BarrelIndigo(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::BarrelIndigo, "Indigo barrel", deviceResources, drawBrushes)
+BarrelIndigo::BarrelIndigo(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::BarrelIndigo, "Indigo barrel", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Shy;
 	this->m_Coalescing = Facings::Shy;

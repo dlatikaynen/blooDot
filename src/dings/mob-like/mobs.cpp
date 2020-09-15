@@ -4,7 +4,7 @@
 const float Dings::WEDGE_STROKE = 1.5f;
 const float Dings::HAIRLINE = 0.72f;
 
-Mob::Mob(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(dingID, dingName, deviceResources, drawBrushes)
+Mob::Mob(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(dingID, dingName, deviceResources, drawBrushes)
 {
 }
 
@@ -13,7 +13,7 @@ bool Mob::IsMob()
 	return true;
 }
 
-Player1::Player1(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Mob(Dings::DingIDs::Player, "Player-1", deviceResources, drawBrushes)
+Player1::Player1(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Mob(Dings::DingIDs::Player, "Player-1", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Viech;
 	this->m_Coalescing = Facings::Shy;
@@ -61,7 +61,7 @@ Platform::String^ Player4::ShouldLoadFromBitmap()
 	return L"player-4.png";
 }
 
-Schaedel::Schaedel(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Mob(Dings::DingIDs::Schaedel, L"Schädel", deviceResources, drawBrushes)
+Schaedel::Schaedel(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Mob(Dings::DingIDs::Schaedel, L"Schädel", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Viech;
 	this->m_Coalescing = Facings::Shy;
@@ -79,7 +79,7 @@ Platform::String^ Schaedel::ShouldLoadFromBitmap()
 	return L"schaedel.png";
 }
 
-FlameGhost::FlameGhost(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Mob(Dings::DingIDs::FlameGhost, L"Flammengeist", deviceResources, drawBrushes)
+FlameGhost::FlameGhost(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Mob(Dings::DingIDs::FlameGhost, L"Flammengeist", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Viech;
 	this->m_Coalescing = Facings::Shy;

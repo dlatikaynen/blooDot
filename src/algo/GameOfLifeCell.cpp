@@ -75,7 +75,7 @@ void GameOfLifeCell::MakeRaindrop(bool isRaindrop)
 	m_isRaindrop = isRaindrop;
 }
 
-void GameOfLifeCell::DrawCell(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int x, int y, int cellSideLength, BrushRegistry* brushRegistry)
+void GameOfLifeCell::DrawCell(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int x, int y, int cellSideLength, std::shared_ptr<BrushRegistry> brushRegistry)
 {
 	D2D1_RECT_F rect;
 	int cellStride = cellSideLength + 1;

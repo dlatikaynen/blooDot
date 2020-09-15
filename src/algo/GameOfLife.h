@@ -23,7 +23,7 @@ public:
 	void MakeRaindrop(bool isRaindrop);
 	bool IsRaindrop();
 	bool IsPromotedRaindrop();
-	void DrawCell(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int x, int y, int cellSideLength, BrushRegistry* brushRegistry);
+	void DrawCell(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, int x, int y, int cellSideLength, std::shared_ptr<BrushRegistry> brushRegistry);
 	static void Wipe(GameOfLifeCell* cell);
 
 private:

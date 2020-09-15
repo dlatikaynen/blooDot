@@ -1,7 +1,7 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\dings.h"
 
-Wasser::Wasser(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Wasser, "Wasser", deviceResources, drawBrushes)
+Wasser::Wasser(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Wasser, "Wasser", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Shy;
 	this->m_Coalescing = Facings::Shy;
@@ -24,7 +24,7 @@ void Wasser::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo
 	rendEr->FillRectangle(rect, innerBrush);
 }
 
-Rail::Rail(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Dings(Dings::DingIDs::Rail, "Rail", deviceResources, drawBrushes)
+Rail::Rail(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Rail, "Rail", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Center;
 	this->m_Coalescing = Facings::Shy;

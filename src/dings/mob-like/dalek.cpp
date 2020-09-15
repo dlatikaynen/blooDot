@@ -1,7 +1,7 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\mobs.h"
 
-Dalek::Dalek(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes) : Mob(Dings::DingIDs::Dalek, "Dalek", deviceResources, drawBrushes)
+Dalek::Dalek(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Mob(Dings::DingIDs::Dalek, "Dalek", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Viech;
 	this->m_Coalescing = Facings::Shy;

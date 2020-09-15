@@ -34,7 +34,7 @@ private:
     Microsoft::WRL::ComPtr<ID2D1Device>             m_d2dDevice;
     Microsoft::WRL::ComPtr<ID2D1DeviceContext>      m_d2dContext;
     Microsoft::WRL::ComPtr<ID2D1DrawingStateBlock>  m_stateBlock;
-	BrushRegistry									m_Brushes;
+	std::shared_ptr<BrushRegistry>					m_Brushes;
 
     Microsoft::WRL::ComPtr<IWICImagingFactory>      m_wicFactory;
     Microsoft::WRL::ComPtr<ID2D1Bitmap>             m_bitmap;

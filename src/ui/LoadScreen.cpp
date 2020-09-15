@@ -11,27 +11,28 @@ using namespace D2D1;
 
 LoadScreen::LoadScreen() 
 {
+	this->m_Brushes = std::make_shared<BrushRegistry>();
 }
 
 void LoadScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>& deviceResources)
 {
-	m_deviceResources = deviceResources;
-	m_wicFactory = deviceResources->GetWicImagingFactory();
-	m_d2dDevice = deviceResources->GetD2DDevice();
-	m_d2dContext = deviceResources->GetD2DDeviceContext();
-    m_imageSize = D2D1::SizeF(0.0f, 0.0f);
-    m_offset = D2D1::SizeF(0.0f, 0.0f);
-	m_moved = D2D1::SizeF(0.0f, 0.0f);
-	m_totalSize = D2D1::SizeF(0.0f, 0.0f);
+	this->m_deviceResources = deviceResources;
+	this->m_wicFactory = deviceResources->GetWicImagingFactory();
+	this->m_d2dDevice = deviceResources->GetD2DDevice();
+	this->m_d2dContext = deviceResources->GetD2DDeviceContext();
+	this->m_imageSize = D2D1::SizeF(0.0f, 0.0f);
+	this->m_offset = D2D1::SizeF(0.0f, 0.0f);
+	this->m_moved = D2D1::SizeF(0.0f, 0.0f);
+	this->m_totalSize = D2D1::SizeF(0.0f, 0.0f);
 
     ComPtr<ID2D1Factory> factory;
-    m_d2dDevice->GetFactory(&factory);
+	this->m_d2dDevice->GetFactory(&factory);
     DX::ThrowIfFailed(
-        factory.As(&m_d2dFactory)
+        factory.As(&this->m_d2dFactory)
     );
 	
-	CreateDeviceDependentResources();
-	ResetDirectXResources();
+	this->CreateDeviceDependentResources();
+	this->ResetDirectXResources();
 }
 
 void LoadScreen::CreateDeviceDependentResources()
@@ -43,7 +44,7 @@ void LoadScreen::ResetDirectXResources()
 {
     ComPtr<IWICBitmapDecoder> wicBitmapDecoder;
     DX::ThrowIfFailed(
-        m_wicFactory->CreateDecoderFromFilename(
+		this->m_wicFactory->CreateDecoderFromFilename(
             L"Media\\Textures\\loadscreen.png",
             nullptr,
             GENERIC_READ,
@@ -59,7 +60,7 @@ void LoadScreen::ResetDirectXResources()
 
     ComPtr<IWICFormatConverter> wicFormatConverter;
     DX::ThrowIfFailed(
-        m_wicFactory->CreateFormatConverter(&wicFormatConverter)
+        this->m_wicFactory->CreateFormatConverter(&wicFormatConverter)
     );
 
     DX::ThrowIfFailed(
@@ -74,20 +75,19 @@ void LoadScreen::ResetDirectXResources()
     );
 
     DX::ThrowIfFailed(
-        m_d2dContext->CreateBitmapFromWicBitmap(
+        this->m_d2dContext->CreateBitmapFromWicBitmap(
             wicFormatConverter.Get(),
             BitmapProperties(PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)),
-            &m_bitmap
+            &this->m_bitmap
         )
     );
 
-    m_imageSize = m_bitmap->GetSize();
-
+    this->m_imageSize = this->m_bitmap->GetSize();
     DX::ThrowIfFailed(
-        m_d2dFactory->CreateDrawingStateBlock(&m_stateBlock)
+        this->m_d2dFactory->CreateDrawingStateBlock(&this->m_stateBlock)
     );
 
-    UpdateForWindowSizeChange();
+    this->UpdateForWindowSizeChange();
 }
 
 void LoadScreen::ReleaseDeviceDependentResources()
@@ -100,19 +100,17 @@ void LoadScreen::ReleaseDeviceDependentResources()
     m_wicFactory.Reset();
 	m_Brushes.Reset();*/
 
-	m_moved.width = m_moved.height = 0;
-	delete m_Sprinkler;
+	this->m_moved.width = this->m_moved.height = 0;
+	delete this->m_Sprinkler;
 }
 
 void LoadScreen::UpdateForWindowSizeChange()
 {
 	bool isAlive;
-
-	m_isResizing = true;
-
+	this->m_isResizing = true;
     Windows::Foundation::Rect windowBounds = CoreWindow::GetForCurrentThread()->Bounds;
 	FLOAT dpiX, dpiY;
-	m_d2dContext->GetDpi(&dpiX, &dpiY);
+	this->m_d2dContext->GetDpi(&dpiX, &dpiY);
 	Windows::Foundation::Rect viewportBounds = Windows::Foundation::Rect(
 		Windows::Foundation::Point(
 			(float)DipsToPixelsX(windowBounds.Left, dpiX),
@@ -124,11 +122,10 @@ void LoadScreen::UpdateForWindowSizeChange()
 		)
 	);
 
-    m_offset.width = (viewportBounds.Width - m_imageSize.width) / 2.0f;
-    m_offset.height = (viewportBounds.Height - m_imageSize.height) / 2.0f;
-
-    m_totalSize.width = m_offset.width + m_imageSize.width;
-    m_totalSize.height = m_offset.height + m_imageSize.height;
+	this->m_offset.width = (viewportBounds.Width - this->m_imageSize.width) / 2.0f;
+	this->m_offset.height = (viewportBounds.Height - this->m_imageSize.height) / 2.0f;
+	this->m_totalSize.width = this->m_offset.width + this->m_imageSize.width;
+	this->m_totalSize.height = this->m_offset.height + this->m_imageSize.height;
 
 	/* we have the screen size here, so we use this opportunity to compute the GoL dimensions
 	 * and also precompute the sprinkler circle dot matrix */
@@ -140,7 +137,6 @@ void LoadScreen::UpdateForWindowSizeChange()
 	int pixHeight = LoadScreen::GoLCellSideLength;
 
 	GameOfLifePlane* randGoL = new GameOfLifePlane(gridWidth, gridHeight);
-
 	randGoL->Wipe();
 
 	srand(static_cast<unsigned int>(time(NULL)));
@@ -158,32 +154,30 @@ void LoadScreen::UpdateForWindowSizeChange()
 	bmPix.Load(L"Media\\Bitmaps\\blooDot.bmp");
 	bmPix.PlaceAt(randGoL, 10, 3);
 
-	m_GoLEngine.SetInitialMatrix(randGoL);
+	this->m_GoLEngine.SetInitialMatrix(randGoL);
 	delete randGoL;
 
-	m_GoLEngine.StartRecording();
+	this->m_GoLEngine.StartRecording();
 
 	/* the sprinkler */
-	m_Sprinkler = new GameOfLifeSprinkler();
-	m_Sprinkler->Create(LoadScreen::GoLSprinklerRadius);
-
-	m_isResizing = false;
+	this->m_Sprinkler = new GameOfLifeSprinkler();
+	this->m_Sprinkler->Create(LoadScreen::GoLSprinklerRadius);
+	this->m_isResizing = false;
 }
 
 void LoadScreen::Update(float timeTotal, float timeDelta)
 {
-	if (m_isResizing) 
+	if (this->m_isResizing)
 	{
 		return;
 	}
 
 	//m_moved.width++;
-	m_GoLEngine.SingleStep();
-
-	if (m_GoLEngine.IsRecording() && m_GoLEngine.GetNumStepsRecorded() == 100) 
+	this->m_GoLEngine.SingleStep();
+	if (this->m_GoLEngine.IsRecording() && this->m_GoLEngine.GetNumStepsRecorded() == 100)
 	{
-		m_GoLEngine.EndRecording();
-		m_GoLEngine.SaveRecording("GoLRecording1.bloodot");
+		this->m_GoLEngine.EndRecording();
+		this->m_GoLEngine.SaveRecording("GoLRecording1.bloodot");
 	}
 
 	//m_GoL = m_GoLEngine.GetCurrentMatrix();
@@ -213,10 +207,9 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 
 void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)
 {
-    m_d2dContext->SaveDrawingState(m_stateBlock.Get());
-
-    m_d2dContext->BeginDraw();
-    m_d2dContext->SetTransform(orientation2D);
+	this->m_d2dContext->SaveDrawingState(this->m_stateBlock.Get());
+	this->m_d2dContext->BeginDraw();
+	this->m_d2dContext->SetTransform(orientation2D);
 
 	//m_d2dContext->DrawBitmap(
  //       m_bitmap.Get(),
@@ -228,7 +221,7 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 	//	)
  //   );
 
-	auto plane = m_GoLEngine.GetCurrentMatrix();
+	auto plane = this->m_GoLEngine.GetCurrentMatrix();
 	int planeWidth = plane->GetWidth();
 	int planeHeight = plane->GetHeight();
 	for (int i = 0; i < planeWidth; ++i) for (int j = 0; j < planeHeight; ++j)
@@ -236,7 +229,7 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 		auto cell = plane->CellAt(i, j);
 		if (cell->IsAlive())
 		{
-			cell->DrawCell(m_d2dContext, i, j, LoadScreen::GoLCellSideLength, &m_Brushes);
+			cell->DrawCell(this->m_d2dContext, i, j, LoadScreen::GoLCellSideLength, this->m_Brushes);
 		}
 	}
 
@@ -249,7 +242,12 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 	//	m_GoLBrushRaindrop.Get()
 	//);
 
-	m_Sprinkler->Render(m_d2dContext, pos.x, pos.y, LoadScreen::GoLCellSideLength, &m_Brushes);
+	this->m_Sprinkler->Render(
+		this->m_d2dContext,
+		pos.x,
+		pos.y,
+		LoadScreen::GoLCellSideLength, this->m_Brushes
+	);
 
 	//ComPtr<ID2D1Effect> scaleEffect;
 	//m_d2dContext->CreateEffect(CLSID_D2D1Scale, &scaleEffect);
@@ -258,14 +256,13 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 	//scaleEffect->SetValue(D2D1_SCALE_PROP_SCALE, D2D1::Vector2F(2.0f, 2.0f));
 	//m_d2dContext->DrawImage(scaleEffect.Get());
 
-
     // We ignore D2DERR_RECREATE_TARGET here. This error indicates that the device
     // is lost. It will be handled during the next call to Present.
-    HRESULT hr = m_d2dContext->EndDraw();
+    HRESULT hr = this->m_d2dContext->EndDraw();
     if (hr != D2DERR_RECREATE_TARGET)
     {
         DX::ThrowIfFailed(hr);
     }
 
-    m_d2dContext->RestoreDrawingState(m_stateBlock.Get());
+    this->m_d2dContext->RestoreDrawingState(this->m_stateBlock.Get());
 }

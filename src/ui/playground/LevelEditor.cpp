@@ -312,10 +312,10 @@ void LevelEditor::DrawLevelEditorRaster()
 	MFARGB colhigh = { 255, 0, 0, 255 };
 	MFARGB coltuch = { 5, 151, 251,255 };
 	MFARGB coleras = { 18, 7, 231, 255 };
-	auto brgrid = this->m_Brushes.WannaHave(m_d2dContext, colgrid);
-	auto cursor = m_Brushes.WannaHave(m_d2dContext, colhigh);
-	auto touchdown = m_Brushes.WannaHave(m_d2dContext, coltuch);
-	auto eraser = m_Brushes.WannaHave(m_d2dContext, coleras);
+	auto brgrid = this->m_Brushes->WannaHave(m_d2dContext, colgrid);
+	auto cursor = m_Brushes->WannaHave(m_d2dContext, colhigh);
+	auto touchdown = m_Brushes->WannaHave(m_d2dContext, coltuch);
+	auto eraser = m_Brushes->WannaHave(m_d2dContext, coleras);
 	auto brusherl = brgrid.Get();
 
 	/* the next multiple of the grid height less than the viewport top */

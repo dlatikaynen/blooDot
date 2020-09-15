@@ -198,7 +198,7 @@ public:
 
 	};
 
-	Dings(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	Dings(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 
 	Dings::DingIDs								ID();
 	Platform::String^							Name();
@@ -230,7 +230,7 @@ public:
 protected:
 	DingIDs				m_ID;
 	Platform::String^	m_Name;
-	BrushRegistry*		m_Brushes;
+	std::shared_ptr<BrushRegistry> m_Brushes;
 	Facings				m_Facings;
 	Facings				m_Coalescing;
 	Layers				m_preferredLayer;
@@ -321,7 +321,7 @@ private:
 class Mauer : public Dings 
 {
 public:
-	Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 protected:
 	void Mauer::PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
@@ -330,7 +330,7 @@ protected:
 class CrackedMauer : public Mauer
 {
 public:
-	CrackedMauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	CrackedMauer(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	void PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 };
@@ -338,7 +338,7 @@ protected:
 class LooseMauer : public Dings
 {
 public:
-	LooseMauer(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	LooseMauer(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 protected:
 	void LooseMauer::PrepareBackground(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
@@ -347,7 +347,7 @@ protected:
 class Door : public Dings
 {
 public:
-	Door(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	Door(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, const D2D1_RECT_F *rect) override;
 protected:
 };
@@ -355,14 +355,14 @@ protected:
 class Wasser : public Dings
 {
 public:
-	Wasser(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	Wasser(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 };
 
 class HighGrass : public Dings
 {
 public:
-	HighGrass(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	HighGrass(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
@@ -370,7 +370,7 @@ protected:
 class Snow : public Dings
 {
 public:
-	Snow(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	Snow(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
@@ -378,7 +378,7 @@ protected:
 class FloorStoneTile : public Dings
 {
 public:
-	FloorStoneTile(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	FloorStoneTile(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
@@ -386,7 +386,7 @@ protected:
 class FloorStoneTilePurple : public Dings
 {
 public:
-	FloorStoneTilePurple(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	FloorStoneTilePurple(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
@@ -394,7 +394,7 @@ protected:
 class FloorStoneTileOchre : public Dings
 {
 public:
-	FloorStoneTileOchre(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	FloorStoneTileOchre(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
@@ -402,7 +402,7 @@ protected:
 class FloorStoneTileSlate : public Dings
 {
 public:
-	FloorStoneTileSlate(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	FloorStoneTileSlate(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
@@ -410,7 +410,7 @@ protected:
 class FloorRockTile : public Dings
 {
 public:
-	FloorRockTile(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	FloorRockTile(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
@@ -418,7 +418,7 @@ protected:
 class FloorRockTileCracked : public Dings
 {
 public:
-	FloorRockTileCracked(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	FloorRockTileCracked(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
@@ -426,14 +426,14 @@ protected:
 class Coin : public Dings
 {
 public:
-	Coin(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	Coin(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
 };
 
 class Chest : public Dings
 {
 public:
-	Chest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	Chest(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, const D2D1_RECT_F *rect) override;
 
 protected:
@@ -443,7 +443,7 @@ protected:
 class SilverChest : public Chest
 {
 public:
-	SilverChest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	SilverChest(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 
 protected:
 	int ColorVariation() override;
@@ -453,7 +453,7 @@ protected:
 class GoldChest : public Chest
 {
 public:
-	GoldChest(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	GoldChest(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 
 protected:
 	int ColorVariation() override;
@@ -462,7 +462,7 @@ protected:
 class Lettuce : public Dings
 {
 public:
-	Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
@@ -470,7 +470,7 @@ protected:
 class BarrelWooden : public Dings
 {
 public:
-	BarrelWooden(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	BarrelWooden(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
@@ -478,7 +478,7 @@ protected:
 class BarrelIndigo : public Dings
 {
 public:
-	BarrelIndigo(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	BarrelIndigo(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };
@@ -486,6 +486,6 @@ protected:
 class Rail : public Dings
 {
 public:
-	Rail(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* drawBrushes);
+	Rail(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, const D2D1_RECT_F *rect) override;
 };

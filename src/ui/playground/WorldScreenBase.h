@@ -48,7 +48,7 @@ protected:
     Microsoft::WRL::ComPtr<ID2D1DeviceContext>		m_d2dContext;
 	std::shared_ptr<Audio>							m_audio;
     Microsoft::WRL::ComPtr<ID2D1DrawingStateBlock>	m_stateBlock;
-	BrushRegistry									m_Brushes;
+	std::shared_ptr<BrushRegistry>					m_Brushes;
     Microsoft::WRL::ComPtr<IWICImagingFactory>		m_wicFactory;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>				m_notimeforcaution;
 	D2D1_SIZE_F										m_viewportSize;

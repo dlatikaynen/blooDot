@@ -20,7 +20,7 @@ public:
 	Level::Level(Level&& obj) { };
 	Level::~Level();
 
-	void Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, BrushRegistry* brushRegistry);
+	void Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> brushRegistry);
 	bool IsDesignMode();
 	D2D1_SIZE_U GetRectBoundsUnits();
 	D2D1_SIZE_U GetSheetSizeUnits();
