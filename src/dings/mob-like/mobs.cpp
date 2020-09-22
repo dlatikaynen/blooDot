@@ -179,6 +179,61 @@ void FlameGhost::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> dr
 	auto ringBrush = brusherl.Get();
 	elli.radiusX = elli.radiusY = (elli.radiusX - 2.5f);
 	rendEr->DrawEllipse(elli, ringBrush, 0.9f);
-	rendEr->DrawLine(D2D1::Point2F(elli.point.x + 0.5f, elli.point.y - 5.0f), D2D1::Point2F(elli.point.x + 0.5f, elli.point.y + 5.0f), ringBrush, 1.5f);
-	rendEr->DrawLine(D2D1::Point2F(elli.point.x - 2.5f, elli.point.y - 3.0f), D2D1::Point2F(elli.point.x + 0.5f, elli.point.y - 5.0f), ringBrush, 1.5f);
+
+	/* la bocca */
+	rendEr->DrawLine(
+		D2D1::Point2F(elli.point.x - 13.f, elli.point.y + 5.f),
+		D2D1::Point2F(elli.point.x + 13.f, elli.point.y + 5.f),
+		ringBrush, 1.5f
+	);
+
+	rendEr->DrawLine(
+		D2D1::Point2F(elli.point.x + 13.f, elli.point.y + 5.f),
+		D2D1::Point2F(elli.point.x, elli.point.y + 23.5f),
+		ringBrush, 1.5f
+	);
+
+	rendEr->DrawLine(
+		D2D1::Point2F(elli.point.x, elli.point.y + 23.5f),
+		D2D1::Point2F(elli.point.x - 13.f, elli.point.y + 5.f),
+		ringBrush, 1.5f
+	);
+
+	/* left eye */
+	rendEr->DrawLine(
+		D2D1::Point2F(elli.point.x - 27.f, elli.point.y - 5.f),
+		D2D1::Point2F(elli.point.x - 5.f, elli.point.y - 5.f),
+		ringBrush, 1.5f
+	);
+
+	rendEr->DrawLine(
+		D2D1::Point2F(elli.point.x - 5.f, elli.point.y - 5.f),
+		D2D1::Point2F(elli.point.x - 16.f, elli.point.y - 25.f),
+		ringBrush, 1.5f
+	);
+
+	rendEr->DrawLine(
+		D2D1::Point2F(elli.point.x - 16.f, elli.point.y - 25.f),
+		D2D1::Point2F(elli.point.x - 27.f, elli.point.y - 5.f),
+		ringBrush, 1.5f
+	);
+
+	/* rheye */
+	rendEr->DrawLine(
+		D2D1::Point2F(elli.point.x + 5.f, elli.point.y - 5.f),
+		D2D1::Point2F(elli.point.x + 27.f, elli.point.y - 5.f),
+		ringBrush, 1.5f
+	);
+
+	rendEr->DrawLine(
+		D2D1::Point2F(elli.point.x + 27.f, elli.point.y - 5.f),
+		D2D1::Point2F(elli.point.x + 16.f, elli.point.y - 25.f),
+		ringBrush, 1.5f
+	);
+
+	rendEr->DrawLine(
+		D2D1::Point2F(elli.point.x + 16.f, elli.point.y - 25.f),
+		D2D1::Point2F(elli.point.x + 5.f, elli.point.y - 5.f),
+		ringBrush, 1.5f
+	);
 }
