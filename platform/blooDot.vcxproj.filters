@@ -192,6 +192,15 @@
     <ClCompile Include="..\src\world\BlockObject.cpp">
       <Filter>world</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\sound\SynthOfLife.cpp">
+      <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sound\SynthPrimitive.cpp">
+      <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sound\SynthSequence.cpp">
+      <Filter>audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
@@ -355,6 +364,15 @@
     </ClInclude>
     <ClInclude Include="..\src\world\BlockObject.h">
       <Filter>world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sound\SynthOfLife.h">
+      <Filter>audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sound\SynthPrimitive.h">
+      <Filter>audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sound\SynthSequence.h">
+      <Filter>audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
