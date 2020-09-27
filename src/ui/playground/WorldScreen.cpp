@@ -409,9 +409,9 @@ void WorldScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 	this->m_d2dContext->DrawRectangle(this->m_viewportScrollTreshold, this->m_debugTresholdBrush.Get(), 0.75f);
 #endif
 	auto leben = 5.0f;
-	auto black = this->m_Brushes.WannaHave(this->m_d2dContext, MFARGB{0, 0, 0, 255});
-	auto red = this->m_Brushes.WannaHave(this->m_d2dContext, MFARGB{0, 0, 250, 255});
-	auto darkred = this->m_Brushes.WannaHave(this->m_d2dContext, MFARGB{0, 0, 70, 175});
+	auto black = this->m_Brushes->WannaHave(this->m_d2dContext, MFARGB{0, 0, 0, 255});
+	auto red = this->m_Brushes->WannaHave(this->m_d2dContext, MFARGB{0, 0, 250, 255});
+	auto darkred = this->m_Brushes->WannaHave(this->m_d2dContext, MFARGB{0, 0, 70, 175});
 
 	this->m_d2dContext->FillRectangle(D2D1::RectF(101+(leben) * 7.0f, 101, 135, 109), darkred.Get());
 	this->m_d2dContext->FillRectangle(D2D1::RectF(101, 101, 100 + (leben) * 7.0f, 109), red.Get());
