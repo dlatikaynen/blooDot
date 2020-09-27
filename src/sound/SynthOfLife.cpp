@@ -1,7 +1,10 @@
-#include "SynthSequence.h"
 #include "SynthOfLife.h"
 
 using namespace blooDot;
+
+SynthOfLife::~SynthOfLife()
+{
+}
 
 void SynthOfLife::Load(Platform::String^ fileName)
 {

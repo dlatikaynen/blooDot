@@ -96,7 +96,10 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
     this->m_audio->Initialize();
 	this->m_accelerometer = Windows::Devices::Sensors::Accelerometer::GetDefault();
 	this->m_loadScreen = std::unique_ptr<LoadScreen>(new LoadScreen());
-	this->m_loadScreen->Initialize(m_deviceResources);
+	this->m_loadScreen->Initialize(
+		this->m_deviceResources,
+		this->m_audio
+	);
 
 	UserInterface::GetInstance().Initialize(
 		this->m_deviceResources->GetD2DDevice(),
@@ -1757,7 +1760,7 @@ void blooDotMain::OnDeviceLost()
 void blooDotMain::OnDeviceRestored()
 {
 	//this->m_worldScreen->CreateDeviceDependentResources();
-	this->m_loadScreen->Initialize(this->m_deviceResources);
+	this->m_loadScreen->Initialize(this->m_deviceResources, this->m_audio);
 	this->m_worldScreen->Initialize(this->m_audio, this->m_deviceResources);
     UserInterface::GetInstance().Initialize(
 		this->m_deviceResources->GetD2DDevice(),

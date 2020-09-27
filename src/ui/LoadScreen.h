@@ -3,14 +3,19 @@
 #include "..\dx\DirectXHelper.h"
 #include "..\dx\DeviceResources.h"
 #include "..\dx\BrushRegistry.h"
+#include "..\sound\Audio.h"
 #include "..\algo\GameOfLife.h"
 #include "..\algo\GameOfLifeSprinkler.h"
+#include "..\sound\SynthOfLife.h"
+#include "..\sound\SynthSequence.h"
+
+using namespace blooDot;
 
 class LoadScreen
 {
 public:
 	LoadScreen::LoadScreen();
-    void Initialize(_In_ std::shared_ptr<DX::DeviceResources>& deviceResources);
+    void Initialize(_In_ std::shared_ptr<DX::DeviceResources>& deviceResources, _In_ std::shared_ptr<Audio> audioEngine);
 	void CreateDeviceDependentResources();
 	void ResetDirectXResources();
     void ReleaseDeviceDependentResources();
@@ -28,11 +33,11 @@ private:
 	const int										GoLSprinklerRadius = 4;
 	const int										GoLCellSideLength = 10;
 
-	std::shared_ptr<DX::DeviceResources>			m_deviceResources;
-	
+	std::shared_ptr<DX::DeviceResources>			m_deviceResources;	
 	Microsoft::WRL::ComPtr<ID2D1Factory1>           m_d2dFactory;
     Microsoft::WRL::ComPtr<ID2D1Device>             m_d2dDevice;
     Microsoft::WRL::ComPtr<ID2D1DeviceContext>      m_d2dContext;
+	std::shared_ptr<Audio>							m_audio;
     Microsoft::WRL::ComPtr<ID2D1DrawingStateBlock>  m_stateBlock;
 	std::shared_ptr<BrushRegistry>					m_Brushes;
 
@@ -47,4 +52,6 @@ private:
 
 	GameOfLifeAnimation								m_GoLEngine;
 	GameOfLifeSprinkler*							m_Sprinkler;
+	std::shared_ptr<SynthOfLife>					m_Synthesizer;
+	std::shared_ptr<SynthSequence>					m_synthSequence;
 };

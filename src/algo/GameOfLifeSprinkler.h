@@ -30,5 +30,4 @@ protected:
 
 private:
 	GameOfLifePlane* m_Square;
-
 };

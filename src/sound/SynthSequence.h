@@ -31,6 +31,12 @@ namespace blooDot
 	public:
 		SynthSequence::SynthSequence(std::shared_ptr<Audio>);
 
+		SynthSequence::SynthSequence(const SynthSequence& obj) { };
+		SynthSequence& operator=(const SynthSequence& obj) { return *this; };
+		SynthSequence::SynthSequence() { };
+		SynthSequence::SynthSequence(SynthSequence&& obj) { };
+		SynthSequence::~SynthSequence();
+
 		void Source(std::shared_ptr<PIECE_OF_MUSIC> entirePiece);
 		void Update(float timeTotal, float timeDelta);
 		void Render();

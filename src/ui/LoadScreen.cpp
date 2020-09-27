@@ -9,17 +9,18 @@ using namespace Windows::UI::ViewManagement;
 using namespace Windows::Graphics::Display;
 using namespace D2D1;
 
-LoadScreen::LoadScreen() 
+LoadScreen::LoadScreen()
 {
 	this->m_Brushes = std::make_shared<BrushRegistry>();
 }
 
-void LoadScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>& deviceResources)
+void LoadScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>& deviceResources, _In_ std::shared_ptr<Audio> audioEngine)
 {
 	this->m_deviceResources = deviceResources;
 	this->m_wicFactory = deviceResources->GetWicImagingFactory();
 	this->m_d2dDevice = deviceResources->GetD2DDevice();
 	this->m_d2dContext = deviceResources->GetD2DDeviceContext();
+	this->m_audio = audioEngine;
 	this->m_imageSize = D2D1::SizeF(0.0f, 0.0f);
 	this->m_offset = D2D1::SizeF(0.0f, 0.0f);
 	this->m_moved = D2D1::SizeF(0.0f, 0.0f);
@@ -30,7 +31,8 @@ void LoadScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>& deviceRes
     DX::ThrowIfFailed(
         factory.As(&this->m_d2dFactory)
     );
-	
+
+	this->m_Synthesizer = std::make_shared<SynthOfLife>();
 	this->CreateDeviceDependentResources();
 	this->ResetDirectXResources();
 }
@@ -70,7 +72,7 @@ void LoadScreen::ResetDirectXResources()
             WICBitmapDitherTypeNone,
             nullptr,
             0.0,
-            WICBitmapPaletteTypeCustom  // the BGRA format has no palette so this value is ignored
+            WICBitmapPaletteTypeCustom // the BGRA format has no palette, so this value is ignored
         )
     );
 
@@ -158,6 +160,7 @@ void LoadScreen::UpdateForWindowSizeChange()
 	delete randGoL;
 
 	this->m_GoLEngine.StartRecording();
+	this->m_synthSequence = this->m_Synthesizer->Play(this->m_audio);
 
 	/* the sprinkler */
 	this->m_Sprinkler = new GameOfLifeSprinkler();
@@ -203,6 +206,8 @@ void LoadScreen::Update(float timeTotal, float timeDelta)
 	//		m_GoL->SetRaindrop(x, y, m_GoL2->CellAt(x, y)->IsRaindrop());
 	//	}
 	//}
+
+	this->m_synthSequence->Update(timeTotal, timeDelta);
 }
 
 void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition)
@@ -241,12 +246,13 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
 	//	D2D1::Ellipse(pos, 30, 30),
 	//	m_GoLBrushRaindrop.Get()
 	//);
-
+	
 	this->m_Sprinkler->Render(
 		this->m_d2dContext,
 		pos.x,
 		pos.y,
-		LoadScreen::GoLCellSideLength, this->m_Brushes
+		LoadScreen::GoLCellSideLength,
+		this->m_Brushes
 	);
 
 	//ComPtr<ID2D1Effect> scaleEffect;
@@ -265,4 +271,5 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
     }
 
     this->m_d2dContext->RestoreDrawingState(this->m_stateBlock.Get());
+	this->m_synthSequence->Render();
 }

@@ -8,6 +8,11 @@ SynthSequence::SynthSequence(std::shared_ptr<Audio> audioEngine)
 	this->m_audioEngine = audioEngine;
 }
 
+SynthSequence::~SynthSequence()
+{
+
+}
+
 void SynthSequence::Source(std::shared_ptr<PIECE_OF_MUSIC> entirePiece)
 {
 	this->m_entirePiece = entirePiece;
