@@ -35,5 +35,5 @@ void SynthSequence::Update(float timeTotal, float timeDelta)
 
 void SynthSequence::Render()
 {
-	//this->m_audioEngine->
+	this->m_audioEngine->PlaySynth();
 }

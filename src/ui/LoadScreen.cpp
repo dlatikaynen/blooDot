@@ -12,6 +12,7 @@ using namespace D2D1;
 LoadScreen::LoadScreen()
 {
 	this->m_Brushes = std::make_shared<BrushRegistry>();
+	this->m_resourceLoadingCompleted = false;
 }
 
 void LoadScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>& deviceResources, _In_ std::shared_ptr<Audio> audioEngine)
@@ -40,6 +41,11 @@ void LoadScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>& deviceRes
 void LoadScreen::CreateDeviceDependentResources()
 {
 
+}
+
+void LoadScreen::ResourceLoadingCompleted()
+{
+	this->m_resourceLoadingCompleted = true;
 }
 
 void LoadScreen::ResetDirectXResources()
@@ -271,5 +277,8 @@ void LoadScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointe
     }
 
     this->m_d2dContext->RestoreDrawingState(this->m_stateBlock.Get());
-	this->m_synthSequence->Render();
+	if (this->m_resourceLoadingCompleted)
+	{
+		this->m_synthSequence->Render();
+	}
 }

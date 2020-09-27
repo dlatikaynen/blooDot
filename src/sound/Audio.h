@@ -120,12 +120,12 @@ public:
 	// the headphones and a new speaker configuration is generated.
 	void SetEngineExperiencedCriticalError()
 	{
-		m_engineExperiencedCriticalError = true;
+		this->m_engineExperiencedCriticalError = true;
 	}
 
 	bool HasEngineExperiencedCriticalError()
 	{
-		return m_engineExperiencedCriticalError;
+		return this->m_engineExperiencedCriticalError;
 	}
 
 	void PlaySoundEffect(SoundEvent sound);
@@ -135,13 +135,18 @@ public:
 	void SetSoundEffectPitch(SoundEvent sound, float pitch);
 	void SetSoundEffectFilter(SoundEvent sound, float frequency, float oneOverQ);
 	void SetRoomSize(float roomSize, float* wallDistances);
+	void PlaySynth();
 
 private:
     IXAudio2*                   m_musicEngine;
     IXAudio2*                   m_soundEffectEngine;
+	IXAudio2*					m_synthEngine;
     IXAudio2MasteringVoice*     m_musicMasteringVoice;
     IXAudio2MasteringVoice*     m_soundEffectMasteringVoice;
-    IXAudio2SourceVoice*        m_musicSourceVoice;
+	IXAudio2MasteringVoice*     m_synthMasteringVoice;
+	IXAudio2SourceVoice*		m_synthSourceVoice;
+	XAUDIO2_BUFFER              m_synthBuffer;
+	IXAudio2SourceVoice*        m_musicSourceVoice;
     StreamingVoiceContext       m_voiceContext;
     byte                        m_audioBuffers[MAX_BUFFER_COUNT][STREAMING_BUFFER_SIZE];
     MediaStreamer               m_musicStreamer;
@@ -156,6 +161,7 @@ private:
     bool                        m_engineExperiencedCriticalError;
     AudioEngineCallbacks        m_musicEngineCallback;
     AudioEngineCallbacks        m_soundEffectEngineCallback;
+	AudioEngineCallbacks		m_synthCallback;
 	bool						m_isMusicStarted;
 	bool						m_isMusicPaused;
 	bool						m_isSfxStarted;

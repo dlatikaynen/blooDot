@@ -4,14 +4,14 @@
 
 void AudioEngineCallbacks::Initialize(Audio* audio)
 {
-    m_audio = audio;
+    this->m_audio = audio;
 }
 
 // Called when a critical system error causes XAudio2
 // to be closed and restarted. The error code is given in Error.
 void  _stdcall AudioEngineCallbacks::OnCriticalError(HRESULT Error)
 {
-    m_audio->SetEngineExperiencedCriticalError();
+    this->m_audio->SetEngineExperiencedCriticalError();
 }
 
 Audio::Audio()
@@ -24,9 +24,12 @@ Audio::Audio()
 	this->m_isSfxPaused = false;
 	this->m_musicEngine = nullptr;
 	this->m_soundEffectEngine = nullptr;
+	this->m_synthEngine = nullptr;
 	this->m_musicMasteringVoice = nullptr;
 	this->m_soundEffectMasteringVoice = nullptr;
+	this->m_synthMasteringVoice = nullptr;
 	this->m_musicSourceVoice = nullptr;
+	this->m_synthSourceVoice = nullptr;
 	this->m_soundEffectReverbVoiceSmallRoom = nullptr;
 	this->m_soundEffectReverbVoiceLargeRoom = nullptr;
 	this->m_musicReverbVoiceSmallRoom = nullptr;
@@ -41,70 +44,73 @@ Audio::~Audio()
 
 void Audio::Initialize()
 {
-    m_isMusicStarted = false;
-	m_isSfxStarted = false;
-	m_musicEngine = nullptr;
-    m_soundEffectEngine = nullptr;
-    m_musicMasteringVoice = nullptr;
-    m_soundEffectMasteringVoice = nullptr;
-    m_musicSourceVoice = nullptr;
+	this->m_isMusicStarted = false;
+	this->m_isSfxStarted = false;
+	this->m_musicEngine = nullptr;
+	this->m_soundEffectEngine = nullptr;
+	this->m_synthEngine = nullptr;
+	this->m_musicMasteringVoice = nullptr;
+	this->m_synthMasteringVoice = nullptr;
+	this->m_soundEffectMasteringVoice = nullptr;
+	this->m_synthSourceVoice = nullptr;
+	this->m_musicSourceVoice = nullptr;
 
-    m_reverbParametersSmall.ReflectionsDelay = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_DELAY;
-    m_reverbParametersSmall.ReverbDelay = XAUDIO2FX_REVERB_DEFAULT_REVERB_DELAY;
-    m_reverbParametersSmall.RearDelay = XAUDIO2FX_REVERB_DEFAULT_REAR_DELAY;
-    m_reverbParametersSmall.PositionLeft = XAUDIO2FX_REVERB_DEFAULT_POSITION;
-    m_reverbParametersSmall.PositionRight = XAUDIO2FX_REVERB_DEFAULT_POSITION;
-    m_reverbParametersSmall.PositionMatrixLeft = XAUDIO2FX_REVERB_DEFAULT_POSITION_MATRIX;
-    m_reverbParametersSmall.PositionMatrixRight = XAUDIO2FX_REVERB_DEFAULT_POSITION_MATRIX;
-    m_reverbParametersSmall.EarlyDiffusion = 4;
-    m_reverbParametersSmall.LateDiffusion = 15;
-    m_reverbParametersSmall.LowEQGain = XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_GAIN;
-    m_reverbParametersSmall.LowEQCutoff = XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_CUTOFF;
-    m_reverbParametersSmall.HighEQGain = XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_GAIN;
-    m_reverbParametersSmall.HighEQCutoff = XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_CUTOFF;
-    m_reverbParametersSmall.RoomFilterFreq = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_FREQ;
-    m_reverbParametersSmall.RoomFilterMain = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_MAIN;
-    m_reverbParametersSmall.RoomFilterHF = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_HF;
-    m_reverbParametersSmall.ReflectionsGain = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_GAIN;
-    m_reverbParametersSmall.ReverbGain = XAUDIO2FX_REVERB_DEFAULT_REVERB_GAIN;
-    m_reverbParametersSmall.DecayTime = XAUDIO2FX_REVERB_DEFAULT_DECAY_TIME;
-    m_reverbParametersSmall.Density = XAUDIO2FX_REVERB_DEFAULT_DENSITY;
-    m_reverbParametersSmall.RoomSize = XAUDIO2FX_REVERB_DEFAULT_ROOM_SIZE;
-    m_reverbParametersSmall.WetDryMix = XAUDIO2FX_REVERB_DEFAULT_WET_DRY_MIX;
-    m_reverbParametersSmall.DisableLateField = TRUE;
+	this->m_reverbParametersSmall.ReflectionsDelay = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_DELAY;
+	this->m_reverbParametersSmall.ReverbDelay = XAUDIO2FX_REVERB_DEFAULT_REVERB_DELAY;
+	this->m_reverbParametersSmall.RearDelay = XAUDIO2FX_REVERB_DEFAULT_REAR_DELAY;
+	this->m_reverbParametersSmall.PositionLeft = XAUDIO2FX_REVERB_DEFAULT_POSITION;
+	this->m_reverbParametersSmall.PositionRight = XAUDIO2FX_REVERB_DEFAULT_POSITION;
+	this->m_reverbParametersSmall.PositionMatrixLeft = XAUDIO2FX_REVERB_DEFAULT_POSITION_MATRIX;
+	this->m_reverbParametersSmall.PositionMatrixRight = XAUDIO2FX_REVERB_DEFAULT_POSITION_MATRIX;
+	this->m_reverbParametersSmall.EarlyDiffusion = 4;
+	this->m_reverbParametersSmall.LateDiffusion = 15;
+	this->m_reverbParametersSmall.LowEQGain = XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_GAIN;
+	this->m_reverbParametersSmall.LowEQCutoff = XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_CUTOFF;
+	this->m_reverbParametersSmall.HighEQGain = XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_GAIN;
+	this->m_reverbParametersSmall.HighEQCutoff = XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_CUTOFF;
+	this->m_reverbParametersSmall.RoomFilterFreq = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_FREQ;
+	this->m_reverbParametersSmall.RoomFilterMain = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_MAIN;
+	this->m_reverbParametersSmall.RoomFilterHF = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_HF;
+	this->m_reverbParametersSmall.ReflectionsGain = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_GAIN;
+	this->m_reverbParametersSmall.ReverbGain = XAUDIO2FX_REVERB_DEFAULT_REVERB_GAIN;
+	this->m_reverbParametersSmall.DecayTime = XAUDIO2FX_REVERB_DEFAULT_DECAY_TIME;
+	this->m_reverbParametersSmall.Density = XAUDIO2FX_REVERB_DEFAULT_DENSITY;
+	this->m_reverbParametersSmall.RoomSize = XAUDIO2FX_REVERB_DEFAULT_ROOM_SIZE;
+	this->m_reverbParametersSmall.WetDryMix = XAUDIO2FX_REVERB_DEFAULT_WET_DRY_MIX;
+	this->m_reverbParametersSmall.DisableLateField = TRUE;
 
-    m_reverbParametersLarge.ReflectionsDelay = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_DELAY;
-    m_reverbParametersLarge.ReverbDelay = XAUDIO2FX_REVERB_DEFAULT_REVERB_DELAY;
-    m_reverbParametersLarge.RearDelay = XAUDIO2FX_REVERB_DEFAULT_REAR_DELAY;
-    m_reverbParametersLarge.PositionLeft = XAUDIO2FX_REVERB_DEFAULT_POSITION;
-    m_reverbParametersLarge.PositionRight = XAUDIO2FX_REVERB_DEFAULT_POSITION;
-    m_reverbParametersLarge.PositionMatrixLeft = XAUDIO2FX_REVERB_DEFAULT_POSITION_MATRIX;
-    m_reverbParametersLarge.PositionMatrixRight = XAUDIO2FX_REVERB_DEFAULT_POSITION_MATRIX;
-    m_reverbParametersLarge.EarlyDiffusion = 4;
-    m_reverbParametersLarge.LateDiffusion = 4;
-    m_reverbParametersLarge.LowEQGain = XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_GAIN;
-    m_reverbParametersLarge.LowEQCutoff = XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_CUTOFF;
-    m_reverbParametersLarge.HighEQGain = XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_GAIN;
-    m_reverbParametersLarge.HighEQCutoff = XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_CUTOFF;
-    m_reverbParametersLarge.RoomFilterFreq = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_FREQ;
-    m_reverbParametersLarge.RoomFilterMain = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_MAIN;
-    m_reverbParametersLarge.RoomFilterHF = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_HF;
-    m_reverbParametersLarge.ReflectionsGain = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_GAIN;
-    m_reverbParametersLarge.ReverbGain = XAUDIO2FX_REVERB_DEFAULT_REVERB_GAIN;
-    m_reverbParametersLarge.DecayTime = 1.0f;
-    m_reverbParametersLarge.Density = 10;
-    m_reverbParametersLarge.RoomSize = 100;
-    m_reverbParametersLarge.WetDryMix = XAUDIO2FX_REVERB_DEFAULT_WET_DRY_MIX;
-    m_reverbParametersLarge.DisableLateField = FALSE;
-    for (int i = 0; i < ARRAYSIZE(m_soundEffects); i++)
+	this->m_reverbParametersLarge.ReflectionsDelay = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_DELAY;
+	this->m_reverbParametersLarge.ReverbDelay = XAUDIO2FX_REVERB_DEFAULT_REVERB_DELAY;
+	this->m_reverbParametersLarge.RearDelay = XAUDIO2FX_REVERB_DEFAULT_REAR_DELAY;
+	this->m_reverbParametersLarge.PositionLeft = XAUDIO2FX_REVERB_DEFAULT_POSITION;
+	this->m_reverbParametersLarge.PositionRight = XAUDIO2FX_REVERB_DEFAULT_POSITION;
+	this->m_reverbParametersLarge.PositionMatrixLeft = XAUDIO2FX_REVERB_DEFAULT_POSITION_MATRIX;
+	this->m_reverbParametersLarge.PositionMatrixRight = XAUDIO2FX_REVERB_DEFAULT_POSITION_MATRIX;
+	this->m_reverbParametersLarge.EarlyDiffusion = 4;
+	this->m_reverbParametersLarge.LateDiffusion = 4;
+	this->m_reverbParametersLarge.LowEQGain = XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_GAIN;
+	this->m_reverbParametersLarge.LowEQCutoff = XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_CUTOFF;
+	this->m_reverbParametersLarge.HighEQGain = XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_GAIN;
+	this->m_reverbParametersLarge.HighEQCutoff = XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_CUTOFF;
+	this->m_reverbParametersLarge.RoomFilterFreq = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_FREQ;
+	this->m_reverbParametersLarge.RoomFilterMain = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_MAIN;
+	this->m_reverbParametersLarge.RoomFilterHF = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_HF;
+	this->m_reverbParametersLarge.ReflectionsGain = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_GAIN;
+	this->m_reverbParametersLarge.ReverbGain = XAUDIO2FX_REVERB_DEFAULT_REVERB_GAIN;
+	this->m_reverbParametersLarge.DecayTime = 1.0f;
+	this->m_reverbParametersLarge.Density = 10;
+	this->m_reverbParametersLarge.RoomSize = 100;
+	this->m_reverbParametersLarge.WetDryMix = XAUDIO2FX_REVERB_DEFAULT_WET_DRY_MIX;
+	this->m_reverbParametersLarge.DisableLateField = FALSE;
+    for (int i = 0; i < ARRAYSIZE(this->m_soundEffects); i++)
     {
-        m_soundEffects[i].m_soundEffectBufferData = nullptr;
-        m_soundEffects[i].m_soundEffectSourceVoice = nullptr;
-        m_soundEffects[i].m_soundEffectStarted = false;
-        ZeroMemory(&m_soundEffects[i].m_audioBuffer, sizeof(m_soundEffects[i].m_audioBuffer));
+		this->m_soundEffects[i].m_soundEffectBufferData = nullptr;
+		this->m_soundEffects[i].m_soundEffectSourceVoice = nullptr;
+		this->m_soundEffects[i].m_soundEffectStarted = false;
+        ZeroMemory(&this->m_soundEffects[i].m_audioBuffer, sizeof(this->m_soundEffects[i].m_audioBuffer));
     }
 
-    ZeroMemory(m_audioBuffers, sizeof(m_audioBuffers));
+    ZeroMemory(this->m_audioBuffers, sizeof(this->m_audioBuffers));
 }
 
 void Audio::SetRoomSize(float roomSize, float* wallDistances)
@@ -136,7 +142,8 @@ void Audio::SetRoomSize(float roomSize, float* wallDistances)
     outputMatrix[1] = 0;
     outputMatrix[2] = 0;
     outputMatrix[3] = leftRatio * normalizedRoomSize;
-    DX::ThrowIfFailed(
+    DX::ThrowIfFailed
+	(
         m_soundEffectReverbVoiceSmallRoom->SetOutputMatrix(m_soundEffectMasteringVoice, 2, 2, outputMatrix)
     );
 
@@ -144,7 +151,8 @@ void Audio::SetRoomSize(float roomSize, float* wallDistances)
     outputMatrix[1] = 0;
     outputMatrix[2] = 0;
     outputMatrix[3]= leftRatio * normalizedRoomSize;
-    DX::ThrowIfFailed(
+    DX::ThrowIfFailed
+	(
         m_musicReverbVoiceSmallRoom->SetOutputMatrix(m_musicMasteringVoice, 2, 2, outputMatrix)
     );
 
@@ -153,88 +161,90 @@ void Audio::SetRoomSize(float roomSize, float* wallDistances)
     outputMatrix[1] = 0;
     outputMatrix[2] = 0;
     outputMatrix[3]= (1.0f - leftRatio) * (1.0f - normalizedRoomSize);
-    DX::ThrowIfFailed(
-        m_soundEffectReverbVoiceLargeRoom->SetOutputMatrix(m_soundEffectMasteringVoice, 2, 2, outputMatrix)
+    DX::ThrowIfFailed
+	(
+        this->m_soundEffectReverbVoiceLargeRoom->SetOutputMatrix(m_soundEffectMasteringVoice, 2, 2, outputMatrix)
     );
 
     outputMatrix[0] = leftRatio * (1.0f - normalizedRoomSize);
     outputMatrix[1] = 0;
     outputMatrix[2] = 0;
     outputMatrix[3] = (1.0f - leftRatio) * (1.0f - normalizedRoomSize);
-    DX::ThrowIfFailed(
-        m_musicReverbVoiceLargeRoom->SetOutputMatrix(m_musicMasteringVoice, 2, 2, outputMatrix)
+    DX::ThrowIfFailed
+	(
+        this->m_musicReverbVoiceLargeRoom->SetOutputMatrix(m_musicMasteringVoice, 2, 2, outputMatrix)
     );
 }
 
 void Audio::CreateResources()
 {
-    try
-    {
-        /* get both file I/O and format decode for audio assets.
+	try
+	{
+		/* get both file I/O and format decode for audio assets.
 		 * can replace streamer with own file I/O and decode routines */
 		this->m_musicStreamer.Initialize(L"Media\\Audio\\background.mp3");
-        DX::ThrowIfFailed(
-            XAudio2Create(&this->m_musicEngine)
-        );
+		DX::ThrowIfFailed(
+			XAudio2Create(&this->m_musicEngine)
+		);
 
 #if defined(_DEBUG)
-        XAUDIO2_DEBUG_CONFIGURATION debugConfig = {0};
-        debugConfig.BreakMask = XAUDIO2_LOG_ERRORS;
-        debugConfig.TraceMask = XAUDIO2_LOG_ERRORS;
+		XAUDIO2_DEBUG_CONFIGURATION debugConfig = { 0 };
+		debugConfig.BreakMask = XAUDIO2_LOG_ERRORS;
+		debugConfig.TraceMask = XAUDIO2_LOG_ERRORS;
 		this->m_musicEngine->SetDebugConfiguration(&debugConfig);
 #endif
 
 		this->m_musicEngineCallback.Initialize(this);
 		this->m_musicEngine->RegisterForCallbacks(&m_musicEngineCallback);
 
-        // This sample plays the equivalent of background music, which we tag on the
-        // mastering voice as AudioCategory_GameMedia. In ordinary usage, if we were
-        // playing the music track with no effects, we could route it entirely through
-        // Media Foundation. Here we are using XAudio2 to apply a reverb effect to the
-        // music, so we use Media Foundation to decode the data then we feed it through
-        // the XAudio2 pipeline as a separate Mastering Voice, so that we can tag it
-        // as Game Media. We default the mastering voice to 2 channels to simplify
-        // the reverb logic.
-        DX::ThrowIfFailed(
+		// This sample plays the equivalent of background music, which we tag on the
+		// mastering voice as AudioCategory_GameMedia. In ordinary usage, if we were
+		// playing the music track with no effects, we could route it entirely through
+		// Media Foundation. Here we are using XAudio2 to apply a reverb effect to the
+		// music, so we use Media Foundation to decode the data then we feed it through
+		// the XAudio2 pipeline as a separate Mastering Voice, so that we can tag it
+		// as Game Media. We default the mastering voice to 2 channels to simplify
+		// the reverb logic.
+		DX::ThrowIfFailed(
 			this->m_musicEngine->CreateMasteringVoice(
-                &this->m_musicMasteringVoice,
-                2,
-                48000,
-                0,
-                nullptr,
-                nullptr,
-                AudioCategory_GameMedia
-            )
-        );
+				&this->m_musicMasteringVoice,
+				2,
+				48000,
+				0,
+				nullptr,
+				nullptr,
+				AudioCategory_GameMedia
+			)
+		);
 
 		this->CreateReverb(
 			this->m_musicEngine,
 			this->m_musicMasteringVoice,
-            &this->m_reverbParametersSmall,
-            &this->m_musicReverbVoiceSmallRoom,
-            true
-        );
-        
+			&this->m_reverbParametersSmall,
+			&this->m_musicReverbVoiceSmallRoom,
+			true
+		);
+
 		this->CreateReverb(
 			this->m_musicEngine,
 			this->m_musicMasteringVoice,
-            &this->m_reverbParametersLarge,
-            &this->m_musicReverbVoiceLargeRoom,
-            true
-        );
+			&this->m_reverbParametersLarge,
+			&this->m_musicReverbVoiceLargeRoom,
+			true
+		);
 
-        XAUDIO2_SEND_DESCRIPTOR descriptors[3];
-        descriptors[0].pOutputVoice = this->m_musicMasteringVoice;
-        descriptors[0].Flags = 0;
-        descriptors[1].pOutputVoice = this->m_musicReverbVoiceSmallRoom;
-        descriptors[1].Flags = 0;
-        descriptors[2].pOutputVoice = this->m_musicReverbVoiceLargeRoom;
-        descriptors[2].Flags = 0;
-        XAUDIO2_VOICE_SENDS sends = {0};
-        sends.SendCount = 3;
-        sends.pSends = descriptors;
-        WAVEFORMATEX& waveFormat = this->m_musicStreamer.GetOutputWaveFormatEx();
-        DX::ThrowIfFailed
+		XAUDIO2_SEND_DESCRIPTOR descriptors[3];
+		descriptors[0].pOutputVoice = this->m_musicMasteringVoice;
+		descriptors[0].Flags = 0;
+		descriptors[1].pOutputVoice = this->m_musicReverbVoiceSmallRoom;
+		descriptors[1].Flags = 0;
+		descriptors[2].pOutputVoice = this->m_musicReverbVoiceLargeRoom;
+		descriptors[2].Flags = 0;
+		XAUDIO2_VOICE_SENDS sends = { 0 };
+		sends.SendCount = 3;
+		sends.pSends = descriptors;
+		WAVEFORMATEX& waveFormat = this->m_musicStreamer.GetOutputWaveFormatEx();
+		DX::ThrowIfFailed
 		(
 			this->m_musicEngine->CreateSourceVoice(
 				&this->m_musicSourceVoice,
@@ -242,44 +252,43 @@ void Audio::CreateResources()
 				0,
 				1.0f,
 				&this->m_voiceContext,
-				&sends, 
+				&sends,
 				nullptr
 			)
-        );
+		);
 
-        DX::ThrowIfFailed
+		DX::ThrowIfFailed
 		(
 			this->m_musicMasteringVoice->SetVolume(0.4f)
-        );
+		);
 
-        // Create a separate engine and mastering voice for sound effects in the sample
-        // Games will use many voices in a complex graph for audio, mixing all effects down to a
-        // single mastering voice.
-        // We are creating an entirely new engine instance and mastering voice in order to tag
-        // our sound effects with the audio category AudioCategory_GameEffects.
-        DX::ThrowIfFailed
+		/* Create a separate engine and mastering voice for sound effects
+		 * mixing all effects and synth down to a single mastering voice */
+		DX::ThrowIfFailed
 		(
-            XAudio2Create(&this->m_soundEffectEngine)
-        );
+			XAudio2Create(&this->m_soundEffectEngine)
+		);
 
 		this->m_soundEffectEngineCallback.Initialize(this);
 		this->m_soundEffectEngine->RegisterForCallbacks(&this->m_soundEffectEngineCallback);
 
-        /* we default the mastering voice to 2 channels to simplify the reverb logic */
-        DX::ThrowIfFailed
+		/* we default the mastering voice to 2 channels to simplify the reverb logic */
+		DX::ThrowIfFailed
 		(
-            this->m_soundEffectEngine->CreateMasteringVoice(&m_soundEffectMasteringVoice, 2, 48000, 0, nullptr, nullptr, AudioCategory_GameEffects)
-        );
+			this->m_soundEffectEngine->CreateMasteringVoice(&m_soundEffectMasteringVoice, 2, 48000, 0, nullptr, nullptr, AudioCategory_GameEffects)
+		);
 
-		this->CreateReverb(
+		this->CreateReverb
+		(
 			this->m_soundEffectEngine,
 			this->m_soundEffectMasteringVoice,
-			&this->m_reverbParametersSmall, 
+			&this->m_reverbParametersSmall,
 			&this->m_soundEffectReverbVoiceSmallRoom,
 			true
 		);
 
-		this->CreateReverb(
+		this->CreateReverb
+		(
 			this->m_soundEffectEngine,
 			this->m_soundEffectMasteringVoice,
 			&this->m_reverbParametersLarge,
@@ -291,6 +300,61 @@ void Audio::CreateResources()
 		{
 			this->CreateSourceVoice(static_cast<SoundEvent>(eventId));
 		}
+
+		/* even simpler for the synthesizer */
+		DX::ThrowIfFailed
+		(
+			XAudio2Create(&this->m_synthEngine)
+		);
+
+		this->m_synthCallback.Initialize(this);
+		this->m_synthEngine->RegisterForCallbacks(&this->m_synthCallback);
+		DX::ThrowIfFailed
+		(
+			this->m_synthEngine->CreateMasteringVoice(&m_synthMasteringVoice, 1, 48000, 0, nullptr, nullptr, AudioCategory_GameMedia)
+		);
+
+		XAUDIO2_SEND_DESCRIPTOR synthDescriptors[1];
+		synthDescriptors[0].pOutputVoice = this->m_synthMasteringVoice;
+		synthDescriptors[0].Flags = 0;
+		XAUDIO2_VOICE_SENDS synthSends = { 0 };
+		synthSends.SendCount = 1;
+		synthSends.pSends = synthDescriptors;
+		WAVEFORMATEX synthFormat;
+		synthFormat.nChannels = 1;
+		//synthFormat.
+		synthFormat.cbSize = sizeof(WAVEFORMATEX);
+		DX::ThrowIfFailed
+		(
+			this->m_synthEngine->CreateSourceVoice(
+				&this->m_synthSourceVoice,
+				&waveFormat,
+				0,
+				1.0f,
+				&this->m_voiceContext,
+				&synthSends,
+				nullptr
+			)
+		);
+
+		DX::ThrowIfFailed
+		(
+			this->m_synthMasteringVoice->SetVolume(0.9f)
+		);
+
+		auto synthData = new byte[100];
+		for (int i = 0; i < 100; ++i) synthData[i] = 255 - i;
+
+		ZeroMemory(&this->m_synthBuffer, sizeof(this->m_synthBuffer));
+		this->m_synthBuffer.AudioBytes = 100;
+		this->m_synthBuffer.pAudioData = synthData;
+		this->m_synthBuffer.pContext = this;
+		this->m_synthBuffer.Flags = XAUDIO2_END_OF_STREAM;
+		this->m_synthBuffer.LoopCount = 0;
+		DX::ThrowIfFailed
+		(
+			this->m_synthSourceVoice->SubmitSourceBuffer(&m_synthBuffer)
+		);
 	}
     catch (...)
     {
@@ -402,27 +466,33 @@ void Audio::CreateSourceVoice(SoundEvent sound)
     // The rolling sound can have pitch shifting and a low-pass filter.
     if (sound == RollingEvent)
     {
-        DX::ThrowIfFailed(
-			this->m_soundEffectEngine->CreateSourceVoice(
+        DX::ThrowIfFailed
+		(
+			this->m_soundEffectEngine->CreateSourceVoice
+			(
                 &this->m_soundEffects[sound].m_soundEffectSourceVoice,
                 &(soundEffectStream.GetOutputWaveFormatEx()),
                 XAUDIO2_VOICE_USEFILTER,
                 2.0f,
                 &this->m_voiceContext,
-                &sends)
-            );
+                &sends
+			)
+        );
     }
     else
     {
-        DX::ThrowIfFailed(
-			this->m_soundEffectEngine->CreateSourceVoice(
+        DX::ThrowIfFailed
+		(
+			this->m_soundEffectEngine->CreateSourceVoice
+			(
                 &this->m_soundEffects[sound].m_soundEffectSourceVoice,
                 &(soundEffectStream.GetOutputWaveFormatEx()),
                 0,
                 1.0f,
                 &this->m_voiceContext,
-                &sends)
-            );
+                &sends
+			)
+        );
     }
 
 	this->m_soundEffects[sound].m_soundEffectSampleRate = soundEffectStream.GetOutputWaveFormatEx().nSamplesPerSec;
@@ -455,49 +525,54 @@ void Audio::CreateSourceVoice(SoundEvent sound)
 
 void Audio::ReleaseResources()
 {
-    if (m_musicSourceVoice != nullptr)
+    if (this->m_musicSourceVoice != nullptr)
     {
-        m_musicSourceVoice->DestroyVoice();
+        this->m_musicSourceVoice->DestroyVoice();
     }
 
-    if (m_soundEffectReverbVoiceSmallRoom != nullptr)
+    if (this->m_soundEffectReverbVoiceSmallRoom != nullptr)
     {
-        m_soundEffectReverbVoiceSmallRoom->DestroyVoice();
+        this->m_soundEffectReverbVoiceSmallRoom->DestroyVoice();
     }
 
-    if (m_soundEffectReverbVoiceLargeRoom != nullptr)
+    if (this->m_soundEffectReverbVoiceLargeRoom != nullptr)
     {
-        m_soundEffectReverbVoiceLargeRoom->DestroyVoice();
+        this->m_soundEffectReverbVoiceLargeRoom->DestroyVoice();
     }
 
-    if (m_musicReverbVoiceSmallRoom != nullptr)
+    if (this->m_musicReverbVoiceSmallRoom != nullptr)
     {
-        m_musicReverbVoiceSmallRoom->DestroyVoice();
+        this->m_musicReverbVoiceSmallRoom->DestroyVoice();
     }
 
-    if (m_musicReverbVoiceLargeRoom != nullptr)
+    if (this->m_musicReverbVoiceLargeRoom != nullptr)
     {
-        m_musicReverbVoiceLargeRoom->DestroyVoice();
+        this->m_musicReverbVoiceLargeRoom->DestroyVoice();
     }
 
-    for (int i = 0; i < ARRAYSIZE(m_soundEffects); i++)
+    for (int i = 0; i < ARRAYSIZE(this->m_soundEffects); i++)
     {
-        if (m_soundEffects[i].m_soundEffectSourceVoice != nullptr)
+        if (this->m_soundEffects[i].m_soundEffectSourceVoice != nullptr)
         {
-            m_soundEffects[i].m_soundEffectSourceVoice->DestroyVoice();
+            this->m_soundEffects[i].m_soundEffectSourceVoice->DestroyVoice();
         }
 
-        m_soundEffects[i].m_soundEffectSourceVoice = nullptr;
+        this->m_soundEffects[i].m_soundEffectSourceVoice = nullptr;
     }
 
-    if (m_musicMasteringVoice != nullptr)
+    if (this->m_musicMasteringVoice != nullptr)
     {
-            m_musicMasteringVoice->DestroyVoice();
+        this->m_musicMasteringVoice->DestroyVoice();
     }
 
-    if (m_soundEffectMasteringVoice != nullptr)
+	if (this->m_synthMasteringVoice != nullptr)
+	{
+		this->m_synthMasteringVoice->DestroyVoice();
+	}
+
+    if (this->m_soundEffectMasteringVoice != nullptr)
     {
-        m_soundEffectMasteringVoice->DestroyVoice();
+        this->m_soundEffectMasteringVoice->DestroyVoice();
     }
 
 	this->m_musicSourceVoice = nullptr;
@@ -505,9 +580,11 @@ void Audio::ReleaseResources()
 	this->m_soundEffectMasteringVoice = nullptr;
 	this->m_soundEffectReverbVoiceSmallRoom = nullptr;
 	this->m_soundEffectReverbVoiceLargeRoom = nullptr;
+	this->m_synthMasteringVoice = nullptr;
 	this->m_musicReverbVoiceSmallRoom = nullptr;
 	this->m_musicReverbVoiceLargeRoom = nullptr;
 	this->SafeRelease(&m_musicEngine);
+	this->SafeRelease(&m_synthEngine);
 	this->SafeRelease(&m_soundEffectEngine);
 }
 
@@ -593,6 +670,28 @@ void Audio::Render()
     {
         m_engineExperiencedCriticalError = true;
     }
+}
+
+void Audio::PlaySynth()
+{
+	if (this->m_synthSourceVoice == nullptr || !this->m_isMusicStarted)
+	{
+		return;
+	}
+
+	HRESULT hr = this->m_synthSourceVoice->Start();
+	if FAILED(hr)
+	{
+		this->m_engineExperiencedCriticalError = true;
+		return;
+	}
+
+	XAUDIO2_VOICE_STATE state = { 0 };
+	this->m_synthSourceVoice->GetState(&state, XAUDIO2_VOICE_NOSAMPLESPLAYED);
+	if (state.BuffersQueued == 0)
+	{
+		this->m_synthSourceVoice->SubmitSourceBuffer(&this->m_synthBuffer);
+	}
 }
 
 void Audio::PlaySoundEffect(SoundEvent sound)
@@ -757,6 +856,7 @@ void Audio::SuspendSfx()
 	if (this->m_isSfxStarted)
 	{
 		this->m_soundEffectEngine->StopEngine();
+		this->m_synthEngine->StopEngine();
 		this->m_isSfxPaused = true;
 	}
 }
@@ -791,13 +891,21 @@ void Audio::ResumeSfx()
 		return;
 	}
 
-	HRESULT hr = this->m_soundEffectEngine->StartEngine();
+	HRESULT hr = this->m_synthEngine->StartEngine();
 	if (FAILED(hr))
 	{
 		this->m_engineExperiencedCriticalError = true;
 	}
-	else
-	{
-		this->m_isSfxPaused = false;
+	else {
+
+		HRESULT hr = this->m_soundEffectEngine->StartEngine();
+		if (FAILED(hr))
+		{
+			this->m_engineExperiencedCriticalError = true;
+		}
+		else
+		{
+			this->m_isSfxPaused = false;
+		}
 	}
 }

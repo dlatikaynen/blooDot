@@ -1421,6 +1421,7 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 		this->m_deferredResourcesReady = true;
 		this->SwallowKeyPress();
 		this->SetGameState(GameState::MainMenu);
+		this->m_loadScreen->ResourceLoadingCompleted();
 		return;
 	}
 	

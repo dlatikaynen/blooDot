@@ -21,6 +21,7 @@ public:
     void ReleaseDeviceDependentResources();
 
     void UpdateForWindowSizeChange();
+	void ResourceLoadingCompleted();
 
 	void Update(float timeTotal, float timeDelta);
 	void Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 pointerPosition);
@@ -54,4 +55,5 @@ private:
 	GameOfLifeSprinkler*							m_Sprinkler;
 	std::shared_ptr<SynthOfLife>					m_Synthesizer;
 	std::shared_ptr<SynthSequence>					m_synthSequence;
+	bool											m_resourceLoadingCompleted;
 };
