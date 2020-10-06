@@ -7,7 +7,7 @@ https://sites.google.com/view/bloodot
 News: Leverage your WiiU Pro and Nintendo Switch Controllers to play on a PC running Windows 10 via Bluetooth using this excellent driver library, which maps the Nintendo controllers to XInput (Xbox works anyway, out of the box):    
 http://www.wiinupro.com/
 
-Development
+[Development](#readme)
 
  - Lukas "PommesFritz03": worldbuilding, gameplay, design, graphics
  - Daniel "dlatikay": maths, physics, algorithms
