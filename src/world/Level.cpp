@@ -590,7 +590,6 @@ void Level::DesignSaveToFile(Platform::String^ fileName)
 
 bool Level::DesignLoadFromFile(Platform::String^ fileName)
 {
-	BasicReaderWriter^ basicReaderWriter;
 	size_t offset = 0L;
 	std::ifstream iF;
 	iF.open(fileName->Data(), ios_base::in | ios_base::binary);

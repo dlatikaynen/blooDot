@@ -339,6 +339,9 @@
     <ClCompile Include="..\src\physics\Collision.cpp" />
     <ClCompile Include="..\src\io\DDSTextureLoader.cpp" />
     <ClCompile Include="..\src\dx\DeviceResources.cpp" />
+    <ClCompile Include="..\src\sound\orchester\AudioFrames.cpp" />
+    <ClCompile Include="..\src\sound\orchester\Orchestrator.cpp" />
+    <ClCompile Include="..\src\sound\orchester\OrchestratorBase.cpp" />
     <ClCompile Include="..\src\sound\SynthOfLife.cpp" />
     <ClCompile Include="..\src\sound\SynthPrimitive.cpp" />
     <ClCompile Include="..\src\sound\SynthSequence.cpp" />
@@ -404,6 +407,11 @@
     <ClInclude Include="..\src\io\DDSTextureLoader.h" />
     <ClInclude Include="..\src\dx\DeviceResources.h" />
     <ClInclude Include="..\src\dx\DirectXHelper.h" />
+    <ClInclude Include="..\src\sound\orchester\AudioFrames.h" />
+    <ClInclude Include="..\src\sound\orchester\Orchestrator.h" />
+    <ClInclude Include="..\src\sound\orchester\OrchestratorBase.h" />
+    <ClInclude Include="..\src\sound\orchester\OrchestratorException.h" />
+    <ClInclude Include="..\src\sound\orchester\Synthesizer.h" />
     <ClInclude Include="..\src\sound\SynthOfLife.h" />
     <ClInclude Include="..\src\sound\SynthPrimitive.h" />
     <ClInclude Include="..\src\sound\SynthSequence.h" />

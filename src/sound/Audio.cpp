@@ -17,6 +17,7 @@ void  _stdcall AudioEngineCallbacks::OnCriticalError(HRESULT Error)
 Audio::Audio()
 {
 	this->m_currentBuffer = 0;
+	this->m_currentSynthBuffer = 0;
 	this->m_engineExperiencedCriticalError = false;
 	this->m_isMusicStarted = false;
 	this->m_isSfxStarted = false;
@@ -34,6 +35,7 @@ Audio::Audio()
 	this->m_soundEffectReverbVoiceLargeRoom = nullptr;
 	this->m_musicReverbVoiceSmallRoom = nullptr;
 	this->m_musicReverbVoiceLargeRoom = nullptr;
+	this->m_synthPlaying = false;
 }
 
 Audio::~Audio()
@@ -111,6 +113,7 @@ void Audio::Initialize()
     }
 
     ZeroMemory(this->m_audioBuffers, sizeof(this->m_audioBuffers));
+	ZeroMemory(this->m_synthBuffers, sizeof(this->m_synthBuffers));
 }
 
 void Audio::SetRoomSize(float roomSize, float* wallDistances)
@@ -311,7 +314,7 @@ void Audio::CreateResources()
 		this->m_synthEngine->RegisterForCallbacks(&this->m_synthCallback);
 		DX::ThrowIfFailed
 		(
-			this->m_synthEngine->CreateMasteringVoice(&m_synthMasteringVoice, 1, 48000, 0, nullptr, nullptr, AudioCategory_GameMedia)
+			this->m_synthEngine->CreateMasteringVoice(&m_synthMasteringVoice, 1, 22050, 0, nullptr, nullptr, AudioCategory_GameMedia)
 		);
 
 		XAUDIO2_SEND_DESCRIPTOR synthDescriptors[1];
@@ -322,8 +325,12 @@ void Audio::CreateResources()
 		synthSends.pSends = synthDescriptors;
 		WAVEFORMATEX synthFormat;
 		synthFormat.nChannels = 1;
-		//synthFormat.
-		synthFormat.cbSize = sizeof(WAVEFORMATEX);
+		synthFormat.wBitsPerSample = 8;
+		synthFormat.nSamplesPerSec = 22050;
+		synthFormat.nAvgBytesPerSec = 22050;
+		synthFormat.nBlockAlign = (synthFormat.nChannels * synthFormat.wBitsPerSample) / 8;
+		synthFormat.wFormatTag = WAVE_FORMAT_PCM;
+		synthFormat.cbSize = 0; /* this is extra bytes, not size of the struct */
 		DX::ThrowIfFailed
 		(
 			this->m_synthEngine->CreateSourceVoice(
@@ -341,20 +348,6 @@ void Audio::CreateResources()
 		(
 			this->m_synthMasteringVoice->SetVolume(0.9f)
 		);
-
-		auto synthData = new byte[100];
-		for (int i = 0; i < 100; ++i) synthData[i] = 255 - i;
-
-		ZeroMemory(&this->m_synthBuffer, sizeof(this->m_synthBuffer));
-		this->m_synthBuffer.AudioBytes = 100;
-		this->m_synthBuffer.pAudioData = synthData;
-		this->m_synthBuffer.pContext = this;
-		this->m_synthBuffer.Flags = XAUDIO2_END_OF_STREAM;
-		this->m_synthBuffer.LoopCount = 0;
-		DX::ThrowIfFailed
-		(
-			this->m_synthSourceVoice->SubmitSourceBuffer(&m_synthBuffer)
-		);
 	}
     catch (...)
     {
@@ -367,7 +360,8 @@ void Audio::CreateReverb(IXAudio2* engine, IXAudio2MasteringVoice* masteringVoic
     XAUDIO2_EFFECT_DESCRIPTOR soundEffectdescriptor;
     XAUDIO2_EFFECT_CHAIN soundEffectChain;
     Microsoft::WRL::ComPtr<IUnknown> soundEffectXAPO;
-    DX::ThrowIfFailed(
+    DX::ThrowIfFailed
+	(
         XAudio2CreateReverb(&soundEffectXAPO)
     );
 
@@ -376,27 +370,32 @@ void Audio::CreateReverb(IXAudio2* engine, IXAudio2MasteringVoice* masteringVoic
     soundEffectdescriptor.pEffect = soundEffectXAPO.Get();
     soundEffectChain.EffectCount = 1;
     soundEffectChain.pEffectDescriptors = &soundEffectdescriptor;
-    DX::ThrowIfFailed(
+    DX::ThrowIfFailed
+	(
         engine->CreateSubmixVoice(newSubmix, 2, 48000, 0, 0, nullptr, &soundEffectChain)
     );
 
-    DX::ThrowIfFailed(
+    DX::ThrowIfFailed
+	(
         (*newSubmix)->SetEffectParameters(0, parameters, sizeof(m_reverbParametersSmall))
     );
 
     if (enableEffect)
     {
-        DX::ThrowIfFailed(
+        DX::ThrowIfFailed
+		(
             (*newSubmix)->EnableEffect(0)
         );
     }
 
-    DX::ThrowIfFailed(
+    DX::ThrowIfFailed
+	(
         (*newSubmix)->SetVolume (1.0f)
     );
 
     float outputMatrix[4] = {0, 0, 0, 0};
-    DX::ThrowIfFailed(
+    DX::ThrowIfFailed
+	(
         (*newSubmix)->SetOutputMatrix(masteringVoice, 2, 2, outputMatrix)
     );
 }
@@ -530,6 +529,11 @@ void Audio::ReleaseResources()
         this->m_musicSourceVoice->DestroyVoice();
     }
 
+	if (this->m_synthSourceVoice != nullptr)
+	{
+		this->m_synthSourceVoice->DestroyVoice();
+	}
+
     if (this->m_soundEffectReverbVoiceSmallRoom != nullptr)
     {
         this->m_soundEffectReverbVoiceSmallRoom->DestroyVoice();
@@ -575,6 +579,7 @@ void Audio::ReleaseResources()
         this->m_soundEffectMasteringVoice->DestroyVoice();
     }
 
+	this->m_synthSourceVoice = nullptr;
 	this->m_musicSourceVoice = nullptr;
 	this->m_musicMasteringVoice = nullptr;
 	this->m_soundEffectMasteringVoice = nullptr;
@@ -612,7 +617,7 @@ void Audio::Start()
 // on a separate thread that is not synced to the main render loop of the game.
 void Audio::Render()
 {
-    if (m_engineExperiencedCriticalError)
+    if (this->m_engineExperiencedCriticalError)
     {
         this->m_engineExperiencedCriticalError = false;
         this->ReleaseResources();
@@ -636,61 +641,56 @@ void Audio::Render()
         this->m_musicSourceVoice->GetState(&state);
         while (state.BuffersQueued <= MAX_BUFFER_COUNT - 1)
         {
-            streamComplete = m_musicStreamer.GetNextBuffer(
-                m_audioBuffers[m_currentBuffer],
+            streamComplete = this->m_musicStreamer.GetNextBuffer
+			(
+                this->m_audioBuffers[m_currentBuffer],
                 STREAMING_BUFFER_SIZE,
                 &bufferLength
-                );
+            );
 
             if (bufferLength > 0)
             {
                 buf.AudioBytes = bufferLength;
-                buf.pAudioData = m_audioBuffers[m_currentBuffer];
-                buf.Flags = (streamComplete) ? XAUDIO2_END_OF_STREAM : 0;
+                buf.pAudioData = this->m_audioBuffers[m_currentBuffer];
+                buf.Flags = streamComplete ? XAUDIO2_END_OF_STREAM : 0;
                 buf.pContext = 0;
-                DX::ThrowIfFailed(
-                    m_musicSourceVoice->SubmitSourceBuffer(&buf)
-                    );
+                DX::ThrowIfFailed
+				(
+                    this->m_musicSourceVoice->SubmitSourceBuffer(&buf)
+                );
 
-                m_currentBuffer++;
-                m_currentBuffer %= MAX_BUFFER_COUNT;
+                this->m_currentBuffer++;
+                this->m_currentBuffer %= MAX_BUFFER_COUNT;
             }
 
             if (streamComplete)
             {
-                // Loop the stream.
-                m_musicStreamer.Restart();
+                // loop the stream
+                this->m_musicStreamer.Restart();
                 break;
             }
 
-            m_musicSourceVoice->GetState(&state);
+            this->m_musicSourceVoice->GetState(&state);
         }
-    }
+	}
     catch (...)
     {
-        m_engineExperiencedCriticalError = true;
+        this->m_engineExperiencedCriticalError = true;
     }
 }
 
 void Audio::PlaySynth()
 {
-	if (this->m_synthSourceVoice == nullptr || !this->m_isMusicStarted)
+	if (!this->m_synthPlaying)
 	{
-		return;
-	}
+		HRESULT hr = this->m_synthSourceVoice->Start();
+		if FAILED(hr)
+		{
+			this->m_engineExperiencedCriticalError = true;
+			return;
+		}
 
-	HRESULT hr = this->m_synthSourceVoice->Start();
-	if FAILED(hr)
-	{
-		this->m_engineExperiencedCriticalError = true;
-		return;
-	}
-
-	XAUDIO2_VOICE_STATE state = { 0 };
-	this->m_synthSourceVoice->GetState(&state, XAUDIO2_VOICE_NOSAMPLESPLAYED);
-	if (state.BuffersQueued == 0)
-	{
-		this->m_synthSourceVoice->SubmitSourceBuffer(&this->m_synthBuffer);
+		this->m_synthPlaying = true;
 	}
 }
 

@@ -137,6 +137,10 @@ public:
 	void SetRoomSize(float roomSize, float* wallDistances);
 	void PlaySynth();
 
+	IXAudio2SourceVoice*		m_synthSourceVoice;
+	byte						m_synthBuffers[MAX_BUFFER_COUNT][STREAMING_BUFFER_SIZE];
+	uint32                      m_currentSynthBuffer;
+
 private:
     IXAudio2*                   m_musicEngine;
     IXAudio2*                   m_soundEffectEngine;
@@ -144,14 +148,13 @@ private:
     IXAudio2MasteringVoice*     m_musicMasteringVoice;
     IXAudio2MasteringVoice*     m_soundEffectMasteringVoice;
 	IXAudio2MasteringVoice*     m_synthMasteringVoice;
-	IXAudio2SourceVoice*		m_synthSourceVoice;
-	XAUDIO2_BUFFER              m_synthBuffer;
+	bool						m_synthPlaying;
 	IXAudio2SourceVoice*        m_musicSourceVoice;
     StreamingVoiceContext       m_voiceContext;
     byte                        m_audioBuffers[MAX_BUFFER_COUNT][STREAMING_BUFFER_SIZE];
     MediaStreamer               m_musicStreamer;
     uint32                      m_currentBuffer;
-    SoundEffectData             m_soundEffects[SOUND_EVENTS];
+	SoundEffectData             m_soundEffects[SOUND_EVENTS];
     XAUDIO2FX_REVERB_PARAMETERS m_reverbParametersLarge;
     XAUDIO2FX_REVERB_PARAMETERS m_reverbParametersSmall;
     IXAudio2SubmixVoice*        m_soundEffectReverbVoiceSmallRoom;

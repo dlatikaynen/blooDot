@@ -1,5 +1,6 @@
 #include "..\PreCompiledHeaders.h"
 #include "Audio.h"
+#include "orchester/Orchestrator.h"
 
 #pragma once
 
@@ -40,6 +41,7 @@ namespace blooDot
 		void Source(std::shared_ptr<PIECE_OF_MUSIC> entirePiece);
 		void Update(float timeTotal, float timeDelta);
 		void Render();
+		bool GetNextBuffer(uint8* buffer, uint32 maxBufferSize, uint32* bufferLength);
 
 	private:
 		std::shared_ptr<Audio>			m_audioEngine;
@@ -47,5 +49,8 @@ namespace blooDot
 		PIECE_OF_MUSIC					m_currentlyPlaying;
 		int								m_minBarIndex;
 		float							m_timeStarted;
+		Orchestrator::Orchestrator*		m_Orchestrator;
+		std::vector<int>				m_Melody;
+		std::vector<int>::iterator		m_Note;
 	};
 }
