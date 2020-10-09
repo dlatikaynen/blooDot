@@ -210,6 +210,9 @@
     <ClCompile Include="..\src\sound\orchester\Orchestrator.cpp">
       <Filter>audio\orchester</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\sound\orchester\Pipeline.cpp">
+      <Filter>audio\orchester\Pipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
@@ -397,6 +400,9 @@
     </ClInclude>
     <ClInclude Include="..\src\sound\orchester\Synthesizer.h">
       <Filter>audio\orchester</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sound\orchester\Pipeline.h">
+      <Filter>audio\orchester\Pipelines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -719,6 +725,12 @@
     </Filter>
     <Filter Include="audio\orchester">
       <UniqueIdentifier>{1213e7ab-df39-4d8f-ba03-47b19b48e2ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="audio\orchester\Pipelines">
+      <UniqueIdentifier>{15bc05b7-85b0-46a5-999e-53783c447862}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="audio\orchester\Soundshapers">
+      <UniqueIdentifier>{4c3387f7-5a00-444b-bafa-cbb660858ac3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

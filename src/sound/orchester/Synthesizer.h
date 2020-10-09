@@ -31,7 +31,7 @@ namespace blooDot
 		inline void Synthesizer::SetFreq(double frequency)
 		{
 			/* pure virtual function call */
-			HandleException(OrchestratorExceptionType::WARNING);
+			HandleException(OrchestratorExceptionType::WARNING_MESSAGE);
 		}
 
 		inline double Synthesizer::LastOut(unsigned int channel)
@@ -41,7 +41,7 @@ namespace blooDot
 
 		inline void Synthesizer::SetCtrl(int number, double value)
 		{			
-			HandleException(OrchestratorExceptionType::WARNING);
+			HandleException(OrchestratorExceptionType::WARNING_MESSAGE);
 		}
 	}
 }

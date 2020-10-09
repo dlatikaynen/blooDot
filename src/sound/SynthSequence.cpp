@@ -105,7 +105,7 @@ bool SynthSequence::GetNextBuffer(uint8* buffer, uint32 maxBufferSize, uint32* b
 
 	for (unsigned i = 0; i < maxBufferSize; ++i)
 	{
-		sample = 100.f * this->m_Orchestrator->Render();
+		sample = static_cast<float>(100. * this->m_Orchestrator->Render());
 		buffer[i] = static_cast<uint8>(sample);
 	}
 

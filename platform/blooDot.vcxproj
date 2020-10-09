@@ -342,6 +342,7 @@
     <ClCompile Include="..\src\sound\orchester\AudioFrames.cpp" />
     <ClCompile Include="..\src\sound\orchester\Orchestrator.cpp" />
     <ClCompile Include="..\src\sound\orchester\OrchestratorBase.cpp" />
+    <ClCompile Include="..\src\sound\orchester\Pipeline.cpp" />
     <ClCompile Include="..\src\sound\SynthOfLife.cpp" />
     <ClCompile Include="..\src\sound\SynthPrimitive.cpp" />
     <ClCompile Include="..\src\sound\SynthSequence.cpp" />
@@ -411,6 +412,7 @@
     <ClInclude Include="..\src\sound\orchester\Orchestrator.h" />
     <ClInclude Include="..\src\sound\orchester\OrchestratorBase.h" />
     <ClInclude Include="..\src\sound\orchester\OrchestratorException.h" />
+    <ClInclude Include="..\src\sound\orchester\Pipeline.h" />
     <ClInclude Include="..\src\sound\orchester\Synthesizer.h" />
     <ClInclude Include="..\src\sound\SynthOfLife.h" />
     <ClInclude Include="..\src\sound\SynthPrimitive.h" />

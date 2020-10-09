@@ -122,7 +122,7 @@ namespace blooDot
 
 		void OrchestratorBase::Sleep(unsigned long milliseconds)
 		{
-			Sleep((DWORD)milliseconds);
+			::Sleep((DWORD)milliseconds);
 		}
 
 		void OrchestratorBase::HandleException(OrchestratorExceptionType type) const
@@ -139,7 +139,7 @@ namespace blooDot
 
 		void OrchestratorBase::HandleException(std::string message, OrchestratorExceptionType type)
 		{
-			if (type == OrchestratorExceptionType::WARNING || type == OrchestratorExceptionType::STATUS)
+			if (type == OrchestratorExceptionType::WARNING_MESSAGE || type == OrchestratorExceptionType::STATUS_INFO)
 			{
 				if (!m_showWarnings)
 				{
@@ -148,7 +148,7 @@ namespace blooDot
 
 				std::cerr << '\n' << message << '\n' << std::endl;
 			}
-			else if (type == OrchestratorExceptionType::DEBUG_PRINT)
+			else if (type == OrchestratorExceptionType::VERBOSE_DEBUG)
 			{
 #ifdef DEBUG
 				std::cerr << '\n' << message << '\n' << std::endl;

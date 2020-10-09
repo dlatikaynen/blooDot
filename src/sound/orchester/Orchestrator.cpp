@@ -88,31 +88,31 @@ namespace blooDot
 				}
 			}
 
-			int voice = -1;
+			int sourceIndex = -1;
 			for (i = 0; i < this->m_synthesizerSources.size(); i++)
 			{
 				if (this->m_synthesizerSources[i].group == group)
 				{
-					if (voice == -1)
+					if (sourceIndex == -1)
 					{
-						voice = i;
+						sourceIndex = i;
 					}
-					else if (this->m_synthesizerSources[i].tag < this->m_synthesizerSources[voice].tag)
+					else if (this->m_synthesizerSources[i].tag < this->m_synthesizerSources[sourceIndex].tag)
 					{
-						voice = (int)i;
+						sourceIndex = static_cast<int>(i);
 					}
 				}
 			}
 
-			if (voice >= 0)
+			if (sourceIndex >= 0)
 			{
-				this->m_synthesizerSources[voice].tag = this->m_Tags++;
-				this->m_synthesizerSources[voice].group = group;
-				this->m_synthesizerSources[voice].midiNoteNumber = midiNoteNumber;
-				this->m_synthesizerSources[voice].freq = freq;
-				this->m_synthesizerSources[voice].synthesizer->Start(freq, amplitude * INVERSE_HALFBYTE);
-				this->m_synthesizerSources[voice].isSounding = 1;
-				return this->m_synthesizerSources[voice].tag;
+				this->m_synthesizerSources[sourceIndex].tag = this->m_Tags++;
+				this->m_synthesizerSources[sourceIndex].group = group;
+				this->m_synthesizerSources[sourceIndex].midiNoteNumber = midiNoteNumber;
+				this->m_synthesizerSources[sourceIndex].freq = freq;
+				this->m_synthesizerSources[sourceIndex].synthesizer->Start(freq, amplitude * INVERSE_HALFBYTE);
+				this->m_synthesizerSources[sourceIndex].isSounding = 1;
+				return this->m_synthesizerSources[sourceIndex].tag;
 			}
 
 			return -1;
