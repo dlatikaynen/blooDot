@@ -340,6 +340,8 @@
     <ClCompile Include="..\src\io\DDSTextureLoader.cpp" />
     <ClCompile Include="..\src\dx\DeviceResources.cpp" />
     <ClCompile Include="..\src\sound\orchester\AudioFrames.cpp" />
+    <ClCompile Include="..\src\sound\orchester\DelayLineFilter.cpp" />
+    <ClCompile Include="..\src\sound\orchester\DelayLineLinear.cpp" />
     <ClCompile Include="..\src\sound\orchester\EnvelopeSource.cpp" />
     <ClCompile Include="..\src\sound\orchester\FrameSource.cpp" />
     <ClCompile Include="..\src\sound\orchester\Orchestrator.cpp" />
@@ -412,6 +414,8 @@
     <ClInclude Include="..\src\dx\DeviceResources.h" />
     <ClInclude Include="..\src\dx\DirectXHelper.h" />
     <ClInclude Include="..\src\sound\orchester\AudioFrames.h" />
+    <ClInclude Include="..\src\sound\orchester\DelayLineFilter.h" />
+    <ClInclude Include="..\src\sound\orchester\DelayLineLinear.h" />
     <ClInclude Include="..\src\sound\orchester\EnvelopeSource.h" />
     <ClInclude Include="..\src\sound\orchester\FrameSource.h" />
     <ClInclude Include="..\src\sound\orchester\Orchestrator.h" />

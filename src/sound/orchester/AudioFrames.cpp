@@ -161,5 +161,25 @@ namespace blooDot
 
 			return output;
 		}
+
+		unsigned int AudioFrames::Channels(void) const
+		{
+			return this->m_nChannels;
+		}
+
+		unsigned int AudioFrames::Frames(void) const
+		{
+			return (unsigned int)this->m_nFrames;
+		}
+
+		void AudioFrames::SetDataRate(double rate)
+		{
+			this->m_dataRate = rate;
+		}
+
+		double AudioFrames::DataRate(void) const
+		{
+			return this->m_dataRate;
+		}
 	}
 }

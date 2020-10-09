@@ -34,18 +34,18 @@ namespace blooDot
 			void Resize(size_t nFrames, unsigned int nChannels, double value);
 			AudioFrames& GetChannel(unsigned int channel, AudioFrames& destinationFrames, unsigned int destinationChannel) const;
 			void SetChannel(unsigned int channel, const AudioFrames &sourceFrames, unsigned int sourceChannel);
-			unsigned int Channels(void) const { return this->m_nChannels; };
-			unsigned int Frames(void) const { return (unsigned int)this->m_nFrames; };
-			void SetDataRate(double rate) { this->m_dataRate = rate; };
-			double DataRate(void) const { return this->m_dataRate; };
+			unsigned int Channels(void) const;
+			unsigned int Frames(void) const;
+			void SetDataRate(double rate);
+			double DataRate(void) const;
 
 		private:
-			double *m_Data;
-			double m_dataRate;
-			size_t m_nFrames;
-			unsigned int m_nChannels;
-			size_t m_Size;
-			size_t m_bufferSize;
+			double*			m_Data;
+			double			m_dataRate;
+			size_t			m_nFrames;
+			unsigned int	m_nChannels;
+			size_t			m_Size;
+			size_t			m_bufferSize;
 		};
 
 		inline bool AudioFrames::Empty() const
