@@ -18,7 +18,7 @@ namespace blooDot
 
 			unsigned int GetChannelsIn(void) const;
 			unsigned int GetChannelsOut(void) const;
-			virtual void Clear(void);
+			virtual void Reset(void);
 			void SetGain(double gain);
 			double GetGain(void) const;
 			double GetPhaseDelay(double frequency);

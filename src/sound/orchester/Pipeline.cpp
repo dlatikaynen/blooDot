@@ -36,7 +36,7 @@ namespace blooDot
 			return this->m_lastFrame;
 		}
 
-		inline void Pipeline::Clear(void)
+		inline void Pipeline::Reset(void)
 		{
 			unsigned int i;
 			for (i = 0; i < this->m_Inputs.Size(); ++i)

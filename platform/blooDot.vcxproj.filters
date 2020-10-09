@@ -213,19 +213,25 @@
     <ClCompile Include="..\src\sound\orchester\Pipeline.cpp">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\FrameSource.cpp">
-      <Filter>audio\orchester\Pipelines</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\EnvelopeSource.cpp">
-      <Filter>audio\orchester\Pipelines</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\RampSource.cpp">
-      <Filter>audio\orchester\Pipelines</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\sound\orchester\DelayLineFilter.cpp">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClCompile>
     <ClCompile Include="..\src\sound\orchester\DelayLineLinear.cpp">
+      <Filter>audio\orchester\Pipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sound\orchester\EnvelopeSource.cpp">
+      <Filter>audio\orchester\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sound\orchester\FrameSource.cpp">
+      <Filter>audio\orchester\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sound\orchester\RampSource.cpp">
+      <Filter>audio\orchester\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sound\orchester\RandomSource.cpp">
+      <Filter>audio\orchester\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sound\orchester\NoiseGate.cpp">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClCompile>
   </ItemGroup>
@@ -419,19 +425,25 @@
     <ClInclude Include="..\src\sound\orchester\Pipeline.h">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\FrameSource.h">
-      <Filter>audio\orchester\Pipelines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\EnvelopeSource.h">
-      <Filter>audio\orchester\Pipelines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\RampSource.h">
-      <Filter>audio\orchester\Pipelines</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\sound\orchester\DelayLineFilter.h">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClInclude>
     <ClInclude Include="..\src\sound\orchester\DelayLineLinear.h">
+      <Filter>audio\orchester\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sound\orchester\EnvelopeSource.h">
+      <Filter>audio\orchester\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sound\orchester\FrameSource.h">
+      <Filter>audio\orchester\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sound\orchester\RampSource.h">
+      <Filter>audio\orchester\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sound\orchester\RandomSource.h">
+      <Filter>audio\orchester\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sound\orchester\NoiseGate.h">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClInclude>
   </ItemGroup>
@@ -761,6 +773,9 @@
     </Filter>
     <Filter Include="audio\orchester\Soundshapers">
       <UniqueIdentifier>{4c3387f7-5a00-444b-bafa-cbb660858ac3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="audio\orchester\Sources">
+      <UniqueIdentifier>{7061f0e9-b9f5-4269-bdf8-52ad7b70e8f3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

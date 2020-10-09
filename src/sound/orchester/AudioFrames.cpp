@@ -154,7 +154,7 @@ namespace blooDot
 			double output;
 			iIndex = iIndex * this->m_nChannels + channel;
 			output = this->m_Data[iIndex];
-			if (alpha > 0.0)
+			if (alpha > 0.)
 			{
 				output += (alpha * (this->m_Data[iIndex + this->m_nChannels] - output));
 			}
