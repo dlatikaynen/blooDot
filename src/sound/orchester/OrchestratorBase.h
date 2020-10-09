@@ -72,6 +72,7 @@ namespace blooDot
 		typedef double FLOAT64;
 
 		const double PI = 3.14159265358979323846;
+		const double PI_2 = 6.28318530717958647692;
 		const double SAMPLE_RATE = 22050.0;
 		const double INVERSE_HALFBYTE = 0.0078125;
 	}
