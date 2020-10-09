@@ -6,7 +6,7 @@ namespace blooDot
 {
 	namespace Orchestrator
 	{
-		AudioFrames::AudioFrames(unsigned int nFrames, unsigned int nChannels) : 
+		AudioFrames::AudioFrames(unsigned int nFrames, unsigned int nChannels) :
 			m_Data(0),
 			m_nFrames(nFrames),
 			m_nChannels(nChannels)
