@@ -340,6 +340,7 @@
     <ClCompile Include="..\src\io\DDSTextureLoader.cpp" />
     <ClCompile Include="..\src\dx\DeviceResources.cpp" />
     <ClCompile Include="..\src\sound\orchester\AudioFrames.cpp" />
+    <ClCompile Include="..\src\sound\orchester\FrameSource.cpp" />
     <ClCompile Include="..\src\sound\orchester\Orchestrator.cpp" />
     <ClCompile Include="..\src\sound\orchester\OrchestratorBase.cpp" />
     <ClCompile Include="..\src\sound\orchester\Pipeline.cpp" />
@@ -409,6 +410,7 @@
     <ClInclude Include="..\src\dx\DeviceResources.h" />
     <ClInclude Include="..\src\dx\DirectXHelper.h" />
     <ClInclude Include="..\src\sound\orchester\AudioFrames.h" />
+    <ClInclude Include="..\src\sound\orchester\FrameSource.h" />
     <ClInclude Include="..\src\sound\orchester\Orchestrator.h" />
     <ClInclude Include="..\src\sound\orchester\OrchestratorBase.h" />
     <ClInclude Include="..\src\sound\orchester\OrchestratorException.h" />

@@ -213,6 +213,9 @@
     <ClCompile Include="..\src\sound\orchester\Pipeline.cpp">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\sound\orchester\FrameSource.cpp">
+      <Filter>audio\orchester\Pipelines</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
@@ -402,6 +405,9 @@
       <Filter>audio\orchester</Filter>
     </ClInclude>
     <ClInclude Include="..\src\sound\orchester\Pipeline.h">
+      <Filter>audio\orchester\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sound\orchester\FrameSource.h">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClInclude>
   </ItemGroup>
