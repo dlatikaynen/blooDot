@@ -1,8 +1,11 @@
+#pragma once
+
 #include "..\PreCompiledHeaders.h"
 #include "Audio.h"
-#include "orchester/Orchestrator.h"
-
-#pragma once
+//#include "orchester\OrchestratorBase.h"
+#include "orchester\Orchestrator.h"
+//#include "orchester\Synthesizer.h"
+#include "orchester\StringShape.h"
 
 namespace blooDot
 {
@@ -49,7 +52,8 @@ namespace blooDot
 		PIECE_OF_MUSIC					m_currentlyPlaying;
 		int								m_minBarIndex;
 		float							m_timeStarted;
-		Orchestrator::Orchestrator*		m_Orchestrator;
+		blooDot::Orchestrator::Orchestrator*		m_Orchestrator;
+		blooDot::Orchestrator::StringShape*			m_Pluckable;
 		std::vector<int>				m_Melody;
 		std::vector<int>::iterator		m_Note;
 	};

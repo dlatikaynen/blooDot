@@ -22,12 +22,12 @@ namespace blooDot
 			}
 		}
 
-		inline double RandomSource::Render(void)
+		double RandomSource::Render(void)
 		{
 			return this->m_lastFrame[0] = static_cast<double>(2. * ::rand() / (RAND_MAX + 1.) - 1.);
 		}
 
-		inline AudioFrames& RandomSource::Render(AudioFrames& frames, unsigned int channel)
+		AudioFrames& RandomSource::Render(AudioFrames& frames, unsigned int channel)
 		{
 			auto *samples = &frames[channel];
 			auto stride = frames.Channels();

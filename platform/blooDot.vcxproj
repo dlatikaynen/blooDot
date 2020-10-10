@@ -351,6 +351,7 @@
     <ClCompile Include="..\src\sound\orchester\RampSource.cpp" />
     <ClCompile Include="..\src\sound\orchester\RandomSource.cpp" />
     <ClCompile Include="..\src\sound\orchester\SecondOrder.cpp" />
+    <ClCompile Include="..\src\sound\orchester\StringShape.cpp" />
     <ClCompile Include="..\src\sound\SynthOfLife.cpp" />
     <ClCompile Include="..\src\sound\SynthPrimitive.cpp" />
     <ClCompile Include="..\src\sound\SynthSequence.cpp" />
@@ -429,6 +430,7 @@
     <ClInclude Include="..\src\sound\orchester\RampSource.h" />
     <ClInclude Include="..\src\sound\orchester\RandomSource.h" />
     <ClInclude Include="..\src\sound\orchester\SecondOrder.h" />
+    <ClInclude Include="..\src\sound\orchester\StringShape.h" />
     <ClInclude Include="..\src\sound\orchester\Synthesizer.h" />
     <ClInclude Include="..\src\sound\SynthOfLife.h" />
     <ClInclude Include="..\src\sound\SynthPrimitive.h" />

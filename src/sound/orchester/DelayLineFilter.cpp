@@ -118,7 +118,7 @@ namespace blooDot
 			return this->m_lastFrame[0];
 		}
 
-		inline double DelayLineFilter::GetNextOutput(void)
+		double DelayLineFilter::GetNextOutput(void)
 		{
 			if (this->m_enableNextOutput)
 			{
@@ -141,7 +141,7 @@ namespace blooDot
 			this->m_filterInput = 0.;
 		}
 
-		inline double DelayLineFilter::Render(double input)
+		double DelayLineFilter::Render(double input)
 		{
 			this->m_Inputs[m_inputIndex++] = input * this->m_Gain;
 			if (this->m_inputIndex == this->m_Inputs.Size())
@@ -160,7 +160,7 @@ namespace blooDot
 			return this->m_lastFrame[0];
 		}
 
-		inline AudioFrames& DelayLineFilter::Render(AudioFrames& frames, unsigned int channel)
+		AudioFrames& DelayLineFilter::Render(AudioFrames& frames, unsigned int channel)
 		{
 			double *samples = &frames[channel];
 			unsigned int stride = frames.Channels();
@@ -185,7 +185,7 @@ namespace blooDot
 			return frames;
 		}
 
-		inline AudioFrames& DelayLineFilter::Render(
+		AudioFrames& DelayLineFilter::Render(
 			AudioFrames& inputFrames,
 			AudioFrames& outputFrames,
 			unsigned int inputChannel,

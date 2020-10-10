@@ -28,10 +28,10 @@ namespace blooDot
 		protected:
 			void SetSampleRate(double newRate, double oldRate);
 
-			bool m_Status;
-			double m_Value;
-			double m_Speed;
-			double m_Bound;
+			bool	m_Status;
+			double	m_Value;
+			double	m_Speed;
+			double	m_Bound;
 		};
 	}
 }

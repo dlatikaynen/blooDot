@@ -98,7 +98,7 @@ namespace blooDot
 			}
 		}
 
-		inline double SecondOrder::Render(double input)
+		double SecondOrder::Render(double input)
 		{
 			this->m_Inputs[0] = this->m_Gain * input;
 			this->m_lastFrame[0] = this->m_pipelineB[0] * this->m_Inputs[0] + this->m_pipelineB[1] * this->m_Inputs[1] + this->m_pipelineB[2] * this->m_Inputs[2];
@@ -110,7 +110,7 @@ namespace blooDot
 			return this->m_lastFrame[0];
 		}
 
-		inline AudioFrames& SecondOrder::Render(AudioFrames& frames, unsigned int channel)
+		AudioFrames& SecondOrder::Render(AudioFrames& frames, unsigned int channel)
 		{
 			double *samples = &frames[channel];
 			unsigned int hop = frames.Channels();
@@ -128,7 +128,7 @@ namespace blooDot
 			return frames;
 		}
 
-		inline AudioFrames& SecondOrder::Render(
+		AudioFrames& SecondOrder::Render(
 			AudioFrames& inputFrames,
 			AudioFrames& outputFrames,
 			unsigned int inputChannel,

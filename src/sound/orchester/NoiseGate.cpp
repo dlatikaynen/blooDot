@@ -50,7 +50,7 @@ namespace blooDot
 			return this->m_lastFrame[0];
 		}
 
-		inline double NoiseGate::Render(double input)
+		double NoiseGate::Render(double input)
 		{
 			this->m_Inputs[0] = this->m_Gain * input;
 			this->m_lastFrame[0] = this->m_pipelineB[1] * this->m_Inputs[1] + this->m_pipelineB[0] * this->m_Inputs[0];
@@ -59,7 +59,7 @@ namespace blooDot
 			return this->m_lastFrame[0];
 		}
 
-		inline AudioFrames& NoiseGate::Render(AudioFrames& frames, unsigned int channel)
+		AudioFrames& NoiseGate::Render(AudioFrames& frames, unsigned int channel)
 		{
 			auto *samples = &frames[channel];
 			auto stride = frames.Channels();
@@ -74,7 +74,7 @@ namespace blooDot
 			return frames;
 		}
 
-		inline AudioFrames& NoiseGate::Render(
+		AudioFrames& NoiseGate::Render(
 			AudioFrames& inputFrames,
 			AudioFrames& outputFrames,
 			unsigned int inputChannel,

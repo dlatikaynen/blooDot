@@ -44,7 +44,7 @@ namespace blooDot
 			auto index = this->m_inputIndex - atTime - 1;
 			while (index < 0)
 			{
-				index += this->m_Inputs.Size();
+				index += static_cast<unsigned long>(this->m_Inputs.Size());
 			}
 
 			return this->m_Inputs[index];
@@ -55,13 +55,13 @@ namespace blooDot
 			auto index = this->m_inputIndex - atTime - 1;
 			while (index < 0)
 			{
-				index += this->m_Inputs.Size();
+				index += static_cast<unsigned long>(this->m_Inputs.Size());
 			}
 
 			this->m_Inputs[index] = value;
 		}
 
-		inline double DelayLineLinear::GetNextOutput(void)
+		double DelayLineLinear::GetNextOutput(void)
 		{
 			if (this->m_enableNextOutput)
 			{
@@ -81,7 +81,7 @@ namespace blooDot
 			return this->m_nextOutput;
 		}
 
-		inline void DelayLineLinear::SetDelay(double delay)
+		void DelayLineLinear::SetDelay(double delay)
 		{
 			if (delay < 0)
 			{
@@ -114,7 +114,17 @@ namespace blooDot
 			this->m_enableNextOutput = true;
 		}
 
-		inline double DelayLineLinear::Render(double input)
+		double DelayLineLinear::GetDelay(void) const
+		{
+			return this->m_Delay;
+		}
+
+		unsigned long DelayLineLinear::GetMaxDelay(void)
+		{
+			return static_cast<unsigned long>(this->m_Inputs.Size()) - 1;
+		}
+
+		double DelayLineLinear::Render(double input)
 		{
 			this->m_Inputs[this->m_inputIndex++] = input * this->m_Gain;
 			if (this->m_inputIndex == this->m_Inputs.Size())
@@ -132,7 +142,7 @@ namespace blooDot
 			return this->m_lastFrame[0];
 		}
 
-		inline AudioFrames& DelayLineLinear::Render(AudioFrames& frames, unsigned int channel)
+		AudioFrames& DelayLineLinear::Render(AudioFrames& frames, unsigned int channel)
 		{
 			double *samples = &frames[channel];
 			unsigned int stride = frames.Channels();
@@ -152,7 +162,7 @@ namespace blooDot
 			return frames;
 		}
 
-		inline AudioFrames& DelayLineLinear::Render(
+		AudioFrames& DelayLineLinear::Render(
 			AudioFrames& inputFrames,
 			AudioFrames& outputFrames,
 			unsigned int iChannel,
@@ -163,7 +173,7 @@ namespace blooDot
 			unsigned int inStride = inputFrames.Channels();
 			double *outFrames = &outputFrames[oChannel];
 			unsigned int outStride = outputFrames.Channels();
-			for (unsigned int i = 0; i < inputFrames.Frames(); i++, inFrames += inStride, outFrames += outStride)
+			for (unsigned int i = 0; i < inputFrames.Frames(); ++i, inFrames += inStride, outFrames += outStride)
 			{
 				this->m_Inputs[this->m_inputIndex++] = *inFrames * this->m_Gain;
 				if (this->m_inputIndex == this->m_Inputs.Size())
@@ -181,16 +191,6 @@ namespace blooDot
 
 			this->m_lastFrame[0] = *(outFrames - outStride);
 			return inputFrames;
-		}
-
-		double DelayLineLinear::GetDelay(void) const
-		{
-			return this->m_Delay;
-		}
-
-		unsigned long DelayLineLinear::GetMaxDelay(void)
-		{
-			return this->m_Inputs.Size() - 1;
 		}
 
 		double DelayLineLinear::GetLastOutput(void) const
