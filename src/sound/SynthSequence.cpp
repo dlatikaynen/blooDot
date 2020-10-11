@@ -50,6 +50,9 @@ void SynthSequence::Update(float timeTotal, float timeDelta)
 
 void SynthSequence::Render()
 {
+	return;
+
+
 	bool streamComplete;
 	XAUDIO2_VOICE_STATE state;
 	uint32 bufferLength;

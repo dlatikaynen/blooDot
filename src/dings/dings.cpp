@@ -507,7 +507,7 @@ void Dings::Rotate(ID2D1RenderTarget *rendEr, D2D1_RECT_F rect, float rotationAn
 
 D2D1_POINT_2U Dings::GetSheetPlacement(OrientabilityIndexRotatory rotationDent)
 {
-	return this->m_lookupSides[rotationDent];
+	return this->m_lookupViech[rotationDent];
 }
 
 inline OrientabilityIndexRotatory Dings::HeadingFromFacing(Facings orientationFacing)

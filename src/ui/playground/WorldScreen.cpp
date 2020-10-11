@@ -435,7 +435,7 @@ void WorldScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 
 void WorldScreen::RenderSprites()
 {
-	auto spriteMap = this->m_currentLevel->GetDingSheetBmp();
+	auto spriteMap = this->m_currentLevel->GetMobsSheetBmp();
 	for (auto mob = this->m_playerData.begin(); mob != this->m_playerData.end(); ++mob)
 	{
 		auto screenRect = D2D1::RectF(
@@ -446,7 +446,7 @@ void WorldScreen::RenderSprites()
 		);
 
 		this->m_d2dContext->DrawBitmap(
-			this->m_currentLevel->GetMobsSheetBmp(), 
+			spriteMap,
 			screenRect,
 			1.0f, 
 			D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, 
