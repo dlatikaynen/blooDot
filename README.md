@@ -11,7 +11,7 @@ http://www.wiinupro.com/
 
  - Lukas "PommesFritz03": worldbuilding, gameplay, design, graphics
  - Daniel "dlatikay": maths, physics, algorithms
- - Jonas "jlatikay": test and quality assurance
+ - Jonas "jlatikay": maps, code review, test and quality assurance
 
 ![](https://raw.githubusercontent.com/dlatikaynen/blooDot/master/bloodot.png)
 
