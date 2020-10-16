@@ -8,7 +8,7 @@ static const int MAX_BUFFER_COUNT = 3;
 
 enum SoundEvent
 {
-	RollingEvent		= 0,
+	NoSound				= 0,
 	FallingEvent		= 1,
 	CollisionEvent		= 2,
 	CheckpointEvent		= 3,

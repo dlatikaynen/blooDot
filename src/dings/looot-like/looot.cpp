@@ -8,7 +8,11 @@ Coin::Coin(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr
 	m_preferredLayer = Layers::Walls;
 	m_possibleLayers = Layers::Walls;
 	this->m_Behaviors = ObjectBehaviors::Takeable;
+}
 
+SoundEvent Coin::GetSoundOnTaken()
+{
+	return SoundEvent::Kaching;
 }
 
 void Coin::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
@@ -161,6 +165,11 @@ Lettuce::Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, std::shar
 Platform::String^ Lettuce::ShouldLoadFromBitmap()
 {
 	return L"lettuce.png";
+}
+
+SoundEvent Lettuce::GetSoundOnTaken()
+{
+	return SoundEvent::HitCrumble;
 }
 
 BarrelWooden::BarrelWooden(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::BarrelWood, "Wooden barrel", deviceResources, drawBrushes)

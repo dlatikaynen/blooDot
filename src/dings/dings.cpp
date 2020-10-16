@@ -744,3 +744,8 @@ Facings Dings::RotateFromFacing(Facings fromFacing, bool inverseDirection)
 		}
 	}
 }
+
+SoundEvent Dings::GetSoundOnTaken()
+{
+	return SoundEvent::NoSound;
+}

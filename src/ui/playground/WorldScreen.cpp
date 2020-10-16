@@ -99,7 +99,15 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 		{
 			if(collidedWith->m_Behaviors & ObjectBehaviors::Takeable)
 			{
-				this->m_audio->PlaySoundEffect(SoundEvent::Kaching);
+				auto collidingDing = collidedWith->GetDing();
+				if (collidingDing != nullptr)
+				{
+					auto collisionSound = collidingDing->GetSoundOnTaken();
+					if (collisionSound != SoundEvent::NoSound)
+					{
+						this->m_audio->PlaySoundEffect(collisionSound);
+					}
+				}
 				this->ObliterateObject(collidedWith->PositionSquare);
 			}
 		}

@@ -45,7 +45,7 @@ public:
 protected:
 	std::shared_ptr<Blocks>				m_blocksContainer;
 	std::shared_ptr<Dings>				m_Ding;
-	ObjectProperties*					m_objectProperties;
+	std::shared_ptr<ObjectProperties>	m_objectProperties;
 	Facings								m_Facing;
 	std::shared_ptr<Level>				m_Level;
 	D2D1_RECT_F							m_boundingBox;

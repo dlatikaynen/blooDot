@@ -6,6 +6,7 @@
 #include "..\dx\BrushRegistry.h"
 #include "..\io\BasicLoader.h"
 #include "..\world\Bounding.h"
+#include "..\sound\Audio.h"
 #include "ObjectBehaviors.h"
 
 // flagset bitfield. numeric ordering is relied upon
@@ -210,6 +211,7 @@ public:
 	Layers										GetPreferredLayer();
 	Facings										AvailableFacings();
 	ObjectBehaviors								GetInherentBehaviors();
+	virtual SoundEvent							GetSoundOnTaken();
 	bool										BoundingIsDefaultRect();
 	D2D1_RECT_F									GetBoundingOuterRim();
 	std::shared_ptr<Bounding>					GetBoundingInfo();
@@ -428,6 +430,7 @@ class Coin : public Dings
 public:
 	Coin(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 	void DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo) override;
+	SoundEvent GetSoundOnTaken() override;
 };
 
 class Chest : public Dings
@@ -465,6 +468,7 @@ public:
 	Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
+	SoundEvent GetSoundOnTaken() override;
 };
 
 class BarrelWooden : public Dings

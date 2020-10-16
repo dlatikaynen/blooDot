@@ -299,7 +299,7 @@ void Audio::CreateResources()
 			true
 		);
 
-		for (int eventId = SoundEvent::RollingEvent; eventId != SoundEvent::LastSoundEvent; ++eventId)
+		for (int eventId = SoundEvent::NoSound + 1; eventId != SoundEvent::LastSoundEvent; ++eventId)
 		{
 			this->CreateSourceVoice(static_cast<SoundEvent>(eventId));
 		}
@@ -463,7 +463,7 @@ void Audio::CreateSourceVoice(SoundEvent sound)
     sends.pSends = descriptors;
 
     // The rolling sound can have pitch shifting and a low-pass filter.
-    if (sound == RollingEvent)
+    if (sound == FallingEvent)
     {
         DX::ThrowIfFailed
 		(
@@ -502,7 +502,7 @@ void Audio::CreateSourceVoice(SoundEvent sound)
 	this->m_soundEffects[sound].m_audioBuffer.pAudioData = this->m_soundEffects[sound].m_soundEffectBufferData;
 	this->m_soundEffects[sound].m_audioBuffer.pContext = &this->m_soundEffects[sound];
 	this->m_soundEffects[sound].m_audioBuffer.Flags = XAUDIO2_END_OF_STREAM;
-    if (sound == RollingEvent)
+    if (sound == FallingEvent)
     {
 		this->m_soundEffects[sound].m_audioBuffer.LoopCount = XAUDIO2_LOOP_INFINITE;
     }
@@ -714,7 +714,7 @@ void Audio::PlaySoundEffect(SoundEvent sound)
 
     // For one-off voices, submit a new buffer if there's none queued up,
     // and allow up to two collisions to be queued up.
-    if (sound != RollingEvent)
+    if (sound != FallingEvent)
     {
         XAUDIO2_VOICE_STATE state = {0};
         soundEffect->m_soundEffectSourceVoice->GetState(&state, XAUDIO2_VOICE_NOSAMPLESPLAYED);
