@@ -183,7 +183,7 @@ public:
 		FloorTilingRock = 10,
 		FloorTilingRockCracked = 22,
 		Lettuce = 11,
-		Player = 12,
+		Player = 12, // player entries must remain ordered and contiguous
 		Player2 = 13,
 		Player3 = 14,
 		Player4 = 15,
@@ -204,6 +204,7 @@ public:
 	Dings::DingIDs								ID();
 	Platform::String^							Name();
 	virtual bool								IsMob();
+	bool										IsPlayer();
 	void										Draw(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo, int canvasX, int canvasY);
 	D2D1_POINT_2U								GetSheetPlacement(Facings orientation);
 	D2D1_POINT_2U								GetSheetPlacement(OrientabilityIndexRotatory rotationDent);

@@ -375,9 +375,14 @@ void Level::SetupRuntimeState()
 					{
 						auto wallObject = allocatedObject->GetObject(Layers::Walls);
 						wallObject->SetupRuntimeState();
-						if (wallObject->GetDing()->IsMob())
+						auto wallDing = wallObject->GetDing();
+						if (wallDing->IsMob())
 						{
-							auto elevateSprite = allocatedObject->ExtractObject(Layers::Walls);
+							/* monsters remain in both lists, player are in sprites list only */
+							auto elevateSprite = wallDing->IsPlayer()
+								? allocatedObject->ExtractObject(Layers::Walls)
+								: allocatedObject->GetObject(Layers::Walls);
+
 							if (elevateSprite != nullptr)
 							{
 								this->m_spriteBlocks.push_back(elevateSprite);

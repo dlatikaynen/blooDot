@@ -21,11 +21,11 @@ Sprite::~Sprite()
 {	
 }
 
-void Sprite::InitializeIn(Platform::String^ playerName, std::shared_ptr<Level> inLevel, unsigned positionInLevelX, unsigned positionInLevelY, Facings mobFacing)
+void Sprite::InitializeIn(Dings::DingIDs dingID, Platform::String^ instanceName, std::shared_ptr<Level> inLevel, unsigned positionInLevelX, unsigned positionInLevelY, Facings mobFacing)
 {
-	this->Name = playerName;
+	this->Name = instanceName;
 	this->SetPosition(D2D1::Point2U(positionInLevelX, positionInLevelY));
-	auto playerTemplate = inLevel->GetDing(Dings::DingIDs::Player);
+	auto playerTemplate = inLevel->GetDing(dingID);
 	this->InstantiateFacing(playerTemplate, mobFacing);
 	this->m_Orientation = Dings::HeadingFromFacing(mobFacing);
 	this->m_Level = inLevel;

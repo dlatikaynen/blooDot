@@ -12,7 +12,7 @@ public:
 	Sprite::Sprite(Sprite&& obj) { };
 	virtual ~Sprite();
 
-	void InitializeIn(Platform::String^ playerName, std::shared_ptr<Level> inLevel, unsigned positionInLevelX, unsigned positionInLevelY, Facings mobFacing);
+	void InitializeIn(Dings::DingIDs dingID, Platform::String^ instanceName, std::shared_ptr<Level> inLevel, unsigned positionInLevelX, unsigned positionInLevelY, Facings mobFacing);
 	void PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
 	void PushY(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
 	std::shared_ptr<BlockObject> Update();

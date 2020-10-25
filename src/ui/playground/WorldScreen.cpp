@@ -15,10 +15,16 @@ WorldScreen::~WorldScreen()
 void WorldScreen::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>& deviceResources)
 {
 	WorldScreenBase::Initialize(audioEngine, deviceResources);
-	/* player(s) positions and initial sprite positions 
-	 * in level are determined from level metadata */
+	/* player(s) positions and initial sprite positions
+	 * in level are determined from level metadata. */
 	if (this->m_Sprites.empty() && this->m_currentLevel != nullptr)
 	{
+		/* first four entries in this vector are always the players */
+		for (int i = 0; i < 4; ++i)
+		{
+			this->m_Sprites.push_back((Sprite*)nullptr);
+		}
+
 		auto elevatingSprites = this->m_currentLevel->GetSpriteBlocks();
 		for (auto elevatingSprite : *elevatingSprites)
 		{			
@@ -48,6 +54,7 @@ void WorldScreen::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::
 			}
 
 			newSprite->InitializeIn(
+				basedOnDingID,
 				spriteName,
 				this->m_currentLevel,
 				elevatingSprite->PositionSquare.x,
@@ -55,7 +62,18 @@ void WorldScreen::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::
 				elevatingSprite->PlacementFacing()
 			);
 
-			this->m_Sprites.push_back(newSprite);
+			if (basedOnDingID >= Dings::DingIDs::Player && basedOnDingID <= Dings::DingIDs::Player4)
+			{
+				auto playerIndex = static_cast<size_t>(static_cast<int>(basedOnDingID) - static_cast<int>(Dings::DingIDs::Player));
+				if (this->m_Sprites[playerIndex] == nullptr)
+				{
+					this->m_Sprites[playerIndex] = newSprite;
+				}
+			}
+			else
+			{
+				this->m_Sprites.push_back(newSprite);
+			}
 		}
 	}
 }
@@ -120,53 +138,58 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 	bool scrollTresholdHandledY = false;
 	float scrollTresholdExcessX = 0.0f;
 	float scrollTresholdExcessY = 0.0f;
+	int isPlayer = 0;
 	for (auto mob = this->m_Sprites.begin(); mob != this->m_Sprites.end(); ++mob)
 	{		
-		auto Player = (*mob);
-		auto collidedWith = Player->Update();
-		if (collidedWith != nullptr)
+		auto sprite = (*mob);
+		if (sprite != nullptr)
 		{
-			if(collidedWith->m_Behaviors & ObjectBehaviors::Takeable)
+			auto collidedWith = sprite->Update();
+			if (collidedWith != nullptr)
 			{
-				auto collidingDing = collidedWith->GetDing();
-				if (collidingDing != nullptr)
+				if (collidedWith->m_Behaviors & ObjectBehaviors::Takeable)
 				{
-					auto collisionSound = collidingDing->GetSoundOnTaken();
-					if (collisionSound != SoundEvent::NoSound)
+					auto collidingDing = collidedWith->GetDing();
+					if (collidingDing != nullptr)
 					{
-						this->m_audio->PlaySoundEffect(collisionSound);
+						auto collisionSound = collidingDing->GetSoundOnTaken();
+						if (collisionSound != SoundEvent::NoSound)
+						{
+							this->m_audio->PlaySoundEffect(collisionSound);
+						}
 					}
+					this->ObliterateObject(collidedWith->PositionSquare);
 				}
-				this->ObliterateObject(collidedWith->PositionSquare);
 			}
-		}
 
-		if ((Player->Position.left - this->m_viewportOffset.x) < this->m_viewportScrollTreshold.left)
-		{
-			scrollTresholdExceeded = true;
-			scrollTresholdExcessX = -(this->m_viewportScrollTreshold.left - (Player->Position.left - this->m_viewportOffset.x));
-			scrollTresholdHandledX = true;
-		}
+			if (++isPlayer == 1)
+			{
+				if ((sprite->Position.left - this->m_viewportOffset.x) < this->m_viewportScrollTreshold.left)
+				{
+					scrollTresholdExcessX = -(this->m_viewportScrollTreshold.left - (sprite->Position.left - this->m_viewportOffset.x));
+					scrollTresholdExceeded |= std::abs(scrollTresholdExcessX) > .1f;
+					scrollTresholdHandledX = true;
+				}
 
-		if ((Player->Position.top - this->m_viewportOffset.y) < this->m_viewportScrollTreshold.top)
-		{
-			scrollTresholdExceeded = true;
-			scrollTresholdExcessY = -(this->m_viewportScrollTreshold.top - (Player->Position.top - this->m_viewportOffset.y));
-			scrollTresholdHandledY = true;
-		}
+				if ((sprite->Position.top - this->m_viewportOffset.y) < this->m_viewportScrollTreshold.top)
+				{
+					scrollTresholdExcessY = -(this->m_viewportScrollTreshold.top - (sprite->Position.top - this->m_viewportOffset.y));
+					scrollTresholdExceeded |= std::abs(scrollTresholdExcessY) > .1f;
+					scrollTresholdHandledY = true;
+				}
 
-		if (!scrollTresholdHandledX && (Player->Position.right - this->m_viewportOffset.x) > this->m_viewportScrollTreshold.right)
-		{
-			scrollTresholdExceeded = true;
-			scrollTresholdExcessX = Player->Position.right - this->m_viewportOffset.x - this->m_viewportScrollTreshold.right;
-			scrollTresholdHandledX = true;
-		}
+				if (!scrollTresholdHandledX && (sprite->Position.right - this->m_viewportOffset.x) > this->m_viewportScrollTreshold.right)
+				{
+					scrollTresholdExcessX = sprite->Position.right - this->m_viewportOffset.x - this->m_viewportScrollTreshold.right;
+					scrollTresholdExceeded |= std::abs(scrollTresholdExcessX) > .1f;
+				}
 
-		if (!scrollTresholdHandledY && (Player->Position.bottom - this->m_viewportOffset.y) > this->m_viewportScrollTreshold.bottom)
-		{
-			scrollTresholdExceeded = true;
-			scrollTresholdExcessY = Player->Position.bottom - this->m_viewportOffset.y - this->m_viewportScrollTreshold.bottom;
-			scrollTresholdHandledY = true;
+				if (!scrollTresholdHandledY && (sprite->Position.bottom - this->m_viewportOffset.y) > this->m_viewportScrollTreshold.bottom)
+				{
+					scrollTresholdExcessY = sprite->Position.bottom - this->m_viewportOffset.y - this->m_viewportScrollTreshold.bottom;
+					scrollTresholdExceeded |= std::abs(scrollTresholdExcessY) > .1f;
+				}
+			}
 		}
 	}
 
@@ -200,7 +223,7 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 			WORLDSHEET_SW->Translate(viewPort, 0, 0);
 		}
 
-		/* will this trigger an blittersheet treshold transgression to the right? */
+		/* will this trigger a blittersheet treshold transgression to the right? */
 		if (WORLDSHEET_NE != nullptr && (WORLDSHEET_NE->PhysicalPosition.right - 2.0f * blooDot::Consts::SQUARE_WIDTH) < viewPort.right)
 		{
 			this->ReflapBlitterSheets(viewPort, Facings::East);
@@ -459,8 +482,6 @@ void WorldScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 	this->m_d2dContext->DrawLine(D2D1::Point2F(121, 100), D2D1::Point2F(121, 110), black.Get());
 	this->m_d2dContext->DrawLine(D2D1::Point2F(128, 100), D2D1::Point2F(128, 110), black.Get());
 	
-
-
 	HRESULT hr = m_d2dContext->EndDraw();
 	if (hr != D2DERR_RECREATE_TARGET)
 	{
@@ -475,33 +496,36 @@ void WorldScreen::RenderSprites()
 	auto spriteMap = this->m_currentLevel->GetMobsSheetBmp();
 	for (auto mob = this->m_Sprites.begin(); mob != this->m_Sprites.end(); ++mob)
 	{
-		auto screenRect = D2D1::RectF(
-			(*mob)->Position.left - this->m_viewportOffset.x,
-			(*mob)->Position.top - this->m_viewportOffset.y,
-			(*mob)->Position.right - this->m_viewportOffset.x,
-			(*mob)->Position.bottom - this->m_viewportOffset.y
-		);
+		if ((*mob) != nullptr)
+		{
+			auto screenRect = D2D1::RectF(
+				(*mob)->Position.left - this->m_viewportOffset.x,
+				(*mob)->Position.top - this->m_viewportOffset.y,
+				(*mob)->Position.right - this->m_viewportOffset.x,
+				(*mob)->Position.bottom - this->m_viewportOffset.y
+			);
 
-		this->m_d2dContext->DrawBitmap(
-			spriteMap,
-			screenRect,
-			1.0f, 
-			D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, 
-			(*mob)->m_spriteSourceRect
-		);
+			this->m_d2dContext->DrawBitmap(
+				spriteMap,
+				screenRect,
+				1.0f,
+				D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+				(*mob)->m_spriteSourceRect
+			);
 
 #ifdef _DEBUG
-		auto gridPosition = (*mob)->PositionSquare;
-		auto gridLocked = D2D1::RectF(
-			gridPosition.x * blooDot::Consts::SQUARE_WIDTH - this->m_viewportOffset.x,
-			gridPosition.y * blooDot::Consts::SQUARE_HEIGHT - this->m_viewportOffset.y,
-			0,
-			0
-		);
+			auto gridPosition = (*mob)->PositionSquare;
+			auto gridLocked = D2D1::RectF(
+				gridPosition.x * blooDot::Consts::SQUARE_WIDTH - this->m_viewportOffset.x,
+				gridPosition.y * blooDot::Consts::SQUARE_HEIGHT - this->m_viewportOffset.y,
+				0,
+				0
+			);
 
-		gridLocked.right = gridLocked.left + blooDot::Consts::SQUARE_WIDTH;
-		gridLocked.bottom = gridLocked.top + blooDot::Consts::SQUARE_HEIGHT;
-		this->m_d2dContext->DrawRectangle(gridLocked, this->m_debugBorderBrush.Get(), 0.7F);	
+			gridLocked.right = gridLocked.left + blooDot::Consts::SQUARE_WIDTH;
+			gridLocked.bottom = gridLocked.top + blooDot::Consts::SQUARE_HEIGHT;
+			this->m_d2dContext->DrawRectangle(gridLocked, this->m_debugBorderBrush.Get(), 0.7F);
 #endif
+		}
 	}
 }

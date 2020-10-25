@@ -50,6 +50,11 @@ bool Dings::IsMob()
 	return false;
 }
 
+bool Dings::IsPlayer()
+{
+	return this->m_ID >= Dings::DingIDs::Player && this->m_ID <= Dings::DingIDs::Player4;
+}
+
 Layers Dings::GetPreferredLayer()
 {
 	return this->m_preferredLayer;
