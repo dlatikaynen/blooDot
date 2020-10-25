@@ -3,14 +3,14 @@
 
 #pragma once
 
-class Player : public BlockObject
+class Sprite : public BlockObject
 {
 public:
-	Player::Player();
-	Player::Player(const Player& obj) { };
-	Player& operator=(const Player& obj) { return *this; };
-	Player::Player(Player&& obj) { };
-	virtual ~Player();
+	Sprite::Sprite();
+	Sprite::Sprite(const Sprite& obj) { };
+	Sprite& operator=(const Sprite& obj) { return *this; };
+	Sprite::Sprite(Sprite&& obj) { };
+	virtual ~Sprite();
 
 	void InitializeIn(Platform::String^ playerName, std::shared_ptr<Level> inLevel, unsigned positionInLevelX, unsigned positionInLevelY, Facings mobFacing);
 	void PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);

@@ -40,9 +40,13 @@ void WorldScreenBase::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ s
     ComPtr<ID2D1Factory> factory;
 	this->m_d2dDevice->GetFactory(&factory);
     DX::ThrowIfFailed(factory.As(&this->m_d2dFactory));
-	this->m_currentLevel->Initialize(this->m_deviceResources, this->m_Brushes);
 	this->CreateDeviceDependentResources();
 	this->ResetDirectXResources();
+}
+
+std::shared_ptr<BrushRegistry> WorldScreenBase::SharedBrushes()
+{
+	return this->m_Brushes;
 }
 
 void WorldScreenBase::CreateDeviceDependentResources()

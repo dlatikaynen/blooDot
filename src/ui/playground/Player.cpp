@@ -6,7 +6,7 @@
 #include "..\src\world\Level.h"
 #include "Player.h"
 
-Player::Player()
+Sprite::Sprite()
 {
 	BlockObject::BlockObject((std::shared_ptr<Blocks>)nullptr);
 	this->Momentum.speedX = 0.0f;
@@ -17,15 +17,14 @@ Player::Player()
 	this->Momentum.attenuationY = 0.0f;	
 }
 
-Player::~Player()
+Sprite::~Sprite()
 {	
 }
 
-void Player::InitializeIn(Platform::String^ playerName, std::shared_ptr<Level> inLevel, unsigned positionInLevelX, unsigned positionInLevelY, Facings mobFacing)
+void Sprite::InitializeIn(Platform::String^ playerName, std::shared_ptr<Level> inLevel, unsigned positionInLevelX, unsigned positionInLevelY, Facings mobFacing)
 {
 	this->Name = playerName;
 	this->SetPosition(D2D1::Point2U(positionInLevelX, positionInLevelY));
-	//this->PositionSquare = D2D1::Point2U(positionInLevelX, positionInLevelY);
 	auto playerTemplate = inLevel->GetDing(Dings::DingIDs::Player);
 	this->InstantiateFacing(playerTemplate, mobFacing);
 	this->m_Orientation = Dings::HeadingFromFacing(mobFacing);
@@ -33,7 +32,7 @@ void Player::InitializeIn(Platform::String^ playerName, std::shared_ptr<Level> i
 	this->PlaceInLevel();
 }
 
-void Player::PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity)
+void Sprite::PushX(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity)
 {
 	this->Momentum.accelerationX = accelerationRate;
 	this->Momentum.attenuationX = attenuationRate;
@@ -41,7 +40,7 @@ void Player::PushX(float accelerationRate, float attenuationRate, float gripFact
 	this->Momentum.mediumViscosity = mediumViscosity;
 }
 
-void Player::PushY(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity)
+void Sprite::PushY(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity)
 {
 	this->Momentum.accelerationY = accelerationRate;
 	this->Momentum.attenuationY = attenuationRate;
@@ -49,7 +48,7 @@ void Player::PushY(float accelerationRate, float attenuationRate, float gripFact
 	this->Momentum.mediumViscosity = mediumViscosity;
 }
 
-std::shared_ptr<BlockObject> Player::Update()
+std::shared_ptr<BlockObject> Sprite::Update()
 {
 	D2D1_RECT_F myBoundingBox;
 	std::shared_ptr<BlockObject> collidedWith = nullptr;

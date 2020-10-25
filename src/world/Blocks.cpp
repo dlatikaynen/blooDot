@@ -36,6 +36,11 @@ void Blocks::InstantiateInLayerFacing(std::shared_ptr<Level> placeInLevel, Layer
 
 		case Layers::Walls:
 			this->m_ObjectWalls = std::make_shared<BlockObject>(this->shared_from_this());
+			if (placementFacing == Facings::Shy && templateDing != nullptr && templateDing->IsMob())
+			{
+				placementFacing = Facings::East;
+			}
+
 			this->m_ObjectWalls->InstantiateFacing(templateDing, placementFacing);
 			break;
 
@@ -228,6 +233,34 @@ std::shared_ptr<BlockObject> Blocks::GetObject(Layers ofLayer)
 	}
 
 	return nullptr;
+}
+
+
+std::shared_ptr<BlockObject> Blocks::ExtractObject(Layers fromLayer)
+{
+	auto curObject = this->GetObject(fromLayer);
+	if (curObject == nullptr)
+	{
+		return nullptr;
+	}
+
+	auto tempObject = curObject;
+	switch (fromLayer)
+	{
+		case Layers::Floor:
+			this->m_ObjectFloor = nullptr;
+			break;
+
+		case Layers::Walls:
+			this->m_ObjectWalls = nullptr;
+			break;
+
+		case Layers::Rooof:
+			this->m_ObjectRooof = nullptr;
+			break;
+	}
+
+	return tempObject;
 }
 
 void Blocks::DesignSaveToFile(std::ofstream* toFile, Layers ofLayer)

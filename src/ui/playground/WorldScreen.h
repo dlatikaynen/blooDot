@@ -22,7 +22,7 @@ private:
 	void RenderSprites();
 	void UpdateParticles(float timeTotal, float timeDelta);
 
-	std::vector<Player*> m_playerData;
+	std::vector<Sprite*> m_Sprites;
 
 	float m_shootx;
 	float m_shooty;

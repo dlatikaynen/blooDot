@@ -30,11 +30,7 @@ Level::Level(Platform::String^ levelName, D2D1_SIZE_U sheetSize, unsigned extent
 
 Level::~Level()
 {
-	while (!this->m_Blocks.empty()) 
-	{
-		this->m_Blocks.back().reset();
-		this->m_Blocks.pop_back();
-	}
+	this->ClearBlocksAndSprites();
 
 	if (this->m_dingSheet != nullptr)
 	{
@@ -81,10 +77,7 @@ Level::~Level()
 
 void Level::Clear()
 {
-	if (!this->m_Blocks.empty())
-	{
-		this->m_Blocks.clear();
-	}
+	this->ClearBlocksAndSprites();
 
 	/* generates the matrix for this level, lazy-loading */
 	for (unsigned y = 0; y < this->m_rectangularBounds.height; ++y)
@@ -98,6 +91,21 @@ void Level::Clear()
 	if (m_isDesignTime)
 	{
 		this->m_designTimeDirty = true;
+	}
+}
+
+void Level::ClearBlocksAndSprites()
+{
+	while (!this->m_Blocks.empty())
+	{
+		this->m_Blocks.back().reset();
+		this->m_Blocks.pop_back();
+	}
+
+	while (!this->m_spriteBlocks.empty())
+	{
+		this->m_spriteBlocks.back().reset();
+		this->m_spriteBlocks.pop_back();
 	}
 }
 
@@ -365,7 +373,16 @@ void Level::SetupRuntimeState()
 
 					if (layers & Layers::Walls)
 					{
-						allocatedObject->GetObject(Layers::Walls)->SetupRuntimeState();
+						auto wallObject = allocatedObject->GetObject(Layers::Walls);
+						wallObject->SetupRuntimeState();
+						if (wallObject->GetDing()->IsMob())
+						{
+							auto elevateSprite = allocatedObject->ExtractObject(Layers::Walls);
+							if (elevateSprite != nullptr)
+							{
+								this->m_spriteBlocks.push_back(elevateSprite);
+							}
+						}
 					}
 
 					if (layers & Layers::Rooof)
@@ -376,6 +393,11 @@ void Level::SetupRuntimeState()
 			}
 		}
 	}
+}
+
+std::vector<std::shared_ptr<BlockObject>>* Level::GetSpriteBlocks()
+{
+	return &this->m_spriteBlocks;
 }
 
 ClumsyPacking::NeighborConfiguration Level::GetNeighborConfigurationOf(unsigned levelX, unsigned levelY, Dings::DingIDs dingID, Layers inLayer)

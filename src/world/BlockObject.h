@@ -20,8 +20,6 @@ public:
 	BlockObject::BlockObject(BlockObject&& obj) { };
 	BlockObject::~BlockObject();
 
-	Layers								Layer;
-
 	void								Instantiate(std::shared_ptr<Dings> templateDing, ClumsyPacking::NeighborConfiguration neighborHood);
 	void								InstantiateFacing(std::shared_ptr<Dings> templateDing, Facings placementFacing);
 	void								SetupRuntimeState();

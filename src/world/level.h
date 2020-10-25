@@ -8,6 +8,10 @@
 #include "..\algo\ClumsyPacking.h"
 #include "World.h"
 
+typedef std::map<Dings::DingIDs, const std::shared_ptr<Dings>> DingMap;
+
+//class Sprite;
+
 /* A level is a set of worldsheets belonging to the same floor level, hence its name :) */
 class Level : public std::enable_shared_from_this<Level>
 {
@@ -42,6 +46,7 @@ public:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> CreateMobImage(Dings::DingIDs dingID, Facings placementOrientation);
 	Microsoft::WRL::ComPtr<ID2D1Bitmap> GetFloorBackground();
 	D2D1_RECT_U DeterminePopulatedAreaBounds();
+	std::vector<std::shared_ptr<BlockObject>>* GetSpriteBlocks();
 
 	void SetDesignTime();
 	bool DesignLoadFromFile(Platform::String^ fileName);
@@ -58,6 +63,7 @@ private:
 	const unsigned char rooofbit = 0x1;
 
 	void Clear();
+	void ClearBlocksAndSprites();
 	unsigned GetNumOfSheetsRequired(unsigned extentUnits, unsigned sizePerSheet);
 	bool HasCompatibleNeighbor(int x, int y, Dings::DingIDs dingID, Layers ofLayer);
 	void DesignLoadFromFile_version2(char* srcData, const size_t length, size_t offset);
@@ -65,7 +71,7 @@ private:
 
 	Platform::String^									m_Name;
 	D2D1_SIZE_U											m_rectangularBounds;
-	std::map<Dings::DingIDs, const std::shared_ptr<Dings>>	m_dingMap;
+	DingMap												m_dingMap;
 	D2D1_SIZE_U											m_sheetSize;
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_floorBackground;
 	Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget>		m_dingSheet;
@@ -76,6 +82,7 @@ private:
 	Microsoft::WRL::ComPtr<ID2D1Bitmap>					m_mobsSheetBmp;
 
 	std::vector<std::shared_ptr<Blocks>>				m_Blocks;
+	std::vector<std::shared_ptr<BlockObject>>			m_spriteBlocks;
 	bool												m_isDesignTime;
 	Platform::String^									m_lastSavedAsFileName;
 	bool												m_designTimeDirty;

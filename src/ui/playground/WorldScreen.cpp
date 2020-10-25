@@ -15,19 +15,48 @@ WorldScreen::~WorldScreen()
 void WorldScreen::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>& deviceResources)
 {
 	WorldScreenBase::Initialize(audioEngine, deviceResources);
-	/* player(s) positions, and ultimately initial position in level are determined from level metadata */
-	if (this->m_playerData.empty() && this->m_currentLevel != nullptr)
+	/* player(s) positions and initial sprite positions 
+	 * in level are determined from level metadata */
+	if (this->m_Sprites.empty() && this->m_currentLevel != nullptr)
 	{
-		auto player1 = new Player();
-		player1->InitializeIn(
-			L"Nepomuk der Nasenbär",
-			this->m_currentLevel,
-			355,
-			358,
-			Facings::East
-		);
+		auto elevatingSprites = this->m_currentLevel->GetSpriteBlocks();
+		for (auto elevatingSprite : *elevatingSprites)
+		{			
+			auto newSprite = new Sprite();
+			auto basedOnDing = elevatingSprite->GetDing();
+			auto basedOnDingID = basedOnDing->ID();
+			Platform::String^ spriteName;
+			if (basedOnDingID == Dings::DingIDs::Player)
+			{
+				spriteName = L"Sipiasibasian";
+			}
+			else if (basedOnDingID == Dings::DingIDs::Player2)
+			{
+				spriteName = L"Nepomuk der Nasenbär";
+			}
+			else if (basedOnDingID == Dings::DingIDs::Player3)
+			{
+				spriteName = L"Lukas";
+			}
+			else if (basedOnDingID == Dings::DingIDs::Player4)
+			{
+				spriteName = L"Jonas";
+			}
+			else
+			{
+				spriteName = basedOnDing->Name();
+			}
 
-		this->m_playerData.push_back(player1);
+			newSprite->InitializeIn(
+				spriteName,
+				this->m_currentLevel,
+				elevatingSprite->PositionSquare.x,
+				elevatingSprite->PositionSquare.y,
+				elevatingSprite->PlacementFacing()
+			);
+
+			this->m_Sprites.push_back(newSprite);
+		}
 	}
 }
 
@@ -39,7 +68,7 @@ void WorldScreen::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchM
 	this->m_touchMap = touchMap;
 	this->m_isMoving = Facings::Shy;
 	this->m_keyShiftDown = shiftKeyActive;
-	auto keyboardPlayer = *this->m_playerData.begin();
+	auto keyboardPlayer = *this->m_Sprites.begin();
 	if (left)
 	{
 		keyboardPlayer->Facing = Facings::West;
@@ -65,7 +94,7 @@ void WorldScreen::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchM
 // mousewheeled
 void WorldScreen::SetControl(int detentCount, bool shiftKeyActive)
 {
-	auto keyboardPlayer = *this->m_playerData.begin();
+	auto keyboardPlayer = *this->m_Sprites.begin();
 	keyboardPlayer->Facing = Dings::RotateMobFine(keyboardPlayer->Facing, shiftKeyActive);
 }
 
@@ -73,7 +102,7 @@ void WorldScreen::SetControl(bool triggershoot)
 {
 	if (triggershoot && !this->m_shooting)
 	{
-		auto Player = *this->m_playerData.begin();
+		auto Player = *this->m_Sprites.begin();
 		this->m_shooting = true;
 		this->m_shootx = Player->Position.left + blooDot::Consts::SQUARE_WIDTH / 2.0f;
 		this->m_shooty = Player->Position.top + blooDot::Consts::SQUARE_HEIGHT / 2.0f;
@@ -91,7 +120,7 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 	bool scrollTresholdHandledY = false;
 	float scrollTresholdExcessX = 0.0f;
 	float scrollTresholdExcessY = 0.0f;
-	for (auto mob = this->m_playerData.begin(); mob != this->m_playerData.end(); ++mob)
+	for (auto mob = this->m_Sprites.begin(); mob != this->m_Sprites.end(); ++mob)
 	{		
 		auto Player = (*mob);
 		auto collidedWith = Player->Update();
@@ -444,7 +473,7 @@ void WorldScreen::Render(D2D1::Matrix3x2F orientation2D, DirectX::XMFLOAT2 point
 void WorldScreen::RenderSprites()
 {
 	auto spriteMap = this->m_currentLevel->GetMobsSheetBmp();
-	for (auto mob = this->m_playerData.begin(); mob != this->m_playerData.end(); ++mob)
+	for (auto mob = this->m_Sprites.begin(); mob != this->m_Sprites.end(); ++mob)
 	{
 		auto screenRect = D2D1::RectF(
 			(*mob)->Position.left - this->m_viewportOffset.x,
