@@ -156,6 +156,9 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, std
 
 	this->m_mobsSheet->BeginDraw();
 	this->RegisterDing(std::make_shared<Player1>(deviceResources, brushRegistry),		00,  0);
+	//this->RegisterDing(std::make_shared<Player2>(deviceResources, brushRegistry),		00,  1);
+	//this->RegisterDing(std::make_shared<Player3>(deviceResources, brushRegistry),		00,  2);
+	//this->RegisterDing(std::make_shared<Player4>(deviceResources, brushRegistry),		00,  3);
 	this->RegisterDing(std::make_shared<Dalek>(deviceResources, brushRegistry),			00,  1);
 	this->RegisterDing(std::make_shared<Schaedel>(deviceResources, brushRegistry),		00,  2);
 	this->RegisterDing(std::make_shared<FlameGhost>(deviceResources, brushRegistry),	00,  3);

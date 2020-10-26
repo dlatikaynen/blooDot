@@ -10,11 +10,11 @@ using namespace D2D1;
 
 WorldScreenBase::WorldScreenBase() 
 {
+	this->m_Brushes = nullptr;
 	this->m_currentLevel = nullptr;	
 	this->m_currentLevelEditorCell = D2D1::Point2U(0, 0);
 	this->m_currentLevelEditorCellKnown = false;
-	this->m_touchMap = nullptr;
-	this->m_Brushes = std::make_shared<BrushRegistry>();
+	this->m_touchMap = nullptr;	
 #ifdef _DEBUG
 	this->m_lastBlitSheetCount = 0;
 #endif
@@ -28,9 +28,10 @@ WorldScreenBase::~WorldScreenBase()
 	WORLDSHEET_SW.reset();
 }
 
-void WorldScreenBase::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>& deviceResources)
+void WorldScreenBase::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>& deviceResources, _In_ std::shared_ptr<BrushRegistry> brushRegistry)
 {
 	this->m_deviceResources = deviceResources;
+	this->m_Brushes = brushRegistry;
 	this->m_wicFactory = deviceResources->GetWicImagingFactory();
 	this->m_d2dDevice = deviceResources->GetD2DDevice();
 	this->m_d2dContext = deviceResources->GetD2DDeviceContext();	
@@ -42,11 +43,6 @@ void WorldScreenBase::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ s
     DX::ThrowIfFailed(factory.As(&this->m_d2dFactory));
 	this->CreateDeviceDependentResources();
 	this->ResetDirectXResources();
-}
-
-std::shared_ptr<BrushRegistry> WorldScreenBase::SharedBrushes()
-{
-	return this->m_Brushes;
 }
 
 void WorldScreenBase::CreateDeviceDependentResources()

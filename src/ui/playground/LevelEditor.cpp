@@ -22,9 +22,9 @@ LevelEditor::~LevelEditor()
 	this->m_blackBrush.Reset();
 }
 
-void LevelEditor::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>& deviceResources)
+void LevelEditor::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>& deviceResources, _In_ std::shared_ptr<BrushRegistry> brushRegistry)
 {
-	WorldScreenBase::Initialize(audioEngine, deviceResources);
+	WorldScreenBase::Initialize(audioEngine, deviceResources, brushRegistry);
 	DX::ThrowIfFailed(deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &this->m_textColorBrush));
 	this->m_textColorBrush->SetOpacity(m_textColorBrush->GetOpacity() * blooDot::Consts::GOLDEN_RATIO);
 	DX::ThrowIfFailed(deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &this->m_blackBrush));
@@ -591,7 +591,11 @@ void LevelEditor::CloneObjectToCell(std::shared_ptr<Blocks> sourceCell, std::sha
 {
 	auto newDingID = sourceCell->GetObject(inLayer)->GetDing()->ID();
 	auto newDings = this->m_currentLevel->GetDing(newDingID);
-	auto curDings = targetCell->GetObject(inLayer)->GetDing();
+	auto curObject = targetCell->GetObject(inLayer);
+	auto curDings = curObject == nullptr
+		? nullptr
+		: curObject->GetDing();
+
 	if (curDings == nullptr || (this->m_IsOverwriting && curDings->ID() != newDingID))
 	{
 		auto intendedFacing = sourceCell->GetObject(inLayer)->PlacementFacing();

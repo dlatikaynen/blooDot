@@ -14,20 +14,19 @@ StopwatchTimer::StopwatchTimer() :
 {
 }
 
-void StopwatchTimer::Initialize()
+void StopwatchTimer::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
 {
-	TextElement::Initialize();
+	TextElement::Initialize(brushRegistry);
 }
 
 void StopwatchTimer::Update(float timeTotal, float timeDelta)
 {
-	if (m_active)
+	if (this->m_active)
 	{
-		m_elapsedTime += timeDelta;
-
 		WCHAR buffer[16];
-		GetFormattedTime(buffer);
-		SetText(buffer);
+		this->m_elapsedTime += timeDelta;
+		this->GetFormattedTime(buffer);
+		this->SetText(buffer);
 	}
 
 	TextElement::Update(timeTotal, timeDelta);

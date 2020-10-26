@@ -12,8 +12,9 @@ ControllerSetup::ControllerSetup()
 {
 }
 
-void ControllerSetup::Initialize()
+void ControllerSetup::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
 {
+	this->m_brushRegistry = brushRegistry;
 	auto d2dContext = UserInterface::GetD2DContext();
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::White), &m_textColorBrush));
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::White, 0.2f), &m_selectionBackdropBrush));

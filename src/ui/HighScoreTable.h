@@ -18,7 +18,7 @@ class HighScoreTable : public TextElement
 public:
 	HighScoreTable();
 
-	virtual void Initialize();
+	virtual void Initialize(std::shared_ptr<BrushRegistry> brushRegistry);
 	virtual void Update(float timeTotal, float timeDelta);
 	virtual void Render();
 
@@ -27,7 +27,7 @@ public:
 	void Reset();
 
 protected:
-	HighScoreEntries    m_entries;
+	HighScoreEntries m_entries;
 
 	void UpdateText();
 };

@@ -51,7 +51,7 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 {
     // Register to be notified if the Device is lost or recreated.
 	this->m_deviceResources->RegisterDeviceNotify(this);
-
+	this->m_Brushes = std::make_shared<BrushRegistry>();
     this->m_currentCheckpoint = 0;
     this->m_windowActive = false;
 	this->m_keyInsertActive = false;
@@ -179,7 +179,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
 	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"help~about", UIElement::HelpAboutButton, &containerRect));
 	this->m_mainMenuButtons.push_back(this->CreateMainMenuButton(L"exterminate", UIElement::ExterminateButton, &containerRect));
 
-    m_highScoreButton.Initialize();
+    m_highScoreButton.Initialize(this->m_Brushes);
     m_highScoreButton.SetAlignment(AlignCenter, AlignCenter);
     m_highScoreButton.SetContainer(bottomHalfRect);
     m_highScoreButton.SetText(L"multiplayer");
@@ -189,7 +189,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_highScoreButton.GetTextStyle().SetFontSize(72.0f);
     UserInterface::GetInstance().RegisterElement(blooDot::UIElement::HighScoreButton, &m_highScoreButton);
 
-    m_highScoreTable.Initialize();
+    m_highScoreTable.Initialize(this->m_Brushes);
     m_highScoreTable.SetAlignment(AlignCenter, AlignCenter);
     m_highScoreTable.SetContainer(clientRect);
     m_highScoreTable.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
@@ -198,7 +198,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_highScoreTable.GetTextStyle().SetFontSize(60.0f);
     UserInterface::GetInstance().RegisterElement(blooDot::UIElement::HighscoreTable, &m_highScoreTable);
 
-    m_preGameCountdownTimer.Initialize();
+    m_preGameCountdownTimer.Initialize(this->m_Brushes);
     m_preGameCountdownTimer.SetAlignment(AlignCenter, AlignCenter);
     m_preGameCountdownTimer.SetContainer(clientRect);
     m_preGameCountdownTimer.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
@@ -206,7 +206,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_preGameCountdownTimer.GetTextStyle().SetFontSize(144.0f);
     UserInterface::GetInstance().RegisterElement(blooDot::UIElement::PreGameCountdownTimer, &m_preGameCountdownTimer);
 
-	m_nerdStatsDisplay.Initialize();
+	m_nerdStatsDisplay.Initialize(this->m_Brushes);
 	m_nerdStatsDisplay.SetAlignment(AlignType::AlignNear, AlignType::AlignNear);
 	m_nerdStatsDisplay.SetContainer(clientRect);
 	m_nerdStatsDisplay.SetTextColor(D2D1::ColorF(D2D1::ColorF::LightGoldenrodYellow));
@@ -214,22 +214,22 @@ void blooDotMain::CreateWindowSizeDependentResources()
 	m_nerdStatsDisplay.GetTextStyle().SetFontSize(24.0f);
 	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::NerdStatsDisplay, &m_nerdStatsDisplay);
 
-	this->m_levelEditorHUD.Initialize();
+	this->m_levelEditorHUD.Initialize(this->m_Brushes);
 	this->m_levelEditorHUD.SetAlignment(AlignType::AlignFar, AlignType::AlignNear);
 	this->m_levelEditorHUD.SetContainer(clientRect);
 	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::LevelEditorHUD, &m_levelEditorHUD);
 
-	this->m_dialogDingSheet.Initialize();
+	this->m_dialogDingSheet.Initialize(this->m_Brushes);
 	this->m_dialogDingSheet.SetAlignment(AlignType::AlignCenter, AlignType::AlignCenter);	
 	this->m_dialogDingSheet.SetContainer(clientRect);
 	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::DingSheetDialog, &m_dialogDingSheet);
 
-	this->m_controllerSetup.Initialize();
+	this->m_controllerSetup.Initialize(this->m_Brushes);
 	this->m_controllerSetup.SetAlignment(AlignType::AlignCenter, AlignType::AlignCenter);
 	this->m_controllerSetup.SetContainer(clientRect);
 	UserInterface::GetInstance().RegisterElement(blooDot::UIElement::ControllerSetup, &m_controllerSetup);
 
-    m_inGameStopwatchTimer.Initialize();
+    m_inGameStopwatchTimer.Initialize(this->m_Brushes);
     m_inGameStopwatchTimer.SetAlignment(AlignNear, AlignFar);
     m_inGameStopwatchTimer.SetContainer(clientRect);
     m_inGameStopwatchTimer.SetTextColor(D2D1::ColorF(D2D1::ColorF::White, 0.75f));
@@ -237,7 +237,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_inGameStopwatchTimer.GetTextStyle().SetFontSize(96.0f);
     UserInterface::GetInstance().RegisterElement(blooDot::UIElement::InGameStopwatchTimer, &m_inGameStopwatchTimer);
 
-    m_checkpointText.Initialize();
+    m_checkpointText.Initialize(this->m_Brushes);
     m_checkpointText.SetAlignment(AlignCenter, AlignCenter);
     m_checkpointText.SetContainer(clientRect);
     m_checkpointText.SetText(L"Checkpoint!");
@@ -246,7 +246,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_checkpointText.GetTextStyle().SetFontSize(72.0f);
     UserInterface::GetInstance().RegisterElement(blooDot::UIElement::CheckPointText, &m_checkpointText);
 
-    m_pausedText.Initialize();
+    m_pausedText.Initialize(this->m_Brushes);
     m_pausedText.SetAlignment(AlignCenter, AlignCenter);
     m_pausedText.SetContainer(clientRect);
     m_pausedText.SetText(L"Paused");
@@ -255,7 +255,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
     m_pausedText.GetTextStyle().SetFontSize(72.0f);
     UserInterface::GetInstance().RegisterElement(blooDot::UIElement::PausedText, &m_pausedText);
 
-    m_resultsText.Initialize();
+    m_resultsText.Initialize(this->m_Brushes);
     m_resultsText.SetAlignment(AlignCenter, AlignCenter);
     m_resultsText.SetContainer(clientRect);
     m_resultsText.SetTextColor(D2D1::ColorF(D2D1::ColorF::White));
@@ -278,7 +278,7 @@ void blooDotMain::CreateWindowSizeDependentResources()
 TextButton* blooDotMain::CreateMainMenuButton(Platform::String^ captionText, UIElement elementKey, D2D1_RECT_F* containerRect)
 {
 	auto newButton = new TextButton();
-	newButton->Initialize();
+	newButton->Initialize(this->m_Brushes);
 	newButton->SetAlignment(AlignCenter, AlignCenter);
 	newButton->SetContainer(*containerRect);
 	newButton->SetText(captionText);
@@ -947,7 +947,6 @@ void blooDotMain::SwallowKeyPress()
 	this->m_keyEnterPressed = false;
 }
 
-
 void blooDotMain::SelectMainMenu(bool moveUp, bool moveDown)
 {
 	auto didMove = false;
@@ -1034,11 +1033,11 @@ void blooDotMain::OnActionEnterLevel()
 	auto levelName = ref new Platform::String(L"Grassmere-1");
 	this->m_worldScreen = std::unique_ptr<WorldScreenBase>(new WorldScreen());
 	this->m_currentLevel = std::make_shared<Level>(levelName, D2D1::SizeU(50, 30), 720, 720);
-	this->m_currentLevel->Initialize(this->m_deviceResources, this->m_worldScreen->SharedBrushes());
+	this->m_currentLevel->Initialize(this->m_deviceResources, this->m_Brushes);
 	this->m_currentLevel->DesignLoadFromFile(L"Media\\Levels\\grassmere.bloodot");
 	this->m_currentLevel->SetupRuntimeState();
 	this->m_worldScreen->EnterLevel(m_currentLevel);
-	this->m_worldScreen->Initialize(this->m_audio, this->m_deviceResources);
+	this->m_worldScreen->Initialize(this->m_audio, this->m_deviceResources, this->m_Brushes);
 	this->SetGameState(GameState::InGameActive);
 }
 
@@ -1048,9 +1047,9 @@ void blooDotMain::OnActionEnterLevelEditor()
 	this->m_worldScreen = std::unique_ptr<WorldScreenBase>(new LevelEditor());
 	this->m_currentLevel = std::make_shared<Level>(levelName, D2D1::SizeU(50, 30), 720, 720);
 	this->m_currentLevel->SetDesignTime();
-	this->m_currentLevel->Initialize(this->m_deviceResources, this->m_worldScreen->SharedBrushes());
+	this->m_currentLevel->Initialize(this->m_deviceResources, this->m_Brushes);
 	this->m_worldScreen->EnterLevel(this->m_currentLevel);
-	this->m_worldScreen->Initialize(this->m_audio, this->m_deviceResources);
+	this->m_worldScreen->Initialize(this->m_audio, this->m_deviceResources, this->m_Brushes);
 
 #ifdef _DEBUG
 	auto newObject = m_currentLevel->GetBlocksAt(353, 361, true);
@@ -1764,7 +1763,7 @@ void blooDotMain::OnDeviceRestored()
 {
 	//this->m_worldScreen->CreateDeviceDependentResources();
 	this->m_loadScreen->Initialize(this->m_deviceResources, this->m_audio);
-	this->m_worldScreen->Initialize(this->m_audio, this->m_deviceResources);
+	this->m_worldScreen->Initialize(this->m_audio, this->m_deviceResources, this->m_Brushes);
     UserInterface::GetInstance().Initialize(
 		this->m_deviceResources->GetD2DDevice(),
 		this->m_deviceResources->GetD2DDeviceContext(),

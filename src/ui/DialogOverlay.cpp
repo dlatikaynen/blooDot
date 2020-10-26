@@ -14,9 +14,9 @@ DialogOverlay::DialogOverlay()
 	this->m_visible = false;
 }
 
-void DialogOverlay::Initialize()
+void DialogOverlay::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
 {
-	ElementBase::Initialize();
+	ElementBase::Initialize(brushRegistry);
 	auto d2dContext = UserInterface::GetD2DContext();
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(RGB(10,10,10)), &this->m_textColorBrush));
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::Black), &this->m_shadowColorBrush));

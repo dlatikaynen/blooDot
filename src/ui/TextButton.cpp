@@ -15,9 +15,9 @@ TextButton::TextButton() :
 {
 }
 
-void TextButton::Initialize()
+void TextButton::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
 {
-	TextElement::Initialize();
+	TextElement::Initialize(brushRegistry);
 }
 
 void TextButton::Update(float timeTotal, float timeDelta)

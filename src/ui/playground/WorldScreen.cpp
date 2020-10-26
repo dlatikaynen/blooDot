@@ -12,9 +12,9 @@ WorldScreen::~WorldScreen()
 
 }
 
-void WorldScreen::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>& deviceResources)
+void WorldScreen::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>& deviceResources, _In_ std::shared_ptr<BrushRegistry> brushRegistry)
 {
-	WorldScreenBase::Initialize(audioEngine, deviceResources);
+	WorldScreenBase::Initialize(audioEngine, deviceResources, brushRegistry);
 	/* player(s) positions and initial sprite positions
 	 * in level are determined from level metadata. */
 	if (this->m_Sprites.empty() && this->m_currentLevel != nullptr)

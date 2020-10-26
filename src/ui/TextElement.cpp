@@ -12,9 +12,10 @@ TextElement::TextElement()
 {
 }
 
-void TextElement::Initialize()
+void TextElement::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
 {
 	ID2D1DeviceContext* d2dContext = UserInterface::GetD2DContext();
+	this->m_brushRegistry = brushRegistry;
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::White), &m_textColorBrush));
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::White, 0.2f), &m_selectionBackdropBrush));
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::Black), &m_shadowColorBrush));

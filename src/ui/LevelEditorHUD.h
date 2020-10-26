@@ -5,7 +5,7 @@ class LevelEditorHUD : public ElementBase
 public:
 	LevelEditorHUD();
 
-	virtual void Initialize();
+	virtual void Initialize(std::shared_ptr<BrushRegistry> brushRegistry);
 	virtual void Update(float timeTotal, float timeDelta);
 	virtual void Render();
 	virtual void ReleaseDeviceDependentResources();
@@ -37,9 +37,7 @@ protected:
 	float											m_fadeOutTime;
 	float											m_fadeOutTimeElapsed;
 
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_shadowColorBrush;
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_textColorBrush;
-	Microsoft::WRL::ComPtr<IDWriteTextLayout>       m_textLayout;
+	Microsoft::WRL::ComPtr<IDWriteTextLayout>		m_textLayout;
 	D2D1_RECT_F										m_textExtents;
 	TextStyle										m_textStyle;
 

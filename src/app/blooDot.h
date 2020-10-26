@@ -100,7 +100,8 @@ namespace blooDot
 
 		// Cached pointer to device resources.
         std::shared_ptr<DX::DeviceResources>		m_deviceResources;
-        DX::StepTimer								m_timer;
+		std::shared_ptr<BrushRegistry>				m_Brushes;
+		DX::StepTimer								m_timer;
         std::unique_ptr<LoadScreen>					m_loadScreen;
 		std::unique_ptr<WorldScreenBase>			m_worldScreen;
 		std::shared_ptr<Level>						m_currentLevel;

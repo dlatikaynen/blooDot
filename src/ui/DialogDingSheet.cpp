@@ -8,11 +8,11 @@ DialogDingSheet::DialogDingSheet()
 	this->m_currentPane = Pane::Dings;
 }
 
-void DialogDingSheet::Initialize()
+void DialogDingSheet::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
 {
 	auto d2dContext = UserInterface::GetD2DContext();
+	DialogOverlay::Initialize(brushRegistry);
 	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Crimson), &this->m_boundsBrush));
-	DialogOverlay::Initialize();
 }
 
 Platform::String^ DialogDingSheet::StaticCaption()

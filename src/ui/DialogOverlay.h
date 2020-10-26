@@ -5,7 +5,7 @@ class DialogOverlay : public ElementBase
 public:
 	DialogOverlay();
 
-	virtual void Initialize() override;
+	virtual void Initialize(std::shared_ptr<BrushRegistry> brushRegistry) override;
 	virtual void Update(float timeTotal, float timeDelta) override;
 	virtual void Render() override;
 	virtual void ReleaseDeviceDependentResources() override;

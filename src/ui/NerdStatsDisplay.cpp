@@ -14,9 +14,9 @@ NerdStatsDisplay::NerdStatsDisplay() :
 {
 }
 
-void NerdStatsDisplay::Initialize()
+void NerdStatsDisplay::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
 {
-	TextElement::Initialize();
+	TextElement::Initialize(brushRegistry);
 }
 
 void NerdStatsDisplay::Update(float timeTotal, float timeDelta)

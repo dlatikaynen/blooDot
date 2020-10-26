@@ -12,16 +12,16 @@ HighScoreTable::HighScoreTable()
 {
 }
 
-void HighScoreTable::Initialize()
+void HighScoreTable::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
 {
-	TextElement::Initialize();
-	UpdateText();
+	TextElement::Initialize(brushRegistry);
+	this->UpdateText();
 }
 
 void HighScoreTable::Reset()
 {
-	m_entries.clear();
-	UpdateText();
+	this->m_entries.clear();
+	this->UpdateText();
 }
 
 void HighScoreTable::Update(float timeTotal, float timeDelta)

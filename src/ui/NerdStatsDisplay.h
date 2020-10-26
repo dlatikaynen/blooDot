@@ -4,7 +4,7 @@ class NerdStatsDisplay : public TextElement
 {
 public:
 	NerdStatsDisplay();
-	void Initialize() override;
+	void Initialize(std::shared_ptr<BrushRegistry> brushRegistry) override;
 	void Update(float timeTotal, float timeDelta) override;	
 	void UpdateFPS(int averageFPS);
 

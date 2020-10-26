@@ -16,6 +16,11 @@ ElementBase::ElementBase() :
 	m_alignment.vertical = AlignCenter;
 }
 
+void ElementBase::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
+{
+	this->m_brushRegistry = brushRegistry;
+}
+
 void ElementBase::SetAlignment(AlignType horizontal, AlignType vertical)
 {
 	m_alignment.horizontal = horizontal;

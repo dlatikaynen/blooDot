@@ -23,9 +23,9 @@ BrushRegistry::~BrushRegistry()
 Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> BrushRegistry::WannaHave(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, MFARGB color)
 {
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = NULL;
-	if (m_Registry.size() != 0)
+	if (this->m_Registry.size() != 0)
 	{	
-		brush = m_Registry[color];
+		brush = this->m_Registry[color];
 	}
 
 	if (brush == NULL) 
@@ -41,7 +41,7 @@ Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> BrushRegistry::WannaHave(Microsoft:
 			dxDC->CreateSolidColorBrush(brushColor, &brush)
 		);
 
-		m_Registry.emplace(color, brush);
+		this->m_Registry.emplace(color, brush);
 	}
 
 	return brush;
@@ -50,9 +50,9 @@ Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> BrushRegistry::WannaHave(Microsoft:
 Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> BrushRegistry::WannaHave(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> dxTarget, MFARGB color)
 {
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = NULL;
-	if (m_Registry.size() != 0)
+	if (this->m_Registry.size() != 0)
 	{
-		brush = m_Registry[color];
+		brush = this->m_Registry[color];
 	}
 
 	if (brush == NULL)
@@ -68,7 +68,7 @@ Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> BrushRegistry::WannaHave(Microsoft:
 			dxTarget->CreateSolidColorBrush(brushColor, &brush)
 		);
 
-		m_Registry.emplace(color, brush);
+		this->m_Registry.emplace(color, brush);
 	}
 
 	return brush;

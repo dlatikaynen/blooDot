@@ -1,5 +1,6 @@
 #pragma once
 
+#include "..\dx\BrushRegistry.h"
 #include "TextStyle.h"
 #include "ElementBase.h"
 #include "TextElement.h"
@@ -22,6 +23,7 @@ public:
 
     static IDWriteFactory* GetDWriteFactory() { return m_instance.m_dwriteFactory.Get(); }
 	static IDWriteFactory3* GetDWriteFactory3() { return m_instance.m_dwriteFactory3.Get(); }
+	static Microsoft::WRL::ComPtr<ID2D1DeviceContext> GetD2DContextWrapped() { return m_instance.m_d2dContext; }
 	static ID2D1DeviceContext* GetD2DContext() { return m_instance.m_d2dContext.Get(); }
 	static IDWriteFontCollection* GetFontCollection() {	return m_instance.m_fontCollection.Get(); }
 

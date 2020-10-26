@@ -5,7 +5,7 @@ class TextElement : public ElementBase
 public:
 	TextElement();
 
-	virtual void Initialize();
+	virtual void Initialize(std::shared_ptr<BrushRegistry> brushRegistry);
 	virtual void Update(float timeTotal, float timeDelta);
 	virtual void Render();
 	virtual void ReleaseDeviceDependentResources();

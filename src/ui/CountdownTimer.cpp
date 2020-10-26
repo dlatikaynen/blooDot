@@ -14,9 +14,9 @@ CountdownTimer::CountdownTimer() :
 {
 }
 
-void CountdownTimer::Initialize()
+void CountdownTimer::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
 {
-	TextElement::Initialize();
+	TextElement::Initialize(brushRegistry);
 }
 
 void CountdownTimer::Update(float timeTotal, float timeDelta)

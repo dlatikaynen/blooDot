@@ -24,9 +24,8 @@ public:
 	typedef std::map<int, DirectX::XMFLOAT2> TouchMap;
 
 	/* graphical */
-	virtual void Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>&	deviceResources);
+	virtual void Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>&	deviceResources, _In_ std::shared_ptr<BrushRegistry> brushRegistry);
 	void CreateDeviceDependentResources();
-	std::shared_ptr<BrushRegistry> SharedBrushes();
 	void ResetDirectXResources();
     void ReleaseDeviceDependentResources();
     void UpdateForWindowSizeChange();

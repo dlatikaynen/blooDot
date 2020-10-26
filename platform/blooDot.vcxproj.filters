@@ -580,6 +580,15 @@
     <Image Include="Media\Bitmaps\barrel-wooden.png">
       <Filter>media\bitmap</Filter>
     </Image>
+    <Image Include="Media\Bitmaps\player-2.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\player-3.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\player-4.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />

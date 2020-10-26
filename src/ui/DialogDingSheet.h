@@ -5,7 +5,7 @@ class DialogDingSheet : public DialogOverlay
 public:
 	DialogDingSheet();
 
-	virtual void Initialize() override;
+	virtual void Initialize(std::shared_ptr<BrushRegistry> brushRegistry) override;
 	virtual Platform::String^ StaticCaption() override;
 	void SetContent(std::shared_ptr<Level> levelInfo);
 	virtual void ReleaseDeviceDependentResources() override;

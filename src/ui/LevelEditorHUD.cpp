@@ -19,12 +19,9 @@ LevelEditorHUD::LevelEditorHUD()
 	this->m_pendingDingSheetCommand = blooDot::DialogCommand::None;
 }
 
-void LevelEditorHUD::Initialize()
+void LevelEditorHUD::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
 {
-	auto d2dContext = UserInterface::GetD2DContext();
-	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::White), &this->m_textColorBrush));
-	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::Black), &this->m_shadowColorBrush));
-	this->m_shadowColorBrush->SetOpacity(m_shadowColorBrush->GetOpacity() * blooDot::Consts::GOLDEN_RATIO);
+	this->m_brushRegistry = brushRegistry;
 }
 
 void LevelEditorHUD::CalculateSize()
@@ -32,7 +29,7 @@ void LevelEditorHUD::CalculateSize()
 	auto d2dContext = UserInterface::GetD2DContext();
 	this->m_size = SizeF(
 		d2dContext->GetSize().width / 2.0F,
-		blooDot::Consts::SQUARE_HEIGHT * 2.0F
+		blooDot::Consts::SQUARE_HEIGHT * 1.75F
 	);
 
 	this->CreateTextLayout();
@@ -73,6 +70,8 @@ void LevelEditorHUD::CreateTextLayout()
 	{
 		auto dwriteFactory = UserInterface::GetDWriteFactory();
 		this->m_textStyle.SetFontName(L"Fredoka One");
+		this->m_textStyle.SetFontWeight(DWRITE_FONT_WEIGHT::DWRITE_FONT_WEIGHT_LIGHT);
+		this->m_textStyle.SetFontSize(15.f);
 		DX::ThrowIfFailed(
 			dwriteFactory->CreateTextLayout(
 				this->m_dingName->Data(),
@@ -82,9 +81,7 @@ void LevelEditorHUD::CreateTextLayout()
 				this->m_container.bottom - this->m_container.top,
 				&this->m_textLayout
 			)
-		);
-
-		this->m_textColorBrush->SetColor(ColorF(ColorF::Aquamarine));
+		);		
 	}
 }
 
@@ -96,9 +93,14 @@ void LevelEditorHUD::Update(float timeTotal, float timeDelta)
 
 void LevelEditorHUD::Render()
 {
-	auto d2dContext = UserInterface::GetD2DContext();
+	auto d2dContext = UserInterface::GetD2DContextWrapped();
+	auto alphaRatio = static_cast<BYTE>(static_cast<float>(255) * blooDot::Consts::GOLDEN_RATIO);
 	D2D1_RECT_F bounds = this->GetBounds();
-	d2dContext->FillRectangle(&bounds, this->m_shadowColorBrush.Get());
+	auto textColorBrush = this->m_brushRegistry->WannaHave(d2dContext, MFARGB{ 0xd4, 0xff, 0x7f, 255 }); // Aquamarine
+	auto shadowColorBrush = this->m_brushRegistry->WannaHave(d2dContext, MFARGB{ 0, 0, 0, alphaRatio });
+	auto shadowFrameBrush = this->m_brushRegistry->WannaHave(d2dContext, MFARGB{ 192, 192, 192, alphaRatio });
+	d2dContext->FillRectangle(&bounds, shadowColorBrush.Get());
+	d2dContext->DrawRectangle(&bounds, shadowFrameBrush.Get(), 1.3f);
 	if (this->m_selectedDingID > Dings::DingIDs::Void)
 	{
 		auto dingPic = this->m_selectedDingImage.Get();
@@ -124,7 +126,7 @@ void LevelEditorHUD::Render()
 				bounds.top + blooDot::Consts::DIALOG_PADDING / 2.0f + blooDot::Consts::SQUARE_HEIGHT + blooDot::Consts::DIALOG_PADDING
 			),
 			this->m_textLayout.Get(),
-			this->m_textColorBrush.Get(),
+			textColorBrush.Get(),
 			D2D1_DRAW_TEXT_OPTIONS_NO_SNAP
 		);
 	}
@@ -132,9 +134,9 @@ void LevelEditorHUD::Render()
 
 void LevelEditorHUD::ReleaseDeviceDependentResources()
 {
-	/*this->m_textColorBrush.Reset();
-	this->m_shadowColorBrush.Reset();
-	this->m_selectedDingImage.Reset();*/
+	/*
+	this->m_selectedDingImage.Reset();
+	*/
 }
 
 Dings::DingIDs LevelEditorHUD::SelectedDingID()
