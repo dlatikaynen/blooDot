@@ -274,6 +274,28 @@ void WorldScreenBase::Update(float timeTotal, float timeDelta)
 		{
 			WORLDSHEET_SW->Translate(viewPort, 0, 0);
 		}
+
+		/* will this trigger a blittersheet treshold transgression to the right? */
+		if (WORLDSHEET_NE != nullptr && (WORLDSHEET_NE->PhysicalPosition.right - 2.0f * blooDot::Consts::SQUARE_WIDTH) < viewPort.right)
+		{
+			this->ReflapBlitterSheets(viewPort, Facings::East);
+		}
+		else if (WORLDSHEET_NW != nullptr && (WORLDSHEET_NW->PhysicalPosition.left + 2.0f * blooDot::Consts::SQUARE_WIDTH) > viewPort.left)
+		{
+			/* to the left? */
+			this->ReflapBlitterSheets(viewPort, Facings::West);
+		}
+
+		/* down? */
+		if (WORLDSHEET_SW != nullptr && (WORLDSHEET_SW->PhysicalPosition.bottom - 2.0f * blooDot::Consts::SQUARE_HEIGHT) < viewPort.bottom)
+		{
+			this->ReflapBlitterSheets(viewPort, Facings::South);
+		}
+		else if (WORLDSHEET_NW != nullptr && (WORLDSHEET_NW->PhysicalPosition.top + 2.0f * blooDot::Consts::SQUARE_HEIGHT) > viewPort.top)
+		{
+			/* or even up? */
+			this->ReflapBlitterSheets(viewPort, Facings::North);
+		}
 	}
 }
 
@@ -500,7 +522,7 @@ void WorldScreenBase::ReflapBlitterSheets(D2D1_RECT_F viewPort, Facings towardsD
 	}
 }
 
-// Make this async, so it would not lag
+// Make this async, so it would not lag, if it ever lags
 void WorldScreenBase::RePopulateSheet(WorldSheet* targetSheet)
 {
 	targetSheet->ForceRePopulate();

@@ -67,7 +67,8 @@ void DialogDingSheet::RenderClientarea(ID2D1DeviceContext* d2dContext)
 	while (dingIter != Dings::DingIDs::Void)
 	{
 		auto thisDing = this->m_LevelInfo->GetDing(dingIter);
-		if (thisDing != nullptr && !thisDing->BoundingIsDefaultRect() && (thisDing->IsMob() || this->m_currentPane != Pane::Mobs))
+		auto isMobPane = this->m_currentPane == Pane::Mobs;
+		if (thisDing != nullptr && !thisDing->BoundingIsDefaultRect() && thisDing->IsMob() == isMobPane)
 		{
 			auto sheetPlacement = thisDing->GetSheetPlacement(Facings::North);
 			auto boundingGeometry = thisDing->GetBoundingInfo();
