@@ -483,14 +483,14 @@ void WorldScreenBase::ReflapBlitterSheets(D2D1_RECT_F viewPort, Facings towardsD
 			sheetSwap = WORLDSHEET_NW.release();
 			WORLDSHEET_NW = std::unique_ptr<WorldSheet>(WORLDSHEET_SW.release());
 			WORLDSHEET_SW = std::unique_ptr<WorldSheet>(sheetSwap);
-			WORLDSHEET_NW->Translate(viewPort, 0, WORLDSHEET_SW->PhysicalWidth() * 2.0f);
+			WORLDSHEET_NW->Translate(viewPort, 0, WORLDSHEET_SW->PhysicalHeight() * 2.0f);
 			WORLDSHEET_NW->UpdatePositionInLevel(0, -2);
 			this->RePopulateSheet(WORLDSHEET_NW.get());
 
 			sheetSwap = WORLDSHEET_NE.release();
 			WORLDSHEET_NE = std::unique_ptr<WorldSheet>(WORLDSHEET_SE.release());
 			WORLDSHEET_SE = std::unique_ptr<WorldSheet>(sheetSwap);
-			WORLDSHEET_NE->Translate(viewPort, 0, WORLDSHEET_SE->PhysicalWidth() * 2.0f);
+			WORLDSHEET_NE->Translate(viewPort, 0, WORLDSHEET_SE->PhysicalHeight() * 2.0f);
 			WORLDSHEET_NE->UpdatePositionInLevel(0, -2);
 			this->RePopulateSheet(WORLDSHEET_NE.get());
 		}
@@ -502,14 +502,14 @@ void WorldScreenBase::ReflapBlitterSheets(D2D1_RECT_F viewPort, Facings towardsD
 			sheetSwap = WORLDSHEET_SW.release();
 			WORLDSHEET_SW = std::unique_ptr<WorldSheet>(WORLDSHEET_NW.release());
 			WORLDSHEET_NW = std::unique_ptr<WorldSheet>(sheetSwap);
-			WORLDSHEET_SW->Translate(viewPort, 0, -WORLDSHEET_NW->PhysicalWidth() * 2.0f);
+			WORLDSHEET_SW->Translate(viewPort, 0, -WORLDSHEET_NW->PhysicalHeight() * 2.0f);
 			WORLDSHEET_SW->UpdatePositionInLevel(0, 2);
 			this->RePopulateSheet(WORLDSHEET_SW.get());
 
 			sheetSwap = WORLDSHEET_SE.release();
 			WORLDSHEET_SE = std::unique_ptr<WorldSheet>(WORLDSHEET_NE.release());
 			WORLDSHEET_NE = std::unique_ptr<WorldSheet>(sheetSwap);
-			WORLDSHEET_SE->Translate(viewPort, 0, -WORLDSHEET_NE->PhysicalWidth() * 2.0f);
+			WORLDSHEET_SE->Translate(viewPort, 0, -WORLDSHEET_NE->PhysicalHeight() * 2.0f);
 			WORLDSHEET_SE->UpdatePositionInLevel(0, 2);
 			this->RePopulateSheet(WORLDSHEET_SE.get());
 		}

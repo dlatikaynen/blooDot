@@ -979,11 +979,11 @@ void blooDotMain::SelectMainMenu(bool moveUp, bool moveDown)
 
 	if (didMove)
 	{
-		this->m_audio->PlaySoundEffect(MenuChangeEvent);
+		this->m_audio->PlaySoundEffect(SoundEvent::MenuChangeEvent);
 	}
 	else if (moveUp || moveDown)
 	{
-		this->m_audio->PlaySoundEffect(MenuTiltEvent);
+		this->m_audio->PlaySoundEffect(SoundEvent::MenuTiltEvent);
 	}
 }
 
@@ -992,7 +992,7 @@ UIElement blooDotMain::DetectMenuItemSelected()
 	auto currentlySelected = UserInterface::GetInstance().GetSelectedButton();
 	if (currentlySelected != blooDot::UIElement::None)
 	{
-		this->m_audio->PlaySoundEffect(MenuSelectedEvent);
+		this->m_audio->PlaySoundEffect(SoundEvent::MenuSelectedEvent);
 	}
 	
 	return currentlySelected;
@@ -1003,7 +1003,7 @@ UIElement blooDotMain::DetectMenuItemPressed()
 	auto lastPressed = UserInterface::GetInstance().PopPressed();
 	if (lastPressed != blooDot::UIElement::None)
 	{
-		this->m_audio->PlaySoundEffect(MenuSelectedEvent);
+		this->m_audio->PlaySoundEffect(SoundEvent::MenuSelectedEvent);
 	}
 
 	return lastPressed;

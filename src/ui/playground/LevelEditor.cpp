@@ -94,6 +94,10 @@ void LevelEditor::Update(float timeTotal, float timeDelta)
 		this->m_IsErasing = myHUD->IsInEraserMode();
 		this->m_IsOverwriting = myHUD->IsInOverwriteMode();
 		this->m_selectedDingID = myHUD->SelectedDingID();
+		/* we should use PopTouchdown here, but then the nice drag-to-draw
+		 * capability would cease to work, and we would be forced to click.
+		 * drawback: more logic needed to detect collision to avoid repeated 
+		 * instantiation in the same cell */
 		if (this->PeekTouchdown())
 		{
 			bool needRedraw = false;
@@ -144,7 +148,7 @@ void LevelEditor::ConsiderPlacement(bool fillArea)
 {
 	if (this->m_currentLevelEditorCellKnown && this->m_selectedDingID > Dings::DingIDs::Void)
 	{
-		if (fillArea && m_lastPlacementPositionValid)
+		if (fillArea && this->m_lastPlacementPositionValid)
 		{
 			auto currentCellBackup = this->m_currentLevelEditorCell;
 			auto xFrom = this->m_lastPlacementPosition.x > this->m_currentLevelEditorCell.x ? this->m_currentLevelEditorCell.x : this->m_lastPlacementPosition.x;
@@ -200,6 +204,10 @@ void LevelEditor::DoPlaceDing()
 			this->m_lastPlacementPosition.x = this->m_currentLevelEditorCell.x;
 			this->m_lastPlacementPosition.y = this->m_currentLevelEditorCell.y;
 			this->m_lastPlacementPositionValid = true;
+		}
+		else if(curDings != nullptr && curDings->ID() != newDingID)
+		{
+			this->m_audio->PlaySoundEffect(SoundEvent::MenuTiltEvent);
 		}
 	}
 }

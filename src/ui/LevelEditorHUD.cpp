@@ -87,7 +87,6 @@ void LevelEditorHUD::CreateTextLayout()
 
 void LevelEditorHUD::Update(float timeTotal, float timeDelta)
 {
-	
 
 }
 
