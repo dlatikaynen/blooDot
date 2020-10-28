@@ -1,4 +1,4 @@
-#include "PlayerMomentum.h"
+#include "MobMomentum.h"
 #include "..\src\dings\dings.h"
 
 #pragma once
@@ -17,10 +17,16 @@ public:
 	void PushY(float accelerationRate, float attenuationRate, float gripFactor, float mediumViscosity);
 	std::shared_ptr<BlockObject> Update(float timeTotal, float timeDelta);
 
+	bool TimingRotationPending();
+	bool TimingRotationClear();
+
+	void PushTheWall(std::shared_ptr<BlockObject> pushableObject, Facings towardsDirection);
+
 	Platform::String^ Name;	
-	PlayerMomentum Momentum;
+	MobMomentum Momentum;
 	Facings Facing;
 
 private:
-	float m_timeAccrued;
+	float	m_timeAccrued;
+	bool	m_timeForRotation;
 };

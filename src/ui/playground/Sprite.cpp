@@ -16,6 +16,7 @@ Sprite::Sprite()
 	this->Momentum.attenuationX = 0.f;
 	this->Momentum.attenuationY = 0.f;	
 	this->m_timeAccrued = 0.f;
+	this->m_timeForRotation = false;
 }
 
 Sprite::~Sprite()
@@ -54,6 +55,10 @@ std::shared_ptr<BlockObject> Sprite::Update(float timeTotal, float timeDelta)
 	D2D1_RECT_F myBoundingBox;
 	std::shared_ptr<BlockObject> collidedWith = nullptr;
 	this->m_timeAccrued += timeDelta;
+	if (!this->m_timeForRotation && this->m_timeAccrued > .1f)
+	{
+		this->m_timeForRotation = true;
+	}
 
 	/* accelerate with momentary acceleration */
 	this->Momentum.speedX += this->Momentum.accelerationX;
@@ -147,12 +152,15 @@ std::shared_ptr<BlockObject> Sprite::Update(float timeTotal, float timeDelta)
 				auto wouldPenetrate = westCenterBoundingBox.right - myBoundingBox.left;
 				newPosition.left = westCenterBoundingBox.right + 1.0F;
 				newPosition.right = newPosition.left + originalWidth;
-				if (westCenterTerrain->m_Behaviors & ObjectBehaviors::Solid)
+				if (westCenterTerrain->m_Behaviors & ObjectBehaviors::Pushable)
 				{
-					this->Momentum.HitTheWall(Facings::East);
+					this->PushTheWall(westCenterTerrain, Facings::West);
 				}
-
-				if (westCenterTerrain->m_Behaviors != ObjectBehaviors::Solid)
+				else if (westCenterTerrain->m_Behaviors & ObjectBehaviors::Solid)
+				{
+					this->Momentum.HitTheWall(Facings::West);
+				}
+				else
 				{
 					collidedWith = westCenterTerrain;
 				}
@@ -177,12 +185,15 @@ std::shared_ptr<BlockObject> Sprite::Update(float timeTotal, float timeDelta)
 				auto wouldPenetrate = myBoundingBox.right - eastCenterBoundingBox.left;
 				newPosition.right = eastCenterBoundingBox.left - 1.0F;
 				newPosition.left = newPosition.right - originalWidth;
-				if (eastCenterTerrain->m_Behaviors & ObjectBehaviors::Solid)
+				if (eastCenterTerrain->m_Behaviors & ObjectBehaviors::Pushable)
+				{
+					this->PushTheWall(eastCenterTerrain, Facings::East);
+				}
+				else if (eastCenterTerrain->m_Behaviors & ObjectBehaviors::Solid)
 				{
 					this->Momentum.HitTheWall(Facings::East);
 				}
-
-				if (eastCenterTerrain->m_Behaviors != ObjectBehaviors::Solid)
+				else
 				{
 					collidedWith = eastCenterTerrain;
 				}
@@ -205,12 +216,15 @@ std::shared_ptr<BlockObject> Sprite::Update(float timeTotal, float timeDelta)
 				auto wouldPenetrate = northCenterBoundingBox.bottom - myBoundingBox.top;
 				newPosition.top = northCenterBoundingBox.bottom + 1.0F;
 				newPosition.bottom = newPosition.top + originalHeight;
-				if (northCenterTerrain->m_Behaviors & ObjectBehaviors::Solid)
+				if (northCenterTerrain->m_Behaviors & ObjectBehaviors::Pushable)
+				{
+					this->PushTheWall(northCenterTerrain, Facings::North);
+				}
+				else if (northCenterTerrain->m_Behaviors & ObjectBehaviors::Solid)
 				{
 					this->Momentum.HitTheWall(Facings::North);
 				}
-
-				if (northCenterTerrain->m_Behaviors != ObjectBehaviors::Solid)
+				else
 				{
 					collidedWith = northCenterTerrain;
 				}
@@ -233,12 +247,15 @@ std::shared_ptr<BlockObject> Sprite::Update(float timeTotal, float timeDelta)
 				auto wouldPenetrate = myBoundingBox.bottom - southCenterBoundingBox.top;
 				newPosition.bottom = southCenterBoundingBox.top - 1.0F;
 				newPosition.top = newPosition.bottom - originalHeight;
-				if (southCenterTerrain->m_Behaviors & ObjectBehaviors::Solid)
+				if (southCenterTerrain->m_Behaviors & ObjectBehaviors::Pushable)
+				{
+					this->PushTheWall(southCenterTerrain, Facings::South);
+				}
+				else if (southCenterTerrain->m_Behaviors & ObjectBehaviors::Solid)
 				{
 					this->Momentum.HitTheWall(Facings::South);
 				}
-
-				if (southCenterTerrain->m_Behaviors != ObjectBehaviors::Solid)
+				else
 				{
 					collidedWith = southCenterTerrain;
 				}
@@ -248,4 +265,33 @@ std::shared_ptr<BlockObject> Sprite::Update(float timeTotal, float timeDelta)
 
 	this->SetPosition(newPosition);
 	return collidedWith;
+}
+
+bool Sprite::TimingRotationPending()
+{
+	return this->m_timeForRotation;
+}
+
+bool Sprite::TimingRotationClear()
+{
+	if (this->m_timeForRotation)
+	{
+		this->m_timeForRotation = false;
+		this->m_timeAccrued = 0.f;
+		return true;
+	}
+
+	return false;
+}
+
+void Sprite::PushTheWall(std::shared_ptr<BlockObject> pushableObject, Facings towardsDirection)
+{
+	/* 1. we are an actively moving mob.
+	 * can we push that, given our own momentum? */
+
+	/* if we can, it attenuates our momentum */
+
+	/* if we cannot, it acts just like any other solid */
+	this->Momentum.HitTheWall(towardsDirection);
+
 }

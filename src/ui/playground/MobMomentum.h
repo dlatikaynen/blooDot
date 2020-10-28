@@ -2,7 +2,7 @@
 
 #pragma once
 
-class PlayerMomentum
+class MobMomentum
 {
 public:
 	static const float speedCapX;

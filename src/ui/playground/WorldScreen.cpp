@@ -192,8 +192,16 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 			}
 			else if (sprite->GetDing()->ID() == Dings::DingIDs::FlameGhost)
 			{				
-				auto newOrientation = Dings::RotateMobFine(sprite->GetMobRotation(), false);
-				sprite->SetMobRotation(newOrientation);
+				auto spriteDing = sprite->GetDing();
+				if (!spriteDing->IsPlayer())
+				{
+					if (sprite->TimingRotationPending())
+					{
+						auto newOrientation = Dings::RotateMobFine(sprite->GetMobRotation(), false);
+						sprite->SetMobRotation(newOrientation);
+						sprite->TimingRotationClear();
+					}
+				}
 			}
 		}
 	}

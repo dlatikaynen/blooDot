@@ -1,10 +1,10 @@
 #include "..\..\dings\dings.h"
-#include "PlayerMomentum.h"
+#include "MobMomentum.h"
 
-const float PlayerMomentum::speedCapX = blooDot::Consts::SQUARE_WIDTH / 2.2f;
-const float PlayerMomentum::speedCapY = blooDot::Consts::SQUARE_WIDTH / 2.2f;
+const float MobMomentum::speedCapX = blooDot::Consts::SQUARE_WIDTH / 2.2f;
+const float MobMomentum::speedCapY = blooDot::Consts::SQUARE_WIDTH / 2.2f;
 
-void PlayerMomentum::HitTheWall(Facings directionFacing)
+void MobMomentum::HitTheWall(Facings directionFacing)
 {
 	switch (directionFacing)
 	{

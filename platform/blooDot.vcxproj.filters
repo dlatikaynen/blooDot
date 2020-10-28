@@ -174,9 +174,6 @@
     <ClCompile Include="..\src\world\Bounding.cpp">
       <Filter>world</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\playground\PlayerMomentum.cpp">
-      <Filter>ui\playground</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\dings\wall-like\doors.cpp">
       <Filter>ui\dings</Filter>
     </ClCompile>
@@ -238,6 +235,9 @@
       <Filter>audio\orchester\Soundshapers</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ui\playground\Sprite.cpp">
+      <Filter>ui\playground</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\playground\MobMomentum.cpp">
       <Filter>ui\playground</Filter>
     </ClCompile>
   </ItemGroup>
@@ -389,9 +389,6 @@
     <ClInclude Include="..\src\world\World.h">
       <Filter>world</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\playground\PlayerMomentum.h">
-      <Filter>ui\playground</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\dings\mobs.h">
       <Filter>ui\dings</Filter>
     </ClInclude>
@@ -456,6 +453,9 @@
       <Filter>audio\orchester\Soundshapers</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\playground\Sprite.h">
+      <Filter>ui\playground</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\playground\MobMomentum.h">
       <Filter>ui\playground</Filter>
     </ClInclude>
   </ItemGroup>

@@ -363,7 +363,7 @@
     <ClCompile Include="..\src\ui\DialogOverlay.cpp" />
     <ClCompile Include="..\src\ui\LoadScreen.cpp" />
     <ClCompile Include="..\src\ui\playground\Sprite.cpp" />
-    <ClCompile Include="..\src\ui\playground\PlayerMomentum.cpp" />
+    <ClCompile Include="..\src\ui\playground\MobMomentum.cpp" />
     <ClCompile Include="..\src\ui\playground\WorldScreen.cpp" />
     <ClCompile Include="..\src\ui\playground\WorldScreenBase.cpp" />
     <ClCompile Include="..\src\app\blooDot.cpp" />
@@ -443,7 +443,7 @@
     <ClInclude Include="..\src\ui\DialogOverlay.h" />
     <ClInclude Include="..\src\ui\LoadScreen.h" />
     <ClInclude Include="..\src\ui\playground\Sprite.h" />
-    <ClInclude Include="..\src\ui\playground\PlayerMomentum.h" />
+    <ClInclude Include="..\src\ui\playground\MobMomentum.h" />
     <ClInclude Include="..\src\ui\playground\WorldScreen.h" />
     <ClInclude Include="..\src\ui\playground\WorldScreenBase.h" />
     <ClInclude Include="..\src\app\blooDot.h" />
