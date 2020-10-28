@@ -546,28 +546,31 @@ inline OrientabilityIndexRotatory Dings::HeadingFromFacing(Facings orientationFa
 
 Facings Dings::RotateMobFine(Facings currentFacing, bool counterClockwise)
 {
-	auto orientabilityIndex = Dings::HeadingFromFacing(currentFacing);
+	auto orientabilityIndex = Dings::RotateMobFine(Dings::HeadingFromFacing(currentFacing), counterClockwise);
+	return FacingFromHeading(orientabilityIndex);
+}
+
+OrientabilityIndexRotatory Dings::RotateMobFine(OrientabilityIndexRotatory currentOrientation, bool counterClockwise)
+{
 	if (counterClockwise)
 	{
-		if (orientabilityIndex == OrientabilityIndexRotatory::HDG360)
+		if (currentOrientation == OrientabilityIndexRotatory::HDG360)
 		{
-			orientabilityIndex = OrientabilityIndexRotatory::HDG337_5;
+			return OrientabilityIndexRotatory::HDG337_5;
 		}
 		else
 		{
-			orientabilityIndex = static_cast<OrientabilityIndexRotatory>(orientabilityIndex - 1);
+			return static_cast<OrientabilityIndexRotatory>(currentOrientation - 1);
 		}
 	}
 	else
 	{
-		orientabilityIndex = static_cast<OrientabilityIndexRotatory>(orientabilityIndex + 1);
-		if (orientabilityIndex == OrientabilityIndexRotatory::NumberOfSectors)
+		currentOrientation = static_cast<OrientabilityIndexRotatory>(currentOrientation + 1);
+		if (currentOrientation == OrientabilityIndexRotatory::NumberOfSectors)
 		{
-			orientabilityIndex = OrientabilityIndexRotatory::HDG360;
+			return OrientabilityIndexRotatory::HDG360;
 		}
 	}
-
-	return FacingFromHeading(orientabilityIndex);
 }
 
 Facings Dings::FacingFromHeading(OrientabilityIndexRotatory orientabilityIndex)

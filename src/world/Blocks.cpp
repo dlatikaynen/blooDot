@@ -38,7 +38,7 @@ void Blocks::InstantiateInLayerFacing(std::shared_ptr<Level> placeInLevel, Layer
 			this->m_ObjectWalls = std::make_shared<BlockObject>(this->shared_from_this());
 			if (placementFacing == Facings::Shy && templateDing != nullptr && templateDing->IsMob())
 			{
-				placementFacing = Facings::East;
+				placementFacing = Dings::DefaultMobFacing;
 			}
 
 			this->m_ObjectWalls->InstantiateFacing(templateDing, placementFacing);
@@ -70,6 +70,21 @@ void Blocks::PlaceInLevel(std::shared_ptr<Level> hostLevel)
 	if (this->m_ObjectRooof != nullptr)
 	{
 		this->m_ObjectRooof->PlaceInLevel();
+	}
+}
+
+void Blocks::MakeAnchorLink(std::shared_ptr<BlockObject> towardsAnchorObject, Layers inLayer)
+{
+	auto existingObject = this->GetObject(inLayer);
+	if (existingObject == nullptr)
+	{
+		this->InstantiateInLayerFacing(this->m_Level, inLayer, nullptr, Facings::Shy);
+		existingObject = this->GetObject(inLayer);
+	}
+
+	if (existingObject != nullptr)
+	{
+		existingObject->SetAnchor(towardsAnchorObject);
 	}
 }
 

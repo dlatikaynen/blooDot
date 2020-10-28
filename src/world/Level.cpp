@@ -379,7 +379,7 @@ void Level::SetupRuntimeState()
 						auto wallObject = allocatedObject->GetObject(Layers::Walls);
 						wallObject->SetupRuntimeState();
 						auto wallDing = wallObject->GetDing();
-						if (wallDing->IsMob())
+						if (wallDing != nullptr && wallDing->IsMob())
 						{
 							/* monsters remain in both lists, player are in sprites list only */
 							auto elevateSprite = wallDing->IsPlayer()
@@ -767,7 +767,37 @@ bool Level::CellLoadFromFile(char *srcData, size_t *offset, const Layers inLayer
 		}
 
 		auto containerBlock = this->GetBlocksAt(coordinateX, coordinateY, true);
-		containerBlock->InstantiateInLayerFacing(this->shared_from_this(), inLayer, this->GetDing(dingID), placementFacing);
+		auto templateDing = this->GetDing(dingID);
+		containerBlock->InstantiateInLayerFacing(this->shared_from_this(), inLayer, templateDing, placementFacing);
+		auto size = templateDing->GetExtentOnSheet();
+		if (size.width > 1 || size.height > 1)
+		{
+			auto anchorObject = containerBlock->GetObject(inLayer);
+			if (anchorObject != nullptr)
+			{
+				auto isSeln = true;
+				for (auto y = coordinateY; y < (coordinateY + size.height); ++y)
+				{
+					for (auto x = coordinateX; x < (coordinateX + size.width); ++x)
+					{
+						if (isSeln)
+						{
+							/* the origin is the anchor cell */
+							isSeln = false;
+						}
+						else
+						{
+							auto linkedBlock = this->GetBlocksAt(x, y, true);
+							if (linkedBlock != nullptr)
+							{
+								linkedBlock->MakeAnchorLink(anchorObject, inLayer);
+							}
+						}
+					}
+				}
+			}
+		}
+
 		return true;
 	}
 

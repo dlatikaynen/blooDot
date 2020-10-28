@@ -40,7 +40,7 @@ namespace blooDot
 
 		void DelayLineFilter::SetDelay(double delay)
 		{
-			unsigned long length = this->m_Inputs.Size();
+			auto length = this->m_Inputs.Size();
 			if ((delay + 1) > length)
 			{
 				this->m_oStream << "Delay must not exceed input buffer";
@@ -72,7 +72,7 @@ namespace blooDot
 				++this->m_outputIndex;
 				if (this->m_outputIndex >= length)
 				{
-					this->m_outputIndex -= length;
+					this->m_outputIndex -= static_cast<unsigned long>(length);
 				}
 
 				this->m_Factor += 1.;
@@ -86,7 +86,7 @@ namespace blooDot
 			auto index = this->m_inputIndex - atTime - 1;
 			while (index < 0)
 			{
-				index += this->m_Inputs.Size();
+				index += static_cast<unsigned long>(this->m_Inputs.Size());
 			}
 
 			return this->m_Inputs[index];
@@ -97,7 +97,7 @@ namespace blooDot
 			auto index = this->m_inputIndex - atTime - 1;
 			while (index < 0)
 			{
-				index += this->m_Inputs.Size();
+				index += static_cast<unsigned long>(this->m_Inputs.Size());
 			}
 
 			this->m_Inputs[index] = value;
@@ -110,7 +110,7 @@ namespace blooDot
 
 		unsigned long DelayLineFilter::GetMaxDelay(void)
 		{
-			return this->m_Inputs.Size() - 1;
+			return static_cast<unsigned long>(this->m_Inputs.Size()) - 1;
 		}
 
 		double DelayLineFilter::GetLastOutput(void) const

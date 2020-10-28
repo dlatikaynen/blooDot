@@ -112,7 +112,10 @@ void WorldSheet::Populate()
 
 						auto objectFloor = objectX->GetObject(Layers::Floor);
 						dings = objectFloor->GetDing();
-						this->PlacePrimitive(dings->IsMob() ? mobsMap : dingMap, this->m_floor, dings, objectFloor->PlacementFacing(), x, y);
+						if (dings != nullptr)
+						{
+							this->PlacePrimitive(dings->IsMob() ? mobsMap : dingMap, this->m_floor, dings, objectFloor->PlacementFacing(), x, y);
+						}
 					}
 					
 					if ((layer & Layers::Walls) == Layers::Walls)
@@ -126,7 +129,10 @@ void WorldSheet::Populate()
 
 						auto objectWalls = objectX->GetObject(Layers::Walls);
 						dings = objectWalls->GetDing();
-						this->PlacePrimitive(dings->IsMob() ? mobsMap : dingMap, this->m_walls, dings, objectWalls->PlacementFacing(), x, y);
+						if (dings != nullptr)
+						{
+							this->PlacePrimitive(dings->IsMob() ? mobsMap : dingMap, this->m_walls, dings, objectWalls->PlacementFacing(), x, y);
+						}
 					}
 					
 					if ((layer & Layers::Rooof) == Layers::Rooof)
@@ -140,7 +146,10 @@ void WorldSheet::Populate()
 
 						auto objectRooof = objectX->GetObject(Layers::Rooof);
 						dings = objectRooof->GetDing();
-						this->PlacePrimitive(dings->IsMob() ? mobsMap : dingMap, this->m_rooof, dings, objectRooof->PlacementFacing(), x, y);
+						if (dings != nullptr)
+						{
+							this->PlacePrimitive(dings->IsMob() ? mobsMap : dingMap, this->m_rooof, dings, objectRooof->PlacementFacing(), x, y);
+						}
 					}
 				}
 			}
@@ -410,7 +419,14 @@ D2D1_RECT_F WorldSheet::GetFloorBounds()
 
 void WorldSheet::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, std::shared_ptr<Dings> ding, Facings coalesce, int placementX, int placementY)
 {
-	auto dingOnSheet = ding->GetSheetPlacement(coalesce);
+	if (ding->IsMob())
+	{
+		/* those all become sprites at runtime,
+		 * so we may not draw them as static wall plane content */
+		return;
+	}
+
+	auto dingOnSheet = ding->GetSheetPlacement(coalesce);	
 	auto dingExtent = ding->GetExtentOnSheet();
 	auto dingOriginX = dingOnSheet.x * blooDot::Consts::SQUARE_WIDTH;
 	auto dingOriginY = dingOnSheet.y * blooDot::Consts::SQUARE_HEIGHT;

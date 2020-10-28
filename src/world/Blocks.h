@@ -28,6 +28,7 @@ public:
 	Layers								GetLayers();
 	std::shared_ptr<BlockObject>		GetObject(Layers ofLayer);
 	std::shared_ptr<BlockObject>		ExtractObject(Layers fromLayer);
+	void								MakeAnchorLink(std::shared_ptr<BlockObject> towardsAnchorObject, Layers inLayer);
 	void								SetPosition(const D2D1_POINT_2U gridPosition);
 	void								SetPosition(const D2D1_POINT_2F pixelPosition);
 	void								SetPosition(const D2D1_RECT_F pixelPosition);

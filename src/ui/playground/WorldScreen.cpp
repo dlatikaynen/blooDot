@@ -124,8 +124,8 @@ void WorldScreen::SetControl(bool triggershoot)
 		this->m_shooting = true;
 		this->m_shootx = Player->Position.left + blooDot::Consts::SQUARE_WIDTH / 2.0f;
 		this->m_shooty = Player->Position.top + blooDot::Consts::SQUARE_HEIGHT / 2.0f;
-		this->m_shoot_directionX = 4.5f * cosf(static_cast<float>(2.0f * static_cast<float>(M_PI) / 16.0f * Player->m_Orientation) - static_cast<float>(M_PI) / 2.0f);
-		this->m_shoot_directionY = 4.5f * sinf(static_cast<float>(2.0f * static_cast<float>(M_PI) / 16.0f * Player->m_Orientation) - static_cast<float>(M_PI) / 2.0f);
+		this->m_shoot_directionX = 4.5f * cosf(static_cast<float>(2.0f * static_cast<float>(M_PI) / 16.0f * Player->m_orientationCurrent) - static_cast<float>(M_PI) / 2.0f);
+		this->m_shoot_directionY = 4.5f * sinf(static_cast<float>(2.0f * static_cast<float>(M_PI) / 16.0f * Player->m_orientationCurrent) - static_cast<float>(M_PI) / 2.0f);
 		this->m_blockstravelled = 0;
 	}
 }
@@ -144,7 +144,7 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 		auto sprite = (*mob);
 		if (sprite != nullptr)
 		{
-			auto collidedWith = sprite->Update();
+			auto collidedWith = sprite->Update(timeTotal, timeDelta);
 			if (collidedWith != nullptr)
 			{
 				if (collidedWith->m_Behaviors & ObjectBehaviors::Takeable)
@@ -189,6 +189,11 @@ void WorldScreen::Update(float timeTotal, float timeDelta)
 					scrollTresholdExcessY = sprite->Position.bottom - this->m_viewportOffset.y - this->m_viewportScrollTreshold.bottom;
 					scrollTresholdExceeded |= std::abs(scrollTresholdExcessY) > .1f;
 				}
+			}
+			else if (sprite->GetDing()->ID() == Dings::DingIDs::FlameGhost)
+			{				
+				auto newOrientation = Dings::RotateMobFine(sprite->GetMobRotation(), false);
+				sprite->SetMobRotation(newOrientation);
 			}
 		}
 	}
@@ -496,25 +501,33 @@ void WorldScreen::RenderSprites()
 	auto spriteMap = this->m_currentLevel->GetMobsSheetBmp();
 	for (auto mob = this->m_Sprites.begin(); mob != this->m_Sprites.end(); ++mob)
 	{
-		if ((*mob) != nullptr)
+		auto mobSprite = *mob;
+		if (mobSprite != nullptr)
 		{
+			auto spriteWidth = mobSprite->m_spriteSourceRect.right - mobSprite->m_spriteSourceRect.left;
+			auto spriteHeight = mobSprite->m_spriteSourceRect.bottom - mobSprite->m_spriteSourceRect.top;
 			auto screenRect = D2D1::RectF(
-				(*mob)->Position.left - this->m_viewportOffset.x,
-				(*mob)->Position.top - this->m_viewportOffset.y,
-				(*mob)->Position.right - this->m_viewportOffset.x,
-				(*mob)->Position.bottom - this->m_viewportOffset.y
+				mobSprite->Position.left - this->m_viewportOffset.x,
+				mobSprite->Position.top - this->m_viewportOffset.y,
+				mobSprite->Position.left + spriteWidth - this->m_viewportOffset.x,
+				mobSprite->Position.top + spriteHeight - this->m_viewportOffset.y
 			);
+
+			if (mobSprite->GetDing()->ID() == Dings::DingIDs::FlameGhost)
+			{
+				//break;
+			}
 
 			this->m_d2dContext->DrawBitmap(
 				spriteMap,
 				screenRect,
 				1.0f,
 				D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
-				(*mob)->m_spriteSourceRect
+				mobSprite->m_spriteSourceRect
 			);
 
 #ifdef _DEBUG
-			auto gridPosition = (*mob)->PositionSquare;
+			auto gridPosition = mobSprite->PositionSquare;
 			auto gridLocked = D2D1::RectF(
 				gridPosition.x * blooDot::Consts::SQUARE_WIDTH - this->m_viewportOffset.x,
 				gridPosition.y * blooDot::Consts::SQUARE_HEIGHT - this->m_viewportOffset.y,

@@ -31,6 +31,19 @@ void BlockObject::InstantiateFacing(std::shared_ptr<Dings> templateDing, Facings
 	this->m_Facing = placementFacing;
 }
 
+void BlockObject::SetAnchor(std::shared_ptr<BlockObject> fromOrigin)
+{
+	if (this->m_anchorBlock == nullptr)
+	{
+		this->m_anchorBlock = fromOrigin;
+	}
+}
+
+void BlockObject::ClearAnchor()
+{
+	this->m_anchorBlock = nullptr;
+}
+
 void BlockObject::PlaceInLevel()
 {		
 	if (this->m_Ding != nullptr)
@@ -78,13 +91,20 @@ void BlockObject::SetPosition(D2D1_RECT_F pixelPosition)
 	this->PositionSquare.y = static_cast<int>((this->Position.top + blooDot::Consts::SQUARE_HEIGHT / 2.0F) / blooDot::Consts::SQUARE_HEIGHT);
 }
 
+OrientabilityIndexRotatory BlockObject::GetMobRotation()
+{
+	return this->m_orientationCurrent;
+}
+
 void BlockObject::SetMobRotation(OrientabilityIndexRotatory rotationDent)
 {
+	this->m_orientationCurrent = rotationDent;
 	auto spriteOnSheet = this->m_Ding->GetSheetPlacement(rotationDent);
+	auto sizeOnSheet = this->m_Ding->GetExtentOnSheet();
 	this->m_spriteSourceRect.left = spriteOnSheet.x * blooDot::Consts::SQUARE_WIDTH;
 	this->m_spriteSourceRect.top = spriteOnSheet.y * blooDot::Consts::SQUARE_HEIGHT;
-	this->m_spriteSourceRect.right = this->m_spriteSourceRect.left + blooDot::Consts::SQUARE_WIDTH;
-	this->m_spriteSourceRect.bottom = this->m_spriteSourceRect.top + blooDot::Consts::SQUARE_HEIGHT;
+	this->m_spriteSourceRect.right = this->m_spriteSourceRect.left + blooDot::Consts::SQUARE_WIDTH * sizeOnSheet.width;
+	this->m_spriteSourceRect.bottom = this->m_spriteSourceRect.top + blooDot::Consts::SQUARE_HEIGHT * sizeOnSheet.height;
 }
 
 void BlockObject::SetupRuntimeState()

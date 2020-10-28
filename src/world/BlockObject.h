@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "..\dings\mobs.h"
 #include "..\algo\ClumsyPacking.h"
@@ -26,10 +26,14 @@ public:
 	std::shared_ptr<Dings>				GetDing();
 	Facings								PlacementFacing();
 	void								PlaceInLevel();
+	void								SetAnchor(std::shared_ptr<BlockObject> fromOrigin);
+	void								ClearAnchor();
 	void								SetPosition(const D2D1_POINT_2U gridPosition);
 	void								SetPosition(const D2D1_POINT_2F pixelPosition);
 	void								SetPosition(const D2D1_RECT_F pixelPosition);
 	void								AdjustFacing(Facings shouldBeFacing);
+	OrientabilityIndexRotatory			GetMobRotation();
+	void								SetMobRotation(OrientabilityIndexRotatory rotationDent);
 	void								RotateInPlace(bool inverseDirection);
 	bool								GetBoundingBox(_Out_ D2D1_RECT_F* boundingBox);
 	bool								GetBoundingBoxNext(_Out_ D2D1_RECT_F* boundingBox);
@@ -38,10 +42,12 @@ public:
 	D2D1_POINT_2U						PositionSquare;
 
 	ObjectBehaviors						m_Behaviors;
+	OrientabilityIndexRotatory			m_orientationCurrent;
 	D2D1_RECT_F							m_spriteSourceRect;
 
 protected:
 	std::shared_ptr<Blocks>				m_blocksContainer;
+	std::shared_ptr<BlockObject>		m_anchorBlock; // covered by → link to main origin point, usually the top left of a multi-cell entity
 	std::shared_ptr<Dings>				m_Ding;
 	std::shared_ptr<ObjectProperties>	m_objectProperties;
 	Facings								m_Facing;
@@ -49,10 +55,7 @@ protected:
 	D2D1_RECT_F							m_boundingBox;
 	std::vector<D2D1_RECT_F>*			m_boundingBoxes;
 
-	void SetMobRotation(OrientabilityIndexRotatory rotationDent);
-
 private:
 	std::vector<D2D1_RECT_F>::iterator	m_boundingBoxIter;
-	Facings								m_orientationSpinTo;
-	Facings								m_orientationCurrent;
+	OrientabilityIndexRotatory			m_orientationSpinTo;
 };

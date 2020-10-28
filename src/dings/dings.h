@@ -221,6 +221,7 @@ public:
 	static OrientabilityIndexRotatory			HeadingFromFacing(Facings orientationFacing);
 	static Facings								FacingFromHeading(OrientabilityIndexRotatory orientabilityIndex);
 	static Facings								RotateMobFine(Facings currentFacing, bool counterClockwise);
+	static OrientabilityIndexRotatory			RotateMobFine(OrientabilityIndexRotatory currentOrientation, bool counterClockwise);
 
 	static inline OrientabilityIndexRotatory	HeadingFromVector(float vectorX, float vectorY)
 	{

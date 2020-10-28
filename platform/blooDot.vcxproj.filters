@@ -150,9 +150,6 @@
     <ClCompile Include="..\src\ui\playground\LevelEditor.cpp">
       <Filter>ui\playground</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\playground\Player.cpp">
-      <Filter>ui\playground</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ui\ControllerSetup.cpp">
       <Filter>ui</Filter>
     </ClCompile>
@@ -239,6 +236,9 @@
     </ClCompile>
     <ClCompile Include="..\src\sound\orchester\StringShape.cpp">
       <Filter>audio\orchester\Soundshapers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\playground\Sprite.cpp">
+      <Filter>ui\playground</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -362,9 +362,6 @@
     <ClInclude Include="..\src\ui\playground\LevelEditor.h">
       <Filter>ui\playground</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\playground\Player.h">
-      <Filter>ui\playground</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ui\ControllerSetup.h">
       <Filter>ui</Filter>
     </ClInclude>
@@ -457,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="..\src\sound\orchester\StringShape.h">
       <Filter>audio\orchester\Soundshapers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\playground\Sprite.h">
+      <Filter>ui\playground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

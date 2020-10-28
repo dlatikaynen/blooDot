@@ -4,17 +4,18 @@
 
 #include "..\src\world\World.h"
 #include "..\src\world\Level.h"
-#include "Player.h"
+#include "Sprite.h"
 
 Sprite::Sprite()
 {
 	BlockObject::BlockObject((std::shared_ptr<Blocks>)nullptr);
-	this->Momentum.speedX = 0.0f;
-	this->Momentum.speedY = 0.0f;
-	this->Momentum.accelerationX = 0.0f;
-	this->Momentum.accelerationY = 0.0f;
-	this->Momentum.attenuationX = 0.0f;
-	this->Momentum.attenuationY = 0.0f;	
+	this->Momentum.speedX = 0.f;
+	this->Momentum.speedY = 0.f;
+	this->Momentum.accelerationX = 0.f;
+	this->Momentum.accelerationY = 0.f;
+	this->Momentum.attenuationX = 0.f;
+	this->Momentum.attenuationY = 0.f;	
+	this->m_timeAccrued = 0.f;
 }
 
 Sprite::~Sprite()
@@ -27,7 +28,7 @@ void Sprite::InitializeIn(Dings::DingIDs dingID, Platform::String^ instanceName,
 	this->SetPosition(D2D1::Point2U(positionInLevelX, positionInLevelY));
 	auto playerTemplate = inLevel->GetDing(dingID);
 	this->InstantiateFacing(playerTemplate, mobFacing);
-	this->m_Orientation = Dings::HeadingFromFacing(mobFacing);
+	this->m_orientationCurrent = Dings::HeadingFromFacing(mobFacing);
 	this->m_Level = inLevel;
 	this->PlaceInLevel();
 }
@@ -48,10 +49,11 @@ void Sprite::PushY(float accelerationRate, float attenuationRate, float gripFact
 	this->Momentum.mediumViscosity = mediumViscosity;
 }
 
-std::shared_ptr<BlockObject> Sprite::Update()
+std::shared_ptr<BlockObject> Sprite::Update(float timeTotal, float timeDelta)
 {
 	D2D1_RECT_F myBoundingBox;
 	std::shared_ptr<BlockObject> collidedWith = nullptr;
+	this->m_timeAccrued += timeDelta;
 
 	/* accelerate with momentary acceleration */
 	this->Momentum.speedX += this->Momentum.accelerationX;
@@ -117,7 +119,7 @@ std::shared_ptr<BlockObject> Sprite::Update()
 	/* orient the sprite based on the intented vector */
 	if (abs(deltaX) > 0.1F || abs(deltaY) > 0.1F)
 	{		
-		this->m_Orientation = Dings::HeadingFromVector(deltaX, deltaY);
+		this->m_orientationCurrent = Dings::HeadingFromVector(deltaX, deltaY);
 
 #if DEBUG
 		std::wostringstream os_;
@@ -125,7 +127,7 @@ std::shared_ptr<BlockObject> Sprite::Update()
 		OutputDebugStringW(os_.str().c_str());
 #endif
 
-		this->SetMobRotation(this->m_Orientation);
+		this->SetMobRotation(this->m_orientationCurrent);
 	}
 
 	/* hit testing */
