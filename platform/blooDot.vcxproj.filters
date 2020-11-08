@@ -727,6 +727,9 @@
     <None Include="Media\Levels\grassmere.bloodot">
       <Filter>media\levels</Filter>
     </None>
+    <None Include="Media\Scenes\element-cube.pov">
+      <Filter>media\scenes</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="algo">
@@ -800,6 +803,9 @@
     </Filter>
     <Filter Include="media\data">
       <UniqueIdentifier>{a7394487-eae3-45d4-a7fa-1a501647b9f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\scenes">
+      <UniqueIdentifier>{c1297a14-f45a-4faa-8bd2-e88b9fec2f28}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
