@@ -568,8 +568,10 @@ OrientabilityIndexRotatory Dings::RotateMobFine(OrientabilityIndexRotatory curre
 		currentOrientation = static_cast<OrientabilityIndexRotatory>(currentOrientation + 1);
 		if (currentOrientation == OrientabilityIndexRotatory::NumberOfSectors)
 		{
-			return OrientabilityIndexRotatory::HDG360;
+			currentOrientation = OrientabilityIndexRotatory::HDG360;
 		}
+		
+		return static_cast<OrientabilityIndexRotatory>(currentOrientation);
 	}
 }
 

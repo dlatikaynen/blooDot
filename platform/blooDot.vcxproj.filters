@@ -798,6 +798,9 @@
     <Filter Include="audio\orchester\Sources">
       <UniqueIdentifier>{7061f0e9-b9f5-4269-bdf8-52ad7b70e8f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="media\data">
+      <UniqueIdentifier>{a7394487-eae3-45d4-a7fa-1a501647b9f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Media Include="Media\Audio\background.mp3">
@@ -818,5 +821,10 @@
     <Media Include="Media\Audio\kaching.wav">
       <Filter>media\sfx</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Media\Data\elements.dat">
+      <Filter>media\data</Filter>
+    </Resource>
   </ItemGroup>
 </Project>

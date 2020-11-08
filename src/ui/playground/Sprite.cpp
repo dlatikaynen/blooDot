@@ -14,13 +14,13 @@ Sprite::Sprite()
 	this->Momentum.accelerationX = 0.f;
 	this->Momentum.accelerationY = 0.f;
 	this->Momentum.attenuationX = 0.f;
-	this->Momentum.attenuationY = 0.f;	
+	this->Momentum.attenuationY = 0.f;
 	this->m_timeAccrued = 0.f;
 	this->m_timeForRotation = false;
 }
 
 Sprite::~Sprite()
-{	
+{
 }
 
 void Sprite::InitializeIn(Dings::DingIDs dingID, Platform::String^ instanceName, std::shared_ptr<Level> inLevel, unsigned positionInLevelX, unsigned positionInLevelY, Facings mobFacing)
@@ -290,6 +290,9 @@ void Sprite::PushTheWall(std::shared_ptr<BlockObject> pushableObject, Facings to
 	 * can we push that, given our own momentum? */
 
 	/* if we can, it attenuates our momentum */
+
+	// F = m * a
+
 
 	/* if we cannot, it acts just like any other solid */
 	this->Momentum.HitTheWall(towardsDirection);

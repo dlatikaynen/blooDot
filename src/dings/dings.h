@@ -199,6 +199,34 @@ public:
 
 	};
 
+	enum class DingShelves : unsigned
+	{
+		None = 0,
+		Floorlike,
+		Walllike = 1,
+		Decoration = 2,
+		Lootlike = 3,
+		Adversaries = 4,
+		Elements = 5
+	};
+
+	enum class WorldType
+	{
+		Unspecific = 0,
+		Aliens = 1,
+		Garden = 2,
+		ArcticSnow = 3,
+		ArcticIce = 4,
+		Mizu = 5,
+		Jungle = 6,
+		Sabaku = 7,
+		Kaze = 8,
+		Swamp = 9,
+		Cave = 10,
+		Hi = 11,
+		Cosmic = 12
+	};
+
 	Dings(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 
 	Dings::DingIDs								ID();
@@ -319,7 +347,9 @@ private:
 	void DrawClumsyPack(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo);
 	unsigned StepX(unsigned *oldValue);
 
-	Platform::String^ m_fromFile;
+	Platform::String^	m_fromFile;
+	WorldType			m_metaWorld;
+	DingShelves			m_metaShelf;
 };
 
 class Mauer : public Dings 
