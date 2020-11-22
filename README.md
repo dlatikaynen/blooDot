@@ -1,7 +1,9 @@
 # blooDot
 ### -- A Game of Life --  
 
-Game Homepage in the making...    
+![C/C++ CI](https://github.com/dlatikaynen/blooDot/workflows/C/C++%20CI/badge.svg)
+
+Game Homepage    
 https://sites.google.com/view/bloodot    
 
 News: Leverage your WiiU Pro and Nintendo Switch Controllers to play on a PC running Windows 10 via Bluetooth using this excellent driver library, which maps the Nintendo controllers to XInput (Xbox works anyway, out of the box):    
