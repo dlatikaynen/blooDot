@@ -110,15 +110,6 @@ Microsoft::WRL::ComPtr<ID2D1Bitmap> Dings::LoadBitmap(Platform::String^ fileName
 
 Microsoft::WRL::ComPtr<ID2D1Bitmap> Dings::LoadFromBitmap()
 {	
-	auto loadedBitmap = this->LoadBitmap(this->m_fromFile);
-	auto loadedSize = loadedBitmap->GetPixelSize();
-	auto integralWidth = static_cast<int>(blooDot::Consts::SQUARE_WIDTH);
-	auto integralHeight = static_cast<int>(blooDot::Consts::SQUARE_HEIGHT);
-	if ((loadedSize.width % integralWidth) != 0 || (loadedSize.height % integralHeight) != 0)
-	{
-		DebugBreak();
-	}
-
 	return this->LoadBitmap(this->m_fromFile);
 }
 
