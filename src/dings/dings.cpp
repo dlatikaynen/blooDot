@@ -110,7 +110,44 @@ Microsoft::WRL::ComPtr<ID2D1Bitmap> Dings::LoadBitmap(Platform::String^ fileName
 
 Microsoft::WRL::ComPtr<ID2D1Bitmap> Dings::LoadFromBitmap()
 {	
-	return this->LoadBitmap(this->m_fromFile);
+	auto loadedBitmap = this->LoadBitmap(this->m_fromFile);
+	auto loadedSize = loadedBitmap->GetSize();
+	auto integralWidth = static_cast<int>(blooDot::Consts::SQUARE_WIDTH);
+	auto integralHeight = static_cast<int>(blooDot::Consts::SQUARE_HEIGHT);
+	auto adjustWidth = static_cast<int>(loadedSize.width) % integralWidth != 0;
+	auto adjustHeight = static_cast<int>(loadedSize.height) % integralHeight != 0;
+	if (adjustWidth || adjustHeight)
+	{
+		auto requiredWidth = ceil(loadedSize.width / blooDot::Consts::SQUARE_WIDTH) * blooDot::Consts::SQUARE_WIDTH;
+		auto requiredHeight = ceil(loadedSize.height / blooDot::Consts::SQUARE_HEIGHT) * blooDot::Consts::SQUARE_HEIGHT;
+		auto offsetX = (requiredWidth - loadedSize.width) / 2.f;
+		auto offsetY = (requiredHeight - loadedSize.height) / 2.f;
+		auto deviceFactory = this->m_deviceResources->GetD2DFactory();
+		Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> enlargedImage;
+		auto deviceContext = Microsoft::WRL::ComPtr<ID2D1DeviceContext1>(this->m_deviceResources->GetD2DDeviceContext());
+		deviceContext->CreateCompatibleRenderTarget(
+			D2D1::SizeF(requiredWidth, requiredHeight),
+			&enlargedImage
+		);
+
+		enlargedImage->BeginDraw();
+		enlargedImage->Clear();
+		auto destinationRect = D2D1::RectF(offsetX, offsetX, offsetX + loadedSize.width, offsetY + loadedSize.height);
+		enlargedImage->DrawBitmap(loadedBitmap.Get(), destinationRect);
+
+		auto debugBrush = this->m_Brushes->WannaHave(deviceContext, MFARGB{ 128, 128, 128, 255 });
+		enlargedImage->DrawRoundedRectangle(D2D1::RoundedRect(D2D1::RectF(offsetX, offsetX, offsetX + loadedSize.width, offsetY + loadedSize.height), 2.f, 2.f), debugBrush.Get());
+
+		enlargedImage->EndDraw();
+		ID2D1Bitmap *finalBitmap = NULL;
+		enlargedImage->GetBitmap(&finalBitmap);
+		Microsoft::WRL::ComPtr<ID2D1Bitmap> finalPointer = finalBitmap;
+		return finalPointer;
+	}
+	else
+	{
+		return loadedBitmap;
+	}
 }
 
 void Dings::DrawShy(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
