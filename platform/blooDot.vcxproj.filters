@@ -458,6 +458,9 @@
     <ClInclude Include="..\src\ui\playground\MobMomentum.h">
       <Filter>ui\playground</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\dings\looot-like\looot.h">
+      <Filter>ui\dings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Media\Bitmaps\dalek.png">
@@ -589,6 +592,8 @@
     <Image Include="Media\Bitmaps\player-4.png">
       <Filter>media\bitmap</Filter>
     </Image>
+    <Image Include="Media\Bitmaps\chel-ra.png" />
+    <Image Include="Media\Bitmaps\pte-astabrine.png" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
@@ -829,8 +834,6 @@
     </Media>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Media\Data\elements.dat">
-      <Filter>media\data</Filter>
-    </Resource>
+    <DesignData Include="Media\Data\elements.dat" />
   </ItemGroup>
 </Project>

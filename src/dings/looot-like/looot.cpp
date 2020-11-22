@@ -1,5 +1,5 @@
 #include "..\..\PreCompiledHeaders.h"
-#include "..\dings.h"
+#include "looot.h"
 
 Coin::Coin(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Coin, "Coin", deviceResources, drawBrushes)
 {
@@ -202,4 +202,20 @@ BarrelIndigo::BarrelIndigo(std::shared_ptr<DX::DeviceResources> deviceResources,
 Platform::String^ BarrelIndigo::ShouldLoadFromBitmap()
 {
 	return L"barrel-indigo.png";
+}
+
+Radium::Radium(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Radium, "Elementary Radium", deviceResources, drawBrushes)
+{
+	this->m_Facings = Facings::Shy;
+	this->m_Coalescing = Facings::Shy;
+	this->m_preferredLayer = Layers::Walls;
+	this->m_possibleLayers = Layers::Walls;
+	this->m_Behaviors =
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::Takeable;
+}
+
+Platform::String^ Radium::ShouldLoadFromBitmap()
+{
+	return L"chel-ra.png";
 }

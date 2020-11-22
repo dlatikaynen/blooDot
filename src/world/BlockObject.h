@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "..\dings\mobs.h"
+#include "..\dings\looot-like\looot.h"
 #include "..\algo\ClumsyPacking.h"
 
 class Blocks;

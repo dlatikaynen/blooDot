@@ -151,6 +151,7 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, std
 	this->RegisterDing(std::make_shared<BarrelIndigo>(deviceResources, brushRegistry),			16,  2);
 	this->RegisterDing(std::make_shared<LooseMauer>(deviceResources, brushRegistry),			14,  3);
 	this->RegisterDing(std::make_shared<Door>(deviceResources, brushRegistry),					14,  4);
+	this->RegisterDing(std::make_shared<Radium>(deviceResources, brushRegistry),				14,  5);
 	DX::ThrowIfFailed(this->m_dingSheet->EndDraw());
 	this->m_dingSheet->GetBitmap(&this->m_dingSheetBmp);
 

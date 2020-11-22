@@ -317,6 +317,7 @@
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
     <Image Include="Media\Bitmaps\barrel-indigo.png" />
     <Image Include="Media\Bitmaps\barrel-wooden.png" />
+    <Image Include="Media\Bitmaps\chel-ra.png" />
     <Image Include="Media\Bitmaps\floorrocktile-cracked.png" />
     <Image Include="Media\Bitmaps\floorrocktile.png" />
     <Image Include="Media\Bitmaps\floorstonetile-ochre.png" />
@@ -331,6 +332,7 @@
     <Image Include="Media\Bitmaps\player-2.png" />
     <Image Include="Media\Bitmaps\player-3.png" />
     <Image Include="Media\Bitmaps\player-4.png" />
+    <Image Include="Media\Bitmaps\pte-astabrine.png" />
     <Image Include="Media\Bitmaps\schaedel.png" />
     <Image Include="Media\Bitmaps\snowblock.png" />
     <Image Include="Media\Bitmaps\universe_seamless.png" />
@@ -429,6 +431,7 @@
     <ClInclude Include="..\src\app\Consts.h" />
     <ClInclude Include="..\src\app\Utility.h" />
     <ClInclude Include="..\src\dings\Dings.h" />
+    <ClInclude Include="..\src\dings\looot-like\looot.h" />
     <ClInclude Include="..\src\dings\mobs.h" />
     <ClInclude Include="..\src\dings\ObjectBehaviors.h" />
     <ClInclude Include="..\src\dings\ObjectProperties.h" />
