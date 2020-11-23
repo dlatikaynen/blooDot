@@ -1,7 +1,7 @@
 # blooDot
 ### -- A Game of Life --  
 
-![C/C++ CI](https://github.com/dlatikaynen/blooDot/workflows/C/C++%20CI/badge.svg)
+![UWP 64 Release](https://github.com/dlatikaynen/blooDot/workflows/UWP%2064%20Release/badge.svg)
 
 Game Homepage    
 https://sites.google.com/view/bloodot    
