@@ -577,6 +577,9 @@ inline OrientabilityIndexRotatory Dings::HeadingFromFacing(Facings orientationFa
 #ifdef _DEBUG
 		default:
 			throw ref new Platform::FailureException(L"Invalid orientation in HeadingFromFacing function");
+#else
+		default:
+			return OrientabilityIndexRotatory::HDG360;
 #endif
 	}
 }
@@ -635,6 +638,9 @@ Facings Dings::FacingFromHeading(OrientabilityIndexRotatory orientabilityIndex)
 #ifdef _DEBUG
 		default:
 			throw ref new Platform::FailureException(L"Invalid facing in FacingFromHeading function");
+#else
+		default:
+			return Facings::North;
 #endif
 	}
 }
