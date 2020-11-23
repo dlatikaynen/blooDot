@@ -39,6 +39,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./SampleX64.ZIP
-          asset_name: SampleX64.ZIP
+          asset_path: ./blooDot.zip
+          asset_name: blooDot.zip
           asset_content_type: application/zip
