@@ -592,8 +592,27 @@
     <Image Include="Media\Bitmaps\player-4.png">
       <Filter>media\bitmap</Filter>
     </Image>
-    <Image Include="Media\Bitmaps\chel-ra.png" />
-    <Image Include="Media\Bitmaps\pte-astabrine.png" />
+    <Image Include="Media\Bitmaps\chel-ra.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\pte-astabrine.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\chel-ag.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\chel-au.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\chel-cr.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\chel-cu.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
+    <Image Include="Media\Bitmaps\chel-f.png">
+      <Filter>media\bitmap</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
@@ -834,6 +853,8 @@
     </Media>
   </ItemGroup>
   <ItemGroup>
-    <DesignData Include="Media\Data\elements.dat" />
+    <DesignData Include="Media\Data\elements.dat">
+      <Filter>media\data</Filter>
+    </DesignData>
   </ItemGroup>
 </Project>

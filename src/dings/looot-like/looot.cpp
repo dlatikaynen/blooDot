@@ -1,7 +1,23 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "looot.h"
 
-Coin::Coin(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Coin, "Coin", deviceResources, drawBrushes)
+Loot::Loot(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(dingID, dingName, deviceResources, drawBrushes)
+{
+	this->m_metaShelf = DingShelves::Lootlike;
+}
+
+void Loot::InitChemicalElement()
+{
+	this->m_Facings = Facings::Shy;
+	this->m_Coalescing = Facings::Shy;
+	this->m_preferredLayer = Layers::Walls;
+	this->m_possibleLayers = Layers::Walls;
+	this->m_Behaviors =
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::Takeable;
+}
+
+Coin::Coin(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Loot(Dings::DingIDs::Coin, "Coin", deviceResources, drawBrushes)
 {
 	m_Facings = Facings::Shy;
 	m_Coalescing = Facings::Shy;
@@ -35,7 +51,7 @@ void Coin::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	rendEr->DrawLine(D2D1::Point2F(elli.point.x - 2.5f, elli.point.y - 3.0f), D2D1::Point2F(elli.point.x + 0.5f, elli.point.y - 5.0f), ringBrush, 1.5f);
 }
 
-Chest::Chest(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Chest, "Chest", deviceResources, drawBrushes)
+Chest::Chest(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Loot(Dings::DingIDs::Chest, "Chest", deviceResources, drawBrushes)
 {
 	m_Facings = Facings::Cross;
 	m_Coalescing = Facings::Shy;
@@ -151,7 +167,7 @@ int GoldChest::ColorVariation()
 	return 3;
 }
 
-Lettuce::Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Lettuce, "Lettuce", deviceResources, drawBrushes)
+Lettuce::Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Loot(Dings::DingIDs::Lettuce, "Lettuce", deviceResources, drawBrushes)
 {
 	this->m_Facings = Facings::Shy;
 	this->m_Coalescing = Facings::Shy;
@@ -172,50 +188,16 @@ SoundEvent Lettuce::GetSoundOnTaken()
 	return SoundEvent::HitCrumble;
 }
 
-BarrelWooden::BarrelWooden(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::BarrelWood, "Wooden barrel", deviceResources, drawBrushes)
-{
-	this->m_Facings = Facings::Shy;
-	this->m_Coalescing = Facings::Shy;
-	this->m_preferredLayer = Layers::Walls;
-	this->m_possibleLayers = Layers::Walls;
-	this->m_Behaviors =
-		ObjectBehaviors::Solid |
-		ObjectBehaviors::Takeable;
-}
+Radium::Radium(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Loot(Dings::DingIDs::Radium, "Elementary Radium", deviceResources, drawBrushes) { this->InitChemicalElement(); }
+Copper::Copper(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Loot(Dings::DingIDs::Radium, "Elementary Copper", deviceResources, drawBrushes) { this->InitChemicalElement(); }
+Fluorine::Fluorine(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Loot(Dings::DingIDs::Radium, "Elementary Fluorine", deviceResources, drawBrushes) { this->InitChemicalElement(); }
+Chromium::Chromium(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Loot(Dings::DingIDs::Radium, "Elementary Chromium", deviceResources, drawBrushes) { this->InitChemicalElement(); }
+Silver::Silver(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Loot(Dings::DingIDs::Radium, "Elementary Silver", deviceResources, drawBrushes) { this->InitChemicalElement(); }
+Gold::Gold(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Loot(Dings::DingIDs::Radium, "Elementary Gold", deviceResources, drawBrushes) { this->InitChemicalElement(); }
 
-Platform::String^ BarrelWooden::ShouldLoadFromBitmap()
-{
-	return L"barrel-wooden.png";
-}
-
-BarrelIndigo::BarrelIndigo(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::BarrelIndigo, "Indigo barrel", deviceResources, drawBrushes)
-{
-	this->m_Facings = Facings::Shy;
-	this->m_Coalescing = Facings::Shy;
-	this->m_preferredLayer = Layers::Walls;
-	this->m_possibleLayers = Layers::Walls;
-	this->m_Behaviors =
-		ObjectBehaviors::Solid |
-		ObjectBehaviors::Takeable;
-}
-
-Platform::String^ BarrelIndigo::ShouldLoadFromBitmap()
-{
-	return L"barrel-indigo.png";
-}
-
-Radium::Radium(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Radium, "Elementary Radium", deviceResources, drawBrushes)
-{
-	this->m_Facings = Facings::Shy;
-	this->m_Coalescing = Facings::Shy;
-	this->m_preferredLayer = Layers::Walls;
-	this->m_possibleLayers = Layers::Walls;
-	this->m_Behaviors =
-		ObjectBehaviors::Solid |
-		ObjectBehaviors::Takeable;
-}
-
-Platform::String^ Radium::ShouldLoadFromBitmap()
-{
-	return L"chel-ra.png";
-}
+Platform::String^ Radium::ShouldLoadFromBitmap() { return L"chel-ra.png"; }
+Platform::String^ Copper::ShouldLoadFromBitmap() { return L"chel-cu.png"; }
+Platform::String^ Fluorine::ShouldLoadFromBitmap() { return L"chel-f.png"; }
+Platform::String^ Chromium::ShouldLoadFromBitmap() { return L"chel-cr.png"; }
+Platform::String^ Silver::ShouldLoadFromBitmap() { return L"chel-ag.png"; }
+Platform::String^ Gold::ShouldLoadFromBitmap() { return L"chel-au.png"; }

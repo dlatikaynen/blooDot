@@ -196,6 +196,11 @@ public:
 		Dalek = 34,
 		FlameGhost = 35,
 		Radium = 88,
+		Copper = 29,
+		Chromium = 224,
+		Silver = 47,
+		Gold = 79,
+		Fluorine = 209,
 		Schaedel = 4042
 
 	};
@@ -334,6 +339,8 @@ protected:
 	D2D1_SIZE_U								m_extentOnSheet;
 	ObjectBehaviors							m_Behaviors;
 	std::shared_ptr<Bounding>				m_Bounding;
+	WorldType								m_metaWorld;
+	DingShelves								m_metaShelf;
 
 private:
 	void SetOnSheetPlacementsFromCoalescability();
@@ -349,8 +356,6 @@ private:
 	unsigned StepX(unsigned *oldValue);
 
 	Platform::String^	m_fromFile;
-	WorldType			m_metaWorld;
-	DingShelves			m_metaShelf;
 };
 
 class Mauer : public Dings 

@@ -194,6 +194,11 @@
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
     <Image Include="Media\Bitmaps\barrel-indigo.png" />
     <Image Include="Media\Bitmaps\barrel-wooden.png" />
+    <Image Include="Media\Bitmaps\chel-ag.png" />
+    <Image Include="Media\Bitmaps\chel-au.png" />
+    <Image Include="Media\Bitmaps\chel-cr.png" />
+    <Image Include="Media\Bitmaps\chel-cu.png" />
+    <Image Include="Media\Bitmaps\chel-f.png" />
     <Image Include="Media\Bitmaps\chel-ra.png" />
     <Image Include="Media\Bitmaps\floorrocktile-cracked.png" />
     <Image Include="Media\Bitmaps\floorrocktile.png" />

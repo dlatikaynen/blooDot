@@ -2,7 +2,16 @@
 
 #include "..\Dings.h"
 
-class Coin : public Dings
+class Loot : public Dings
+{
+public:
+	Loot(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
+
+protected:
+	void InitChemicalElement();
+};
+
+class Coin : public Loot
 {
 public:
 	Coin(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
@@ -10,7 +19,7 @@ public:
 	SoundEvent GetSoundOnTaken() override;
 };
 
-class Chest : public Dings
+class Chest : public Loot
 {
 public:
 	Chest(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
@@ -39,7 +48,7 @@ protected:
 	int ColorVariation() override;
 };
 
-class Lettuce : public Dings
+class Lettuce : public Loot
 {
 public:
 	Lettuce(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
@@ -48,10 +57,50 @@ protected:
 	SoundEvent GetSoundOnTaken() override;
 };
 
-class Radium : public Dings
+class Radium : public Loot
 {
 public:
 	Radium(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Fluorine : public Loot
+{
+public:
+	Fluorine(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Copper : public Loot
+{
+public:
+	Copper(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Chromium : public Loot
+{
+public:
+	Chromium(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Silver : public Loot
+{
+public:
+	Silver(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
+protected:
+	Platform::String^ ShouldLoadFromBitmap() override;
+};
+
+class Gold : public Loot
+{
+public:
+	Gold(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes);
 protected:
 	Platform::String^ ShouldLoadFromBitmap() override;
 };

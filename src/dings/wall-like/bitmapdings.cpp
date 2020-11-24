@@ -33,3 +33,35 @@ Platform::String^ Snow::ShouldLoadFromBitmap()
 {
 	return L"snowblock.png";
 }
+
+BarrelIndigo::BarrelIndigo(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::BarrelIndigo, "Indigo barrel", deviceResources, drawBrushes)
+{
+	this->m_Facings = Facings::Shy;
+	this->m_Coalescing = Facings::Shy;
+	this->m_preferredLayer = Layers::Walls;
+	this->m_possibleLayers = Layers::Walls;
+	this->m_Behaviors =
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::Takeable;
+}
+
+Platform::String^ BarrelIndigo::ShouldLoadFromBitmap()
+{
+	return L"barrel-indigo.png";
+}
+
+BarrelWooden::BarrelWooden(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::BarrelWood, "Wooden barrel", deviceResources, drawBrushes)
+{
+	this->m_Facings = Facings::Shy;
+	this->m_Coalescing = Facings::Shy;
+	this->m_preferredLayer = Layers::Walls;
+	this->m_possibleLayers = Layers::Walls;
+	this->m_Behaviors =
+		ObjectBehaviors::Solid |
+		ObjectBehaviors::Takeable;
+}
+
+Platform::String^ BarrelWooden::ShouldLoadFromBitmap()
+{
+	return L"barrel-wooden.png";
+}
