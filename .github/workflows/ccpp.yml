@@ -1,9 +1,7 @@
 name: UWP 64 Release
 on:
-  workflow_dispatch:
   push:
-    tags:
-      - 'v*'
+  workflow_dispatch:
 jobs:
   create_release:
     name: Create UWP 64 Release
@@ -26,7 +24,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: |
             Automated Release by GitHub Action CI
