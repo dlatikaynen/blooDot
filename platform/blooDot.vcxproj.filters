@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="..\src\BasicPixelShader.hlsl">
-      <Filter>dx\3dx</Filter>
-    </FxCompile>
-    <FxCompile Include="..\src\BasicVertexShader.hlsl">
-      <Filter>dx\3dx</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\src\algo\GameOfLifeSprinkler.cpp">
       <Filter>algo</Filter>
     </ClCompile>
@@ -532,24 +524,6 @@
     <Image Include="..\src\windowstitle-sdk.png">
       <Filter>media\bitmap</Filter>
     </Image>
-    <Image Include="Media\Textures\bridge.dds">
-      <Filter>dx\3dx</Filter>
-    </Image>
-    <Image Include="Media\Textures\bridge_bump.dds">
-      <Filter>dx\3dx</Filter>
-    </Image>
-    <Image Include="Media\Textures\cliff_sides.dds">
-      <Filter>dx\3dx</Filter>
-    </Image>
-    <Image Include="Media\Textures\Marble.dds">
-      <Filter>dx\3dx</Filter>
-    </Image>
-    <Image Include="Media\Textures\topwall_color.dds">
-      <Filter>dx\3dx</Filter>
-    </Image>
-    <Image Include="Media\Textures\walllevel1.dds">
-      <Filter>dx\3dx</Filter>
-    </Image>
     <Image Include="Media\Bitmaps\floorrocktile.png">
       <Filter>media\bitmap</Filter>
     </Image>
@@ -797,9 +771,6 @@
     </Filter>
     <Filter Include="media\font">
       <UniqueIdentifier>{92936b36-5994-4916-ab89-e93fef575fa0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dx\3dx">
-      <UniqueIdentifier>{a212c7f3-557a-4543-bcfb-cd170556664d}</UniqueIdentifier>
     </Filter>
     <Filter Include="media\legacy">
       <UniqueIdentifier>{5ad9b12e-0441-4ccf-899f-6ae06c107570}</UniqueIdentifier>

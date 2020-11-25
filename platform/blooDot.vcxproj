@@ -219,13 +219,7 @@
     <Image Include="Media\Bitmaps\snowblock.png" />
     <Image Include="Media\Bitmaps\universe_seamless.png" />
     <Image Include="Media\Bitmaps\notimeforcaution.png" />
-    <Image Include="Media\Textures\bridge.dds" />
-    <Image Include="Media\Textures\bridge_bump.dds" />
-    <Image Include="Media\Textures\cliff_sides.dds" />
     <Image Include="Media\Textures\loadscreen.png" />
-    <Image Include="Media\Textures\Marble.dds" />
-    <Image Include="Media\Textures\topwall_color.dds" />
-    <Image Include="Media\Textures\walllevel1.dds" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\app\App.cpp" />
@@ -380,22 +374,6 @@
     <ClInclude Include="..\src\ui\playground\LevelEditor.h" />
     <ClInclude Include="..\src\ui\LevelEditorHUD.h" />
     <ClInclude Include="..\src\world\World.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\src\BasicPixelShader.hlsl">
-      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
-      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableDebuggingInformation>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="..\src\BasicVertexShader.hlsl">
-      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
-      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableDebuggingInformation>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
