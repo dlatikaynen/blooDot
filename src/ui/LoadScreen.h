@@ -42,13 +42,7 @@ private:
     Microsoft::WRL::ComPtr<ID2D1DrawingStateBlock>  m_stateBlock;
 	std::shared_ptr<BrushRegistry>					m_Brushes;
 
-    Microsoft::WRL::ComPtr<IWICImagingFactory>      m_wicFactory;
-    Microsoft::WRL::ComPtr<ID2D1Bitmap>             m_bitmap;
-
-    D2D1_SIZE_F                                     m_imageSize;
-    D2D1_SIZE_F                                     m_offset;
 	D2D1_SIZE_F                                     m_moved;
-	D2D1_SIZE_F                                     m_totalSize;
 	bool											m_isResizing;
 
 	GameOfLifeAnimation								m_GoLEngine;

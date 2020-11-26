@@ -18,14 +18,10 @@ LoadScreen::LoadScreen()
 void LoadScreen::Initialize(_In_ std::shared_ptr<DX::DeviceResources>& deviceResources, _In_ std::shared_ptr<Audio> audioEngine)
 {
 	this->m_deviceResources = deviceResources;
-	this->m_wicFactory = deviceResources->GetWicImagingFactory();
 	this->m_d2dDevice = deviceResources->GetD2DDevice();
 	this->m_d2dContext = deviceResources->GetD2DDeviceContext();
 	this->m_audio = audioEngine;
-	this->m_imageSize = D2D1::SizeF(0.0f, 0.0f);
-	this->m_offset = D2D1::SizeF(0.0f, 0.0f);
 	this->m_moved = D2D1::SizeF(0.0f, 0.0f);
-	this->m_totalSize = D2D1::SizeF(0.0f, 0.0f);
 
     ComPtr<ID2D1Factory> factory;
 	this->m_d2dDevice->GetFactory(&factory);
@@ -50,47 +46,6 @@ void LoadScreen::ResourceLoadingCompleted()
 
 void LoadScreen::ResetDirectXResources()
 {
-    ComPtr<IWICBitmapDecoder> wicBitmapDecoder;
-    DX::ThrowIfFailed(
-		this->m_wicFactory->CreateDecoderFromFilename(
-            L"Media\\Textures\\loadscreen.png",
-            nullptr,
-            GENERIC_READ,
-            WICDecodeMetadataCacheOnDemand,
-            &wicBitmapDecoder
-        )
-    );
-
-    ComPtr<IWICBitmapFrameDecode> wicBitmapFrame;
-    DX::ThrowIfFailed(
-        wicBitmapDecoder->GetFrame(0, &wicBitmapFrame)
-    );
-
-    ComPtr<IWICFormatConverter> wicFormatConverter;
-    DX::ThrowIfFailed(
-        this->m_wicFactory->CreateFormatConverter(&wicFormatConverter)
-    );
-
-    DX::ThrowIfFailed(
-        wicFormatConverter->Initialize(
-            wicBitmapFrame.Get(),
-            GUID_WICPixelFormat32bppPBGRA,
-            WICBitmapDitherTypeNone,
-            nullptr,
-            0.0,
-            WICBitmapPaletteTypeCustom // the BGRA format has no palette, so this value is ignored
-        )
-    );
-
-    DX::ThrowIfFailed(
-        this->m_d2dContext->CreateBitmapFromWicBitmap(
-            wicFormatConverter.Get(),
-            BitmapProperties(PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)),
-            &this->m_bitmap
-        )
-    );
-
-    this->m_imageSize = this->m_bitmap->GetSize();
     DX::ThrowIfFailed(
         this->m_d2dFactory->CreateDrawingStateBlock(&this->m_stateBlock)
     );
@@ -129,11 +84,6 @@ void LoadScreen::UpdateForWindowSizeChange()
 			(float)DipsToPixelsY(windowBounds.Bottom, dpiY)
 		)
 	);
-
-	this->m_offset.width = (viewportBounds.Width - this->m_imageSize.width) / 2.0f;
-	this->m_offset.height = (viewportBounds.Height - this->m_imageSize.height) / 2.0f;
-	this->m_totalSize.width = this->m_offset.width + this->m_imageSize.width;
-	this->m_totalSize.height = this->m_offset.height + this->m_imageSize.height;
 
 	/* we have the screen size here, so we use this opportunity to compute the GoL dimensions
 	 * and also precompute the sprinkler circle dot matrix */

@@ -512,9 +512,6 @@
     <Image Include="Media\Bitmaps\highgrass.png">
       <Filter>media\bitmap</Filter>
     </Image>
-    <Image Include="Media\Textures\loadscreen.png">
-      <Filter>media\bitmap</Filter>
-    </Image>
     <Image Include="Assets\LockScreenLogo.scale-200.png">
       <Filter>media\bitmap</Filter>
     </Image>

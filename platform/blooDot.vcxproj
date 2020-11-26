@@ -221,7 +221,6 @@
     <Image Include="Media\Bitmaps\snowblock.png" />
     <Image Include="Media\Bitmaps\universe_seamless.png" />
     <Image Include="Media\Bitmaps\notimeforcaution.png" />
-    <Image Include="Media\Textures\loadscreen.png" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\app\App.cpp" />
