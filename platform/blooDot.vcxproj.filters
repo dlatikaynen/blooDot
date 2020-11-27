@@ -232,6 +232,9 @@
     <ClCompile Include="..\src\ui\playground\MobMomentum.cpp">
       <Filter>ui\playground</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ui\controls\ControlPrimitive.cpp">
+      <Filter>ui\controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
@@ -452,6 +455,9 @@
     </ClInclude>
     <ClInclude Include="..\src\dings\looot-like\looot.h">
       <Filter>ui\dings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\controls\ControlPrimitive.h">
+      <Filter>ui\controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -798,6 +804,9 @@
     </Filter>
     <Filter Include="media\scenes">
       <UniqueIdentifier>{c1297a14-f45a-4faa-8bd2-e88b9fec2f28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\controls">
+      <UniqueIdentifier>{0ea08ffb-651d-4031-b7c0-bbf6de4c2e77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 #include "..\PreCompiledHeaders.h"
 #include "UserInterface.h"
 #include "..\dx\DirectXHelper.h"
+
 #include "DialogOverlay.h"
 
 using namespace Windows::UI::Core;
