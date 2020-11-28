@@ -25,6 +25,8 @@ protected:
 	Alignment						m_alignment;
 	D2D1_RECT_F						m_container;
 	D2D1_SIZE_F						m_size;
+	D2D1_SIZE_F						m_clientAreaContent;
+	D2D1_POINT_2F					m_clientAreaScrollOffset;
 	bool							m_visible;
 	bool							m_isFadingOut;
 };

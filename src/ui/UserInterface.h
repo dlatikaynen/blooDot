@@ -27,7 +27,8 @@ public:
 	static ID2D1DeviceContext* GetD2DContext() { return m_instance.m_d2dContext.Get(); }
 	static IDWriteFontCollection* GetFontCollection() {	return m_instance.m_fontCollection.Get(); }
 
-    static MFARGB Color(D2D1::ColorF::Enum color, BYTE alpha = (0xff));
+    static const MFARGB Color(D2D1::ColorF::Enum color, BYTE alpha = (0xff));
+    static const D2D1_SIZE_F Snug2Max(const D2D1_SIZE_F availableArea, const D2D1_SIZE_F requiredArea);
     static void ReleaseDeviceDependentResources();
 
     void Initialize(

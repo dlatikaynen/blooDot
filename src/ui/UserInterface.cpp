@@ -122,7 +122,7 @@ void UserInterface::HitTest(D2D1_POINT_2F point)
     }
 }
 
-MFARGB UserInterface::Color(D2D1::ColorF::Enum color, BYTE alpha)
+const MFARGB UserInterface::Color(D2D1::ColorF::Enum color, BYTE alpha)
 {	
 	return MFARGB
 	{
@@ -131,6 +131,26 @@ MFARGB UserInterface::Color(D2D1::ColorF::Enum color, BYTE alpha)
 		static_cast<BYTE>((color & 0xff0000) >> 16), //red
 		alpha
 	};
+}
+
+const D2D1_SIZE_F UserInterface::Snug2Max(D2D1_SIZE_F availableArea, D2D1_SIZE_F requiredArea)
+{
+	auto availableWidth = availableArea.width - blooDot::Consts::SQUARE_WIDTH;
+	auto availableHeight = availableArea.height - blooDot::Consts::SQUARE_HEIGHT;
+	auto grantedWidth = requiredArea.width;
+	auto grantedHeight = requiredArea.height;
+	if (requiredArea.width > availableWidth)
+	{
+		grantedWidth = availableWidth;
+	}
+
+	if (requiredArea.height > availableHeight)
+	{
+		grantedHeight = availableHeight;
+	}
+
+	return D2D1::SizeF(grantedWidth, grantedHeight);
+	
 }
 
 blooDot::UIElement UserInterface::GetSelectedButton()

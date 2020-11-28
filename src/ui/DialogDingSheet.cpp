@@ -10,9 +10,9 @@ DialogDingSheet::DialogDingSheet()
 
 void DialogDingSheet::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
 {
-	auto d2dContext = UserInterface::GetD2DContext();
+	auto d2dContext = UserInterface::GetD2DContextWrapped();
 	DialogOverlay::Initialize(brushRegistry);
-	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Crimson), &this->m_boundsBrush));
+	this->m_boundsBrush = this->m_brushRegistry->WannaHave(d2dContext, UserInterface::Color(D2D1::ColorF::Crimson));
 }
 
 Platform::String^ DialogDingSheet::StaticCaption()
@@ -26,7 +26,11 @@ void DialogDingSheet::SetContent(std::shared_ptr<Level> levelInfo)
 {	
 	this->m_LevelInfo = levelInfo;
 	this->m_dingSheetBitmap = this->m_currentPane == Pane::Mobs ? levelInfo->GetMobsSheetBmp() : levelInfo->GetDingSheetBmp();
-	this->SetClientareaSize(this->m_dingSheetBitmap->GetSize());
+	auto d2dContext = UserInterface::GetD2DContextWrapped();
+	auto viewportSize = d2dContext->GetSize();
+	this->m_clientAreaContent = this->m_dingSheetBitmap->GetSize();
+	auto windowClientSize = UserInterface::Snug2Max(viewportSize, this->m_clientAreaContent);
+	this->SetClientareaSize(windowClientSize);
 }
 
 void DialogDingSheet::Update(float timeTotal, float timeDelta)
@@ -51,8 +55,13 @@ void DialogDingSheet::TogglePane()
 void DialogDingSheet::RenderClientarea(ID2D1DeviceContext* d2dContext)
 {
 	DialogOverlay::RenderClientarea(d2dContext);
-	auto dingSheetSize = this->m_dingSheetBitmap->GetSize();
-	auto sourceRect = D2D1::RectF(0.0F, 0.0F, dingSheetSize.width - 1.0F, dingSheetSize.height - 1.0F);
+	auto sourceRect = D2D1::RectF(
+		this->m_clientAreaScrollOffset.x,
+		this->m_clientAreaScrollOffset.y,
+		this->m_clientAreaScrollOffset.x + (this->m_clientArea.right - this->m_clientArea.left),
+		this->m_clientAreaScrollOffset.y + (this->m_clientArea.bottom - this->m_clientArea.top)
+	);
+
 	d2dContext->DrawBitmap(
 		this->m_dingSheetBitmap,
 		this->m_clientArea,
@@ -123,6 +132,5 @@ void DialogDingSheet::RenderClientarea(ID2D1DeviceContext* d2dContext)
 
 void DialogDingSheet::ReleaseDeviceDependentResources()
 {
-	this->m_boundsBrush.Reset();
 	DialogOverlay::ReleaseDeviceDependentResources();
 }

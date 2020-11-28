@@ -453,7 +453,13 @@ void WorldSheet::PlacePrimitive(ID2D1Bitmap *dingSurface, Microsoft::WRL::ComPtr
 
 void WorldSheet::EraseSquare(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> renderTarget, int placementX, int placementY)
 {
-	D2D1_RECT_F placementRect = D2D1::RectF(placementX * 49.0f, placementY * 49.0f, placementX * 49.0f + 49.0f, placementY * 49.0f + 49.0f);
+	D2D1_RECT_F placementRect = D2D1::RectF(
+		placementX * blooDot::Consts::SQUARE_WIDTH,
+		placementY * blooDot::Consts::SQUARE_HEIGHT,
+		placementX * blooDot::Consts::SQUARE_WIDTH + blooDot::Consts::SQUARE_WIDTH,
+		placementY * blooDot::Consts::SQUARE_HEIGHT + blooDot::Consts::SQUARE_HEIGHT
+	);
+
 	renderTarget->PushAxisAlignedClip(placementRect, D2D1_ANTIALIAS_MODE::D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
 	renderTarget->Clear();
 	renderTarget->PopAxisAlignedClip();

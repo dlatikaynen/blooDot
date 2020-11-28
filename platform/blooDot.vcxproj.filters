@@ -92,10 +92,10 @@
       <Filter>app</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dings\wall-like\mauer.cpp">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dings\mob-like\dalek.cpp">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ui\NerdStatsDisplay.cpp">
       <Filter>ui</Filter>
@@ -104,7 +104,7 @@
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\world\Level.cpp">
-      <Filter>world</Filter>
+      <Filter>game\world</Filter>
     </ClCompile>
     <ClCompile Include="..\src\app\Consts.cpp">
       <Filter>app</Filter>
@@ -113,10 +113,10 @@
       <Filter>ui</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dings\wall-like\bitmapdings.cpp">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dings\floor-like\wasser.cpp">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClCompile>
     <ClCompile Include="..\src\algo\ClumsyPacking.h">
       <Filter>algo</Filter>
@@ -125,22 +125,22 @@
       <Filter>audio</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dings\looot-like\looot.cpp">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dings\mob-like\mobs.cpp">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dx\TTFLoader.cpp">
       <Filter>dx</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ui\playground\WorldScreenBase.cpp">
-      <Filter>ui\playground</Filter>
+      <Filter>game\playground</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ui\playground\WorldScreen.cpp">
-      <Filter>ui\playground</Filter>
+      <Filter>game\playground</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ui\playground\LevelEditor.cpp">
-      <Filter>ui\playground</Filter>
+      <Filter>game\playground</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ui\ControllerSetup.cpp">
       <Filter>ui</Filter>
@@ -149,13 +149,13 @@
       <Filter>app</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dings\Dings.cpp">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dings\ObjectProperties.cpp">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dings\ObjectBehaviors.cpp">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ui\DialogOverlay.cpp">
       <Filter>ui\dialogs</Filter>
@@ -164,19 +164,19 @@
       <Filter>ui\dialogs</Filter>
     </ClCompile>
     <ClCompile Include="..\src\world\Bounding.cpp">
-      <Filter>world</Filter>
+      <Filter>game\world</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dings\wall-like\doors.cpp">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dings\floor-like\flooring.cpp">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClCompile>
     <ClCompile Include="..\src\world\Blocks.cpp">
-      <Filter>world</Filter>
+      <Filter>game\world</Filter>
     </ClCompile>
     <ClCompile Include="..\src\world\BlockObject.cpp">
-      <Filter>world</Filter>
+      <Filter>game\world</Filter>
     </ClCompile>
     <ClCompile Include="..\src\sound\SynthOfLife.cpp">
       <Filter>audio</Filter>
@@ -227,10 +227,10 @@
       <Filter>audio\orchester\Soundshapers</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ui\playground\Sprite.cpp">
-      <Filter>ui\playground</Filter>
+      <Filter>game\playground</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ui\playground\MobMomentum.cpp">
-      <Filter>ui\playground</Filter>
+      <Filter>game\playground</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ui\controls\ControlPrimitive.cpp">
       <Filter>ui\controls</Filter>
@@ -334,7 +334,7 @@
       <Filter>ui</Filter>
     </ClInclude>
     <ClInclude Include="..\src\world\Level.h">
-      <Filter>world</Filter>
+      <Filter>game\world</Filter>
     </ClInclude>
     <ClInclude Include="..\src\app\Consts.h">
       <Filter>app</Filter>
@@ -352,13 +352,13 @@
       <Filter>dx</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\playground\WorldScreenBase.h">
-      <Filter>ui\playground</Filter>
+      <Filter>game\playground</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\playground\WorldScreen.h">
-      <Filter>ui\playground</Filter>
+      <Filter>game\playground</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\playground\LevelEditor.h">
-      <Filter>ui\playground</Filter>
+      <Filter>game\playground</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\ControllerSetup.h">
       <Filter>ui</Filter>
@@ -367,13 +367,13 @@
       <Filter>app</Filter>
     </ClInclude>
     <ClInclude Include="..\src\dings\Dings.h">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClInclude>
     <ClInclude Include="..\src\dings\ObjectBehaviors.h">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClInclude>
     <ClInclude Include="..\src\dings\ObjectProperties.h">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\DialogOverlay.h">
       <Filter>ui\dialogs</Filter>
@@ -382,19 +382,19 @@
       <Filter>ui\dialogs</Filter>
     </ClInclude>
     <ClInclude Include="..\src\world\Bounding.h">
-      <Filter>world</Filter>
+      <Filter>game\world</Filter>
     </ClInclude>
     <ClInclude Include="..\src\world\World.h">
-      <Filter>world</Filter>
+      <Filter>game\world</Filter>
     </ClInclude>
     <ClInclude Include="..\src\dings\mobs.h">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClInclude>
     <ClInclude Include="..\src\world\Blocks.h">
-      <Filter>world</Filter>
+      <Filter>game\world</Filter>
     </ClInclude>
     <ClInclude Include="..\src\world\BlockObject.h">
-      <Filter>world</Filter>
+      <Filter>game\world</Filter>
     </ClInclude>
     <ClInclude Include="..\src\sound\SynthOfLife.h">
       <Filter>audio</Filter>
@@ -451,13 +451,13 @@
       <Filter>audio\orchester\Soundshapers</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\playground\Sprite.h">
-      <Filter>ui\playground</Filter>
+      <Filter>game\playground</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\playground\MobMomentum.h">
-      <Filter>ui\playground</Filter>
+      <Filter>game\playground</Filter>
     </ClInclude>
     <ClInclude Include="..\src\dings\looot-like\looot.h">
-      <Filter>ui\dings</Filter>
+      <Filter>game\dings</Filter>
     </ClInclude>
     <ClInclude Include="..\src\ui\controls\ControlPrimitive.h">
       <Filter>ui\controls</Filter>
@@ -757,12 +757,6 @@
     <Filter Include="physics">
       <UniqueIdentifier>{80d370da-3609-4d8b-8635-a95217136445}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ui\dings">
-      <UniqueIdentifier>{7c70adad-ff9a-47e4-88c5-7b4c458ff3c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="world">
-      <UniqueIdentifier>{718ea7fb-a814-40ca-98d3-0cc426bad6dc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="audio">
       <UniqueIdentifier>{29991b5a-8268-48ef-adb8-8fa4897b6d09}</UniqueIdentifier>
     </Filter>
@@ -787,9 +781,6 @@
     <Filter Include="media\levels">
       <UniqueIdentifier>{7bf3c37d-0bbb-4ef1-975c-8b2e4d51717b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ui\playground">
-      <UniqueIdentifier>{e1b24f93-f12b-45ef-be90-c324090333be}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ui\dialogs">
       <UniqueIdentifier>{703a3674-9f4d-492c-a744-eb62c0bd6240}</UniqueIdentifier>
     </Filter>
@@ -813,6 +804,18 @@
     </Filter>
     <Filter Include="ui\controls">
       <UniqueIdentifier>{0ea08ffb-651d-4031-b7c0-bbf6de4c2e77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{87472d5f-f532-4726-8123-8dfacef7b4cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\world">
+      <UniqueIdentifier>{718ea7fb-a814-40ca-98d3-0cc426bad6dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\dings">
+      <UniqueIdentifier>{7c70adad-ff9a-47e4-88c5-7b4c458ff3c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\playground">
+      <UniqueIdentifier>{e1b24f93-f12b-45ef-be90-c324090333be}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

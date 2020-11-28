@@ -118,7 +118,6 @@ void Level::Initialize(std::shared_ptr<DX::DeviceResources> deviceResources, std
 
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(1000.0f, 600.0f), &this->m_dingSheet));
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT), &this->m_dingImage));
-
 	DX::ThrowIfFailed(device->CreateCompatibleRenderTarget(D2D1::SizeF(
 		blooDot::Consts::SQUARE_WIDTH * blooDot::Consts::MAX_MOB_BLOCKS * OrientabilityIndexRotatory::NumberOfSectors,
 		600.0f
@@ -246,7 +245,13 @@ Microsoft::WRL::ComPtr<ID2D1Bitmap> Level::CreateDingImage(Dings::DingIDs dingID
 	ID2D1Bitmap *resultBitmap = NULL;
 	this->m_dingImage->BeginDraw();
 	this->m_dingImage->Clear();
-	D2D1_RECT_F dingRect = D2D1::RectF(dingOnSheet.x * 49.0f, dingOnSheet.y * 49.0f, dingOnSheet.x * 49.0f + 49.0f, dingOnSheet.y * 49.0f + 49.0f);
+	D2D1_RECT_F dingRect = D2D1::RectF(
+		dingOnSheet.x * blooDot::Consts::SQUARE_WIDTH,
+		dingOnSheet.y * blooDot::Consts::SQUARE_HEIGHT,
+		dingOnSheet.x * blooDot::Consts::SQUARE_WIDTH + blooDot::Consts::SQUARE_WIDTH,
+		dingOnSheet.y * blooDot::Consts::SQUARE_HEIGHT + blooDot::Consts::SQUARE_HEIGHT
+	);
+
 	D2D1_RECT_F placementRect = D2D1::RectF(0, 0, blooDot::Consts::SQUARE_WIDTH, blooDot::Consts::SQUARE_HEIGHT);
 	this->m_dingImage->DrawBitmap(this->m_dingSheetBmp.Get(), placementRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, dingRect);
 	DX::ThrowIfFailed(this->m_dingImage->EndDraw());

@@ -12,8 +12,11 @@ ElementBase::ElementBase() :
 	m_visible(false),
 	m_isFadingOut(false)
 {
-	m_alignment.horizontal = AlignCenter;
-	m_alignment.vertical = AlignCenter;
+	this->m_alignment.horizontal = AlignCenter;
+	this->m_alignment.vertical = AlignCenter;
+	this->m_clientAreaContent = D2D1::SizeF(0.f, 0.f);
+	this->m_clientAreaScrollOffset = D2D1::Point2F(0.f, 0.f);
+
 }
 
 void ElementBase::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)

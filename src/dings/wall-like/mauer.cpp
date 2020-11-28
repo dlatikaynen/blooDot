@@ -48,10 +48,10 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	auto innerBrush = brrect.Get();
 
 	/* CENTER CROSSING */
-	rect.left = 49.0f * this->m_lookupCrossing.x;
-	rect.top = 49.0f * this->m_lookupCrossing.y;
-	rect.right = rect.left + 49.0f;
-	rect.bottom = rect.top + 49.0f;	
+	rect.left = blooDot::Consts::SQUARE_WIDTH * this->m_lookupCrossing.x;
+	rect.top = blooDot::Consts::SQUARE_HEIGHT * this->m_lookupCrossing.y;
+	rect.right = rect.left + blooDot::Consts::SQUARE_WIDTH;
+	rect.bottom = rect.top + blooDot::Consts::SQUARE_HEIGHT;	
 	rendEr->DrawLine(D2D1::Point2F(rect.left, rect.top + Dings::MAUER_INDENT), D2D1::Point2F(rect.left + Dings::MAUER_INDENT, rect.top+ Dings::MAUER_INDENT), innerBrush, Mauer::MAUER_STROKE, 0);
 	rendEr->DrawLine(D2D1::Point2F(rect.left+ Dings::MAUER_INDENT, rect.top + Dings::MAUER_INDENT), D2D1::Point2F(rect.left + Dings::MAUER_INDENT, rect.top), innerBrush, Mauer::MAUER_STROKE, 0);
 	rendEr->DrawLine(D2D1::Point2F(rect.right, rect.top + Dings::MAUER_INDENT), D2D1::Point2F(rect.right - Dings::MAUER_INDENT, rect.top + Dings::MAUER_INDENT), innerBrush, Mauer::MAUER_STROKE, 0);
@@ -63,10 +63,10 @@ void Mauer::DrawInternal(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> drawTo)
 	
 	/* SHY
 	 * inner border */
-	rect.left = 49.0f * this->m_lookupShy.x + Dings::MAUER_INDENT;
-	rect.top = 49.0f * this->m_lookupShy.y + Dings::MAUER_INDENT;
-	rect.right = rect.left + 49.0f - 10.0f;
-	rect.bottom = rect.top + 49.0f - 10.0f;
+	rect.left = blooDot::Consts::SQUARE_WIDTH * this->m_lookupShy.x + Dings::MAUER_INDENT;
+	rect.top = blooDot::Consts::SQUARE_HEIGHT * this->m_lookupShy.y + Dings::MAUER_INDENT;
+	rect.right = rect.left + blooDot::Consts::SQUARE_WIDTH - 10.0f;
+	rect.bottom = rect.top + blooDot::Consts::SQUARE_HEIGHT - 10.0f;
 	rendEr->DrawRectangle(rect, innerBrush, Mauer::MAUER_STROKE, 0);
 
 	/* Us: rotate so we have lefty (no rotation) last, so
