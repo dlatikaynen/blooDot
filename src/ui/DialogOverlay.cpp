@@ -3,6 +3,7 @@
 #include "..\dx\DirectXHelper.h"
 
 #include "DialogOverlay.h"
+#include "controls/ControlPrimitive.h"
 
 using namespace Windows::UI::Core;
 using namespace Windows::Foundation;
@@ -88,11 +89,11 @@ void DialogOverlay::CreateTextLayout()
 		);
 
 		this->m_textLayout->SetTextAlignment(DWRITE_TEXT_ALIGNMENT::DWRITE_TEXT_ALIGNMENT_LEADING);
-		this->m_textLayout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT::DWRITE_PARAGRAPH_ALIGNMENT_CENTER);		
+		this->m_textLayout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT::DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 	}
 }
 
-void DialogOverlay::ScheduleDialogCommand(blooDot::DialogCommand dialogCommand)
+void DialogOverlay::ScheduleDialogCommand(blooDot::DialogCommand dialogCommand, float commandArgument)
 {
 	if (this->m_pendingDialogCommand == blooDot::DialogCommand::None)
 	{
@@ -121,14 +122,14 @@ void DialogOverlay::Update(float timeTotal, float timeDelta)
 void DialogOverlay::Render()
 {
 	ElementBase::Render();
-	auto d2dContext = UserInterface::GetD2DContext();
+	auto d2dContext = UserInterface::GetD2DContextWrapped();
 	auto screenSize = d2dContext->GetSize();
 	auto screenRect = D2D1::RectF(0.0F, 0.0F, screenSize.width - 1.0F, screenSize.height - 1.0F);
 	d2dContext->FillRectangle(screenRect, this->m_coverBrush.Get());
 	d2dContext->FillRectangle(this->m_outerBounds, this->m_chromeBrush.Get());
 	d2dContext->DrawRectangle(this->m_outerBounds, this->m_blackBrush.Get());
 	d2dContext->DrawRectangle(D2D1::RectF(this->m_clientArea.left - 1.0F, this->m_clientArea.top - 1.0F, this->m_clientArea.right + 1.0F, this->m_clientArea.bottom + 1.0F), this->m_blackBrush.Get());
-	this->RenderClientarea(d2dContext);
+	this->RenderClientarea(d2dContext.Get());
 	d2dContext->DrawTextLayout(
 		Point2F(
 			this->m_outerBounds.left + CHROMEWIDTH - 2.0F,
@@ -138,6 +139,18 @@ void DialogOverlay::Render()
 		this->m_textColorBrush.Get(),
 		D2D1_DRAW_TEXT_OPTIONS_NO_SNAP
 	);
+
+	auto scrollOverflow = this->HasScrollOverflow();
+	if (scrollOverflow > ElementBase::Directions::NONE)
+	{
+		ControlPrimitive::DrawScrollIndicators(
+			d2dContext,
+			UserInterface::GetD2DFactory(),
+			this->m_brushRegistry,
+			this->m_clientArea,
+			scrollOverflow
+		);
+	}
 }
 
 void DialogOverlay::RenderClientarea(ID2D1DeviceContext* d2dContext)

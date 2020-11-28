@@ -44,6 +44,8 @@ namespace blooDot
 		PreviousPane = 2,
 		Down = 3,
 		Up = 4,
-		Close = 5
+		Close = 5,
+		AccelerateScrollX = 6,
+		AccelerateScrollY = 7
 	};
 }

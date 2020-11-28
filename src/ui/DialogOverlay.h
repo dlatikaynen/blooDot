@@ -12,7 +12,7 @@ public:
 
 	virtual Platform::String^ GetCaption() { return this->m_Caption; }
 	void SetCaption(Platform::String^ value);
-	void ScheduleDialogCommand(blooDot::DialogCommand dialogCommand);
+	void ScheduleDialogCommand(blooDot::DialogCommand dialogCommand, float commandArgument = (0.f));
 
 protected:
 	static constexpr float CHROMEWIDTH = 8.0F;
@@ -32,7 +32,6 @@ protected:
 	Microsoft::WRL::ComPtr<IDWriteTextLayout>       m_textLayout;
 	D2D1_RECT_F										m_textExtents;
 	TextStyle										m_textStyle;
-	D2D1_RECT_F										m_clientArea;
 
 private:
 	void CreateTextLayout();

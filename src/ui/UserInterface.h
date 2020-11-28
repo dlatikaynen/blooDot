@@ -21,6 +21,7 @@ class UserInterface
 public:
     static UserInterface& GetInstance() { return m_instance; }
 
+    static Microsoft::WRL::ComPtr<ID2D1Factory1> GetD2DFactory() { return m_instance.m_d2dFactory; }
     static IDWriteFactory* GetDWriteFactory() { return m_instance.m_dwriteFactory.Get(); }
 	static IDWriteFactory3* GetDWriteFactory3() { return m_instance.m_dwriteFactory3.Get(); }
 	static Microsoft::WRL::ComPtr<ID2D1DeviceContext> GetD2DContextWrapped() { return m_instance.m_d2dContext; }
