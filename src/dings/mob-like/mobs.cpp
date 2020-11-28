@@ -1,8 +1,8 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\mobs.h"
 
-const float Dings::WEDGE_STROKE = 1.5f;
-const float Dings::HAIRLINE = 0.72f;
+constexpr float Dings::WEDGE_STROKE = 1.5f;
+constexpr float Dings::HAIRLINE = 0.72f;
 
 Mob::Mob(Dings::DingIDs dingID, Platform::String^ dingName, std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(dingID, dingName, deviceResources, drawBrushes)
 {

@@ -15,8 +15,8 @@ public:
 	void ScheduleDialogCommand(blooDot::DialogCommand dialogCommand);
 
 protected:
-	const float CHROMEWIDTH = 8.0F;
-	const float CAPTIONHEIGHT = 20.0F;
+	static constexpr float CHROMEWIDTH = 8.0F;
+	static constexpr float CAPTIONHEIGHT = 20.0F;
 
 	void SetClientareaSize(D2D1_SIZE_F clientArea);
 	virtual void CalculateSize() override;

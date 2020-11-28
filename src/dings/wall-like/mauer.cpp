@@ -1,12 +1,12 @@
 ﻿#include "..\..\PreCompiledHeaders.h"
 #include "..\dings.h"
 
-const int Dings::MAUER_GRAY_SOLID = 128;
-const int Dings::MAUER_GRAY_LOOSE = 98;
-const float Dings::MAUER_STROKE = 2.5f;
-const float Dings::MAUER_INDENT = 5.f;
-const float Dings::MAUER_BEZIER_X = 8.f;
-const float Dings::MAUER_BEZIER_Y = 20.f;
+constexpr int Dings::MAUER_GRAY_SOLID = 128;
+constexpr int Dings::MAUER_GRAY_LOOSE = 98;
+constexpr float Dings::MAUER_STROKE = 2.5f;
+constexpr float Dings::MAUER_INDENT = 5.f;
+constexpr float Dings::MAUER_BEZIER_X = 8.f;
+constexpr float Dings::MAUER_BEZIER_Y = 20.f;
 
 Mauer::Mauer(std::shared_ptr<DX::DeviceResources> deviceResources, std::shared_ptr<BrushRegistry> drawBrushes) : Dings(Dings::DingIDs::Mauer, "Mauer", deviceResources, drawBrushes)
 {

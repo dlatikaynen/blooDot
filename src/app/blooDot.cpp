@@ -162,7 +162,7 @@ bool blooDotMain::Suicide()
 void blooDotMain::CreateWindowSizeDependentResources()
 {
     // user interface
-    const float padding = 32.0f;
+    constexpr float padding = 32.0f;
     D2D1_RECT_F clientRect = ConvertRect(m_deviceResources->GetLogicalSize());
     InflateRect(clientRect, -padding, -padding);
 

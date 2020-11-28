@@ -36,14 +36,14 @@ namespace DX
     // Converts a length in device-independent pixels (DIPs) to a length in physical pixels.
     inline float ConvertDipsToPixels(float dips, float dpi)
     {
-        static const float dipsPerInch = 96.0f;
+        static constexpr float dipsPerInch = 96.0f;
         return floorf(dips * dpi / dipsPerInch + 0.5f); // Round to nearest integer.
     }
 
     // Converts a length in physical pixels to a length in device-independent pixels (DIPs).
     inline float ConvertPixelsToDips(float pixels)
     {
-        static const float dipsPerInch = 96.0f;
+        static constexpr float dipsPerInch = 96.0f;
         return pixels * dipsPerInch / Windows::Graphics::Display::DisplayInformation::GetForCurrentView()->LogicalDpi; // Do not round.
     }
 
@@ -51,7 +51,7 @@ namespace DX
     // to call this function from a thread associated with a CoreWindow, which is required by DisplayInformation::GetForCurrentView().
     inline float ConvertPixelsToDips(float pixels, float dpi)
     {
-        static const float dipsPerInch = 96.0f;
+        static constexpr float dipsPerInch = 96.0f;
         return pixels * dipsPerInch / dpi; // Do not round.
     }
 

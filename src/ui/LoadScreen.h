@@ -30,9 +30,9 @@ private:
 	inline int DipsToPixelsX(float dips, float dpix) const { return int(dips * dpix / 96.f + 0.5f);	};
 	inline int DipsToPixelsY(float dips, float dpiy) const { return int(dips * dpiy / 96.f + 0.5f); };
 
-	const float										GoLCellSizePerc = 0.0105f;
-	const int										GoLSprinklerRadius = 4;
-	const int										GoLCellSideLength = 10;
+	static constexpr float							GoLCellSizePerc = 0.0105f;
+	static constexpr int							GoLSprinklerRadius = 4;
+	static constexpr int							GoLCellSideLength = 10;
 
 	std::shared_ptr<DX::DeviceResources>			m_deviceResources;	
 	Microsoft::WRL::ComPtr<ID2D1Factory1>           m_d2dFactory;

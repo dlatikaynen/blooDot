@@ -224,7 +224,7 @@ void Collision::MergeSharedEdgeCoplanarContacts(FXMVECTOR sphere, FXMVECTOR radi
                 // we are, we're probably on a flat plane, and can merge the two.
                 if (coplanar)
                 {
-                    const float PENETRATION_DIST_TOLERANCE = 1E-4f;
+                    constexpr float PENETRATION_DIST_TOLERANCE = 1E-4f;
                     if (fabs(c1.penetrationDistance - c2.penetrationDistance) <= PENETRATION_DIST_TOLERANCE)
                     {
                         // Same plane!

@@ -91,12 +91,12 @@ namespace blooDot
 		void OnActionSaveLevel(bool forcePrompt);
 
     private:
-		static const int							FPSSampleSize = 10;
-		const float									m_deadzoneRadius = 0.1f;
-		const float									m_deadzoneSquared = m_deadzoneRadius * m_deadzoneRadius;
-		const float									m_controllerScaleFactor = 8.0f;
-		const float									m_touchScaleFactor = 2.0f;
-		const float									m_accelerometerScaleFactor = 3.5f;
+		static constexpr int						FPSSampleSize = 10;
+		static constexpr float						m_deadzoneRadius = 0.1f;
+		static constexpr float						m_deadzoneSquared = m_deadzoneRadius * m_deadzoneRadius;
+		static constexpr float						m_controllerScaleFactor = 8.0f;
+		static constexpr float						m_touchScaleFactor = 2.0f;
+		static constexpr float						m_accelerometerScaleFactor = 3.5f;
 
 		// Cached pointer to device resources.
         std::shared_ptr<DX::DeviceResources>		m_deviceResources;

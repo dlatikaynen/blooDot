@@ -13,7 +13,7 @@ using namespace Windows::Graphics::Display;
 using namespace D2D1;
 using namespace std;
 
-const float Dings::sectorScale = static_cast<float>(OrientabilityIndexRotatory::NumberOfSectors) / (2.0F * static_cast<float>(M_PI));
+constexpr float Dings::sectorScale = static_cast<float>(OrientabilityIndexRotatory::NumberOfSectors) / (2.0F * static_cast<float>(M_PI));
 
 Facings& operator |=(Facings& a, Facings b)
 {

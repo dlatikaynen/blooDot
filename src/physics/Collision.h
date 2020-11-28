@@ -36,7 +36,7 @@ struct Contact
 
     BOOL IsColliding() const
     {
-        const float MIN_COLLISION_DISTANCE = -1.0E-5f;
+        constexpr float MIN_COLLISION_DISTANCE = -1.0E-5f;
         return penetrationDistance <= MIN_COLLISION_DISTANCE;
     }
 

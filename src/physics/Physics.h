@@ -2,15 +2,15 @@
 
 // #define DISABLE_RAYCAST_REVERB
 
-const float Gravity = 981.0f;                               // Strength of gravity (x100 for this simulation scale)
-const float WallFriction = 0.05f;                           // Friction coefficient to apply to the walls.
-const float MaxVelocity = 250.0f;                           // Upper bounds on marble velocity
-const float MinVelocity = 0.1f;                             // Only used if you #define ENABLE_VELOCITY_CLAMP_TO_ZERO
-const float MinAudibleCollisionSpeed = 10.0f;               // Minimum velocity a collision must have before reporting.
-const float WallRestitutionCoefficient = 0.5f;              // How elastic the walls/floor are, from 0.0f to 1.0f
-const float Damping = 1.0f;                                 // Only used if you #define ENABLE_VELOCITY_DAMPING
-const float MaxPhysicsTimestep = 1.0f / 8.0f;               // Maximum time delta per physics update
-const float PhysicsTimestep = 1.0f / 60.0f;                 // Time for single physics iteration
+constexpr float Gravity = 981.0f;                               // Strength of gravity (x100 for this simulation scale)
+constexpr float WallFriction = 0.05f;                           // Friction coefficient to apply to the walls.
+constexpr float MaxVelocity = 250.0f;                           // Upper bounds on marble velocity
+constexpr float MinVelocity = 0.1f;                             // Only used if you #define ENABLE_VELOCITY_CLAMP_TO_ZERO
+constexpr float MinAudibleCollisionSpeed = 10.0f;               // Minimum velocity a collision must have before reporting.
+constexpr float WallRestitutionCoefficient = 0.5f;              // How elastic the walls/floor are, from 0.0f to 1.0f
+constexpr float Damping = 1.0f;                                 // Only used if you #define ENABLE_VELOCITY_DAMPING
+constexpr float MaxPhysicsTimestep = 1.0f / 8.0f;               // Maximum time delta per physics update
+constexpr float PhysicsTimestep = 1.0f / 60.0f;                 // Time for single physics iteration
 
 
 // Contains information regarding any contacts that occurred during the physics simulation. Used for audio feedback.

@@ -40,7 +40,7 @@ public:
 	virtual void SetControl(int detentCount, bool shiftKeyActive);
 
 protected:
-	const float										SCROLL_TRESHOLD_FACT = 0.61F;
+	static constexpr float							SCROLL_TRESHOLD_FACT = 0.61F;
 
 	std::shared_ptr<DX::DeviceResources>			m_deviceResources;
 	Microsoft::WRL::ComPtr<ID2D1Factory1>			m_d2dFactory;
