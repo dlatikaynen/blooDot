@@ -1,10 +1,10 @@
-name: UWP 64 Release
+name: UWP 64 Maintenance Rolling
 on:
   push:
   workflow_dispatch:
 jobs:
   rolling_build:
-    name: UWP 64 Rolling Maintenance Build
+    name: UWP 64 Release
     runs-on: windows-2019
     steps:
       - name: Install File Compression Library
