@@ -1,7 +1,7 @@
 # blooDot
 ### -- A Game of Life --  
 
-![UWP 64 Release](https://github.com/dlatikaynen/blooDot/workflows/UWP%2064%20Release/badge.svg)  [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dlatikaynen/blooDot/issues)
+![UWP 64 Rolling](https://github.com/dlatikaynen/blooDot/workflows/UWP%2064%20Maintenance%20Rolling/badge.svg)  [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dlatikaynen/blooDot/issues)
 
 Game Homepage    
 https://sites.google.com/view/bloodot    
