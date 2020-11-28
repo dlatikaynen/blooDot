@@ -120,7 +120,7 @@ void ControlPrimitive::DrawScrollIndicators(
 			borderSink->AddLine(points[5]);
 			borderSink->AddLine(points[3]);
 			borderSink->AddLine(points[2]);
-			borderSink->AddLine(points[0]);
+			borderSink->AddLine(points[4]);
 			break;
 
 		case ElementBase::EdgeCoalescingCases::TwinNW:
@@ -142,16 +142,27 @@ void ControlPrimitive::DrawScrollIndicators(
 			break;
 
 		default:
+			auto openFigure = false;
 			if (coalescingCase & ElementBase::EdgeCoalescingCases::SingleEast)
 			{
 				borderSink->BeginFigure(points[6], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
 				borderSink->AddLine(points[7]);
 				borderSink->AddLine(points[5]);
 				borderSink->AddLine(points[4]);
+				openFigure = true;
 			}
 
 			if (coalescingCase & ElementBase::EdgeCoalescingCases::SingleWest)
 			{
+				if (openFigure)
+				{
+					borderSink->EndFigure(D2D1_FIGURE_END::D2D1_FIGURE_END_CLOSED);
+				}
+				else
+				{
+					openFigure = true;
+				}
+
 				borderSink->BeginFigure(points[0], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
 				borderSink->AddLine(points[2]);
 				borderSink->AddLine(points[3]);
@@ -160,6 +171,15 @@ void ControlPrimitive::DrawScrollIndicators(
 
 			if (coalescingCase & ElementBase::EdgeCoalescingCases::SingleSouth)
 			{
+				if (openFigure)
+				{
+					borderSink->EndFigure(D2D1_FIGURE_END::D2D1_FIGURE_END_CLOSED);
+				}
+				else
+				{
+					openFigure = true;
+				}
+
 				borderSink->BeginFigure(points[2], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
 				borderSink->AddLine(points[4]);
 				borderSink->AddLine(points[5]);
@@ -168,6 +188,15 @@ void ControlPrimitive::DrawScrollIndicators(
 
 			if (coalescingCase & ElementBase::EdgeCoalescingCases::SingleNorth)
 			{
+				if (openFigure)
+				{
+					borderSink->EndFigure(D2D1_FIGURE_END::D2D1_FIGURE_END_CLOSED);
+				}
+				else
+				{
+					openFigure = true;
+				}
+
 				borderSink->BeginFigure(points[0], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
 				borderSink->AddLine(points[1]);
 				borderSink->AddLine(points[7]);

@@ -162,6 +162,22 @@ ElementBase::EdgeCoalescingCases ElementBase::EdgeCoalescingCaseFrom(ElementBase
 	{
 		return EdgeCoalescingCases::TripletWSE;
 	}
+	else if (left && upes)
+	{
+		return EdgeCoalescingCases::TwinNW;
+	}
+	else if (rite && upes)
+	{
+		return EdgeCoalescingCases::TwinNE;
+	}
+	else if (rite && down)
+	{
+		return EdgeCoalescingCases::TwinSE;
+	}
+	else if (left && down)
+	{
+		return EdgeCoalescingCases::TwinSW;
+	}
 	else if (left && rite)
 	{
 		return EdgeCoalescingCases::SingleWest | EdgeCoalescingCases::SingleEast;
