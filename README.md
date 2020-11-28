@@ -3,8 +3,8 @@
 
 ![UWP 64 Rolling](https://github.com/dlatikaynen/blooDot/workflows/UWP%2064%20Maintenance%20Rolling/badge.svg)  [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dlatikaynen/blooDot/issues)
 
-Game Homepage    
-https://sites.google.com/view/bloodot    
+Game Homepage  
+https://dlatikaynen.github.io/blooDot    
 
 News: Leverage your WiiU Pro and Nintendo Switch Controllers to play on a PC running Windows 10 via Bluetooth using this excellent driver library, which maps the Nintendo controllers to XInput (Xbox works anyway, out of the box):    
 http://www.wiinupro.com/
