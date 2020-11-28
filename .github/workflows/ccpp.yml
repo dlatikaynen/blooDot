@@ -3,18 +3,19 @@ on:
   push:
   workflow_dispatch:
 jobs:
-  create_release:
-    name: Create UWP 64 Release
+  rolling_build:
+    name: UWP 64 Rolling Maintenance Build
     runs-on: windows-2019
     steps:
-      - name: Install 7Zip PowerShell Module
+      - name: Install File Compression Library
         shell: powershell
         run: Install-Module 7Zip4PowerShell -Force -Verbose
       - uses: actions/checkout@v2
       
-      - name: Build Binary
+      - name: Build Solution
         shell: cmd
         run: call .\Build.cmd
-      - name: Build Artifact
+        
+      - name: Publish Artifact
         shell: cmd
         run: call .\ArtifactBuild.cmd
