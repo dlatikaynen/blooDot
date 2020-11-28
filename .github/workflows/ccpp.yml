@@ -14,8 +14,8 @@ jobs:
       
       - name: Build Solution
         shell: cmd
-        run: call .\Build.cmd
+        run: call .\.github\workflows\Build.cmd
         
       - name: Publish Artifact
         shell: cmd
-        run: call .\ArtifactBuild.cmd
+        run: call .\.github\workflows\ArtifactBuild.cmd
