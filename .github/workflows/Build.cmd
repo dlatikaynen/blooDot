@@ -1,4 +1,6 @@
 @echo off
+cd..
+cd..
 pushd "%~dp0"
 if exist Release rd /s /q Release
 if exist x64 rd /s /q x64
