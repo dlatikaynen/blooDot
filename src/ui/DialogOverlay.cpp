@@ -18,14 +18,14 @@ DialogOverlay::DialogOverlay()
 void DialogOverlay::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
 {
 	ElementBase::Initialize(brushRegistry);
-	auto d2dContext = UserInterface::GetD2DContext();
-	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(RGB(10,10,10)), &this->m_textColorBrush));
-	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(ColorF(ColorF::Black), &this->m_shadowColorBrush));
-	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &this->m_blackBrush));
-	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gold), &this->m_chromeBrush));
-	DX::ThrowIfFailed(d2dContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &this->m_coverBrush));
-	this->m_shadowColorBrush->SetOpacity(m_shadowColorBrush->GetOpacity() * blooDot::Consts::GOLDEN_RATIO);
-	this->m_coverBrush->SetOpacity(m_coverBrush->GetOpacity() * blooDot::Consts::INVERSE_GOLDEN_RATIO);
+	auto d2dContext = UserInterface::GetD2DContextWrapped();
+	auto shadowOpacity = static_cast<BYTE>(static_cast<float>(0xff) * blooDot::Consts::GOLDEN_RATIO);
+	auto coverOpacity = static_cast<BYTE>(static_cast<float>(0xff) * blooDot::Consts::INVERSE_GOLDEN_RATIO);
+	this->m_textColorBrush = this->m_brushRegistry->WannaHave(d2dContext, MFARGB{10, 10, 10, 255});
+	this->m_shadowColorBrush = this->m_brushRegistry->WannaHave(d2dContext, UserInterface::Color(ColorF::Black, shadowOpacity));
+	this->m_chromeBrush = this->m_brushRegistry->WannaHave(d2dContext, UserInterface::Color(ColorF::Gold));
+	this->m_coverBrush = this->m_brushRegistry->WannaHave(d2dContext, UserInterface::Color(ColorF::Black, coverOpacity));
+	this->m_blackBrush = this->m_brushRegistry->WannaHave(d2dContext, UserInterface::Color(ColorF::Black));	
 	this->SetCaption(this->StaticCaption());
 	this->SetVisible(false);
 }
@@ -147,11 +147,11 @@ void DialogOverlay::RenderClientarea(ID2D1DeviceContext* d2dContext)
 
 void DialogOverlay::ReleaseDeviceDependentResources()
 {
-	this->m_shadowColorBrush.Reset();
-	this->m_textColorBrush.Reset();
-	this->m_blackBrush.Reset();
-	this->m_coverBrush.Reset();
-	this->m_chromeBrush.Reset();
+	//this->m_shadowColorBrush.Reset();
+	//this->m_textColorBrush.Reset();
+	//this->m_blackBrush.Reset();
+	//this->m_coverBrush.Reset();
+	//this->m_chromeBrush.Reset();
 	this->m_textLayout.Reset();	
 	ElementBase::ReleaseDeviceDependentResources();
 }

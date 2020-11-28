@@ -27,6 +27,7 @@ public:
 	static ID2D1DeviceContext* GetD2DContext() { return m_instance.m_d2dContext.Get(); }
 	static IDWriteFontCollection* GetFontCollection() {	return m_instance.m_fontCollection.Get(); }
 
+    static MFARGB Color(D2D1::ColorF::Enum color, BYTE alpha = (0xff));
     static void ReleaseDeviceDependentResources();
 
     void Initialize(

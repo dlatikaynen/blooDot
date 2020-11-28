@@ -235,6 +235,9 @@
     <ClCompile Include="..\src\ui\controls\ControlPrimitive.cpp">
       <Filter>ui\controls</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ui\DialogEmbedded.cpp">
+      <Filter>ui\dialogs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
@@ -458,6 +461,9 @@
     </ClInclude>
     <ClInclude Include="..\src\ui\controls\ControlPrimitive.h">
       <Filter>ui\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\DialogEmbedded.h">
+      <Filter>ui\dialogs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

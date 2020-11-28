@@ -122,6 +122,17 @@ void UserInterface::HitTest(D2D1_POINT_2F point)
     }
 }
 
+MFARGB UserInterface::Color(D2D1::ColorF::Enum color, BYTE alpha)
+{	
+	return MFARGB
+	{
+		static_cast<BYTE>(color & 0x0000ff), //blue
+		static_cast<BYTE>((color & 0x00ff00) >> 8), //green
+		static_cast<BYTE>((color & 0xff0000) >> 16), //red
+		alpha
+	};
+}
+
 blooDot::UIElement UserInterface::GetSelectedButton()
 {
 	for (auto iter = this->m_elements.begin(); iter != this->m_elements.end(); ++iter)
