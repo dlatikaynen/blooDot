@@ -1,6 +1,7 @@
 #include "..\..\PreCompiledHeaders.h"
 #include "..\UserInterface.h"
 #include "..\..\dx\DirectXHelper.h"
+#include "..\..\algo\Topology.h"
 
 #include "ControlPrimitive.h"
 
@@ -19,7 +20,7 @@ void ControlPrimitive::DrawScrollIndicators(
 		/* prepare all possible points, this is trivial */
 		constexpr float nudge = 3.f;
 		const float inset = blooDot::Consts::SQUARE_WIDTH * blooDot::Consts::INVERSE_GOLDEN_RATIO;
-		D2D1_POINT_2F points[] =
+		const D2D1_POINT_2F points[] =
 		{
 			D2D1::Point2F(clientArea.left - nudge, clientArea.top - nudge),
 			D2D1::Point2F(clientArea.left + inset, clientArea.top + inset),
@@ -45,162 +46,65 @@ void ControlPrimitive::DrawScrollIndicators(
 			borderGeometry->Open(borderSink.GetAddressOf())
 		);
 
+		auto openFigure = false;
 		auto coalescingCase = ElementBase::EdgeCoalescingCaseFrom(drawSides);
 		switch (coalescingCase)
 		{
 		case ElementBase::EdgeCoalescingCases::Plenty:
-			borderSink->BeginFigure(points[6], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
-			borderSink->AddLine(points[0]);
-			borderSink->AddLine(points[2]);
-			borderSink->AddLine(points[4]);
-			borderSink->AddLine(points[6]);
-			borderSink->AddLine(points[7]);
-			borderSink->AddLine(points[5]);
-			borderSink->AddLine(points[3]);
-			borderSink->AddLine(points[1]);
-			borderSink->AddLine(points[7]);
+			ControlPrimitive::ConstructWedge(borderSink, points, &openFigure, std::size(blooDot::Topology::D2EdgePlenty), blooDot::Topology::D2EdgePlenty);
 			break;
 
 		case ElementBase::EdgeCoalescingCases::TripletNES:
-			borderSink->BeginFigure(points[2], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
-			borderSink->AddLine(points[4]);
-			borderSink->AddLine(points[6]);
-			borderSink->AddLine(points[0]);
-			borderSink->AddLine(points[1]);
-			borderSink->AddLine(points[7]);
-			borderSink->AddLine(points[5]);
-			borderSink->AddLine(points[3]);
+			ControlPrimitive::ConstructWedge(borderSink, points, &openFigure, std::size(blooDot::Topology::D2TripletNES), blooDot::Topology::D2TripletNES);
 			break;
 
 		case ElementBase::EdgeCoalescingCases::TripletNWS:
-			borderSink->BeginFigure(points[6], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
-			borderSink->AddLine(points[0]);
-			borderSink->AddLine(points[2]);
-			borderSink->AddLine(points[4]);
-			borderSink->AddLine(points[5]);
-			borderSink->AddLine(points[3]);
-			borderSink->AddLine(points[1]);
-			borderSink->AddLine(points[7]);
+			ControlPrimitive::ConstructWedge(borderSink, points, &openFigure, std::size(blooDot::Topology::D2TripletNWS), blooDot::Topology::D2TripletNWS);
 			break;
 
 		case ElementBase::EdgeCoalescingCases::TripletWNE:
-			borderSink->BeginFigure(points[4], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
-			borderSink->AddLine(points[6]);
-			borderSink->AddLine(points[0]);
-			borderSink->AddLine(points[2]);
-			borderSink->AddLine(points[3]);
-			borderSink->AddLine(points[1]);
-			borderSink->AddLine(points[7]);
-			borderSink->AddLine(points[5]);
+			ControlPrimitive::ConstructWedge(borderSink, points, &openFigure, std::size(blooDot::Topology::D2TripletWNE), blooDot::Topology::D2TripletWNE);
 			break;
 
 		case ElementBase::EdgeCoalescingCases::TripletWSE:
-			borderSink->BeginFigure(points[0], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
-			borderSink->AddLine(points[2]);
-			borderSink->AddLine(points[4]);
-			borderSink->AddLine(points[6]);
-			borderSink->AddLine(points[7]);
-			borderSink->AddLine(points[5]);
-			borderSink->AddLine(points[3]);
-			borderSink->AddLine(points[1]);
+			ControlPrimitive::ConstructWedge(borderSink, points, &openFigure, std::size(blooDot::Topology::D2TripletWSE), blooDot::Topology::D2TripletWSE);
 			break;
 
 		case ElementBase::EdgeCoalescingCases::TwinSW:
-			borderSink->BeginFigure(points[0], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
-			borderSink->AddLine(points[2]);
-			borderSink->AddLine(points[4]);
-			borderSink->AddLine(points[5]);
-			borderSink->AddLine(points[3]);
-			borderSink->AddLine(points[1]);
+			ControlPrimitive::ConstructWedge(borderSink, points, &openFigure, std::size(blooDot::Topology::D2TwinSW), blooDot::Topology::D2TwinSW);
 			break;
 
 		case ElementBase::EdgeCoalescingCases::TwinSE:
-			borderSink->BeginFigure(points[6], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
-			borderSink->AddLine(points[7]);
-			borderSink->AddLine(points[5]);
-			borderSink->AddLine(points[3]);
-			borderSink->AddLine(points[2]);
-			borderSink->AddLine(points[4]);
+			ControlPrimitive::ConstructWedge(borderSink, points, &openFigure, std::size(blooDot::Topology::D2TwinSE), blooDot::Topology::D2TwinSE);
 			break;
 
 		case ElementBase::EdgeCoalescingCases::TwinNW:
-			borderSink->BeginFigure(points[0], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
-			borderSink->AddLine(points[2]);
-			borderSink->AddLine(points[3]);
-			borderSink->AddLine(points[1]);
-			borderSink->AddLine(points[7]);
-			borderSink->AddLine(points[6]);
+			ControlPrimitive::ConstructWedge(borderSink, points, &openFigure, std::size(blooDot::Topology::D2TwinNW), blooDot::Topology::D2TwinNW);
 			break;
 
 		case ElementBase::EdgeCoalescingCases::TwinNE:
-			borderSink->BeginFigure(points[0], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
-			borderSink->AddLine(points[1]);
-			borderSink->AddLine(points[7]);
-			borderSink->AddLine(points[5]);
-			borderSink->AddLine(points[4]);
-			borderSink->AddLine(points[6]);
+			ControlPrimitive::ConstructWedge(borderSink, points, &openFigure, std::size(blooDot::Topology::D2TwinNE), blooDot::Topology::D2TwinNE);
 			break;
 
 		default:
-			auto openFigure = false;
 			if (coalescingCase & ElementBase::EdgeCoalescingCases::SingleEast)
 			{
-				borderSink->BeginFigure(points[6], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
-				borderSink->AddLine(points[7]);
-				borderSink->AddLine(points[5]);
-				borderSink->AddLine(points[4]);
-				openFigure = true;
+				ControlPrimitive::ConstructWedge(borderSink, points, &openFigure, std::size(blooDot::Topology::D2SingleEast), blooDot::Topology::D2SingleEast);
 			}
 
 			if (coalescingCase & ElementBase::EdgeCoalescingCases::SingleWest)
 			{
-				if (openFigure)
-				{
-					borderSink->EndFigure(D2D1_FIGURE_END::D2D1_FIGURE_END_CLOSED);
-				}
-				else
-				{
-					openFigure = true;
-				}
-
-				borderSink->BeginFigure(points[0], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
-				borderSink->AddLine(points[2]);
-				borderSink->AddLine(points[3]);
-				borderSink->AddLine(points[1]);
+				ControlPrimitive::ConstructWedge(borderSink, points, &openFigure, std::size(blooDot::Topology::D2SingleWest), blooDot::Topology::D2SingleWest);
 			}
 
 			if (coalescingCase & ElementBase::EdgeCoalescingCases::SingleSouth)
 			{
-				if (openFigure)
-				{
-					borderSink->EndFigure(D2D1_FIGURE_END::D2D1_FIGURE_END_CLOSED);
-				}
-				else
-				{
-					openFigure = true;
-				}
-
-				borderSink->BeginFigure(points[2], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
-				borderSink->AddLine(points[4]);
-				borderSink->AddLine(points[5]);
-				borderSink->AddLine(points[3]);
+				ControlPrimitive::ConstructWedge(borderSink, points, &openFigure, std::size(blooDot::Topology::D2SingleSouth), blooDot::Topology::D2SingleSouth);
 			}
 
 			if (coalescingCase & ElementBase::EdgeCoalescingCases::SingleNorth)
 			{
-				if (openFigure)
-				{
-					borderSink->EndFigure(D2D1_FIGURE_END::D2D1_FIGURE_END_CLOSED);
-				}
-				else
-				{
-					openFigure = true;
-				}
-
-				borderSink->BeginFigure(points[0], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
-				borderSink->AddLine(points[1]);
-				borderSink->AddLine(points[7]);
-				borderSink->AddLine(points[6]);
+				ControlPrimitive::ConstructWedge(borderSink, points, &openFigure, std::size(blooDot::Topology::D2SingleNorth), blooDot::Topology::D2SingleNorth);
 			}
 
 			break;
@@ -224,4 +128,28 @@ void ControlPrimitive::DrawScrollIndicators(
 		d2dContext->DrawGeometry(borderGeometry.Get(), borderBrush.Get());	
 		d2dContext->PopAxisAlignedClip();
 	}	
+}
+
+void ControlPrimitive::ConstructWedge(
+	Microsoft::WRL::ComPtr<ID2D1GeometrySink> borderSink,
+	const D2D1_POINT_2F* points,
+	bool* openFigure,
+	const size_t numPoints,
+	const int* pointIndices
+)
+{
+	if (*openFigure)
+	{
+		borderSink->EndFigure(D2D1_FIGURE_END::D2D1_FIGURE_END_CLOSED);
+	}
+	else
+	{
+		*openFigure = true;
+	}
+
+	borderSink->BeginFigure(points[pointIndices[0]], D2D1_FIGURE_BEGIN::D2D1_FIGURE_BEGIN_FILLED);
+	for (auto i = 1; i < numPoints; ++i)
+	{
+		borderSink->AddLine(points[pointIndices[i]]);
+	}
 }

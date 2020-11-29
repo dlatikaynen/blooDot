@@ -27,7 +27,6 @@ ElementBase::ElementBase() :
 	this->m_clientArea = D2D1::RectF(0.f, 0.f, 0.f, 0.f);
 	this->m_clientAreaContent = D2D1::SizeF(0.f, 0.f);
 	this->m_clientAreaScrollOffset = D2D1::Point2F(0.f, 0.f);
-
 }
 
 void ElementBase::Initialize(std::shared_ptr<BrushRegistry> brushRegistry)
@@ -102,6 +101,58 @@ D2D1_RECT_F ElementBase::GetBounds()
 	return bounds;
 }
 
+void ElementBase::Scroll(const float deltaX, const float deltaY)
+{
+	if (this->m_clientArea.right > 0.f && this->m_clientAreaContent.width > 0)
+	{
+		if (deltaX > 0.f)
+		{
+			if (((this->m_clientArea.right - this->m_clientArea.left) + this->m_clientAreaScrollOffset.x + deltaX) > this->m_clientAreaContent.width)
+			{
+				this->m_clientAreaScrollOffset.x = this->m_clientAreaContent.width - (this->m_clientArea.right - this->m_clientArea.left);
+			}
+			else
+			{
+				this->m_clientAreaScrollOffset.x += deltaX;
+			}
+		}
+		else if (deltaX < 0.f)
+		{
+			if ((this->m_clientAreaScrollOffset.x + deltaX) < 0.f)
+			{
+				this->m_clientAreaScrollOffset.x = 0.f;
+			}
+			else
+			{
+				this->m_clientAreaScrollOffset.x += deltaX;
+			}
+		}
+
+		if (deltaY > 0.f)
+		{
+			if (((this->m_clientArea.bottom - this->m_clientArea.top) + this->m_clientAreaScrollOffset.y + deltaY) > this->m_clientAreaContent.height)
+			{
+				this->m_clientAreaScrollOffset.y = this->m_clientAreaContent.height - (this->m_clientArea.bottom - this->m_clientArea.top);
+			}
+			else
+			{
+				this->m_clientAreaScrollOffset.y += deltaY;
+			}
+		}
+		else if (deltaY < 0.f)
+		{
+			if ((this->m_clientAreaScrollOffset.y + deltaY) < 0.f)
+			{
+				this->m_clientAreaScrollOffset.y = 0;
+			}
+			else
+			{
+				this->m_clientAreaScrollOffset.y += deltaY;
+			}
+		}
+	}
+}
+
 ElementBase::Directions ElementBase::HasScrollOverflow()
 {
 	ElementBase::Directions result = ElementBase::Directions::NONE;
@@ -136,56 +187,24 @@ ElementBase::Directions ElementBase::HasScrollOverflow()
 
 ElementBase::EdgeCoalescingCases ElementBase::EdgeCoalescingCaseFrom(ElementBase::Directions edges)
 {
-	auto
-		left = edges & ElementBase::Directions::LeftWest,
-		rite = edges & ElementBase::Directions::RightEast,
-		down = edges & ElementBase::Directions::DownSouth,
-		upes = edges & ElementBase::Directions::UpNorth;
-	
-	if (left && rite && down && upes)
-	{
-		return EdgeCoalescingCases::Plenty;
-	}
-	else if (left && upes && rite)
-	{
-		return EdgeCoalescingCases::TripletWNE;
-	}
-	else if (left && upes && down)
-	{
-		return EdgeCoalescingCases::TripletNWS;
-	}
-	else if (rite && upes && down)
-	{
-		return EdgeCoalescingCases::TripletNES;
-	}
-	else if (left && rite && down)
-	{
-		return EdgeCoalescingCases::TripletWSE;
-	}
-	else if (left && upes)
-	{
-		return EdgeCoalescingCases::TwinNW;
-	}
-	else if (rite && upes)
-	{
-		return EdgeCoalescingCases::TwinNE;
-	}
-	else if (rite && down)
-	{
-		return EdgeCoalescingCases::TwinSE;
-	}
-	else if (left && down)
-	{
-		return EdgeCoalescingCases::TwinSW;
-	}
-	else if (left && rite)
-	{
-		return EdgeCoalescingCases::SingleWest | EdgeCoalescingCases::SingleEast;
-	}
-	else if (upes && down)
-	{
-		return EdgeCoalescingCases::SingleNorth | EdgeCoalescingCases::SingleSouth;
-	}
-	
-	return static_cast<EdgeCoalescingCases>(edges);
+	constexpr static EdgeCoalescingCases lookup[] = {
+		EdgeCoalescingCases::NoEdge,                                         // 0
+		EdgeCoalescingCases::SingleWest,                                     // 1 ~ ElementBase::Directions::LeftWest
+		EdgeCoalescingCases::SingleEast,                                     // 2 ~ ElementBase::Directions::RightEast
+		EdgeCoalescingCases::SingleWest | EdgeCoalescingCases::SingleEast,   // 3
+		EdgeCoalescingCases::SingleSouth,                                    // 4 ~ ElementBase::Directions::DownSouth
+		EdgeCoalescingCases::TwinSW,                                         // 5
+		EdgeCoalescingCases::TwinSE,                                         // 6
+		EdgeCoalescingCases::TripletWSE,                                     // 7
+		EdgeCoalescingCases::SingleNorth,                                    // 8 ~ ElementBase::Directions::UpNorth
+		EdgeCoalescingCases::TwinNW,                                         // 9
+		EdgeCoalescingCases::TwinNE,                                         // 10
+		EdgeCoalescingCases::TripletWNE,                                     // 11
+		EdgeCoalescingCases::SingleNorth | EdgeCoalescingCases::SingleSouth, // 12
+		EdgeCoalescingCases::TripletNWS,                                     // 13
+		EdgeCoalescingCases::TripletNES,                                     // 14
+		EdgeCoalescingCases::Plenty                                          // 15
+	};
+
+	return lookup[edges];
 }

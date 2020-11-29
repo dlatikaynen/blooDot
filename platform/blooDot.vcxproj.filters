@@ -465,6 +465,9 @@
     <ClInclude Include="..\src\ui\DialogEmbedded.h">
       <Filter>ui\dialogs</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\algo\Topology.h">
+      <Filter>algo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Media\Bitmaps\dalek.png">

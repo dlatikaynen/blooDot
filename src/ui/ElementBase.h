@@ -44,6 +44,7 @@ public:
 	D2D1_RECT_F GetBounds();
 	Directions HasScrollOverflow();
 	static EdgeCoalescingCases EdgeCoalescingCaseFrom(const Directions edges);
+	void Scroll(const float deltaX, const float deltaY);
 
 protected:
 	ElementBase();

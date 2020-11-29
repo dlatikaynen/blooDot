@@ -11,5 +11,12 @@ public:
 		ElementBase::Directions drawSides
 	);
 
-
+private:
+	static void ConstructWedge(
+		Microsoft::WRL::ComPtr<ID2D1GeometrySink> borderSink,
+		const D2D1_POINT_2F* points,
+		bool* openFigure,
+		const size_t numPoints,
+		const int* pointIndices
+	);
 };
