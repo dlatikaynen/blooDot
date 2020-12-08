@@ -112,6 +112,19 @@ blooDot::DialogCommand DialogOverlay::DequeDialogCommand()
 	return pendingCommand;
 }
 
+void DialogOverlay::SetVisible(bool visible)
+{
+	ElementBase::SetVisible(visible);
+	if (visible)
+	{
+		UserInterface::GetInstance().ActiveDialog = std::unique_ptr<DialogOverlay>(this);
+	}
+	else
+	{
+		UserInterface::GetInstance().ActiveDialog = nullptr;
+	}
+}
+
 void DialogOverlay::Update(float timeTotal, float timeDelta)
 {
 	ElementBase::Update(timeTotal, timeDelta);

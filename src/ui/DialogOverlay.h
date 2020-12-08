@@ -6,6 +6,7 @@ public:
 	DialogOverlay();
 
 	virtual void Initialize(std::shared_ptr<BrushRegistry> brushRegistry) override;
+	virtual void SetVisible(bool visible) override;
 	virtual void Update(float timeTotal, float timeDelta) override;
 	virtual void Render() override;
 	virtual void ReleaseDeviceDependentResources() override;

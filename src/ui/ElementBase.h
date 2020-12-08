@@ -39,7 +39,7 @@ public:
 
 	void SetAlignment(AlignType horizontal, AlignType vertical);
 	virtual void SetContainer(const D2D1_RECT_F& container);
-	void SetVisible(bool visible);
+	virtual void SetVisible(bool visible);
 	bool IsVisible() const;
 	D2D1_RECT_F GetBounds();
 	Directions HasScrollOverflow();
