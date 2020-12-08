@@ -114,9 +114,6 @@ namespace blooDot
         Physics					m_physics;
         std::shared_ptr<Audio>	m_audio;
         GameState				m_gameState;
-        typedef std::vector<XMFLOAT3> Checkpoints;
-        Checkpoints				m_checkpoints;
-        size_t					m_currentCheckpoint;
 		typedef std::vector<TextButton*> Menubuttons;
 		Menubuttons				m_mainMenuButtons;
         TextButton				m_highScoreButton;
@@ -230,7 +227,6 @@ namespace blooDot
 
 		// utility
 		void LoadFontCollection();
-		void ResetCheckpoints();
 		void ComputeFPS(float timeDelta);
 		int QueryFPS();
 		void LogMessage(Platform::Object^ obj);

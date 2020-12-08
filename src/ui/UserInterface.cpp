@@ -21,6 +21,11 @@ void UserInterface::ReleaseDeviceDependentResources()
     }
 }
 
+UserInterface::UserInterface()
+{
+	this->ActiveDialog = nullptr;
+}
+
 void UserInterface::Initialize(
     _In_ ID2D1Device*			d2dDevice,
     _In_ ID2D1DeviceContext*	d2dContext,

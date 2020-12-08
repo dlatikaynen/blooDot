@@ -39,31 +39,32 @@ public:
         _In_ IDWriteFactory*		dwriteFactory,
 		_In_ IDWriteFactory3*		dwriteFactory3,
 		_In_ IDWriteFontCollection*	drwiteFontCollection
-        );
+	);
 
-    void Release()
-    {
-        m_d2dFactory = nullptr;
-        m_d2dDevice = nullptr;
-        m_d2dContext = nullptr;
-        m_dwriteFactory = nullptr;
+	void Release()
+	{
+		m_d2dFactory = nullptr;
+		m_d2dDevice = nullptr;
+		m_d2dContext = nullptr;
+		m_dwriteFactory = nullptr;
 		m_dwriteFactory3 = nullptr;
-        m_stateBlock = nullptr;
-        m_wicFactory = nullptr;
-    }
+		m_stateBlock = nullptr;
+		m_wicFactory = nullptr;
+	}
 
-    void Update(float timeTotal, float timeDelta);
-    void Render(D2D1::Matrix3x2F orientation2D);
+	void Update(float timeTotal, float timeDelta);
+	void Render(D2D1::Matrix3x2F orientation2D);
 
-    void RegisterElement(blooDot::UIElement elementKey, ElementBase* element);
+	void RegisterElement(blooDot::UIElement elementKey, ElementBase* element);
 	ElementBase* GetElement(blooDot::UIElement elementKey);
-    void UnregisterElement(blooDot::UIElement elementKey);
-    void HitTest(D2D1_POINT_2F point);
+	void UnregisterElement(blooDot::UIElement elementKey);
+	void HitTest(D2D1_POINT_2F point);
 	blooDot::UIElement GetSelectedButton();
 	blooDot::UIElement PopPressed();
+	std::unique_ptr<DialogOverlay> ActiveDialog;
 
 private:
-    UserInterface() {}
+	UserInterface();
     ~UserInterface() {}
 
     static UserInterface m_instance;

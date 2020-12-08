@@ -49,11 +49,10 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	m_FPSWatermark(0),
 	m_currentLevel(nullptr)
 {
-    // Register to be notified if the Device is lost or recreated.
+	// Register to be notified if the Device is lost or recreated
 	this->m_deviceResources->RegisterDeviceNotify(this);
 	this->m_Brushes = std::make_shared<BrushRegistry>();
-    this->m_currentCheckpoint = 0;
-    this->m_windowActive = false;
+	this->m_windowActive = false;
 	this->m_keyInsertActive = false;
 	this->m_keyDeletePressed = false;
 	this->m_keyMinusActive = false;
@@ -79,18 +78,8 @@ blooDotMain::blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResou
 	this->m_keySpacePressed = false;
 	this->m_keyEscapeActive = false;
 	this->m_keyEscapePressed = false;
-
-    // Checkpoints (from start to goal).
-    m_checkpoints.push_back(XMFLOAT3(45.7f, -43.6f, -45.0f)); // Start
-    m_checkpoints.push_back(XMFLOAT3(120.7f, -35.0f, -45.0f)); // Checkpoint 1
-    m_checkpoints.push_back(XMFLOAT3(297.6f, -194.6f, -45.0f)); // Checkpoint 2
-    m_checkpoints.push_back(XMFLOAT3(770.1f, -391.5f, -45.0f)); // Checkpoint 3
-    m_checkpoints.push_back(XMFLOAT3(552.0f, -148.6f, -45.0f)); // Checkpoint 4
-    m_checkpoints.push_back(XMFLOAT3(846.8f, -377.0f, -45.0f)); // Goal
-
-    m_persistentState = ref new PersistentState();
-    m_persistentState->Initialize(Windows::Storage::ApplicationData::Current->LocalSettings->Values, "blooDot");
-
+    this->m_persistentState = ref new PersistentState();
+    this->m_persistentState->Initialize(Windows::Storage::ApplicationData::Current->LocalSettings->Values, "blooDot");
 	this->LoadFontCollection();
 	this->m_audio = std::make_shared<Audio>();
     this->m_audio->Initialize();
@@ -364,7 +353,7 @@ bool blooDotMain::Render()
     context->ClearRenderTargetView(m_deviceResources->GetBackBufferRenderTargetView(), DirectX::Colors::Black);
     context->ClearDepthStencilView(m_deviceResources->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	if (this->m_gameState == GameState::LoadScreen || this->m_gameState==GameState::MainMenu)
+	if (this->m_gameState == GameState::LoadScreen || this->m_gameState == GameState::MainMenu)
 	{
 		// Only render the loading screen for now.
 		this->m_deviceResources->GetD3DDeviceContext()->BeginEventInt(L"Render Loading Screen", 0);
@@ -454,8 +443,6 @@ void blooDotMain::SetGameState(GameState nextState)
 		this->m_inGameStopwatchTimer.SetVisible(false);
 		this->m_preGameCountdownTimer.SetVisible(true);
 		this->m_preGameCountdownTimer.StartCountdown(3);
-		this->ResetCheckpoints();
-		this->m_physics.SetPosition(m_checkpoints[0]);
 		this->m_physics.SetVelocity(XMFLOAT3(0, 0, 0));
         break;
 
@@ -488,11 +475,6 @@ void blooDotMain::SetGameState(GameState nextState)
     }
 
     m_gameState = nextState;
-}
-
-void blooDotMain::ResetCheckpoints()
-{
-    m_currentCheckpoint = 0;
 }
 
 // Updates the application state once per frame.
@@ -535,7 +517,6 @@ void blooDotMain::Update()
 		}
 
 		// Process controller input.
-#if WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP // Only process controller input when the device is not a phone.
 		if (m_currentGamepadNeedsRefresh)
 		{
 			auto mostRecentGamepad = this->GetLastGamepad();
@@ -555,15 +536,17 @@ void blooDotMain::Update()
 
 		float leftStickX = static_cast<float>(m_newReading.LeftThumbstickX);
 		float leftStickY = static_cast<float>(m_newReading.LeftThumbstickY);
-#endif
-
-		// When the game is first loaded, we display a load screen
-        // and load any deferred resources that might be too expensive
-        // to load during initialization.
-		if (this->m_gameState == GameState::LoadScreen || this->m_gameState == GameState::MainMenu)
+		if (UserInterface::ActiveDialog != nullptr)
 		{
-			// At this point we can draw a progress bar, or if we had
-			// loaded audio, we could play audio during the loading process.
+
+		}
+		else if (this->m_gameState == GameState::LoadScreen || this->m_gameState == GameState::MainMenu)
+		{
+			/* when the game is first loaded, we display a load screen
+			 * and load any deferred resources that might be too expensive
+			 * to load during initialization.
+			 * we can draw a progress bar, or if we had
+			 * loaded audio, we could play audio during the loading process */
 			this->m_loadScreen->Update(timerTotal, timerElapsed);
 		}
 		else if (this->m_gameState == GameState::InGameActive)
@@ -1170,7 +1153,6 @@ void blooDotMain::SaveState()
     m_persistentState->SaveXMFLOAT3(":Velocity", m_physics.GetVelocity());
     m_persistentState->SaveSingle(":ElapsedTime", m_inGameStopwatchTimer.GetElapsedTime());
     m_persistentState->SaveInt32(":GameState", static_cast<int>(m_gameState));
-    m_persistentState->SaveInt32(":Checkpoint", static_cast<int>(m_currentCheckpoint));
 
     int i = 0;
     HighScoreEntries entries = m_highScoreTable.GetEntries();
@@ -1193,10 +1175,7 @@ void blooDotMain::LoadState()
     XMFLOAT3 position = m_persistentState->LoadXMFLOAT3(":Position", m_physics.GetPosition());
     XMFLOAT3 velocity = m_persistentState->LoadXMFLOAT3(":Velocity", m_physics.GetVelocity());
     float elapsedTime = m_persistentState->LoadSingle(":ElapsedTime", 0.0f);
-
     int gameState = m_persistentState->LoadInt32(":GameState", static_cast<int>(m_gameState));
-    int currentCheckpoint = m_persistentState->LoadInt32(":Checkpoint", static_cast<int>(m_currentCheckpoint));
-
     switch (static_cast<GameState>(gameState))
     {
     case GameState::Initial:
@@ -1217,7 +1196,6 @@ void blooDotMain::LoadState()
         m_inGameStopwatchTimer.SetElapsedTime(elapsedTime);
         m_physics.SetPosition(position);
         m_physics.SetVelocity(velocity);
-        m_currentCheckpoint = currentCheckpoint;
         SetGameState(GameState::InGamePaused);
         break;
     }

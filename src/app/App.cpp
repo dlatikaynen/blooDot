@@ -93,7 +93,7 @@ void App::SetWindow(CoreWindow^ window)
 // Initializes scene resources, or loads a previously saved app state.
 void App::Load(Platform::String^ entryPoint)
 {
-    // On Windows Phone the Load method may be called when resuming from a suspended state.
+    // the Load method may be called when resuming from a suspended state.
     // IsDeferredLoadReady checks to see if resources have already been loaded.
     // If they have been loaded then the deferred load is skipped.
     // This is more efficient, and it avoids a potential race condition where the application
