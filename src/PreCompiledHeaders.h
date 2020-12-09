@@ -55,3 +55,5 @@
 #include <collection.h>
 
 #include "app\Consts.h"
+
+typedef std::map<int, DirectX::XMFLOAT2> TouchMap;

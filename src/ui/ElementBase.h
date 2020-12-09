@@ -42,6 +42,7 @@ public:
 	virtual void SetVisible(bool visible);
 	bool IsVisible() const;
 	D2D1_RECT_F GetBounds();
+	void SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down, float scrollDeltaX, float scrollDeltaY);
 	Directions HasScrollOverflow();
 	static EdgeCoalescingCases EdgeCoalescingCaseFrom(const Directions edges);
 	void Scroll(const float deltaX, const float deltaY);

@@ -1,6 +1,8 @@
 #include "..\PreCompiledHeaders.h"
 #include "UserInterface.h"
 #include "..\dx\DirectXHelper.h"
+#include "../app/blooDot.h"
+#include "ElementBase.h"
 
 using namespace Windows::UI::Core;
 using namespace Windows::Foundation;
@@ -99,6 +101,21 @@ D2D1_RECT_F ElementBase::GetBounds()
 	}
 
 	return bounds;
+}
+
+void ElementBase::SetControl(
+	DirectX::XMFLOAT2 pointerPosition,
+	TouchMap* touchMap,
+	bool shiftKeyActive,
+	bool left,
+	bool right,
+	bool up,
+	bool down,
+	float scrollDeltaX,
+	float scrollDeltaY
+)
+{
+	this->Scroll(scrollDeltaX, scrollDeltaY);
 }
 
 void ElementBase::Scroll(const float deltaX, const float deltaY)

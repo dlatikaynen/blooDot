@@ -21,8 +21,6 @@ public:
 	WorldScreenBase::WorldScreenBase();
 	virtual WorldScreenBase::~WorldScreenBase();
 
-	typedef std::map<int, DirectX::XMFLOAT2> TouchMap;
-
 	/* graphical */
 	virtual void Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::shared_ptr<DX::DeviceResources>&	deviceResources, _In_ std::shared_ptr<BrushRegistry> brushRegistry);
 	void CreateDeviceDependentResources();

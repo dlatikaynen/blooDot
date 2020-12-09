@@ -536,9 +536,19 @@ void blooDotMain::Update()
 
 		float leftStickX = static_cast<float>(m_newReading.LeftThumbstickX);
 		float leftStickY = static_cast<float>(m_newReading.LeftThumbstickY);
-		if (UserInterface::ActiveDialog != nullptr)
+		if (UserInterface::GetInstance().ActiveDialog != nullptr)
 		{
-
+			UserInterface::GetInstance().ActiveDialog->SetControl(
+				this->m_pointerPosition,
+				&this->m_touches,
+				this->m_shiftKeyActive,
+				this->m_keyLeftArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadLeft),
+				this->m_keyRightArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadRight),
+				this->m_keyUpArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadUp),
+				this->m_keyDownArrowPressed || this->ButtonJustPressed(GamepadButtons::DPadDown),
+				this->m_keyLeftFineActive ? -1.0F : this->m_keyRightFineActive ? 1.0F : leftStickX,
+				this->m_keyUpFineActive ? -1.0F : this->m_keyDownFineActive ? 1.0F : leftStickY
+			);
 		}
 		else if (this->m_gameState == GameState::LoadScreen || this->m_gameState == GameState::MainMenu)
 		{

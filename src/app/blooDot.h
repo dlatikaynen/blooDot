@@ -52,7 +52,7 @@ enum class CheckpointState
 // Renders Direct2D and 3D content on the screen.
 namespace blooDot
 {
-    class blooDotMain : public DX::IDeviceNotify
+	class blooDotMain : public DX::IDeviceNotify
     {
     public:
 		blooDotMain(const std::shared_ptr<DX::DeviceResources>& deviceResources);
@@ -84,7 +84,7 @@ namespace blooDot
 		void RemoveTouch(int id);
         void KeyDown(Windows::System::VirtualKey key);
         void KeyUp(Windows::System::VirtualKey key);
-
+		
 	protected:
 		void OnActionLoadLevel();
 		void OnActionImportLevel();
@@ -129,7 +129,6 @@ namespace blooDot
         TextButton			m_pausedText;
         TextElement			m_resultsText;
         HighScoreEntry		m_newHighScore;
-		typedef std::map<int, XMFLOAT2> TouchMap;
         TouchMap			m_touches;
 		XMFLOAT2			m_pointerPosition;
         typedef std::queue<D2D1_POINT_2F> PointQueue;
