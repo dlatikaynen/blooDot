@@ -16,7 +16,7 @@ void ControlPrimitive::DrawScrollIndicators(
 	if (drawSides != ElementBase::Directions::NONE)
 	{
 		auto borderBrush = brushRegistry->WannaHave(d2dContext, UserInterface::Color(D2D1::ColorF::WhiteSmoke, 196));
-		auto backBrush = brushRegistry->WannaHave(d2dContext, UserInterface::Color(D2D1::ColorF::WhiteSmoke, 48));
+		auto backBrush = brushRegistry->Rather(d2dContext, UserInterface::Color(D2D1::ColorF::WhiteSmoke, 48), 148);
 		/* prepare all possible points, this is trivial */
 		constexpr float nudge = 3.f;
 		const float inset = blooDot::Consts::SQUARE_WIDTH * blooDot::Consts::INVERSE_GOLDEN_RATIO;
@@ -116,18 +116,45 @@ void ControlPrimitive::DrawScrollIndicators(
 			borderSink->Close()
 		);
 
+		d2dContext->PushAxisAlignedClip(clientArea, D2D1_ANTIALIAS_MODE::D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
+
 		/* the plenty case is the only topology with a hole */
 		if (coalescingCase == ElementBase::EdgeCoalescingCases::Plenty)
 		{
-			borderGeometry->Outline(nullptr, borderSink.Get());
+			Microsoft::WRL::ComPtr<ID2D1PathGeometry> secondaryGeometry;
+			Microsoft::WRL::ComPtr<ID2D1GeometrySink> secondarySink;
+			DX::ThrowIfFailed
+			(
+				d2dFactory->CreatePathGeometry(secondaryGeometry.GetAddressOf())
+			);
+
+			DX::ThrowIfFailed
+			(
+				secondaryGeometry->Open(secondarySink.GetAddressOf())
+			);
+
+			borderGeometry->Outline(nullptr, secondarySink.Get());
+			borderGeometry.Reset();
+			DX::ThrowIfFailed
+			(
+				secondarySink->Close()
+			);
+
+			/* as a flex, filling opacity follows the scroll direction */
+			backBrush->SetStartPoint(D2D1::Point2F(0, 0));
+			backBrush->SetEndPoint(D2D1::Point2F(640, 480));
+			d2dContext->FillGeometry(secondaryGeometry.Get(), backBrush.Get());
+			d2dContext->DrawGeometry(secondaryGeometry.Get(), borderBrush.Get());
+		}
+		else
+		{
+			d2dContext->FillGeometry(borderGeometry.Get(), backBrush.Get());
+			d2dContext->DrawGeometry(borderGeometry.Get(), borderBrush.Get());
 		}
 
 		/* realize the bars */
-		d2dContext->PushAxisAlignedClip(clientArea, D2D1_ANTIALIAS_MODE::D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
-		d2dContext->FillGeometry(borderGeometry.Get(), backBrush.Get());
-		d2dContext->DrawGeometry(borderGeometry.Get(), borderBrush.Get());	
 		d2dContext->PopAxisAlignedClip();
-	}	
+	}
 }
 
 void ControlPrimitive::ConstructWedge(

@@ -19,6 +19,8 @@ public:
 	Microsoft::WRL::ComPtr<ID2D1Brush> WannaHave(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, MFARGB color);
 	Microsoft::WRL::ComPtr<ID2D1Brush> WannaHave(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> dxTarget, MFARGB color);
 
+	Microsoft::WRL::ComPtr<ID2D1LinearGradientBrush> Rather(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxTarget, MFARGB color, BYTE gradientAlpha2);
+
 	void Reset();
 
 private:
