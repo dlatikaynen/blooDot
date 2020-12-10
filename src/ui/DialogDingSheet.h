@@ -23,8 +23,8 @@ protected:
 private:
 	void TogglePane();
 
-	ID2D1Bitmap*									m_dingSheetBitmap;
-	std::shared_ptr<Level>							m_LevelInfo;
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>	m_boundsBrush;
-	Pane											m_currentPane;
+	ID2D1Bitmap*						m_dingSheetBitmap;
+	std::shared_ptr<Level>				m_LevelInfo;
+	Microsoft::WRL::ComPtr<ID2D1Brush>	m_boundsBrush;
+	Pane								m_currentPane;
 };

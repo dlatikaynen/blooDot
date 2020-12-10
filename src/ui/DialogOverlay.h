@@ -25,14 +25,14 @@ protected:
 	virtual void RenderClientarea(ID2D1DeviceContext* d2dContext);
 	blooDot::DialogCommand DequeDialogCommand();
 
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_shadowColorBrush;
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_textColorBrush;
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_blackBrush;
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_coverBrush;
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_chromeBrush;
-	Microsoft::WRL::ComPtr<IDWriteTextLayout>       m_textLayout;
-	D2D1_RECT_F										m_textExtents;
-	TextStyle										m_textStyle;
+	Microsoft::WRL::ComPtr<ID2D1Brush>			m_shadowColorBrush;
+	Microsoft::WRL::ComPtr<ID2D1Brush>			m_textColorBrush;
+	Microsoft::WRL::ComPtr<ID2D1Brush>			m_blackBrush;
+	Microsoft::WRL::ComPtr<ID2D1Brush>			m_coverBrush;
+	Microsoft::WRL::ComPtr<ID2D1Brush>			m_chromeBrush;
+	Microsoft::WRL::ComPtr<IDWriteTextLayout>	m_textLayout;
+	D2D1_RECT_F									m_textExtents;
+	TextStyle									m_textStyle;
 
 private:
 	void CreateTextLayout();

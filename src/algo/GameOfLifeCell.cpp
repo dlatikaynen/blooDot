@@ -88,8 +88,7 @@ void GameOfLifeCell::DrawCell(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, i
 	rrect.radiusX = 2;
 	rrect.radiusY = 2;
 
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = brushRegistry->WannaHave(dxDC, m_Color);
-
+	auto brush = brushRegistry->WannaHave(dxDC, m_Color);
 	dxDC->FillRoundedRectangle(
 		&rrect,
 		brush.Get()

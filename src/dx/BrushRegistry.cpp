@@ -20,9 +20,9 @@ BrushRegistry::~BrushRegistry()
 	this->Reset();
 }
 
-Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> BrushRegistry::WannaHave(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, MFARGB color)
+Microsoft::WRL::ComPtr<ID2D1Brush> BrushRegistry::WannaHave(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, MFARGB color)
 {
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = NULL;
+	Microsoft::WRL::ComPtr<ID2D1Brush> brush = nullptr;
 	if (this->m_Registry.size() != 0)
 	{	
 		brush = this->m_Registry[color];
@@ -31,25 +31,27 @@ Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> BrushRegistry::WannaHave(Microsoft:
 	if (brush == NULL) 
 	{
 		D2D1_COLOR_F brushColor = D2D1::ColorF(
-			static_cast<float>(color.rgbRed) / 255.0F, 
+			static_cast<float>(color.rgbRed) / 255.0F,
 			static_cast<float>(color.rgbGreen) / 255.0F,
 			static_cast<float>(color.rgbBlue) / 255.0F,
 			static_cast<float>(color.rgbAlpha) / 255.0F
 		);
 
+		Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> specificBrush = nullptr;
 		DX::ThrowIfFailed(
-			dxDC->CreateSolidColorBrush(brushColor, &brush)
+			dxDC->CreateSolidColorBrush(brushColor, &specificBrush)
 		);
 
+		specificBrush->QueryInterface<ID2D1Brush>(&brush);		
 		this->m_Registry.emplace(color, brush);
 	}
 
 	return brush;
 }
 
-Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> BrushRegistry::WannaHave(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> dxTarget, MFARGB color)
+Microsoft::WRL::ComPtr<ID2D1Brush> BrushRegistry::WannaHave(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> dxTarget, MFARGB color)
 {
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = NULL;
+	Microsoft::WRL::ComPtr<ID2D1Brush> brush = nullptr;
 	if (this->m_Registry.size() != 0)
 	{
 		brush = this->m_Registry[color];
@@ -64,10 +66,12 @@ Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> BrushRegistry::WannaHave(Microsoft:
 			static_cast<float>(color.rgbAlpha) / 255.0F
 		);
 
+		Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> specificBrush = nullptr;
 		DX::ThrowIfFailed(
-			dxTarget->CreateSolidColorBrush(brushColor, &brush)
+			dxTarget->CreateSolidColorBrush(brushColor, &specificBrush)
 		);
 
+		specificBrush->QueryInterface<ID2D1Brush>(&brush);		
 		this->m_Registry.emplace(color, brush);
 	}
 
