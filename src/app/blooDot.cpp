@@ -1525,12 +1525,34 @@ void blooDotMain::KeyUp(Windows::System::VirtualKey key)
 			this->m_keyDingSheetPressed = true;
 			this->m_keyDingSheetActive = false;
 		}
-
-		this->m_keyRightFineActive = false;
 	}
 	else if (key == Windows::System::VirtualKey::W)
 	{
-		this->m_keyUpFineActive = false;
+		if (this->m_keyUpFineActive)
+		{
+			this->m_keyUpFineActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::A)
+	{
+		if (this->m_keyLeftFineActive)
+		{
+			this->m_keyLeftFineActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::S)
+	{
+		if (this->m_keyDownFineActive)
+		{
+			this->m_keyDownFineActive = false;
+		}
+	}
+	else if (key == Windows::System::VirtualKey::D)
+	{
+		if (this->m_keyRightFineActive)
+		{
+			this->m_keyRightFineActive = false;
+		}
 	}
 	else if (key == Windows::System::VirtualKey::R)
 	{
