@@ -5,8 +5,10 @@
 class MobMomentum
 {
 public:
-	static const float speedCapX;
-	static const float speedCapY;
+	//static const float speedCapX;
+	//static const float speedCapY;
+	const static float speedCapX;
+	const static float speedCapY;
 
 	void HitTheWall(Facings directionFacing);
 

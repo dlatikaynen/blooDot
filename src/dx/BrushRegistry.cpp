@@ -43,7 +43,7 @@ Microsoft::WRL::ComPtr<ID2D1Brush> BrushRegistry::WannaHave(Microsoft::WRL::ComP
 		);
 
 		specificBrush->QueryInterface<ID2D1Brush>(&brush);
-		this->m_Registry.emplace(color, brush);
+		this->m_Registry[color] = brush;
 	}
 
 	return brush;
@@ -95,8 +95,7 @@ Microsoft::WRL::ComPtr<ID2D1LinearGradientBrush> BrushRegistry::Rather(Microsoft
 			dxDC->CreateLinearGradientBrush(gradientProperties, pGradientStops, &specificBrush)
 		);
 
-		specificBrush->QueryInterface<ID2D1Brush>(&genericBrush);
-		this->m_Registry.emplace(color, genericBrush);
+		this->m_Registry[color] = specificBrush;
 	}
 	else
 	{
@@ -129,7 +128,7 @@ Microsoft::WRL::ComPtr<ID2D1Brush> BrushRegistry::WannaHave(Microsoft::WRL::ComP
 		);
 
 		specificBrush->QueryInterface<ID2D1Brush>(&brush);
-		this->m_Registry.emplace(color, brush);
+		this->m_Registry[color] = brush;
 	}
 
 	return brush;

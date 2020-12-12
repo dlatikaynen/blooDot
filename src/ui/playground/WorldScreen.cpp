@@ -80,7 +80,6 @@ void WorldScreen::Initialize(_In_ std::shared_ptr<Audio> audioEngine, _In_ std::
 
 void WorldScreen::SetControl(DirectX::XMFLOAT2 pointerPosition, TouchMap* touchMap, bool shiftKeyActive, bool left, bool right, bool up, bool down, float scrollDeltaX, float scrollDeltaY)
 {
-
 	this->m_pointerPosition.x = pointerPosition.x;
 	this->m_pointerPosition.y = pointerPosition.y;
 	this->m_touchMap = touchMap;

@@ -10,13 +10,31 @@ void ControlPrimitive::DrawScrollIndicators(
 	Microsoft::WRL::ComPtr<ID2D1Factory1> d2dFactory,
 	std::shared_ptr<BrushRegistry> brushRegistry,
 	D2D1_RECT_F clientArea,
-	ElementBase::Directions drawSides
+	ElementBase::Directions drawSides,
+	D2D1_POINT_2F scrollDirectionVector
 )
 {
 	if (drawSides != ElementBase::Directions::NONE)
 	{
 		auto borderBrush = brushRegistry->WannaHave(d2dContext, UserInterface::Color(D2D1::ColorF::WhiteSmoke, 196));
-		auto backBrush = brushRegistry->Rather(d2dContext, UserInterface::Color(D2D1::ColorF::WhiteSmoke, 48), 148);
+		Microsoft::WRL::ComPtr<ID2D1Brush> backBrush;
+		auto indicateDirection = scrollDirectionVector.x != 0.f && scrollDirectionVector.y != 0.f;
+		if (indicateDirection)
+		{
+			/* flexing skill, filling opacity follows the scroll direction */
+			auto gradientBrush = brushRegistry->Rather(d2dContext, UserInterface::Color(D2D1::ColorF::WhiteSmoke, 48), 148);
+			D2D1_POINT_2F startPoint;
+			D2D1_POINT_2F endinPoint;
+			ControlPrimitive::ProjectLineOnFrame(D2D1::RectF(0,0,0,0), scrollDirectionVector, &startPoint, &endinPoint);
+			gradientBrush->SetStartPoint(startPoint);
+			gradientBrush->SetEndPoint(endinPoint);
+			gradientBrush->QueryInterface<ID2D1Brush>(&backBrush);
+		}
+		else
+		{
+			backBrush = brushRegistry->WannaHave(d2dContext, UserInterface::Color(D2D1::ColorF::WhiteSmoke, 48));
+		}
+
 		/* prepare all possible points, this is trivial */
 		constexpr float nudge = 3.f;
 		const float inset = blooDot::Consts::SQUARE_WIDTH * blooDot::Consts::INVERSE_GOLDEN_RATIO;
@@ -134,15 +152,11 @@ void ControlPrimitive::DrawScrollIndicators(
 			);
 
 			borderGeometry->Outline(nullptr, secondarySink.Get());
-			borderGeometry.Reset();
 			DX::ThrowIfFailed
 			(
 				secondarySink->Close()
 			);
 
-			/* as a flex, filling opacity follows the scroll direction */
-			backBrush->SetStartPoint(D2D1::Point2F(0, 0));
-			backBrush->SetEndPoint(D2D1::Point2F(640, 480));
 			d2dContext->FillGeometry(secondaryGeometry.Get(), backBrush.Get());
 			d2dContext->DrawGeometry(secondaryGeometry.Get(), borderBrush.Get());
 		}
@@ -179,4 +193,13 @@ void ControlPrimitive::ConstructWedge(
 	{
 		borderSink->AddLine(points[pointIndices[i]]);
 	}
+}
+
+void ControlPrimitive::ProjectLineOnFrame(D2D1_RECT_F frame, D2D1_POINT_2F linedirection, D2D1_POINT_2F* intersection1, D2D1_POINT_2F* intersection2)
+{
+	auto a = -linedirection.y;
+	auto b = linedirection.x;
+	auto x = -(b * frame.bottom) / a;
+	auto y = -(a * frame.right) / b;
+
 }

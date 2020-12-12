@@ -161,7 +161,8 @@ void DialogOverlay::Render()
 			UserInterface::GetD2DFactory(),
 			this->m_brushRegistry,
 			this->m_clientArea,
-			scrollOverflow
+			scrollOverflow,
+			this->m_scrollingDirection
 		);
 	}
 }

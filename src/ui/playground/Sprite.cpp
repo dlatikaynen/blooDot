@@ -112,8 +112,8 @@ std::shared_ptr<BlockObject> Sprite::Update(float timeTotal, float timeDelta)
 	}
 	
 	/* linear relocation depending on momentary velocity */	
-	auto deltaX = abs(this->Momentum.speedX) > this->Momentum.speedCapX ? std::copysignf(this->Momentum.speedCapX, this->Momentum.speedX) : this->Momentum.speedX;
-	auto deltaY = abs(this->Momentum.speedY) > this->Momentum.speedCapY ? std::copysignf(this->Momentum.speedCapY, this->Momentum.speedY) : this->Momentum.speedY;	
+	auto deltaX = abs(this->Momentum.speedX) > MobMomentum::speedCapX ? std::copysignf(MobMomentum::speedCapX, this->Momentum.speedX) : this->Momentum.speedX;
+	auto deltaY = abs(this->Momentum.speedY) > MobMomentum::speedCapY ? std::copysignf(MobMomentum::speedCapY, this->Momentum.speedY) : this->Momentum.speedY;	
 	auto newPosition = D2D1::RectF(
 		this->Position.left + deltaX,
 		this->Position.top + deltaY,
@@ -126,9 +126,9 @@ std::shared_ptr<BlockObject> Sprite::Update(float timeTotal, float timeDelta)
 	{		
 		this->m_orientationCurrent = Dings::HeadingFromVector(deltaX, deltaY);
 
-#if DEBUG
+#if _DEBUG
 		std::wostringstream os_;
-		os_ << this->m_Orientation << " (" << deltaX << ", " << deltaY << ")" << std::endl ;
+		os_ << this->m_orientationCurrent << " (" << deltaX << ", " << deltaY << ")" << std::endl ;
 		OutputDebugStringW(os_.str().c_str());
 #endif
 

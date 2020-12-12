@@ -59,6 +59,7 @@ protected:
 	D2D1_RECT_F						m_clientArea;
 	D2D1_SIZE_F						m_clientAreaContent;
 	D2D1_POINT_2F					m_clientAreaScrollOffset;
+	D2D1_POINT_2F					m_scrollingDirection;
 	bool							m_visible;
 	bool							m_isFadingOut;
 };

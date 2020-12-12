@@ -9,11 +9,12 @@ BasicShapes::BasicShapes(ID3D11Device *d3dDevice) : m_d3dDevice(d3dDevice)
 {
 }
 
-void BasicShapes::CreateVertexBuffer(
+void BasicShapes::CreateVertexBuffer
+(
     _In_ unsigned int numVertices,
     _In_ BasicVertex *vertexData,
     _Out_ ID3D11Buffer **vertexBuffer
-    )
+)
 {
     *vertexBuffer = nullptr;
     Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBufferInternal;
@@ -30,24 +31,24 @@ void BasicShapes::CreateVertexBuffer(
     VertexBufferData.pSysMem = vertexData;
     VertexBufferData.SysMemPitch = 0;
     VertexBufferData.SysMemSlicePitch = 0;
-
-    DX::ThrowIfFailed(
+    DX::ThrowIfFailed
+    (
         m_d3dDevice->CreateBuffer(
             &VertexBufferDesc,
             &VertexBufferData,
             &vertexBufferInternal
-            )
-        );
-
+        )
+    );
 
     *vertexBuffer = vertexBufferInternal.Detach();
 }
 
-void BasicShapes::CreateIndexBuffer(
+void BasicShapes::CreateIndexBuffer
+(
     _In_ unsigned int numIndices,
     _In_ unsigned short *indexData,
     _Out_ ID3D11Buffer **indexBuffer
-    )
+)
 {
     *indexBuffer = nullptr;
     Microsoft::WRL::ComPtr<ID3D11Buffer> indexBufferInternal;
@@ -64,14 +65,15 @@ void BasicShapes::CreateIndexBuffer(
     IndexBufferData.pSysMem = indexData;
     IndexBufferData.SysMemPitch = 0;
     IndexBufferData.SysMemSlicePitch = 0;
-
-    DX::ThrowIfFailed(
-        m_d3dDevice->CreateBuffer(
+    DX::ThrowIfFailed
+    (
+        m_d3dDevice->CreateBuffer
+        (
             &IndexBufferDesc,
             &IndexBufferData,
             &indexBufferInternal
-            )
-        );
+        )
+    );
 
     *indexBuffer = indexBufferInternal.Detach();
 }
@@ -110,12 +112,13 @@ void BasicShapes::CreateTangentVertexBuffer(
     *vertexBuffer = vertexBufferInternal.Detach();
 }
 
-void BasicShapes::CreateCube(
+void BasicShapes::CreateCube
+(
     _Out_ ID3D11Buffer **vertexBuffer,
     _Out_ ID3D11Buffer **indexBuffer,
     _Out_opt_ unsigned int *vertexCount,
     _Out_opt_ unsigned int *indexCount
-    )
+)
 {
     BasicVertex cubeVertices[] =
     {
@@ -171,34 +174,39 @@ void BasicShapes::CreateCube(
         20, 22, 23
     };
 
-    CreateVertexBuffer(
+    CreateVertexBuffer
+    (
         ARRAYSIZE(cubeVertices),
         cubeVertices,
         vertexBuffer
-        );
+    );
+
     if (vertexCount != nullptr)
     {
         *vertexCount = ARRAYSIZE(cubeVertices);
     }
 
-    CreateIndexBuffer(
+    CreateIndexBuffer
+    (
         ARRAYSIZE(cubeIndices),
         cubeIndices,
         indexBuffer
-        );
+    );
+    
     if (indexCount != nullptr)
     {
         *indexCount = ARRAYSIZE(cubeIndices);
     }
 }
 
-void BasicShapes::CreateBox(
+void BasicShapes::CreateBox
+(
     float3 r,
     _Out_ ID3D11Buffer **vertexBuffer,
     _Out_ ID3D11Buffer **indexBuffer,
     _Out_opt_ unsigned int *vertexCount,
     _Out_opt_ unsigned int *indexCount
-    )
+)
 {
     BasicVertex boxVertices[] =
     {
@@ -255,40 +263,43 @@ void BasicShapes::CreateBox(
         21, 22, 23,
     };
 
-    CreateVertexBuffer(
+    CreateVertexBuffer
+    (
         ARRAYSIZE(boxVertices),
         boxVertices,
         vertexBuffer
-        );
+    );
+    
     if (vertexCount != nullptr)
     {
         *vertexCount = ARRAYSIZE(boxVertices);
     }
 
-    CreateIndexBuffer(
+    CreateIndexBuffer
+    (
         ARRAYSIZE(boxIndices),
         boxIndices,
         indexBuffer
-        );
+    );
+    
     if (indexCount != nullptr)
     {
         *indexCount = ARRAYSIZE(boxIndices);
     }
 }
 
-void BasicShapes::CreateSphere(
+void BasicShapes::CreateSphere
+(
     _Out_ ID3D11Buffer **vertexBuffer,
     _Out_ ID3D11Buffer **indexBuffer,
     _Out_opt_ unsigned int *vertexCount,
     _Out_opt_ unsigned int *indexCount
-    )
+)
 {
     const int numSegments = 64;
     const int numSlices = numSegments / 2;
-
     const int numVertices = (numSlices + 1) * (numSegments + 1);
     std::unique_ptr<BasicVertex[]> sphereVertices(new BasicVertex[numVertices]);
-
     for (int slice = 0; slice <= numSlices; slice++)
     {
         float v = (float)slice/(float)numSlices;
@@ -308,7 +319,6 @@ void BasicShapes::CreateSphere(
 
     const int numIndices = numSlices * (numSegments-2) * 6;
     std::unique_ptr<unsigned short[]> sphereIndices(new unsigned short[numIndices]);
-
     unsigned int index = 0;
     for (int slice = 0; slice < numSlices; slice++)
     {
@@ -331,39 +341,43 @@ void BasicShapes::CreateSphere(
         }
     }
 
-    CreateVertexBuffer(
+    CreateVertexBuffer
+    (
         numVertices,
         sphereVertices.get(),
         vertexBuffer
-        );
+    );
+    
     if (vertexCount != nullptr)
     {
         *vertexCount = numVertices;
     }
 
-    CreateIndexBuffer(
+    CreateIndexBuffer
+    (
         numIndices,
         sphereIndices.get(),
         indexBuffer
-        );
+    );
+    
     if (indexCount != nullptr)
     {
         *indexCount = numIndices;
     }
 }
-void BasicShapes::CreateTangentSphere(
+
+void BasicShapes::CreateTangentSphere
+(
     _Out_ ID3D11Buffer **vertexBuffer,
     _Out_ ID3D11Buffer **indexBuffer,
     _Out_opt_ unsigned int *vertexCount,
     _Out_opt_ unsigned int *indexCount
-    )
+)
 {
     const int numSegments = 64;
     const int numSlices = numSegments / 2;
-
     const int numVertices = (numSlices + 1) * (numSegments + 1);
     std::unique_ptr<TangentVertex[]> sphereVertices(new TangentVertex[numVertices]);
-
     for (int slice = 0; slice <= numSlices; slice++)
     {
         float v = (float)slice/(float)numSlices;
@@ -385,7 +399,6 @@ void BasicShapes::CreateTangentSphere(
 
     const int numIndices = numSlices * (numSegments-2) * 6;
     std::unique_ptr<unsigned short[]> sphereIndices(new unsigned short[numIndices]);
-
     unsigned int index = 0;
     for (int slice = 0; slice < numSlices; slice++)
     {
@@ -408,33 +421,38 @@ void BasicShapes::CreateTangentSphere(
         }
     }
 
-    CreateTangentVertexBuffer(
+    CreateTangentVertexBuffer
+    (
         numVertices,
         sphereVertices.get(),
         vertexBuffer
-        );
+    );
+    
     if (vertexCount != nullptr)
     {
         *vertexCount = numVertices;
     }
 
-    CreateIndexBuffer(
+    CreateIndexBuffer
+    (
         numIndices,
         sphereIndices.get(),
         indexBuffer
-        );
+    );
+    
     if (indexCount != nullptr)
     {
         *indexCount = numIndices;
     }
 }
 
-void BasicShapes::CreateReferenceAxis(
+void BasicShapes::CreateReferenceAxis
+(
     _Out_ ID3D11Buffer **vertexBuffer,
     _Out_ ID3D11Buffer **indexBuffer,
     _Out_opt_ unsigned int *vertexCount,
     _Out_opt_ unsigned int *indexCount
-    )
+)
 {
     BasicVertex axisVertices[] =
     {
@@ -576,21 +594,25 @@ void BasicShapes::CreateReferenceAxis(
         92, 95, 94,
     };
 
-    CreateVertexBuffer(
+    CreateVertexBuffer
+    (
         ARRAYSIZE(axisVertices),
         axisVertices,
         vertexBuffer
-        );
+    );
+    
     if (vertexCount != nullptr)
     {
         *vertexCount = ARRAYSIZE(axisVertices);
     }
 
-    CreateIndexBuffer(
+    CreateIndexBuffer
+    (
         ARRAYSIZE(axisIndices),
         axisIndices,
         indexBuffer
-        );
+    );
+    
     if (indexCount != nullptr)
     {
         *indexCount = ARRAYSIZE(axisIndices);
