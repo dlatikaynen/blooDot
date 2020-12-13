@@ -25,7 +25,7 @@ void ControlPrimitive::DrawScrollIndicators(
 			auto gradientBrush = brushRegistry->Rather(d2dContext, UserInterface::Color(D2D1::ColorF::WhiteSmoke, 48), 148);
 			D2D1_POINT_2F startPoint;
 			D2D1_POINT_2F endinPoint;
-			ControlPrimitive::ProjectLineOnFrame(D2D1::RectF(0,0,0,0), scrollDirectionVector, &startPoint, &endinPoint);
+			ControlPrimitive::ProjectLineOnFrame(clientArea, scrollDirectionVector, &startPoint, &endinPoint);
 			gradientBrush->SetStartPoint(startPoint);
 			gradientBrush->SetEndPoint(endinPoint);
 			gradientBrush->QueryInterface<ID2D1Brush>(&backBrush);
@@ -197,9 +197,56 @@ void ControlPrimitive::ConstructWedge(
 
 void ControlPrimitive::ProjectLineOnFrame(D2D1_RECT_F frame, D2D1_POINT_2F linedirection, D2D1_POINT_2F* intersection1, D2D1_POINT_2F* intersection2)
 {
+	D2D1_POINT_2F i1, i2;
 	auto a = -linedirection.y;
 	auto b = linedirection.x;
-	auto x = -(b * frame.bottom) / a;
-	auto y = -(a * frame.right) / b;
+	/* center the frame and keep offsets */
+	auto halfWidth = (frame.right - frame.left) / 2.f;
+	auto halfHeight = (frame.bottom - frame.top) / 2.f;
+	auto centeredFrame = D2D1::RectF(-halfWidth, -halfHeight, halfWidth, halfHeight);
+	/* solve the equations;
+	 * do we have a point in the west? */
+	if (b == 0.f)
+	{
+		/* horizontal edge case */
+		i1.x = centeredFrame.left;
+		i2.x = centeredFrame.right;
+		i1.y = i2.y = 0;
+	}
+	else
+	{
+		auto westY = -(a * centeredFrame.left) / b;
+		if (westY >= centeredFrame.top && westY <= centeredFrame.bottom)
+		{
+			(*intersection1).x = centeredFrame.left;
+			(*intersection1).y = westY;
+			(*intersection2).x = centeredFrame.right;
+			(*intersection2).y = -westY;
+		}
+	}
 
+	if (a == 0.f)
+	{
+		/* vertical case */
+		i1.y = centeredFrame.top;
+		i2.y = centeredFrame.bottom;
+		i1.x = i2.x = 0;
+	}
+	else
+	{
+		auto southX = -(b * centeredFrame.bottom) / a;
+		if (southX >= centeredFrame.left && southX <= centeredFrame.right)
+		{
+			(*intersection2).x = -southX;
+			(*intersection2).y = centeredFrame.top;
+			(*intersection1).x = southX;
+			(*intersection1).y = centeredFrame.bottom;
+		}
+	}
+
+	/* deliver in caller's coordinate system */
+	(*intersection1).x = frame.left + halfWidth + i1.x;
+	(*intersection1).y = frame.top + halfHeight + i1.y;
+	(*intersection2).x = frame.left + halfWidth + i2.x;
+	(*intersection2).y = frame.top + halfHeight + i2.y;
 }
