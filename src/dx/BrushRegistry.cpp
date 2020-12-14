@@ -23,9 +23,9 @@ BrushRegistry::~BrushRegistry()
 Microsoft::WRL::ComPtr<ID2D1Brush> BrushRegistry::WannaHave(Microsoft::WRL::ComPtr<ID2D1DeviceContext> dxDC, MFARGB color)
 {
 	Microsoft::WRL::ComPtr<ID2D1Brush> brush;
-	if (this->m_Registry.size() != 0)
+	if (this->m_RegistryMonotone.size() != 0)
 	{	
-		brush = this->m_Registry[color];
+		brush = this->m_RegistryMonotone[color];
 	}
 
 	if (brush == nullptr) 
@@ -43,7 +43,7 @@ Microsoft::WRL::ComPtr<ID2D1Brush> BrushRegistry::WannaHave(Microsoft::WRL::ComP
 		);
 
 		specificBrush->QueryInterface<ID2D1Brush>(&brush);
-		this->m_Registry[color] = brush;
+		this->m_RegistryMonotone[color] = brush;
 	}
 
 	return brush;
@@ -53,9 +53,9 @@ Microsoft::WRL::ComPtr<ID2D1LinearGradientBrush> BrushRegistry::Rather(Microsoft
 {
 	Microsoft::WRL::ComPtr<ID2D1LinearGradientBrush> specificBrush;
 	Microsoft::WRL::ComPtr<ID2D1Brush> genericBrush;
-	if (this->m_Registry.size() != 0)
+	if (this->m_RegistryLinearGradient.size() != 0)
 	{
-		genericBrush = this->m_Registry[color];
+		genericBrush = this->m_RegistryLinearGradient[color];
 	}
 
 	if (genericBrush == nullptr)
@@ -95,7 +95,7 @@ Microsoft::WRL::ComPtr<ID2D1LinearGradientBrush> BrushRegistry::Rather(Microsoft
 			dxDC->CreateLinearGradientBrush(gradientProperties, pGradientStops, &specificBrush)
 		);
 
-		this->m_Registry[color] = specificBrush;
+		this->m_RegistryLinearGradient[color] = specificBrush;
 	}
 	else
 	{
@@ -108,9 +108,9 @@ Microsoft::WRL::ComPtr<ID2D1LinearGradientBrush> BrushRegistry::Rather(Microsoft
 Microsoft::WRL::ComPtr<ID2D1Brush> BrushRegistry::WannaHave(Microsoft::WRL::ComPtr<ID2D1BitmapRenderTarget> dxTarget, MFARGB color)
 {
 	Microsoft::WRL::ComPtr<ID2D1Brush> brush;
-	if (this->m_Registry.size() != 0)
+	if (this->m_RegistryMonotone.size() != 0)
 	{
-		brush = this->m_Registry[color];
+		brush = this->m_RegistryMonotone[color];
 	}
 
 	if (brush == nullptr)
@@ -128,7 +128,7 @@ Microsoft::WRL::ComPtr<ID2D1Brush> BrushRegistry::WannaHave(Microsoft::WRL::ComP
 		);
 
 		specificBrush->QueryInterface<ID2D1Brush>(&brush);
-		this->m_Registry[color] = brush;
+		this->m_RegistryMonotone[color] = brush;
 	}
 
 	return brush;
@@ -136,5 +136,6 @@ Microsoft::WRL::ComPtr<ID2D1Brush> BrushRegistry::WannaHave(Microsoft::WRL::ComP
 
 void BrushRegistry::Reset()
 {
-	this->m_Registry.clear();
+	this->m_RegistryMonotone.clear();
+	this->m_RegistryLinearGradient.clear();
 }

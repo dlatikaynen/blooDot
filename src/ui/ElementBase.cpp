@@ -122,6 +122,8 @@ void ElementBase::Scroll(const float deltaX, const float deltaY)
 {
 	if (this->m_clientArea.right > 0.f && this->m_clientAreaContent.width > 0)
 	{
+		this->m_scrollingDirection.x = deltaX;
+		this->m_scrollingDirection.y = deltaY;
 		if (deltaX > 0.f)
 		{
 			if (((this->m_clientArea.right - this->m_clientArea.left) + this->m_clientAreaScrollOffset.x + deltaX) > this->m_clientAreaContent.width)

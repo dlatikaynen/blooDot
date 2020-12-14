@@ -24,6 +24,6 @@ public:
 	void Reset();
 
 private:
-	std::map<MFARGB, Microsoft::WRL::ComPtr<ID2D1Brush>, D2D1_COLOR_FCompare> m_Registry;
+	std::map<MFARGB, Microsoft::WRL::ComPtr<ID2D1Brush>, D2D1_COLOR_FCompare> m_RegistryMonotone;
+	std::map<MFARGB, Microsoft::WRL::ComPtr<ID2D1Brush>, D2D1_COLOR_FCompare> m_RegistryLinearGradient;
 };
-

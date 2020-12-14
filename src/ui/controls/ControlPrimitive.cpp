@@ -218,10 +218,10 @@ void ControlPrimitive::ProjectLineOnFrame(D2D1_RECT_F frame, D2D1_POINT_2F lined
 		auto westY = -(a * centeredFrame.left) / b;
 		if (westY >= centeredFrame.top && westY <= centeredFrame.bottom)
 		{
-			(*intersection1).x = centeredFrame.left;
-			(*intersection1).y = westY;
-			(*intersection2).x = centeredFrame.right;
-			(*intersection2).y = -westY;
+			i1.x = centeredFrame.left;
+			i1.y = westY;
+			i2.x = centeredFrame.right;
+			i2.y = -westY;
 		}
 	}
 
@@ -237,10 +237,14 @@ void ControlPrimitive::ProjectLineOnFrame(D2D1_RECT_F frame, D2D1_POINT_2F lined
 		auto southX = -(b * centeredFrame.bottom) / a;
 		if (southX >= centeredFrame.left && southX <= centeredFrame.right)
 		{
-			(*intersection2).x = -southX;
-			(*intersection2).y = centeredFrame.top;
-			(*intersection1).x = southX;
-			(*intersection1).y = centeredFrame.bottom;
+			i1.x = -southX;
+			i1.y = centeredFrame.top;
+			i2.x = southX;
+			i2.y = centeredFrame.bottom;
+		}
+		else
+		{
+			assert(false);
 		}
 	}
 
