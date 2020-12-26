@@ -18,7 +18,7 @@ void ControlPrimitive::DrawScrollIndicators(
 	{
 		auto borderBrush = brushRegistry->WannaHave(d2dContext, UserInterface::Color(D2D1::ColorF::WhiteSmoke, 196));
 		Microsoft::WRL::ComPtr<ID2D1Brush> backBrush;
-		auto indicateDirection = scrollDirectionVector.x != 0.f && scrollDirectionVector.y != 0.f;
+		auto indicateDirection = scrollDirectionVector.x != 0.f || scrollDirectionVector.y != 0.f;
 		if (indicateDirection)
 		{
 			/* flexing skill, filling opacity follows the scroll direction */
@@ -29,6 +29,9 @@ void ControlPrimitive::DrawScrollIndicators(
 			gradientBrush->SetStartPoint(startPoint);
 			gradientBrush->SetEndPoint(endinPoint);
 			gradientBrush->QueryInterface<ID2D1Brush>(&backBrush);
+#ifdef _DEBUG
+			d2dContext->DrawLine(startPoint, endinPoint, borderBrush.Get());
+#endif
 		}
 		else
 		{
@@ -200,6 +203,7 @@ void ControlPrimitive::ProjectLineOnFrame(D2D1_RECT_F frame, D2D1_POINT_2F lined
 	D2D1_POINT_2F i1, i2;
 	auto a = -linedirection.y;
 	auto b = linedirection.x;
+	bool done = false;
 	/* center the frame and keep offsets */
 	auto halfWidth = (frame.right - frame.left) / 2.f;
 	auto halfHeight = (frame.bottom - frame.top) / 2.f;
@@ -213,7 +217,15 @@ void ControlPrimitive::ProjectLineOnFrame(D2D1_RECT_F frame, D2D1_POINT_2F lined
 		i2.x = centeredFrame.right;
 		i1.y = i2.y = 0;
 	}
-	else
+	else if (a == 0.f)
+	{
+		/* vertical case */
+		i1.y = centeredFrame.top;
+		i2.y = centeredFrame.bottom;
+		i1.x = i2.x = 0;
+	}
+
+	if(b != 0.f)
 	{
 		auto westY = -(a * centeredFrame.left) / b;
 		if (westY >= centeredFrame.top && westY <= centeredFrame.bottom)
@@ -222,17 +234,11 @@ void ControlPrimitive::ProjectLineOnFrame(D2D1_RECT_F frame, D2D1_POINT_2F lined
 			i1.y = westY;
 			i2.x = centeredFrame.right;
 			i2.y = -westY;
+			done = true;
 		}
 	}
-
-	if (a == 0.f)
-	{
-		/* vertical case */
-		i1.y = centeredFrame.top;
-		i2.y = centeredFrame.bottom;
-		i1.x = i2.x = 0;
-	}
-	else
+	
+	if (!done && a != 0.f)
 	{
 		auto southX = -(b * centeredFrame.bottom) / a;
 		if (southX >= centeredFrame.left && southX <= centeredFrame.right)
