@@ -210,30 +210,26 @@ void ControlPrimitive::ProjectLineOnFrame(D2D1_RECT_F frame, D2D1_POINT_2F lined
 	auto centeredFrame = D2D1::RectF(-halfWidth, -halfHeight, halfWidth, halfHeight);
 	/* solve the equations;
 	 * do we have a point in the west? */
-	if (b == 0.f)
-	{
-		/* horizontal edge case */
-		i1.x = centeredFrame.left;
-		i2.x = centeredFrame.right;
-		i1.y = i2.y = 0;
-	}
-	else if (a == 0.f)
-	{
-		/* vertical case */
-		i1.y = centeredFrame.top;
-		i2.y = centeredFrame.bottom;
-		i1.x = i2.x = 0;
-	}
-
 	if(b != 0.f)
 	{
 		auto westY = -(a * centeredFrame.left) / b;
 		if (westY >= centeredFrame.top && westY <= centeredFrame.bottom)
 		{
-			i1.x = centeredFrame.left;
-			i1.y = westY;
-			i2.x = centeredFrame.right;
-			i2.y = -westY;
+			if (b > 0.f)
+			{
+				i1.x = centeredFrame.right;
+				i1.y = -westY;
+				i2.x = centeredFrame.left;
+				i2.y = westY;
+			}
+			else
+			{
+				i1.x = centeredFrame.left;
+				i1.y = westY;
+				i2.x = centeredFrame.right;
+				i2.y = -westY;
+			}
+
 			done = true;
 		}
 	}
@@ -243,10 +239,20 @@ void ControlPrimitive::ProjectLineOnFrame(D2D1_RECT_F frame, D2D1_POINT_2F lined
 		auto southX = -(b * centeredFrame.bottom) / a;
 		if (southX >= centeredFrame.left && southX <= centeredFrame.right)
 		{
-			i1.x = -southX;
-			i1.y = centeredFrame.top;
-			i2.x = southX;
-			i2.y = centeredFrame.bottom;
+			if (a > 0.f)
+			{
+				i1.x = southX;
+				i1.y = centeredFrame.bottom;
+				i2.x = -southX;
+				i2.y = centeredFrame.top;
+			}
+			else
+			{
+				i1.x = -southX;
+				i1.y = centeredFrame.top;
+				i2.x = southX;
+				i2.y = centeredFrame.bottom;
+			}
 		}
 		else
 		{
