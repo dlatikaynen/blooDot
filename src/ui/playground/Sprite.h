@@ -1,5 +1,5 @@
 #include "MobMomentum.h"
-#include "..\src\dings\dings.h"
+#include "src\dings\dings.h"
 
 #pragma once
 

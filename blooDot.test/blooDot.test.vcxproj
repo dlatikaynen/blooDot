@@ -214,7 +214,7 @@
     <Xml Include="UnitTestApp.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\platform\blooDot.vcxproj">
+    <ProjectReference Include="..\blooDot.vcxproj">
       <Project>{1fef1241-e4e9-40ac-af29-51b8f7c6f932}</Project>
     </ProjectReference>
   </ItemGroup>

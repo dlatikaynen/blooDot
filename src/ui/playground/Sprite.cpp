@@ -2,8 +2,8 @@
 #include <iostream>
 #include <sstream>
 
-#include "..\src\world\World.h"
-#include "..\src\world\Level.h"
+#include "src\world\World.h"
+#include "src\world\Level.h"
 #include "Sprite.h"
 
 Sprite::Sprite()

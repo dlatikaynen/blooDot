@@ -1,471 +1,471 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\src\algo\GameOfLifeSprinkler.cpp">
+    <ClCompile Include="src\algo\GameOfLifeSprinkler.cpp">
       <Filter>algo</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\algo\GameOfLifePlane.cpp">
+    <ClCompile Include="src\algo\GameOfLifePlane.cpp">
       <Filter>algo</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\algo\GameOfLifeCell.cpp">
+    <ClCompile Include="src\algo\GameOfLifeCell.cpp">
       <Filter>algo</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\app\App.cpp">
+    <ClCompile Include="src\app\App.cpp">
       <Filter>app</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\io\BasicLoader.cpp">
+    <ClCompile Include="src\io\BasicLoader.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\io\BasicReaderWriter.cpp">
+    <ClCompile Include="src\io\BasicReaderWriter.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\UserInterface.cpp">
+    <ClCompile Include="src\ui\UserInterface.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\TextStyle.cpp">
+    <ClCompile Include="src\ui\TextStyle.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\TextElement.cpp">
+    <ClCompile Include="src\ui\TextElement.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\TextButton.cpp">
+    <ClCompile Include="src\ui\TextButton.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\HighScoreTable.cpp">
+    <ClCompile Include="src\ui\HighScoreTable.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\ElementBase.cpp">
+    <ClCompile Include="src\ui\ElementBase.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\LoadScreen.cpp">
+    <ClCompile Include="src\ui\LoadScreen.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dx\DeviceResources.cpp">
+    <ClCompile Include="src\dx\DeviceResources.cpp">
       <Filter>dx</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\io\DDSTextureLoader.cpp">
+    <ClCompile Include="src\io\DDSTextureLoader.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\CountdownTimer.cpp">
+    <ClCompile Include="src\ui\CountdownTimer.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\io\PersistentState.cpp">
+    <ClCompile Include="src\io\PersistentState.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\StopwatchTimer.cpp">
+    <ClCompile Include="src\ui\StopwatchTimer.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dx\BrushRegistry.cpp">
+    <ClCompile Include="src\dx\BrushRegistry.cpp">
       <Filter>dx</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\physics\Collision.cpp">
+    <ClCompile Include="src\physics\Collision.cpp">
       <Filter>physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\algo\BitmapPixelator.cpp">
+    <ClCompile Include="src\algo\BitmapPixelator.cpp">
       <Filter>algo</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\algo\GameOfLifeAnimation.cpp">
+    <ClCompile Include="src\algo\GameOfLifeAnimation.cpp">
       <Filter>algo</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\algo\GameOfLifeStep.cpp">
+    <ClCompile Include="src\algo\GameOfLifeStep.cpp">
       <Filter>algo</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\algo\GameOfLifeTransition.cpp">
+    <ClCompile Include="src\algo\GameOfLifeTransition.cpp">
       <Filter>algo</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dx\BasicShapes.cpp">
+    <ClCompile Include="src\dx\BasicShapes.cpp">
       <Filter>dx</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dx\Mesh.cpp">
+    <ClCompile Include="src\dx\Mesh.cpp">
       <Filter>dx</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\io\MediaStreamer.cpp">
+    <ClCompile Include="src\io\MediaStreamer.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\physics\Physics.cpp">
+    <ClCompile Include="src\physics\Physics.cpp">
       <Filter>physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dx\Camera.cpp">
+    <ClCompile Include="src\dx\Camera.cpp">
       <Filter>dx</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\app\blooDot.cpp">
+    <ClCompile Include="src\app\blooDot.cpp">
       <Filter>app</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\wall-like\mauer.cpp">
+    <ClCompile Include="src\dings\wall-like\mauer.cpp">
       <Filter>game\dings</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\mob-like\dalek.cpp">
+    <ClCompile Include="src\dings\mob-like\dalek.cpp">
       <Filter>game\dings</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\NerdStatsDisplay.cpp">
+    <ClCompile Include="src\ui\NerdStatsDisplay.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\WorldSheet.cpp">
+    <ClCompile Include="src\ui\WorldSheet.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\world\Level.cpp">
+    <ClCompile Include="src\world\Level.cpp">
       <Filter>game\world</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\app\Consts.cpp">
+    <ClCompile Include="src\app\Consts.cpp">
       <Filter>app</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\LevelEditorHUD.cpp">
+    <ClCompile Include="src\ui\LevelEditorHUD.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\wall-like\bitmapdings.cpp">
+    <ClCompile Include="src\dings\wall-like\bitmapdings.cpp">
       <Filter>game\dings</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\floor-like\wasser.cpp">
+    <ClCompile Include="src\dings\floor-like\wasser.cpp">
       <Filter>game\dings</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\algo\ClumsyPacking.h">
+    <ClCompile Include="src\algo\ClumsyPacking.h">
       <Filter>algo</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\Audio.cpp">
+    <ClCompile Include="src\sound\Audio.cpp">
       <Filter>audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\looot-like\looot.cpp">
+    <ClCompile Include="src\dings\looot-like\looot.cpp">
       <Filter>game\dings</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\mob-like\mobs.cpp">
+    <ClCompile Include="src\dings\mob-like\mobs.cpp">
       <Filter>game\dings</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dx\TTFLoader.cpp">
+    <ClCompile Include="src\dx\TTFLoader.cpp">
       <Filter>dx</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\playground\WorldScreenBase.cpp">
+    <ClCompile Include="src\ui\playground\WorldScreenBase.cpp">
       <Filter>game\playground</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\playground\WorldScreen.cpp">
+    <ClCompile Include="src\ui\playground\WorldScreen.cpp">
       <Filter>game\playground</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\playground\LevelEditor.cpp">
+    <ClCompile Include="src\ui\playground\LevelEditor.cpp">
       <Filter>game\playground</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\ControllerSetup.cpp">
+    <ClCompile Include="src\ui\ControllerSetup.cpp">
       <Filter>ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\app\Utility.cpp">
+    <ClCompile Include="src\app\Utility.cpp">
       <Filter>app</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\Dings.cpp">
+    <ClCompile Include="src\dings\Dings.cpp">
       <Filter>game\dings</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\ObjectProperties.cpp">
+    <ClCompile Include="src\dings\ObjectProperties.cpp">
       <Filter>game\dings</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\ObjectBehaviors.cpp">
+    <ClCompile Include="src\dings\ObjectBehaviors.cpp">
       <Filter>game\dings</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\DialogOverlay.cpp">
+    <ClCompile Include="src\ui\DialogOverlay.cpp">
       <Filter>ui\dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\DialogDingSheet.cpp">
+    <ClCompile Include="src\ui\DialogDingSheet.cpp">
       <Filter>ui\dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\world\Bounding.cpp">
+    <ClCompile Include="src\world\Bounding.cpp">
       <Filter>game\world</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\wall-like\doors.cpp">
+    <ClCompile Include="src\dings\wall-like\doors.cpp">
       <Filter>game\dings</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dings\floor-like\flooring.cpp">
+    <ClCompile Include="src\dings\floor-like\flooring.cpp">
       <Filter>game\dings</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\world\Blocks.cpp">
+    <ClCompile Include="src\world\Blocks.cpp">
       <Filter>game\world</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\world\BlockObject.cpp">
+    <ClCompile Include="src\world\BlockObject.cpp">
       <Filter>game\world</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\SynthOfLife.cpp">
+    <ClCompile Include="src\sound\SynthOfLife.cpp">
       <Filter>audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\SynthPrimitive.cpp">
+    <ClCompile Include="src\sound\SynthPrimitive.cpp">
       <Filter>audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\SynthSequence.cpp">
+    <ClCompile Include="src\sound\SynthSequence.cpp">
       <Filter>audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\AudioFrames.cpp">
+    <ClCompile Include="src\sound\orchester\AudioFrames.cpp">
       <Filter>audio\orchester</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\OrchestratorBase.cpp">
+    <ClCompile Include="src\sound\orchester\OrchestratorBase.cpp">
       <Filter>audio\orchester</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\Orchestrator.cpp">
+    <ClCompile Include="src\sound\orchester\Orchestrator.cpp">
       <Filter>audio\orchester</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\Pipeline.cpp">
+    <ClCompile Include="src\sound\orchester\Pipeline.cpp">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\DelayLineFilter.cpp">
+    <ClCompile Include="src\sound\orchester\DelayLineFilter.cpp">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\DelayLineLinear.cpp">
+    <ClCompile Include="src\sound\orchester\DelayLineLinear.cpp">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\EnvelopeSource.cpp">
+    <ClCompile Include="src\sound\orchester\EnvelopeSource.cpp">
       <Filter>audio\orchester\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\FrameSource.cpp">
+    <ClCompile Include="src\sound\orchester\FrameSource.cpp">
       <Filter>audio\orchester\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\RampSource.cpp">
+    <ClCompile Include="src\sound\orchester\RampSource.cpp">
       <Filter>audio\orchester\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\RandomSource.cpp">
+    <ClCompile Include="src\sound\orchester\RandomSource.cpp">
       <Filter>audio\orchester\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\NoiseGate.cpp">
+    <ClCompile Include="src\sound\orchester\NoiseGate.cpp">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\SecondOrder.cpp">
+    <ClCompile Include="src\sound\orchester\SecondOrder.cpp">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\sound\orchester\StringShape.cpp">
+    <ClCompile Include="src\sound\orchester\StringShape.cpp">
       <Filter>audio\orchester\Soundshapers</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\playground\Sprite.cpp">
+    <ClCompile Include="src\ui\playground\Sprite.cpp">
       <Filter>game\playground</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\playground\MobMomentum.cpp">
+    <ClCompile Include="src\ui\playground\MobMomentum.cpp">
       <Filter>game\playground</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\controls\ControlPrimitive.cpp">
+    <ClCompile Include="src\ui\controls\ControlPrimitive.cpp">
       <Filter>ui\controls</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ui\DialogEmbedded.cpp">
+    <ClCompile Include="src\ui\DialogEmbedded.cpp">
       <Filter>ui\dialogs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\algo\GameOfLifeSprinkler.h">
+    <ClInclude Include="src\algo\GameOfLifeSprinkler.h">
       <Filter>algo</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\app\App.h">
+    <ClInclude Include="src\app\App.h">
       <Filter>app</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\io\BasicLoader.h">
+    <ClInclude Include="src\io\BasicLoader.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\io\BasicReaderWriter.h">
+    <ClInclude Include="src\io\BasicReaderWriter.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\UserInterface.h">
+    <ClInclude Include="src\ui\UserInterface.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\TextStyle.h">
+    <ClInclude Include="src\ui\TextStyle.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\TextElement.h">
+    <ClInclude Include="src\ui\TextElement.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\TextButton.h">
+    <ClInclude Include="src\ui\TextButton.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\HighScoreTable.h">
+    <ClInclude Include="src\ui\HighScoreTable.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\ElementBase.h">
+    <ClInclude Include="src\ui\ElementBase.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\LoadScreen.h">
+    <ClInclude Include="src\ui\LoadScreen.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dx\DeviceResources.h">
+    <ClInclude Include="src\dx\DeviceResources.h">
       <Filter>dx</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dx\DirectXHelper.h">
+    <ClInclude Include="src\dx\DirectXHelper.h">
       <Filter>dx</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\io\DDSTextureLoader.h">
+    <ClInclude Include="src\io\DDSTextureLoader.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\CountdownTimer.h">
+    <ClInclude Include="src\ui\CountdownTimer.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\io\PersistentState.h">
+    <ClInclude Include="src\io\PersistentState.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\StopwatchTimer.h">
+    <ClInclude Include="src\ui\StopwatchTimer.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dx\BrushRegistry.h">
+    <ClInclude Include="src\dx\BrushRegistry.h">
       <Filter>dx</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\physics\Collision.h">
+    <ClInclude Include="src\physics\Collision.h">
       <Filter>physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\algo\BitmapPixelator.h">
+    <ClInclude Include="src\algo\BitmapPixelator.h">
       <Filter>algo</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\algo\GameOfLife.h">
+    <ClInclude Include="src\algo\GameOfLife.h">
       <Filter>algo</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dx\BasicShapes.h">
+    <ClInclude Include="src\dx\BasicShapes.h">
       <Filter>dx</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dx\Mesh.h">
+    <ClInclude Include="src\dx\Mesh.h">
       <Filter>dx</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\io\MediaStreamer.h">
+    <ClInclude Include="src\io\MediaStreamer.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\physics\Physics.h">
+    <ClInclude Include="src\physics\Physics.h">
       <Filter>physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\app\StepTimer.h">
+    <ClInclude Include="src\app\StepTimer.h">
       <Filter>app</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dx\Camera.h">
+    <ClInclude Include="src\dx\Camera.h">
       <Filter>dx</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\app\blooDot.h">
+    <ClInclude Include="src\app\blooDot.h">
       <Filter>app</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\physics\BasicMath.h">
+    <ClInclude Include="src\physics\BasicMath.h">
       <Filter>algo</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\NerdStatsDisplay.h">
+    <ClInclude Include="src\ui\NerdStatsDisplay.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\WorldSheet.h">
+    <ClInclude Include="src\ui\WorldSheet.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\world\Level.h">
+    <ClInclude Include="src\world\Level.h">
       <Filter>game\world</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\app\Consts.h">
+    <ClInclude Include="src\app\Consts.h">
       <Filter>app</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\LevelEditorHUD.h">
+    <ClInclude Include="src\ui\LevelEditorHUD.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dx\Primitives.h">
+    <ClInclude Include="src\dx\Primitives.h">
       <Filter>algo</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\Audio.h">
+    <ClInclude Include="src\sound\Audio.h">
       <Filter>audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dx\TTFLoader.h">
+    <ClInclude Include="src\dx\TTFLoader.h">
       <Filter>dx</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\playground\WorldScreenBase.h">
+    <ClInclude Include="src\ui\playground\WorldScreenBase.h">
       <Filter>game\playground</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\playground\WorldScreen.h">
+    <ClInclude Include="src\ui\playground\WorldScreen.h">
       <Filter>game\playground</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\playground\LevelEditor.h">
+    <ClInclude Include="src\ui\playground\LevelEditor.h">
       <Filter>game\playground</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\ControllerSetup.h">
+    <ClInclude Include="src\ui\ControllerSetup.h">
       <Filter>ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\app\Utility.h">
+    <ClInclude Include="src\app\Utility.h">
       <Filter>app</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dings\Dings.h">
+    <ClInclude Include="src\dings\Dings.h">
       <Filter>game\dings</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dings\ObjectBehaviors.h">
+    <ClInclude Include="src\dings\ObjectBehaviors.h">
       <Filter>game\dings</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dings\ObjectProperties.h">
+    <ClInclude Include="src\dings\ObjectProperties.h">
       <Filter>game\dings</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\DialogOverlay.h">
+    <ClInclude Include="src\ui\DialogOverlay.h">
       <Filter>ui\dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\DialogDingSheet.h">
+    <ClInclude Include="src\ui\DialogDingSheet.h">
       <Filter>ui\dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\world\Bounding.h">
+    <ClInclude Include="src\world\Bounding.h">
       <Filter>game\world</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\world\World.h">
+    <ClInclude Include="src\world\World.h">
       <Filter>game\world</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dings\mobs.h">
+    <ClInclude Include="src\dings\mobs.h">
       <Filter>game\dings</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\world\Blocks.h">
+    <ClInclude Include="src\world\Blocks.h">
       <Filter>game\world</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\world\BlockObject.h">
+    <ClInclude Include="src\world\BlockObject.h">
       <Filter>game\world</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\SynthOfLife.h">
+    <ClInclude Include="src\sound\SynthOfLife.h">
       <Filter>audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\SynthPrimitive.h">
+    <ClInclude Include="src\sound\SynthPrimitive.h">
       <Filter>audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\SynthSequence.h">
+    <ClInclude Include="src\sound\SynthSequence.h">
       <Filter>audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\AudioFrames.h">
+    <ClInclude Include="src\sound\orchester\AudioFrames.h">
       <Filter>audio\orchester</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\OrchestratorBase.h">
+    <ClInclude Include="src\sound\orchester\OrchestratorBase.h">
       <Filter>audio\orchester</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\OrchestratorException.h">
+    <ClInclude Include="src\sound\orchester\OrchestratorException.h">
       <Filter>audio\orchester</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\Orchestrator.h">
+    <ClInclude Include="src\sound\orchester\Orchestrator.h">
       <Filter>audio\orchester</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\Synthesizer.h">
+    <ClInclude Include="src\sound\orchester\Synthesizer.h">
       <Filter>audio\orchester</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\Pipeline.h">
+    <ClInclude Include="src\sound\orchester\Pipeline.h">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\DelayLineFilter.h">
+    <ClInclude Include="src\sound\orchester\DelayLineFilter.h">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\DelayLineLinear.h">
+    <ClInclude Include="src\sound\orchester\DelayLineLinear.h">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\EnvelopeSource.h">
+    <ClInclude Include="src\sound\orchester\EnvelopeSource.h">
       <Filter>audio\orchester\Sources</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\FrameSource.h">
+    <ClInclude Include="src\sound\orchester\FrameSource.h">
       <Filter>audio\orchester\Sources</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\RampSource.h">
+    <ClInclude Include="src\sound\orchester\RampSource.h">
       <Filter>audio\orchester\Sources</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\RandomSource.h">
+    <ClInclude Include="src\sound\orchester\RandomSource.h">
       <Filter>audio\orchester\Sources</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\NoiseGate.h">
+    <ClInclude Include="src\sound\orchester\NoiseGate.h">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\SecondOrder.h">
+    <ClInclude Include="src\sound\orchester\SecondOrder.h">
       <Filter>audio\orchester\Pipelines</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\sound\orchester\StringShape.h">
+    <ClInclude Include="src\sound\orchester\StringShape.h">
       <Filter>audio\orchester\Soundshapers</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\playground\Sprite.h">
+    <ClInclude Include="src\ui\playground\Sprite.h">
       <Filter>game\playground</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\playground\MobMomentum.h">
+    <ClInclude Include="src\ui\playground\MobMomentum.h">
       <Filter>game\playground</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\dings\looot-like\looot.h">
+    <ClInclude Include="src\dings\looot-like\looot.h">
       <Filter>game\dings</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\controls\ControlPrimitive.h">
+    <ClInclude Include="src\ui\controls\ControlPrimitive.h">
       <Filter>ui\controls</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui\DialogEmbedded.h">
+    <ClInclude Include="src\ui\DialogEmbedded.h">
       <Filter>ui\dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\algo\Topology.h">
+    <ClInclude Include="src\algo\Topology.h">
       <Filter>algo</Filter>
     </ClInclude>
   </ItemGroup>
@@ -479,25 +479,25 @@
     <Image Include="Media\Bitmaps\notimeforcaution.png">
       <Filter>media\bitmap</Filter>
     </Image>
-    <Image Include="..\src\mediumtile-sdk.png">
+    <Image Include="src\mediumtile-sdk.png">
       <Filter>media\bitmap</Filter>
     </Image>
-    <Image Include="..\src\smalltile-phone-sdk.png">
+    <Image Include="src\smalltile-phone-sdk.png">
       <Filter>media\bitmap</Filter>
     </Image>
-    <Image Include="..\src\smalltile-windows-sdk.png">
+    <Image Include="src\smalltile-windows-sdk.png">
       <Filter>media\bitmap</Filter>
     </Image>
     <Image Include="Media\Bitmaps\snowblock.png">
       <Filter>media\bitmap</Filter>
     </Image>
-    <Image Include="..\src\splash-phone-sdk.png">
+    <Image Include="src\splash-phone-sdk.png">
       <Filter>media\bitmap</Filter>
     </Image>
     <Image Include="Assets\SplashScreen.scale-200.png">
       <Filter>media\bitmap</Filter>
     </Image>
-    <Image Include="..\src\splash-windows-sdk.png">
+    <Image Include="src\splash-windows-sdk.png">
       <Filter>media\bitmap</Filter>
     </Image>
     <Image Include="Assets\Square44x44Logo.scale-200.png">
@@ -509,16 +509,16 @@
     <Image Include="Assets\Square150x150Logo.scale-200.png">
       <Filter>media\bitmap</Filter>
     </Image>
-    <Image Include="..\src\squareTile-sdk.png">
+    <Image Include="src\squareTile-sdk.png">
       <Filter>media\bitmap</Filter>
     </Image>
     <Image Include="Assets\StoreLogo.png">
       <Filter>media\bitmap</Filter>
     </Image>
-    <Image Include="..\src\storeLogo-sdk.png">
+    <Image Include="src\storeLogo-sdk.png">
       <Filter>media\bitmap</Filter>
     </Image>
-    <Image Include="..\src\tile-sdk.png">
+    <Image Include="src\tile-sdk.png">
       <Filter>media\bitmap</Filter>
     </Image>
     <Image Include="Media\Bitmaps\universe_seamless.png">
@@ -533,7 +533,7 @@
     <Image Include="Assets\Wide310x150Logo.scale-200.png">
       <Filter>media\bitmap</Filter>
     </Image>
-    <Image Include="..\src\windowstitle-sdk.png">
+    <Image Include="src\windowstitle-sdk.png">
       <Filter>media\bitmap</Filter>
     </Image>
     <Image Include="Media\Bitmaps\floorrocktile.png">
