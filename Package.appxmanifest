@@ -15,11 +15,8 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="DirectXApplication.App">
-      <uap:VisualElements DisplayName="blooDot" Square150x150Logo="squareTile-sdk.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="The blooDot Game" BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="The PreCompiledHeaders.h Game">
-          <uap:ShowNameOnTiles>
-            <uap:ShowOn Tile="square150x150Logo" />
-          </uap:ShowNameOnTiles>
+      <uap:VisualElements DisplayName="blooDot" Square44x44Logo="Assets\Square44x44Logo.png" Description="The blooDot Game" BackgroundColor="transparent" Square150x150Logo="Assets\squareTile-sdk.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="blooDot" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png">
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
         <uap:InitialRotationPreference>

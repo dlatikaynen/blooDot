@@ -7,5 +7,13 @@
     <AppxBuildConfigurationSelection>x64</AppxBuildConfigurationSelection>
     <PackageOptionalProjectsInIdeBuilds>False</PackageOptionalProjectsInIdeBuilds>
     <UapAppxPackageBuildMode>SideloadOnly</UapAppxPackageBuildMode>
+    <Source>C:\src\blooDot\Assets\Square150x150Logo.scale-200.png</Source>
+    <SmallTileSource>C:\src\blooDot\Assets\Square150x150Logo.scale-200.png</SmallTileSource>
+    <MediumTileSource>C:\src\blooDot\Assets\Square150x150Logo.scale-200.png</MediumTileSource>
+    <WideTileSource>C:\src\blooDot\Assets\Square150x150Logo.scale-200.png</WideTileSource>
+    <LargeTileSource>C:\src\blooDot\Assets\Square150x150Logo.scale-200.png</LargeTileSource>
+    <AppIconSource>C:\src\blooDot\Assets\Square150x150Logo.scale-200.png</AppIconSource>
+    <SplashScreenSource>C:\src\blooDot\Assets\Square150x150Logo.scale-200.png</SplashScreenSource>
+    <PackageLogoSource>C:\src\blooDot\Assets\Square150x150Logo.scale-200.png</PackageLogoSource>
   </PropertyGroup>
 </Project>
