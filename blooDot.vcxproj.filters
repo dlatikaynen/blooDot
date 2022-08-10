@@ -1,0 +1,436 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Lib Files">
+      <UniqueIdentifier>{3be6d793-e692-4b84-b501-8e94e96ecb7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{8c724c14-eb4d-48aa-8a76-a4a26e4f0d34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Licences">
+      <UniqueIdentifier>{3a8d3a08-876f-4930-8f3b-f3db288a21f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{f0f01b33-0b62-4d20-b9ff-268a3c8b8c43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib Headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SDL\include\begin_code.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\close_code.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_assert.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_atomic.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_audio.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_bits.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_blendmode.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_clipboard.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_config.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_config_android.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_config_iphoneos.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_config_macosx.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_config_minimal.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_config_pandora.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_config_psp.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_config_windows.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_config_winrt.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_config_wiz.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_copying.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_cpuinfo.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_egl.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_endian.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_error.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_events.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_filesystem.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_gamecontroller.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_gesture.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_haptic.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_hidapi.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_hints.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_joystick.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_keyboard.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_keycode.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_loadso.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_locale.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_log.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_main.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_messagebox.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_metal.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_misc.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_mouse.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_mutex.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_name.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_opengl.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_opengl_glext.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_opengles.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_opengles2.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_opengles2_gl2.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_opengles2_gl2ext.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_opengles2_gl2platform.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_opengles2_khrplatform.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_pixels.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_platform.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_power.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_quit.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_rect.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_render.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_revision.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_rwops.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_scancode.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_sensor.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_shape.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_stdinc.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_surface.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_system.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_syswm.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_test.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_test_assert.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_test_common.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_test_compare.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_test_crc32.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_test_font.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_test_fuzzer.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_test_harness.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_test_images.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_test_log.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_test_md5.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_test_memory.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_test_random.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_thread.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_timer.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_touch.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_types.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_version.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_video.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_vulkan.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_image.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_mixer.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL\include\SDL_ttf.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="orchestrator.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="splash.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="dexassy.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="scripture.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo\cairo.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo\cairo-deprecated.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo\cairo-features.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo\cairo-ft.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo\cairo-gobject.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo\cairo-pdf.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo\cairo-ps.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo\cairo-script-interpreter.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo\cairo-svg.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo\cairo-version.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cairo\cairo-win32.h">
+      <Filter>Lib Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="orchestrator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="splash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dexassy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scripture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="SDL\lib\x64\SDL2.dll">
+      <Filter>Platform</Filter>
+    </None>
+    <None Include="SDL\lib\x64\SDL2_image.dll">
+      <Filter>Platform</Filter>
+    </None>
+    <None Include="SDL\lib\x64\SDL2_mixer.dll">
+      <Filter>Platform</Filter>
+    </None>
+    <None Include="SDL\lib\x64\SDL2_ttf.dll">
+      <Filter>Platform</Filter>
+    </None>
+    <None Include="res\xassy.cmd">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="SDL\lib\x64\SDL2.lib">
+      <Filter>Lib Files</Filter>
+    </Library>
+    <Library Include="SDL\lib\x64\SDL2_image.lib">
+      <Filter>Lib Files</Filter>
+    </Library>
+    <Library Include="SDL\lib\x64\SDL2_mixer.lib">
+      <Filter>Lib Files</Filter>
+    </Library>
+    <Library Include="SDL\lib\x64\SDL2_ttf.lib">
+      <Filter>Lib Files</Filter>
+    </Library>
+    <Library Include="SDL\lib\x64\SDL2test.lib">
+      <Filter>Lib Files</Filter>
+    </Library>
+    <Library Include="SDL\lib\x64\SDL2main.lib">
+      <Filter>Lib Files</Filter>
+    </Library>
+    <Library Include="SDL\lib\x64\cairo.lib">
+      <Filter>Lib Files</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="blooDot.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\nn-splash-scene.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ofl.txt">
+      <Filter>Licences</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="res\FreckleFace-Regular.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
+    <Font Include="res\FredokaOne-Regular.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
+  </ItemGroup>
+</Project>

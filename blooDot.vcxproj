@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props')" />
+  <PropertyGroup Label="Globals">
+    <CppWinRTOptimized>true</CppWinRTOptimized>
+    <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
+    <CppWinRTGenerateWindowsMetadata>false</CppWinRTGenerateWindowsMetadata>
+    <MinimalCoreWin>true</MinimalCoreWin>
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{6b17bca6-5bd1-4a5d-9603-e90912c1ec24}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>blooDot</RootNamespace>
+    <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0.20348.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.17134.0</WindowsTargetPlatformMinVersion>
+    <CppWinRTModernIDL>true</CppWinRTModernIDL>
+    <CppWinRTFastAbi>true</CppWinRTFastAbi>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '14.0'">v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <SpectreMitigation>false</SpectreMitigation>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="PropertySheet.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);SDL\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);SDL\lib\x64</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);SDL\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);SDL\lib\x64</LibraryPath>
+    <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+    <CustomBuildBeforeTargets>Link</CustomBuildBeforeTargets>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
+      <PreprocessorDefinitions>_CONSOLE;WIN32_LEAN_AND_MEAN;WINRT_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level4</WarningLevel>
+      <AdditionalOptions>%(AdditionalOptions) /permissive- /bigobj</AdditionalOptions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
+      <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatWarningAsError>
+      <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</MultiProcessorCompilation>
+      <StringPooling Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</StringPooling>
+      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</BufferSecurityCheck>
+      <FloatingPointModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Fast</FloatingPointModel>
+      <FloatingPointExceptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</FloatingPointExceptions>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdc17</LanguageStandard_C>
+      <ConformanceMode Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ConformanceMode>
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AssemblyAndSourceCode</AssemblerOutput>
+      <UseUnicodeForAssemblerListing Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</UseUnicodeForAssemblerListing>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SDL\lib\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)SDL\lib\x64\SDL2.lib;$(ProjectDir)SDL\lib\x64\SDL2main.lib;$(ProjectDir)SDL\lib\x64\SDL2_image.lib;$(ProjectDir)SDL\lib\x64\SDL2_mixer.lib;$(ProjectDir)SDL\lib\x64\SDL2_ttf.lib;$(ProjectDir)SDL\lib\x64\cairo.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <TurnOffAssemblyGeneration Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</TurnOffAssemblyGeneration>
+      <EnableUAC Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableUAC>
+    </Link>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2.dll $(OutDirFullPath)
+xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2_image.dll $(OutDirFullPath)
+xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2_mixer.dll $(OutDirFullPath)
+xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2_ttf.dll $(OutDirFullPath)
+xcopy /i /d /y $(ProjectDir)SDL\lib\x64\libcairo-2.dll $(OutDirFullPath)
+
+robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copy SDL2.dll to output directory</Message>
+    </PostBuildEvent>
+    <ProjectReference>
+      <LinkLibraryDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdcpp20</LanguageStandard>
+      <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdc17</LanguageStandard_C>
+      <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)SDL\lib\x64\SDL2.lib;$(ProjectDir)SDL\lib\x64\SDL2main.lib;$(ProjectDir)SDL\lib\x64\SDL2_image.lib;$(ProjectDir)SDL\lib\x64\SDL2_mixer.lib;$(ProjectDir)SDL\lib\x64\SDL2_ttf.lib;$(ProjectDir)SDL\lib\x64\cairo.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <TurnOffAssemblyGeneration Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</TurnOffAssemblyGeneration>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SDL\lib\x64</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</IgnoreAllDefaultLibraries>
+      <EnableUAC Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</EnableUAC>
+      <IgnoreSpecificDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Release|x64'">user32;gdi32;comctl32;winspool;comdlg32;advapi32;shell32;shlwapi;ole32;oleaut32;uuid;odbc32;odbccp32</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkLibraryDependencies>
+    </ProjectReference>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2.dll $(OutDirFullPath)
+xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2_image.dll $(OutDirFullPath)
+xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2_mixer.dll $(OutDirFullPath)
+xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2_ttf.dll $(OutDirFullPath)
+xcopy /i /d /y $(ProjectDir)SDL\lib\x64\libcairo-2.dll $(OutDirFullPath)
+
+robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Packaging Resources</Message>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="cairo\cairo-deprecated.h" />
+    <ClInclude Include="cairo\cairo-features.h" />
+    <ClInclude Include="cairo\cairo-ft.h" />
+    <ClInclude Include="cairo\cairo-gobject.h" />
+    <ClInclude Include="cairo\cairo-pdf.h" />
+    <ClInclude Include="cairo\cairo-ps.h" />
+    <ClInclude Include="cairo\cairo-script-interpreter.h" />
+    <ClInclude Include="cairo\cairo-svg.h" />
+    <ClInclude Include="cairo\cairo-version.h" />
+    <ClInclude Include="cairo\cairo-win32.h" />
+    <ClInclude Include="cairo\cairo.h" />
+    <ClInclude Include="dexassy.h" />
+    <ClInclude Include="orchestrator.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
+    <ClCompile Include="scripture.cpp" />
+    <ClInclude Include="scripture.h" />
+    <ClInclude Include="SDL\include\begin_code.h" />
+    <ClInclude Include="SDL\include\close_code.h" />
+    <ClInclude Include="SDL\include\SDL.h" />
+    <ClInclude Include="SDL\include\SDL_assert.h" />
+    <ClInclude Include="SDL\include\SDL_atomic.h" />
+    <ClInclude Include="SDL\include\SDL_audio.h" />
+    <ClInclude Include="SDL\include\SDL_bits.h" />
+    <ClInclude Include="SDL\include\SDL_blendmode.h" />
+    <ClInclude Include="SDL\include\SDL_clipboard.h" />
+    <ClInclude Include="SDL\include\SDL_config.h" />
+    <ClInclude Include="SDL\include\SDL_config_android.h" />
+    <ClInclude Include="SDL\include\SDL_config_iphoneos.h" />
+    <ClInclude Include="SDL\include\SDL_config_macosx.h" />
+    <ClInclude Include="SDL\include\SDL_config_minimal.h" />
+    <ClInclude Include="SDL\include\SDL_config_pandora.h" />
+    <ClInclude Include="SDL\include\SDL_config_psp.h" />
+    <ClInclude Include="SDL\include\SDL_config_windows.h" />
+    <ClInclude Include="SDL\include\SDL_config_winrt.h" />
+    <ClInclude Include="SDL\include\SDL_config_wiz.h" />
+    <ClInclude Include="SDL\include\SDL_copying.h" />
+    <ClInclude Include="SDL\include\SDL_cpuinfo.h" />
+    <ClInclude Include="SDL\include\SDL_egl.h" />
+    <ClInclude Include="SDL\include\SDL_endian.h" />
+    <ClInclude Include="SDL\include\SDL_error.h" />
+    <ClInclude Include="SDL\include\SDL_events.h" />
+    <ClInclude Include="SDL\include\SDL_filesystem.h" />
+    <ClInclude Include="SDL\include\SDL_gamecontroller.h" />
+    <ClInclude Include="SDL\include\SDL_gesture.h" />
+    <ClInclude Include="SDL\include\SDL_haptic.h" />
+    <ClInclude Include="SDL\include\SDL_hidapi.h" />
+    <ClInclude Include="SDL\include\SDL_hints.h" />
+    <ClInclude Include="SDL\include\SDL_image.h" />
+    <ClInclude Include="SDL\include\SDL_joystick.h" />
+    <ClInclude Include="SDL\include\SDL_keyboard.h" />
+    <ClInclude Include="SDL\include\SDL_keycode.h" />
+    <ClInclude Include="SDL\include\SDL_loadso.h" />
+    <ClInclude Include="SDL\include\SDL_locale.h" />
+    <ClInclude Include="SDL\include\SDL_log.h" />
+    <ClInclude Include="SDL\include\SDL_main.h" />
+    <ClInclude Include="SDL\include\SDL_messagebox.h" />
+    <ClInclude Include="SDL\include\SDL_metal.h" />
+    <ClInclude Include="SDL\include\SDL_misc.h" />
+    <ClInclude Include="SDL\include\SDL_mixer.h" />
+    <ClInclude Include="SDL\include\SDL_mouse.h" />
+    <ClInclude Include="SDL\include\SDL_mutex.h" />
+    <ClInclude Include="SDL\include\SDL_name.h" />
+    <ClInclude Include="SDL\include\SDL_opengl.h" />
+    <ClInclude Include="SDL\include\SDL_opengles.h" />
+    <ClInclude Include="SDL\include\SDL_opengles2.h" />
+    <ClInclude Include="SDL\include\SDL_opengles2_gl2.h" />
+    <ClInclude Include="SDL\include\SDL_opengles2_gl2ext.h" />
+    <ClInclude Include="SDL\include\SDL_opengles2_gl2platform.h" />
+    <ClInclude Include="SDL\include\SDL_opengles2_khrplatform.h" />
+    <ClInclude Include="SDL\include\SDL_opengl_glext.h" />
+    <ClInclude Include="SDL\include\SDL_pixels.h" />
+    <ClInclude Include="SDL\include\SDL_platform.h" />
+    <ClInclude Include="SDL\include\SDL_power.h" />
+    <ClInclude Include="SDL\include\SDL_quit.h" />
+    <ClInclude Include="SDL\include\SDL_rect.h" />
+    <ClInclude Include="SDL\include\SDL_render.h" />
+    <ClInclude Include="SDL\include\SDL_revision.h" />
+    <ClInclude Include="SDL\include\SDL_rwops.h" />
+    <ClInclude Include="SDL\include\SDL_scancode.h" />
+    <ClInclude Include="SDL\include\SDL_sensor.h" />
+    <ClInclude Include="SDL\include\SDL_shape.h" />
+    <ClInclude Include="SDL\include\SDL_stdinc.h" />
+    <ClInclude Include="SDL\include\SDL_surface.h" />
+    <ClInclude Include="SDL\include\SDL_system.h" />
+    <ClInclude Include="SDL\include\SDL_syswm.h" />
+    <ClInclude Include="SDL\include\SDL_test.h" />
+    <ClInclude Include="SDL\include\SDL_test_assert.h" />
+    <ClInclude Include="SDL\include\SDL_test_common.h" />
+    <ClInclude Include="SDL\include\SDL_test_compare.h" />
+    <ClInclude Include="SDL\include\SDL_test_crc32.h" />
+    <ClInclude Include="SDL\include\SDL_test_font.h" />
+    <ClInclude Include="SDL\include\SDL_test_fuzzer.h" />
+    <ClInclude Include="SDL\include\SDL_test_harness.h" />
+    <ClInclude Include="SDL\include\SDL_test_images.h" />
+    <ClInclude Include="SDL\include\SDL_test_log.h" />
+    <ClInclude Include="SDL\include\SDL_test_md5.h" />
+    <ClInclude Include="SDL\include\SDL_test_memory.h" />
+    <ClInclude Include="SDL\include\SDL_test_random.h" />
+    <ClInclude Include="SDL\include\SDL_thread.h" />
+    <ClInclude Include="SDL\include\SDL_timer.h" />
+    <ClInclude Include="SDL\include\SDL_touch.h" />
+    <ClInclude Include="SDL\include\SDL_ttf.h" />
+    <ClInclude Include="SDL\include\SDL_types.h" />
+    <ClInclude Include="SDL\include\SDL_version.h" />
+    <ClInclude Include="SDL\include\SDL_video.h" />
+    <ClInclude Include="SDL\include\SDL_vulkan.h" />
+    <ClInclude Include="splash.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dexassy.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="orchestrator.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="splash.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="res\xassy.cmd" />
+    <None Include="SDL\lib\x64\SDL2.dll">
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </None>
+    <None Include="SDL\lib\x64\SDL2_image.dll" />
+    <None Include="SDL\lib\x64\SDL2_mixer.dll" />
+    <None Include="SDL\lib\x64\SDL2_ttf.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="SDL\lib\x64\cairo.lib" />
+    <Library Include="SDL\lib\x64\SDL2.lib" />
+    <Library Include="SDL\lib\x64\SDL2main.lib" />
+    <Library Include="SDL\lib\x64\SDL2test.lib" />
+    <Library Include="SDL\lib\x64\SDL2_image.lib" />
+    <Library Include="SDL\lib\x64\SDL2_mixer.lib" />
+    <Library Include="SDL\lib\x64\SDL2_ttf.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="blooDot.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\nn-splash-scene.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ofl.txt">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="res\FreckleFace-Regular.ttf" />
+    <Font Include="res\FredokaOne-Regular.ttf" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.props'))" />
+    <Error Condition="!Exists('packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Windows.CppWinRT.2.0.210806.1\build\native\Microsoft.Windows.CppWinRT.targets'))" />
+  </Target>
+</Project>
