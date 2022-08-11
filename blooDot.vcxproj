@@ -110,11 +110,7 @@
       <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">libcairo-2.dll</DelayLoadDLLs>
     </Link>
     <PostBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2.dll $(OutDirFullPath)
-xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2_image.dll $(OutDirFullPath)
-xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2_mixer.dll $(OutDirFullPath)
-xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2_ttf.dll $(OutDirFullPath)
-xcopy /i /d /y $(ProjectDir)SDL\lib\x64\libcairo-2.dll $(OutDirFullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xcopy /i /d /y $(ProjectDir)SDL\lib\x64\*.dll $(OutDirFullPath)
 
 robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     </PostBuildEvent>
@@ -161,11 +157,7 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
       <LinkLibraryDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkLibraryDependencies>
     </ProjectReference>
     <PostBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2.dll $(OutDirFullPath)
-xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2_image.dll $(OutDirFullPath)
-xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2_mixer.dll $(OutDirFullPath)
-xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2_ttf.dll $(OutDirFullPath)
-xcopy /i /d /y $(ProjectDir)SDL\lib\x64\libcairo-2.dll $(OutDirFullPath)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xcopy /i /d /y $(ProjectDir)SDL\lib\x64\*.dll $(OutDirFullPath)
 
 robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     </PostBuildEvent>
@@ -330,6 +322,11 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </None>
     <None Include="res\xassy.cmd" />
+    <None Include="SDL\lib\x64\libcairo-2.dll" />
+    <None Include="SDL\lib\x64\libexpat-1.dll" />
+    <None Include="SDL\lib\x64\libfontconfig-1.dll" />
+    <None Include="SDL\lib\x64\libfreetype-6.dll" />
+    <None Include="SDL\lib\x64\libpng14-14.dll" />
     <None Include="SDL\lib\x64\SDL2.dll">
       <FileType>Document</FileType>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
@@ -337,6 +334,7 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <None Include="SDL\lib\x64\SDL2_image.dll" />
     <None Include="SDL\lib\x64\SDL2_mixer.dll" />
     <None Include="SDL\lib\x64\SDL2_ttf.dll" />
+    <None Include="SDL\lib\x64\zlib1.dll" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\lib\x64\cairo.lib" />

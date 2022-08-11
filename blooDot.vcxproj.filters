@@ -413,6 +413,24 @@
     <None Include="planning\scraps.ligma">
       <Filter>Planning</Filter>
     </None>
+    <None Include="SDL\lib\x64\libcairo-2.dll">
+      <Filter>Platform</Filter>
+    </None>
+    <None Include="SDL\lib\x64\libexpat-1.dll">
+      <Filter>Platform</Filter>
+    </None>
+    <None Include="SDL\lib\x64\libfontconfig-1.dll">
+      <Filter>Platform</Filter>
+    </None>
+    <None Include="SDL\lib\x64\libfreetype-6.dll">
+      <Filter>Platform</Filter>
+    </None>
+    <None Include="SDL\lib\x64\libpng14-14.dll">
+      <Filter>Platform</Filter>
+    </None>
+    <None Include="SDL\lib\x64\zlib1.dll">
+      <Filter>Platform</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\lib\x64\SDL2.lib">
