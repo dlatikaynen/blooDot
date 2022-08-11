@@ -1,13 +1,12 @@
 #include "pch.h"
 #include "dexassy.h"
 
-extern void ReportError(const char*, const char*);
-
 size_t chunkSizes[] = {
 	1072649,
 	42452,
 	107112,
-	37776
+	37776,
+	3662
 };
 
 std::vector<size_t> chunkOffsets;

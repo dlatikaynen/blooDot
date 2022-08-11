@@ -1,17 +1,9 @@
 ﻿#include "pch.h"
-#include <SDL.h>
-#include <SDL_mixer.h>
-#include <SDL_image.h>
-#include <iostream>
+#include "main.h"
 #include "dexassy.h"
 #include "scripture.h"
 #include "splash.h"
 #include "orchestrator.h"
-
-extern void PrepareIndex();
-extern bool OpenCooked();
-extern void CloseCooked();
-extern void CloseFonts();
 
 const int ExitCodeNormally = 0x00;
 const int ExitCodeSDLInitFail = 0x55;
@@ -111,14 +103,6 @@ int main(int, char**)
 			break;
 		}
 
-		const auto soundEffect = Mix_LoadWAV("c:\\lc\\blooDot\\projectile-decay.wav");
-		if (!soundEffect)
-		{
-			const auto soundError = SDL_GetError();
-			ReportError("Failed to load sound effect", soundError);
-			break;
-		}
-
 		const auto numAudioDrivers = SDL_GetNumAudioDrivers();
 		for (auto i = 0; i < numAudioDrivers; ++i)
 		{
@@ -139,6 +123,18 @@ int main(int, char**)
 
 		PrepareIndex();
 		OpenCooked();
+
+		SDL_RWops* soundFile;
+		const auto soundMem = Retrieve(CHUNK_KEY_SFX_PROJECTILEDECAY, &soundFile);
+		const auto soundEffect = Mix_LoadWAV_RW(soundFile, true);
+		soundFile->close(soundFile);
+		SDL_free(soundMem);
+		if (!soundEffect)
+		{
+			const auto soundError = SDL_GetError();
+			ReportError("Failed to load sound effect", soundError);
+			break;
+		}
 
 		SDL_ShowWindow(mainWindow);
 		Mix_PlayChannel(-1, soundEffect, 0);

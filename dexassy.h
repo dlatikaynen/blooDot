@@ -5,6 +5,9 @@ constexpr auto CHUNK_KEY_SPLASH = 0;
 constexpr auto CHUNK_KEY_FONT_TITLE = 1;
 constexpr auto CHUNK_KEY_FONT_DIALOG = 2;
 constexpr auto CHUNK_KEY_FONT_ALIEN = 3;
+constexpr auto CHUNK_KEY_SFX_PROJECTILEDECAY = 4;
+
+extern void ReportError(const char*, const char*);
 
 void PrepareIndex();
 bool OpenCooked();

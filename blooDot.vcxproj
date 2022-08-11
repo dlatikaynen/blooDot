@@ -62,9 +62,6 @@
   <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets">
-    <Import Project="PropertySheet.props" />
-  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);cairo;SDL\include</IncludePath>
@@ -190,6 +187,7 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClInclude Include="cairo\cairo.h" />
     <ClInclude Include="dexassy.h" />
     <ClInclude Include="drawing.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="orchestrator.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
@@ -299,6 +297,7 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="players.ligma" />
     <None Include="res\xassy.cmd" />
     <None Include="SDL\lib\x64\SDL2.dll">
       <FileType>Document</FileType>
@@ -324,17 +323,34 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <Image Include="res\nn-splash-scene.png">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="LICENSE.txt">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Text>
     <Text Include="ofl.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Text>
   </ItemGroup>
   <ItemGroup>
+    <Font Include="res\esl_gothic_shavian.ttf" />
     <Font Include="res\FreckleFace-Regular.ttf" />
     <Font Include="res\FredokaOne-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\projectile-decay.wav">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </Media>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

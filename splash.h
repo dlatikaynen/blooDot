@@ -3,4 +3,9 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
+extern void ReportError(const char*, const char*);
+extern void* Retrieve(int chunkKey, __out SDL_RWops** const stream);
+extern bool LoadFonts();
+extern TTF_Font* GetFont(int fontKey);
+
 void SplashLoop(SDL_Renderer*);

@@ -6,10 +6,6 @@
 #include <cairo.h>
 
 extern bool mainRunning;
-extern void ReportError(const char*, const char*);
-extern void* Retrieve(int chunkKey, __out SDL_RWops** const stream);
-extern bool LoadFonts();
-extern TTF_Font* GetFont(int fontKey);
 
 SDL_Event splashEvent;
 bool splashRunning = false;
@@ -58,6 +54,7 @@ void LoadSplash(SDL_Renderer* renderer)
 cairo_t* cb(cairo_t* cr)
 {
 	cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
+	cairo_set_line_width(cr, 10.0);
 	cairo_rectangle(cr, 10, 20, 128, 128);
 	cairo_stroke(cr);
 	return cr;
@@ -92,11 +89,14 @@ void SplashLoop(SDL_Renderer* renderer)
 		return;
 	}
 
-	titleRect.x = outerMenuRect.x + 10;
-	titleRect.y = outerMenuRect.y + 10;
-	titleRect.w = titleText->w;
-	titleRect.h = titleText->h;
-	SDL_free(titleText);
+	if (titleText)
+	{
+		titleRect.x = outerMenuRect.x + 10;
+		titleRect.y = outerMenuRect.y + 10;
+		titleRect.w = titleText->w;
+		titleRect.h = titleText->h;
+		SDL_free(titleText);
+	}
 
 	while (splashRunning)
 	{

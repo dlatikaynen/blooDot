@@ -25,6 +25,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Planning">
+      <UniqueIdentifier>{bb8a392c-d034-4162-8457-3bbd0c1006f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL\include\begin_code.h">
@@ -351,6 +354,9 @@
     <ClInclude Include="drawing.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -392,6 +398,9 @@
     <None Include="res\xassy.cmd">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="players.ligma">
+      <Filter>Planning</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\lib\x64\SDL2.lib">
@@ -430,6 +439,7 @@
     <Text Include="ofl.txt">
       <Filter>Licences</Filter>
     </Text>
+    <Text Include="LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="res\FreckleFace-Regular.ttf">
@@ -438,5 +448,11 @@
     <Font Include="res\FredokaOne-Regular.ttf">
       <Filter>Resource Files</Filter>
     </Font>
+    <Font Include="res\esl_gothic_shavian.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\projectile-decay.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>
