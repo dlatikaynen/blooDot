@@ -110,6 +110,7 @@
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)SDL\lib\x64\SDL2.lib;$(ProjectDir)SDL\lib\x64\SDL2main.lib;$(ProjectDir)SDL\lib\x64\SDL2_image.lib;$(ProjectDir)SDL\lib\x64\SDL2_mixer.lib;$(ProjectDir)SDL\lib\x64\SDL2_ttf.lib;$(ProjectDir)SDL\lib\x64\cairo.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TurnOffAssemblyGeneration Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</TurnOffAssemblyGeneration>
       <EnableUAC Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableUAC>
+      <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">libcairo-2.dll</DelayLoadDLLs>
     </Link>
     <PostBuildEvent>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xcopy /i /d /y $(ProjectDir)SDL\lib\x64\SDL2.dll $(OutDirFullPath)
@@ -131,6 +132,9 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClCompile>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">libcairo-2.dll</DelayLoadDLLs>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
@@ -153,6 +157,8 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
       <IgnoreAllDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</IgnoreAllDefaultLibraries>
       <EnableUAC Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</EnableUAC>
       <IgnoreSpecificDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Release|x64'">user32;gdi32;comctl32;winspool;comdlg32;advapi32;shell32;shlwapi;ole32;oleaut32;uuid;odbc32;odbccp32</IgnoreSpecificDefaultLibraries>
+      <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">libcairo-2.dll</DelayLoadDLLs>
+      <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">libcairo-2.dll</DelayLoadDLLs>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkLibraryDependencies>
@@ -183,9 +189,11 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClInclude Include="cairo\cairo-win32.h" />
     <ClInclude Include="cairo\cairo.h" />
     <ClInclude Include="dexassy.h" />
+    <ClInclude Include="drawing.h" />
     <ClInclude Include="orchestrator.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
+    <ClCompile Include="drawing.cpp" />
     <ClCompile Include="scripture.cpp" />
     <ClInclude Include="scripture.h" />
     <ClInclude Include="SDL\include\begin_code.h" />

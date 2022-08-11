@@ -348,6 +348,9 @@
     <ClInclude Include="cairo\cairo-win32.h">
       <Filter>Lib Headers</Filter>
     </ClInclude>
+    <ClInclude Include="drawing.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -366,6 +369,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="scripture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="drawing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

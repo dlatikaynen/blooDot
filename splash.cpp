@@ -2,6 +2,7 @@
 #include "splash.h"
 #include "dexassy.h"
 #include "scripture.h"
+#include "drawing.h"
 #include <cairo.h>
 
 extern bool mainRunning;
@@ -60,23 +61,6 @@ cairo_t* cb(cairo_t* cr)
 	cairo_rectangle(cr, 10, 20, 128, 128);
 	cairo_stroke(cr);
 	return cr;
-}
-
-cairo_t* cai(SDL_Renderer* r, cairo_t* (*f)(cairo_t*))
-{
-	int width = 640, height = 640, pitch; void* pixels;
-	
-	const auto t = SDL_CreateTexture(r, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
-	SDL_LockTexture(t, NULL, &pixels, &pitch);
-	const auto cs = cairo_image_surface_create_for_data(static_cast<unsigned char*>(pixels), CAIRO_FORMAT_ARGB32, width, height, pitch);
-	const auto s = cairo_create(cs);
-	const auto fr = f(s);
-	
-	SDL_UnlockTexture(t);
-	SDL_RenderCopy(r, t, NULL, NULL);
-	SDL_RenderPresent(r);
-	
-	return fr;
 }
 
 void SplashLoop(SDL_Renderer* renderer)
@@ -158,8 +142,7 @@ void SplashLoop(SDL_Renderer* renderer)
 		};
 		
 		SDL_RenderCopy(renderer, textTexture, NULL, &titleRect);
-
-		cai(renderer, cb);
+		RenderDrawing(renderer, cb);
 
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);
