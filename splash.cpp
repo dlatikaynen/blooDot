@@ -3,6 +3,7 @@
 #include "dexassy.h"
 #include "scripture.h"
 #include "drawing.h"
+#include "dialogcontrols.h"
 #include <cairo.h>
 
 extern bool mainRunning;
@@ -66,7 +67,8 @@ void SplashLoop(SDL_Renderer* renderer)
 
 	SDL_Rect srcRect{ 0,0,640,480 };
 	SDL_Rect dstRect{ 0,0,640,480 };
-	SDL_Rect outerMenuRect{ 150,100,640 - 300,480 - 200 };
+	//SDL_Rect outerMenuRect{ 150,100,640 - 300,480 - 200 };
+	SDL_Rect outerMenuRect{ 150,100,300,300 };
 	SDL_Rect titleRect{};
 
 	const auto font = GetFont(FONT_KEY_ALIEN);
@@ -98,6 +100,14 @@ void SplashLoop(SDL_Renderer* renderer)
 		SDL_free(titleText);
 	}
 
+	const auto primaryController = SDL_GameControllerOpen(0);
+	if (primaryController)
+	{
+		SDL_GameControllerSetPlayerIndex(primaryController, 1);
+		SDL_GameControllerRumble(primaryController, 0xffff, 0xffff, 0xff);
+		SDL_GameControllerEventState(SDL_ENABLE);
+	}
+
 	while (splashRunning)
 	{
 		while (SDL_PollEvent(&splashEvent) != 0)
@@ -112,10 +122,21 @@ void SplashLoop(SDL_Renderer* renderer)
 			case SDL_KEYDOWN:
 				splashRunning = false;
 				break;
+
+			case SDL_CONTROLLERAXISMOTION:
+				if (splashEvent.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX) 
+				{
+					srcRect.x += splashEvent.caxis.value / 8192;
+				}
+
+				if (splashEvent.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY)
+				{
+					srcRect.y += splashEvent.caxis.value / 8192;
+				}
+
+				break;
 			}
 		}
-
-		++srcRect.y;
 
 		if (SDL_RenderClear(renderer) < 0)
 		{
@@ -143,9 +164,15 @@ void SplashLoop(SDL_Renderer* renderer)
 		
 		SDL_RenderCopy(renderer, textTexture, NULL, &titleRect);
 		RenderDrawing(renderer, cb);
+		RenderDrawing(renderer, DrawButtonChevron);
 
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);
+	}
+
+	if (primaryController)
+	{
+		SDL_GameControllerClose(primaryController);
 	}
 
 	if (splashTexture)

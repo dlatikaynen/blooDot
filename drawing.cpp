@@ -4,7 +4,7 @@
 cairo_t* RenderDrawing(SDL_Renderer* renderTarget, cairo_t* (*drawJob)(cairo_t*))
 {
 	int width = 640;
-	int height = 640;
+	int height = 480;
 	int pitch;
 	void* pixels;
 

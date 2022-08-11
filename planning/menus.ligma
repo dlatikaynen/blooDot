@@ -1,0 +1,43 @@
+
+  Paradigm 1.
+└────────────
+
+  On startup, after the essential resources have been loaded,
+  in the main window the user is presented with the following choices:
+  
+    1. Continue --> loads the last savegame and starts
+       When there is none, tumbleweed
+    2. Load --> presents the choice of savepoints to choose from, and starts
+       When the list of savegames is empty, tumbleweed
+    3. New single-player
+    4. New local multiplayer
+    5. New network multiplayer
+    6. Settings
+    7. Quit
+
+
+  Paradigm 2.
+└────────────
+
+  In an ongoing game session, another menu is accessible:
+
+    1. Save --> creates a manual savepoint
+    2. Inventory
+    3. Map
+    4. Knowledge base
+    5. Leave --> Save and quit to title screen
+             --> Quit without saving
+
+
+  Paradigm 3.
+└────────────
+
+  Settings menu.
+  Change screen resolution
+    --> This is a resolution that pleases the Lord.
+        Still want to change?
+
+    --> I payed for the whole screen,
+        I'm using the whole screen
+
+░▒▓█▄■▀█▓▒░

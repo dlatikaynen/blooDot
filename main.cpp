@@ -51,6 +51,27 @@ int main(int, char**)
 		std::cout << "Video driver \"" << SDL_GetVideoDriver(i) << "\" present\n";
 	}
 
+	const auto connectedControllers = SDL_NumJoysticks();
+	if (connectedControllers == 0)
+	{
+		std::cout << "No controllers detected\n";
+	}
+	else
+	{
+		for (int i = 0; i < connectedControllers; ++i)
+		{
+			const auto controllerName = SDL_GameControllerNameForIndex(i);
+			if(controllerName) 
+			{
+				std::cout << "Controller \"" << controllerName << "\" present\n";
+			}
+			else
+			{
+				std::wcout << "Controller (no name) present\n";
+			}
+		}
+	}
+
 	while (true)
 	{
 		/* action */
@@ -155,7 +176,7 @@ int main(int, char**)
 	SDL_Quit();
 	const auto shutdownError = SDL_GetError();
 	if (strnlen(shutdownError, MaxExpectedSDLErrorLength) > 0) {
-		ReportError("Could not quit SDL cleanly", shutdownError);
+		ReportError("Could not quit cleanly", shutdownError);
 	}
 
 	return ExitCodeNormally;

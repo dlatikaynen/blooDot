@@ -357,6 +357,9 @@
     <ClInclude Include="main.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="dialogcontrols.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -380,6 +383,9 @@
     <ClCompile Include="drawing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dialogcontrols.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -398,7 +404,13 @@
     <None Include="res\xassy.cmd">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="players.ligma">
+    <None Include="planning\menus.ligma">
+      <Filter>Planning</Filter>
+    </None>
+    <None Include="planning\players.ligma">
+      <Filter>Planning</Filter>
+    </None>
+    <None Include="planning\scraps.ligma">
       <Filter>Planning</Filter>
     </None>
   </ItemGroup>
@@ -448,7 +460,9 @@
     <Font Include="res\FredokaOne-Regular.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\esl_gothic_shavian.ttf" />
+    <Font Include="res\esl_gothic_shavian.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
   </ItemGroup>
   <ItemGroup>
     <Media Include="res\projectile-decay.wav">
