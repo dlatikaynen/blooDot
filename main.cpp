@@ -7,9 +7,9 @@
 
 const int ExitCodeNormally = 0x00;
 const int ExitCodeSDLInitFail = 0x55;
-const size_t MaxExpectedSDLErrorLength = 32768;
-const int GodsFavoriteScreenWidth = 640;
-const int GodsFavoriteScreenHeight = 480;
+const size_t MaxExpectedSDLErrorLength = 0x8000;
+const int GodsFavoriteScreenWidth = 0x280;
+const int GodsFavoriteScreenHeight = 0x1e0;
 const char* NameOfTheGame = "blooDot";
 
 void ReportError(const char* message, const char* error)
