@@ -109,6 +109,39 @@ TTF_Font* GetFont(int fontKey)
 	return NULL;
 }
 
+SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_Rect* frame, int fontKey, int sizePt, const char* text, SDL_Color color)
+{
+	SDL_Texture* textTexture = NULL;
+
+	const auto font = GetFont(fontKey);
+	TTF_SetFontSize(dialogFont, sizePt);
+	const auto textSurface = TTF_RenderUTF8_Blended(font, text, color);
+
+	if (textSurface)
+	{
+		(*frame).w = textSurface->w;
+		(*frame).h = textSurface->h;
+		textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+		if (!textTexture)
+		{
+			const auto textureError = SDL_GetError();
+			ReportError("Failed to create a text texture", textureError);
+
+			return NULL;
+		}
+	}
+	else
+	{
+		const auto textError = TTF_GetError();
+		ReportError("Failed to render text", textError);
+		return NULL;
+	}
+
+	SDL_free(textSurface);
+
+	return textTexture;
+}
+
 void CloseFonts()
 {
 	if (titleFont)

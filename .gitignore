@@ -160,6 +160,9 @@ nCrunchTemp_*
 *.mm.*
 AutoTest.Net/
 
+# blooDot xassy digest
+*.ngld
+
 # Web workbench (sass)
 .sass-cache/
 

@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "drawing.h"
 
-cairo_t* RenderDrawing(SDL_Renderer* renderTarget, cairo_t* (*drawJob)(cairo_t*))
+cairo_t* drawingSink = NULL;
+
+SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget)
 {
 	int width = 640;
 	int height = 480;
@@ -16,21 +18,34 @@ cairo_t* RenderDrawing(SDL_Renderer* renderTarget, cairo_t* (*drawJob)(cairo_t*)
 		height
 	);
 
-	SDL_LockTexture(targetTexture, NULL, &pixels, &pitch);
-	const auto cairoSurface = cairo_image_surface_create_for_data(
-		static_cast<unsigned char*>(pixels),
-		CAIRO_FORMAT_ARGB32,
-		width,
-		height,
-		pitch
-	);
+	if (targetTexture)
+	{
+		SDL_LockTexture(targetTexture, NULL, &pixels, &pitch);
+		const auto cairoSurface = cairo_image_surface_create_for_data(
+			static_cast<unsigned char*>(pixels),
+			CAIRO_FORMAT_ARGB32,
+			width,
+			height,
+			pitch
+		);
 
-	const auto drawingSink = cairo_create(cairoSurface);
-	const auto result = drawJob(drawingSink);
+		drawingSink = cairo_create(cairoSurface);
+	}
 
+	return targetTexture;
+}
+
+cairo_t* GetDrawingSink()
+{
+	return drawingSink;
+}
+
+void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture)
+{
 	SDL_UnlockTexture(targetTexture);
 	SDL_SetTextureBlendMode(targetTexture, SDL_BLENDMODE_BLEND);
 	SDL_RenderCopy(renderTarget, targetTexture, NULL, NULL);
 
-	return result;
+	SDL_DestroyTexture(targetTexture);
+	cairo_destroy(drawingSink);
 }

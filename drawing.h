@@ -2,4 +2,6 @@
 #include <cairo.h>
 #include <SDL.h>
 
-cairo_t* RenderDrawing(SDL_Renderer* renderTarget, cairo_t* (*drawJob)(cairo_t*));
+SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget);
+cairo_t* GetDrawingSink();
+void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture);

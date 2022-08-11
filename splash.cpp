@@ -52,53 +52,44 @@ void LoadSplash(SDL_Renderer* renderer)
 	splashRunning = true;
 }
 
-cairo_t* cb(cairo_t* cr)
-{
-	cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
-	cairo_set_line_width(cr, 10.0);
-	cairo_rectangle(cr, 10, 20, 128, 128);
-	cairo_stroke(cr);
-	return cr;
-}
-
 void SplashLoop(SDL_Renderer* renderer)
 {
 	LoadSplash(renderer);
 
 	SDL_Rect srcRect{ 0,0,640,480 };
 	SDL_Rect dstRect{ 0,0,640,480 };
-	//SDL_Rect outerMenuRect{ 150,100,640 - 300,480 - 200 };
-	SDL_Rect outerMenuRect{ 150,100,300,300 };
-	SDL_Rect titleRect{};
+	SDL_Rect outerMenuRect{ 150,100,340,280 };
+	SDL_Rect titleRect{ 160,110,0,0 };
+	SDL_Rect continueRect{ 150 + 65,100 + 58,0,0 };
+	SDL_Rect loadRect{ 150 + 65,100 + 58 + 70,0,0 };
 
-	const auto font = GetFont(FONT_KEY_ALIEN);
-	SDL_Color fontColor{ 250,200,200,222 };
-	const auto titleText = TTF_RenderUTF8_Blended(font, "SiPiaSibasIan", fontColor);
-	if (!titleText)
-	{
-		const auto textError = TTF_GetError();
-		ReportError("Failed to render text", textError);
-		mainRunning = false;
-		splashRunning = false;
-	}
+	const auto titleTexture = RenderText(
+		renderer,
+		&titleRect,
+		FONT_KEY_ALIEN,
+		16,
+		"MainMenu",
+		{ 250,200,200,222 }
+	);
 
-	const auto textTexture = SDL_CreateTextureFromSurface(renderer, titleText);
-	if (!textTexture)
-	{
-		const auto textureError = SDL_GetError();
-		ReportError("Failed to create the title text texture", textureError);
-		mainRunning = false;
-		return;
-	}
+	/* menu item text */
+	const auto continueTexture = RenderText(
+		renderer,
+		&continueRect,
+		FONT_KEY_DIALOG,
+		23,
+		"Continue",
+		{ 250, 230, 230, 245 }
+	);
 
-	if (titleText)
-	{
-		titleRect.x = outerMenuRect.x + 10;
-		titleRect.y = outerMenuRect.y + 10;
-		titleRect.w = titleText->w;
-		titleRect.h = titleText->h;
-		SDL_free(titleText);
-	}
+	const auto loadTexture = RenderText(
+		renderer,
+		&loadRect,
+		FONT_KEY_DIALOG,
+		23,
+		"Load",
+		{ 250, 230, 230, 245 }
+	);
 
 	const auto primaryController = SDL_GameControllerOpen(0);
 	if (primaryController)
@@ -162,9 +153,18 @@ void SplashLoop(SDL_Renderer* renderer)
 			splashRunning = false;
 		};
 		
-		SDL_RenderCopy(renderer, textTexture, NULL, &titleRect);
-		RenderDrawing(renderer, cb);
-		RenderDrawing(renderer, DrawButtonChevron);
+		SDL_RenderCopy(renderer, titleTexture, NULL, &titleRect);
+
+		const auto drawingTexture = BeginRenderDrawing(renderer);
+		if (drawingTexture)
+		{
+			const auto drawingSink = GetDrawingSink();
+			DrawButton(drawingSink, 160, 150, 250, 42);
+			DrawButton(drawingSink, 160, 220, 250, 42);
+			EndRenderDrawing(renderer, drawingTexture);
+			SDL_RenderCopy(renderer, continueTexture, NULL, &continueRect);
+			SDL_RenderCopy(renderer, loadTexture, NULL, &loadRect);
+		}
 
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);
