@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -18,15 +14,19 @@
     <Filter Include="Licences">
       <UniqueIdentifier>{3a8d3a08-876f-4930-8f3b-f3db288a21f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headers">
-      <UniqueIdentifier>{f0f01b33-0b62-4d20-b9ff-268a3c8b8c43}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Lib Headers">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
     <Filter Include="Planning">
       <UniqueIdentifier>{bb8a392c-d034-4162-8457-3bbd0c1006f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Headers">
+      <UniqueIdentifier>{f0f01b33-0b62-4d20-b9ff-268a3c8b8c43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -301,22 +301,22 @@
       <Filter>Lib Headers</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>Headers</Filter>
+      <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="orchestrator.h">
-      <Filter>Headers</Filter>
+      <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Headers</Filter>
+      <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="splash.h">
-      <Filter>Headers</Filter>
+      <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="dexassy.h">
-      <Filter>Headers</Filter>
+      <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="scripture.h">
-      <Filter>Headers</Filter>
+      <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="cairo\cairo.h">
       <Filter>Lib Headers</Filter>
@@ -352,51 +352,69 @@
       <Filter>Lib Headers</Filter>
     </ClInclude>
     <ClInclude Include="drawing.h">
-      <Filter>Headers</Filter>
+      <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
-      <Filter>Headers</Filter>
+      <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="dialogcontrols.h">
-      <Filter>Headers</Filter>
+      <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="xlations.h">
-      <Filter>Headers</Filter>
+      <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="settings.h">
-      <Filter>Headers</Filter>
+      <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="enums.h">
-      <Filter>Headers</Filter>
+      <Filter>_Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="gameview.h">
+      <Filter>_Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="gamestate.h">
+      <Filter>_Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="renderstate.h">
+      <Filter>_Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="orchestrator.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="splash.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dexassy.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="scripture.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="drawing.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dialogcontrols.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="settings.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>_Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gameview.cpp">
+      <Filter>_Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gamestate.cpp">
+      <Filter>_Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="renderstate.cpp">
+      <Filter>_Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -482,6 +500,9 @@
       <Filter>Licences</Filter>
     </Text>
     <Text Include="LICENSE.txt" />
+    <Text Include="boxchars.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Font Include="res\FreckleFace-Regular.ttf">

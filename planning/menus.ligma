@@ -24,8 +24,9 @@
     1. Save --> creates a manual savepoint
     2. Inventory
     3. Map
-    4. Knowledge base
-    5. Leave --> Save and quit to title screen
+    4. Controls (also add/remove players?)
+    5. Knowledge base
+    6. Leave --> Save and quit to title screen
              --> Quit without saving
 
 

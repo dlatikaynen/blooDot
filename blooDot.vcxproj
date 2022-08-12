@@ -181,12 +181,18 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClInclude Include="dialogcontrols.h" />
     <ClInclude Include="drawing.h" />
     <ClInclude Include="enums.h" />
+    <ClInclude Include="gamestate.h" />
+    <ClInclude Include="gameview.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="orchestrator.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="renderstate.h" />
     <ClInclude Include="resource.h" />
     <ClCompile Include="dialogcontrols.cpp" />
     <ClCompile Include="drawing.cpp" />
+    <ClCompile Include="gamestate.cpp" />
+    <ClCompile Include="gameview.cpp" />
+    <ClCompile Include="renderstate.cpp" />
     <ClCompile Include="scripture.cpp" />
     <ClInclude Include="scripture.h" />
     <ClInclude Include="SDL\include\begin_code.h" />
@@ -361,6 +367,12 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="boxchars.txt">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
+    </Text>
     <Text Include="LICENSE.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
