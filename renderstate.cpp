@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "renderstate.h"
 
+extern SDL_Renderer* GameViewRenderer;
+
+int flapW = 0;
+int flapH = 0;
+
 SDL_Texture* flapsFloor[9];
 SDL_Texture* flapsWalls[9];
 SDL_Texture* flapsRooof[9];
@@ -15,19 +20,94 @@ unsigned short flapIndirection[9];
  * floor, walls and rooof are always swapped together
  * and therefore automatically in sync among themselves
 
-┌─────────┬─────────┬─────────┐
-│0        │1        │2        │
-│         │      ┏━━┿━━━━━┓   │
-├─────────┼──────╂──┼─────╂───┤
-│3        │4     ┃  │ VP  ┃-> │
-│         │      ┗━━│━━━━━┛   │
-├─────────┼─────────┼─────────┤
-│6        │7        │8        │
-│         │         │         │
-└─────────┴─────────┴─────────┘
+  ┌─────────┬─────────┬─────────┐
+  │0        │1        │2        │
+  │         │      ┏━━┿━━━━━┓   │
+  ├─────────┼──────╂──┼─────╂───┤
+  │3        │4     ┃  │ VP  ┃-> │
+  │         │      ┗━━│━━━━━┛   │
+  ├─────────┼─────────┼─────────┤
+  │6        │7        │8        │
+  │         │         │         │
+  └─────────┴─────────┴─────────┘
 
 * VP is viewport.
 */
+
+SDL_Texture* NewTexture(SDL_Renderer* renderer)
+{
+	const auto newTexture = SDL_CreateTexture(
+		renderer,
+		SDL_PIXELFORMAT_ARGB8888,
+		SDL_TEXTUREACCESS_TARGET,
+		flapW,
+		flapH
+	);
+
+	if (!newTexture)
+	{
+		const auto creationError = SDL_GetError();
+		ReportError("Failed to create flap texture", creationError);
+	}
+
+	return newTexture;
+}
+
+bool InitializeAllFlaps(int width, int height)
+{
+	flapW = width;
+	flapH = height;
+
+	for (auto i = 0; i < 9; ++i)
+	{
+		flapsFloor[i] = NewTexture(GameViewRenderer);
+		if (!flapsFloor[i]) 
+		{
+			return false;
+		}
+
+		flapsWalls[i] = NewTexture(GameViewRenderer);
+		if (!flapsWalls[i])
+		{
+			return false;
+		}
+
+		flapsRooof[i] = NewTexture(GameViewRenderer);
+		if (!flapsRooof[i])
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+void PopulateAllFlaps()
+{
+	for (unsigned short i = 0; i < 9; ++i)
+	{
+		flapIndirection[i] = i;
+		PopulateFlap(i);
+	}
+}
+
+void PopulateTopRowFlaps()
+{
+	PopulateFlap(0);
+	PopulateFlap(1);
+	PopulateFlap(2);
+}
+
+void PopulateFlap(int flapIndex)
+{
+	const auto textureIndex = flapIndirection[flapIndex];
+	const auto floor = flapsFloor[textureIndex];
+	//const auto walls = flapsWalls[textureIndex];
+	//const auto rooof = flapsRooof[textureIndex];
+
+	SDL_GetTextureUserData(floor);
+
+}
 
 /// <summary>
 /// The top row becomes the bottom row,
@@ -69,6 +149,7 @@ void FlapoverUp()
 	flapIndirection[0] = bottomLft;
 	flapIndirection[1] = bottomMid;
 	flapIndirection[2] = bottomRgt;
+	PopulateTopRowFlaps();
 }
 
 /// <summary>
@@ -112,4 +193,34 @@ void FlapoverRight()
 	flapIndirection[2] = leftTop;
 	flapIndirection[5] = leftMid;
 	flapIndirection[8] = leftBot;
+}
+
+void RenderFloor()
+{
+
+}
+
+void RenderMobs()
+{
+
+}
+
+void RenderWalls()
+{
+
+}
+
+void RenderRooof()
+{
+
+}
+
+void RenderstateTeardown()
+{
+	for (auto i = 0; i < 9; ++i)
+	{
+		SDL_DestroyTexture(flapsFloor[i]);
+		SDL_DestroyTexture(flapsWalls[i]);
+		SDL_DestroyTexture(flapsRooof[i]);
+	}
 }

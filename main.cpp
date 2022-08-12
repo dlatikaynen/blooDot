@@ -166,6 +166,7 @@ int main(int, char**)
 		IMG_Quit();
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(mainWindow);
+
 		break;
 	}
 

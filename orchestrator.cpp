@@ -1,12 +1,19 @@
 #include "pch.h"
 #include "orchestrator.h"
 
+extern SDL_Renderer* GameViewRenderer;
+
 bool mainRunning = true;
 SDL_Event mainEvent;
 
 void MainLoop(SDL_Renderer* renderer)
 {
-	char i = 0;
+	GameViewRenderer = renderer;
+	if (!GameviewEnterWorld())
+	{
+		mainRunning = false;
+	}
+
 	while (mainRunning)
 	{
 		while (SDL_PollEvent(&mainEvent) != 0)
@@ -19,11 +26,11 @@ void MainLoop(SDL_Renderer* renderer)
 			}
 		}
 
-		SDL_SetRenderDrawColor(renderer, i, 30, 28, 200);
-		i = ++i % 0xff;
-
 		SDL_RenderClear(renderer);
+		GameViewRenderFrame();
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);
 	}
+
+	GameviewTeardown();
 }
