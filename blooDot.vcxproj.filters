@@ -363,6 +363,12 @@
     <ClInclude Include="xlations.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="settings.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="enums.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -387,6 +393,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dialogcontrols.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

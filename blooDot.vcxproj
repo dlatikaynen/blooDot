@@ -180,6 +180,7 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClInclude Include="dexassy.h" />
     <ClInclude Include="dialogcontrols.h" />
     <ClInclude Include="drawing.h" />
+    <ClInclude Include="enums.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="orchestrator.h" />
     <ClInclude Include="pch.h" />
@@ -278,6 +279,7 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClInclude Include="SDL\include\SDL_version.h" />
     <ClInclude Include="SDL\include\SDL_video.h" />
     <ClInclude Include="SDL\include\SDL_vulkan.h" />
+    <ClInclude Include="settings.h" />
     <ClInclude Include="splash.h" />
     <ClInclude Include="xlations.h" />
   </ItemGroup>
@@ -288,6 +290,7 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="settings.cpp" />
     <ClCompile Include="splash.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -13,6 +13,7 @@ extern bool mainRunning;
 
 SDL_Event splashEvent;
 bool splashRunning = false;
+bool settingsLoaded = false;
 SDL_Texture* splashTexture = NULL;
 int backgroundSpeedX = 0;
 int backgroundSpeedY = 0;
@@ -162,6 +163,12 @@ void SplashLoop(SDL_Renderer* renderer)
 		SDL_GameControllerSetPlayerIndex(primaryController, 1);
 		SDL_GameControllerRumble(primaryController, 0xffff, 0xffff, 0xff);
 		SDL_GameControllerEventState(SDL_ENABLE);
+	}
+
+	if (!settingsLoaded)
+	{
+		LoadSettings();
+		settingsLoaded = true;
 	}
 
 	while (splashRunning)
