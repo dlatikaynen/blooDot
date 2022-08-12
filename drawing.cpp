@@ -3,6 +3,30 @@
 
 cairo_t* drawingSink = NULL;
 
+cairo_t* BeginTextureDrawing(SDL_Texture* targetTexture)
+{
+	int width = 640;
+	int height = 480;
+	int pitch;
+	void* pixels;
+
+	if (targetTexture)
+	{
+		SDL_LockTexture(targetTexture, NULL, &pixels, &pitch);
+		const auto cairoSurface = cairo_image_surface_create_for_data(
+			static_cast<unsigned char*>(pixels),
+			CAIRO_FORMAT_ARGB32,
+			width,
+			height,
+			pitch
+		);
+
+		return cairo_create(cairoSurface);
+	}
+
+	return NULL;
+}
+
 SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget)
 {
 	int width = 640;
@@ -48,4 +72,10 @@ void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture)
 
 	SDL_DestroyTexture(targetTexture);
 	cairo_destroy(drawingSink);
+}
+
+void EndTextureDrawing(SDL_Texture* targetTexture, cairo_t* drawer)
+{
+	SDL_UnlockTexture(targetTexture);
+	cairo_destroy(drawer);
 }

@@ -39,7 +39,7 @@ SDL_Texture* NewTexture(SDL_Renderer* renderer)
 	const auto newTexture = SDL_CreateTexture(
 		renderer,
 		SDL_PIXELFORMAT_ARGB8888,
-		SDL_TEXTUREACCESS_TARGET,
+		SDL_TEXTUREACCESS_STREAMING,
 		flapW,
 		flapH
 	);
@@ -105,8 +105,16 @@ void PopulateFlap(int flapIndex)
 	//const auto walls = flapsWalls[textureIndex];
 	//const auto rooof = flapsRooof[textureIndex];
 
-	SDL_GetTextureUserData(floor);
+	if (flapIndex == 4) 
+	{
+		const auto drawingSink = BeginTextureDrawing(floor);
 
+		cairo_set_source_rgb(drawingSink, 0xff, 0x12, 0x12);
+		cairo_rectangle(drawingSink, 20, 20, 300, 300);
+		cairo_fill(drawingSink);
+
+		EndTextureDrawing(floor, drawingSink);
+	}
 }
 
 /// <summary>
@@ -197,7 +205,8 @@ void FlapoverRight()
 
 void RenderFloor()
 {
-
+	SDL_Rect rect = { 0,0,640,480 };
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[4], &rect, &rect);
 }
 
 void RenderMobs()
