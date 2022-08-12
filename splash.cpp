@@ -58,10 +58,15 @@ void SplashLoop(SDL_Renderer* renderer)
 
 	SDL_Rect srcRect{ 0,0,640,480 };
 	SDL_Rect dstRect{ 0,0,640,480 };
-	SDL_Rect outerMenuRect{ 150,100,340,280 };
-	SDL_Rect titleRect{ 160,110,0,0 };
-	SDL_Rect continueRect{ 150 + 65,100 + 58,0,0 };
-	SDL_Rect loadRect{ 150 + 65,100 + 58 + 70,0,0 };
+	SDL_Rect outerMenuRect{ 150,45,340,390 };
+	SDL_Rect titleRect{ 0,0,0,0 };
+	SDL_Rect continueRect{ 0,0,0,0 };
+	SDL_Rect loadRect{ 0,0,0,0 };
+	SDL_Rect singleRect{ 0,0,0,0 };
+	SDL_Rect localMultiRect{ 0,0,0,0 };
+	SDL_Rect netMultiRect{ 0,0,0,0 };
+	SDL_Rect settingsRect{ 0,0,0,0 };
+	SDL_Rect quitRect{ 0,0,0,0 };
 
 	const auto titleTexture = RenderText(
 		renderer,
@@ -88,6 +93,51 @@ void SplashLoop(SDL_Renderer* renderer)
 		FONT_KEY_DIALOG,
 		23,
 		"Load",
+		{ 250, 230, 230, 245 }
+	);
+
+	const auto singleTexture = RenderText(
+		renderer,
+		&singleRect,
+		FONT_KEY_DIALOG,
+		23,
+		"Single player",
+		{ 250, 230, 230, 245 }
+	);
+
+	const auto localMultiTexture = RenderText(
+		renderer,
+		&localMultiRect,
+		FONT_KEY_DIALOG,
+		23,
+		"Local multiplayer",
+		{ 250, 230, 230, 245 }
+	);
+
+	const auto netMultiTexture = RenderText(
+		renderer,
+		&netMultiRect,
+		FONT_KEY_DIALOG,
+		23,
+		"Net multiplayer",
+		{ 250, 230, 230, 245 }
+	);
+
+	const auto settingsTexture = RenderText(
+		renderer,
+		&settingsRect,
+		FONT_KEY_DIALOG,
+		23,
+		"Settings",
+		{ 250, 230, 230, 245 }
+	);
+
+	const auto quitTexture = RenderText(
+		renderer,
+		&quitRect,
+		FONT_KEY_DIALOG,
+		23,
+		"Exit",
 		{ 250, 230, 230, 245 }
 	);
 
@@ -153,17 +203,28 @@ void SplashLoop(SDL_Renderer* renderer)
 			splashRunning = false;
 		};
 		
-		SDL_RenderCopy(renderer, titleTexture, NULL, &titleRect);
+		DrawLabel(renderer, titleTexture, 284, 54, &titleRect);
 
 		const auto drawingTexture = BeginRenderDrawing(renderer);
 		if (drawingTexture)
 		{
 			const auto drawingSink = GetDrawingSink();
-			DrawButton(drawingSink, 160, 150, 250, 42);
-			DrawButton(drawingSink, 160, 220, 250, 42);
+			DrawButton(drawingSink, 195, 100, 250, 42);
+			DrawButton(drawingSink, 195, 148, 250, 42);
+			DrawButton(drawingSink, 195, 196, 250, 42);
+			DrawButton(drawingSink, 195, 250, 250, 42);
+			DrawButton(drawingSink, 195, 300, 250, 42);
+			DrawButton(drawingSink, 195, 350, 250, 42);
+			DrawButton(drawingSink, 195, 400, 250, 42);
 			EndRenderDrawing(renderer, drawingTexture);
-			SDL_RenderCopy(renderer, continueTexture, NULL, &continueRect);
-			SDL_RenderCopy(renderer, loadTexture, NULL, &loadRect);
+
+			DrawLabel(renderer, continueTexture, 235, 70 + 36, &continueRect);
+			DrawLabel(renderer, loadTexture, 235, 70 + 56 + 50, &loadRect);
+			DrawLabel(renderer, singleTexture, 235, 70 + 56 + 100, &singleRect);
+			DrawLabel(renderer, localMultiTexture, 235, 70 + 56 + 150, &localMultiRect);
+			DrawLabel(renderer, netMultiTexture, 235, 70 + 56 + 200, &netMultiRect);
+			DrawLabel(renderer, settingsTexture, 235, 70 + 56 + 250, &settingsRect);
+			DrawLabel(renderer, quitTexture, 235, 70 + 56 + 300, &quitRect);
 		}
 
 		SDL_RenderPresent(renderer);

@@ -32,3 +32,11 @@ cairo_t* DrawButton(cairo_t* context, double x, double y, double w, double h)
 
 	return context;
 }
+
+void DrawLabel(SDL_Renderer* renderer, SDL_Texture* texture, int x, int y, SDL_Rect* frame)
+{
+	(*frame).x = x;
+	(*frame).y = y;
+
+	SDL_RenderCopy(renderer, texture, NULL, frame);
+}

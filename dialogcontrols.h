@@ -3,3 +3,4 @@
 #include <cairo.h>
 
 cairo_t* DrawButton(cairo_t* context, double x, double y, double w, double h);
+void DrawLabel(SDL_Renderer* renderer, SDL_Texture* texture, int x, int y, SDL_Rect* frame);
