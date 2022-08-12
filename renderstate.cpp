@@ -6,6 +6,11 @@ extern SDL_Renderer* GameViewRenderer;
 int flapW = 0;
 int flapH = 0;
 
+// current absolute scroll distance from the world origin centerpoint, hwich
+// can and will go negative for locations left and up relative to the origin
+int originDx = 0;
+int originDy = 0;
+
 SDL_Texture* flapsFloor[9];
 SDL_Texture* flapsWalls[9];
 SDL_Texture* flapsRooof[9];
@@ -24,7 +29,7 @@ unsigned short flapIndirection[9];
   │0        │1        │2        │
   │         │      ┏━━┿━━━━━┓   │
   ├─────────┼──────╂──┼─────╂───┤
-  │3        │4     ┃  │ VP  ┃-> │
+  │3        │4     ┃VP│5    ┃-> │
   │         │      ┗━━│━━━━━┛   │
   ├─────────┼─────────┼─────────┤
   │6        │7        │8        │
@@ -105,16 +110,38 @@ void PopulateFlap(int flapIndex)
 	//const auto walls = flapsWalls[textureIndex];
 	//const auto rooof = flapsRooof[textureIndex];
 
-	if (flapIndex == 4) 
-	{
-		const auto drawingSink = BeginTextureDrawing(floor);
+	const auto drawingSink = BeginTextureDrawing(floor);
 
-		cairo_set_source_rgb(drawingSink, 0xff, 0x12, 0x12);
-		cairo_rectangle(drawingSink, 20, 20, 300, 300);
-		cairo_fill(drawingSink);
+	cairo_set_source_rgb(drawingSink, 1, 0.68, 0.08);
+		
+	cairo_move_to(drawingSink, 0, 16);
+	cairo_line_to(drawingSink, 0, 0);
+	cairo_line_to(drawingSink, 16, 0);
+	cairo_stroke(drawingSink);
 
-		EndTextureDrawing(floor, drawingSink);
-	}
+	cairo_move_to(drawingSink, flapW - 16, 0);
+	cairo_line_to(drawingSink, flapW, 0);
+	cairo_line_to(drawingSink, flapW, 16);
+	cairo_stroke(drawingSink);
+
+	cairo_move_to(drawingSink, flapW - 16, flapH);
+	cairo_line_to(drawingSink, flapW, flapH);
+	cairo_line_to(drawingSink, flapW, flapH - 16);
+	cairo_stroke(drawingSink);
+
+	cairo_move_to(drawingSink, 0, flapH - 16);
+	cairo_line_to(drawingSink, 0, flapH);
+	cairo_line_to(drawingSink, 16, flapH);
+	cairo_stroke(drawingSink);
+
+	cairo_move_to(drawingSink, 10, 16);
+	cairo_text_path(drawingSink, std::to_string(flapIndex).c_str());
+	cairo_move_to(drawingSink, 25, 16);
+	cairo_text_path(drawingSink, std::to_string(textureIndex).c_str());
+
+	cairo_fill(drawingSink);
+
+	EndTextureDrawing(floor, drawingSink);
 }
 
 /// <summary>

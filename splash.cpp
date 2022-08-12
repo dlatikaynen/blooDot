@@ -76,6 +76,7 @@ void SplashLoop(SDL_Renderer* renderer)
 	SDL_Rect dstRect{ 0,0,backgroundW,backgroundH };
 	SDL_Rect outerMenuRect{ 150,45,340,390 };
 	SDL_Rect titleRect{ 0,0,0,0 };
+	SDL_Rect authorRect{ 0,0,0,0 };
 	SDL_Rect continueRect{ 0,0,0,0 };
 	SDL_Rect loadRect{ 0,0,0,0 };
 	SDL_Rect singleRect{ 0,0,0,0 };
@@ -93,13 +94,22 @@ void SplashLoop(SDL_Renderer* renderer)
 		{ 250,200,200,222 }
 	);
 
+	const auto authorTexture = RenderText(
+		renderer,
+		&authorRect,
+		FONT_KEY_ALIEN,
+		26,
+		literalManufacturer,
+		{ 250,200,200,222 }
+	);
+
 	/* menu item text */
 	const auto continueTexture = RenderText(
 		renderer,
 		&continueRect,
 		FONT_KEY_DIALOG,
 		23,
-		"Continue",
+		literalMenuContinue,
 		{ 250, 230, 230, 245 }
 	);
 
@@ -108,7 +118,7 @@ void SplashLoop(SDL_Renderer* renderer)
 		&loadRect,
 		FONT_KEY_DIALOG,
 		23,
-		"Load",
+		literalMenuLoad,
 		{ 250, 230, 230, 245 }
 	);
 
@@ -117,7 +127,7 @@ void SplashLoop(SDL_Renderer* renderer)
 		&singleRect,
 		FONT_KEY_DIALOG,
 		23,
-		"Single player",
+		literalMenuSingle,
 		{ 250, 230, 230, 245 }
 	);
 
@@ -126,7 +136,7 @@ void SplashLoop(SDL_Renderer* renderer)
 		&localMultiRect,
 		FONT_KEY_DIALOG,
 		23,
-		"Local multiplayer",
+		literalMenuLocalMulti,
 		{ 250, 230, 230, 245 }
 	);
 
@@ -135,7 +145,7 @@ void SplashLoop(SDL_Renderer* renderer)
 		&netMultiRect,
 		FONT_KEY_DIALOG,
 		23,
-		"Net multiplayer",
+		literalMenuNetMulti,
 		{ 250, 230, 230, 245 }
 	);
 
@@ -144,7 +154,7 @@ void SplashLoop(SDL_Renderer* renderer)
 		&settingsRect,
 		FONT_KEY_DIALOG,
 		23,
-		"Settings",
+		literalMenuSettings,
 		{ 250, 230, 230, 245 }
 	);
 
@@ -153,7 +163,7 @@ void SplashLoop(SDL_Renderer* renderer)
 		&quitRect,
 		FONT_KEY_DIALOG,
 		23,
-		"Exit",
+		literalMenuExit,
 		{ 250, 230, 230, 245 }
 	);
 
@@ -228,6 +238,7 @@ void SplashLoop(SDL_Renderer* renderer)
 		};
 		
 		DrawLabel(renderer, 286, 54, titleTexture, &titleRect);
+		DrawLabel(renderer, 346, 454, authorTexture, &authorRect);
 
 		const auto drawingTexture = BeginRenderDrawing(renderer);
 		if (drawingTexture)
