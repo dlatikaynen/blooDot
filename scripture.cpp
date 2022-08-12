@@ -78,7 +78,7 @@ void* LoadFontInternal(int chunkKey, __out TTF_Font** font, __out SDL_RWops **so
 		return NULL;
 	}
 
-	const auto loadedFont = TTF_OpenFontRW(chunkStream, 0, 16);
+	const auto loadedFont = TTF_OpenFontRW(chunkStream, 0, 19);
 	if (!loadedFont)
 	{
 		const auto fontError = TTF_GetError();
@@ -114,7 +114,12 @@ SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_Rect* frame, int fontKey, in
 	SDL_Texture* textTexture = NULL;
 
 	const auto font = GetFont(fontKey);
-	TTF_SetFontSize(dialogFont, sizePt);
+	if(TTF_SetFontSize(dialogFont, sizePt) < 0)
+	{ 
+		const auto sizeError = TTF_GetError();
+		ReportError("Failed to set font size", sizeError);
+	}
+
 	const auto textSurface = TTF_RenderUTF8_Blended(font, text, color);
 
 	if (textSurface)

@@ -279,6 +279,7 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClInclude Include="SDL\include\SDL_video.h" />
     <ClInclude Include="SDL\include\SDL_vulkan.h" />
     <ClInclude Include="splash.h" />
+    <ClInclude Include="xlations.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dexassy.cpp" />
