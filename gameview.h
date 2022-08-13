@@ -3,11 +3,17 @@
 
 extern bool InitializeAllFlaps(int width, int height);
 extern void PopulateAllFlaps();
-extern void RenderFloor();
+extern void RenderFloorBung();
+extern void RenderFloorVert();
+extern void RenderFloorHorz();
+extern void RenderFloorQuart();
 extern void RenderMobs();
-extern void RenderWalls();
-extern void RenderRooof();
+extern void RenderWallsAndRooofBung();
 extern void RenderstateTeardown();
+extern void RenderWallsAndRooofVert();
+extern void RenderWallsAndRooofHorz();
+extern void RenderWallsAndRooofQuart();
+
 
 bool GameviewEnterWorld();
 void GameViewRenderFrame();

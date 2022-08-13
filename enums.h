@@ -6,5 +6,12 @@ enum ViewportResolutions {
 	VR_SVGA,     //  800 x 600
 	VR_HERCMONO, //  720 x 348
 	VR_NOTEBOOK, // 1280 x 720
-	VR_MAXOUT
+	VR_MAXOUT    // fullscreen
+};
+
+enum FlappySituation {
+	FS_BUNGHOLE,
+	FS_VERTICAL,
+	FS_HORIZONTAL,
+	FS_QUARTERED
 };

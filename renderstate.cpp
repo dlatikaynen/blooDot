@@ -1,15 +1,19 @@
 #include "pch.h"
 #include "renderstate.h"
+#include <iostream>
+
+constexpr unsigned short flapIndicesHorz[] = { 3,4,5 };
+constexpr unsigned short flapIndicesVert[] = { 1,4,7 };
 
 extern SDL_Renderer* GameViewRenderer;
 
+extern int originDx;
+extern int originDy;
+
 int flapW = 0;
 int flapH = 0;
-
-// current absolute scroll distance from the world origin centerpoint, hwich
-// can and will go negative for locations left and up relative to the origin
-int originDx = 0;
-int originDy = 0;
+int halfW = 0;
+int halfH = 0;
 
 SDL_Texture* flapsFloor[9];
 SDL_Texture* flapsWalls[9];
@@ -37,9 +41,36 @@ unsigned short flapIndirection[9];
   └─────────┴─────────┴─────────┘
 
 * VP is viewport.
+* I foresee that this unnecessarily complicated approach
+* will be a source of glitches to no end
 */
 
-SDL_Texture* NewTexture(SDL_Renderer* renderer)
+FlappySituation constellation = FS_BUNGHOLE;
+SDL_Rect bunghole;
+SDL_Rect vertUpperSrc;
+SDL_Rect vertUpperDst;
+SDL_Rect vertLowerSrc;
+SDL_Rect vertLowerDst;
+SDL_Rect horzLeftSrc;
+SDL_Rect horzLeftDst;
+SDL_Rect horzRiteSrc;
+SDL_Rect horzRiteDst;
+SDL_Rect quadrantNWSrc;
+SDL_Rect quadrantNWDst;
+SDL_Rect quadrantNESrc;
+SDL_Rect quadrantNEDst;
+SDL_Rect quadrantSWSrc;
+SDL_Rect quadrantSWDst;
+SDL_Rect quadrantSESrc;
+SDL_Rect quadrantSEDst;
+unsigned short vertUpperLower = 0;
+unsigned short horzLeftRight = 0;
+unsigned short flapIndexNW; // only relevant in the quadrant topology
+unsigned short flapIndexNE;
+unsigned short flapIndexSW;
+unsigned short flapIndexSE;
+
+SDL_Texture* NewTexture(SDL_Renderer* renderer, bool transparentAble)
 {
 	const auto newTexture = SDL_CreateTexture(
 		renderer,
@@ -55,36 +86,100 @@ SDL_Texture* NewTexture(SDL_Renderer* renderer)
 		ReportError("Failed to create flap texture", creationError);
 	}
 
+	if (transparentAble)
+	{
+		if (SDL_SetTextureBlendMode(newTexture, SDL_BLENDMODE_BLEND) < 0)
+		{
+			const auto blendModeError = SDL_GetError();
+			ReportError("Failed to set flap texture blend mode", blendModeError);
+		}
+	}
+
 	return newTexture;
 }
 
 bool InitializeAllFlaps(int width, int height)
 {
 	flapW = width;
+	halfW = width / 2;
 	flapH = height;
+	halfH = height / 2;
+
+	/* the centerpiece is constantly identical to the viewport */
+	bunghole = SDL_Rect{ 0,0,width,height };
 
 	for (auto i = 0; i < 9; ++i)
 	{
-		flapsFloor[i] = NewTexture(GameViewRenderer);
+		flapsFloor[i] = NewTexture(GameViewRenderer, false);
 		if (!flapsFloor[i]) 
 		{
 			return false;
 		}
 
-		flapsWalls[i] = NewTexture(GameViewRenderer);
+		flapsWalls[i] = NewTexture(GameViewRenderer, true);
 		if (!flapsWalls[i])
 		{
 			return false;
 		}
 
-		flapsRooof[i] = NewTexture(GameViewRenderer);
+		flapsRooof[i] = NewTexture(GameViewRenderer, true);
 		if (!flapsRooof[i])
 		{
 			return false;
 		}
 	}
 
+	RecomputeFlapConstellation();
+	RecomputeFlapRects();
+
 	return true;
+}
+
+void RecomputeFlapConstellation()
+{
+	const bool isVerticallyAligned = originDx % flapW == 0;
+	const bool isHorizntalyAligned = originDy % flapH == 0;
+	if (isVerticallyAligned && isHorizntalyAligned)
+	{
+		constellation = FS_BUNGHOLE;
+#ifndef NDEBUG
+		std::cout << "Are you threatening me?";
+#endif
+	}
+	else if (isVerticallyAligned)
+	{
+		constellation = FS_VERTICAL;
+	}
+	else if (isHorizntalyAligned)
+	{
+		constellation = FS_HORIZONTAL;
+	}
+	else
+	{
+		constellation = FS_QUARTERED;
+	}
+}
+
+void RecomputeFlapRects()
+{
+	switch (constellation)
+	{
+	case FS_BUNGHOLE:
+		/* nothing to compute, this is always the centerpiece (flap 4) */
+		break;
+
+	case FS_VERTICAL:
+
+		break;
+
+	case FS_HORIZONTAL:
+
+		break;
+
+	default:
+
+		break;
+	}
 }
 
 void PopulateAllFlaps()
@@ -107,10 +202,11 @@ void PopulateFlap(int flapIndex)
 {
 	const auto textureIndex = flapIndirection[flapIndex];
 	const auto floor = flapsFloor[textureIndex];
-	//const auto walls = flapsWalls[textureIndex];
-	//const auto rooof = flapsRooof[textureIndex];
+	const auto walls = flapsWalls[textureIndex];
+	const auto rooof = flapsRooof[textureIndex];
 
-	const auto drawingSink = BeginTextureDrawing(floor);
+#ifndef NDEBUG
+	auto drawingSink = BeginTextureDrawing(floor);
 
 	cairo_set_source_rgb(drawingSink, 1, 0.68, 0.08);
 		
@@ -142,6 +238,77 @@ void PopulateFlap(int flapIndex)
 	cairo_fill(drawingSink);
 
 	EndTextureDrawing(floor, drawingSink);
+#endif
+
+#ifndef NDEBUG
+	drawingSink = BeginTextureDrawing(walls);
+
+	cairo_set_source_rgb(drawingSink, 0.68, 1, 0.08);
+
+	cairo_move_to(drawingSink, 1, 15);
+	cairo_line_to(drawingSink, 1, 1);
+	cairo_line_to(drawingSink, 15, 1);
+	cairo_stroke(drawingSink);
+
+	cairo_move_to(drawingSink, flapW - 15, 1);
+	cairo_line_to(drawingSink, flapW - 1, 1);
+	cairo_line_to(drawingSink, flapW - 1, 15);
+	cairo_stroke(drawingSink);
+
+	cairo_move_to(drawingSink, flapW - 16, flapH - 1);
+	cairo_line_to(drawingSink, flapW - 1, flapH - 1);
+	cairo_line_to(drawingSink, flapW - 1, flapH - 15);
+	cairo_stroke(drawingSink);
+
+	cairo_move_to(drawingSink, 1, flapH - 15);
+	cairo_line_to(drawingSink, 1, flapH - 1);
+	cairo_line_to(drawingSink, 15, flapH - 1);
+	cairo_stroke(drawingSink);
+
+	cairo_move_to(drawingSink, 20, 26);
+	cairo_text_path(drawingSink, std::to_string(flapIndex).c_str());
+	cairo_move_to(drawingSink, 35, 26);
+	cairo_text_path(drawingSink, std::to_string(textureIndex).c_str());
+
+	cairo_fill(drawingSink);
+
+	EndTextureDrawing(walls, drawingSink);
+#endif
+
+#ifndef NDEBUG
+	drawingSink = BeginTextureDrawing(rooof);
+
+	cairo_set_source_rgb(drawingSink, 0.08, 0.68, 1);
+
+	cairo_move_to(drawingSink, 2, 14);
+	cairo_line_to(drawingSink, 2, 2);
+	cairo_line_to(drawingSink, 14, 2);
+	cairo_stroke(drawingSink);
+
+	cairo_move_to(drawingSink, flapW - 14, 2);
+	cairo_line_to(drawingSink, flapW - 2, 2);
+	cairo_line_to(drawingSink, flapW - 2, 14);
+	cairo_stroke(drawingSink);
+
+	cairo_move_to(drawingSink, flapW - 14, flapH - 2);
+	cairo_line_to(drawingSink, flapW - 2, flapH - 2);
+	cairo_line_to(drawingSink, flapW - 2, flapH - 14);
+	cairo_stroke(drawingSink);
+
+	cairo_move_to(drawingSink, 2, flapH - 14);
+	cairo_line_to(drawingSink, 2, flapH - 2);
+	cairo_line_to(drawingSink, 14, flapH - 2);
+	cairo_stroke(drawingSink);
+
+	cairo_move_to(drawingSink, 30, 36);
+	cairo_text_path(drawingSink, std::to_string(flapIndex).c_str());
+	cairo_move_to(drawingSink, 45, 36);
+	cairo_text_path(drawingSink, std::to_string(textureIndex).c_str());
+
+	cairo_fill(drawingSink);
+
+	EndTextureDrawing(rooof, drawingSink);
+#endif
 }
 
 /// <summary>
@@ -230,10 +397,29 @@ void FlapoverRight()
 	flapIndirection[8] = leftBot;
 }
 
-void RenderFloor()
+void RenderFloorBung()
+{	
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[BUNGHOLE], &bunghole, &bunghole);
+}
+
+void RenderFloorVert()
 {
-	SDL_Rect rect = { 0,0,640,480 };
-	SDL_RenderCopy(GameViewRenderer, flapsFloor[4], &rect, &rect);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndicesVert[vertUpperLower]], &vertUpperSrc, &vertUpperDst);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndicesVert[vertUpperLower + 1]], &vertLowerSrc, &vertLowerDst);
+}
+
+void RenderFloorHorz()
+{
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndicesHorz[horzLeftRight]], &horzLeftSrc, &horzLeftDst);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndicesHorz[horzLeftRight + 1]], &horzRiteSrc, &horzRiteDst);
+}
+
+void RenderFloorQuart()
+{
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndexNW], &quadrantNWSrc, &quadrantNWDst);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndexNE], &quadrantNESrc, &quadrantNEDst);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndexSW], &quadrantSWSrc, &quadrantSWDst);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndexSE], &quadrantSESrc, &quadrantSEDst);
 }
 
 void RenderMobs()
@@ -241,14 +427,38 @@ void RenderMobs()
 
 }
 
-void RenderWalls()
+void RenderWallsAndRooofBung()
 {
-
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[BUNGHOLE], &bunghole, &bunghole);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[BUNGHOLE], &bunghole, &bunghole);
 }
 
-void RenderRooof()
+void RenderWallsAndRooofVert()
 {
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndicesVert[vertUpperLower]], &vertUpperSrc, &vertUpperDst);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndicesVert[vertUpperLower + 1]], &vertLowerSrc, &vertLowerDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndicesVert[vertUpperLower]], &vertUpperSrc, &vertUpperDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndicesVert[vertUpperLower + 1]], &vertLowerSrc, &vertLowerDst);
+}
 
+void RenderWallsAndRooofHorz()
+{
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndicesHorz[horzLeftRight]], &horzLeftSrc, &horzLeftDst);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndicesHorz[horzLeftRight + 1]], &horzRiteSrc, &horzRiteDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndicesHorz[horzLeftRight]], &horzLeftSrc, &horzLeftDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndicesHorz[horzLeftRight + 1]], &horzRiteSrc, &horzRiteDst);
+}
+
+void RenderWallsAndRooofQuart()
+{
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndexNW], &quadrantNWSrc, &quadrantNWDst);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndexNE], &quadrantNESrc, &quadrantNEDst);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndexSW], &quadrantSWSrc, &quadrantSWDst);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndexSE], &quadrantSESrc, &quadrantSEDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndexNW], &quadrantNWSrc, &quadrantNWDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndexNE], &quadrantNESrc, &quadrantNEDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndexSW], &quadrantSWSrc, &quadrantSWDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndexSE], &quadrantSESrc, &quadrantSEDst);
 }
 
 void RenderstateTeardown()
