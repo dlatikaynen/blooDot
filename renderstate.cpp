@@ -70,34 +70,6 @@ unsigned short flapIndexNE;
 unsigned short flapIndexSW;
 unsigned short flapIndexSE;
 
-SDL_Texture* NewTexture(SDL_Renderer* renderer, bool transparentAble)
-{
-	const auto newTexture = SDL_CreateTexture(
-		renderer,
-		SDL_PIXELFORMAT_ARGB8888,
-		SDL_TEXTUREACCESS_STREAMING,
-		flapW,
-		flapH
-	);
-
-	if (!newTexture)
-	{
-		const auto creationError = SDL_GetError();
-		ReportError("Failed to create flap texture", creationError);
-	}
-
-	if (transparentAble)
-	{
-		if (SDL_SetTextureBlendMode(newTexture, SDL_BLENDMODE_BLEND) < 0)
-		{
-			const auto blendModeError = SDL_GetError();
-			ReportError("Failed to set flap texture blend mode", blendModeError);
-		}
-	}
-
-	return newTexture;
-}
-
 bool InitializeAllFlaps(int width, int height)
 {
 	flapW = width;
@@ -110,19 +82,19 @@ bool InitializeAllFlaps(int width, int height)
 
 	for (auto i = 0; i < 9; ++i)
 	{
-		flapsFloor[i] = NewTexture(GameViewRenderer, false);
+		flapsFloor[i] = _NewTexture(GameViewRenderer, false);
 		if (!flapsFloor[i]) 
 		{
 			return false;
 		}
 
-		flapsWalls[i] = NewTexture(GameViewRenderer, true);
+		flapsWalls[i] = _NewTexture(GameViewRenderer, true);
 		if (!flapsWalls[i])
 		{
 			return false;
 		}
 
-		flapsRooof[i] = NewTexture(GameViewRenderer, true);
+		flapsRooof[i] = _NewTexture(GameViewRenderer, true);
 		if (!flapsRooof[i])
 		{
 			return false;
@@ -130,7 +102,6 @@ bool InitializeAllFlaps(int width, int height)
 	}
 
 	RecomputeFlapConstellation();
-	RecomputeFlapRects();
 
 	return true;
 }
@@ -139,6 +110,7 @@ void RecomputeFlapConstellation()
 {
 	const bool isVerticallyAligned = originDx % flapW == 0;
 	const bool isHorizntalyAligned = originDy % flapH == 0;
+
 	if (isVerticallyAligned && isHorizntalyAligned)
 	{
 		constellation = FS_BUNGHOLE;
@@ -160,23 +132,256 @@ void RecomputeFlapConstellation()
 	}
 }
 
-void RecomputeFlapRects()
+void Scroll(int dx, int dy)
 {
+	const bool isHorz = dy == 0;
+	const bool isVert = dx == 0;
+
+	originDx += dx;
+	originDy += dy;
+
+	const bool isVertSnapped = originDx % flapW == 0;
+	const bool isHorzSnapped = originDy % flapH == 0;
+
+	/*
+vertUpperLower = 0;
+horzLeftRight = 0;
+flapIndexNW; // only relevant in the quadrant topology
+flapIndexNE;
+flapIndexSW;
+flapIndexSE;
+*/
 	switch (constellation)
 	{
 	case FS_BUNGHOLE:
-		/* nothing to compute, this is always the centerpiece (flap 4) */
-		break;
+		if (isHorz)
+		{
+			/* break out into a vertically locked (horizontal-only) slide */
+			if (dx > 0)
+			{
+				horzLeftRight = 1;
+				horzLeftSrc = { dx,0,flapW - dx,flapH };
+				horzLeftDst = { 0,0,flapW - dx,flapH };
+				horzRiteSrc = { 0,0,dx,flapH };
+				horzRiteDst = { flapW - dx,0,dx,flapH };
+			}
+			else
+			{
+				horzLeftRight = 0;
+			}
 
-	case FS_VERTICAL:
+			constellation = FS_HORIZONTAL;
+		}
+		else if (isVert)
+		{
+			/* break out into a horizontally locked (vertical-only) slide */
+			if (dy > 0)
+			{
+				vertUpperLower = 1;
+			}
+			else
+			{
+				vertUpperLower = 0;
+			}
+
+			constellation = FS_VERTICAL;
+		}
+		else
+		{
+			/* break out into one of the four quadrant slides */
+			if (dx < 0) 
+			{
+				if (dy < 0)
+				{
+					/* NW */
+					flapIndexNW = 0; flapIndexNE = 1; flapIndexSW = 3; flapIndexSE = 4;
+				}
+				else
+				{
+					/* SW */
+					flapIndexNW = 3; flapIndexNE = 4; flapIndexSW = 6; flapIndexSE = 7;
+				}
+			}
+			else
+			{
+				if (dy < 0)
+				{
+					/* NE */
+					flapIndexNW = 1; flapIndexNE = 2; flapIndexSW = 4; flapIndexSE = 5;
+				}
+				else
+				{
+					/* SE */
+					flapIndexNW = 4; flapIndexNE = 5; flapIndexSW = 7; flapIndexSE = 8;
+				}
+			}
+
+			constellation = FS_QUARTERED;
+		}
 
 		break;
 
 	case FS_HORIZONTAL:
+		if (isHorz)
+		{
+			if (isVertSnapped)
+			{
+				constellation = FS_BUNGHOLE;
+			}
+			else
+			{
+				horzLeftSrc.x += dx;
+				horzLeftSrc.w -= dx;
+				horzLeftDst.w -= dx;
+				horzRiteSrc.x -= dx;
+				horzRiteSrc.w += dx;
+				horzRiteDst.x -= dx;
+				horzRiteDst.w += dx;
+			}
+		}
+		else 
+		{
+			/* break out into a quarter freeform or vertical lock */
+			if (isVertSnapped)
+			{
+				if (dy > 0)
+				{
+					vertUpperLower = 1;
+				}
+				else
+				{
+					vertUpperLower = 0;
+				}
+
+				constellation = FS_VERTICAL;
+			}
+			else
+			{
+				if (dy < 0)
+				{
+					if (horzLeftRight == 1) 
+					{
+						/* NE */
+						flapIndexNW = 1; flapIndexNE = 2; flapIndexSW = 4; flapIndexSE = 5;
+					}
+					else
+					{
+						/* NW */
+						flapIndexNW = 0; flapIndexNE = 1; flapIndexSW = 3; flapIndexSE = 4;
+					}
+				}
+				else
+				{
+					if (horzLeftRight == 1)
+					{
+						/* SE */
+						flapIndexNW = 4; flapIndexNE = 5; flapIndexSW = 7; flapIndexSE = 8;
+					}
+					else
+					{
+						/* SW */
+						flapIndexNW = 3; flapIndexNE = 4; flapIndexSW = 6; flapIndexSE = 7;
+					}
+				}
+
+				constellation = FS_QUARTERED;
+			}
+		}
+
+		break;
+
+	case FS_VERTICAL:
+		if (isVert)
+		{
+			if (isHorzSnapped)
+			{
+				constellation = FS_BUNGHOLE;
+			}
+			else
+			{
+				vertUpperSrc.y += dy;
+				vertUpperSrc.h -= dy;
+				vertUpperDst.h -= dy;
+				vertLowerSrc.y -= dy;
+				vertLowerSrc.h += dy;
+				vertLowerDst.y -= dy;
+				vertLowerDst.h += dy;
+			}
+		}
+		else
+		{
+			/* break out into a quarter freeform or a horizontal lock */
+			if (isHorzSnapped)
+			{
+				if (dx > 0)
+				{
+					horzLeftRight = 1;
+				}
+				else
+				{
+					horzLeftRight = 0;
+				}
+
+				constellation = FS_HORIZONTAL;
+			}
+			else
+			{
+				if (dx < 0)
+				{
+					if (vertUpperLower == 1)
+					{
+						/* SW */
+						flapIndexNW = 3; flapIndexNE = 4; flapIndexSW = 6; flapIndexSE = 7;
+					}
+					else
+					{
+						/* NW */
+						flapIndexNW = 0; flapIndexNE = 1; flapIndexSW = 3; flapIndexSE = 4;
+					}
+				}
+				else 
+				{
+					if (vertUpperLower == 1)
+					{
+						/* SW */
+						flapIndexNW = 3; flapIndexNE = 4; flapIndexSW = 6; flapIndexSE = 7;
+					}
+					else
+					{
+						/* NE */
+						flapIndexNW = 1; flapIndexNE = 2; flapIndexSW = 4; flapIndexSE = 5;
+					}
+				}
+
+				constellation = FS_QUARTERED;
+			}
+		}
 
 		break;
 
 	default:
+		assert(constellation == FS_QUARTERED);
+
+		if (isVertSnapped && isHorzSnapped)
+		{
+			/* jackpot */
+			constellation = FS_BUNGHOLE;
+		}
+		else if (isVertSnapped)
+		{
+			/* freerange to vertically gliding */
+			constellation = FS_VERTICAL;
+		}
+		else if (isHorzSnapped)
+		{
+			/* freerange to horizontally gliding */
+			constellation = FS_HORIZONTAL;
+		}
+		else
+		{
+			/* remains freeform */
+
+		}
 
 		break;
 	}
@@ -196,6 +401,25 @@ void PopulateTopRowFlaps()
 	PopulateFlap(0);
 	PopulateFlap(1);
 	PopulateFlap(2);
+}
+
+void PopulateBottomRowFlaps()
+{
+	PopulateFlap(6);
+	PopulateFlap(7);
+	PopulateFlap(8);
+}
+
+void PopulateLeftColFlaps() {
+	PopulateFlap(0);
+	PopulateFlap(3);
+	PopulateFlap(6);
+}
+
+void PopulateRiteColFlaps() {
+	PopulateFlap(2);
+	PopulateFlap(5);
+	PopulateFlap(8);
 }
 
 void PopulateFlap(int flapIndex)
@@ -330,6 +554,20 @@ void FlapoverDown()
 	flapIndirection[6] = topLft;
 	flapIndirection[7] = topMid;
 	flapIndirection[8] = topRgt;
+
+	if (constellation == FS_VERTICAL)
+	{
+		vertUpperLower = 0;
+	} 
+	else if (constellation == FS_QUARTERED)
+	{
+		flapIndexNW = flapIndexNW == 3 ? 0 : 1;
+		flapIndexNE = flapIndexNE == 4 ? 1 : 2;
+		flapIndexSW = flapIndexSW == 6 ? 3 : 4;
+		flapIndexSE = flapIndexSE == 7 ? 4 : 5;
+	}
+
+	PopulateBottomRowFlaps();
 }
 
 /// <summary>
@@ -351,6 +589,19 @@ void FlapoverUp()
 	flapIndirection[0] = bottomLft;
 	flapIndirection[1] = bottomMid;
 	flapIndirection[2] = bottomRgt;
+
+	if (constellation == FS_VERTICAL)
+	{
+		vertUpperLower = 1;
+	}
+	else if (constellation == FS_QUARTERED)
+	{
+		flapIndexNW = flapIndexNW == 0 ? 3 : 4;
+		flapIndexNE = flapIndexNE == 1 ? 4 : 5;
+		flapIndexSW = flapIndexSW == 3 ? 6 : 7;
+		flapIndexSE = flapIndexSE == 4 ? 7 : 8;
+	}
+
 	PopulateTopRowFlaps();
 }
 
@@ -373,6 +624,20 @@ void FlapoverLeft()
 	flapIndirection[0] = rightTop;
 	flapIndirection[3] = rightMid;
 	flapIndirection[6] = rightBot;
+
+	if (constellation == FS_HORIZONTAL)
+	{
+		horzLeftRight = 1;
+	}
+	else if (constellation == FS_QUARTERED)
+	{
+		flapIndexNW = flapIndexNW == 0 ? 1 : 4;
+		flapIndexNE = flapIndexNE == 1 ? 2 : 5;
+		flapIndexSW = flapIndexSW == 3 ? 4 : 7;
+		flapIndexSE = flapIndexSE == 7 ? 8 : 5;
+	}
+
+	PopulateRiteColFlaps();
 }
 
 /// <summary>
@@ -395,6 +660,20 @@ void FlapoverRight()
 	flapIndirection[2] = leftTop;
 	flapIndirection[5] = leftMid;
 	flapIndirection[8] = leftBot;
+
+	if (constellation == FS_HORIZONTAL)
+	{
+		horzLeftRight = 0;
+	}
+	else if (constellation == FS_QUARTERED)
+	{
+		flapIndexNW = flapIndexNW == 1 ? 0 : 3;
+		flapIndexNE = flapIndexNE == 2 ? 1 : 4;
+		flapIndexSW = flapIndexSW == 4 ? 3 : 6;
+		flapIndexSE = flapIndexSE == 5 ? 4 : 7;
+	}
+
+	PopulateLeftColFlaps();
 }
 
 void RenderFloorBung()
@@ -469,4 +748,32 @@ void RenderstateTeardown()
 		SDL_DestroyTexture(flapsWalls[i]);
 		SDL_DestroyTexture(flapsRooof[i]);
 	}
+}
+
+SDL_Texture* _NewTexture(SDL_Renderer* renderer, bool transparentAble)
+{
+	const auto newTexture = SDL_CreateTexture(
+		renderer,
+		SDL_PIXELFORMAT_ARGB8888,
+		SDL_TEXTUREACCESS_STREAMING,
+		flapW,
+		flapH
+	);
+
+	if (!newTexture)
+	{
+		const auto creationError = SDL_GetError();
+		ReportError("Failed to create flap texture", creationError);
+	}
+
+	if (transparentAble)
+	{
+		if (SDL_SetTextureBlendMode(newTexture, SDL_BLENDMODE_BLEND) < 0)
+		{
+			const auto blendModeError = SDL_GetError();
+			ReportError("Failed to set flap texture blend mode", blendModeError);
+		}
+	}
+
+	return newTexture;
 }

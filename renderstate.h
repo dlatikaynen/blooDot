@@ -12,7 +12,7 @@ extern void EndTextureDrawing(SDL_Texture*, cairo_t*);
 
 bool InitializeAllFlaps(int width, int height);
 void RecomputeFlapConstellation();
-void RecomputeFlapRects();
+void Scroll(int dx, int dy);
 void PopulateAllFlaps();
 void PopulateFlap(int flapIndex);
 void RenderFloorBung();
@@ -25,3 +25,5 @@ void RenderWallsAndRooofVert();
 void RenderWallsAndRooofHorz();
 void RenderWallsAndRooofQuart();
 void RenderstateTeardown();
+
+SDL_Texture* _NewTexture(SDL_Renderer* renderer, bool transparentAble);
