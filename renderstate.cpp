@@ -149,46 +149,12 @@ void Scroll(int dx, int dy)
 		if (isHorz)
 		{
 			/* break out into a vertically locked (horizontal-only) slide */
-			if (dx > 0)
-			{
-				horzLeftRight = 1;
-				horzLeftSrc = { dx,0,flapW - dx,flapH };
-				horzLeftDst = { 0,0,flapW - dx,flapH };
-				horzRiteSrc = { 0,0,dx,flapH };
-				horzRiteDst = { flapW - dx,0,dx,flapH };
-			}
-			else
-			{
-				horzLeftRight = 0;
-				horzLeftSrc = { flapW + dx,0,-dx,flapH };
-				horzLeftDst = { 0,0,-dx,flapH };
-				horzRiteSrc = { 0,0,flapW + dx,flapH };
-				horzRiteDst = { -dx,0,flapW+dx,flapH };
-			}
-
-			constellation = FS_HORIZONTAL;
+			_SnapHorizontal(dx);
 		}
 		else if (isVert)
 		{
 			/* break out into a horizontally locked (vertical-only) slide */
-			if (dy > 0)
-			{
-				vertUpperLower = 1;
-				vertUpperSrc = { 0,dy,flapW,flapH - dy };
-				vertUpperDst = { 0,0,flapW,flapH - dy };
-				vertLowerSrc= { 0,0,flapW,dy };
-				vertLowerDst = { 0,flapH - dy,flapW,dy };
-			}
-			else
-			{
-				vertUpperLower = 0;
-				vertUpperSrc = { 0,flapH + dy,flapW,-dy };
-				vertUpperDst = { 0,0,flapW,-dy };
-				vertLowerSrc = { 0,0,flapW,flapH+dy };
-				vertLowerDst = { 0,-dy,flapW,flapH + dy };
-			}
-
-			constellation = FS_VERTICAL;
+			_SnapVertical(dy);
 		}
 		else
 		{
@@ -220,7 +186,7 @@ void Scroll(int dx, int dy)
 				}
 			}
 
-			constellation = FS_QUARTERED;
+			_Unsnap(dx, dy);
 		}
 
 		break;
@@ -247,16 +213,7 @@ void Scroll(int dx, int dy)
 			/* break out into a quarter freeform or vertical lock */
 			if (isVertSnapped)
 			{
-				if (dy > 0)
-				{
-					vertUpperLower = 1;
-				}
-				else
-				{
-					vertUpperLower = 0;
-				}
-
-				constellation = FS_VERTICAL;
+				_SnapVertical(dy);
 			}
 			else
 			{
@@ -287,7 +244,7 @@ void Scroll(int dx, int dy)
 					}
 				}
 
-				constellation = FS_QUARTERED;
+				_Unsnap(dx, dy);
 			}
 		}
 
@@ -315,16 +272,7 @@ void Scroll(int dx, int dy)
 			/* break out into a quarter freeform or a horizontal lock */
 			if (isHorzSnapped)
 			{
-				if (dx > 0)
-				{
-					horzLeftRight = 1;
-				}
-				else
-				{
-					horzLeftRight = 0;
-				}
-
-				constellation = FS_HORIZONTAL;
+				_SnapHorizontal(dx);
 			}
 			else
 			{
@@ -355,7 +303,7 @@ void Scroll(int dx, int dy)
 					}
 				}
 
-				constellation = FS_QUARTERED;
+				_Unsnap(dx, dy);
 			}
 		}
 
@@ -369,15 +317,15 @@ void Scroll(int dx, int dy)
 			/* jackpot */
 			constellation = FS_BUNGHOLE;
 		}
-		else if (isVertSnapped)
-		{
-			/* freerange to vertically gliding */
-			constellation = FS_VERTICAL;
-		}
 		else if (isHorzSnapped)
 		{
 			/* freerange to horizontally gliding */
-			constellation = FS_HORIZONTAL;
+			_SnapHorizontal(dx);
+		}
+		else if (isVertSnapped)
+		{
+			/* freerange to vertically gliding */
+			_SnapVertical(dy);
 		}
 		else
 		{
@@ -778,4 +726,135 @@ SDL_Texture* _NewTexture(SDL_Renderer* renderer, bool transparentAble)
 	}
 
 	return newTexture;
+}
+
+void _SnapHorizontal(int dx)
+{
+	if (dx > 0)
+	{
+		horzLeftRight = 1;
+		horzLeftSrc = { dx,0,flapW - dx,flapH };
+		horzLeftDst = { 0,0,flapW - dx,flapH };
+		horzRiteSrc = { 0,0,dx,flapH };
+		horzRiteDst = { flapW - dx,0,dx,flapH };
+	}
+	else
+	{
+		horzLeftRight = 0;
+		horzLeftSrc = { flapW + dx,0,-dx,flapH };
+		horzLeftDst = { 0,0,-dx,flapH };
+		horzRiteSrc = { 0,0,flapW + dx,flapH };
+		horzRiteDst = { -dx,0,flapW + dx,flapH };
+	}
+
+	constellation = FS_HORIZONTAL;
+}
+
+void _SnapVertical(int dy)
+{
+	if (dy > 0)
+	{
+		vertUpperLower = 1;
+		vertUpperSrc = { 0,dy,flapW,flapH - dy };
+		vertUpperDst = { 0,0,flapW,flapH - dy };
+		vertLowerSrc = { 0,0,flapW,dy };
+		vertLowerDst = { 0,flapH - dy,flapW,dy };
+	}
+	else
+	{
+		vertUpperLower = 0;
+		vertUpperSrc = { 0,flapH + dy,flapW,-dy };
+		vertUpperDst = { 0,0,flapW,-dy };
+		vertLowerSrc = { 0,0,flapW,flapH + dy };
+		vertLowerDst = { 0,-dy,flapW,flapH + dy };
+	}
+
+	constellation = FS_VERTICAL;
+}
+
+void _Unsnap(int dx, int dy)
+{
+	if (dx > 0)
+	{
+		quadrantNWSrc.x = dx;
+		quadrantSWSrc.x = dx;
+		quadrantNWSrc.w = flapW - dx;
+		quadrantSWSrc.w = flapW - dx;
+		quadrantNWDst.x = 0;
+		quadrantSWDst.x = 0;
+		quadrantNWDst.w = flapW - dx;
+		quadrantSWDst.w = flapW - dx;
+
+		quadrantNESrc.x = 0;
+		quadrantSESrc.x = 0;
+		quadrantNESrc.w = dx;
+		quadrantSESrc.w = dx;
+		quadrantNEDst.x = flapW - dx;
+		quadrantSEDst.x = flapW - dx;
+		quadrantNEDst.w = dx;
+		quadrantSEDst.w = dx;
+	}
+	else
+	{
+		quadrantNWSrc.x = flapW + dx;
+		quadrantSWSrc.x = flapW + dx;
+		quadrantNWSrc.w = -dx;
+		quadrantSWSrc.w = -dx;
+		quadrantNWDst.x = 0;
+		quadrantSWDst.x = 0;
+		quadrantNWDst.w = -dx;
+		quadrantSWDst.w = -dx;
+
+		quadrantNESrc.x = 0;
+		quadrantSESrc.x = 0;
+		quadrantNESrc.w = flapW + dx;
+		quadrantSESrc.w = flapW + dx;
+		quadrantNEDst.x = -dx;
+		quadrantSEDst.x = -dx;
+		quadrantNEDst.w = flapW + dx;
+		quadrantSEDst.w = flapW + dx;
+	}
+
+	if (dy > 0)
+	{
+		quadrantNWSrc.y = dy;
+		quadrantNESrc.y = dy;
+		quadrantNWSrc.h = flapH - dy;
+		quadrantNESrc.h = flapH - dy;
+		quadrantNWDst.y = 0;
+		quadrantNEDst.y = 0;
+		quadrantNWDst.h = flapH - dy;
+		quadrantNEDst.h = flapH - dy;
+
+		quadrantSWSrc.y = 0;
+		quadrantSESrc.y = 0;
+		quadrantSWSrc.h = dy;
+		quadrantSESrc.h = dy;
+		quadrantSWDst.y = flapH - dy;
+		quadrantSWDst.y = flapH - dy;
+		quadrantSWDst.h = dy;
+		quadrantSEDst.h = dy;
+	}
+	else
+	{
+		quadrantNWSrc.y = flapH + dy;
+		quadrantNESrc.y = flapH + dy;
+		quadrantNWSrc.h = -dy;
+		quadrantNESrc.h = -dy;
+		quadrantNWDst.y = 0;
+		quadrantNEDst.y = 0;
+		quadrantNWDst.h = -dy;
+		quadrantNEDst.h = -dy;
+
+		quadrantSWSrc.y = 0;
+		quadrantSESrc.y = 0;
+		quadrantSWSrc.h = flapH + dy;
+		quadrantSESrc.h = flapH + dy;
+		quadrantSWDst.y = -dy;
+		quadrantSEDst.y = -dy;
+		quadrantSWDst.h = flapH + dy;
+		quadrantSEDst.h = flapH + dy;
+	}
+
+	constellation = FS_QUARTERED;
 }
