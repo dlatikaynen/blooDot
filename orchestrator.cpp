@@ -20,6 +20,28 @@ void MainLoop(SDL_Renderer* renderer)
 		{
 			switch (mainEvent.type)
 			{
+			case SDL_KEYDOWN:
+				switch (mainEvent.key.keysym.sym)
+				{
+				case SDLK_LEFT:
+					Scroll(-5, 0);
+					break;
+
+				case SDLK_RIGHT:
+					Scroll(5, 0);
+					break;
+
+				case SDLK_UP:
+					Scroll(0, -5);
+					break;
+
+				case SDLK_DOWN:
+					Scroll(0, 5);
+					break;
+				}
+
+				break;
+
 			case SDL_QUIT:
 				mainRunning = false;
 				break;

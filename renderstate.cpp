@@ -143,14 +143,6 @@ void Scroll(int dx, int dy)
 	const bool isVertSnapped = originDx % flapW == 0;
 	const bool isHorzSnapped = originDy % flapH == 0;
 
-	/*
-vertUpperLower = 0;
-horzLeftRight = 0;
-flapIndexNW; // only relevant in the quadrant topology
-flapIndexNE;
-flapIndexSW;
-flapIndexSE;
-*/
 	switch (constellation)
 	{
 	case FS_BUNGHOLE:
@@ -168,6 +160,10 @@ flapIndexSE;
 			else
 			{
 				horzLeftRight = 0;
+				horzLeftSrc = { flapW + dx,0,-dx,flapH };
+				horzLeftDst = { 0,0,-dx,flapH };
+				horzRiteSrc = { 0,0,flapW + dx,flapH };
+				horzRiteDst = { -dx,0,flapW+dx,flapH };
 			}
 
 			constellation = FS_HORIZONTAL;
@@ -178,10 +174,18 @@ flapIndexSE;
 			if (dy > 0)
 			{
 				vertUpperLower = 1;
+				vertUpperSrc = { 0,dy,flapW,flapH - dy };
+				vertUpperDst = { 0,0,flapW,flapH - dy };
+				vertLowerSrc= { 0,0,flapW,dy };
+				vertLowerDst = { 0,flapH - dy,flapW,dy };
 			}
 			else
 			{
 				vertUpperLower = 0;
+				vertUpperSrc = { 0,flapH + dy,flapW,-dy };
+				vertUpperDst = { 0,0,flapW,-dy };
+				vertLowerSrc = { 0,0,flapW,flapH+dy };
+				vertLowerDst = { 0,-dy,flapW,flapH + dy };
 			}
 
 			constellation = FS_VERTICAL;
@@ -233,7 +237,6 @@ flapIndexSE;
 				horzLeftSrc.x += dx;
 				horzLeftSrc.w -= dx;
 				horzLeftDst.w -= dx;
-				horzRiteSrc.x -= dx;
 				horzRiteSrc.w += dx;
 				horzRiteDst.x -= dx;
 				horzRiteDst.w += dx;
@@ -302,7 +305,6 @@ flapIndexSE;
 				vertUpperSrc.y += dy;
 				vertUpperSrc.h -= dy;
 				vertUpperDst.h -= dy;
-				vertLowerSrc.y -= dy;
 				vertLowerSrc.h += dy;
 				vertLowerDst.y -= dy;
 				vertLowerDst.h += dy;
