@@ -427,13 +427,15 @@ void PopulateBottomRowFlaps()
 	PopulateFlap(8);
 }
 
-void PopulateLeftColFlaps() {
+void PopulateLeftColFlaps()
+{
 	PopulateFlap(0);
 	PopulateFlap(3);
 	PopulateFlap(6);
 }
 
-void PopulateRiteColFlaps() {
+void PopulateRiteColFlaps()
+{
 	PopulateFlap(2);
 	PopulateFlap(5);
 	PopulateFlap(8);
@@ -443,19 +445,102 @@ void PopulateFlap(int flapIndex)
 {
 	const auto textureIndex = flapIndirection[flapIndex];
 	const auto floor = flapsFloor[textureIndex];
-	const auto walls = flapsWalls[textureIndex];
-	const auto rooof = flapsRooof[textureIndex];
+	//const auto walls = flapsWalls[textureIndex];
+	//const auto rooof = flapsRooof[textureIndex];
 
 	/* where in the world are we? */
-	const auto leftOfMidpoint = 0 - halfW - GRIDUNIT / 2;
-	const auto leftStart = 0 - halfW / GRIDUNIT + leftOfMidpoint;
+	const auto leftOfMidpoint = -GRIDUNIT / 2;
+	const auto nrthofMidpoint = -GRIDUNIT / 2;
+	const auto leftStart = leftOfMidpoint - (halfW / GRIDUNIT + 1) * GRIDUNIT;
+	const auto nrthStart = nrthofMidpoint - (halfH / GRIDUNIT + 1) * GRIDUNIT;
 	const auto gridUnitsPerRow = (int)ceil((double)flapW / GRIDUNIT);
+	const auto gridUnitsPerCol = (int)ceil((double)flapH / GRIDUNIT);
+	const auto leftWorldY = -gridUnitsPerRow / 2;
+	auto worldX = leftWorldY;
+	auto worldY = -gridUnitsPerCol / 2;
 
-	std::cout << leftOfMidpoint << leftStart << gridUnitsPerRow;
+	std::cout << leftOfMidpoint << "," << leftStart << "," << gridUnitsPerRow << "\n";
+	
+	//auto drawingSink = BeginTextureDrawing(floor);
+	bool isFirst = true;
+	int lastIterX = 0, lastIterY = 0;
+	for (auto y = halfH + nrthStart; y <= flapH; y += GRIDUNIT)
+	{
+		for (auto x = halfW + leftStart; x <= flapW; x += GRIDUNIT)
+		{			
+			if (isFirst)
+			{
+				//cairo_set_source_rgb(drawingSink, 0, 1, 1);
+				isFirst = false;
+			}
+			else 
+			{
+				//cairo_set_source_rgb(drawingSink, 0, 0, 1);
+				lastIterX = x;
+				lastIterY = y;
+			}
+
+			//cairo_move_to(drawingSink, x + 1, y);
+			//cairo_line_to(drawingSink, x + 4, y);
+			//cairo_move_to(drawingSink, x, y + 1);
+			//cairo_line_to(drawingSink, x, y + 4);
+
+			//cairo_move_to(drawingSink, x + GRIDUNIT - 1, y + GRIDUNIT);
+			//cairo_line_to(drawingSink, x + GRIDUNIT - 4, y + GRIDUNIT);
+			//cairo_move_to(drawingSink, x + GRIDUNIT, y + GRIDUNIT - 1);
+			//cairo_line_to(drawingSink, x + GRIDUNIT, y + GRIDUNIT - 4);
+			//cairo_stroke(drawingSink);
+
+			const auto cellPiece = GetPieceRelative(worldX, worldY);
+			if (!cellPiece.dings.empty())
+			{
+				for (auto& ding : cellPiece.dings)
+				{
+					const auto dingLocator = GetDing(ding.ding);
+					if (dingLocator->onSheet)
+					{
+						if (SDL_SetRenderTarget(GameViewRenderer, floor) < 0)
+						{
+							const auto floorError = SDL_GetError();
+							ReportError("Could not set render target to floor", floorError);
+						}
+
+						SDL_Rect dest = { x,y,GRIDUNIT,GRIDUNIT };
+						if (SDL_RenderCopy(GameViewRenderer, dingLocator->onSheet, &(dingLocator->src), &dest) < 0)
+						{
+							const auto placeError = SDL_GetError();
+							ReportError("Could not place ding on dingsheet", placeError);
+						}
+
+						if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
+						{
+							const auto restoreError = SDL_GetError();
+							ReportError("Could not restore render target", restoreError);
+						}
+					}
+				}
+			}
+
+			++worldX;
+		}
+
+		++worldY;
+		worldX = leftWorldY;
+	}
+
+	/*
+	cairo_set_source_rgb(drawingSink, 0, 1, 1);
+	cairo_move_to(drawingSink, lastIterX + 1, lastIterY);
+	cairo_line_to(drawingSink, lastIterX + 4, lastIterY);
+	cairo_move_to(drawingSink, lastIterX, lastIterY + 1);
+	cairo_line_to(drawingSink, lastIterX, lastIterY + 4);
+	cairo_move_to(drawingSink, lastIterX + GRIDUNIT - 1, lastIterY + GRIDUNIT);
+	cairo_line_to(drawingSink, lastIterX + GRIDUNIT - 4, lastIterY + GRIDUNIT);
+	cairo_move_to(drawingSink, lastIterX + GRIDUNIT, lastIterY + GRIDUNIT - 1);
+	cairo_line_to(drawingSink, lastIterX + GRIDUNIT, lastIterY + GRIDUNIT - 4);
+	cairo_stroke(drawingSink);
 
 #ifndef NDEBUG
-	auto drawingSink = BeginTextureDrawing(floor);
-
 	cairo_set_source_rgb(drawingSink, 1, 0.68, 0.08);
 		
 	cairo_move_to(drawingSink, 0, 16);
@@ -511,12 +596,12 @@ void PopulateFlap(int flapIndex)
 		cairo_line_to(drawingSink, halfW + 60, halfH);
 		cairo_stroke(drawingSink);
 		cairo_set_source_rgb(drawingSink, 0.68, 0.68, 0.68);
-		cairo_rectangle(drawingSink, halfW - 24, halfH - 24, 49, 49);
+		cairo_rectangle(drawingSink, halfW - GRIDUNIT / 2, halfH - GRIDUNIT / 2, GRIDUNIT, GRIDUNIT);
 		cairo_stroke(drawingSink);
 	}
 
-	EndTextureDrawing(floor, drawingSink);
 #endif
+	EndTextureDrawing(floor, drawingSink);
 
 #ifndef NDEBUG
 	drawingSink = BeginTextureDrawing(walls);
@@ -587,6 +672,7 @@ void PopulateFlap(int flapIndex)
 
 	EndTextureDrawing(rooof, drawingSink);
 #endif
+*/
 }
 
 /// <summary>
@@ -820,7 +906,8 @@ SDL_Texture* _NewTexture(SDL_Renderer* renderer, bool transparentAble)
 	const auto newTexture = SDL_CreateTexture(
 		renderer,
 		SDL_PIXELFORMAT_ARGB8888,
-		SDL_TEXTUREACCESS_STREAMING,
+		//SDL_TEXTUREACCESS_STREAMING,
+		SDL_TEXTUREACCESS_TARGET,
 		flapW,
 		flapH
 	);

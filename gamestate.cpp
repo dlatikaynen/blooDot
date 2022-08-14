@@ -31,7 +31,7 @@ void ClearWorldSheet(int sheetIndex)
 
 void ReplaceWorldSheet(int sheetX, int sheetY, WorldSheet* content)
 {
-	const auto sheetIndex = sheetY * 3 + sheetX;
+	const auto sheetIndex = (sheetY + 1) * 3 + (sheetX + 1);
 	assert(sheetIndex >= 0 && sheetIndex < 9);
 	if (worldSheets[sheetIndex])
 	{
@@ -44,4 +44,12 @@ void ReplaceWorldSheet(int sheetX, int sheetY, WorldSheet* content)
 void AddRegion(WorldRegion regionDescriptor)
 {
 	worldRegions.push_back(regionDescriptor);
+}
+
+WorldPiece GetPieceRelative(int worldX, int worldY)
+{
+	const auto sheet = worldSheets[static_cast<std::array<WorldSheet*, 9Ui64>::size_type>(1 * 3) + 1];
+	const auto pieceIndex = ((worldY + WORLD_SHEET_CENTERPOINT) * WORLD_SHEET_SIDELENGTH + worldX + WORLD_SHEET_CENTERPOINT);
+	
+	return sheet->arena[pieceIndex];
 }

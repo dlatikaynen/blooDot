@@ -4,6 +4,7 @@
 #include "enums.h"
 
 constexpr auto WORLD_SHEET_SIDELENGTH = 120;
+constexpr auto WORLD_SHEET_CENTERPOINT = WORLD_SHEET_SIDELENGTH / 2;
 
 typedef struct DingInstance {
 	Ding ding;
@@ -11,7 +12,10 @@ typedef struct DingInstance {
 } DingInstance;
 
 /// <summary>
-/// 
+/// One grid unit full of information.
+/// Contains data for all three layers
+/// Multi-cell objects are repeated as
+/// pointers in every neighboring cell
 /// </summary>
 typedef struct WorldPeace
 {
@@ -49,3 +53,4 @@ void ClearWorldData();
 void ClearWorldSheet(int sheetIndex);
 void AddRegion(WorldRegion regionDescriptor);
 void ReplaceWorldSheet(int sheetX, int sheetY, WorldSheet* content);
+WorldPiece GetPieceRelative(int worldX, int worldY);

@@ -180,6 +180,7 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClInclude Include="dexassy.h" />
     <ClInclude Include="dialogcontrols.h" />
     <ClInclude Include="ding.h" />
+    <ClInclude Include="dingsheet.h" />
     <ClInclude Include="drawing.h" />
     <ClInclude Include="enums.h" />
     <ClInclude Include="gamestate.h" />
@@ -191,6 +192,7 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClInclude Include="renderstate.h" />
     <ClInclude Include="resource.h" />
     <ClCompile Include="dialogcontrols.cpp" />
+    <ClCompile Include="dingsheet.cpp" />
     <ClCompile Include="drawing.cpp" />
     <ClCompile Include="gamestate.cpp" />
     <ClCompile Include="gameview.cpp" />

@@ -2,6 +2,8 @@
 #include <SDL.h>
 #include <cairo.h>
 #include "enums.h"
+#include "gamestate.h"
+#include "dingsheet.h"
 
 /* what else would the almighty bunghole be? */
 constexpr unsigned short BUNGHOLE = 4;
@@ -9,6 +11,7 @@ constexpr unsigned short BUNGHOLE = 4;
 extern void ReportError(const char*, const char*);
 extern cairo_t* BeginTextureDrawing(SDL_Texture*);
 extern void EndTextureDrawing(SDL_Texture*, cairo_t*);
+extern WorldPiece GetPieceRelative(int, int);
 
 bool InitializeAllFlaps(int width, int height);
 void RecomputeFlapConstellation();
