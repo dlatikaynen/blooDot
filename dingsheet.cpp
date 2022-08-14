@@ -1,10 +1,13 @@
 #include "pch.h"
 #include "dingsheet.h"
 
+constexpr const int DING_SHEET_SIDE_LENGTH = 800;
+
 extern SDL_Renderer* GameViewRenderer;
 
 std::vector<SDL_Texture*> dingSheets;
 std::map<Ding, DingLocator> dingMap;
+std::vector<SDL_Rect> occupied; // bottom-left rectangle packing is good enough
 
 DingLocator* GetDing(Ding ding)
 {
@@ -14,7 +17,7 @@ DingLocator* GetDing(Ding ding)
 	{
 		/* not already on a sheet, load-on-demand now */
 		SDL_Rect dingDimensions;
-		const auto resourceKey = _GetDingResourceKey(ding);
+		const auto resourceKey = GetDingResourceKey(ding);
 		const auto dingTexture = _LoadDingTexture(resourceKey, &dingDimensions);
 		if (!dingTexture)
 		{
@@ -34,25 +37,14 @@ DingLocator* GetDing(Ding ding)
 
 void TeardownDingSheets()
 {
+	occupied.clear();
+	dingMap.clear();
 	for (auto const& dingSheet : dingSheets)
 	{
 		SDL_DestroyTexture(dingSheet);
 	}
-}
 
-int _GetDingResourceKey(Ding ding)
-{
-	switch (ding)
-	{
-	case Ding::BarrelIndigo:
-		return CHUNK_KEY_DINGS_BARREL_INDIGO;
-
-	case Ding::FloorSlate:
-		return CHUNK_KEY_DINGS_FLOORSTONETILE_SLATE;
-
-	default:
-		return -1;
-	}
+	dingSheets.clear();
 }
 
 SDL_Texture* _LoadDingTexture(int resourceKey, __out SDL_Rect* dimensions)
@@ -105,11 +97,12 @@ DingLocator _PlaceOnDingSheet(SDL_Rect* dingDimensions, SDL_Texture* dingTexture
 
 	if (!_FindRoomOnDingSheet(placeOnSheet, &finalSrc))
 	{
+		occupied.clear();
 		placeOnSheet = SDL_CreateTexture(
 			GameViewRenderer, SDL_PIXELFORMAT_ARGB8888,
 			SDL_TEXTUREACCESS_TARGET,
-			800,
-			600
+			DING_SHEET_SIDE_LENGTH,
+			DING_SHEET_SIDE_LENGTH
 		);
 
 		if (!placeOnSheet)
@@ -120,6 +113,7 @@ DingLocator _PlaceOnDingSheet(SDL_Rect* dingDimensions, SDL_Texture* dingTexture
 		}
 
 		dingSheets.push_back(placeOnSheet);
+		occupied.push_back(finalSrc);
 		SDL_SetTextureBlendMode(placeOnSheet, SDL_BLENDMODE_BLEND);
 	}
 
@@ -156,8 +150,26 @@ bool _FindRoomOnDingSheet(SDL_Texture* sheet, SDL_Rect* frame)
 		return false;
 	}
 
-	(*frame).x = 50;
-	(*frame).y = 0;
+	assert(!occupied.empty());
+	auto& curLine = occupied.back();
+	if (curLine.y + frame->h > DING_SHEET_SIDE_LENGTH)
+	{
+		/* does not fit height-wise */
+		return false;
+	}
+
+	if (curLine.w + frame->w > DING_SHEET_SIDE_LENGTH)
+	{
+		/* does not fit across */
+		return false;
+	}
+
+	curLine.h = frame->h > curLine.h ? frame->h : curLine.h;
+	(*frame).x = curLine.w;
+	(*frame).y = curLine.y;
+	curLine.w += frame->w;
+	occupied.pop_back();
+	occupied.push_back(curLine);
 
 	return true;
 }

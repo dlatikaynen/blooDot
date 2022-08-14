@@ -79,6 +79,7 @@ void MainLoop(SDL_Renderer* renderer)
 		SDL_Delay(16);
 	}
 
+	TeardownDingSheets();
 	GameviewTeardown();
 	ClearWorldData();
 }

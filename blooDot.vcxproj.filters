@@ -492,6 +492,12 @@
       <Filter>Planning</Filter>
     </None>
     <None Include="cpp.hint" />
+    <None Include="planning\sidequests.ligma">
+      <Filter>Planning</Filter>
+    </None>
+    <None Include="planning\dramatis-personae.ligma">
+      <Filter>Planning</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\lib\x64\SDL2.lib">

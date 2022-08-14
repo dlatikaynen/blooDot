@@ -9,6 +9,8 @@ typedef struct DingLocator {
 	SDL_Rect src;
 } DingLocator;
 
+extern int GetDingResourceKey(Ding);
+
 void TeardownDingSheets();
 DingLocator* GetDing(Ding ding);
 
