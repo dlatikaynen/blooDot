@@ -831,7 +831,7 @@ void _Unsnap(int dx, int dy)
 		quadrantSWSrc.h = dy;
 		quadrantSESrc.h = dy;
 		quadrantSWDst.y = flapH - dy;
-		quadrantSWDst.y = flapH - dy;
+		quadrantSEDst.y = flapH - dy;
 		quadrantSWDst.h = dy;
 		quadrantSEDst.h = dy;
 	}

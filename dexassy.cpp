@@ -1,12 +1,14 @@
 #include "pch.h"
 #include "dexassy.h"
 
+constexpr char const* XassyFile = "xassy.cooked1.ngld";
+
 size_t chunkSizes[] = {
-	1072649,
-	42452,
-	107112,
-	37776,
-	3662
+	1072649, // CHUNK_KEY_SPLASH
+	42452,   // CHUNK_KEY_FONT_TITLE
+	107112,  // CHUNK_KEY_FONT_DIALOG
+	37776,   // CHUNK_KEY_FONT_ALIEN
+	3662     // CHUNK_KEY_SFX_PROJECTILEDECAY
 };
 
 std::vector<size_t> chunkOffsets;
@@ -28,14 +30,14 @@ bool OpenCooked()
 {
 	if (cooked)
 	{
+		ReportError("Could not open wad", "already open");
 		return false;
 	}
+
 	const auto basePath = SDL_GetBasePath();
 	std::stringstream sourcePath;
-	sourcePath << basePath << "\\xassy.cooked1.ngld";
-
+	sourcePath << basePath << "\\" << XassyFile;
 	cooked = SDL_RWFromFile(sourcePath.str().c_str(), "rb");
-	
 	if (!cooked)
 	{
 		const auto openError = SDL_GetError();
