@@ -159,8 +159,11 @@ int main(int, char**)
 
 		SDL_ShowWindow(mainWindow);
 		Mix_PlayChannel(-1, soundEffect, 0);
-		SplashLoop(renderer);
-		MainLoop(renderer);
+		if (SplashLoop(renderer))
+		{
+			MainLoop(renderer);
+		}
+
 		Mix_FreeChunk(soundEffect);
 		Mix_Quit();
 		IMG_Quit();

@@ -467,6 +467,7 @@
     <None Include="planning\gfx.ligma">
       <Filter>Planning</Filter>
     </None>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\lib\x64\SDL2.lib">

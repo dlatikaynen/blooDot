@@ -19,6 +19,20 @@ void LoadSettings()
 	}
 
 	settingsFile->read(settingsFile, &Settings, sizeof(SettingsStruct), 1);
+	const SettingsStruct validator;
+	const auto isValid = _memicmp(
+		(const void*)(&validator.Preamble0),
+		(const void*)(&Settings.Preamble0),
+		sizeof(char) * 8
+	);
+
+	if (isValid != 0)
+	{
+		ReportError("Could not load settings, fallback to defaults", "Settings store corrupted");
+		DefaultSettings();
+		SaveSettings();
+		return;
+	}
 
 	settingsFile->close(settingsFile);
 }

@@ -23,4 +23,5 @@ typedef struct SettingsStruct
 	char Preamble8 = '\5';
 	char Preamble9 = '\0';
 	ViewportResolutions SettingViewportResolution = VR_TEMPLE;
+	unsigned short NumberOfSavegames = 0;
 } SettingsStruct;

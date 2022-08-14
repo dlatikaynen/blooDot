@@ -14,7 +14,8 @@ extern cairo_t* GetDrawingSink();
 extern void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture);
 extern cairo_t* DrawButton(cairo_t*);
 extern void DrawLabel(SDL_Renderer*, int, int, SDL_Texture*, SDL_Rect*);
+extern cairo_t* DrawChevron(cairo_t*, double, double, bool, unsigned short);
 extern void LoadSettings();
 
-void SplashLoop(SDL_Renderer*);
+bool SplashLoop(SDL_Renderer*);
 void Bounce(SDL_Rect* srcRect);

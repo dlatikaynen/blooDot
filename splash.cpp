@@ -8,8 +8,10 @@
 #include "xlations.h"
 #include <random>
 #include <iostream>
+#include "settings.h"
 
 extern bool mainRunning;
+extern SettingsStruct Settings;
 
 SDL_Event splashEvent;
 bool splashRunning = false;
@@ -26,6 +28,7 @@ const int backdropVert = 720 - backgroundH;
 auto backgroundAnimDelay = 237;
 std::default_random_engine generator;
 std::uniform_int_distribution<int> distribution(0, 3);
+MainMenuItems menuSelection = MMI_CUE;
 
 void LoadSplash(SDL_Renderer* renderer)
 {
@@ -68,8 +71,9 @@ void LoadSplash(SDL_Renderer* renderer)
 	splashRunning = true;
 }
 
-void SplashLoop(SDL_Renderer* renderer)
+bool SplashLoop(SDL_Renderer* renderer)
 {
+	bool keepRunning = true;
 	LoadSplash(renderer);
 
 	SDL_Rect srcRect{ 0,0,backgroundW,backgroundH };
@@ -179,8 +183,11 @@ void SplashLoop(SDL_Renderer* renderer)
 	{
 		LoadSettings();
 		settingsLoaded = true;
+
+		menuSelection = Settings.NumberOfSavegames == 0 ? MMI_NEWSINGLE : MMI_CUE;
 	}
 
+	unsigned short frame = 0L;
 	while (splashRunning)
 	{
 		while (SDL_PollEvent(&splashEvent) != 0)
@@ -193,7 +200,54 @@ void SplashLoop(SDL_Renderer* renderer)
 				break;
 
 			case SDL_KEYDOWN:
-				splashRunning = false;
+				switch (splashEvent.key.keysym.scancode)
+				{
+				case SDL_SCANCODE_UP:
+				case SDL_SCANCODE_KP_8:
+				case SDL_SCANCODE_W:
+					if (menuSelection != MMI_CUE)
+					{
+						menuSelection = static_cast<MainMenuItems>(menuSelection - 1);
+					}
+
+					break;
+
+				case SDL_SCANCODE_DOWN:
+				case SDL_SCANCODE_KP_2:
+				case SDL_SCANCODE_S:
+					if (menuSelection != MMI_EXIT)
+					{
+						menuSelection = static_cast<MainMenuItems>(menuSelection + 1);
+					}
+
+					break;
+
+				case SDL_SCANCODE_PAGEDOWN:
+				case SDL_SCANCODE_END:
+					menuSelection = MMI_EXIT;
+					break;
+
+				case SDL_SCANCODE_PAGEUP:
+					menuSelection = MMI_CUE;
+					break;
+
+				case SDL_SCANCODE_HOME:
+					menuSelection = Settings.NumberOfSavegames == 0 ? MMI_NEWSINGLE : MMI_CUE;
+					break;
+
+				case SDL_SCANCODE_RETURN:
+				case SDL_SCANCODE_RETURN2:
+				case SDL_SCANCODE_KP_ENTER:
+				case SDL_SCANCODE_SPACE:
+					splashRunning = false;
+					keepRunning = menuSelection != MMI_EXIT;
+					break;
+
+				case SDL_SCANCODE_ESCAPE:
+					splashRunning = false;
+					keepRunning = false;
+				}
+
 				break;
 
 			case SDL_CONTROLLERAXISMOTION:
@@ -245,9 +299,17 @@ void SplashLoop(SDL_Renderer* renderer)
 		{
 			const auto drawingSink = GetDrawingSink();
 			const int stride = 46;
+			MainMenuItems itemToDraw = MMI_CUE;
 			for (auto y = 94; y < 400; y += stride)
 			{
 				DrawButton(drawingSink, 195, y, 250, 42);
+				if (itemToDraw == menuSelection)
+				{
+					DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);
+					DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
+				}
+
+				itemToDraw = static_cast<MainMenuItems>(itemToDraw + 1);
 			}
 
 			EndRenderDrawing(renderer, drawingTexture);
@@ -263,6 +325,7 @@ void SplashLoop(SDL_Renderer* renderer)
 
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);
+		++frame;
 	}
 
 	if (primaryController)
@@ -274,6 +337,8 @@ void SplashLoop(SDL_Renderer* renderer)
 	{
 		SDL_DestroyTexture(splashTexture);
 	}
+
+	return keepRunning;
 }
 
 void AssignNewSpeed(__out int* speed)

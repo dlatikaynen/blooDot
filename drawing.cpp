@@ -21,7 +21,10 @@ cairo_t* BeginTextureDrawing(SDL_Texture* targetTexture)
 			pitch
 		);
 
-		return cairo_create(cairoSurface);
+		const auto sink = cairo_create(cairoSurface);
+		cairo_set_antialias(sink, CAIRO_ANTIALIAS_SUBPIXEL);
+		
+		return sink;
 	}
 
 	return NULL;
@@ -54,6 +57,7 @@ SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget)
 		);
 
 		drawingSink = cairo_create(cairoSurface);
+		cairo_set_antialias(drawingSink, CAIRO_ANTIALIAS_SUBPIXEL);
 	}
 
 	return targetTexture;
