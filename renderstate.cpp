@@ -115,7 +115,7 @@ void RecomputeFlapConstellation()
 	{
 		constellation = FS_BUNGHOLE;
 #ifndef NDEBUG
-		std::cout << "Are you threatening me?";
+		std::cout << "Are you threatening me?\n";
 #endif
 	}
 	else if (isVerticallyAligned)
@@ -132,6 +132,12 @@ void RecomputeFlapConstellation()
 	}
 }
 
+/// <summary>
+/// Used to be the most mysterious thing in retro
+/// Nowadays, there is no pel pan, no interrupts,
+/// just a massive waste of stupidly moving 8888s
+/// So we're here to making it complicated again.
+/// </summary>
 void Scroll(int dx, int dy)
 {
 	const bool isHorz = dy == 0;
@@ -196,6 +202,10 @@ void Scroll(int dx, int dy)
 		{
 			if (isVertSnapped)
 			{
+#ifndef NDEBUG
+				std::cout << "HORZ UP THE BUNGHOLE\n";
+#endif
+
 				constellation = FS_BUNGHOLE;
 			}
 			else
@@ -217,25 +227,25 @@ void Scroll(int dx, int dy)
 			}
 			else
 			{
-				if (dy < 0)
+				if (horzLeftRight == 1)
 				{
-					if (horzLeftRight == 1) 
+					if (dy < 0)
 					{
 						/* NE */
 						flapIndexNW = 1; flapIndexNE = 2; flapIndexSW = 4; flapIndexSE = 5;
 					}
 					else
 					{
-						/* NW */
-						flapIndexNW = 0; flapIndexNE = 1; flapIndexSW = 3; flapIndexSE = 4;
+						/* SE */
+						flapIndexNW = 4; flapIndexNE = 5; flapIndexSW = 7; flapIndexSE = 8;
 					}
 				}
 				else
 				{
-					if (horzLeftRight == 1)
+					if (dy < 0)
 					{
-						/* SE */
-						flapIndexNW = 4; flapIndexNE = 5; flapIndexSW = 7; flapIndexSE = 8;
+						/* NW */
+						flapIndexNW = 0; flapIndexNE = 1; flapIndexSW = 3; flapIndexSE = 4;
 					}
 					else
 					{
@@ -244,6 +254,7 @@ void Scroll(int dx, int dy)
 					}
 				}
 
+				dx += horzLeftSrc.x;
 				_Unsnap(dx, dy);
 			}
 		}
@@ -255,6 +266,10 @@ void Scroll(int dx, int dy)
 		{
 			if (isHorzSnapped)
 			{
+#ifndef NDEBUG
+				std::cout << "VERT UP THE BUNGHOLE\n";
+#endif
+
 				constellation = FS_BUNGHOLE;
 			}
 			else
@@ -303,6 +318,7 @@ void Scroll(int dx, int dy)
 					}
 				}
 
+				dy += vertUpperSrc.y;
 				_Unsnap(dx, dy);
 			}
 		}
@@ -315,22 +331,72 @@ void Scroll(int dx, int dy)
 		if (isVertSnapped && isHorzSnapped)
 		{
 			/* jackpot */
+#ifndef NDEBUG
+			std::cout << "RIGHT IN THE BUNGHOLE\n";
+#endif
+
 			constellation = FS_BUNGHOLE;
 		}
 		else if (isHorzSnapped)
 		{
 			/* freerange to horizontally gliding */
-			_SnapHorizontal(dx);
+			horzLeftRight = flapIndexNW == 0 || flapIndexNW == 3 ? 0 : 1;
+			horzLeftSrc = { quadrantNWSrc.x + dx,0,quadrantNWSrc.w - dx,flapH };
+			horzLeftDst = { quadrantNWDst.x,0,quadrantNWDst.w - dx,flapH };
+			horzRiteSrc = { quadrantNESrc.x,0,quadrantNESrc.w + dx,flapH };
+			horzRiteDst = { quadrantNEDst.x - dx,0,quadrantNEDst.w + dx,flapH };
+
+#ifndef NDEBUG
+			std::cout << "RE-SNAPPED HORZ\n";
+#endif
+
+			constellation = FS_HORIZONTAL;
 		}
 		else if (isVertSnapped)
 		{
 			/* freerange to vertically gliding */
-			_SnapVertical(dy);
+			vertUpperLower = flapIndexNW == 0 || flapIndexNW == 1 ? 0 : 1;
+			vertUpperSrc = { 0,quadrantNWSrc.y + dy,flapW,quadrantNWSrc.h - dy };
+			vertUpperDst = { 0,quadrantNWDst.y,flapW,quadrantNWDst.h - dy };
+			vertLowerSrc = { 0,quadrantSWSrc.y,flapW,quadrantSWSrc.h + dy };
+			vertLowerDst = { 0,quadrantSWDst.y - dy,flapW,quadrantSWDst.h + dy };
+
+#ifndef NDEBUG
+			std::cout << "RE-SNAPPED VERT\n";
+#endif
+
+			constellation = FS_VERTICAL;
 		}
 		else
 		{
 			/* remains freeform */
+			quadrantNWSrc.x += dx;
+			quadrantNWSrc.w -= dx;
+			quadrantNWSrc.y += dy;
+			quadrantNWSrc.h -= dy;
+			quadrantNWDst.w -= dx;
+			quadrantNWDst.h -= dy;
 
+			quadrantNESrc.w += dx;
+			quadrantNESrc.y += dy;
+			quadrantNESrc.h -= dy;
+			quadrantNEDst.x -= dx;
+			quadrantNEDst.w += dx;
+			quadrantNEDst.h -= dy;
+
+			quadrantSWSrc.x += dx;
+			quadrantSWSrc.w -= dx;
+			quadrantSWSrc.h += dy;
+			quadrantSWDst.w -= dx;
+			quadrantSWDst.y -= dy;
+			quadrantSWDst.h += dy;
+
+			quadrantSESrc.w += dx;
+			quadrantSESrc.h += dy;
+			quadrantSEDst.x -= dx;
+			quadrantSEDst.y -= dy;
+			quadrantSEDst.w += dx;
+			quadrantSEDst.h += dy;
 		}
 
 		break;
@@ -404,12 +470,39 @@ void PopulateFlap(int flapIndex)
 	cairo_line_to(drawingSink, 16, flapH);
 	cairo_stroke(drawingSink);
 
+	const auto flapNr = std::to_string(flapIndex);
+	const auto tureNr = std::to_string(textureIndex);
 	cairo_move_to(drawingSink, 10, 16);
-	cairo_text_path(drawingSink, std::to_string(flapIndex).c_str());
+	cairo_text_path(drawingSink, flapNr.c_str());
 	cairo_move_to(drawingSink, 25, 16);
-	cairo_text_path(drawingSink, std::to_string(textureIndex).c_str());
+	cairo_text_path(drawingSink, tureNr.c_str());
+
+	cairo_move_to(drawingSink, flapW - 10 - 5, 16);
+	cairo_text_path(drawingSink, flapNr.c_str());
+	cairo_move_to(drawingSink, flapW - 25 - 5, 16);
+	cairo_text_path(drawingSink, tureNr.c_str());
+
+	cairo_move_to(drawingSink, flapW - 10 - 5, flapH - 16 + 8);
+	cairo_text_path(drawingSink, flapNr.c_str());
+	cairo_move_to(drawingSink, flapW - 25 - 5, flapH - 16 + 8);
+	cairo_text_path(drawingSink, tureNr.c_str());
+
+	cairo_move_to(drawingSink, 10, flapH - 16 + 8);
+	cairo_text_path(drawingSink, flapNr.c_str());
+	cairo_move_to(drawingSink, 25, flapH - 16 + 8);
+	cairo_text_path(drawingSink, tureNr.c_str());
 
 	cairo_fill(drawingSink);
+
+	cairo_set_source_rgb(drawingSink, 0.28, 0.28, 0.28);
+	cairo_move_to(drawingSink, halfW, halfH - 60);
+	cairo_line_to(drawingSink, halfW, halfH + 60);
+	cairo_move_to(drawingSink, halfW - 60, halfH);
+	cairo_line_to(drawingSink, halfW + 60, halfH);
+	cairo_stroke(drawingSink);
+	cairo_set_source_rgb(drawingSink, 0.68, 0.68, 0.68);
+	cairo_rectangle(drawingSink, halfW - 24, halfH - 24, 49, 49);
+	cairo_stroke(drawingSink);
 
 	EndTextureDrawing(floor, drawingSink);
 #endif
@@ -680,6 +773,17 @@ void RenderWallsAndRooofHorz()
 
 void RenderWallsAndRooofQuart()
 {
+	assert(quadrantNWSrc.w + quadrantNESrc.w == flapW);
+	assert(quadrantNWSrc.h == quadrantNESrc.h && quadrantNWSrc.h > 0);
+	assert(quadrantNWSrc.y == quadrantNESrc.y && quadrantNWSrc.y > 0);
+
+	assert(quadrantSWSrc.w + quadrantSESrc.w == flapW);
+	assert(quadrantSWSrc.h == quadrantSESrc.h && quadrantSWSrc.h > 0);
+	assert(quadrantSWSrc.y == quadrantSESrc.y && quadrantSWSrc.y == 0);
+
+	assert(quadrantNWSrc.h + quadrantSWSrc.h == flapH);
+	assert(quadrantNESrc.h + quadrantSESrc.h == flapH);
+
 	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndexNW], &quadrantNWSrc, &quadrantNWDst);
 	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndexNE], &quadrantNESrc, &quadrantNEDst);
 	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndexSW], &quadrantSWSrc, &quadrantSWDst);
@@ -747,6 +851,10 @@ void _SnapHorizontal(int dx)
 		horzRiteDst = { -dx,0,flapW + dx,flapH };
 	}
 
+#ifndef NDEBUG
+	std::cout << "HORZSNAPPED\n";
+#endif
+
 	constellation = FS_HORIZONTAL;
 }
 
@@ -768,6 +876,10 @@ void _SnapVertical(int dy)
 		vertLowerSrc = { 0,0,flapW,flapH + dy };
 		vertLowerDst = { 0,-dy,flapW,flapH + dy };
 	}
+
+#ifndef NDEBUG
+	std::cout << "VERTSNAPPED\n";
+#endif
 
 	constellation = FS_VERTICAL;
 }
@@ -855,6 +967,10 @@ void _Unsnap(int dx, int dy)
 		quadrantSWDst.h = flapH + dy;
 		quadrantSEDst.h = flapH + dy;
 	}
+
+#ifndef NDEBUG
+	std::cout << "UNSNAPPED\n";
+#endif
 
 	constellation = FS_QUARTERED;
 }

@@ -461,6 +461,9 @@
     <None Include="SDL\lib\x64\zlib1.dll">
       <Filter>Platform</Filter>
     </None>
+    <None Include="planning\gfx.ligma">
+      <Filter>Planning</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\lib\x64\SDL2.lib">
