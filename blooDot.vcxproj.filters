@@ -28,6 +28,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Resource Files\dings">
+      <UniqueIdentifier>{991bd455-6340-420b-829c-7106346a443a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL\include\begin_code.h">
@@ -496,6 +499,42 @@
   <ItemGroup>
     <Image Include="res\nn-splash-scene.png">
       <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\barrel-indigo.png">
+      <Filter>Resource Files\dings</Filter>
+    </Image>
+    <Image Include="res\barrel-wooden.png">
+      <Filter>Resource Files\dings</Filter>
+    </Image>
+    <Image Include="res\chel-f.png">
+      <Filter>Resource Files\dings</Filter>
+    </Image>
+    <Image Include="res\floorrocktile.png">
+      <Filter>Resource Files\dings</Filter>
+    </Image>
+    <Image Include="res\floorrocktile-cracked.png">
+      <Filter>Resource Files\dings</Filter>
+    </Image>
+    <Image Include="res\floorstonetile-ochre.png">
+      <Filter>Resource Files\dings</Filter>
+    </Image>
+    <Image Include="res\floorstonetile-purple.png">
+      <Filter>Resource Files\dings</Filter>
+    </Image>
+    <Image Include="res\floorstonetile-slate.png">
+      <Filter>Resource Files\dings</Filter>
+    </Image>
+    <Image Include="res\grass.png">
+      <Filter>Resource Files\dings</Filter>
+    </Image>
+    <Image Include="res\lettuce.png">
+      <Filter>Resource Files\dings</Filter>
+    </Image>
+    <Image Include="res\schaedel.png">
+      <Filter>Resource Files\dings</Filter>
+    </Image>
+    <Image Include="res\snowblock.png">
+      <Filter>Resource Files\dings</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
