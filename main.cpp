@@ -176,6 +176,7 @@ int main(int, char**)
 	/* shitdown */
 	CloseCooked();
 	CloseFonts();
+	TeardownDialogControls();
 	SDL_ClearError();
 	SDL_Quit();
 	const auto shutdownError = SDL_GetError();

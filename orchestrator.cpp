@@ -8,8 +8,13 @@ SDL_Event mainEvent;
 
 void MainLoop(SDL_Renderer* renderer)
 {
+	if (!InitializeNewWorld())
+	{
+		mainRunning = false;
+	}
+
 	GameViewRenderer = renderer;
-	if (!GameviewEnterWorld())
+	if (mainRunning && !GameviewEnterWorld())
 	{
 		mainRunning = false;
 	}
@@ -75,4 +80,5 @@ void MainLoop(SDL_Renderer* renderer)
 	}
 
 	GameviewTeardown();
+	ClearWorldData();
 }

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "renderstate.h"
+#include "ding.h"
 #include <iostream>
 
 constexpr unsigned short flapIndicesHorz[] = { 3,4,5 };
@@ -445,6 +446,13 @@ void PopulateFlap(int flapIndex)
 	const auto walls = flapsWalls[textureIndex];
 	const auto rooof = flapsRooof[textureIndex];
 
+	/* where in the world are we? */
+	const auto leftOfMidpoint = 0 - halfW - GRIDUNIT / 2;
+	const auto leftStart = 0 - halfW / GRIDUNIT + leftOfMidpoint;
+	const auto gridUnitsPerRow = (int)ceil((double)flapW / GRIDUNIT);
+
+	std::cout << leftOfMidpoint << leftStart << gridUnitsPerRow;
+
 #ifndef NDEBUG
 	auto drawingSink = BeginTextureDrawing(floor);
 
@@ -494,15 +502,18 @@ void PopulateFlap(int flapIndex)
 
 	cairo_fill(drawingSink);
 
-	cairo_set_source_rgb(drawingSink, 0.28, 0.28, 0.28);
-	cairo_move_to(drawingSink, halfW, halfH - 60);
-	cairo_line_to(drawingSink, halfW, halfH + 60);
-	cairo_move_to(drawingSink, halfW - 60, halfH);
-	cairo_line_to(drawingSink, halfW + 60, halfH);
-	cairo_stroke(drawingSink);
-	cairo_set_source_rgb(drawingSink, 0.68, 0.68, 0.68);
-	cairo_rectangle(drawingSink, halfW - 24, halfH - 24, 49, 49);
-	cairo_stroke(drawingSink);
+	if (flapIndex == BUNGHOLE)
+	{
+		cairo_set_source_rgb(drawingSink, 0.28, 0.28, 0.28);
+		cairo_move_to(drawingSink, halfW, halfH - 60);
+		cairo_line_to(drawingSink, halfW, halfH + 60);
+		cairo_move_to(drawingSink, halfW - 60, halfH);
+		cairo_line_to(drawingSink, halfW + 60, halfH);
+		cairo_stroke(drawingSink);
+		cairo_set_source_rgb(drawingSink, 0.68, 0.68, 0.68);
+		cairo_rectangle(drawingSink, halfW - 24, halfH - 24, 49, 49);
+		cairo_stroke(drawingSink);
+	}
 
 	EndTextureDrawing(floor, drawingSink);
 #endif

@@ -381,6 +381,12 @@
     <ClInclude Include="renderstate.h">
       <Filter>_Headers</Filter>
     </ClInclude>
+    <ClInclude Include="newworld.h">
+      <Filter>_Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ding.h">
+      <Filter>_Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -417,6 +423,9 @@
       <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="renderstate.cpp">
+      <Filter>_Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="newworld.cpp">
       <Filter>_Source Files</Filter>
     </ClCompile>
   </ItemGroup>

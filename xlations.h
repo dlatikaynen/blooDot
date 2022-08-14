@@ -9,3 +9,4 @@ constexpr char const* literalMenuLocalMulti = "Local multiplayer";
 constexpr char const* literalMenuNetMulti = "Net multiplayer";
 constexpr char const* literalMenuSettings = "Settings";
 constexpr char const* literalMenuExit = "Exit";
+constexpr char const* regionNameScullery = "The Skullery";

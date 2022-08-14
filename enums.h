@@ -25,3 +25,10 @@ enum MainMenuItems {
 	MMI_SETTINGS,
 	MMI_EXIT
 };
+
+enum DingProps : unsigned char
+{
+	Floor = 1,
+	Walls = 2,
+	Rooof = 4
+};

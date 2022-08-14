@@ -302,7 +302,7 @@ bool SplashLoop(SDL_Renderer* renderer)
 			MainMenuItems itemToDraw = MMI_CUE;
 			for (auto y = 94; y < 400; y += stride)
 			{
-				DrawButton(drawingSink, 195, y, 250, 42);
+				DrawButton(drawingSink, 195, y, 250, 42, itemToDraw == menuSelection);
 				if (itemToDraw == menuSelection)
 				{
 					DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);

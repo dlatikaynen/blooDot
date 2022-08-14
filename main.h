@@ -6,5 +6,6 @@
 
 extern void PrepareIndex();
 extern bool OpenCooked();
+extern void TeardownDialogControls();
 extern void CloseCooked();
 extern void CloseFonts();
