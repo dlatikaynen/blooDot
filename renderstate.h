@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include <iostream>
 #include <cairo.h>
 #include "enums.h"
 #include "gamestate.h"
@@ -11,13 +12,13 @@ constexpr unsigned short BUNGHOLE = 4;
 extern void ReportError(const char*, const char*);
 extern cairo_t* BeginTextureDrawing(SDL_Texture*);
 extern void EndTextureDrawing(SDL_Texture*, cairo_t*);
+extern void PopulateFlap(int flapIndex);
 extern WorldPiece GetPieceRelative(int, int);
 
 bool InitializeAllFlaps(int width, int height);
 void RecomputeFlapConstellation();
 void Scroll(int dx, int dy);
 void PopulateAllFlaps();
-void PopulateFlap(int flapIndex);
 void RenderFloorBung();
 void RenderFloorVert();
 void RenderFloorHorz();

@@ -156,7 +156,7 @@ bool _FindRoomOnDingSheet(SDL_Texture* sheet, SDL_Rect* frame)
 		return false;
 	}
 
-	(*frame).x = 0;
+	(*frame).x = 50;
 	(*frame).y = 0;
 
 	return true;

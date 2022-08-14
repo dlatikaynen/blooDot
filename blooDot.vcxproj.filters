@@ -390,6 +390,9 @@
     <ClInclude Include="dingsheet.h">
       <Filter>_Headers</Filter>
     </ClInclude>
+    <ClInclude Include="flap.h">
+      <Filter>_Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -432,6 +435,12 @@
       <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dingsheet.cpp">
+      <Filter>_Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="flap.cpp">
+      <Filter>_Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ding.cpp">
       <Filter>_Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -23,6 +23,14 @@ bool InitializeNewWorld()
 		return false;
 	}
 
+	for (auto y = -3; y <= 3; ++y)
+	{
+		for (auto x = -4; x <= 4; ++x)
+		{
+			_Put(centerSheet, x, y, Ding::FloorSlate);
+		}
+	}
+
 	_Put(centerSheet, 1, 1, Ding::BarrelIndigo);
 	_Put(centerSheet, -1, 1, Ding::BarrelIndigo);
 	_Put(centerSheet, 1, -1, Ding::BarrelIndigo);
@@ -33,12 +41,13 @@ bool InitializeNewWorld()
 	return true;
 }
 
-void _Put(WorldSheet* sheet, int x, int y, Ding ding)
+void _Put(WorldSheet* sheet, int x, int y, Ding ding, DingProps props)
 {
-	DingInstance instance;
+	DingInstance instance{};
 	instance.ding = ding;
-	instance.props = DingProps::Floor;
-	sheet->arena[static_cast<std::array<WorldPiece, 422Ui64>::size_type>(y + WORLD_SHEET_CENTERPOINT) * WORLD_SHEET_SIDELENGTH + x + WORLD_SHEET_CENTERPOINT]
+	instance.props = props == DingProps::Default ? GetDingDefaultProps(ding) : props;
+	const auto pieceIndex = (y + WORLD_SHEET_CENTERPOINT) * WORLD_SHEET_SIDELENGTH + x + WORLD_SHEET_CENTERPOINT;
+	sheet->arena[pieceIndex]
 		.dings
 		.push_back(instance);
 }

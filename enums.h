@@ -28,6 +28,7 @@ enum MainMenuItems {
 
 enum DingProps : unsigned char
 {
+	Default = 0,
 	Floor = 1,
 	Walls = 2,
 	Rooof = 4
