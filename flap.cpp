@@ -5,6 +5,10 @@ extern unsigned short flapIndirection[9];
 extern SDL_Texture* flapsFloor[9];
 extern SDL_Texture* flapsWalls[9];
 extern SDL_Texture* flapsRooof[9];
+#ifndef NDEBUG
+extern SDL_Texture* debugFlap;
+extern SDL_Rect bunghole;
+#endif
 extern SDL_Renderer* GameViewRenderer;
 extern int flapW;
 extern int flapH;
@@ -29,37 +33,46 @@ void PopulateFlap(int flapIndex)
 	auto worldX = leftWorldY;
 	auto worldY = -gridUnitsPerCol / 2;
 
-	std::cout << leftOfMidpoint << "," << leftStart << "," << gridUnitsPerRow << "\n";
-
-	//auto drawingSink = BeginTextureDrawing(floor);
+#ifndef NDEBUG
+	auto drawingSink = BeginTextureDrawing(debugFlap);
+	cairo_set_source_rgba(drawingSink, 0, 0, 0, 0);
+	cairo_rectangle(drawingSink, 0, 0, flapW, flapH);
+	cairo_fill(drawingSink);
+	cairo_set_operator(drawingSink, CAIRO_OPERATOR_SOURCE);
+	cairo_paint_with_alpha(drawingSink, 1);
 	bool isFirst = true;
 	int lastIterX = 0, lastIterY = 0;
+	int objectCount = 0;
+#endif
+
 	for (auto y = halfH + nrthStart; y <= flapH; y += GRIDUNIT)
 	{
 		for (auto x = halfW + leftStart; x <= flapW; x += GRIDUNIT)
 		{
+#ifndef NDEBUG
 			if (isFirst)
 			{
-				//cairo_set_source_rgb(drawingSink, 0, 1, 1);
+				cairo_set_source_rgb(drawingSink, 0, 1, 1);
 				isFirst = false;
 			}
 			else
 			{
-				//cairo_set_source_rgb(drawingSink, 0, 0, 1);
+				cairo_set_source_rgb(drawingSink, 0, 0, 1);
 				lastIterX = x;
 				lastIterY = y;
 			}
 
-			//cairo_move_to(drawingSink, x + 1, y);
-			//cairo_line_to(drawingSink, x + 4, y);
-			//cairo_move_to(drawingSink, x, y + 1);
-			//cairo_line_to(drawingSink, x, y + 4);
+			cairo_move_to(drawingSink, x + 1, y);
+			cairo_line_to(drawingSink, x + 4, y);
+			cairo_move_to(drawingSink, x, y + 1);
+			cairo_line_to(drawingSink, x, y + 4);
 
-			//cairo_move_to(drawingSink, x + GRIDUNIT - 1, y + GRIDUNIT);
-			//cairo_line_to(drawingSink, x + GRIDUNIT - 4, y + GRIDUNIT);
-			//cairo_move_to(drawingSink, x + GRIDUNIT, y + GRIDUNIT - 1);
-			//cairo_line_to(drawingSink, x + GRIDUNIT, y + GRIDUNIT - 4);
-			//cairo_stroke(drawingSink);
+			cairo_move_to(drawingSink, x + GRIDUNIT - 1, y + GRIDUNIT);
+			cairo_line_to(drawingSink, x + GRIDUNIT - 4, y + GRIDUNIT);
+			cairo_move_to(drawingSink, x + GRIDUNIT, y + GRIDUNIT - 1);
+			cairo_line_to(drawingSink, x + GRIDUNIT, y + GRIDUNIT - 4);
+			cairo_stroke(drawingSink);
+#endif
 
 			const auto cellPiece = GetPieceRelative(worldX, worldY);
 			if (!cellPiece.dings.empty())
@@ -69,6 +82,9 @@ void PopulateFlap(int flapIndex)
 					const auto dingLocator = GetDing(ding.ding);
 					if (dingLocator->onSheet)
 					{
+#ifndef NDEBUG
+						++objectCount;
+#endif
 						if (ding.props & DingProps::Walls)
 						{
 							if (SDL_SetRenderTarget(GameViewRenderer, walls) < 0)
@@ -100,12 +116,6 @@ void PopulateFlap(int flapIndex)
 							const auto placeError = SDL_GetError();
 							ReportError("Could not place ding on dingsheet", placeError);
 						}
-
-						if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
-						{
-							const auto restoreError = SDL_GetError();
-							ReportError("Could not restore render target", restoreError);
-						}
 					}
 				}
 			}
@@ -117,8 +127,8 @@ void PopulateFlap(int flapIndex)
 		worldX = leftWorldY;
 	}
 
-	/*
-	cairo_set_source_rgb(drawingSink, 0, 1, 1);
+#ifndef NDEBUG
+	cairo_set_source_rgb(drawingSink, 1, 0, 1);
 	cairo_move_to(drawingSink, lastIterX + 1, lastIterY);
 	cairo_line_to(drawingSink, lastIterX + 4, lastIterY);
 	cairo_move_to(drawingSink, lastIterX, lastIterY + 1);
@@ -129,27 +139,26 @@ void PopulateFlap(int flapIndex)
 	cairo_line_to(drawingSink, lastIterX + GRIDUNIT, lastIterY + GRIDUNIT - 4);
 	cairo_stroke(drawingSink);
 
-#ifndef NDEBUG
 	cairo_set_source_rgb(drawingSink, 1, 0.68, 0.08);
 
-	cairo_move_to(drawingSink, 0, 16);
+	cairo_move_to(drawingSink, 0, 13);
 	cairo_line_to(drawingSink, 0, 0);
-	cairo_line_to(drawingSink, 16, 0);
+	cairo_line_to(drawingSink, 13, 0);
 	cairo_stroke(drawingSink);
 
-	cairo_move_to(drawingSink, flapW - 16, 0);
+	cairo_move_to(drawingSink, flapW - 13, 0);
 	cairo_line_to(drawingSink, flapW, 0);
-	cairo_line_to(drawingSink, flapW, 16);
+	cairo_line_to(drawingSink, flapW, 13);
 	cairo_stroke(drawingSink);
 
-	cairo_move_to(drawingSink, flapW - 16, flapH);
+	cairo_move_to(drawingSink, flapW - 13, flapH);
 	cairo_line_to(drawingSink, flapW, flapH);
-	cairo_line_to(drawingSink, flapW, flapH - 16);
+	cairo_line_to(drawingSink, flapW, flapH - 13);
 	cairo_stroke(drawingSink);
 
-	cairo_move_to(drawingSink, 0, flapH - 16);
+	cairo_move_to(drawingSink, 0, flapH - 13);
 	cairo_line_to(drawingSink, 0, flapH);
-	cairo_line_to(drawingSink, 16, flapH);
+	cairo_line_to(drawingSink, 13, flapH);
 	cairo_stroke(drawingSink);
 
 	const auto flapNr = std::to_string(flapIndex);
@@ -189,77 +198,28 @@ void PopulateFlap(int flapIndex)
 		cairo_stroke(drawingSink);
 	}
 
-#endif
-	EndTextureDrawing(floor, drawingSink);
+	EndTextureDrawing(debugFlap, drawingSink);
 
-#ifndef NDEBUG
-	drawingSink = BeginTextureDrawing(walls);
+	SDL_SetRenderTarget(GameViewRenderer, rooof);
+	SDL_RenderCopy(GameViewRenderer, debugFlap, &bunghole, &bunghole);
 
-	cairo_set_source_rgb(drawingSink, 0.68, 1, 0.08);
-
-	cairo_move_to(drawingSink, 1, 15);
-	cairo_line_to(drawingSink, 1, 1);
-	cairo_line_to(drawingSink, 15, 1);
-	cairo_stroke(drawingSink);
-
-	cairo_move_to(drawingSink, flapW - 15, 1);
-	cairo_line_to(drawingSink, flapW - 1, 1);
-	cairo_line_to(drawingSink, flapW - 1, 15);
-	cairo_stroke(drawingSink);
-
-	cairo_move_to(drawingSink, flapW - 16, flapH - 1);
-	cairo_line_to(drawingSink, flapW - 1, flapH - 1);
-	cairo_line_to(drawingSink, flapW - 1, flapH - 15);
-	cairo_stroke(drawingSink);
-
-	cairo_move_to(drawingSink, 1, flapH - 15);
-	cairo_line_to(drawingSink, 1, flapH - 1);
-	cairo_line_to(drawingSink, 15, flapH - 1);
-	cairo_stroke(drawingSink);
-
-	cairo_move_to(drawingSink, 20, 26);
-	cairo_text_path(drawingSink, std::to_string(flapIndex).c_str());
-	cairo_move_to(drawingSink, 35, 26);
-	cairo_text_path(drawingSink, std::to_string(textureIndex).c_str());
-
-	cairo_fill(drawingSink);
-
-	EndTextureDrawing(walls, drawingSink);
+	std::cout
+		<< "Populated flap #"
+		<< flapIndex
+		<< ", mapped to texture index "
+		<< textureIndex
+		<< " at world coordinates left "
+		<< worldX
+		<< ", top "
+		<< worldY
+		<< " with "
+		<< objectCount
+		<< "\n";
 #endif
 
-#ifndef NDEBUG
-	drawingSink = BeginTextureDrawing(rooof);
-
-	cairo_set_source_rgb(drawingSink, 0.08, 0.68, 1);
-
-	cairo_move_to(drawingSink, 2, 14);
-	cairo_line_to(drawingSink, 2, 2);
-	cairo_line_to(drawingSink, 14, 2);
-	cairo_stroke(drawingSink);
-
-	cairo_move_to(drawingSink, flapW - 14, 2);
-	cairo_line_to(drawingSink, flapW - 2, 2);
-	cairo_line_to(drawingSink, flapW - 2, 14);
-	cairo_stroke(drawingSink);
-
-	cairo_move_to(drawingSink, flapW - 14, flapH - 2);
-	cairo_line_to(drawingSink, flapW - 2, flapH - 2);
-	cairo_line_to(drawingSink, flapW - 2, flapH - 14);
-	cairo_stroke(drawingSink);
-
-	cairo_move_to(drawingSink, 2, flapH - 14);
-	cairo_line_to(drawingSink, 2, flapH - 2);
-	cairo_line_to(drawingSink, 14, flapH - 2);
-	cairo_stroke(drawingSink);
-
-	cairo_move_to(drawingSink, 30, 36);
-	cairo_text_path(drawingSink, std::to_string(flapIndex).c_str());
-	cairo_move_to(drawingSink, 45, 36);
-	cairo_text_path(drawingSink, std::to_string(textureIndex).c_str());
-
-	cairo_fill(drawingSink);
-
-	EndTextureDrawing(rooof, drawingSink);
-#endif
-*/
+	if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
+	{
+		const auto restoreError = SDL_GetError();
+		ReportError("Could not restore render target", restoreError);
+	}
 }

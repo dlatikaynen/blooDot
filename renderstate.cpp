@@ -19,6 +19,10 @@ SDL_Texture* flapsFloor[9];
 SDL_Texture* flapsWalls[9];
 SDL_Texture* flapsRooof[9];
 
+#ifndef NDEBUG
+SDL_Texture* debugFlap;
+#endif
+
 /* contains the indices to the flaps,
  * where its own indices are position-stable.
  * the flaps swap around, so this is used
@@ -102,6 +106,9 @@ bool InitializeAllFlaps(int width, int height)
 	}
 
 	RecomputeFlapConstellation();
+#ifndef NDEBUG
+	debugFlap = _NewTexture(GameViewRenderer, true, true);
+#endif
 
 	return true;
 }
@@ -658,6 +665,10 @@ void RenderWallsAndRooofQuart()
 
 void RenderstateTeardown()
 {
+#ifndef NDEBUG
+	SDL_DestroyTexture(debugFlap);
+#endif
+
 	for (auto i = 0; i < 9; ++i)
 	{
 		SDL_DestroyTexture(flapsFloor[i]);
@@ -666,13 +677,12 @@ void RenderstateTeardown()
 	}
 }
 
-SDL_Texture* _NewTexture(SDL_Renderer* renderer, bool transparentAble)
+SDL_Texture* _NewTexture(SDL_Renderer* renderer, bool transparentAble, bool forCairo)
 {
 	const auto newTexture = SDL_CreateTexture(
 		renderer,
 		SDL_PIXELFORMAT_ARGB8888,
-		//SDL_TEXTUREACCESS_STREAMING,
-		SDL_TEXTUREACCESS_TARGET,
+		forCairo ? SDL_TEXTUREACCESS_STREAMING : SDL_TEXTUREACCESS_TARGET,
 		flapW,
 		flapH
 	);

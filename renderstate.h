@@ -30,7 +30,7 @@ void RenderWallsAndRooofHorz();
 void RenderWallsAndRooofQuart();
 void RenderstateTeardown();
 
-SDL_Texture* _NewTexture(SDL_Renderer* renderer, bool transparentAble);
+SDL_Texture* _NewTexture(SDL_Renderer* renderer, bool transparentAble, bool forCairo = false);
 void _SnapHorizontal(int dx);
 void _SnapVertical(int dy);
 void _Unsnap(int dx, int dy);
