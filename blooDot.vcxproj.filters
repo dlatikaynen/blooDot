@@ -567,6 +567,9 @@
     <Image Include="res\snowblock.png">
       <Filter>Resource Files\dings</Filter>
     </Image>
+    <Image Include="res\barrel-loaded.png">
+      <Filter>Resource Files\dings</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ofl.txt">

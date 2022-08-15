@@ -31,5 +31,12 @@ enum DingProps : unsigned char
 	Default = 0,
 	Floor = 1,
 	Walls = 2,
-	Rooof = 4
+	Rooof = 4,
+	Mob = 8,
+	Loot = 16
 };
+
+inline DingProps operator|(DingProps a, DingProps b)
+{
+	return static_cast<DingProps>(static_cast<int>(a) | static_cast<int>(b));
+}

@@ -33,9 +33,11 @@ bool InitializeNewWorld()
 
 	_Put(centerSheet, 1, 1, Ding::BarrelIndigo);
 	_Put(centerSheet, -1, 1, Ding::BarrelIndigo);
-	_Put(centerSheet, 1, -1, Ding::BarrelIndigo);
-	_Put(centerSheet, -1, -1, Ding::BarrelIndigo);
+	_Put(centerSheet, 1, -1, Ding::BarrelWood);
+	_Put(centerSheet, -1, -1, Ding::BarrelLoaded);
 	_Put(centerSheet, -2, 0, Ding::Lettuce);
+	_Put(centerSheet, 2, 0, Ding::Schaed);
+	_Put(centerSheet, 0, 2, Ding::Snow);
 
 	ReplaceWorldSheet(0, 0, centerSheet);
 

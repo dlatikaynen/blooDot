@@ -18,5 +18,6 @@ copy ^
 + /b lettuce.png ^
 + /b schaedel.png ^
 + /b snowblock.png ^
++ /b barrel-loaded.png ^
   /V /Y ^
 xassy.cooked1.ngld

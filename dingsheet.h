@@ -16,5 +16,5 @@ DingLocator* GetDing(Ding ding);
 
 int _GetDingResourceKey(Ding ding);
 SDL_Texture* _LoadDingTexture(int resourceKey, __out SDL_Rect* dimensions);
-DingLocator _PlaceOnDingSheet(SDL_Rect* dingDimensions, SDL_Texture* dingTexture);
-bool _FindRoomOnDingSheet(SDL_Texture* sheet, SDL_Rect* frame);
+DingLocator _PlaceOnDingSheet(SDL_Rect* dingDimensions, SDL_Texture* dingTexture, Ding dingInfo);
+bool _FindRoomOnDingSheet(SDL_Texture* sheet, SDL_Rect* frame, Ding dingInfo);

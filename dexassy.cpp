@@ -20,7 +20,8 @@ size_t chunkSizes[] = {
 	6303,    // CHUNK_KEY_DINGS_GRASS
 	3541,    // CHUNK_KEY_DINGS_LETTUCE
 	1987,    // CHUNK_KEY_DINGS_SCHAED
-	3233     // CHUNK_KEY_DINGS_SNOW
+	3233,    // CHUNK_KEY_DINGS_SNOW
+	3886     // CHUNK_KEY_DINGS_BARREL_LOADED
 };
 
 std::vector<size_t> chunkOffsets;

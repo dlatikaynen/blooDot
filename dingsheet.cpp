@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "dingsheet.h"
+#include <iostream>
 
 constexpr const int DING_SHEET_SIDE_LENGTH = 800;
 
@@ -24,7 +25,7 @@ DingLocator* GetDing(Ding ding)
 			return NULL;
 		}
 		
-		const auto newLocator = _PlaceOnDingSheet(&dingDimensions, dingTexture);
+		const auto newLocator = _PlaceOnDingSheet(&dingDimensions, dingTexture, ding);
 		SDL_DestroyTexture(dingTexture);
 		dingMap[ding] = newLocator;
 		return &dingMap[ding];
@@ -82,7 +83,7 @@ SDL_Texture* _LoadDingTexture(int resourceKey, __out SDL_Rect* dimensions)
 	return resTexture;
 }
 
-DingLocator _PlaceOnDingSheet(SDL_Rect* dingDimensions, SDL_Texture* dingTexture)
+DingLocator _PlaceOnDingSheet(SDL_Rect* dingDimensions, SDL_Texture* dingTexture, Ding dingInfo)
 {
 	DingLocator newLocator{};
 	SDL_Rect finalSrc{};
@@ -95,7 +96,7 @@ DingLocator _PlaceOnDingSheet(SDL_Rect* dingDimensions, SDL_Texture* dingTexture
 	finalSrc.w = dingDimensions->w;
 	finalSrc.h = dingDimensions->h;
 
-	if (!_FindRoomOnDingSheet(placeOnSheet, &finalSrc))
+	if (!_FindRoomOnDingSheet(placeOnSheet, &finalSrc, dingInfo))
 	{
 		occupied.clear();
 		placeOnSheet = SDL_CreateTexture(
@@ -143,7 +144,7 @@ DingLocator _PlaceOnDingSheet(SDL_Rect* dingDimensions, SDL_Texture* dingTexture
 	return newLocator;
 }
 
-bool _FindRoomOnDingSheet(SDL_Texture* sheet, SDL_Rect* frame)
+bool _FindRoomOnDingSheet(SDL_Texture* sheet, SDL_Rect* frame, Ding dingInfo)
 {
 	if (!sheet)
 	{
@@ -155,13 +156,35 @@ bool _FindRoomOnDingSheet(SDL_Texture* sheet, SDL_Rect* frame)
 	if (curLine.y + frame->h > DING_SHEET_SIDE_LENGTH)
 	{
 		/* does not fit height-wise */
+		std::stringstream howBigIsTooBig;
+		howBigIsTooBig << "Been asked to allocate " << frame->h << " high for " << dingInfo << ", but the current line is " << curLine.h << " and maxes out at " << DING_SHEET_SIDE_LENGTH - curLine.y << " right now";
+		ReportError("Ding too high for sheet", howBigIsTooBig.str().c_str());
+		return false;
+	}
+
+	if (frame->w > DING_SHEET_SIDE_LENGTH)
+	{
+		/* does not fit at all, not even on a new line */
+		std::stringstream howBigIsTooBig;
+		howBigIsTooBig << "Been asked to allocate " << frame->w << " wide for " << dingInfo << ", but am only " << DING_SHEET_SIDE_LENGTH << " wide altogether";
+		ReportError("Ding too big for sheet", howBigIsTooBig.str().c_str());
 		return false;
 	}
 
 	if (curLine.w + frame->w > DING_SHEET_SIDE_LENGTH)
 	{
-		/* does not fit across */
-		return false;
+		/* does not fit across, attempt to allocate a new line once */
+		SDL_Rect newLine{ 0,curLine.y + curLine.h,0,frame->h };
+		if (newLine.y + newLine.h > DING_SHEET_SIDE_LENGTH)
+		{
+			std::stringstream howBigIsTooBig;
+			howBigIsTooBig << "Been asked to allocate " << frame->h << " high for " << dingInfo << ", but the highest possible line at " << (newLine.y + newLine.h) << " would exceed the available " << DING_SHEET_SIDE_LENGTH << " of sheet height";
+			ReportError("Ding too high for remaining sheet", howBigIsTooBig.str().c_str());
+			return false;
+		}
+		
+		occupied.push_back(newLine);
+		curLine = occupied.back();
 	}
 
 	curLine.h = frame->h > curLine.h ? frame->h : curLine.h;
@@ -170,6 +193,25 @@ bool _FindRoomOnDingSheet(SDL_Texture* sheet, SDL_Rect* frame)
 	curLine.w += frame->w;
 	occupied.pop_back();
 	occupied.push_back(curLine);
+
+#ifndef NDEBUG
+	std::cout
+		<< "Allocated ("
+		<< frame->x
+		<< ","
+		<< frame->y
+		<< ","
+		<< frame->w
+		<< ","
+		<< frame->h
+		<< ") on the "
+		<< sheet
+		<< " sheet's line number "
+		<< occupied.size()
+		<< " for "
+		<< dingInfo
+		<< "\n";
+#endif
 
 	return true;
 }

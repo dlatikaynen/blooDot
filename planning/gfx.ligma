@@ -4,3 +4,10 @@
 
   Shaking ground is rotating the three layers (FWR) against each other
   excentrically and in opposing rotational directionsw with a damped phase profile
+
+
+  Ligma.
+└───────
+
+  Lesson learned from carrying props so far that the quadrant with their spawnpoint
+  unloads: on unloading quadrants, fix origin pointers of then originless props

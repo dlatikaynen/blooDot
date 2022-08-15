@@ -9,9 +9,19 @@ enum Ding : unsigned short
 {
 	None,
 	FloorSlate,
+	FloorOchre,
+	FloorPurple,
+	FloorRock,
+	FloorRockCracked,
 	WallClassic,
 	BarrelIndigo,
-	Lettuce
+	BarrelWood,
+	BarrelLoaded,
+	Lettuce,
+	Grass,
+	Schaed,
+	Snow,
+	ChelF
 };
 
 DingProps GetDingDefaultProps(Ding ding);
