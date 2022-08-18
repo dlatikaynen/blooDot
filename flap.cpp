@@ -15,7 +15,42 @@ extern int flapH;
 extern int halfW;
 extern int halfH;
 
-void PopulateFlap(int flapIndex)
+FlapAwareness flapAwareness[9]{};
+
+FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapInWorldY)
+{
+	const auto awarenessEntry = &(flapAwareness[flapIndex]);
+	awarenessEntry->flapInWorldX = flapInWorldX;
+	awarenessEntry->flapInWorldY = flapInWorldY;
+	
+	/* we compute the pixel coordinate exactly at first */
+	const auto midpointX = (flapInWorldX * flapW) + halfW - GRIDUNIT / 2;
+	const auto midpointY = (flapInWorldY * flapH) + halfH - GRIDUNIT / 2;
+
+	/* then we compute the number of gridunits, rounding up */
+	const auto absoluteDistanceX = abs(midpointX) + flapW;
+	const auto absoluteDistanceY = abs(midpointY) + flapH;
+	const auto numGridunitsX = (int)ceil(static_cast<double>(absoluteDistanceX) / static_cast<double>(GRIDUNIT));
+	const auto numGridunitsY = (int)ceil(static_cast<double>(absoluteDistanceY) / static_cast<double>(GRIDUNIT));
+
+	
+
+	std::cout << numGridunitsX << " x " << numGridunitsY << "\n";
+
+	/*
+	int myGridLeftX;  // which is the absolute world grid x-coordinate of my first (left) column? 
+	int myGridTopY;   // which is the absolute worls grid y-coordinate of my first (top) row? 
+
+	int numGridUnitsWide;
+	int numGridUnitsHigh;
+	int localDrawingOffsetX; // where to start drawing on the flap, left 
+	int localDrawingOffsetY; // where to start drawing on the flap, top 
+	*/
+
+	return awarenessEntry;
+}
+
+void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 {
 	const auto textureIndex = flapIndirection[flapIndex];
 	const auto floor = flapsFloor[textureIndex];
@@ -23,14 +58,17 @@ void PopulateFlap(int flapIndex)
 	const auto rooof = flapsRooof[textureIndex];
 
 	/* where in the world are we? */
+	const auto myAwareness = _FigureOutAwarenessFor(flapIndex, flapInWorldX, flapInWorldY);
+	std::cout << myAwareness;
+
 	const auto leftOfMidpoint = -GRIDUNIT / 2;
 	const auto nrthofMidpoint = -GRIDUNIT / 2;
 	const auto leftStart = leftOfMidpoint - (halfW / GRIDUNIT + 1) * GRIDUNIT;
 	const auto nrthStart = nrthofMidpoint - (halfH / GRIDUNIT + 1) * GRIDUNIT;
 	const auto gridUnitsPerRow = (int)ceil((double)flapW / GRIDUNIT);
 	const auto gridUnitsPerCol = (int)ceil((double)flapH / GRIDUNIT);
-	const auto leftWorldY = -gridUnitsPerRow / 2;
-	auto worldX = leftWorldY;
+	const auto leftWorldX = -gridUnitsPerRow / 2;
+	auto worldX = leftWorldX;
 	auto worldY = -gridUnitsPerCol / 2;
 
 #ifndef NDEBUG
@@ -80,7 +118,7 @@ void PopulateFlap(int flapIndex)
 				for (auto& ding : cellPiece.dings)
 				{
 					const auto dingLocator = GetDing(ding.ding);
-					if (dingLocator->onSheet)
+					if (dingLocator->onSheet) [[likely]]
 					{
 #ifndef NDEBUG
 						++objectCount;
@@ -124,7 +162,7 @@ void PopulateFlap(int flapIndex)
 		}
 
 		++worldY;
-		worldX = leftWorldY;
+		worldX = leftWorldX;
 	}
 
 #ifndef NDEBUG

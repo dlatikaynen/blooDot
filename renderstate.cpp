@@ -2,11 +2,9 @@
 #include "renderstate.h"
 #include "ding.h"
 
-constexpr unsigned short flapIndicesHorz[] = { 3,4,5 };
-constexpr unsigned short flapIndicesVert[] = { 1,4,7 };
-
 extern SDL_Renderer* GameViewRenderer;
 
+/* this is where the centerpoint of the nine flaps is in the world */
 extern int originDx;
 extern int originDy;
 
@@ -207,7 +205,7 @@ void Scroll(int dx, int dy)
 	case FS_HORIZONTAL:
 		if (isHorz)
 		{
-			if (isVertSnapped)
+			if (isVertSnapped) [[unlikely]]
 			{
 #ifndef NDEBUG
 				std::cout << "HORZ UP THE BUNGHOLE\n";
@@ -271,7 +269,7 @@ void Scroll(int dx, int dy)
 	case FS_VERTICAL:
 		if (isVert)
 		{
-			if (isHorzSnapped)
+			if (isHorzSnapped) [[unlikely]]
 			{
 #ifndef NDEBUG
 				std::cout << "VERT UP THE BUNGHOLE\n";
@@ -335,7 +333,7 @@ void Scroll(int dx, int dy)
 	default:
 		assert(constellation == FS_QUARTERED);
 
-		if (isVertSnapped && isHorzSnapped)
+		if (isVertSnapped && isHorzSnapped) [[unlikely]]
 		{
 			/* jackpot */
 #ifndef NDEBUG
@@ -374,7 +372,7 @@ void Scroll(int dx, int dy)
 
 			constellation = FS_VERTICAL;
 		}
-		else
+		else [[likely]]
 		{
 			/* remains freeform */
 			quadrantNWSrc.x += dx;
@@ -415,36 +413,36 @@ void PopulateAllFlaps()
 	for (unsigned short i = 0; i < 9; ++i)
 	{
 		flapIndirection[i] = i;
-		PopulateFlap(i);
+		PopulateFlap(i, flapWorldOffsetsX[i], flapWorldOffsetsY[i]);
 	}
 }
 
 void PopulateTopRowFlaps()
 {
-	PopulateFlap(0);
-	PopulateFlap(1);
-	PopulateFlap(2);
+	PopulateFlap(0, originDx + flapWorldOffsetsX[0], originDy + flapWorldOffsetsY[0]);
+	PopulateFlap(1, originDx + flapWorldOffsetsX[1], originDy + flapWorldOffsetsY[1]);
+	PopulateFlap(2, originDx + flapWorldOffsetsX[2], originDy + flapWorldOffsetsY[2]);
 }
 
 void PopulateBottomRowFlaps()
 {
-	PopulateFlap(6);
-	PopulateFlap(7);
-	PopulateFlap(8);
+	PopulateFlap(6, originDx + flapWorldOffsetsX[6], originDy + flapWorldOffsetsY[6]);
+	PopulateFlap(7, originDx + flapWorldOffsetsX[7], originDy + flapWorldOffsetsY[7]);
+	PopulateFlap(8, originDx + flapWorldOffsetsX[8], originDy + flapWorldOffsetsY[8]);
 }
 
 void PopulateLeftColFlaps()
 {
-	PopulateFlap(0);
-	PopulateFlap(3);
-	PopulateFlap(6);
+	PopulateFlap(0, originDx + flapWorldOffsetsX[0], originDy + flapWorldOffsetsY[0]);
+	PopulateFlap(3, originDx + flapWorldOffsetsX[3], originDy + flapWorldOffsetsY[3]);
+	PopulateFlap(6, originDx + flapWorldOffsetsX[6], originDy + flapWorldOffsetsY[6]);
 }
 
 void PopulateRiteColFlaps()
 {
-	PopulateFlap(2);
-	PopulateFlap(5);
-	PopulateFlap(8);
+	PopulateFlap(2, originDx + flapWorldOffsetsX[2], originDy + flapWorldOffsetsY[2]);
+	PopulateFlap(5, originDx + flapWorldOffsetsX[5], originDy + flapWorldOffsetsY[5]);
+	PopulateFlap(8, originDx + flapWorldOffsetsX[8], originDy + flapWorldOffsetsY[8]);
 }
 
 /// <summary>
