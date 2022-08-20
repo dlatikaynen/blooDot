@@ -16,3 +16,5 @@ typedef struct FlapAwareness {
 } FlapAwareness;
 
 void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY);
+
+FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapInWorldY);

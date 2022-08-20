@@ -17,39 +17,6 @@ extern int halfH;
 
 FlapAwareness flapAwareness[9]{};
 
-FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapInWorldY)
-{
-	const auto awarenessEntry = &(flapAwareness[flapIndex]);
-	awarenessEntry->flapInWorldX = flapInWorldX;
-	awarenessEntry->flapInWorldY = flapInWorldY;
-	
-	/* we compute the pixel coordinate exactly at first */
-	const auto midpointX = (flapInWorldX * flapW) + halfW - GRIDUNIT / 2;
-	const auto midpointY = (flapInWorldY * flapH) + halfH - GRIDUNIT / 2;
-
-	/* then we compute the number of gridunits, rounding up */
-	const auto absoluteDistanceX = abs(midpointX) + flapW;
-	const auto absoluteDistanceY = abs(midpointY) + flapH;
-	const auto numGridunitsX = (int)ceil(static_cast<double>(absoluteDistanceX) / static_cast<double>(GRIDUNIT));
-	const auto numGridunitsY = (int)ceil(static_cast<double>(absoluteDistanceY) / static_cast<double>(GRIDUNIT));
-
-	
-
-	std::cout << numGridunitsX << " x " << numGridunitsY << "\n";
-
-	/*
-	int myGridLeftX;  // which is the absolute world grid x-coordinate of my first (left) column? 
-	int myGridTopY;   // which is the absolute worls grid y-coordinate of my first (top) row? 
-
-	int numGridUnitsWide;
-	int numGridUnitsHigh;
-	int localDrawingOffsetX; // where to start drawing on the flap, left 
-	int localDrawingOffsetY; // where to start drawing on the flap, top 
-	*/
-
-	return awarenessEntry;
-}
-
 void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 {
 	const auto textureIndex = flapIndirection[flapIndex];
@@ -59,12 +26,6 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 
 	/* where in the world are we? */
 	const auto myAwareness = _FigureOutAwarenessFor(flapIndex, flapInWorldX, flapInWorldY);
-	std::cout << myAwareness;
-
-	const auto leftOfMidpoint = -GRIDUNIT / 2;
-	const auto nrthofMidpoint = -GRIDUNIT / 2;
-	const auto leftStart = leftOfMidpoint - (halfW / GRIDUNIT + 1) * GRIDUNIT;
-	const auto nrthStart = nrthofMidpoint - (halfH / GRIDUNIT + 1) * GRIDUNIT;
 	const auto gridUnitsPerRow = (int)ceil((double)flapW / GRIDUNIT);
 	const auto gridUnitsPerCol = (int)ceil((double)flapH / GRIDUNIT);
 	const auto leftWorldX = -gridUnitsPerRow / 2;
@@ -83,9 +44,9 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 	int objectCount = 0;
 #endif
 
-	for (auto y = halfH + nrthStart; y <= flapH; y += GRIDUNIT)
+	for (auto y = myAwareness->localDrawingOffsetY; y <= flapH; y += GRIDUNIT)
 	{
-		for (auto x = halfW + leftStart; x <= flapW; x += GRIDUNIT)
+		for (auto x = myAwareness->localDrawingOffsetX; x <= flapW; x += GRIDUNIT)
 		{
 #ifndef NDEBUG
 			if (isFirst)
@@ -260,4 +221,80 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 		const auto restoreError = SDL_GetError();
 		ReportError("Could not restore render target", restoreError);
 	}
+}
+
+FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapInWorldY)
+{
+	const auto fictitiousFlapX = 0x800 + flapInWorldX;
+	const auto fictitiousFlapY = 0x800 + flapInWorldY;
+
+	// koordinate des rechten randes [5]
+	const auto rightBorderX = flapW * (fictitiousFlapX + 1);
+	const auto bottoBorderY = flapH * (fictitiousFlapY + 1);
+
+	// koordinate des letzten quadrats [4]
+	const auto lastGrindX = (ceil(rightBorderX / static_cast<double>(GRIDUNIT)) - 1) * GRIDUNIT;
+	const auto lastGrindY = (ceil(bottoBorderY / static_cast<double>(GRIDUNIT)) - 1) * GRIDUNIT;
+
+	// innenstand letztes quadrat lokal [6]
+	const auto lastInnerX = rightBorderX - lastGrindX;
+	const auto lastInnerY = bottoBorderY - lastGrindY;
+
+	// anzahl mit überstand [7]
+	const auto overCompensatedX = ceil(flapW / static_cast<double>(GRIDUNIT));
+	const auto overCompensatedY = ceil(flapH / static_cast<double>(GRIDUNIT));
+
+	// überstand letztes quadrat lokal [8]
+	const auto lastOuterX = GRIDUNIT - lastInnerX;
+	const auto lastOuterY = GRIDUNIT - lastInnerY;
+
+	// koordinate des linken quadrats [9]
+	const auto firstInnerX = (ceil((rightBorderX - static_cast<double>(flapW)) / static_cast<double>(GRIDUNIT)) - 1) * GRIDUNIT;
+	const auto firstInnerY = (ceil((bottoBorderY - static_cast<double>(flapH)) / static_cast<double>(GRIDUNIT)) - 1) * GRIDUNIT;
+
+	// koordinate des linken quadrats lokal [10]
+	const auto firstLocalX = firstInnerX - (fictitiousFlapX * flapW);
+	const auto firstLocalY = firstInnerY - (fictitiousFlapY * flapH);
+
+	// innenstand des linken quadrats lokal [11]
+	const auto firstLocalInnerX = GRIDUNIT + firstLocalX;
+	const auto firstLocalInnerY = GRIDUNIT + firstLocalY;
+
+	// summe innenstand und überstand erstes
+	assert((firstLocalInnerX - firstLocalX) == GRIDUNIT);
+	assert((firstLocalInnerY - firstLocalY) == GRIDUNIT);
+
+	// summe innenstand und überstand letztes
+	assert((lastInnerX + lastOuterX) == GRIDUNIT);
+	assert((lastInnerY + lastOuterY) == GRIDUNIT);
+
+	// both broadcast and return this for immediate use
+	const auto awarenessEntry = &(flapAwareness[flapIndex]);
+	awarenessEntry->flapInWorldX = flapInWorldX;
+	awarenessEntry->flapInWorldY = flapInWorldY;
+	awarenessEntry->localDrawingOffsetX = static_cast<int>(firstLocalX);
+	awarenessEntry->localDrawingOffsetY = static_cast<int>(firstLocalY);
+	awarenessEntry->numGridUnitsWide = static_cast<int>(overCompensatedX);
+	awarenessEntry->numGridUnitsHigh = static_cast<int>(overCompensatedY);
+
+#ifndef NDEBUG
+	std::cout
+		<< "Flap #"
+		<< flapIndex
+		<< " describes ("
+		<< flapInWorldX
+		<< ","
+		<< flapInWorldY
+		<< "), is "
+		<< overCompensatedX
+		<< "gu wide and "
+		<< overCompensatedY
+		<< "gu high and draws at ("
+		<< firstLocalX
+		<< ","
+		<< firstLocalY
+		<< ")\n";
+#endif
+
+	return awarenessEntry;
 }
