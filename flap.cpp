@@ -237,6 +237,7 @@ FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapI
 	const auto rightBorderX = flapW * (fictitiousFlapX + 1);
 	const auto bottoBorderY = flapH * (fictitiousFlapY + 1);
 
+#ifndef NDEBUG
 	// koordinate des letzten quadrats [4]
 	const auto lastGrindX = (ceil(rightBorderX / static_cast<double>(GRIDUNIT)) - 1) * GRIDUNIT;
 	const auto lastGrindY = (ceil(bottoBorderY / static_cast<double>(GRIDUNIT)) - 1) * GRIDUNIT;
@@ -244,14 +245,17 @@ FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapI
 	// innenstand letztes quadrat lokal [6]
 	const auto lastInnerX = rightBorderX - lastGrindX;
 	const auto lastInnerY = bottoBorderY - lastGrindY;
+#endif
 
 	// anzahl mit überstand [7]
 	const auto overCompensatedX = ceil(flapW / static_cast<double>(GRIDUNIT));
 	const auto overCompensatedY = ceil(flapH / static_cast<double>(GRIDUNIT));
 
+#ifndef NDEBUG
 	// überstand letztes quadrat lokal [8]
 	const auto lastOuterX = GRIDUNIT - lastInnerX;
 	const auto lastOuterY = GRIDUNIT - lastInnerY;
+#endif
 
 	// koordinate des linken quadrats [9]
 	const auto firstInnerX = (ceil((rightBorderX - static_cast<double>(flapW)) / static_cast<double>(GRIDUNIT)) - 1) * GRIDUNIT;
@@ -261,6 +265,7 @@ FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapI
 	const auto firstLocalX = firstInnerX - (fictitiousFlapX * flapW);
 	const auto firstLocalY = firstInnerY - (fictitiousFlapY * flapH);
 
+#ifndef NDEBUG
 	// innenstand des linken quadrats lokal [11]
 	const auto firstLocalInnerX = GRIDUNIT + firstLocalX;
 	const auto firstLocalInnerY = GRIDUNIT + firstLocalY;
@@ -268,6 +273,7 @@ FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapI
 	// summe innenstand und überstand erstes
 	assert((firstLocalInnerX - firstLocalX) == GRIDUNIT);
 	assert((firstLocalInnerY - firstLocalY) == GRIDUNIT);
+#endif
 
 	// summe innenstand und überstand letztes
 	assert((lastInnerX + lastOuterX) == GRIDUNIT);
