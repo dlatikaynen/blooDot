@@ -26,14 +26,12 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 
 	/* where in the world are we? */
 	const auto myAwareness = _FigureOutAwarenessFor(flapIndex, flapInWorldX, flapInWorldY);
-	const auto gridUnitsPerRow = (int)ceil((double)flapW / GRIDUNIT);
-	const auto gridUnitsPerCol = (int)ceil((double)flapH / GRIDUNIT);
-	const auto leftWorldX = -gridUnitsPerRow / 2;
+	const auto leftWorldX = myAwareness->myGridLeftX;
 	auto worldX = leftWorldX;
-	auto worldY = -gridUnitsPerCol / 2;
+	auto worldY = myAwareness->myGridToopY;
 
 #ifndef NDEBUG
-	auto drawingSink = BeginTextureDrawing(debugFlap);
+	const auto drawingSink = BeginTextureDrawing(debugFlap);
 	cairo_set_source_rgba(drawingSink, 0, 0, 0, 0);
 	cairo_rectangle(drawingSink, 0, 0, flapW, flapH);
 	cairo_fill(drawingSink);
@@ -51,6 +49,13 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 #ifndef NDEBUG
 			if (isFirst)
 			{
+				cairo_set_source_rgb(drawingSink, 1, 1, 1);
+				cairo_move_to(drawingSink, x + GRIDUNIT + 3, y + GRIDUNIT + 13);
+				cairo_set_font_size(drawingSink, 16);
+				std::stringstream flapInWorldLabel;
+				flapInWorldLabel << "[" << myAwareness->myGridLeftX << "," << myAwareness->myGridToopY << "]";					
+				cairo_text_path(drawingSink, flapInWorldLabel.str().c_str());
+				cairo_fill(drawingSink);
 				cairo_set_source_rgb(drawingSink, 0, 1, 1);
 				isFirst = false;
 			}
@@ -268,6 +273,9 @@ FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapI
 	assert((lastInnerX + lastOuterX) == GRIDUNIT);
 	assert((lastInnerY + lastOuterY) == GRIDUNIT);
 
+	const auto gridInWorldX = flapInWorldX * (overCompensatedX - 1) - overCompensatedX / 2;
+	const auto gridInWorldY = flapInWorldY * (overCompensatedY) - overCompensatedY / 2;
+
 	// both broadcast and return this for immediate use
 	const auto awarenessEntry = &(flapAwareness[flapIndex]);
 	awarenessEntry->flapInWorldX = flapInWorldX;
@@ -276,6 +284,8 @@ FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapI
 	awarenessEntry->localDrawingOffsetY = static_cast<int>(firstLocalY);
 	awarenessEntry->numGridUnitsWide = static_cast<int>(overCompensatedX);
 	awarenessEntry->numGridUnitsHigh = static_cast<int>(overCompensatedY);
+	awarenessEntry->myGridLeftX = static_cast<int>(gridInWorldX);
+	awarenessEntry->myGridToopY = static_cast<int>(gridInWorldY);
 
 #ifndef NDEBUG
 	std::cout
@@ -287,9 +297,13 @@ FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapI
 		<< flapInWorldY
 		<< "), is "
 		<< overCompensatedX
-		<< "gu wide and "
+		<< "gu wide, "
 		<< overCompensatedY
-		<< "gu high and draws at ("
+		<< "gu high, represents ("
+		<< gridInWorldX
+		<< ","
+		<< gridInWorldY
+		<< ") and draws at ("
 		<< firstLocalX
 		<< ","
 		<< firstLocalY

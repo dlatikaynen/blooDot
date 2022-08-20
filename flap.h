@@ -7,7 +7,7 @@ typedef struct FlapAwareness {
 	int flapInWorldX; /* where in the X range of flaps am I in the world? origin center being 0 */
 	int flapInWorldY; /* where in the Y range of flaps am I in the world? origin middle being 0 */
 	int myGridLeftX;  /* which is the absolute world grid x-coordinate of my first (left) column? */
-	int myGridTopY;   /* which is the absolute worls grid y-coordinate of my first (top) row? */
+	int myGridToopY;  /* which is the absolute worls grid y-coordinate of my first (top) row? */
 	
 	int numGridUnitsWide;
 	int numGridUnitsHigh;

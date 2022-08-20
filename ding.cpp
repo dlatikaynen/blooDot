@@ -60,6 +60,12 @@ int GetDingResourceKey(Ding ding)
 	case Ding::Snow:
 		return CHUNK_KEY_DINGS_SNOW;
 
+	case Ding::ChelF:
+		return CHUNK_KEY_DINGS_CHEL_F;
+
+	case Ding::Grass:
+		return CHUNK_KEY_DINGS_GRASS;
+
 	default:
 		assert(ding != ding);
 		return -1;

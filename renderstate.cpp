@@ -313,8 +313,8 @@ void Scroll(int dx, int dy)
 				{
 					if (vertUpperLower == 1)
 					{
-						/* SW */
-						flapIndexNW = 3; flapIndexNE = 4; flapIndexSW = 6; flapIndexSE = 7;
+						/* SE */
+						flapIndexNW = 4; flapIndexNE = 5; flapIndexSW = 7; flapIndexSE = 8;
 					}
 					else
 					{
