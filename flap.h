@@ -3,6 +3,8 @@
 #include <iostream>
 #include "renderstate.h"
 
+constexpr auto const UnsignednessOffset = 0x800;
+
 typedef struct FlapAwareness {
 	int flapInWorldX; /* where in the X range of flaps am I in the world? origin center being 0 */
 	int flapInWorldY; /* where in the Y range of flaps am I in the world? origin middle being 0 */

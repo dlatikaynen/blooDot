@@ -230,8 +230,8 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 
 FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapInWorldY)
 {
-	const auto fictitiousFlapX = 0x800 + flapInWorldX;
-	const auto fictitiousFlapY = 0x800 + flapInWorldY;
+	const auto fictitiousFlapX = UnsignednessOffset + flapInWorldX;
+	const auto fictitiousFlapY = UnsignednessOffset + flapInWorldY;
 
 	// koordinate des rechten randes [5]
 	const auto rightBorderX = flapW * (fictitiousFlapX + 1);
@@ -273,14 +273,14 @@ FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapI
 	// summe innenstand und überstand erstes
 	assert((firstLocalInnerX - firstLocalX) == GRIDUNIT);
 	assert((firstLocalInnerY - firstLocalY) == GRIDUNIT);
-#endif
 
 	// summe innenstand und überstand letztes
 	assert((lastInnerX + lastOuterX) == GRIDUNIT);
 	assert((lastInnerY + lastOuterY) == GRIDUNIT);
+#endif
 
-	const auto gridInWorldX = flapInWorldX * (overCompensatedX - 1) - overCompensatedX / 2;
-	const auto gridInWorldY = flapInWorldY * (overCompensatedY) - overCompensatedY / 2;
+	const auto gridInWorldX = ceil((firstInnerX - flapW * UnsignednessOffset) / static_cast<double>(GRIDUNIT) - overCompensatedX / 2);
+	const auto gridInWorldY = ceil((firstInnerY - flapH * UnsignednessOffset) / static_cast<double>(GRIDUNIT) - overCompensatedY / 2);
 
 	// both broadcast and return this for immediate use
 	const auto awarenessEntry = &(flapAwareness[flapIndex]);

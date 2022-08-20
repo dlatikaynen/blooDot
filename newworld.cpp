@@ -43,6 +43,11 @@ bool InitializeNewWorld()
 	_Put(centerSheet, 2, 0, Ding::Schaed);
 	_Put(centerSheet, 0, -2, Ding::Snow);
 
+	_Put(centerSheet, 6, 4, Ding::Grass);
+	_Put(centerSheet, 7, 4, Ding::Grass);
+	_Put(centerSheet, 6, 5, Ding::Grass);
+	_Put(centerSheet, 7, 5, Ding::Grass);
+
 	ReplaceWorldSheet(0, 0, centerSheet);
 
 	return true;
