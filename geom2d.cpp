@@ -1,6 +1,25 @@
 #include "pch.h"
 #include "geom2d.h"
 #include "gamestate.h"
+#include <algorithm>
+
+SDL_Rect GetPolyBoundingBox(std::vector<PointInWorld>* polygonRegion)
+{
+    int minX = 0;
+    int maxX = 0;
+    int minY = 0;
+    int maxY = 0;
+
+    for (auto& point : *polygonRegion)
+    {
+        minX = std::min(point.x, minX);
+        maxX = std::max(point.x, maxX);
+        minY = std::min(point.y, minY);
+        maxY = std::max(point.y, maxY);
+    }
+
+    return { minX, minY, maxX - minX, maxY - minY };
+}
 
 /// <summary>
 /// Jordan's theorem, not optimized for the convex case
@@ -20,10 +39,7 @@ bool WorldCoordinateInRegion(std::vector<PointInWorld>* polygonRegion, int x, in
     bool inside = false;
     for (auto i = 0; i < numVertices; ++i)
     {
-#pragma warning (disable: 26451)
         const auto j = (i + 1) % numVertices;
-#pragma warning (default: 26451)
-
         const auto x0 = polyRef[i].x;
         const auto y0 = polyRef[i].y;
         const auto x1 = polyRef[j].x;

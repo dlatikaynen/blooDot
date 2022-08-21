@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ding.h"
+#include "xlations.h"
 
 DingProps GetDingDefaultProps(Ding ding)
 {
@@ -75,5 +76,57 @@ int GetDingResourceKey(Ding ding)
 	default:
 		assert(ding != ding);
 		return -1;
+	}
+}
+
+char const* GetDingName(Ding ding)
+{
+	switch (ding)
+	{
+	case Ding::BarrelIndigo:
+		return dingNameBarrelIndigo;
+
+	case Ding::BarrelWood:
+		return dingNameBarrelWood;
+
+	case Ding::BarrelLoaded:
+		return dingNameBarrelLoaded;
+
+	case Ding::FloorSlate:
+		return dingNameFloorSlate;
+
+	case Ding::FloorPurple:
+		return dingNameFloorPurple;
+
+	case Ding::FloorOchre:
+		return dingNameFloorOchre;
+
+	case Ding::FloorRock:
+		return dingNameFloorRock;
+
+	case Ding::FloorRockCracked:
+		return dingNameFloorRockCracked;
+
+	case Ding::Lettuce:
+		return dingNameLettuce;
+
+	case Ding::Schaed:
+		return dingNameSchaed;
+
+	case Ding::Snow:
+		return dingNameSnow;
+
+	case Ding::ChelF:
+		return dingNameChelF;
+
+	case Ding::Grass:
+		return dingNameGrass;
+
+	case Ding::RooofMesh:
+		return dingNameRooofMesh;
+
+	default:
+		assert(ding != ding);
+		return nullptr;
 	}
 }

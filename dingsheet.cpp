@@ -209,7 +209,7 @@ bool _FindRoomOnDingSheet(SDL_Texture* sheet, SDL_Rect* frame, Ding dingInfo)
 		<< " sheet's line number "
 		<< occupied.size()
 		<< " for "
-		<< dingInfo
+		<< GetDingName(dingInfo)
 		<< "\n";
 #endif
 

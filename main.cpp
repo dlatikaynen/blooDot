@@ -21,8 +21,9 @@ void ReportError(const char* message, const char* error)
 
 int main(int, char**)
 {
-	HuffCompress();
-	HuffDeflate();
+	//test harness
+	//HuffCompress();
+	//HuffDeflate();
 
 	/* startup */
 	const auto initResult = SDL_Init(SDL_INIT_EVERYTHING);

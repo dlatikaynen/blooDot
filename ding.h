@@ -27,3 +27,4 @@ enum Ding : unsigned short
 
 DingProps GetDingDefaultProps(Ding ding);
 int GetDingResourceKey(Ding ding);
+char const* GetDingName(Ding ding);

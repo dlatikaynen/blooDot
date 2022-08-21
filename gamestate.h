@@ -46,6 +46,7 @@ typedef struct WorldRegion
 	int RegionId;
 	std::string RegionName;
 	std::vector<PointInWorld> polygon;
+	SDL_Rect bounds;
 	WorldRegion* belongsTo = NULL;
 } WorldRegion;
 

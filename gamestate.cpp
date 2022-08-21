@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "gamestate.h"
+#include "geom2d.h"
 
 /* (0,0) is world center.
  * world data is loaded on demand, in 9 quadrants at a time
@@ -43,6 +44,7 @@ void ReplaceWorldSheet(int sheetX, int sheetY, WorldSheet* content)
 
 void AddRegion(WorldRegion regionDescriptor)
 {
+	regionDescriptor.bounds = GetPolyBoundingBox(&regionDescriptor.polygon);
 	worldRegions.push_back(regionDescriptor);
 }
 
