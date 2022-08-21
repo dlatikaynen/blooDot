@@ -18,6 +18,9 @@ DingProps GetDingDefaultProps(Ding ding)
 	case Ding::Schaed:
 		return DingProps::Mob | DingProps::Walls;
 
+	case Ding::RooofMesh:
+		return DingProps::Rooof;
+
 	default:
 		return DingProps::Floor;
 	}
@@ -65,6 +68,9 @@ int GetDingResourceKey(Ding ding)
 
 	case Ding::Grass:
 		return CHUNK_KEY_DINGS_GRASS;
+
+	case Ding::RooofMesh:
+		return CHUNK_KEY_DINGS_ROOOFTILE_MESH;
 
 	default:
 		assert(ding != ding);

@@ -21,7 +21,8 @@ enum Ding : unsigned short
 	Grass,
 	Schaed,
 	Snow,
-	ChelF
+	ChelF,
+	RooofMesh
 };
 
 DingProps GetDingDefaultProps(Ding ding);

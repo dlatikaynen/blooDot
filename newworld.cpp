@@ -38,6 +38,7 @@ bool InitializeNewWorld()
 	_Put(centerSheet, 1, -1, Ding::BarrelWood);
 	_Put(centerSheet, 0, 0, Ding::ChelF);
 	_Put(centerSheet, -1, -1, Ding::BarrelLoaded);
+	_Put(centerSheet, -1, -1, Ding::RooofMesh);
 	_Put(centerSheet, 2, 1, Ding::Grass);
 	_Put(centerSheet, -2, 0, Ding::Lettuce);
 	_Put(centerSheet, 2, 0, Ding::Schaed);

@@ -19,6 +19,7 @@ constexpr auto CHUNK_KEY_DINGS_LETTUCE = 14;
 constexpr auto CHUNK_KEY_DINGS_SCHAED = 15;
 constexpr auto CHUNK_KEY_DINGS_SNOW = 16;
 constexpr auto CHUNK_KEY_DINGS_BARREL_LOADED = 17;
+constexpr auto CHUNK_KEY_DINGS_ROOOFTILE_MESH = 18;
 
 extern void ReportError(const char*, const char*);
 
