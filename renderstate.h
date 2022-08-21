@@ -19,6 +19,10 @@ extern cairo_t* BeginTextureDrawing(SDL_Texture*);
 extern void EndTextureDrawing(SDL_Texture*, cairo_t*);
 extern void PopulateFlap(int, int, int);
 extern WorldPiece GetPieceRelative(int, int);
+extern int FlapAwarenessLeft();
+extern int FlapAwarenessRite();
+extern int FlapAwarenessUuup();
+extern int FlapAwarenessDown();
 
 bool InitializeAllFlaps(int width, int height);
 void RecomputeFlapConstellation();
@@ -39,3 +43,7 @@ SDL_Texture* _NewTexture(SDL_Renderer* renderer, bool transparentAble, bool forC
 void _SnapHorizontal(int dx);
 void _SnapVertical(int dy);
 void _Unsnap(int dx, int dy);
+void _FlapoverLeft();
+void _FlapoverRite();
+void _FlapoverDown();
+void _FlapoverUuup();

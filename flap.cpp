@@ -318,3 +318,75 @@ FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapI
 
 	return awarenessEntry;
 }
+
+int FlapAwarenessLeft()
+{
+	flapAwareness[2] = flapAwareness[1];
+	flapAwareness[5] = flapAwareness[4];
+	flapAwareness[8] = flapAwareness[7];
+	flapAwareness[1] = flapAwareness[0];
+	flapAwareness[4] = flapAwareness[3];
+	flapAwareness[7] = flapAwareness[6];
+
+	/* they're going to be repopulated */
+	flapAwareness[0] = {};
+	flapAwareness[3] = {};
+	flapAwareness[6] = {};
+
+	/* we return where the new col shall be */
+	return flapAwareness[4].flapInWorldX - 1;
+}
+
+int FlapAwarenessRite()
+{
+	flapAwareness[0] = flapAwareness[1];
+	flapAwareness[3] = flapAwareness[4];
+	flapAwareness[6] = flapAwareness[7];
+	flapAwareness[1] = flapAwareness[2];
+	flapAwareness[4] = flapAwareness[5];
+	flapAwareness[7] = flapAwareness[8];
+
+	/* they're going to be repopulated */
+	flapAwareness[2] = {};
+	flapAwareness[5] = {};
+	flapAwareness[8] = {};
+
+	/* we return where the new col shall be */
+	return flapAwareness[4].flapInWorldX + 1;
+}
+
+int FlapAwarenessUuup()
+{
+	flapAwareness[6] = flapAwareness[3];
+	flapAwareness[7] = flapAwareness[4];
+	flapAwareness[8] = flapAwareness[5];
+	flapAwareness[3] = flapAwareness[0];
+	flapAwareness[4] = flapAwareness[1];
+	flapAwareness[5] = flapAwareness[2];
+
+	/* they're going to be repopulated */
+	flapAwareness[0] = {};
+	flapAwareness[1] = {};
+	flapAwareness[2] = {};
+
+	/* we return where the new row shall be */
+	return flapAwareness[4].flapInWorldY - 1;
+}
+
+int FlapAwarenessDown()
+{
+	flapAwareness[0] = flapAwareness[3];
+	flapAwareness[1] = flapAwareness[4];
+	flapAwareness[2] = flapAwareness[5];
+	flapAwareness[3] = flapAwareness[6];
+	flapAwareness[4] = flapAwareness[7];
+	flapAwareness[5] = flapAwareness[8];
+
+	/* they're going to be repopulated */
+	flapAwareness[6] = {};
+	flapAwareness[7] = {};
+	flapAwareness[8] = {};
+
+	/* we return where the new row shall be */
+	return flapAwareness[4].flapInWorldY + 1;
+}

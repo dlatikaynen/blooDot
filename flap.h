@@ -6,17 +6,44 @@
 constexpr auto const UnsignednessOffset = 0x800;
 
 typedef struct FlapAwareness {
-	int flapInWorldX; /* where in the X range of flaps am I in the world? origin center being 0 */
-	int flapInWorldY; /* where in the Y range of flaps am I in the world? origin middle being 0 */
-	int myGridLeftX;  /* which is the absolute world grid x-coordinate of my first (left) column? */
-	int myGridToopY;  /* which is the absolute worls grid y-coordinate of my first (top) row? */
+	/// <summary>
+	/// where in the X range of flaps am I in the world? origin center being 0
+	/// </summary>
+	int flapInWorldX;
+	
+	/// <summary>
+	/// where in the Y range of flaps am I in the world? origin middle being 0
+	/// </summary>
+	int flapInWorldY; 
+
+	/// <summary>
+	/// which is the absolute world grid x-coordinate of my first (left) column?
+	/// </summary>
+	int myGridLeftX;
+
+	/// <summary>
+	/// which is the absolute worls grid y-coordinate of my first (top) row?
+	/// </summary>
+	int myGridToopY;
 	
 	int numGridUnitsWide;
 	int numGridUnitsHigh;
-	int localDrawingOffsetX; /* where to start drawing on the flap, left */
-	int localDrawingOffsetY; /* where to start drawing on the flap, top */
+
+	/// <summary>
+	/// where to start drawing on the flap, left
+	/// </summary>
+	int localDrawingOffsetX;
+
+	/// <summary>
+	/// where to start drawing on the flap, top
+	/// </summary>
+	int localDrawingOffsetY;
 } FlapAwareness;
 
 void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY);
+int FlapAwarenessLeft();
+int FlapAwarenessRite();
+int FlapAwarenessUuup();
+int FlapAwarenessDown();
 
 FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapInWorldY);

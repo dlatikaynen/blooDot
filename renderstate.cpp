@@ -8,10 +8,16 @@ extern SDL_Renderer* GameViewRenderer;
 extern int originDx;
 extern int originDy;
 
+/* and this is to decide when we need a flapover in either direction */
+int flapLocalDx = 0;
+int flapLocalDy = 0;
+
 int flapW = 0;
 int flapH = 0;
 int halfW = 0;
 int halfH = 0;
+int flapoverTresholdX = 0;
+int flapoverTresholdY = 0;
 
 SDL_Texture* flapsFloor[9];
 SDL_Texture* flapsWalls[9];
@@ -76,8 +82,10 @@ bool InitializeAllFlaps(int width, int height)
 {
 	flapW = width;
 	halfW = width / 2;
+	flapoverTresholdX = width / 3 * 2;
 	flapH = height;
 	halfH = height / 2;
+	flapoverTresholdY = height / 3 * 2;
 
 	/* the centerpiece is constantly identical to the viewport */
 	bunghole = SDL_Rect{ 0,0,width,height };
@@ -143,7 +151,7 @@ void RecomputeFlapConstellation()
 /// just a massive waste of stupidly moving 8888s
 /// So we're here to making it complicated again.
 /// </summary>
-void Scroll(int dx, int dy)
+void Scroll(const int dx, const int dy)
 {
 	const bool isHorz = dy == 0;
 	const bool isVert = dx == 0;
@@ -259,8 +267,7 @@ void Scroll(int dx, int dy)
 					}
 				}
 
-				dx += horzLeftSrc.x;
-				_Unsnap(dx, dy);
+				_Unsnap(dx + horzLeftSrc.x, dy);
 			}
 		}
 
@@ -323,8 +330,7 @@ void Scroll(int dx, int dy)
 					}
 				}
 
-				dy += vertUpperSrc.y;
-				_Unsnap(dx, dy);
+				_Unsnap(dx, dy + vertUpperSrc.y);
 			}
 		}
 
@@ -406,6 +412,38 @@ void Scroll(int dx, int dy)
 
 		break;
 	}
+
+	/* flapovers are looked at after the fact */
+	flapLocalDx += dx;
+	flapLocalDy += dy;
+	if (abs(flapLocalDx) > flapoverTresholdX)
+	{
+		if (flapLocalDx > 0)
+		{
+			_FlapoverRite();
+			flapLocalDx -= flapW;
+		}
+		else
+		{
+			_FlapoverLeft();
+			flapLocalDx += flapW;
+		}
+	}
+	else if (abs(flapLocalDy) > flapoverTresholdY)
+	{
+		/* this is an else if because we don't want to do
+		 * two flapovers at once if we're hitting a diagonal exactly. */
+		if (flapLocalDy > 0)
+		{
+			_FlapoverDown();
+			flapLocalDy -= flapH;
+		}
+		else
+		{
+			_FlapoverUuup();
+			flapLocalDy += flapH;
+		}
+	}
 }
 
 void PopulateAllFlaps()
@@ -417,32 +455,32 @@ void PopulateAllFlaps()
 	}
 }
 
-void PopulateTopRowFlaps()
+void PopulateTopRowFlaps(const int worldRow)
 {
-	PopulateFlap(0, originDx + flapWorldOffsetsX[0], originDy + flapWorldOffsetsY[0]);
-	PopulateFlap(1, originDx + flapWorldOffsetsX[1], originDy + flapWorldOffsetsY[1]);
-	PopulateFlap(2, originDx + flapWorldOffsetsX[2], originDy + flapWorldOffsetsY[2]);
+	PopulateFlap(0, flapWorldOffsetsX[0], worldRow);
+	PopulateFlap(1, flapWorldOffsetsX[1], worldRow);
+	PopulateFlap(2, flapWorldOffsetsX[2], worldRow);
 }
 
-void PopulateBottomRowFlaps()
+void PopulateBottomRowFlaps(const int worldRow)
 {
-	PopulateFlap(6, originDx + flapWorldOffsetsX[6], originDy + flapWorldOffsetsY[6]);
-	PopulateFlap(7, originDx + flapWorldOffsetsX[7], originDy + flapWorldOffsetsY[7]);
-	PopulateFlap(8, originDx + flapWorldOffsetsX[8], originDy + flapWorldOffsetsY[8]);
+	PopulateFlap(6, flapWorldOffsetsX[6], worldRow);
+	PopulateFlap(7, flapWorldOffsetsX[7], worldRow);
+	PopulateFlap(8, flapWorldOffsetsX[8], worldRow);
 }
 
-void PopulateLeftColFlaps()
-{
-	PopulateFlap(0, originDx + flapWorldOffsetsX[0], originDy + flapWorldOffsetsY[0]);
-	PopulateFlap(3, originDx + flapWorldOffsetsX[3], originDy + flapWorldOffsetsY[3]);
-	PopulateFlap(6, originDx + flapWorldOffsetsX[6], originDy + flapWorldOffsetsY[6]);
+void PopulateLeftColFlaps(const int worldColumn)
+{	
+	PopulateFlap(0, worldColumn, flapWorldOffsetsY[0]);
+	PopulateFlap(3, worldColumn, flapWorldOffsetsY[3]);
+	PopulateFlap(6, worldColumn, flapWorldOffsetsY[6]);
 }
 
-void PopulateRiteColFlaps()
+void PopulateRiteColFlaps(const int worldColumn)
 {
-	PopulateFlap(2, originDx + flapWorldOffsetsX[2], originDy + flapWorldOffsetsY[2]);
-	PopulateFlap(5, originDx + flapWorldOffsetsX[5], originDy + flapWorldOffsetsY[5]);
-	PopulateFlap(8, originDx + flapWorldOffsetsX[8], originDy + flapWorldOffsetsY[8]);
+	PopulateFlap(2, worldColumn, flapWorldOffsetsY[2]);
+	PopulateFlap(5, worldColumn, flapWorldOffsetsY[5]);
+	PopulateFlap(8, worldColumn, flapWorldOffsetsY[8]);
 }
 
 /// <summary>
@@ -450,7 +488,7 @@ void PopulateRiteColFlaps()
 /// the middle and bottom move to the top,
 /// the new bottom row is scheduled for repopulation
 /// </summary>
-void FlapoverDown()
+void _FlapoverDown()
 {
 	const auto topLft = flapIndirection[0];
 	const auto topMid = flapIndirection[1];
@@ -477,7 +515,12 @@ void FlapoverDown()
 		flapIndexSE = flapIndexSE == 7 ? 4 : 5;
 	}
 
-	PopulateBottomRowFlaps();
+#ifndef NDEBUG
+	std::cout << "Flapped over downwards\n";
+#endif
+	
+	const auto rowInWorld = FlapAwarenessDown();
+	PopulateBottomRowFlaps(rowInWorld);
 }
 
 /// <summary>
@@ -485,7 +528,7 @@ void FlapoverDown()
 /// the middle and top move to the bottom,
 /// the new top row is scheduled for repopulation
 /// </summary>
-void FlapoverUp()
+void _FlapoverUuup()
 {
 	const auto bottomLft = flapIndirection[6];
 	const auto bottomMid = flapIndirection[7];
@@ -512,7 +555,12 @@ void FlapoverUp()
 		flapIndexSE = flapIndexSE == 4 ? 7 : 8;
 	}
 
-	PopulateTopRowFlaps();
+#ifndef NDEBUG
+	std::cout << "Flapped over upwards\n";
+#endif
+
+	const auto rowInWorld = FlapAwarenessUuup();
+	PopulateTopRowFlaps(rowInWorld);
 }
 
 /// <summary>
@@ -520,7 +568,7 @@ void FlapoverUp()
 /// the middle and left move on to the right,
 /// the new leftmost column is scheduled for repopulation
 /// </summary>
-void FlapoverLeft()
+void _FlapoverLeft()
 {
 	const auto rightTop = flapIndirection[2];
 	const auto rightMid = flapIndirection[5];
@@ -547,7 +595,12 @@ void FlapoverLeft()
 		flapIndexSE = flapIndexSE == 7 ? 8 : 5;
 	}
 
-	PopulateRiteColFlaps();
+#ifndef NDEBUG
+	std::cout << "Flapped over on the port side\n";
+#endif
+
+	const auto columnInWorld = FlapAwarenessLeft();
+	PopulateLeftColFlaps(columnInWorld);
 }
 
 /// <summary>
@@ -556,7 +609,7 @@ void FlapoverLeft()
 /// the new rightmost column is scheduled for repopulation
 /// (this is the scenario depicted in the drawing)
 /// </summary>
-void FlapoverRight()
+void _FlapoverRite()
 {
 	const auto leftTop = flapIndirection[0];
 	const auto leftMid = flapIndirection[3];
@@ -583,7 +636,12 @@ void FlapoverRight()
 		flapIndexSE = flapIndexSE == 5 ? 4 : 7;
 	}
 
-	PopulateLeftColFlaps();
+#ifndef NDEBUG
+	std::cout << "Flapped over starbord\n";
+#endif
+
+	const auto columnInWorld = FlapAwarenessRite();
+	PopulateRiteColFlaps(columnInWorld);
 }
 
 void RenderFloorBung()

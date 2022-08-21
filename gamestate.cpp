@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "gamestate.h"
 #include "geom2d.h"
+#include "xlations.h"
 
 /* (0,0) is world center.
  * world data is loaded on demand, in 9 quadrants at a time
@@ -54,4 +55,22 @@ WorldPiece GetPieceRelative(int worldX, int worldY)
 	const auto pieceIndex = ((worldY + WORLD_SHEET_CENTERPOINT) * WORLD_SHEET_SIDELENGTH + worldX + WORLD_SHEET_CENTERPOINT);
 	
 	return sheet->arena[pieceIndex];
+}
+
+const char* GetRegionName(int worldX, int worldY)
+{
+	/* 1. intersect with the bounding boxes. first wins */
+	for (const auto& region : worldRegions)
+	{
+		if (PointInRect(worldX, worldY, region.bounds))
+		{
+			/* 2. now intersect with the polygon */
+			if (WorldCoordinateInRegion(&region.polygon, worldX, worldY))
+			{
+				return region.RegionName.c_str();
+			}
+		}
+	}
+
+	return literalUnknownRegion;
 }

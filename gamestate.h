@@ -55,3 +55,4 @@ void ClearWorldSheet(int sheetIndex);
 void AddRegion(WorldRegion regionDescriptor);
 void ReplaceWorldSheet(int sheetX, int sheetY, WorldSheet* content);
 WorldPiece GetPieceRelative(int worldX, int worldY);
+const char* GetRegionName(int worldX, int worldY);

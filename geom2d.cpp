@@ -25,7 +25,7 @@ SDL_Rect GetPolyBoundingBox(std::vector<PointInWorld>* polygonRegion)
 /// Jordan's theorem, not optimized for the convex case
 /// Inspired by samples found at https://stackoverflow.com/q/11716268/1132334
 /// </summary>
-bool WorldCoordinateInRegion(std::vector<PointInWorld>* polygonRegion, int x, int y)
+bool WorldCoordinateInRegion(const std::vector<PointInWorld>* polygonRegion, int x, int y)
 {
     const auto& polyRef = *polygonRegion;
     const auto numVertices = polyRef.size();
@@ -56,4 +56,19 @@ bool WorldCoordinateInRegion(std::vector<PointInWorld>* polygonRegion, int x, in
     }
 
     return inside;
+}
+
+bool PointInRect(int x, int y, SDL_Rect r)
+{
+    const auto x1 = r.x + r.w;
+    const auto y1 = r.y + r.h;
+
+    // bitwise is intentional here
+    return ((r.x < x) && (x < x1)) & ((r.y < y) && (y < y1));
+}
+
+bool PointInRect(int x, int y, int x0, int y0, int x1, int y1)
+{
+    // bitwise is intentional here, https://stackoverflow.com/a/13685281/1132334
+    return ((x0 < x) && (x < x1)) & ((y0 < y) && (y < y1));
 }

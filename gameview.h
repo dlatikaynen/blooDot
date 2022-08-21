@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include <iostream>
 
 extern bool InitializeAllFlaps(int width, int height);
 extern void PopulateAllFlaps();

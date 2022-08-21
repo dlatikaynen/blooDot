@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "gameview.h"
+#include "gamestate.h"
 #include "enums.h"
 
 /* the gameview knows where we are in the world.
@@ -24,6 +25,13 @@ bool GameviewEnterWorld()
 	}
 
 	PopulateAllFlaps();
+
+#ifndef NDEBUG
+	std::cout
+		<< ">> "
+		<< GetRegionName(0, 0)
+		<< " <<\n";
+#endif
 
 	return true;
 }
