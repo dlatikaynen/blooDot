@@ -30,6 +30,31 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 	auto worldX = leftWorldX;
 	auto worldY = myAwareness->myGridToopY;
 
+	if (SDL_SetRenderTarget(GameViewRenderer, floor) < 0)
+	{
+		const auto floorError = SDL_GetError();
+		ReportError("Could not clear floor render target", floorError);
+	}
+
+	SDL_SetRenderDrawColor(GameViewRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_RenderClear(GameViewRenderer);
+	if (SDL_SetRenderTarget(GameViewRenderer, walls) < 0)
+	{
+		const auto wallsError = SDL_GetError();
+		ReportError("Could not clear walls render target", wallsError);
+	}
+
+	SDL_SetRenderDrawColor(GameViewRenderer, 0, 0, 0, SDL_ALPHA_TRANSPARENT);
+	SDL_RenderClear(GameViewRenderer);
+	if (SDL_SetRenderTarget(GameViewRenderer, rooof) < 0)
+	{
+		const auto rooofError = SDL_GetError();
+		ReportError("Could not clear rooof render target", rooofError);
+	}
+
+	SDL_SetRenderDrawColor(GameViewRenderer, 0, 0, 0, SDL_ALPHA_TRANSPARENT);
+	SDL_RenderClear(GameViewRenderer);
+
 #ifndef NDEBUG
 	const auto drawingSink = BeginTextureDrawing(debugFlap);
 	cairo_set_source_rgba(drawingSink, 0, 0, 0, 0);

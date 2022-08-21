@@ -651,22 +651,22 @@ void RenderFloorBung()
 
 void RenderFloorVert()
 {
-	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndicesVert[vertUpperLower]], &vertUpperSrc, &vertUpperDst);
-	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndicesVert[vertUpperLower + 1]], &vertLowerSrc, &vertLowerDst);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndirection[flapIndicesVert[vertUpperLower]]], &vertUpperSrc, &vertUpperDst);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndirection[flapIndicesVert[vertUpperLower + 1]]], &vertLowerSrc, &vertLowerDst);
 }
 
 void RenderFloorHorz()
 {
-	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndicesHorz[horzLeftRight]], &horzLeftSrc, &horzLeftDst);
-	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndicesHorz[horzLeftRight + 1]], &horzRiteSrc, &horzRiteDst);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndirection[flapIndicesHorz[horzLeftRight]]], &horzLeftSrc, &horzLeftDst);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndirection[flapIndicesHorz[horzLeftRight + 1]]], &horzRiteSrc, &horzRiteDst);
 }
 
 void RenderFloorQuart()
 {
-	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndexNW], &quadrantNWSrc, &quadrantNWDst);
-	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndexNE], &quadrantNESrc, &quadrantNEDst);
-	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndexSW], &quadrantSWSrc, &quadrantSWDst);
-	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndexSE], &quadrantSESrc, &quadrantSEDst);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndirection[flapIndexNW]], &quadrantNWSrc, &quadrantNWDst);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndirection[flapIndexNE]], &quadrantNESrc, &quadrantNEDst);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndirection[flapIndexSW]], &quadrantSWSrc, &quadrantSWDst);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndirection[flapIndexSE]], &quadrantSESrc, &quadrantSEDst);
 }
 
 void RenderMobs()
@@ -682,18 +682,18 @@ void RenderWallsAndRooofBung()
 
 void RenderWallsAndRooofVert()
 {
-	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndicesVert[vertUpperLower]], &vertUpperSrc, &vertUpperDst);
-	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndicesVert[vertUpperLower + 1]], &vertLowerSrc, &vertLowerDst);
-	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndicesVert[vertUpperLower]], &vertUpperSrc, &vertUpperDst);
-	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndicesVert[vertUpperLower + 1]], &vertLowerSrc, &vertLowerDst);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndirection[flapIndicesVert[vertUpperLower]]], &vertUpperSrc, &vertUpperDst);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndirection[flapIndicesVert[vertUpperLower + 1]]], &vertLowerSrc, &vertLowerDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndirection[flapIndicesVert[vertUpperLower + 1]]], &vertLowerSrc, &vertLowerDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndirection[flapIndicesVert[vertUpperLower]]], &vertUpperSrc, &vertUpperDst);
 }
 
 void RenderWallsAndRooofHorz()
 {
-	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndicesHorz[horzLeftRight]], &horzLeftSrc, &horzLeftDst);
-	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndicesHorz[horzLeftRight + 1]], &horzRiteSrc, &horzRiteDst);
-	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndicesHorz[horzLeftRight]], &horzLeftSrc, &horzLeftDst);
-	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndicesHorz[horzLeftRight + 1]], &horzRiteSrc, &horzRiteDst);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndirection[flapIndicesHorz[horzLeftRight]]], &horzLeftSrc, &horzLeftDst);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndirection[flapIndicesHorz[horzLeftRight + 1]]], &horzRiteSrc, &horzRiteDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndirection[flapIndicesHorz[horzLeftRight]]], &horzLeftSrc, &horzLeftDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndirection[flapIndicesHorz[horzLeftRight + 1]]], &horzRiteSrc, &horzRiteDst);
 }
 
 void RenderWallsAndRooofQuart()
@@ -709,14 +709,14 @@ void RenderWallsAndRooofQuart()
 	assert(quadrantNWSrc.h + quadrantSWSrc.h == flapH);
 	assert(quadrantNESrc.h + quadrantSESrc.h == flapH);
 
-	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndexNW], &quadrantNWSrc, &quadrantNWDst);
-	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndexNE], &quadrantNESrc, &quadrantNEDst);
-	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndexSW], &quadrantSWSrc, &quadrantSWDst);
-	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndexSE], &quadrantSESrc, &quadrantSEDst);
-	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndexNW], &quadrantNWSrc, &quadrantNWDst);
-	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndexNE], &quadrantNESrc, &quadrantNEDst);
-	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndexSW], &quadrantSWSrc, &quadrantSWDst);
-	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndexSE], &quadrantSESrc, &quadrantSEDst);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndirection[flapIndexNW]], &quadrantNWSrc, &quadrantNWDst);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndirection[flapIndexNE]], &quadrantNESrc, &quadrantNEDst);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndirection[flapIndexSW]], &quadrantSWSrc, &quadrantSWDst);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndirection[flapIndexSE]], &quadrantSESrc, &quadrantSEDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndirection[flapIndexNW]], &quadrantNWSrc, &quadrantNWDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndirection[flapIndexNE]], &quadrantNESrc, &quadrantNEDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndirection[flapIndexSW]], &quadrantSWSrc, &quadrantSWDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndirection[flapIndexSE]], &quadrantSESrc, &quadrantSEDst);
 }
 
 void RenderstateTeardown()

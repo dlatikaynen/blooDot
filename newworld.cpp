@@ -52,6 +52,29 @@ bool InitializeNewWorld()
 	_Put(centerSheet, -10, 0, Ding::Lettuce);
 	_Put(centerSheet, 8, 0, Ding::Lettuce);
 
+	auto y = 2;
+	for (auto i = 10; i < 120; ++i)
+	{
+		if (i % 5 == 0)
+		{
+			++y;
+		}
+
+		_Put(centerSheet, i, y, Ding::Lettuce);
+	}
+
+	y = 2;
+	for (auto i = -10; i > -120; --i)
+	{
+		if (i % 5 == 0)
+		{
+			--y;
+		}
+
+		_Put(centerSheet, i, y, Ding::Schaed);
+	}
+
+
 	ReplaceWorldSheet(0, 0, centerSheet);
 
 	return true;
