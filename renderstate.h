@@ -23,6 +23,8 @@ extern int FlapAwarenessLeft();
 extern int FlapAwarenessRite();
 extern int FlapAwarenessUuup();
 extern int FlapAwarenessDown();
+extern int GetCurrentBungRow();
+extern int GetCurrentBungCol();
 
 bool InitializeAllFlaps(int width, int height);
 void RecomputeFlapConstellation();

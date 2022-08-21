@@ -59,7 +59,9 @@ WorldPiece GetPieceRelative(int worldX, int worldY)
 
 const char* GetRegionName(int worldX, int worldY)
 {
-	/* 1. intersect with the bounding boxes. first wins */
+	/* 1. intersect with the bounding boxes. first wins
+	 *    if it has a fitting polygon, so overlapping regions
+	 *    would be matched in the order of their adding to the world */
 	for (const auto& region : worldRegions)
 	{
 		if (PointInRect(worldX, worldY, region.bounds))

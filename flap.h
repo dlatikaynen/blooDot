@@ -45,5 +45,7 @@ int FlapAwarenessLeft();
 int FlapAwarenessRite();
 int FlapAwarenessUuup();
 int FlapAwarenessDown();
+int GetCurrentBungRow();
+int GetCurrentBungCol();
 
 FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapInWorldY);

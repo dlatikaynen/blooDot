@@ -457,30 +457,38 @@ void PopulateAllFlaps()
 
 void PopulateTopRowFlaps(const int worldRow)
 {
-	PopulateFlap(0, flapWorldOffsetsX[0], worldRow);
-	PopulateFlap(1, flapWorldOffsetsX[1], worldRow);
-	PopulateFlap(2, flapWorldOffsetsX[2], worldRow);
+	const auto medianCol = GetCurrentBungCol();
+
+	PopulateFlap(0, medianCol - 1, worldRow);
+	PopulateFlap(1, medianCol, worldRow);
+	PopulateFlap(2, medianCol + 1, worldRow);
 }
 
 void PopulateBottomRowFlaps(const int worldRow)
 {
-	PopulateFlap(6, flapWorldOffsetsX[6], worldRow);
-	PopulateFlap(7, flapWorldOffsetsX[7], worldRow);
-	PopulateFlap(8, flapWorldOffsetsX[8], worldRow);
+	const auto medianCol = GetCurrentBungCol();
+
+	PopulateFlap(6, medianCol - 1, worldRow);
+	PopulateFlap(7, medianCol, worldRow);
+	PopulateFlap(8, medianCol + 1, worldRow);
 }
 
 void PopulateLeftColFlaps(const int worldColumn)
 {	
-	PopulateFlap(0, worldColumn, flapWorldOffsetsY[0]);
-	PopulateFlap(3, worldColumn, flapWorldOffsetsY[3]);
-	PopulateFlap(6, worldColumn, flapWorldOffsetsY[6]);
+	const auto medianRow = GetCurrentBungRow();
+	
+	PopulateFlap(0, worldColumn, medianRow - 1);
+	PopulateFlap(3, worldColumn, medianRow);
+	PopulateFlap(6, worldColumn, medianRow + 1);
 }
 
 void PopulateRiteColFlaps(const int worldColumn)
 {
-	PopulateFlap(2, worldColumn, flapWorldOffsetsY[2]);
-	PopulateFlap(5, worldColumn, flapWorldOffsetsY[5]);
-	PopulateFlap(8, worldColumn, flapWorldOffsetsY[8]);
+	const auto medianRow = GetCurrentBungRow();
+
+	PopulateFlap(2, worldColumn, medianRow - 1);
+	PopulateFlap(5, worldColumn, medianRow);
+	PopulateFlap(8, worldColumn, medianRow + 1);
 }
 
 /// <summary>
@@ -646,7 +654,7 @@ void _FlapoverRite()
 
 void RenderFloorBung()
 {	
-	SDL_RenderCopy(GameViewRenderer, flapsFloor[BUNGHOLE], &bunghole, &bunghole);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndirection[BUNGHOLE]], &bunghole, &bunghole);
 }
 
 void RenderFloorVert()
@@ -676,8 +684,8 @@ void RenderMobs()
 
 void RenderWallsAndRooofBung()
 {
-	SDL_RenderCopy(GameViewRenderer, flapsWalls[BUNGHOLE], &bunghole, &bunghole);
-	SDL_RenderCopy(GameViewRenderer, flapsRooof[BUNGHOLE], &bunghole, &bunghole);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndirection[BUNGHOLE]], &bunghole, &bunghole);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndirection[BUNGHOLE]], &bunghole, &bunghole);
 }
 
 void RenderWallsAndRooofVert()

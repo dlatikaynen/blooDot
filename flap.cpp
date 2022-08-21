@@ -415,3 +415,13 @@ int FlapAwarenessDown()
 	/* we return where the new row shall be */
 	return flapAwareness[4].flapInWorldY + 1;
 }
+
+int GetCurrentBungCol()
+{
+	return flapAwareness[BUNGHOLE].flapInWorldX;
+}
+
+int GetCurrentBungRow()
+{
+	return flapAwareness[BUNGHOLE].flapInWorldY;
+}
