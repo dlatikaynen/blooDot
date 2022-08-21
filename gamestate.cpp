@@ -74,5 +74,5 @@ const char* GetRegionName(int worldX, int worldY)
 		}
 	}
 
-	return literalUnknownRegion;
+	return regionNameUnknown;
 }

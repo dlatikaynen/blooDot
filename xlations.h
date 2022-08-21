@@ -1,6 +1,7 @@
 #pragma once
 
 constexpr char const* literalAlienMainMenuLabel = "MainMenu";
+constexpr char const* literalAlienSettingsMenuLabel = "Settings";
 constexpr char const* literalManufacturer = "Copyright zOzz FlaminginSarjakuvatOj";
 constexpr char const* literalMenuContinue = "Continue";
 constexpr char const* literalMenuLoad = "Load";
@@ -9,9 +10,12 @@ constexpr char const* literalMenuLocalMulti = "Local multiplayer";
 constexpr char const* literalMenuNetMulti = "Net multiplayer";
 constexpr char const* literalMenuSettings = "Settings";
 constexpr char const* literalMenuExit = "Exit";
-constexpr char const* literalUnknownRegion = "Here be dragons";
+constexpr char const* literalMenuBack = "Back";
+constexpr char const* literalSettingsMenuScreensize = "Screen size";
+constexpr char const* literalSettingsMenuControls = "Controls";
 
-constexpr char const* regionNameScullery = "The Skullery";
+constexpr char const* regionNameUnknown = "Here be dragons";
+constexpr char const* regionNameScullery = "The Scullery";
 
 constexpr char const* dingNameBarrelIndigo = "Premium cask";
 constexpr char const* dingNameBarrelWood = "Wooden cask";

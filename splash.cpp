@@ -239,8 +239,7 @@ bool SplashLoop(SDL_Renderer* renderer)
 				case SDL_SCANCODE_RETURN2:
 				case SDL_SCANCODE_KP_ENTER:
 				case SDL_SCANCODE_SPACE:
-					splashRunning = false;
-					keepRunning = menuSelection != MMI_EXIT;
+					keepRunning = _EnterAndHandleMenu(renderer);
 					break;
 
 				case SDL_SCANCODE_ESCAPE:
@@ -414,4 +413,29 @@ void Bounce(SDL_Rect* srcRect)
 
 	(*srcRect).x = (int)round(backgroundPosX);
 	(*srcRect).y = (int)round(backgroundPosY);
+}
+
+bool _EnterAndHandleMenu(SDL_Renderer* renderer)
+{
+	switch (menuSelection)
+	{
+	case MMI_SETTINGS:
+		_EnterAndHandleSettings(renderer);
+		break;
+
+	case MMI_EXIT:
+		splashRunning = false;
+		return false;
+
+	default:
+		splashRunning = false;
+		break;
+	}
+
+	return true;
+}
+
+void _EnterAndHandleSettings(SDL_Renderer* renderer)
+{
+	SettingsMenuLoop(renderer);
 }

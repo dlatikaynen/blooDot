@@ -26,6 +26,12 @@ enum MainMenuItems {
 	MMI_EXIT
 };
 
+enum SettingsMenuItems {
+	SMI_BACK,
+	SMI_SCREENSIZE,
+	SMI_CONTROLS
+};
+
 enum DingProps : unsigned char
 {
 	Default = 0,
