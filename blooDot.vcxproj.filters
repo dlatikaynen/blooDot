@@ -393,6 +393,15 @@
     <ClInclude Include="flap.h">
       <Filter>_Headers</Filter>
     </ClInclude>
+    <ClInclude Include="geom2d.h">
+      <Filter>_Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="huff-deco.h">
+      <Filter>_Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="huff-comp.h">
+      <Filter>_Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -441,6 +450,15 @@
       <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ding.cpp">
+      <Filter>_Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="geom2d.cpp">
+      <Filter>_Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="huff-comp.cpp">
+      <Filter>_Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="huff-deco.cpp">
       <Filter>_Source Files</Filter>
     </ClCompile>
   </ItemGroup>

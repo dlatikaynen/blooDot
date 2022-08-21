@@ -48,6 +48,9 @@ bool InitializeNewWorld()
 	_Put(centerSheet, 6, 5, Ding::Grass);
 	_Put(centerSheet, 7, 5, Ding::Grass);
 
+	_Put(centerSheet, -10, 0, Ding::Lettuce);
+	_Put(centerSheet, 8, 0, Ding::Lettuce);
+
 	ReplaceWorldSheet(0, 0, centerSheet);
 
 	return true;

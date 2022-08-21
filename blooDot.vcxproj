@@ -186,6 +186,9 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClInclude Include="flap.h" />
     <ClInclude Include="gamestate.h" />
     <ClInclude Include="gameview.h" />
+    <ClInclude Include="geom2d.h" />
+    <ClInclude Include="huff-comp.h" />
+    <ClInclude Include="huff-deco.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="newworld.h" />
     <ClInclude Include="orchestrator.h" />
@@ -199,6 +202,9 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClCompile Include="flap.cpp" />
     <ClCompile Include="gamestate.cpp" />
     <ClCompile Include="gameview.cpp" />
+    <ClCompile Include="geom2d.cpp" />
+    <ClCompile Include="huff-comp.cpp" />
+    <ClCompile Include="huff-deco.cpp" />
     <ClCompile Include="newworld.cpp" />
     <ClCompile Include="renderstate.cpp" />
     <ClCompile Include="scripture.cpp" />

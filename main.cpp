@@ -4,6 +4,8 @@
 #include "scripture.h"
 #include "splash.h"
 #include "orchestrator.h"
+#include "huff-comp.h"
+#include "huff-deco.h"
 
 const int ExitCodeNormally = 0x00;
 const int ExitCodeSDLInitFail = 0x55;
@@ -19,6 +21,9 @@ void ReportError(const char* message, const char* error)
 
 int main(int, char**)
 {
+	HuffCompress();
+	HuffDeflate();
+
 	/* startup */
 	const auto initResult = SDL_Init(SDL_INIT_EVERYTHING);
 	if (initResult < 0)
