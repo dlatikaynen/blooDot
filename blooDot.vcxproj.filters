@@ -31,6 +31,12 @@
     <Filter Include="Resource Files\dings">
       <UniqueIdentifier>{991bd455-6340-420b-829c-7106346a443a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_Headers\ui">
+      <UniqueIdentifier>{a3fa8ee6-ef1b-4a02-ad83-56f4c507ced6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\ui">
+      <UniqueIdentifier>{98ccbfb1-caaf-4618-946b-1a05fda65f64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL\include\begin_code.h">
@@ -312,9 +318,6 @@
     <ClInclude Include="resource.h">
       <Filter>_Headers</Filter>
     </ClInclude>
-    <ClInclude Include="splash.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
     <ClInclude Include="dexassy.h">
       <Filter>_Headers</Filter>
     </ClInclude>
@@ -360,12 +363,6 @@
     <ClInclude Include="main.h">
       <Filter>_Headers</Filter>
     </ClInclude>
-    <ClInclude Include="dialogcontrols.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="xlations.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
     <ClInclude Include="settings.h">
       <Filter>_Headers</Filter>
     </ClInclude>
@@ -403,7 +400,19 @@
       <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-settings.h">
-      <Filter>_Headers</Filter>
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="menu-settings-screen.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="xlations.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogcontrols.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="splash.h">
+      <Filter>_Headers\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -416,9 +425,6 @@
     <ClCompile Include="orchestrator.cpp">
       <Filter>_Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="splash.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="dexassy.cpp">
       <Filter>_Source Files</Filter>
     </ClCompile>
@@ -426,9 +432,6 @@
       <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="drawing.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogcontrols.cpp">
       <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="settings.cpp">
@@ -464,8 +467,17 @@
     <ClCompile Include="huff-deco.cpp">
       <Filter>_Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dialogcontrols.cpp">
+      <Filter>_Source Files\ui</Filter>
+    </ClCompile>
     <ClCompile Include="menu-settings.cpp">
-      <Filter>_Source Files</Filter>
+      <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="splash.cpp">
+      <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="menu-settings-screen.cpp">
+      <Filter>_Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

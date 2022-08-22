@@ -1,7 +1,8 @@
 #pragma once
 
-constexpr char const* literalAlienMainMenuLabel = "MainMenu";
-constexpr char const* literalAlienSettingsMenuLabel = "Settings";
+constexpr char const* literalAlienMainMenuLabel = "MejnMenju";
+constexpr char const* literalAlienSettingsMenuLabel = "Setins";
+constexpr char const* literalAlienScreenSettingsMenuLabel = "ScrinSaiz";
 constexpr char const* literalManufacturer = "Copyright zOzz FlaminginSarjakuvatOj";
 constexpr char const* literalMenuContinue = "Continue";
 constexpr char const* literalMenuLoad = "Load";
@@ -11,6 +12,9 @@ constexpr char const* literalMenuNetMulti = "Net multiplayer";
 constexpr char const* literalMenuSettings = "Settings";
 constexpr char const* literalMenuExit = "Exit";
 constexpr char const* literalMenuBack = "Back";
+constexpr char const* literalMenuItemUp = "Up";
+constexpr char const* literalMenuItemDown = "Down";
+constexpr char const* literalMenuCancel = "Cancel";
 constexpr char const* literalSettingsMenuScreensize = "Screen size";
 constexpr char const* literalSettingsMenuControls = "Controls";
 

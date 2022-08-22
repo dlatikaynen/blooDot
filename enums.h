@@ -32,6 +32,16 @@ enum SettingsMenuItems {
 	SMI_CONTROLS
 };
 
+enum ScreenSettingsMenuItems {
+	SSMI_CANCEL,
+	SSMI_VIDEOMODE_GOD,
+	SSMI_VIDEOMODE_SVGA,
+	SSMI_VIDEOMODE_EGA,
+	SSMI_VIDEOMODE_HERC,
+	SSMI_VIDEOMODE_X,
+	SSMI_VIDEOMODE_FULLSCREEN
+};
+
 enum DingProps : unsigned char
 {
 	Default = 0,

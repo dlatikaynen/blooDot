@@ -1,5 +1,6 @@
 #include "pch.h"
-#include "menu-settings.h"
+#include "menu-settings-screen.h"
+
 #include "scripture.h"
 #include "drawing.h"
 #include "dialogcontrols.h"
@@ -9,73 +10,73 @@
 
 extern SettingsStruct Settings;
 
-SDL_Event settingsMenuEvent;
-bool settingsMenuRunning = false;
-SettingsMenuItems menuSelection = SMI_BACK;
+SDL_Event screenSettingsMenuEvent;
+bool screenSettingsMenuRunning = false;
+ScreenSettingsMenuItems menuSelection = SSMI_CANCEL;
 
-bool SettingsMenuLoop(SDL_Renderer* renderer)
+bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 {
-	settingsMenuRunning = true;
+	screenSettingsMenuRunning = true;
 
 	SDL_Rect outerMenuRect{ 150,45,340,390 };
 	SDL_Rect titleRect{ 0,0,0,0 };
-	SDL_Rect backRect{ 0,0,0,0 };
-	SDL_Rect screensizeRect{ 0,0,0,0 };
-	SDL_Rect controlsRect{ 0,0,0,0 };
+	SDL_Rect cancelRect{ 0,0,0,0 };
+	SDL_Rect uuupRect{ 0,0,0,0 };
+	SDL_Rect downRect{ 0,0,0,0 };
 
 	const auto titleTexture = RenderText(
 		renderer,
 		&titleRect,
 		FONT_KEY_ALIEN,
 		26,
-		literalAlienSettingsMenuLabel,
+		literalAlienScreenSettingsMenuLabel,
 		{ 250,200,200,222 }
 	);
 
 	/* menu item text */
-	const auto backTexture = RenderText(
+	const auto cancelTexture = RenderText(
 		renderer,
-		&backRect,
+		&cancelRect,
 		FONT_KEY_DIALOG,
 		23,
-		literalMenuBack,
+		literalMenuCancel,
 		{ 250, 230, 230, 245 }
 	);
 
-	const auto screensizeTexture = RenderText(
+	const auto uuupTexture = RenderText(
 		renderer,
-		&screensizeRect,
+		&uuupRect,
 		FONT_KEY_DIALOG,
 		23,
-		literalSettingsMenuScreensize,
+		literalMenuItemUp,
 		{ 250, 230, 230, 245 }
 	);
 
-	const auto controlsTexture = RenderText(
+	const auto downTexture = RenderText(
 		renderer,
-		&controlsRect,
+		&downRect,
 		FONT_KEY_DIALOG,
 		23,
-		literalSettingsMenuControls,
+		literalMenuItemDown,
 		{ 250, 230, 230, 245 }
 	);
 
 	unsigned short frame = 0L;
-	while (settingsMenuRunning)
+	while (screenSettingsMenuRunning)
 	{
-		while (SDL_PollEvent(&settingsMenuEvent) != 0)
+		while (SDL_PollEvent(&screenSettingsMenuEvent) != 0)
 		{
-			switch (settingsMenuEvent.type)
+			switch (screenSettingsMenuEvent.type)
 			{
 			case SDL_KEYDOWN:
-				switch (settingsMenuEvent.key.keysym.scancode)
+				switch (screenSettingsMenuEvent.key.keysym.scancode)
 				{
 				case SDL_SCANCODE_UP:
 				case SDL_SCANCODE_KP_8:
 				case SDL_SCANCODE_W:
-					if (menuSelection != SMI_BACK)
+					if (menuSelection != SSMI_CANCEL)
 					{
-						menuSelection = static_cast<SettingsMenuItems>(menuSelection - 1);
+						menuSelection = static_cast<ScreenSettingsMenuItems>(menuSelection - 1);
 					}
 
 					break;
@@ -83,32 +84,32 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 				case SDL_SCANCODE_DOWN:
 				case SDL_SCANCODE_KP_2:
 				case SDL_SCANCODE_S:
-					if (menuSelection != SMI_CONTROLS)
+					if (menuSelection != SSMI_VIDEOMODE_EGA)
 					{
-						menuSelection = static_cast<SettingsMenuItems>(menuSelection + 1);
+						menuSelection = static_cast<ScreenSettingsMenuItems>(menuSelection + 1);
 					}
 
 					break;
 
 				case SDL_SCANCODE_PAGEDOWN:
 				case SDL_SCANCODE_END:
-					menuSelection = SMI_CONTROLS;
+					menuSelection = SSMI_VIDEOMODE_FULLSCREEN;
 					break;
 
 				case SDL_SCANCODE_PAGEUP:
 				case SDL_SCANCODE_HOME:
-					menuSelection = SMI_BACK;
+					menuSelection = SSMI_VIDEOMODE_GOD;
 					break;
 
 				case SDL_SCANCODE_RETURN:
 				case SDL_SCANCODE_RETURN2:
 				case SDL_SCANCODE_KP_ENTER:
 				case SDL_SCANCODE_SPACE:
-					settingsMenuRunning = _EnterAndHandleSettingsMenu(renderer);
+					screenSettingsMenuRunning = false;
 					break;
 
 				case SDL_SCANCODE_ESCAPE:
-					settingsMenuRunning = false;
+					screenSettingsMenuRunning = false;
 					break;
 				}
 
@@ -119,7 +120,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 		if (SDL_RenderClear(renderer) < 0)
 		{
 			const auto clearError = IMG_GetError();
-			ReportError("Failed to clear the settings menu screen", clearError);
+			ReportError("Failed to clear the screen settings menu screen", clearError);
 		}
 
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BlendMode::SDL_BLENDMODE_BLEND);
@@ -129,10 +130,10 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 		if (SDL_RenderDrawRect(renderer, &outerMenuRect) < 0)
 		{
 			const auto drawRectError = SDL_GetError();
-			ReportError("Failed to draw settings menu panel border", drawRectError);
-			settingsMenuRunning = false;
+			ReportError("Failed to draw screen settings menu panel border", drawRectError);
+			screenSettingsMenuRunning = false;
 		};
-		
+
 		DrawLabel(renderer, 286, 54, titleTexture, &titleRect);
 
 		const auto drawingTexture = BeginRenderDrawing(renderer);
@@ -141,7 +142,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 			const auto drawingSink = GetDrawingSink();
 			const int stride = 46;
 			const int backGap = stride / 2;
-			SettingsMenuItems itemToDraw = SMI_BACK;
+			ScreenSettingsMenuItems itemToDraw = SSMI_CANCEL;
 			for (auto y = 94; y < 250; y += stride)
 			{
 				DrawButton(drawingSink, 195, y, 250, 42, itemToDraw == menuSelection);
@@ -151,19 +152,19 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 					DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
 				}
 
-				if(itemToDraw == SMI_BACK) 
+				if (itemToDraw == SSMI_CANCEL)
 				{
 					y += backGap;
 				}
 
-				itemToDraw = static_cast<SettingsMenuItems>(itemToDraw + 1);
+				itemToDraw = static_cast<ScreenSettingsMenuItems>(itemToDraw + 1);
 			}
 
 			EndRenderDrawing(renderer, drawingTexture);
 
-			DrawLabel(renderer, 235, 100 + 0 * stride + 0 * backGap, backTexture, &backRect);
-			DrawLabel(renderer, 235, 100 + 1 * stride + 1 * backGap, screensizeTexture, &screensizeRect);
-			DrawLabel(renderer, 235, 100 + 2 * stride + 1 * backGap, controlsTexture, &controlsRect);
+			DrawLabel(renderer, 235, 100 + 0 * stride + 0 * backGap, cancelTexture, &cancelRect);
+			DrawLabel(renderer, 235, 100 + 1 * stride + 1 * backGap, uuupTexture, &uuupRect);
+			DrawLabel(renderer, 235, 100 + 2 * stride + 1 * backGap, downTexture, &downRect);
 		}
 
 		SDL_RenderPresent(renderer);
@@ -171,25 +172,5 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 		++frame;
 	}
 
-	return settingsMenuRunning;
-}
-
-bool _EnterAndHandleSettingsMenu(SDL_Renderer* renderer)
-{
-	switch (menuSelection)
-	{
-	case SMI_SCREENSIZE:
-		_EnterAndHandleScreenSettings(renderer);
-		break;
-
-	default:
-		return false;
-	}
-
-	return true;
-}
-
-void _EnterAndHandleScreenSettings(SDL_Renderer* renderer)
-{
-	ScreenSettingsMenuLoop(renderer);
+	return screenSettingsMenuRunning;
 }
