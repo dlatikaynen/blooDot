@@ -21,8 +21,7 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 	SDL_Rect outerMenuRect{ 150,45,340,390 };
 	SDL_Rect titleRect{ 0,0,0,0 };
 	SDL_Rect cancelRect{ 0,0,0,0 };
-	SDL_Rect uuupRect{ 0,0,0,0 };
-	SDL_Rect downRect{ 0,0,0,0 };
+	SDL_Rect hintRect{ 0,0,0,0 };
 
 	const auto titleTexture = RenderText(
 		renderer,
@@ -43,21 +42,13 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 		{ 250, 230, 230, 245 }
 	);
 
-	const auto uuupTexture = RenderText(
+	/* explanation of why the settings window itself does not change */
+	const auto hintTexture = RenderText(
 		renderer,
-		&uuupRect,
-		FONT_KEY_DIALOG,
-		23,
-		literalMenuItemUp,
-		{ 250, 230, 230, 245 }
-	);
-
-	const auto downTexture = RenderText(
-		renderer,
-		&downRect,
-		FONT_KEY_DIALOG,
-		23,
-		literalMenuItemDown,
+		&hintRect,
+		FONT_KEY_TITLE,
+		13,
+		literalSettingsMenuScreensizeHint,
 		{ 250, 230, 230, 245 }
 	);
 
@@ -143,13 +134,29 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 			const int stride = 46;
 			const int backGap = stride / 2;
 			ScreenSettingsMenuItems itemToDraw = SSMI_CANCEL;
-			for (auto y = 94; y < 250; y += stride)
+			for (auto y = 94; y < 200; y += stride)
 			{
-				DrawButton(drawingSink, 195, y, 250, 42, itemToDraw == menuSelection);
+				DrawButton(
+					drawingSink,
+					195,
+					y,
+					250,
+					itemToDraw > SSMI_CANCEL ? 232 : 42,
+					itemToDraw == menuSelection
+				);
+
 				if (itemToDraw == menuSelection)
 				{
-					DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);
-					DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
+					if (menuSelection == SSMI_CANCEL)
+					{
+						DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);
+						DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
+					}
+					else
+					{
+						DrawChevron(drawingSink, 195 - 9, y + 83, true, frame);
+						DrawChevron(drawingSink, 195 + 250 + 9, y + 83, false, frame);
+					}
 				}
 
 				if (itemToDraw == SSMI_CANCEL)
@@ -163,8 +170,11 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 			EndRenderDrawing(renderer, drawingTexture);
 
 			DrawLabel(renderer, 235, 100 + 0 * stride + 0 * backGap, cancelTexture, &cancelRect);
+			/*
 			DrawLabel(renderer, 235, 100 + 1 * stride + 1 * backGap, uuupTexture, &uuupRect);
 			DrawLabel(renderer, 235, 100 + 2 * stride + 1 * backGap, downTexture, &downRect);
+			*/
+			DrawLabel(renderer, 235, 400, hintTexture, &hintRect);
 		}
 
 		SDL_RenderPresent(renderer);

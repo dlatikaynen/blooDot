@@ -17,6 +17,7 @@ constexpr char const* literalMenuItemDown = "Down";
 constexpr char const* literalMenuCancel = "Cancel";
 constexpr char const* literalSettingsMenuScreensize = "Screen size";
 constexpr char const* literalSettingsMenuControls = "Controls";
+constexpr char const* literalSettingsMenuScreensizeHint = "This setting will only affect the game window.\r\nSetting does not apply to the launcher (and this screen).";
 
 constexpr char const* regionNameUnknown = "Here be dragons";
 constexpr char const* regionNameScullery = "The Scullery";

@@ -114,13 +114,13 @@ SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_Rect* frame, int fontKey, in
 	SDL_Texture* textTexture = NULL;
 
 	const auto font = GetFont(fontKey);
-	if(TTF_SetFontSize(dialogFont, sizePt) < 0)
+	if(TTF_SetFontSize(font, sizePt) < 0)
 	{ 
 		const auto sizeError = TTF_GetError();
 		ReportError("Failed to set font size", sizeError);
 	}
 
-	const auto textSurface = TTF_RenderUTF8_Blended(font, text, color);
+	const auto textSurface = TTF_RenderUTF8_Blended_Wrapped(font, text, color, 0);
 
 	if (textSurface)
 	{
