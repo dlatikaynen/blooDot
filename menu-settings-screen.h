@@ -6,3 +6,5 @@
 #include "splash.h"
 
 bool ScreenSettingsMenuLoop(SDL_Renderer*);
+
+void _SelectionFromSettings();

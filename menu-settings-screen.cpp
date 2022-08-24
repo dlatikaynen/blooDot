@@ -16,6 +16,7 @@ ScreenSettingsMenuItems menuSelection = SSMI_CANCEL;
 
 bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 {
+	_SelectionFromSettings();
 	screenSettingsMenuRunning = true;
 
 	SDL_Rect outerMenuRect{ 150,45,340,390 };
@@ -49,7 +50,16 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 		FONT_KEY_TITLE,
 		13,
 		literalSettingsMenuScreensizeHint,
-		{ 250, 230, 230, 245 }
+		{ 250, 250, 250, 255 }
+	);
+
+	const auto hintShadow = RenderText(
+		renderer,
+		&hintRect,
+		FONT_KEY_TITLE,
+		13,
+		literalSettingsMenuScreensizeHint,
+		{ 65, 56, 56, 200 }
 	);
 
 	unsigned short frame = 0L;
@@ -141,7 +151,7 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 					195,
 					y,
 					250,
-					itemToDraw > SSMI_CANCEL ? 232 : 42,
+					itemToDraw > SSMI_CANCEL ? 220 : 42,
 					itemToDraw == menuSelection
 				);
 
@@ -154,8 +164,8 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 					}
 					else
 					{
-						DrawChevron(drawingSink, 195 - 9, y + 83, true, frame);
-						DrawChevron(drawingSink, 195 + 250 + 9, y + 83, false, frame);
+						DrawChevron(drawingSink, 195 - 9, y + 105, true, frame);
+						DrawChevron(drawingSink, 195 + 250 + 9, y + 105, false, frame);
 					}
 				}
 
@@ -174,7 +184,8 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 			DrawLabel(renderer, 235, 100 + 1 * stride + 1 * backGap, uuupTexture, &uuupRect);
 			DrawLabel(renderer, 235, 100 + 2 * stride + 1 * backGap, downTexture, &downRect);
 			*/
-			DrawLabel(renderer, 235, 400, hintTexture, &hintRect);
+			DrawLabel(renderer, 181, 392, hintShadow, &hintRect);
+			DrawLabel(renderer, 180, 391, hintTexture, &hintRect);
 		}
 
 		SDL_RenderPresent(renderer);
@@ -183,4 +194,38 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 	}
 
 	return screenSettingsMenuRunning;
+}
+
+void _SelectionFromSettings()
+{
+	switch (Settings.SettingViewportResolution)
+	{
+	case ViewportResolutions::VR_TEMPLE:
+		menuSelection = SSMI_VIDEOMODE_GOD;
+		break;
+
+	case ViewportResolutions::VR_HERCMONO:
+		menuSelection = SSMI_VIDEOMODE_HERC;
+		break;
+
+	case ViewportResolutions::VR_MODEX:
+		menuSelection = SSMI_VIDEOMODE_X;
+		break;
+
+	case ViewportResolutions::VR_SVGA:
+		menuSelection = SSMI_VIDEOMODE_SVGA;
+		break;
+
+	case ViewportResolutions::VR_NOTEBOOK:
+		menuSelection = SSMI_VIDEOMODE_NOTEBOOK;
+		break;
+
+	case ViewportResolutions::VR_MAXOUT:
+		menuSelection = SSMI_VIDEOMODE_FULLSCREEN;
+		break;
+
+	default:
+		menuSelection = SSMI_CANCEL;
+		break;
+	}
 }
