@@ -110,9 +110,7 @@
       <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">libcairo-2.dll</DelayLoadDLLs>
     </Link>
     <PostBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xcopy /i /d /y $(ProjectDir)SDL\lib\x64\*.dll $(OutDirFullPath)
-
-robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xcopy /i /d /y $(ProjectDir)SDL\lib\x64\*.dll $(OutDirFullPath)</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copy SDL2.dll to output directory</Message>
@@ -157,9 +155,7 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
       <LinkLibraryDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkLibraryDependencies>
     </ProjectReference>
     <PostBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xcopy /i /d /y $(ProjectDir)SDL\lib\x64\*.dll $(OutDirFullPath)
-
-robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xcopy /i /d /y $(ProjectDir)SDL\lib\x64\*.dll $(OutDirFullPath)</Command>
     </PostBuildEvent>
     <CustomBuildStep>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Packaging Resources</Message>
@@ -177,16 +173,19 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClInclude Include="cairo\cairo-version.h" />
     <ClInclude Include="cairo\cairo-win32.h" />
     <ClInclude Include="cairo\cairo.h" />
+    <ClInclude Include="chunk-sizes.h" />
     <ClInclude Include="dexassy.h" />
     <ClInclude Include="dialogcontrols.h" />
     <ClInclude Include="ding.h" />
     <ClInclude Include="dingsheet.h" />
     <ClInclude Include="drawing.h" />
     <ClInclude Include="enums.h" />
+    <ClInclude Include="enxassy.h" />
     <ClInclude Include="flap.h" />
     <ClInclude Include="gamestate.h" />
     <ClInclude Include="gameview.h" />
     <ClInclude Include="geom2d.h" />
+    <ClInclude Include="chunk-constants.h" />
     <ClInclude Include="huff-comp.h" />
     <ClInclude Include="huff-deco.h" />
     <ClInclude Include="main.h" />
@@ -201,6 +200,7 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
     <ClCompile Include="ding.cpp" />
     <ClCompile Include="dingsheet.cpp" />
     <ClCompile Include="drawing.cpp" />
+    <ClCompile Include="enxassy.cpp" />
     <ClCompile Include="flap.cpp" />
     <ClCompile Include="gamestate.cpp" />
     <ClCompile Include="gameview.cpp" />
@@ -319,6 +319,7 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="gameres.xassy.recipe" />
     <None Include="packages.config" />
     <None Include="planning\dramatis-personae.ligma">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -445,6 +446,12 @@ robocopy "$(ProjectDir)res" "$(OutDirFullPath)." xassy.cooked1.ngld</Command>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </Image>
     <Image Include="res\floorstonetile-slate.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
+    </Image>
+    <Image Include="res\gpu-chan.png">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

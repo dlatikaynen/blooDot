@@ -317,6 +317,16 @@ void _PrepareControls(SDL_Renderer* renderer)
 			return;
 		}
 
+		SDL_Rect godRect = { 0,0,0,0 };
+		const auto godTexture = RenderText(
+			renderer,
+			&godRect,
+			FONT_KEY_DIALOG,
+			23,
+			literalSettingsScreenTempleResolution,
+			{ 250, 230, 230, 245 }
+		);
+
 		auto const& drawingTexture = BeginRenderDrawing(renderer, sliderTextureWidth, vignetteHeight);
 		auto const& drawingSink = GetDrawingSink();
 		cairo_set_source_rgba(drawingSink, 1, .5, .9, .73);
@@ -331,6 +341,8 @@ void _PrepareControls(SDL_Renderer* renderer)
 		cairo_stroke(drawingSink);
 		
 		EndRenderDrawing(renderer, drawingTexture);
+
+		DrawLabel(renderer, 30, 100, godTexture, &godRect);
 
 		if (SDL_SetRenderTarget(renderer, NULL) < 0)
 		{

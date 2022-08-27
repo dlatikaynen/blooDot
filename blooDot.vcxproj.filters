@@ -37,6 +37,30 @@
     <Filter Include="_Source Files\ui">
       <UniqueIdentifier>{98ccbfb1-caaf-4618-946b-1a05fda65f64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_Source Files\res">
+      <UniqueIdentifier>{ac04c794-a9bc-43e7-a296-b8c4219c24c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\util">
+      <UniqueIdentifier>{9f04926d-819a-4c11-9f2b-6344ba1a26b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\algo">
+      <UniqueIdentifier>{aa3e6e70-3650-4f46-8114-9c66ffcb1d8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Headers\util">
+      <UniqueIdentifier>{ca8bdaa7-9e0d-4548-a732-3e7f3a8d26c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Headers\algo">
+      <UniqueIdentifier>{7ba2c8a7-57f4-40e5-a384-60546a148dce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Headers\res">
+      <UniqueIdentifier>{e0afc3e2-1b05-4200-981b-6cb18437a153}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\ui">
+      <UniqueIdentifier>{c6533e97-b045-43ef-aac4-b06402bd9d3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\sfx">
+      <UniqueIdentifier>{3ba7a2cb-ca59-4c4c-8e1b-1fb83dbf5bef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL\include\begin_code.h">
@@ -309,16 +333,10 @@
     <ClInclude Include="SDL\include\SDL_ttf.h">
       <Filter>Lib Headers</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
     <ClInclude Include="orchestrator.h">
       <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="dexassy.h">
       <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="scripture.h">
@@ -390,15 +408,6 @@
     <ClInclude Include="flap.h">
       <Filter>_Headers</Filter>
     </ClInclude>
-    <ClInclude Include="geom2d.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="huff-deco.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="huff-comp.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
     <ClInclude Include="menu-settings.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
@@ -414,18 +423,36 @@
     <ClInclude Include="splash.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
+    <ClInclude Include="dexassy.h">
+      <Filter>_Headers\res</Filter>
+    </ClInclude>
+    <ClInclude Include="geom2d.h">
+      <Filter>_Headers\algo</Filter>
+    </ClInclude>
+    <ClInclude Include="huff-comp.h">
+      <Filter>_Headers\util</Filter>
+    </ClInclude>
+    <ClInclude Include="huff-deco.h">
+      <Filter>_Headers\util</Filter>
+    </ClInclude>
+    <ClInclude Include="enxassy.h">
+      <Filter>_Headers\res</Filter>
+    </ClInclude>
+    <ClInclude Include="chunk-constants.h">
+      <Filter>_Headers\res</Filter>
+    </ClInclude>
+    <ClInclude Include="chunk-sizes.h">
+      <Filter>_Headers\res</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>_Headers\util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="orchestrator.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dexassy.cpp">
       <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="scripture.cpp">
@@ -458,15 +485,6 @@
     <ClCompile Include="ding.cpp">
       <Filter>_Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="geom2d.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="huff-comp.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="huff-deco.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="dialogcontrols.cpp">
       <Filter>_Source Files\ui</Filter>
     </ClCompile>
@@ -478,6 +496,24 @@
     </ClCompile>
     <ClCompile Include="menu-settings-screen.cpp">
       <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="dexassy.cpp">
+      <Filter>_Source Files\res</Filter>
+    </ClCompile>
+    <ClCompile Include="huff-comp.cpp">
+      <Filter>_Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="huff-deco.cpp">
+      <Filter>_Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>_Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="geom2d.cpp">
+      <Filter>_Source Files\algo</Filter>
+    </ClCompile>
+    <ClCompile Include="enxassy.cpp">
+      <Filter>_Source Files\res</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -534,6 +570,9 @@
     <None Include="planning\dramatis-personae.ligma">
       <Filter>Planning</Filter>
     </None>
+    <None Include="gameres.xassy.recipe">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\lib\x64\SDL2.lib">
@@ -564,9 +603,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\nn-splash-scene.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\barrel-indigo.png">
       <Filter>Resource Files\dings</Filter>
     </Image>
@@ -609,6 +645,12 @@
     <Image Include="res\rooof-meshtile.png">
       <Filter>Resource Files\dings</Filter>
     </Image>
+    <Image Include="res\nn-splash-scene.png">
+      <Filter>Resource Files\ui</Filter>
+    </Image>
+    <Image Include="res\gpu-chan.png">
+      <Filter>Resource Files\ui</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ofl.txt">
@@ -620,19 +662,19 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
+    <Font Include="res\esl_gothic_shavian.ttf">
+      <Filter>Resource Files\ui</Filter>
+    </Font>
     <Font Include="res\FreckleFace-Regular.ttf">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\ui</Filter>
     </Font>
     <Font Include="res\FredokaOne-Regular.ttf">
-      <Filter>Resource Files</Filter>
-    </Font>
-    <Font Include="res\esl_gothic_shavian.ttf">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\ui</Filter>
     </Font>
   </ItemGroup>
   <ItemGroup>
     <Media Include="res\projectile-decay.wav">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\sfx</Filter>
     </Media>
   </ItemGroup>
 </Project>

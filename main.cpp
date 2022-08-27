@@ -19,12 +19,20 @@ void ReportError(const char* message, const char* error)
 	std::cerr << message << ", whatever that means, " << error;
 }
 
+#ifndef NDEBUG
+extern int Cook();
+
+int main(int argc, char** argv)
+{
+	if (argc == 2 && _strnicmp(argv[1], "xassy", _MAX_PATH) == 0)
+	{
+		return Cook();
+	}
+
+#else
 int main(int, char**)
 {
-	//test harness
-	//HuffCompress();
-	//HuffDeflate();
-
+#endif
 	/* startup */
 	const auto initResult = SDL_Init(SDL_INIT_EVERYTHING);
 	if (initResult < 0)

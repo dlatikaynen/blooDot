@@ -2,7 +2,7 @@
 #include<fstream>
 
 constexpr int const CharactersInByte = 256;
-constexpr int const CodeStackSize = 16;
+constexpr int const CodeStackSize = 128;
 
 typedef struct HuffDictionaryEntry
 {
@@ -25,7 +25,7 @@ typedef struct HuffDictionaryEntry
     }
 } HuffDictionaryEntry;
 
-int HuffCompress();
+int HuffCompress(std::ifstream& inFile, std::ofstream& outFile);
 
 void _HuffTreeFill(std::vector<HuffDictionaryEntry*>&, const signed long long, const signed long long);
 HuffDictionaryEntry* _HuffDictionaryBuild(std::vector<HuffDictionaryEntry*>&);
