@@ -293,7 +293,7 @@ bool SplashLoop(SDL_Renderer* renderer)
 		DrawLabel(renderer, 286, 54, titleTexture, &titleRect);
 		DrawLabel(renderer, 346, 454, authorTexture, &authorRect);
 
-		const auto drawingTexture = BeginRenderDrawing(renderer);
+		const auto drawingTexture = BeginRenderDrawing(renderer, 640, 480);
 		if (drawingTexture) [[likely]]
 		{
 			const auto drawingSink = GetDrawingSink();

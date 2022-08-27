@@ -135,7 +135,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 		
 		DrawLabel(renderer, 286, 54, titleTexture, &titleRect);
 
-		const auto drawingTexture = BeginRenderDrawing(renderer);
+		const auto drawingTexture = BeginRenderDrawing(renderer, 640, 480);
 		if (drawingTexture) [[likely]]
 		{
 			const auto drawingSink = GetDrawingSink();

@@ -30,10 +30,8 @@ cairo_t* BeginTextureDrawing(SDL_Texture* targetTexture)
 	return NULL;
 }
 
-SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget)
+SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget, const int canvasWidth, const int canvasHeight)
 {
-	int width = 640;
-	int height = 480;
 	int pitch;
 	void* pixels;
 
@@ -41,8 +39,8 @@ SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget)
 		renderTarget,
 		SDL_PIXELFORMAT_ARGB8888,
 		SDL_TEXTUREACCESS_STREAMING,
-		width,
-		height
+		canvasWidth,
+		canvasHeight
 	);
 
 	if (targetTexture)
@@ -51,8 +49,8 @@ SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget)
 		const auto cairoSurface = cairo_image_surface_create_for_data(
 			static_cast<unsigned char*>(pixels),
 			CAIRO_FORMAT_ARGB32,
-			width,
-			height,
+			canvasWidth,
+			canvasHeight,
 			pitch
 		);
 

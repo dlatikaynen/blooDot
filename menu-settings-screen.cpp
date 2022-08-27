@@ -24,18 +24,28 @@ ViewportResolutions movingToResolution = ViewportResolutions::VR_TEMPLE;
 SDL_Texture* slidingModes;
 int sliderTextureWidth;
 int sliderOffsetLeft = bounceMargin;
+int slideSpeed = 0;
+int targetOffsetLeft = 0;
 
 bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 {
+	constexpr int const startY = 94;
+	constexpr int const stride = 46;
+	constexpr int backGap = stride / 2;
+	constexpr int const sliderY = startY + stride + backGap;
+	constexpr SDL_Rect const carouselDestRect = { 195,sliderY,vignetteWidth,vignetteHeight };
+
 	_PrepareControls(renderer);
 	screenSettingsMenuRunning = true;
 	selectedResolution = Settings.SettingViewportResolution;
 	movingToResolution = Settings.SettingViewportResolution;
+	sliderOffsetLeft = static_cast<int>(selectedResolution) * vignetteWidth + bounceMargin;
 
 	SDL_Rect outerMenuRect{ 150,45,340,390 };
 	SDL_Rect titleRect{ 0,0,0,0 };
 	SDL_Rect cancelRect{ 0,0,0,0 };
 	SDL_Rect hintRect{ 0,0,0,0 };
+	SDL_Rect carouselSrcRect = { sliderOffsetLeft,0,vignetteWidth,vignetteHeight };
 
 	const auto titleTexture = RenderText(
 		renderer,
@@ -185,14 +195,12 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 
 		DrawLabel(renderer, 286, 54, titleTexture, &titleRect);
 
-		const auto drawingTexture = BeginRenderDrawing(renderer);
+		const auto drawingTexture = BeginRenderDrawing(renderer, 640, 480);
 		if (drawingTexture) [[likely]]
 		{
 			auto const& drawingSink = GetDrawingSink();
-			constexpr int const stride = 46;
-			constexpr int backGap = stride / 2;
 			ScreenSettingsMenuItems itemToDraw = SSMI_CANCEL;
-			for (auto y = 94; y < 200; y += stride)
+			for (auto y = startY; y < 200; y += stride)
 			{
 				DrawButton(
 					drawingSink,
@@ -232,10 +240,9 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 			DrawLabel(renderer, 180, 391, hintTexture, &hintRect);
 
 			/* render the carousel choice (and the sliding animation) */
-			constexpr int const sliderY = (94 + stride + backGap);
-			SDL_Rect destRect = { 195,sliderY,vignetteWidth, vignetteHeight };
-			SDL_Rect srrcRect = { sliderOffsetLeft,0,vignetteWidth, vignetteHeight };
-			SDL_RenderCopy(renderer, slidingModes, &srrcRect, &destRect);
+			_AnimateCarousel();
+			carouselSrcRect.x = sliderOffsetLeft;
+			SDL_RenderCopy(renderer, slidingModes, &carouselSrcRect, &carouselDestRect);
 		}
 
 		SDL_RenderPresent(renderer);
@@ -248,9 +255,41 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 	return screenSettingsMenuRunning;
 }
 
+void _AnimateCarousel()
+{
+	if (movingToResolution == selectedResolution)
+	{
+		slideSpeed = 0;
+		return;
+	}
+
+	if (slideSpeed == 0)
+	{
+		targetOffsetLeft = static_cast<int>(movingToResolution) * vignetteWidth + bounceMargin;
+		slideSpeed = 40;
+	}
+
+	auto direction = targetOffsetLeft < sliderOffsetLeft ? -1 : 1;
+	sliderOffsetLeft += direction * slideSpeed;
+	if (direction == 1)
+	{
+		if (sliderOffsetLeft >= targetOffsetLeft)
+		{
+			selectedResolution = movingToResolution;
+		}
+	}
+	else 
+	{
+		if (sliderOffsetLeft <= targetOffsetLeft)
+		{
+			selectedResolution = movingToResolution;
+		}
+	}
+}
+
 void _PrepareControls(SDL_Renderer* renderer)
 {
-	sliderTextureWidth = vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * bounceMargin;
+	sliderTextureWidth = vignetteCount * vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * bounceMargin;
 	slidingModes = SDL_CreateTexture(
 		renderer,
 		SDL_PIXELFORMAT_ARGB8888,
@@ -278,11 +317,19 @@ void _PrepareControls(SDL_Renderer* renderer)
 			return;
 		}
 
-		auto const& drawingTexture = BeginRenderDrawing(renderer);
+		auto const& drawingTexture = BeginRenderDrawing(renderer, sliderTextureWidth, vignetteHeight);
 		auto const& drawingSink = GetDrawingSink();
 		cairo_set_source_rgba(drawingSink, 1, .5, .9, .73);
-		cairo_rectangle(drawingSink, 20, 40, 600, 88);
+		cairo_rectangle(drawingSink, 30, 50, vignetteWidth - 60, vignetteHeight - 60);
 		cairo_fill(drawingSink);
+		
+		cairo_set_source_rgba(drawingSink, 1, 1, 1, 1);
+		cairo_move_to(drawingSink, 0, 0);
+		cairo_line_to(drawingSink, sliderTextureWidth, vignetteHeight);
+		cairo_move_to(drawingSink, sliderTextureWidth, 0);
+		cairo_line_to(drawingSink, 0, vignetteHeight);
+		cairo_stroke(drawingSink);
+		
 		EndRenderDrawing(renderer, drawingTexture);
 
 		if (SDL_SetRenderTarget(renderer, NULL) < 0)
