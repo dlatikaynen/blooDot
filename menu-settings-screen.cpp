@@ -8,16 +8,29 @@
 #include "xlations.h"
 #include "settings.h"
 
+constexpr int const bounceMargin = 10;
+constexpr int const vignetteWidth = 250;
+constexpr int const vignetteHeight = 220;
+constexpr int const vignetteGap = 10;
+constexpr int const vignetteCount = 6;
+
 extern SettingsStruct Settings;
 
 SDL_Event screenSettingsMenuEvent;
 bool screenSettingsMenuRunning = false;
 ScreenSettingsMenuItems menuSelection = SSMI_CANCEL;
+ViewportResolutions selectedResolution = ViewportResolutions::VR_TEMPLE;
+ViewportResolutions movingToResolution = ViewportResolutions::VR_TEMPLE;
+SDL_Texture* slidingModes;
+int sliderTextureWidth;
+int sliderOffsetLeft = bounceMargin;
 
 bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 {
-	_SelectionFromSettings();
+	_PrepareControls(renderer);
 	screenSettingsMenuRunning = true;
+	selectedResolution = Settings.SettingViewportResolution;
+	movingToResolution = Settings.SettingViewportResolution;
 
 	SDL_Rect outerMenuRect{ 150,45,340,390 };
 	SDL_Rect titleRect{ 0,0,0,0 };
@@ -72,40 +85,75 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 			case SDL_KEYDOWN:
 				switch (screenSettingsMenuEvent.key.keysym.scancode)
 				{
-				case SDL_SCANCODE_UP:
-				case SDL_SCANCODE_KP_8:
-				case SDL_SCANCODE_W:
-					if (menuSelection != SSMI_CANCEL)
-					{
-						menuSelection = static_cast<ScreenSettingsMenuItems>(menuSelection - 1);
-					}
-
-					break;
-
 				case SDL_SCANCODE_DOWN:
 				case SDL_SCANCODE_KP_2:
 				case SDL_SCANCODE_S:
-					if (menuSelection != SSMI_VIDEOMODE_EGA)
+				case SDL_SCANCODE_PAGEDOWN:
+				case SDL_SCANCODE_END:
+					menuSelection = SSMI_VIDEOMODE;
+					break;
+
+				case SDL_SCANCODE_UP:
+				case SDL_SCANCODE_KP_8:
+				case SDL_SCANCODE_W:
+				case SDL_SCANCODE_PAGEUP:
+				case SDL_SCANCODE_HOME:
+					menuSelection = SSMI_CANCEL;
+					break;
+
+				case SDL_SCANCODE_LEFT:
+				case SDL_SCANCODE_KP_4:
+				case SDL_SCANCODE_A:
+					if (menuSelection == SSMI_CANCEL)
 					{
-						menuSelection = static_cast<ScreenSettingsMenuItems>(menuSelection + 1);
+						// TODO: soundeffect_moveinmenu_selecteditemchange
+						menuSelection = SSMI_VIDEOMODE;
+					}
+					else if (selectedResolution == ViewportResolutions::VR_TEMPLE)
+					{
+						// TODO: soundeffect_moveinmenu_bounce
+					}
+					else if (movingToResolution == selectedResolution)
+					{
+						// TODO: soundeffect_moveinmenu_slide
+						movingToResolution = static_cast<ViewportResolutions>(static_cast<int>(selectedResolution) - 1);
+					}
+					else if (movingToResolution != ViewportResolutions::VR_TEMPLE)
+					{
+						--movingToResolution;
 					}
 
 					break;
 
-				case SDL_SCANCODE_PAGEDOWN:
-				case SDL_SCANCODE_END:
-					menuSelection = SSMI_VIDEOMODE_FULLSCREEN;
-					break;
+				case SDL_SCANCODE_RIGHT:
+				case SDL_SCANCODE_KP_6:
+				case SDL_SCANCODE_D:
+					if (menuSelection == SSMI_CANCEL)
+					{
+						// TODO: soundeffect_moveinmenu_selecteditemchange
+						menuSelection = SSMI_VIDEOMODE;
+					}
+					else if (selectedResolution == ViewportResolutions::VR_MAXOUT)
+					{
+						// TODO: soundeffect_moveinmenu_bounce
+					}
+					else if(movingToResolution == selectedResolution)
+					{
+						// TODO: soundeffect_moveinmenu_slide
+						movingToResolution = static_cast<ViewportResolutions>(static_cast<int>(selectedResolution) + 1);
+					}
+					else if (movingToResolution != ViewportResolutions::VR_MAXOUT)
+					{
+						++movingToResolution;
+					}
 
-				case SDL_SCANCODE_PAGEUP:
-				case SDL_SCANCODE_HOME:
-					menuSelection = SSMI_VIDEOMODE_GOD;
 					break;
 
 				case SDL_SCANCODE_RETURN:
 				case SDL_SCANCODE_RETURN2:
 				case SDL_SCANCODE_KP_ENTER:
 				case SDL_SCANCODE_SPACE:
+					Settings.SettingViewportResolution = movingToResolution;
 					screenSettingsMenuRunning = false;
 					break;
 
@@ -140,9 +188,9 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 		const auto drawingTexture = BeginRenderDrawing(renderer);
 		if (drawingTexture) [[likely]]
 		{
-			const auto drawingSink = GetDrawingSink();
-			const int stride = 46;
-			const int backGap = stride / 2;
+			auto const& drawingSink = GetDrawingSink();
+			constexpr int const stride = 46;
+			constexpr int backGap = stride / 2;
 			ScreenSettingsMenuItems itemToDraw = SSMI_CANCEL;
 			for (auto y = 94; y < 200; y += stride)
 			{
@@ -150,8 +198,8 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 					drawingSink,
 					195,
 					y,
-					250,
-					itemToDraw > SSMI_CANCEL ? 220 : 42,
+					vignetteWidth,
+					itemToDraw > SSMI_CANCEL ? vignetteHeight : 42,
 					itemToDraw == menuSelection
 				);
 
@@ -160,12 +208,12 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 					if (menuSelection == SSMI_CANCEL)
 					{
 						DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);
-						DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
+						DrawChevron(drawingSink, 195 + vignetteWidth + 7, y + 21, true, frame);
 					}
 					else
 					{
 						DrawChevron(drawingSink, 195 - 9, y + 105, true, frame);
-						DrawChevron(drawingSink, 195 + 250 + 9, y + 105, false, frame);
+						DrawChevron(drawingSink, 195 + vignetteWidth + 9, y + 105, false, frame);
 					}
 				}
 
@@ -180,12 +228,14 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 			EndRenderDrawing(renderer, drawingTexture);
 
 			DrawLabel(renderer, 235, 100 + 0 * stride + 0 * backGap, cancelTexture, &cancelRect);
-			/*
-			DrawLabel(renderer, 235, 100 + 1 * stride + 1 * backGap, uuupTexture, &uuupRect);
-			DrawLabel(renderer, 235, 100 + 2 * stride + 1 * backGap, downTexture, &downRect);
-			*/
 			DrawLabel(renderer, 181, 392, hintShadow, &hintRect);
 			DrawLabel(renderer, 180, 391, hintTexture, &hintRect);
+
+			/* render the carousel choice (and the sliding animation) */
+			constexpr int const sliderY = (94 + stride + backGap);
+			SDL_Rect destRect = { 195,sliderY,vignetteWidth, vignetteHeight };
+			SDL_Rect srrcRect = { sliderOffsetLeft,0,vignetteWidth, vignetteHeight };
+			SDL_RenderCopy(renderer, slidingModes, &srrcRect, &destRect);
 		}
 
 		SDL_RenderPresent(renderer);
@@ -193,39 +243,63 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 		++frame;
 	}
 
+	_TeardownScreenSettingsMenu();
+
 	return screenSettingsMenuRunning;
 }
 
-void _SelectionFromSettings()
+void _PrepareControls(SDL_Renderer* renderer)
 {
-	switch (Settings.SettingViewportResolution)
+	sliderTextureWidth = vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * bounceMargin;
+	slidingModes = SDL_CreateTexture(
+		renderer,
+		SDL_PIXELFORMAT_ARGB8888,
+		SDL_TEXTUREACCESS_TARGET,
+		sliderTextureWidth,
+		vignetteHeight
+	);
+
+	if (slidingModes)
 	{
-	case ViewportResolutions::VR_TEMPLE:
-		menuSelection = SSMI_VIDEOMODE_GOD;
-		break;
+		if (SDL_SetTextureBlendMode(slidingModes, SDL_BLENDMODE_BLEND) < 0)
+		{
+			const auto carouselBlendmodeError = SDL_GetError();
+			ReportError("Could not set blend mode of sliding texture", carouselBlendmodeError);
+			SDL_DestroyTexture(slidingModes);
+			slidingModes = NULL;
 
-	case ViewportResolutions::VR_HERCMONO:
-		menuSelection = SSMI_VIDEOMODE_HERC;
-		break;
+			return;
+		}
 
-	case ViewportResolutions::VR_MODEX:
-		menuSelection = SSMI_VIDEOMODE_X;
-		break;
+		if (SDL_SetRenderTarget(renderer, slidingModes) < 0)
+		{
+			const auto targetError = SDL_GetError();
+			ReportError("Could not set sliding texture as the render target", targetError);
+			return;
+		}
 
-	case ViewportResolutions::VR_SVGA:
-		menuSelection = SSMI_VIDEOMODE_SVGA;
-		break;
+		auto const& drawingTexture = BeginRenderDrawing(renderer);
+		auto const& drawingSink = GetDrawingSink();
+		cairo_set_source_rgba(drawingSink, 1, .5, .9, .73);
+		cairo_rectangle(drawingSink, 20, 40, 600, 88);
+		cairo_fill(drawingSink);
+		EndRenderDrawing(renderer, drawingTexture);
 
-	case ViewportResolutions::VR_NOTEBOOK:
-		menuSelection = SSMI_VIDEOMODE_NOTEBOOK;
-		break;
+		if (SDL_SetRenderTarget(renderer, NULL) < 0)
+		{
+			const auto restoreError = SDL_GetError();
+			ReportError("Could not restore render target after rendering to sliding texture", restoreError);
+			return;
+		}
 
-	case ViewportResolutions::VR_MAXOUT:
-		menuSelection = SSMI_VIDEOMODE_FULLSCREEN;
-		break;
-
-	default:
-		menuSelection = SSMI_CANCEL;
-		break;
+		return;
 	}
+
+	const auto newCarouselError = SDL_GetError();
+	ReportError("Could not allocate sliding texture", newCarouselError);
+}
+
+void _TeardownScreenSettingsMenu()
+{
+	slidingModes&& [] { SDL_DestroyTexture(slidingModes); return false; }();
 }

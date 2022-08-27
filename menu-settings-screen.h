@@ -7,4 +7,5 @@
 
 bool ScreenSettingsMenuLoop(SDL_Renderer*);
 
-void _SelectionFromSettings();
+void _PrepareControls(SDL_Renderer* renderer );
+void _TeardownScreenSettingsMenu();

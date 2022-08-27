@@ -135,7 +135,7 @@ DingLocator _PlaceOnDingSheet(SDL_Rect* dingDimensions, SDL_Texture* dingTexture
 	if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
 	{
 		const auto restoreError = SDL_GetError();
-		ReportError("Could restore render target after rendering to ding sheet", restoreError);
+		ReportError("Could not restore render target after rendering to ding sheet", restoreError);
 		return {};
 	}
 
