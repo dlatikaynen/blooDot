@@ -530,9 +530,6 @@
     <None Include="SDL\lib\x64\SDL2_ttf.dll">
       <Filter>Platform</Filter>
     </None>
-    <None Include="res\xassy.cmd">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="planning\menus.ligma">
       <Filter>Planning</Filter>
     </None>

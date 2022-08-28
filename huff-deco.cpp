@@ -1,66 +1,80 @@
 #include "pch.h"
 #include "huff-deco.h"
+#include <SDL.h>
 
-int HuffDeflate()
+void* HuffDeflate(SDL_RWops* inFile, long long const sourceSize, long long* originalSize, long long* actuallyRead)
 {
-    std::ifstream inFile("test.ligma", std::ios::binary);
-    if (!inFile.good())
+    long long histogramSize;
+    long long storedSize;
+    char bufferRootFreq[sizeof(long long)] = {};
+    char bufferSize[sizeof(long long)] = {};
+    auto countdownSize = sourceSize;
+    (*actuallyRead) = 0;
+
+    inFile->read(inFile, &bufferRootFreq, sizeof(long long), 1);
+    histogramSize = *(long long*)bufferRootFreq;
+
+    inFile->read(inFile, &bufferSize, sizeof(long long), 1);
+    storedSize = *(long long*)bufferSize;
+
+    auto huffmanLookup = _HuffTreeFromStorage(inFile, &countdownSize);
+    auto result = (unsigned char*)SDL_malloc(storedSize);
+    if (!result)
     {
-        return errno;
+        const auto decompAllocError = SDL_GetError();
+        ReportError("Failed to allocate memory for resource extraction", decompAllocError);
+        return NULL;
     }
 
-    char buffer[sizeof(long long)] = {};
-    inFile.read(buffer, sizeof(long long));
-    long long histogramSize;
-    histogramSize = *(long long*)buffer;
-    auto huffmanLookup = _HuffTreeFromStorage(inFile);
-    const auto result = _HuffDeflateInternal(inFile, huffmanLookup, histogramSize);
-    inFile.close();
+    memset(result, 0, storedSize);
+    (*actuallyRead) = _HuffDeflateInternal(inFile, &result, huffmanLookup, histogramSize, &countdownSize, storedSize);
+    (*originalSize) = storedSize;
 
     return result;
 }
 
-HuffLookup* _HuffTreeFromStorage(std::ifstream& in)
+HuffLookup* _HuffTreeFromStorage(SDL_RWops* in, long long* pCountdownSize)
 {
     char ch;
-    in.get(ch);
+    (*pCountdownSize) -= in->read(in, &ch, sizeof(char), 1);
     if (ch == '1')
     {
-        in.get(ch);
+        in->read(in, &ch, sizeof(char), 1);
         const auto codeByte = static_cast<unsigned char>(ch);
 
         return (new HuffLookup(~codeByte, NULL, NULL));
     }
     else
     {
-        HuffLookup* left = _HuffTreeFromStorage(in);
-        HuffLookup* right = _HuffTreeFromStorage(in);
+        HuffLookup* left = _HuffTreeFromStorage(in, pCountdownSize);
+        HuffLookup* right = _HuffTreeFromStorage(in, pCountdownSize);
 
         return(new HuffLookup(0xff, left, right));
     }
 }
 
-int _HuffDeflateInternal(std::ifstream& in, HuffLookup* node, long long int numHistoEntries)
+long long _HuffDeflateInternal(SDL_RWops* in, unsigned char** result, HuffLookup* node, long long int numHistoEntries, long long* countdownSize, long long expectedOutputSize)
 {
-    std::ofstream output("deflated.xassy", std::ios::binary);
-    if (!output.good())
-    {
-        return errno;
-    }
-
     auto endOfFile = false;
     char byte = 0;
     auto pointer = node;
-    while (in.get(byte))
+    auto output = *result;
+    long long actuallyExtracted = 0;
+
+    while ((*countdownSize) > 0 && in->read(in, &byte, sizeof(byte), 1))
     {
+        --(*countdownSize);
+
         auto bitNum = 7;
         while (pointer != NULL && bitNum >= 0 && !endOfFile)
         {
             if (!pointer->left && !pointer->right)
             {
-                output << pointer->code;
-                --numHistoEntries;
-                if (numHistoEntries == 0)
+                *output = pointer->code;
+                ++output;
+                ++actuallyExtracted;
+
+                if (--numHistoEntries == 0 || actuallyExtracted >= expectedOutputSize)
                 {
                     endOfFile = true;
                     break;
@@ -83,7 +97,5 @@ int _HuffDeflateInternal(std::ifstream& in, HuffLookup* node, long long int numH
         }
     }
 
-    output.close();
-
-    return 0;
+    return actuallyExtracted;
 }

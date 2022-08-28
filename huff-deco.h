@@ -1,5 +1,6 @@
 #pragma once
 #include<fstream>
+#include <SDL.h>
 
 typedef struct HuffLookup
 {
@@ -15,7 +16,9 @@ typedef struct HuffLookup
     }
 } HuffLookup;
 
-int HuffDeflate();
+extern void ReportError(const char*, const char*);
 
-HuffLookup* _HuffTreeFromStorage(std::ifstream&);
-int _HuffDeflateInternal(std::ifstream&, HuffLookup*, long long int);
+void* HuffDeflate(SDL_RWops* inFile, long long const sourceSize, long long* originalSize, long long* actuallyRead);
+
+HuffLookup* _HuffTreeFromStorage(SDL_RWops* in, long long* countdownSize);
+long long _HuffDeflateInternal(SDL_RWops* in, unsigned char** result, HuffLookup* node, long long int numHistoEntries, long long* countdownSize, long long expectedOutputSize);

@@ -3,13 +3,14 @@
 
 long long int _histogram[CharactersInByte] = { 0 };
 
-int HuffCompress(std::ifstream& inFile, std::ofstream& outFile)
+int HuffCompress(std::ifstream& inFile, long long const uncompressedSize, std::ofstream& outFile)
 {
     std::vector<long long int> codeDict;
     codeDict.resize(CharactersInByte);
 
     char ch;
     std::memset(&_histogram, 0, CharactersInByte);
+
     while (inFile.get(ch))
     {
         ++_histogram[static_cast<unsigned char>(ch)];
@@ -19,15 +20,18 @@ int HuffCompress(std::ifstream& inFile, std::ofstream& outFile)
     inFile.seekg(0);
     auto tree = _HuffCompressEntry();
 
-    char buffer[sizeof(long long)] = {};
-    *(long long*)buffer = tree->frequency;
-    outFile.write(buffer, sizeof(long long));
+    char bufferRootFreq[sizeof(long long)] = {};
+    char bufferUncompressed[sizeof(long long)] = {};
+
+    *(long long*)bufferRootFreq = tree->frequency;
+    outFile.write(bufferRootFreq, sizeof(long long));
+    *(long long*)bufferUncompressed = uncompressedSize;
+    outFile.write(bufferUncompressed, sizeof(long long));
+    
     _HuffAddTree(outFile, tree);
     char codeStack[CodeStackSize];
     _HuffAddCode(tree, codeStack, 0, codeDict);
     _HuffCompressInternal(inFile, outFile, codeDict);
-    //inFile.close();
-    //outFile.close();
 
     return 0;
 }
@@ -197,5 +201,4 @@ void _HuffCompressInternal(std::ifstream& input, std::ofstream& output, std::vec
     }
 
     output << byte;
-    //output.close();
 }

@@ -25,7 +25,7 @@ typedef struct HuffDictionaryEntry
     }
 } HuffDictionaryEntry;
 
-int HuffCompress(std::ifstream& inFile, std::ofstream& outFile);
+int HuffCompress(std::ifstream& inFile, long long const uncompressedSize, std::ofstream& outFile);
 
 void _HuffTreeFill(std::vector<HuffDictionaryEntry*>&, const signed long long, const signed long long);
 HuffDictionaryEntry* _HuffDictionaryBuild(std::vector<HuffDictionaryEntry*>&);

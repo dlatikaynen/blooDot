@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "enxassy.h"
 #include <iostream>
+#include <filesystem>
 
 int Cook()
 {
@@ -47,6 +48,7 @@ int Cook()
 
 					std::stringstream rawPath;
 					rawPath << basePath << "..\\..\\res\\" << fileName;
+					auto const& uncompressedSize = std::filesystem::file_size(rawPath.str());
 					std::ifstream rawFile(rawPath.str(), std::ios::binary);
 					if (rawFile.is_open() && rawFile.good())
 					{
@@ -54,7 +56,7 @@ int Cook()
 							? (std::streampos)0
 							: cookedFile.tellp();
 
-						HuffCompress(rawFile, cookedFile);
+						HuffCompress(rawFile, uncompressedSize, cookedFile);
 						const long long&& posAfter = cookedFile.tellp();
 						const long long&& compressedSize = posAfter - chunkStart;
 						if (previousIdentifier.empty())
@@ -81,7 +83,9 @@ int Cook()
 
 						std::cout
 							<< compressedSize
-							<< " bytes written.\n";
+							<< " bytes written, original was "
+							<< uncompressedSize
+							<< " bytes\n";
 
 						rawFile.close();
 						++resNumber;
