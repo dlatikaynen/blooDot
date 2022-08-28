@@ -2,7 +2,7 @@
 #include "huff-deco.h"
 #include <SDL.h>
 
-void* HuffDeflate(SDL_RWops* inFile, long long const sourceSize, long long* originalSize, long long* actuallyRead)
+void* HuffInflate(SDL_RWops* inFile, long long const sourceSize, long long* originalSize, long long* actuallyRead)
 {
     long long histogramSize;
     long long storedSize;
@@ -27,7 +27,7 @@ void* HuffDeflate(SDL_RWops* inFile, long long const sourceSize, long long* orig
     }
 
     memset(result, 0, storedSize);
-    (*actuallyRead) = _HuffDeflateInternal(inFile, &result, huffmanLookup, histogramSize, &countdownSize, storedSize);
+    (*actuallyRead) = _HuffInflateInternal(inFile, &result, huffmanLookup, histogramSize, &countdownSize, storedSize);
     (*originalSize) = storedSize;
 
     return result;
@@ -40,7 +40,7 @@ HuffLookup* _HuffTreeFromStorage(SDL_RWops* in, long long* pCountdownSize)
     if (ch == '1')
     {
         in->read(in, &ch, sizeof(char), 1);
-        const auto codeByte = static_cast<unsigned char>(ch);
+        const auto& codeByte = static_cast<unsigned char>(ch);
 
         return (new HuffLookup(~codeByte, NULL, NULL));
     }
@@ -53,7 +53,7 @@ HuffLookup* _HuffTreeFromStorage(SDL_RWops* in, long long* pCountdownSize)
     }
 }
 
-long long _HuffDeflateInternal(SDL_RWops* in, unsigned char** result, HuffLookup* node, long long int numHistoEntries, long long* countdownSize, long long expectedOutputSize)
+long long _HuffInflateInternal(SDL_RWops* in, unsigned char** result, HuffLookup* node, long long int numHistoEntries, long long* countdownSize, long long expectedOutputSize)
 {
     auto endOfFile = false;
     char byte = 0;

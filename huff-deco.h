@@ -18,7 +18,7 @@ typedef struct HuffLookup
 
 extern void ReportError(const char*, const char*);
 
-void* HuffDeflate(SDL_RWops* inFile, long long const sourceSize, long long* originalSize, long long* actuallyRead);
+void* HuffInflate(SDL_RWops* inFile, long long const sourceSize, long long* originalSize, long long* actuallyRead);
 
 HuffLookup* _HuffTreeFromStorage(SDL_RWops* in, long long* countdownSize);
-long long _HuffDeflateInternal(SDL_RWops* in, unsigned char** result, HuffLookup* node, long long int numHistoEntries, long long* countdownSize, long long expectedOutputSize);
+long long _HuffInflateInternal(SDL_RWops* in, unsigned char** result, HuffLookup* node, long long int numHistoEntries, long long* countdownSize, long long expectedOutputSize);

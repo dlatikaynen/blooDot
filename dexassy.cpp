@@ -65,7 +65,7 @@ void* Retrieve(int chunkKey, __out SDL_RWops** const stream)
 
 	long long originalSize = 0;
 	long long actuallyExtracted = 0;
-	const auto extractedRaw = HuffDeflate(cooked, compressedSize, &originalSize, &actuallyExtracted);
+	const auto extractedRaw = HuffInflate(cooked, compressedSize, &originalSize, &actuallyExtracted);
 	SDL_free(compressedMem);
 	if (actuallyExtracted != originalSize)
 	{
