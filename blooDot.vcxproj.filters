@@ -450,6 +450,12 @@
     <ClInclude Include="boydsa.h">
       <Filter>_Headers\algo</Filter>
     </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>_Headers\algo</Filter>
+    </ClInclude>
+    <ClInclude Include="gpuchan.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -520,6 +526,12 @@
     </ClCompile>
     <ClCompile Include="boydsa.cpp">
       <Filter>_Source Files\algo</Filter>
+    </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>_Source Files\algo</Filter>
+    </ClCompile>
+    <ClCompile Include="gpuchan.cpp">
+      <Filter>_Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

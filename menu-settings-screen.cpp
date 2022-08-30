@@ -7,6 +7,7 @@
 #include <cairo.h>
 #include "xlations.h"
 #include "settings.h"
+#include <regex>
 
 constexpr int const bounceMargin = 10;
 constexpr int const vignetteWidth = 250;
@@ -164,7 +165,11 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 				case SDL_SCANCODE_RETURN2:
 				case SDL_SCANCODE_KP_ENTER:
 				case SDL_SCANCODE_SPACE:
-					Settings.SettingViewportResolution = movingToResolution;
+					if (menuSelection == SSMI_VIDEOMODE && _CanSelectMode())
+					{
+						Settings.SettingViewportResolution = movingToResolution;
+					}
+
 					screenSettingsMenuRunning = false;
 					break;
 
@@ -271,7 +276,7 @@ void _AnimateCarousel()
 
 	if (slideSpeed == 0)
 	{
-		targetOffsetLeft = static_cast<int>(movingToResolution) * vignetteWidth + bounceMargin;
+		targetOffsetLeft = bounceMargin + static_cast<int>(movingToResolution) * vignetteWidth;
 		slideSpeed = 40;
 	}
 
@@ -281,6 +286,7 @@ void _AnimateCarousel()
 	{
 		if (sliderOffsetLeft >= targetOffsetLeft)
 		{
+			sliderOffsetLeft = targetOffsetLeft;
 			selectedResolution = movingToResolution;
 		}
 	}
@@ -288,6 +294,7 @@ void _AnimateCarousel()
 	{
 		if (sliderOffsetLeft <= targetOffsetLeft)
 		{
+			sliderOffsetLeft = targetOffsetLeft;
 			selectedResolution = movingToResolution;
 		}
 	}
@@ -323,33 +330,48 @@ void _PrepareControls(SDL_Renderer* renderer)
 			return;
 		}
 
-		SDL_Rect godRect = { 0,0,0,0 };
-		const auto godTexture = RenderText(
-			renderer,
-			&godRect,
-			FONT_KEY_DIALOG,
-			23,
-			literalSettingsScreenTempleResolution,
-			{ 250, 230, 230, 245 }
-		);
+		_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 0, 30, literalSettingsScreenTemple);
+		_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 0, 70, literalSettingsScreenTempleDetails);
+		_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 0, 190, literalSettingsScreenTempleResolution);
 
-		auto const& drawingTexture = BeginRenderDrawing(renderer, sliderTextureWidth, vignetteHeight);
-		auto const& drawingSink = GetDrawingSink();
-		cairo_set_source_rgba(drawingSink, 1, .5, .9, .73);
-		cairo_rectangle(drawingSink, 30, 50, vignetteWidth - 60, vignetteHeight - 60);
-		cairo_fill(drawingSink);
+		_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 1, 30, literalSettingsScreenHercules);
+		_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 1, 70, literalSettingsScreenHerculesDetails);
+		_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 1, 190, literalSettingsScreenHerculesResolution);
+
+		_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 2, 30, literalSettingsScreenModeX);
+		_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 2, 70, literalSettingsScreenModexDetails);
+		_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 2, 190, literalSettingsScreenModeXResolution);
+
+		_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 3, 30, literalSettingsScreenSVGA);
+		_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 3, 70, literalSettingsScreenSVGADetails);
+		_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 3, 190, literalSettingsScreenSVGAResolution);
+
+		_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 4, 30, literalSettingsScreenNotebook);
+		_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 4, 70, literalSettingsScreenNotebookDetails);
+		_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 4, 190, literalSettingsScreenNotebookResolution);
+
+		_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 5, 30, literalSettingsScreenFull);
+		_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 5, 70, literalSettingsScreenFullDetails);
+
+		SDL_DisplayMode displayMode;
+		if (SDL_GetDesktopDisplayMode(0, &displayMode) < 0)
+		{
+			const auto& screenError = SDL_GetError();
+			ReportError("Could not query screen size", screenError);
+		}
+		else
+		{
+			std::stringstream screenWidth;
+			std::stringstream screenHeight;
+			screenWidth << displayMode.w;
+			screenHeight << displayMode.h;
+			std::string fullScreenDimsTemplate;
+			fullScreenDimsTemplate.assign(literalSettingsScreenFullResolution);
+			auto fullScreenDims1 = std::regex_replace(fullScreenDimsTemplate, std::regex("\\$w"), screenWidth.str());
+			auto fullScreenDims2 = std::regex_replace(fullScreenDims1, std::regex("\\$h"), screenHeight.str());
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 5, 190, fullScreenDims2.c_str());
+		}
 		
-		cairo_set_source_rgba(drawingSink, 1, 1, 1, 1);
-		cairo_move_to(drawingSink, 0, 0);
-		cairo_line_to(drawingSink, sliderTextureWidth, vignetteHeight);
-		cairo_move_to(drawingSink, sliderTextureWidth, 0);
-		cairo_line_to(drawingSink, 0, vignetteHeight);
-		cairo_stroke(drawingSink);
-		
-		EndRenderDrawing(renderer, drawingTexture);
-
-		DrawLabel(renderer, 30, 100, godTexture, &godRect);
-
 		if (SDL_SetRenderTarget(renderer, NULL) < 0)
 		{
 			const auto restoreError = SDL_GetError();
@@ -364,7 +386,35 @@ void _PrepareControls(SDL_Renderer* renderer)
 	ReportError("Could not allocate sliding texture", newCarouselError);
 }
 
+void _VignetteLabel(SDL_Renderer* renderer, int font, int size, int vignetteIndex, int y, const char* text)
+{
+	SDL_Rect rectLabel = { 0,0,0,0 };
+	const auto textureLabel = RenderText(
+		renderer,
+		&rectLabel,
+		font,
+		size,
+		text,
+		{ 250, 230, 230, 245 }
+	);
+
+	CenterLabel(
+		renderer,
+		bounceMargin + vignetteIndex * vignetteWidth + vignetteWidth / 2,
+		y,
+		textureLabel,
+		&rectLabel
+	);
+
+	SDL_DestroyTexture(textureLabel);
+}
+
 void _TeardownScreenSettingsMenu()
 {
 	slidingModes&& [] { SDL_DestroyTexture(slidingModes); return false; }();
+}
+
+bool _CanSelectMode()
+{
+	return true;
 }

@@ -8,6 +8,7 @@ extern SDL_Texture* flapsRooof[9];
 #ifndef NDEBUG
 extern SDL_Texture* debugFlap;
 extern SDL_Rect bunghole;
+extern bool toggleDebugView;
 #endif
 extern SDL_Renderer* GameViewRenderer;
 extern int flapW;
@@ -157,80 +158,85 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 	}
 
 #ifndef NDEBUG
-	cairo_set_source_rgb(drawingSink, 1, 0, 1);
-	cairo_move_to(drawingSink, lastIterX + 1, lastIterY);
-	cairo_line_to(drawingSink, lastIterX + 4, lastIterY);
-	cairo_move_to(drawingSink, lastIterX, lastIterY + 1);
-	cairo_line_to(drawingSink, lastIterX, lastIterY + 4);
-	cairo_move_to(drawingSink, lastIterX + GRIDUNIT - 1, lastIterY + GRIDUNIT);
-	cairo_line_to(drawingSink, lastIterX + GRIDUNIT - 4, lastIterY + GRIDUNIT);
-	cairo_move_to(drawingSink, lastIterX + GRIDUNIT, lastIterY + GRIDUNIT - 1);
-	cairo_line_to(drawingSink, lastIterX + GRIDUNIT, lastIterY + GRIDUNIT - 4);
-	cairo_stroke(drawingSink);
-
-	cairo_set_source_rgb(drawingSink, 1, 0.68, 0.08);
-
-	cairo_move_to(drawingSink, 0, 13);
-	cairo_line_to(drawingSink, 0, 0);
-	cairo_line_to(drawingSink, 13, 0);
-	cairo_stroke(drawingSink);
-
-	cairo_move_to(drawingSink, flapW - 13, 0);
-	cairo_line_to(drawingSink, flapW, 0);
-	cairo_line_to(drawingSink, flapW, 13);
-	cairo_stroke(drawingSink);
-
-	cairo_move_to(drawingSink, flapW - 13, flapH);
-	cairo_line_to(drawingSink, flapW, flapH);
-	cairo_line_to(drawingSink, flapW, flapH - 13);
-	cairo_stroke(drawingSink);
-
-	cairo_move_to(drawingSink, 0, flapH - 13);
-	cairo_line_to(drawingSink, 0, flapH);
-	cairo_line_to(drawingSink, 13, flapH);
-	cairo_stroke(drawingSink);
-
-	const auto flapNr = std::to_string(flapIndex);
-	const auto tureNr = std::to_string(textureIndex);
-	cairo_move_to(drawingSink, 10, 16);
-	cairo_text_path(drawingSink, flapNr.c_str());
-	cairo_move_to(drawingSink, 25, 16);
-	cairo_text_path(drawingSink, tureNr.c_str());
-
-	cairo_move_to(drawingSink, flapW - 10 - 5, 16);
-	cairo_text_path(drawingSink, flapNr.c_str());
-	cairo_move_to(drawingSink, flapW - 25 - 5, 16);
-	cairo_text_path(drawingSink, tureNr.c_str());
-
-	cairo_move_to(drawingSink, flapW - 10 - 5, flapH - 16 + 8);
-	cairo_text_path(drawingSink, flapNr.c_str());
-	cairo_move_to(drawingSink, flapW - 25 - 5, flapH - 16 + 8);
-	cairo_text_path(drawingSink, tureNr.c_str());
-
-	cairo_move_to(drawingSink, 10, flapH - 16 + 8);
-	cairo_text_path(drawingSink, flapNr.c_str());
-	cairo_move_to(drawingSink, 25, flapH - 16 + 8);
-	cairo_text_path(drawingSink, tureNr.c_str());
-
-	cairo_fill(drawingSink);
-
-	if (flapIndex == BUNGHOLE)
+	if (toggleDebugView)
 	{
-		cairo_set_source_rgb(drawingSink, 0.28, 0.28, 0.28);
-		cairo_move_to(drawingSink, halfW, halfH - 60);
-		cairo_line_to(drawingSink, halfW, halfH + 60);
-		cairo_move_to(drawingSink, halfW - 60, halfH);
-		cairo_line_to(drawingSink, halfW + 60, halfH);
+		cairo_set_source_rgb(drawingSink, 1, 0, 1);
+		cairo_move_to(drawingSink, lastIterX + 1, lastIterY);
+		cairo_line_to(drawingSink, lastIterX + 4, lastIterY);
+		cairo_move_to(drawingSink, lastIterX, lastIterY + 1);
+		cairo_line_to(drawingSink, lastIterX, lastIterY + 4);
+		cairo_move_to(drawingSink, lastIterX + GRIDUNIT - 1, lastIterY + GRIDUNIT);
+		cairo_line_to(drawingSink, lastIterX + GRIDUNIT - 4, lastIterY + GRIDUNIT);
+		cairo_move_to(drawingSink, lastIterX + GRIDUNIT, lastIterY + GRIDUNIT - 1);
+		cairo_line_to(drawingSink, lastIterX + GRIDUNIT, lastIterY + GRIDUNIT - 4);
 		cairo_stroke(drawingSink);
-		cairo_set_source_rgb(drawingSink, 0.68, 0.68, 0.68);
-		cairo_rectangle(drawingSink, halfW - GRIDUNIT / 2, halfH - GRIDUNIT / 2, GRIDUNIT, GRIDUNIT);
+
+		cairo_set_source_rgb(drawingSink, 1, 0.68, 0.08);
+
+		cairo_move_to(drawingSink, 0, 13);
+		cairo_line_to(drawingSink, 0, 0);
+		cairo_line_to(drawingSink, 13, 0);
 		cairo_stroke(drawingSink);
+
+		cairo_move_to(drawingSink, flapW - 13, 0);
+		cairo_line_to(drawingSink, flapW, 0);
+		cairo_line_to(drawingSink, flapW, 13);
+		cairo_stroke(drawingSink);
+
+		cairo_move_to(drawingSink, flapW - 13, flapH);
+		cairo_line_to(drawingSink, flapW, flapH);
+		cairo_line_to(drawingSink, flapW, flapH - 13);
+		cairo_stroke(drawingSink);
+
+		cairo_move_to(drawingSink, 0, flapH - 13);
+		cairo_line_to(drawingSink, 0, flapH);
+		cairo_line_to(drawingSink, 13, flapH);
+		cairo_stroke(drawingSink);
+
+		const auto flapNr = std::to_string(flapIndex);
+		const auto tureNr = std::to_string(textureIndex);
+		cairo_move_to(drawingSink, 10, 16);
+		cairo_text_path(drawingSink, flapNr.c_str());
+		cairo_move_to(drawingSink, 25, 16);
+		cairo_text_path(drawingSink, tureNr.c_str());
+
+		cairo_move_to(drawingSink, flapW - 10 - 5, 16);
+		cairo_text_path(drawingSink, flapNr.c_str());
+		cairo_move_to(drawingSink, flapW - 25 - 5, 16);
+		cairo_text_path(drawingSink, tureNr.c_str());
+
+		cairo_move_to(drawingSink, flapW - 10 - 5, flapH - 16 + 8);
+		cairo_text_path(drawingSink, flapNr.c_str());
+		cairo_move_to(drawingSink, flapW - 25 - 5, flapH - 16 + 8);
+		cairo_text_path(drawingSink, tureNr.c_str());
+
+		cairo_move_to(drawingSink, 10, flapH - 16 + 8);
+		cairo_text_path(drawingSink, flapNr.c_str());
+		cairo_move_to(drawingSink, 25, flapH - 16 + 8);
+		cairo_text_path(drawingSink, tureNr.c_str());
+
+		cairo_fill(drawingSink);
+
+		if (flapIndex == BUNGHOLE)
+		{
+			cairo_set_source_rgb(drawingSink, 0.28, 0.28, 0.28);
+			cairo_move_to(drawingSink, halfW, halfH - 60);
+			cairo_line_to(drawingSink, halfW, halfH + 60);
+			cairo_move_to(drawingSink, halfW - 60, halfH);
+			cairo_line_to(drawingSink, halfW + 60, halfH);
+			cairo_stroke(drawingSink);
+			cairo_set_source_rgb(drawingSink, 0.68, 0.68, 0.68);
+			cairo_rectangle(drawingSink, halfW - GRIDUNIT / 2, halfH - GRIDUNIT / 2, GRIDUNIT, GRIDUNIT);
+			cairo_stroke(drawingSink);
+		}
 	}
 
 	EndTextureDrawing(debugFlap, drawingSink);
-
-	SDL_SetRenderTarget(GameViewRenderer, rooof);
-	SDL_RenderCopy(GameViewRenderer, debugFlap, &bunghole, &bunghole);
+	if (toggleDebugView)
+	{
+		SDL_SetRenderTarget(GameViewRenderer, rooof);
+		SDL_RenderCopy(GameViewRenderer, debugFlap, &bunghole, &bunghole);
+	}
 
 	std::cout
 		<< "Populated flap #"

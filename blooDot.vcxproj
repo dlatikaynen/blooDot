@@ -231,6 +231,7 @@
     <ClInclude Include="cairo\cairo-win32.h" />
     <ClInclude Include="cairo\cairo.h" />
     <ClInclude Include="chunk-sizes.h" />
+    <ClInclude Include="collision.h" />
     <ClInclude Include="dexassy.h" />
     <ClInclude Include="dialogcontrols.h" />
     <ClInclude Include="ding.h" />
@@ -243,6 +244,7 @@
     <ClInclude Include="gameview.h" />
     <ClInclude Include="geom2d.h" />
     <ClInclude Include="chunk-constants.h" />
+    <ClInclude Include="gpuchan.h" />
     <ClInclude Include="huff-comp.h" />
     <ClInclude Include="huff-deco.h" />
     <ClInclude Include="main.h" />
@@ -254,6 +256,7 @@
     <ClInclude Include="renderstate.h" />
     <ClInclude Include="resource.h" />
     <ClCompile Include="boydsa.cpp" />
+    <ClCompile Include="collision.cpp" />
     <ClCompile Include="dialogcontrols.cpp" />
     <ClCompile Include="ding.cpp" />
     <ClCompile Include="dingsheet.cpp" />
@@ -263,6 +266,7 @@
     <ClCompile Include="gamestate.cpp" />
     <ClCompile Include="gameview.cpp" />
     <ClCompile Include="geom2d.cpp" />
+    <ClCompile Include="gpuchan.cpp" />
     <ClCompile Include="huff-comp.cpp" />
     <ClCompile Include="huff-deco.cpp" />
     <ClCompile Include="menu-settings-screen.cpp" />

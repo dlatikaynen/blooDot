@@ -6,6 +6,10 @@ extern SDL_Renderer* GameViewRenderer;
 bool mainRunning = true;
 SDL_Event mainEvent;
 
+#ifndef NDEBUG
+bool toggleDebugView = false;
+#endif
+
 void MainLoop(SDL_Renderer* renderer)
 {
 	if (!InitializeNewWorld())
@@ -28,6 +32,13 @@ void MainLoop(SDL_Renderer* renderer)
 			case SDL_KEYDOWN:
 				switch (mainEvent.key.keysym.scancode)
 				{
+#ifndef NDEBUG
+				case SDL_SCANCODE_LEFTBRACKET:
+					/* this...is...the...bracket */
+					toggleDebugView = !toggleDebugView;
+					break;
+
+#endif
 				case SDL_SCANCODE_LEFT:
 				case SDL_SCANCODE_KP_4:
 					Scroll(-5, 0);
