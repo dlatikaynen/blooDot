@@ -218,6 +218,7 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="boydsa.h" />
     <ClInclude Include="cairo\cairo-deprecated.h" />
     <ClInclude Include="cairo\cairo-features.h" />
     <ClInclude Include="cairo\cairo-ft.h" />
@@ -252,6 +253,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="renderstate.h" />
     <ClInclude Include="resource.h" />
+    <ClCompile Include="boydsa.cpp" />
     <ClCompile Include="dialogcontrols.cpp" />
     <ClCompile Include="ding.cpp" />
     <ClCompile Include="dingsheet.cpp" />

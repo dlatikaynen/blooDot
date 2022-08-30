@@ -447,6 +447,9 @@
     <ClInclude Include="pch.h">
       <Filter>_Headers\util</Filter>
     </ClInclude>
+    <ClInclude Include="boydsa.h">
+      <Filter>_Headers\algo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -514,6 +517,9 @@
     </ClCompile>
     <ClCompile Include="enxassy.cpp">
       <Filter>_Source Files\res</Filter>
+    </ClCompile>
+    <ClCompile Include="boydsa.cpp">
+      <Filter>_Source Files\algo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

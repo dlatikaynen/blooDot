@@ -36,6 +36,7 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 	constexpr SDL_Rect const carouselDestRect = { 195,sliderY,vignetteWidth,vignetteHeight };
 
 	_PrepareControls(renderer);
+	InitializeBoydsa(640, 480, 50, 370);
 	screenSettingsMenuRunning = true;
 	selectedResolution = Settings.SettingViewportResolution;
 	movingToResolution = Settings.SettingViewportResolution;
@@ -199,6 +200,10 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 		if (drawingTexture) [[likely]]
 		{
 			auto const& drawingSink = GetDrawingSink();
+
+			IterateBoydsa();
+			RenderBoydsa(drawingSink);
+
 			ScreenSettingsMenuItems itemToDraw = SSMI_CANCEL;
 			for (auto y = startY; y < 200; y += stride)
 			{
@@ -246,10 +251,11 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 		}
 
 		SDL_RenderPresent(renderer);
-		SDL_Delay(16);
+		//SDL_Delay(16);
 		++frame;
 	}
 
+	TeardownBoydsa();
 	_TeardownScreenSettingsMenu();
 
 	return screenSettingsMenuRunning;

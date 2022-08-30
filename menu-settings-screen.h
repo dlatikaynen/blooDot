@@ -4,6 +4,7 @@
 #include <SDL_ttf.h>
 #include <cairo.h>
 #include "splash.h"
+#include "boydsa.h"
 
 extern SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget, const int canvasWidth, const int canvasHeight);
 
