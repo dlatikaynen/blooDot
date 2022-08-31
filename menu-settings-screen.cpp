@@ -165,7 +165,7 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 				case SDL_SCANCODE_RETURN2:
 				case SDL_SCANCODE_KP_ENTER:
 				case SDL_SCANCODE_SPACE:
-					if (menuSelection == SSMI_VIDEOMODE && _CanSelectMode())
+					if (menuSelection == SSMI_VIDEOMODE && _CanSelectMode(renderer))
 					{
 						Settings.SettingViewportResolution = movingToResolution;
 					}
@@ -353,18 +353,13 @@ void _PrepareControls(SDL_Renderer* renderer)
 		_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 5, 30, literalSettingsScreenFull);
 		_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 5, 70, literalSettingsScreenFullDetails);
 
-		SDL_DisplayMode displayMode;
-		if (SDL_GetDesktopDisplayMode(0, &displayMode) < 0)
-		{
-			const auto& screenError = SDL_GetError();
-			ReportError("Could not query screen size", screenError);
-		}
-		else
+		SDL_Rect screen;
+		if(_GetResolution(VR_MAXOUT, &screen))
 		{
 			std::stringstream screenWidth;
 			std::stringstream screenHeight;
-			screenWidth << displayMode.w;
-			screenHeight << displayMode.h;
+			screenWidth << screen.w;
+			screenHeight << screen.h;
 			std::string fullScreenDimsTemplate;
 			fullScreenDimsTemplate.assign(literalSettingsScreenFullResolution);
 			auto fullScreenDims1 = std::regex_replace(fullScreenDimsTemplate, std::regex("\\$w"), screenWidth.str());
@@ -405,7 +400,7 @@ void _VignetteLabel(SDL_Renderer* renderer, int font, int size, int vignetteInde
 		textureLabel,
 		&rectLabel
 	);
-
+	
 	SDL_DestroyTexture(textureLabel);
 }
 
@@ -414,7 +409,77 @@ void _TeardownScreenSettingsMenu()
 	slidingModes&& [] { SDL_DestroyTexture(slidingModes); return false; }();
 }
 
-bool _CanSelectMode()
+bool _CanSelectMode(SDL_Renderer* renderer)
 {
+	if (selectedResolution != VR_MAXOUT)
+	{
+		/* we won't precompute this as they could move
+		 * the launcher to a bigger screen, or change settings while we run */
+		SDL_Rect screen;
+		_GetResolution(VR_MAXOUT, &screen);
+
+		SDL_Rect desired;
+		_GetResolution(selectedResolution, &desired);
+
+		if (desired.w > screen.w || desired.h > screen.h)
+		{
+			GpuChanLoop(renderer, "GPU-chan says,", "Oh no,\nit's too\nbig!");
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool _GetResolution(ViewportResolutions videoMode, __out SDL_Rect* dimensions)
+{
+	auto& rect = (*dimensions);
+	SDL_DisplayMode displayMode = {};
+
+	switch (videoMode)
+	{
+	case ViewportResolutions::VR_HERCMONO:
+		rect.w = 720;
+		rect.h = 320;
+		break;
+
+	case ViewportResolutions::VR_TEMPLE:
+		rect.w = 640;
+		rect.h = 480;
+		break;
+
+	case ViewportResolutions::VR_MODEX:
+		rect.w = 320;
+		rect.h = 240;
+		break;
+
+	case ViewportResolutions::VR_SVGA:
+		rect.w = 800;
+		rect.h = 600;
+		break;
+
+	case ViewportResolutions::VR_NOTEBOOK:
+		rect.w = 1280;
+		rect.h = 768;
+		break;
+
+	case ViewportResolutions::VR_MAXOUT:
+		if (SDL_GetDesktopDisplayMode(0, &displayMode) < 0)
+		{
+			const auto& screenError = SDL_GetError();
+			ReportError("Could not query screen size", screenError);
+			return false;
+		}
+
+		rect.w = displayMode.w;
+		rect.h = displayMode.h;
+		break;
+
+	default:
+		rect.w = 0;
+		rect.h = 0;
+		break;
+	}
+
 	return true;
 }
