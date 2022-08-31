@@ -15,6 +15,7 @@ constexpr char const* literalMenuBack = "Back";
 constexpr char const* literalMenuItemUp = "Up";
 constexpr char const* literalMenuItemDown = "Down";
 constexpr char const* literalMenuCancel = "Cancel";
+constexpr char const* literalMenuOk = "Ok";
 constexpr char const* literalSettingsMenuScreensize = "Screen size";
 constexpr char const* literalSettingsMenuControls = "Controls";
 constexpr char const* literalSettingsMenuScreensizeHint = "This setting will only affect the game window.\r\nSetting does not apply to the launcher.";
@@ -36,6 +37,9 @@ constexpr char const* literalSettingsScreenNotebookDetails = "Seven twenty\npee"
 constexpr char const* literalSettingsScreenFull = "Full";
 constexpr char const* literalSettingsScreenFullResolution = "$w x $h";
 constexpr char const* literalSettingsScreenFullDetails = "I paid for the whole screen,\nI'mma use the whole screen";
+constexpr char const* literalMessageInsufficientScreenSize = "You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.";
+constexpr char const* literalDialogTitleGpuChan = "GPU-chan says,";
+constexpr char const* literalDialogBubbleGpuChan = "Oh no,\nit's too\nbig!";
 
 constexpr char const* regionNameUnknown = "Here be dragons";
 constexpr char const* regionNameScullery = "The Scullery";

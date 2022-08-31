@@ -20,13 +20,15 @@ void InitializeBoydsa(int width, int height, int averageMargin, int amountPerGro
 
 void IterateBoydsa()
 {
-    for (auto i = 0; i < boyds.size(); ++i)
+    const auto& numBoyds = boyds.size();
+
+    for (auto i = 0; i < numBoyds; ++i)
     {
         auto forceX = 0.0;
         auto forceY = 0.0;
         auto& boydA = boyds[i];
 
-        for (auto j = 0; j < boyds.size(); ++j)
+        for (auto j = 0; j < numBoyds; ++j)
         {
             if (j != i)
             {
@@ -38,7 +40,7 @@ void IterateBoydsa()
                     const double& dY = boydA.positionY - boydB.positionY;
                     if (dY != 0)
                     {
-                        auto distance = dX * dX + dY * dY;
+                        const auto& distance = dX * dX + dY * dY;
                         if (distance < radiusThresholdSquared)
                         {
                             /* classical newton */
@@ -90,11 +92,11 @@ void RenderBoydsa(cairo_t* const& drawingSink)
 {
     for (auto& boyd : boyds)
     {
-        auto const& r = 1. / abs(boyd.velocityX);
+        auto const& r = 1. - (1. / abs(boyd.velocityX));
         auto const& g = static_cast<double>(boyd.group) / 3.;
         auto const& b = 1. / abs(boyd.velocityY);
 
-        cairo_set_source_rgb(drawingSink, 1. - r, g, b);
+        cairo_set_source_rgb(drawingSink, r, g, b);
         cairo_rectangle(
             drawingSink,
             boyd.positionX - 1,

@@ -262,6 +262,10 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 
 	TeardownBoydsa();
 	_TeardownScreenSettingsMenu();
+	titleTexture && [titleTexture] { SDL_DestroyTexture(titleTexture); return false; }();
+	cancelTexture&& [cancelTexture] { SDL_DestroyTexture(cancelTexture); return false; }();
+	hintTexture&& [hintTexture] { SDL_DestroyTexture(hintTexture); return false; }();
+	hintShadow&& [hintShadow] { SDL_DestroyTexture(hintShadow); return false; }();
 
 	return screenSettingsMenuRunning;
 }
@@ -423,7 +427,13 @@ bool _CanSelectMode(SDL_Renderer* renderer)
 
 		if (desired.w > screen.w || desired.h > screen.h)
 		{
-			GpuChanLoop(renderer, "GPU-chan says,", "Oh no,\nit's too\nbig!");
+			GpuChanLoop(
+				renderer,
+				literalMessageInsufficientScreenSize,
+				literalDialogTitleGpuChan,
+				literalDialogBubbleGpuChan
+			);
+
 			return false;
 		}
 	}
@@ -431,7 +441,7 @@ bool _CanSelectMode(SDL_Renderer* renderer)
 	return true;
 }
 
-bool _GetResolution(ViewportResolutions videoMode, __out SDL_Rect* dimensions)
+bool _GetResolution(ViewportResolutions videoMode, SDL_Rect* dimensions)
 {
 	auto& rect = (*dimensions);
 	SDL_DisplayMode displayMode = {};

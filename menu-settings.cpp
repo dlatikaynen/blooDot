@@ -60,7 +60,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 		{ 250, 230, 230, 245 }
 	);
 
-	unsigned short frame = 0L;
+	unsigned short frame = 0;
 	while (settingsMenuRunning)
 	{
 		while (SDL_PollEvent(&settingsMenuEvent) != 0)

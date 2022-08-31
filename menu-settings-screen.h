@@ -8,7 +8,7 @@
 #include "enums.h"
 
 extern SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget, const int canvasWidth, const int canvasHeight);
-extern bool GpuChanLoop(SDL_Renderer* renderer, const char* title, std::string bubble);
+extern bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title, std::string bubble);
 
 bool ScreenSettingsMenuLoop(SDL_Renderer*);
 
@@ -17,4 +17,4 @@ void _VignetteLabel(SDL_Renderer* renderer, int font, int size, int vignetteInde
 void _AnimateCarousel();
 void _TeardownScreenSettingsMenu();
 bool _CanSelectMode(SDL_Renderer* renderer);
-bool _GetResolution(ViewportResolutions videoMode, __out SDL_Rect* dimensions);
+bool _GetResolution(ViewportResolutions videoMode, SDL_Rect* dimensions);
