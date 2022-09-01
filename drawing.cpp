@@ -1,12 +1,13 @@
 #include "pch.h"
 #include "drawing.h"
+#include "constants.h"
 
 cairo_t* drawingSink = NULL;
 
 cairo_t* BeginTextureDrawing(SDL_Texture* targetTexture)
 {
-	int width = 640;
-	int height = 480;
+	int width = GodsPreferredWidth;
+	int height = GodsPreferredHight;
 	int pitch;
 	void* pixels;
 

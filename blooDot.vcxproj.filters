@@ -456,6 +456,9 @@
     <ClInclude Include="gpuchan.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>_Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

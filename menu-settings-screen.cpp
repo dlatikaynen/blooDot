@@ -8,6 +8,7 @@
 #include "xlations.h"
 #include "settings.h"
 #include <regex>
+#include "constants.h"
 
 constexpr int const bounceMargin = 10;
 constexpr int const vignetteWidth = 250;
@@ -37,7 +38,7 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 	constexpr SDL_Rect const carouselDestRect = { 195,sliderY,vignetteWidth,vignetteHeight };
 
 	_PrepareControls(renderer);
-	InitializeBoydsa(640, 480, 50, 370);
+	InitializeBoydsa(GodsPreferredWidth, GodsPreferredHight, 50, 370);
 	screenSettingsMenuRunning = true;
 	selectedResolution = Settings.SettingViewportResolution;
 	movingToResolution = Settings.SettingViewportResolution;
@@ -55,7 +56,7 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 		FONT_KEY_ALIEN,
 		26,
 		literalAlienScreenSettingsMenuLabel,
-		{ 250,200,200,222 }
+		AlienTextColor
 	);
 
 	/* menu item text */
@@ -65,7 +66,7 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 		FONT_KEY_DIALOG,
 		23,
 		literalMenuCancel,
-		{ 250, 230, 230, 245 }
+		ButtonTextColor
 	);
 
 	/* explanation of why the settings window itself does not change */
@@ -75,7 +76,7 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 		FONT_KEY_TITLE,
 		13,
 		literalSettingsMenuScreensizeHint,
-		{ 250, 250, 250, 255 }
+		DialogTextColor
 	);
 
 	const auto hintShadow = RenderText(
@@ -84,7 +85,7 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 		FONT_KEY_TITLE,
 		13,
 		literalSettingsMenuScreensizeHint,
-		{ 65, 56, 56, 200 }
+		DialogTextShadowColor
 	);
 
 	unsigned short frame = 0L;
@@ -454,8 +455,8 @@ bool _GetResolution(ViewportResolutions videoMode, SDL_Rect* dimensions)
 		break;
 
 	case ViewportResolutions::VR_TEMPLE:
-		rect.w = 640;
-		rect.h = 480;
+		rect.w = GodsPreferredWidth;
+		rect.h = GodsPreferredHight;
 		break;
 
 	case ViewportResolutions::VR_MODEX:

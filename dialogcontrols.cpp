@@ -100,7 +100,7 @@ cairo_t* DrawButton(cairo_t* context, double x, double y, double w, double h, bo
 	return context;
 }
 
-void DrawLabel(SDL_Renderer* renderer, int x, int y, SDL_Texture* texture, __refparam SDL_Rect* frame)
+void DrawLabel(SDL_Renderer* renderer, int x, int y, SDL_Texture* texture, SDL_Rect* frame)
 {
 	(*frame).x = x;
 	(*frame).y = y;

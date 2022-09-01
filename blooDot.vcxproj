@@ -245,6 +245,7 @@
     <ClInclude Include="geom2d.h" />
     <ClInclude Include="chunk-constants.h" />
     <ClInclude Include="gpuchan.h" />
+    <ClInclude Include="constants.h" />
     <ClInclude Include="huff-comp.h" />
     <ClInclude Include="huff-deco.h" />
     <ClInclude Include="main.h" />

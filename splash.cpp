@@ -9,6 +9,7 @@
 #include <random>
 #include <iostream>
 #include "settings.h"
+#include "constants.h"
 
 extern bool mainRunning;
 extern SettingsStruct Settings;
@@ -21,10 +22,8 @@ int backgroundSpeedX = 0;
 int backgroundSpeedY = 0;
 double backgroundPosX = 0.0;
 double backgroundPosY = 0.0;
-const int backgroundW = 640;
-const int backgroundH = 480;
-const int backdropHorz = 1280 - backgroundW;
-const int backdropVert = 720 - backgroundH;
+const int backdropHorz = 1280 - GodsPreferredWidth;
+const int backdropVert = 720 - GodsPreferredHight;
 auto backgroundAnimDelay = 237;
 std::default_random_engine generator;
 std::uniform_int_distribution<int> distribution(0, 3);
@@ -76,8 +75,8 @@ bool SplashLoop(SDL_Renderer* renderer)
 	bool keepRunning = true;
 	LoadSplash(renderer);
 
-	SDL_Rect srcRect{ 0,0,backgroundW,backgroundH };
-	SDL_Rect dstRect{ 0,0,backgroundW,backgroundH };
+	SDL_Rect srcRect{ 0,0,GodsPreferredWidth,GodsPreferredHight };
+	SDL_Rect dstRect{ 0,0,GodsPreferredWidth,GodsPreferredHight };
 	SDL_Rect outerMenuRect{ 150,45,340,390 };
 	SDL_Rect titleRect{ 0,0,0,0 };
 	SDL_Rect authorRect{ 0,0,0,0 };
@@ -293,7 +292,7 @@ bool SplashLoop(SDL_Renderer* renderer)
 		DrawLabel(renderer, 286, 54, titleTexture, &titleRect);
 		DrawLabel(renderer, 346, 454, authorTexture, &authorRect);
 
-		const auto drawingTexture = BeginRenderDrawing(renderer, 640, 480);
+		const auto drawingTexture = BeginRenderDrawing(renderer, GodsPreferredWidth, GodsPreferredHight);
 		if (drawingTexture) [[likely]]
 		{
 			const auto drawingSink = GetDrawingSink();

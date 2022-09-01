@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "gpuchan.h"
 #include "dialogcontrols.h"
+#include "constants.h"
+
+constexpr const SDL_Color titleTextColor = { 11,8,8,222 };
+constexpr const SDL_Color bubbleTextColor = { 12, 8, 8, 255 };
 
 SDL_Texture* gpuChan = NULL;
 SDL_Rect chanDims = { 0 };
@@ -11,7 +15,7 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 {
 	chanRunning = true;
 	_Enter(renderer);
-	SDL_Rect screen = { 0,0,640,480 };
+	SDL_Rect screen = { 0,0,GodsPreferredWidth,GodsPreferredHight };
 	SDL_Rect center = { screen.w - chanDims.w, screen.h - chanDims.h, chanDims.w, chanDims.h};
 	SDL_Rect messageRect{ 0,0,0,0 };
 	SDL_Rect titleRect{ 0,0,0,0 };
@@ -24,7 +28,7 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 		FONT_KEY_TITLE,
 		13,
 		message,
-		{ 11,8,8,222 }
+		titleTextColor
 	);
 
 	const auto titleTexture = RenderText(
@@ -33,7 +37,7 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 		FONT_KEY_TITLE,
 		25,
 		title,
-		{ 11,8,8,222 }
+		titleTextColor
 	);
 
 	const auto okTexture = RenderText(
@@ -42,17 +46,16 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 		FONT_KEY_DIALOG,
 		23,
 		literalMenuOk,
-		{ 250, 230, 230, 245 }
+		ButtonTextColor
 	);
 
-	/* explanation of why the settings window itself does not change */
 	const auto bubbleTexture = RenderText(
 		renderer,
 		&bubbleRect,
 		FONT_KEY_DIALOG,
 		23,
 		bubble.c_str(),
-		{ 12, 8, 8, 255 }
+		bubbleTextColor
 	);
 
 	unsigned short frame = 0;
@@ -60,6 +63,21 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 	{
 		while (SDL_PollEvent(&gpuChanEvent) != 0)
 		{
+			switch (gpuChanEvent.type)
+			{
+			case SDL_KEYDOWN:
+				switch (gpuChanEvent.key.keysym.scancode)
+				{
+				case SDL_SCANCODE_RETURN:
+				case SDL_SCANCODE_RETURN2:
+				case SDL_SCANCODE_KP_ENTER:
+				case SDL_SCANCODE_SPACE:
+				case SDL_SCANCODE_ESCAPE:
+					chanRunning = false;
+					break;
+
+				}
+			}
 		}
 
 		if (SDL_RenderClear(renderer) < 0)
@@ -68,7 +86,7 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 			ReportError("Failed to wipe Gpu-chan", clearError);
 		}
 
-		const auto drawingTexture = BeginRenderDrawing(renderer, 640, 480);
+		const auto drawingTexture = BeginRenderDrawing(renderer, GodsPreferredWidth, GodsPreferredHight);
 		if (drawingTexture) [[likely]]
 		{
 			auto const& drawingSink = GetDrawingSink();

@@ -6,6 +6,7 @@
 #include <cairo.h>
 #include "xlations.h"
 #include "settings.h"
+#include "constants.h"
 
 extern SettingsStruct Settings;
 
@@ -29,7 +30,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 		FONT_KEY_ALIEN,
 		26,
 		literalAlienSettingsMenuLabel,
-		{ 250,200,200,222 }
+		AlienTextColor
 	);
 
 	/* menu item text */
@@ -39,7 +40,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 		FONT_KEY_DIALOG,
 		23,
 		literalMenuBack,
-		{ 250, 230, 230, 245 }
+		ButtonTextColor
 	);
 
 	const auto screensizeTexture = RenderText(
@@ -48,7 +49,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 		FONT_KEY_DIALOG,
 		23,
 		literalSettingsMenuScreensize,
-		{ 250, 230, 230, 245 }
+		ButtonTextColor
 	);
 
 	const auto controlsTexture = RenderText(
@@ -57,7 +58,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 		FONT_KEY_DIALOG,
 		23,
 		literalSettingsMenuControls,
-		{ 250, 230, 230, 245 }
+		ButtonTextColor
 	);
 
 	unsigned short frame = 0;
@@ -135,7 +136,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 		
 		DrawLabel(renderer, 286, 54, titleTexture, &titleRect);
 
-		const auto drawingTexture = BeginRenderDrawing(renderer, 640, 480);
+		const auto drawingTexture = BeginRenderDrawing(renderer, GodsPreferredWidth, GodsPreferredHight);
 		if (drawingTexture) [[likely]]
 		{
 			const auto drawingSink = GetDrawingSink();
