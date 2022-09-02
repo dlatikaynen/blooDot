@@ -4,6 +4,34 @@
 
 cairo_t* drawingSink = NULL;
 
+SDL_Texture* NewTexture(SDL_Renderer* renderer, int w, int h, bool transparentAble, bool forCairo)
+{
+	const auto newTexture = SDL_CreateTexture(
+		renderer,
+		SDL_PIXELFORMAT_ARGB8888,
+		forCairo ? SDL_TEXTUREACCESS_STREAMING : SDL_TEXTUREACCESS_TARGET,
+		w,
+		h
+	);
+
+	if (!newTexture)
+	{
+		const auto creationError = SDL_GetError();
+		ReportError("Failed to create flap texture", creationError);
+	}
+
+	if (transparentAble)
+	{
+		if (SDL_SetTextureBlendMode(newTexture, SDL_BLENDMODE_BLEND) < 0)
+		{
+			const auto blendModeError = SDL_GetError();
+			ReportError("Failed to set flap texture blend mode", blendModeError);
+		}
+	}
+
+	return newTexture;
+}
+
 cairo_t* BeginTextureDrawing(SDL_Texture* targetTexture)
 {
 	int width = GodsPreferredWidth;

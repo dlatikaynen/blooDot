@@ -92,19 +92,19 @@ bool InitializeAllFlaps(int width, int height)
 
 	for (auto i = 0; i < 9; ++i)
 	{
-		flapsFloor[i] = _NewTexture(GameViewRenderer, false);
+		flapsFloor[i] = NewTexture(GameViewRenderer, flapW, flapH, false);
 		if (!flapsFloor[i]) 
 		{
 			return false;
 		}
 
-		flapsWalls[i] = _NewTexture(GameViewRenderer, true);
+		flapsWalls[i] = NewTexture(GameViewRenderer, flapW, flapH, true);
 		if (!flapsWalls[i])
 		{
 			return false;
 		}
 
-		flapsRooof[i] = _NewTexture(GameViewRenderer, true);
+		flapsRooof[i] = NewTexture(GameViewRenderer, flapW, flapH, true);
 		if (!flapsRooof[i])
 		{
 			return false;
@@ -113,7 +113,7 @@ bool InitializeAllFlaps(int width, int height)
 
 	RecomputeFlapConstellation();
 #ifndef NDEBUG
-	debugFlap = _NewTexture(GameViewRenderer, true, true);
+	debugFlap = NewTexture(GameViewRenderer, flapW, flapH, true, true);
 #endif
 
 	return true;
@@ -739,34 +739,6 @@ void RenderstateTeardown()
 		SDL_DestroyTexture(flapsWalls[i]);
 		SDL_DestroyTexture(flapsRooof[i]);
 	}
-}
-
-SDL_Texture* _NewTexture(SDL_Renderer* renderer, bool transparentAble, bool forCairo)
-{
-	const auto newTexture = SDL_CreateTexture(
-		renderer,
-		SDL_PIXELFORMAT_ARGB8888,
-		forCairo ? SDL_TEXTUREACCESS_STREAMING : SDL_TEXTUREACCESS_TARGET,
-		flapW,
-		flapH
-	);
-
-	if (!newTexture)
-	{
-		const auto creationError = SDL_GetError();
-		ReportError("Failed to create flap texture", creationError);
-	}
-
-	if (transparentAble)
-	{
-		if (SDL_SetTextureBlendMode(newTexture, SDL_BLENDMODE_BLEND) < 0)
-		{
-			const auto blendModeError = SDL_GetError();
-			ReportError("Failed to set flap texture blend mode", blendModeError);
-		}
-	}
-
-	return newTexture;
 }
 
 void _SnapHorizontal(int dx)

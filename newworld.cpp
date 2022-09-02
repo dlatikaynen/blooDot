@@ -43,6 +43,7 @@ bool InitializeNewWorld()
 	_Put(centerSheet, -2, 0, Ding::Lettuce);
 	_Put(centerSheet, 2, 0, Ding::Schaed);
 	_Put(centerSheet, 0, -2, Ding::Snow);
+	_Put(centerSheet, 0, -3, Ding::WallClassic);
 
 	_Put(centerSheet, 6, 4, Ding::Grass);
 	_Put(centerSheet, 7, 4, Ding::Grass);

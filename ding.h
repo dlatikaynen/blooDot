@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include <cairo.h>
 #include "enums.h"
 #include "dexassy.h"
 
@@ -25,6 +26,8 @@ enum Ding : unsigned short
 	RooofMesh
 };
 
-DingProps GetDingDefaultProps(Ding ding);
-int GetDingResourceKey(Ding ding);
-char const* GetDingName(Ding ding);
+DingProps GetDingDefaultProps(const Ding ding);
+bool IsOwnerDrawnDing(const Ding ding);
+int GetDingResourceKey(const Ding ding);
+char const* GetDingName(const Ding ding);
+void DrawDing(const Ding ding, cairo_t* canvas);

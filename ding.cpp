@@ -2,7 +2,7 @@
 #include "ding.h"
 #include "xlations.h"
 
-DingProps GetDingDefaultProps(Ding ding)
+DingProps GetDingDefaultProps(const Ding ding)
 {
 	switch (ding)
 	{
@@ -27,7 +27,12 @@ DingProps GetDingDefaultProps(Ding ding)
 	}
 }
 
-int GetDingResourceKey(Ding ding)
+bool IsOwnerDrawnDing(const Ding ding)
+{
+	return ding == Ding::WallClassic;
+}
+
+int GetDingResourceKey(const Ding ding)
 {
 	switch (ding)
 	{
@@ -79,10 +84,13 @@ int GetDingResourceKey(Ding ding)
 	}
 }
 
-char const* GetDingName(Ding ding)
+char const* GetDingName(const Ding ding)
 {
 	switch (ding)
 	{
+	case Ding::WallClassic:
+		return dingNameWallClassic;
+
 	case Ding::BarrelIndigo:
 		return dingNameBarrelIndigo;
 
@@ -128,5 +136,24 @@ char const* GetDingName(Ding ding)
 	default:
 		assert(ding != ding);
 		return nullptr;
+	}
+}
+
+void DrawDing(const Ding ding, cairo_t* canvas)
+{
+	switch (ding)
+	{
+	case Ding::WallClassic:
+		cairo_set_source_rgb(canvas, .3, .3, .3);
+		cairo_rectangle(canvas, 0, 0, GRIDUNIT, GRIDUNIT);
+		cairo_fill(canvas);
+		cairo_set_source_rgb(canvas, .7, .7, .7);
+		cairo_set_line_width(canvas, 3.);
+		cairo_rectangle(canvas, 6, 6, GRIDUNIT - 12, GRIDUNIT - 12);
+		cairo_stroke(canvas);
+		break;
+
+	default:
+		assert(!"Don't know how to draw");
 	}
 }

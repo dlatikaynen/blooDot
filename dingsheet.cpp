@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "dingsheet.h"
 #include <iostream>
+#include "drawing.h"
 
 constexpr const int DING_SHEET_SIDE_LENGTH = 800;
 
@@ -18,13 +19,23 @@ DingLocator* GetDing(Ding ding)
 	{
 		/* not already on a sheet, load-on-demand now */
 		SDL_Rect dingDimensions;
-		const auto resourceKey = GetDingResourceKey(ding);
-		const auto dingTexture = _LoadDingTexture(resourceKey, &dingDimensions);
+		SDL_Texture* dingTexture = NULL;
+
+		if (IsOwnerDrawnDing(ding))
+		{
+			dingTexture = _OwnerDrawDing(ding, &dingDimensions);
+		}
+		else
+		{
+			const auto resourceKey = GetDingResourceKey(ding);
+			dingTexture = _LoadDingTexture(resourceKey, &dingDimensions);
+		}
+		
 		if (!dingTexture)
 		{
 			return NULL;
 		}
-		
+
 		const auto newLocator = _PlaceOnDingSheet(&dingDimensions, dingTexture, ding);
 		SDL_DestroyTexture(dingTexture);
 		dingMap[ding] = newLocator;
@@ -81,6 +92,38 @@ SDL_Texture* _LoadDingTexture(int resourceKey, __out SDL_Rect* dimensions)
 	}
 
 	return resTexture;
+}
+
+SDL_Texture* _OwnerDrawDing(Ding ding, __out SDL_Rect* dimensions)
+{
+	auto& bounds = (*dimensions);
+	bounds = { 0,0,GRIDUNIT,GRIDUNIT };
+	auto drawTo = NewTexture(GameViewRenderer, GRIDUNIT, GRIDUNIT, true);
+	if (drawTo == NULL)
+	{
+		return NULL;
+	}
+
+	auto restoreTarget = SDL_GetRenderTarget(GameViewRenderer);
+	if(SDL_SetRenderTarget(GameViewRenderer, drawTo) < 0)
+	{
+		const auto targetError = SDL_GetError();
+		ReportError("Could not set rendertarget for ding ownerdraw", targetError);
+		return NULL;
+	}
+
+	auto canvasTexture = BeginRenderDrawing(GameViewRenderer, GRIDUNIT, GRIDUNIT);
+	auto const& canvas = GetDrawingSink();
+	DrawDing(ding, canvas);
+	EndRenderDrawing(GameViewRenderer, canvasTexture);
+	if (SDL_SetRenderTarget(GameViewRenderer, restoreTarget) < 0)
+	{
+		const auto restoreError = SDL_GetError();
+		ReportError("Could not restore rendertarget after ding ownerdraw", restoreError);
+		return NULL;
+	}
+
+	return drawTo;
 }
 
 DingLocator _PlaceOnDingSheet(SDL_Rect* dingDimensions, SDL_Texture* dingTexture, Ding dingInfo)

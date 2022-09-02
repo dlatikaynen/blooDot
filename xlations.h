@@ -49,6 +49,7 @@ constexpr char const* mainQuestTitleDrawing = "The Drawing of the Cage of a Plat
 constexpr char const* mainQuestTitleDrowning = "The Drowning of the Wage of an Octopus";
 constexpr char const* mainQuestTitleKermit = "Get the Frog a Loan";
 
+constexpr char const* dingNameWallClassic = "Wall cube";
 constexpr char const* dingNameBarrelIndigo = "Premium cask";
 constexpr char const* dingNameBarrelWood = "Wooden cask";
 constexpr char const* dingNameBarrelLoaded = "Loaded barrel";

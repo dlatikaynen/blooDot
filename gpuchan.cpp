@@ -117,10 +117,10 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 	}
 
 	_PullOut();
-	messageTexture&& [messageTexture] { SDL_DestroyTexture(messageTexture); return false; }();
-	titleTexture&& [titleTexture] { SDL_DestroyTexture(titleTexture); return false; }();
-	okTexture&& [okTexture] { SDL_DestroyTexture(okTexture); return false; }();
-	bubbleTexture&& [bubbleTexture] { SDL_DestroyTexture(bubbleTexture); return false; }();
+	messageTexture && [messageTexture] { SDL_DestroyTexture(messageTexture); return false; }();
+	titleTexture && [titleTexture] { SDL_DestroyTexture(titleTexture); return false; }();
+	okTexture && [okTexture] { SDL_DestroyTexture(okTexture); return false; }();
+	bubbleTexture && [bubbleTexture] { SDL_DestroyTexture(bubbleTexture); return false; }();
 
 	return chanRunning;
 }
