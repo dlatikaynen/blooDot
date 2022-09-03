@@ -9,6 +9,7 @@
 #include "constants.h"
 
 extern SettingsStruct Settings;
+extern bool mainRunning;
 
 SDL_Event settingsMenuEvent;
 bool settingsMenuRunning = false;
@@ -62,12 +63,17 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 	);
 
 	unsigned short frame = 0;
-	while (settingsMenuRunning)
+	while (settingsMenuRunning && mainRunning)
 	{
 		while (SDL_PollEvent(&settingsMenuEvent) != 0)
 		{
 			switch (settingsMenuEvent.type)
 			{
+			case SDL_QUIT:
+				mainRunning = false;
+				settingsMenuRunning = false;
+				break;
+
 			case SDL_KEYDOWN:
 				switch (settingsMenuEvent.key.keysym.scancode)
 				{

@@ -6,6 +6,8 @@
 constexpr const SDL_Color titleTextColor = { 11,8,8,222 };
 constexpr const SDL_Color bubbleTextColor = { 12, 8, 8, 255 };
 
+extern bool mainRunning;
+
 SDL_Texture* gpuChan = NULL;
 SDL_Rect chanDims = { 0 };
 bool chanRunning = false;
@@ -65,6 +67,11 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 		{
 			switch (gpuChanEvent.type)
 			{
+			case SDL_QUIT:
+				mainRunning = false;
+				chanRunning = false;
+				break;
+
 			case SDL_KEYDOWN:
 				switch (gpuChanEvent.key.keysym.scancode)
 				{

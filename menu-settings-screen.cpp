@@ -17,6 +17,7 @@ constexpr int const vignetteGap = 10;
 constexpr int const vignetteCount = 6;
 
 extern SettingsStruct Settings;
+extern bool mainRunning;
 
 SDL_Event screenSettingsMenuEvent;
 bool screenSettingsMenuRunning = false;
@@ -95,6 +96,11 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 		{
 			switch (screenSettingsMenuEvent.type)
 			{
+			case SDL_QUIT:
+				mainRunning = false;
+				screenSettingsMenuRunning = false;
+				break;
+
 			case SDL_KEYDOWN:
 				switch (screenSettingsMenuEvent.key.keysym.scancode)
 				{

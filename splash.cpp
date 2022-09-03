@@ -187,7 +187,7 @@ bool SplashLoop(SDL_Renderer* renderer)
 	}
 
 	unsigned short frame = 0L;
-	while (splashRunning)
+	while (splashRunning && mainRunning)
 	{
 		while (SDL_PollEvent(&splashEvent) != 0)
 		{
