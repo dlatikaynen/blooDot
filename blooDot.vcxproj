@@ -246,6 +246,7 @@
     <ClInclude Include="chunk-constants.h" />
     <ClInclude Include="gpuchan.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="menu-settings-lang.h" />
     <ClInclude Include="huff-comp.h" />
     <ClInclude Include="huff-deco.h" />
     <ClInclude Include="main.h" />
@@ -270,6 +271,7 @@
     <ClCompile Include="gpuchan.cpp" />
     <ClCompile Include="huff-comp.cpp" />
     <ClCompile Include="huff-deco.cpp" />
+    <ClCompile Include="menu-settings-lang.cpp" />
     <ClCompile Include="menu-settings-screen.cpp" />
     <ClCompile Include="menu-settings.cpp" />
     <ClCompile Include="newworld.cpp" />

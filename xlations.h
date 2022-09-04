@@ -3,6 +3,7 @@
 constexpr char const* literalAlienMainMenuLabel = "MejnMenju";
 constexpr char const* literalAlienSettingsMenuLabel = "Setins";
 constexpr char const* literalAlienScreenSettingsMenuLabel = "ScrinSaiz";
+constexpr char const* literalAlienLangSettingsMenuLabel = "lenguij";
 constexpr char const* literalManufacturer = "Copyright zOzz FlaminginSarjakuvatOj";
 constexpr char const* literalMenuContinue = "Continue";
 constexpr char const* literalMenuLoad = "Load";
@@ -18,6 +19,7 @@ constexpr char const* literalMenuCancel = "Cancel";
 constexpr char const* literalMenuOk = "Ok";
 constexpr char const* literalSettingsMenuScreensize = "Screen size";
 constexpr char const* literalSettingsMenuControls = "Controls";
+constexpr char const* literalSettingsMenuLanguage = "Language";
 constexpr char const* literalSettingsMenuScreensizeHint = "This setting will only affect the game window.\r\nSetting does not apply to the launcher.";
 constexpr char const* literalSettingsScreenTemple = "VGA";
 constexpr char const* literalSettingsScreenTempleResolution = "640 x 480";
@@ -38,6 +40,19 @@ constexpr char const* literalSettingsScreenFull = "Full";
 constexpr char const* literalSettingsScreenFullResolution = "$w x $h";
 constexpr char const* literalSettingsScreenFullDetails = "I paid for the whole screen,\nI'mma use the whole screen";
 constexpr char const* literalMessageInsufficientScreenSize = "You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.";
+constexpr char const* literalSettingsLanguageEN = "[en]";
+constexpr char const* literalSettingsLanguageENDetails = "English";
+constexpr char const* literalSettingsLanguageENName = "English";
+constexpr char const* literalSettingsLanguageFI = "[fi]";
+constexpr char const* literalSettingsLanguageFIDetails = "Suomen kieli";
+constexpr char const* literalSettingsLanguageFIName = "Finnish";
+constexpr char const* literalSettingsLanguageDE = "[de]";
+constexpr char const* literalSettingsLanguageDEDetails = "Deutsch";
+constexpr char const* literalSettingsLanguageDEName = "German";
+constexpr char const* literalSettingsLanguageUA = "[ua]";
+constexpr char const* literalSettingsLanguageUADetails = "Українська";
+constexpr char const* literalSettingsLanguageUAName = "Ukrainian";
+
 constexpr char const* literalDialogTitleGpuChan = "GPU-chan says,";
 constexpr char const* literalDialogBubbleGpuChan = "Oh no,\nit's too\nbig!";
 

@@ -459,6 +459,9 @@
     <ClInclude Include="constants.h">
       <Filter>_Headers</Filter>
     </ClInclude>
+    <ClInclude Include="menu-settings-lang.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -534,6 +537,9 @@
       <Filter>_Source Files\algo</Filter>
     </ClCompile>
     <ClCompile Include="gpuchan.cpp">
+      <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="menu-settings-lang.cpp">
       <Filter>_Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>

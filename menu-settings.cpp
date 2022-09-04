@@ -24,6 +24,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 	SDL_Rect backRect{ 0,0,0,0 };
 	SDL_Rect screensizeRect{ 0,0,0,0 };
 	SDL_Rect controlsRect{ 0,0,0,0 };
+	SDL_Rect languageRect{ 0,0,0,0 };
 
 	const auto titleTexture = RenderText(
 		renderer,
@@ -62,6 +63,15 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 		ButtonTextColor
 	);
 
+	const auto languageTexture = RenderText(
+		renderer,
+		&languageRect,
+		FONT_KEY_DIALOG,
+		23,
+		literalSettingsMenuLanguage,
+		ButtonTextColor
+	);
+
 	unsigned short frame = 0;
 	while (settingsMenuRunning && mainRunning)
 	{
@@ -90,7 +100,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 				case SDL_SCANCODE_DOWN:
 				case SDL_SCANCODE_KP_2:
 				case SDL_SCANCODE_S:
-					if (menuSelection != SMI_CONTROLS)
+					if (menuSelection != SMI_LANGUAGE)
 					{
 						menuSelection = static_cast<SettingsMenuItems>(menuSelection + 1);
 					}
@@ -99,7 +109,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 
 				case SDL_SCANCODE_PAGEDOWN:
 				case SDL_SCANCODE_END:
-					menuSelection = SMI_CONTROLS;
+					menuSelection = SMI_LANGUAGE;
 					break;
 
 				case SDL_SCANCODE_PAGEUP:
@@ -149,7 +159,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 			const int stride = 46;
 			const int backGap = stride / 2;
 			SettingsMenuItems itemToDraw = SMI_BACK;
-			for (auto y = 94; y < 250; y += stride)
+			for (auto y = 94; y < 296; y += stride)
 			{
 				DrawButton(drawingSink, 195, y, 250, 42, itemToDraw == menuSelection);
 				if (itemToDraw == menuSelection)
@@ -171,12 +181,19 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 			DrawLabel(renderer, 235, 100 + 0 * stride + 0 * backGap, backTexture, &backRect);
 			DrawLabel(renderer, 235, 100 + 1 * stride + 1 * backGap, screensizeTexture, &screensizeRect);
 			DrawLabel(renderer, 235, 100 + 2 * stride + 1 * backGap, controlsTexture, &controlsRect);
+			DrawLabel(renderer, 235, 100 + 3 * stride + 1 * backGap, languageTexture, &languageRect);
 		}
 
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);
 		++frame;
 	}
+
+	SDL_DestroyTexture(titleTexture);
+	SDL_DestroyTexture(backTexture);
+	SDL_DestroyTexture(screensizeTexture);
+	SDL_DestroyTexture(controlsTexture);
+	SDL_DestroyTexture(languageTexture);
 
 	return settingsMenuRunning;
 }
@@ -189,6 +206,10 @@ bool _EnterAndHandleSettingsMenu(SDL_Renderer* renderer)
 		_EnterAndHandleScreenSettings(renderer);
 		break;
 
+	case SMI_LANGUAGE:
+		_EnterAndHandleLanguageSettings(renderer);
+		break;
+
 	default:
 		return false;
 	}
@@ -198,5 +219,10 @@ bool _EnterAndHandleSettingsMenu(SDL_Renderer* renderer)
 
 void _EnterAndHandleScreenSettings(SDL_Renderer* renderer)
 {
-	ScreenSettingsMenuLoop(renderer);
+	blooDot::MenuSettingsScreen::ScreenSettingsMenuLoop(renderer);
+}
+
+void _EnterAndHandleLanguageSettings(SDL_Renderer* renderer)
+{
+	blooDot::MenuSettingsLang::LanguageSettingsMenuLoop(renderer);
 }

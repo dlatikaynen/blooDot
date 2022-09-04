@@ -9,6 +9,13 @@ enum ViewportResolutions {
 	VR_MAXOUT    // fullscreen
 };
 
+enum UserInterfaceLanguages {
+	UIL_ENGLISH,
+	UIL_FINNISH,
+	UIL_GERMAN,
+	UIL_UKRAINIAN
+};
+
 enum FlappySituation {
 	FS_BUNGHOLE,
 	FS_VERTICAL,
@@ -29,12 +36,18 @@ enum MainMenuItems {
 enum SettingsMenuItems {
 	SMI_BACK,
 	SMI_SCREENSIZE,
-	SMI_CONTROLS
+	SMI_CONTROLS,
+	SMI_LANGUAGE
 };
 
 enum ScreenSettingsMenuItems {
 	SSMI_CANCEL,
 	SSMI_VIDEOMODE
+};
+
+enum LangSettingsMenuItems {
+	LSMI_CANCEL,
+	LSMI_USER_INTERFACE_LANGUAGE
 };
 
 enum DingProps : unsigned char
@@ -60,4 +73,14 @@ inline ViewportResolutions operator--(ViewportResolutions& vpr)
 inline ViewportResolutions operator++(ViewportResolutions& vpr)
 {
 	return static_cast<ViewportResolutions>(static_cast<int>(vpr) + 1);
+}
+
+inline UserInterfaceLanguages operator--(UserInterfaceLanguages& uil)
+{
+	return static_cast<UserInterfaceLanguages>(static_cast<int>(uil) - 1);
+}
+
+inline UserInterfaceLanguages operator++(UserInterfaceLanguages& uil)
+{
+	return static_cast<UserInterfaceLanguages>(static_cast<int>(uil) + 1);
 }
