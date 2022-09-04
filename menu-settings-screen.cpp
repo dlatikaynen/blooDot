@@ -179,6 +179,10 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 						Settings.SettingViewportResolution = movingToResolution;
 						screenSettingsMenuRunning = false;
 					}
+					else if (menuSelection == SSMI_CANCEL)
+					{
+						screenSettingsMenuRunning = false;
+					}
 
 					break;
 
