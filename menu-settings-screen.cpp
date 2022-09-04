@@ -21,9 +21,9 @@ extern bool mainRunning;
 
 SDL_Event screenSettingsMenuEvent;
 bool screenSettingsMenuRunning = false;
-ScreenSettingsMenuItems menuSelection = SSMI_CANCEL;
-ViewportResolutions selectedResolution = ViewportResolutions::VR_TEMPLE;
-ViewportResolutions movingToResolution = ViewportResolutions::VR_TEMPLE;
+auto menuSelection = ScreenSettingsMenuItems::SSMI_CANCEL;
+auto selectedResolution = ViewportResolutions::VR_TEMPLE;
+auto movingToResolution = ViewportResolutions::VR_TEMPLE;
 SDL_Texture* slidingModes;
 int sliderTextureWidth;
 int sliderOffsetLeft = bounceMargin;
@@ -128,7 +128,8 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 						// TODO: soundeffect_moveinmenu_selecteditemchange
 						menuSelection = SSMI_VIDEOMODE;
 					}
-					else if (selectedResolution == ViewportResolutions::VR_TEMPLE)
+					
+					if (selectedResolution == ViewportResolutions::VR_TEMPLE)
 					{
 						// TODO: soundeffect_moveinmenu_bounce
 					}
@@ -152,7 +153,8 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 						// TODO: soundeffect_moveinmenu_selecteditemchange
 						menuSelection = SSMI_VIDEOMODE;
 					}
-					else if (selectedResolution == ViewportResolutions::VR_MAXOUT)
+					
+					if (selectedResolution == ViewportResolutions::VR_MAXOUT)
 					{
 						// TODO: soundeffect_moveinmenu_bounce
 					}
@@ -175,9 +177,9 @@ bool ScreenSettingsMenuLoop(SDL_Renderer* renderer)
 					if (menuSelection == SSMI_VIDEOMODE && _CanSelectMode(renderer))
 					{
 						Settings.SettingViewportResolution = movingToResolution;
+						screenSettingsMenuRunning = false;
 					}
 
-					screenSettingsMenuRunning = false;
 					break;
 
 				case SDL_SCANCODE_ESCAPE:
