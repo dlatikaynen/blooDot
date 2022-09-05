@@ -231,6 +231,7 @@
     <ClInclude Include="cairo\cairo-win32.h" />
     <ClInclude Include="cairo\cairo.h" />
     <ClInclude Include="chunk-sizes.h" />
+    <ClInclude Include="clumsypack.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="dexassy.h" />
     <ClInclude Include="dialogcontrols.h" />
@@ -684,6 +685,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="planning\sfx.ligma">
+      <SubType>Designer</SubType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

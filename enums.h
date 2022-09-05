@@ -6,6 +6,7 @@ enum ViewportResolutions {
 	VR_HERCMONO, //  720 x 348
 	VR_SVGA,     //  800 x 600
 	VR_NOTEBOOK, // 1280 x 720
+	VR_SQUARE,   // fullscreen aspect ratio 1
 	VR_MAXOUT    // fullscreen
 };
 

@@ -14,7 +14,7 @@ constexpr int const bounceMargin = 10;
 constexpr int const vignetteWidth = 250;
 constexpr int const vignetteHeight = 220;
 constexpr int const vignetteGap = 10;
-constexpr int const vignetteCount = 6;
+constexpr int const vignetteCount = 7;
 
 extern SettingsStruct Settings;
 extern bool mainRunning;
@@ -372,8 +372,11 @@ namespace blooDot::MenuSettingsScreen
 			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 4, 70, literalSettingsScreenNotebookDetails);
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 4, 190, literalSettingsScreenNotebookResolution);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 5, 30, literalSettingsScreenFull);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 5, 70, literalSettingsScreenFullDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 5, 30, literalSettingsScreenSquare);
+			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 5, 70, literalSettingsScreenSquareDetails);
+
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 6, 30, literalSettingsScreenFull);
+			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 6, 70, literalSettingsScreenFullDetails);
 
 			SDL_Rect screen;
 			if (_GetResolution(VR_MAXOUT, &screen))
@@ -383,10 +386,14 @@ namespace blooDot::MenuSettingsScreen
 				screenWidth << screen.w;
 				screenHeight << screen.h;
 				std::string fullScreenDimsTemplate;
+				std::string squareDimsTemplate;
 				fullScreenDimsTemplate.assign(literalSettingsScreenFullResolution);
+				squareDimsTemplate.assign(literalSettingsScreenSquareResolution);
 				auto fullScreenDims1 = std::regex_replace(fullScreenDimsTemplate, std::regex("\\$w"), screenWidth.str());
 				auto fullScreenDims2 = std::regex_replace(fullScreenDims1, std::regex("\\$h"), screenHeight.str());
-				_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 5, 190, fullScreenDims2.c_str());
+				auto fullScreenDims3 = std::regex_replace(squareDimsTemplate, std::regex("\\$h"), screenHeight.str());
+				_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 5, 190, fullScreenDims3.c_str());
+				_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 6, 190, fullScreenDims2.c_str());
 			}
 
 			if (SDL_SetRenderTarget(renderer, NULL) < 0)
@@ -489,6 +496,18 @@ namespace blooDot::MenuSettingsScreen
 		case ViewportResolutions::VR_NOTEBOOK:
 			rect.w = 1280;
 			rect.h = 768;
+			break;
+
+		case ViewportResolutions::VR_SQUARE:
+			if (SDL_GetDesktopDisplayMode(0, &displayMode) < 0)
+			{
+				const auto& screenError = SDL_GetError();
+				ReportError("Could not query screen size", screenError);
+				return false;
+			}
+
+			rect.w = std::min(displayMode.w, displayMode.h);
+			rect.h = std::min(displayMode.h, displayMode.w);
 			break;
 
 		case ViewportResolutions::VR_MAXOUT:
