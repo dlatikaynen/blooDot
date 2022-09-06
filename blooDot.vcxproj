@@ -370,6 +370,7 @@
     <ClInclude Include="SDL\include\SDL_video.h" />
     <ClInclude Include="SDL\include\SDL_vulkan.h" />
     <ClInclude Include="settings.h" />
+    <ClInclude Include="sfx.h" />
     <ClInclude Include="splash.h" />
     <ClInclude Include="xlations.h" />
   </ItemGroup>
@@ -381,6 +382,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="settings.cpp" />
+    <ClCompile Include="sfx.cpp" />
     <ClCompile Include="splash.cpp" />
   </ItemGroup>
   <ItemGroup>

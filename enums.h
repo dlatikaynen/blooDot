@@ -10,6 +10,14 @@ enum ViewportResolutions {
 	VR_MAXOUT    // fullscreen
 };
 
+enum SoundEffect {
+	SFX_BULLET_DECAY,
+	SFX_BUMP,
+	SFX_SELCHG,
+	SFX_SELCONF,
+	SFX_ASTERISK
+};
+
 enum UserInterfaceLanguages {
 	UIL_ENGLISH,
 	UIL_FINNISH,

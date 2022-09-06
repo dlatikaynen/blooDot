@@ -61,6 +61,12 @@
     <Filter Include="Resource Files\sfx">
       <UniqueIdentifier>{3ba7a2cb-ca59-4c4c-8e1b-1fb83dbf5bef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_Headers\audio">
+      <UniqueIdentifier>{aa111597-9b3d-4872-966d-c5b420aa1afe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\audio">
+      <UniqueIdentifier>{c8097a68-b789-45aa-add5-a50d87197559}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL\include\begin_code.h">
@@ -465,6 +471,9 @@
     <ClInclude Include="clumsypack.h">
       <Filter>_Headers\algo</Filter>
     </ClInclude>
+    <ClInclude Include="sfx.h">
+      <Filter>_Headers\audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -544,6 +553,9 @@
     </ClCompile>
     <ClCompile Include="menu-settings-lang.cpp">
       <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="sfx.cpp">
+      <Filter>_Source Files\audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

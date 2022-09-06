@@ -35,8 +35,14 @@ int Cook()
 			recipeLine << loadedLine;
 			std::string fileName;
 			std::string identifier;
-			if (std::getline(recipeLine, fileName, '\t')) 
+			if (std::getline(recipeLine, fileName, '\t'))
 			{
+				if (recipeLine.str()[0] == '#')
+				{
+					std::cout << "Skipping commented-out entry\n";
+					continue;
+				}
+
 				if (std::getline(recipeLine, identifier, '\t'))
 				{
 					std::cout
