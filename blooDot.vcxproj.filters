@@ -718,5 +718,17 @@
     <Media Include="res\projectile-decay.wav">
       <Filter>Resource Files\sfx</Filter>
     </Media>
+    <Media Include="res\asterisk.wav">
+      <Filter>Resource Files\sfx</Filter>
+    </Media>
+    <Media Include="res\bump.wav">
+      <Filter>Resource Files\sfx</Filter>
+    </Media>
+    <Media Include="res\selchg.wav">
+      <Filter>Resource Files\sfx</Filter>
+    </Media>
+    <Media Include="res\selconf.wav">
+      <Filter>Resource Files\sfx</Filter>
+    </Media>
   </ItemGroup>
 </Project>

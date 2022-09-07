@@ -7,6 +7,7 @@
 #include "huff-comp.h"
 #include "huff-deco.h"
 #include "constants.h"
+#include "sfx.h"
 
 const int ExitCodeNormally = 0x00;
 const int ExitCodeSDLInitFail = 0x55;
@@ -157,27 +158,16 @@ int main(int, char**)
 
 		PrepareIndex();
 		OpenCooked();
-
-		SDL_RWops* soundFile;
-		const auto soundMem = Retrieve(CHUNK_KEY_SFX_PROJECTILEDECAY, &soundFile);
-		const auto soundEffect = Mix_LoadWAV_RW(soundFile, true);
-		soundFile->close(soundFile);
-		SDL_free(soundMem);
-		if (!soundEffect)
-		{
-			const auto soundError = SDL_GetError();
-			ReportError("Failed to load sound effect", soundError);
-			break;
-		}
+		blooDot::Sfx::PreloadMenuSfx();
 
 		SDL_ShowWindow(mainWindow);
-		Mix_PlayChannel(-1, soundEffect, 0);
+		blooDot::Sfx::Play(SoundEffect::SFX_BULLET_DECAY);
 		if (SplashLoop(renderer))
 		{
 			MainLoop(renderer);
 		}
 
-		Mix_FreeChunk(soundEffect);
+		blooDot::Sfx::Teardown();
 		Mix_Quit();
 		IMG_Quit();
 		SDL_DestroyRenderer(renderer);

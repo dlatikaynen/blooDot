@@ -679,6 +679,8 @@
     </Font>
   </ItemGroup>
   <ItemGroup>
+    <Media Include="res\asterisk.wav" />
+    <Media Include="res\bump.wav" />
     <Media Include="res\projectile-decay.wav">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|Win32'">true</ExcludedFromBuild>
@@ -687,6 +689,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Media>
+    <Media Include="res\selchg.wav" />
+    <Media Include="res\selconf.wav" />
   </ItemGroup>
   <ItemGroup>
     <None Include="planning\sfx.ligma">
