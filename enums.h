@@ -1,6 +1,6 @@
 #pragma once
 
-enum ViewportResolutions {
+enum ViewportResolutions : char {
 	VR_TEMPLE,   //  640 x 480
 	VR_MODEX,    //  320 x 240
 	VR_HERCMONO, //  720 x 348
@@ -18,7 +18,7 @@ enum SoundEffect {
 	SFX_ASTERISK
 };
 
-enum UserInterfaceLanguages {
+enum UserInterfaceLanguages : char {
 	UIL_ENGLISH,
 	UIL_FINNISH,
 	UIL_GERMAN,
@@ -40,6 +40,11 @@ enum MainMenuItems {
 	MMI_NEWMULTINET,
 	MMI_SETTINGS,
 	MMI_EXIT
+};
+
+enum LoadMenuItems {
+	LMI_CANCEL,
+	LMI_SAVEGAME
 };
 
 enum SettingsMenuItems {

@@ -10,6 +10,7 @@
 #include <iostream>
 #include "settings.h"
 #include "constants.h"
+#include "sfx.h"
 
 extern bool mainRunning;
 extern SettingsStruct Settings;
@@ -204,9 +205,14 @@ bool SplashLoop(SDL_Renderer* renderer)
 				case SDL_SCANCODE_UP:
 				case SDL_SCANCODE_KP_8:
 				case SDL_SCANCODE_W:
-					if (menuSelection != MMI_CUE)
+					if (menuSelection == MMI_CUE)
+					{
+						blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+					}
+					else
 					{
 						menuSelection = static_cast<MainMenuItems>(menuSelection - 1);
+						blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 					}
 
 					break;
@@ -214,30 +220,66 @@ bool SplashLoop(SDL_Renderer* renderer)
 				case SDL_SCANCODE_DOWN:
 				case SDL_SCANCODE_KP_2:
 				case SDL_SCANCODE_S:
-					if (menuSelection != MMI_EXIT)
+					if (menuSelection == MMI_EXIT)
+					{
+						blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+					}
+					else
 					{
 						menuSelection = static_cast<MainMenuItems>(menuSelection + 1);
+						blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 					}
 
 					break;
 
 				case SDL_SCANCODE_PAGEDOWN:
 				case SDL_SCANCODE_END:
-					menuSelection = MMI_EXIT;
+					if (menuSelection == MMI_EXIT)
+					{
+						blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+					}
+					else
+					{
+						menuSelection = MMI_EXIT;
+						blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
+					}
+
 					break;
 
 				case SDL_SCANCODE_PAGEUP:
-					menuSelection = MMI_CUE;
+					if (menuSelection == MMI_CUE)
+					{
+						blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+					}
+					else
+					{
+						menuSelection = MMI_CUE;
+						blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
+					}
+
 					break;
 
 				case SDL_SCANCODE_HOME:
-					menuSelection = Settings.NumberOfSavegames == 0 ? MMI_NEWSINGLE : MMI_CUE;
+				{
+					auto const& destSelection = Settings.NumberOfSavegames == 0 ? MMI_NEWSINGLE : MMI_CUE;
+					if (menuSelection == destSelection)
+					{
+						blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+					}
+					else
+					{
+						menuSelection = destSelection;
+						blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
+					}
+
 					break;
+				}
 
 				case SDL_SCANCODE_RETURN:
 				case SDL_SCANCODE_RETURN2:
 				case SDL_SCANCODE_KP_ENTER:
 				case SDL_SCANCODE_SPACE:
+					blooDot::Sfx::Play(SoundEffect::SFX_SELCONF);
 					keepRunning = _EnterAndHandleMenu(renderer);
 					break;
 

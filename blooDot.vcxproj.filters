@@ -474,6 +474,9 @@
     <ClInclude Include="sfx.h">
       <Filter>_Headers\audio</Filter>
     </ClInclude>
+    <ClInclude Include="menu-load.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -556,6 +559,9 @@
     </ClCompile>
     <ClCompile Include="sfx.cpp">
       <Filter>_Source Files\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="menu-load.cpp">
+      <Filter>_Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

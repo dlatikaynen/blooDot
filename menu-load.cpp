@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "menu-settings-lang.h"
+#include "menu-load.h"
 
 #include "scripture.h"
 #include "drawing.h"
@@ -7,6 +7,7 @@
 #include <cairo.h>
 #include "xlations.h"
 #include "settings.h"
+#include <regex>
 #include "constants.h"
 #include "sfx.h"
 
@@ -14,41 +15,43 @@ constexpr int const bounceMargin = 10;
 constexpr int const vignetteWidth = 250;
 constexpr int const vignetteHeight = 220;
 constexpr int const vignetteGap = 10;
-constexpr int const vignetteCount = 6;
 
 extern SettingsStruct Settings;
 extern bool mainRunning;
 
-namespace blooDot::MenuSettingsLang
+namespace blooDot::MenuLoad
 {
-	SDL_Event langSettingsMenuEvent;
-	bool langSettingsMenuRunning = false;
-	auto menuSelection = LangSettingsMenuItems::LSMI_CANCEL;
-	auto selectedLanguage = UserInterfaceLanguages::UIL_ENGLISH;
-	auto movingToLanguage = UserInterfaceLanguages::UIL_ENGLISH;
-	SDL_Texture* slidingLangs;
+	SDL_Event loadMenuEvent;
+	bool loadMenuRunning = false;
+	auto menuSelection = LoadMenuItems::LMI_CANCEL;
+	auto selectedSavegame = 0;
+	auto movingToSavegame = 0;
+	SDL_Texture* slidingSavegames;
 	int sliderTextureWidth;
 	int sliderOffsetLeft = bounceMargin;
+	int vignetteCount = 0;
+	int lastSavegameIndex = 0;
 	int slideSpeed = 0;
 	int targetOffsetLeft = 0;
 
-	bool LanguageSettingsMenuLoop(SDL_Renderer* renderer)
+	bool LoadMenuLoop(SDL_Renderer* renderer)
 	{
 		constexpr int const startY = 94;
 		constexpr int const stride = 46;
 		constexpr int backGap = stride / 2;
 		constexpr int const sliderY = startY + stride + backGap;
 		constexpr SDL_Rect const carouselDestRect = { 195,sliderY,vignetteWidth,vignetteHeight };
-
+		
 		_PrepareControls(renderer);
-		langSettingsMenuRunning = true;
-		selectedLanguage = Settings.SettingUserInterfaceLanguage;
-		movingToLanguage = Settings.SettingUserInterfaceLanguage;
-		sliderOffsetLeft = static_cast<int>(selectedLanguage) * vignetteWidth + bounceMargin;
+		loadMenuRunning = true;
+		selectedSavegame = 0;
+		movingToSavegame = 0;
+		sliderOffsetLeft = static_cast<int>(selectedSavegame) * vignetteWidth + bounceMargin;
 
 		SDL_Rect outerMenuRect{ 150,45,340,390 };
 		SDL_Rect titleRect{ 0,0,0,0 };
 		SDL_Rect cancelRect{ 0,0,0,0 };
+		SDL_Rect hintRect{ 0,0,0,0 };
 		SDL_Rect carouselSrcRect = { sliderOffsetLeft,0,vignetteWidth,vignetteHeight };
 
 		const auto titleTexture = RenderText(
@@ -56,7 +59,7 @@ namespace blooDot::MenuSettingsLang
 			&titleRect,
 			FONT_KEY_ALIEN,
 			26,
-			literalAlienLangSettingsMenuLabel,
+			literalAlienLoadMenuLabel,
 			AlienTextColor
 		);
 
@@ -71,32 +74,32 @@ namespace blooDot::MenuSettingsLang
 		);
 
 		unsigned short frame = 0L;
-		while (langSettingsMenuRunning)
+		while (loadMenuRunning)
 		{
-			while (SDL_PollEvent(&langSettingsMenuEvent) != 0)
+			while (SDL_PollEvent(&loadMenuEvent) != 0)
 			{
-				switch (langSettingsMenuEvent.type)
+				switch (loadMenuEvent.type)
 				{
 				case SDL_QUIT:
 					mainRunning = false;
-					langSettingsMenuRunning = false;
+					loadMenuRunning = false;
 					break;
 
 				case SDL_KEYDOWN:
-					switch (langSettingsMenuEvent.key.keysym.scancode)
+					switch (loadMenuEvent.key.keysym.scancode)
 					{
 					case SDL_SCANCODE_DOWN:
 					case SDL_SCANCODE_KP_2:
 					case SDL_SCANCODE_S:
 					case SDL_SCANCODE_PAGEDOWN:
 					case SDL_SCANCODE_END:
-						if (menuSelection == LSMI_USER_INTERFACE_LANGUAGE)
+						if (menuSelection == LMI_SAVEGAME)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
 						else
 						{
-							menuSelection = LSMI_USER_INTERFACE_LANGUAGE;
+							menuSelection = LMI_SAVEGAME;
 							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 						}
 
@@ -107,13 +110,13 @@ namespace blooDot::MenuSettingsLang
 					case SDL_SCANCODE_W:
 					case SDL_SCANCODE_PAGEUP:
 					case SDL_SCANCODE_HOME:
-						if (menuSelection == LSMI_CANCEL)
+						if (menuSelection == LMI_CANCEL)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
 						else
 						{
-							menuSelection = LSMI_CANCEL;
+							menuSelection = LMI_CANCEL;
 							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 						}
 
@@ -122,23 +125,23 @@ namespace blooDot::MenuSettingsLang
 					case SDL_SCANCODE_LEFT:
 					case SDL_SCANCODE_KP_4:
 					case SDL_SCANCODE_A:
-						if (menuSelection == LSMI_CANCEL)
+						if (menuSelection == LMI_CANCEL)
 						{
-							menuSelection = LSMI_USER_INTERFACE_LANGUAGE;
+							menuSelection = LMI_SAVEGAME;
 						}
 
-						if (selectedLanguage == UserInterfaceLanguages::UIL_ENGLISH)
+						if (selectedSavegame == 0)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
-						else if (movingToLanguage == selectedLanguage)
+						else if (movingToSavegame == selectedSavegame)
 						{
+							movingToSavegame = selectedSavegame - 1;
 							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-							movingToLanguage = static_cast<UserInterfaceLanguages>(static_cast<int>(selectedLanguage) - 1);
 						}
-						else if (movingToLanguage != UserInterfaceLanguages::UIL_ENGLISH)
+						else if (movingToSavegame > 0)
 						{
-							--movingToLanguage;
+							--movingToSavegame;
 						}
 
 						break;
@@ -146,23 +149,23 @@ namespace blooDot::MenuSettingsLang
 					case SDL_SCANCODE_RIGHT:
 					case SDL_SCANCODE_KP_6:
 					case SDL_SCANCODE_D:
-						if (menuSelection == LSMI_CANCEL)
+						if (menuSelection == LMI_CANCEL)
 						{
-							menuSelection = LSMI_USER_INTERFACE_LANGUAGE;
+							menuSelection = LMI_SAVEGAME;
 						}
 
-						if (selectedLanguage == UserInterfaceLanguages::UIL_UKRAINIAN)
+						if (selectedSavegame == lastSavegameIndex)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
-						else if (movingToLanguage == selectedLanguage)
+						else if (movingToSavegame == selectedSavegame)
 						{
-							movingToLanguage = static_cast<UserInterfaceLanguages>(static_cast<int>(selectedLanguage) + 1);
+							movingToSavegame = selectedSavegame + 1;
 							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 						}
-						else if (movingToLanguage != UserInterfaceLanguages::UIL_UKRAINIAN)
+						else if (movingToSavegame < lastSavegameIndex)
 						{
-							++movingToLanguage;
+							++movingToSavegame;
 						}
 
 						break;
@@ -171,21 +174,19 @@ namespace blooDot::MenuSettingsLang
 					case SDL_SCANCODE_RETURN2:
 					case SDL_SCANCODE_KP_ENTER:
 					case SDL_SCANCODE_SPACE:
-						if (menuSelection == LSMI_USER_INTERFACE_LANGUAGE)
+						if (menuSelection == LMI_SAVEGAME)
 						{
-							Settings.SettingUserInterfaceLanguage = movingToLanguage;
-							langSettingsMenuRunning = false;
+							loadMenuRunning = false;
 						}
-						else if (menuSelection == LSMI_CANCEL)
+						else if (menuSelection == LMI_CANCEL)
 						{
-							langSettingsMenuRunning = false;
+							loadMenuRunning = false;
 						}
 
-						blooDot::Sfx::Play(SoundEffect::SFX_SELCONF);
 						break;
 
 					case SDL_SCANCODE_ESCAPE:
-						langSettingsMenuRunning = false;
+						loadMenuRunning = false;
 						break;
 					}
 
@@ -196,7 +197,7 @@ namespace blooDot::MenuSettingsLang
 			if (SDL_RenderClear(renderer) < 0)
 			{
 				const auto clearError = IMG_GetError();
-				ReportError("Failed to clear the language settings menu screen", clearError);
+				ReportError("Failed to clear the load menu screen", clearError);
 			}
 
 			SDL_SetRenderDrawBlendMode(renderer, SDL_BlendMode::SDL_BLENDMODE_BLEND);
@@ -206,8 +207,8 @@ namespace blooDot::MenuSettingsLang
 			if (SDL_RenderDrawRect(renderer, &outerMenuRect) < 0)
 			{
 				const auto drawRectError = SDL_GetError();
-				ReportError("Failed to draw language settings menu panel border", drawRectError);
-				langSettingsMenuRunning = false;
+				ReportError("Failed to draw load menu panel border", drawRectError);
+				loadMenuRunning = false;
 			};
 
 			DrawLabel(renderer, 286, 54, titleTexture, &titleRect);
@@ -216,8 +217,7 @@ namespace blooDot::MenuSettingsLang
 			if (drawingTexture) [[likely]]
 			{
 				auto const& drawingSink = GetDrawingSink();
-
-				LangSettingsMenuItems itemToDraw = LSMI_CANCEL;
+				LoadMenuItems itemToDraw = LMI_CANCEL;
 				for (auto y = startY; y < 200; y += stride)
 				{
 					DrawButton(
@@ -225,13 +225,13 @@ namespace blooDot::MenuSettingsLang
 						195,
 						y,
 						vignetteWidth,
-						itemToDraw > LSMI_CANCEL ? vignetteHeight : 42,
+						itemToDraw > LMI_CANCEL ? vignetteHeight : 42,
 						itemToDraw == menuSelection
 					);
 
 					if (itemToDraw == menuSelection)
 					{
-						if (menuSelection == LSMI_CANCEL)
+						if (menuSelection == LMI_CANCEL)
 						{
 							DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);
 							DrawChevron(drawingSink, 195 + vignetteWidth + 7, y + 21, true, frame);
@@ -243,22 +243,21 @@ namespace blooDot::MenuSettingsLang
 						}
 					}
 
-					if (itemToDraw == LSMI_CANCEL)
+					if (itemToDraw == LMI_CANCEL)
 					{
 						y += backGap;
 					}
 
-					itemToDraw = static_cast<LangSettingsMenuItems>(itemToDraw + 1);
+					itemToDraw = static_cast<LoadMenuItems>(itemToDraw + 1);
 				}
 
 				EndRenderDrawing(renderer, drawingTexture);
-
 				DrawLabel(renderer, 235, 100 + 0 * stride + 0 * backGap, cancelTexture, &cancelRect);
 
 				/* render the carousel choice (and the sliding animation) */
 				_AnimateCarousel();
 				carouselSrcRect.x = sliderOffsetLeft;
-				SDL_RenderCopy(renderer, slidingLangs, &carouselSrcRect, &carouselDestRect);
+				SDL_RenderCopy(renderer, slidingSavegames, &carouselSrcRect, &carouselDestRect);
 			}
 
 			SDL_RenderPresent(renderer);
@@ -270,12 +269,12 @@ namespace blooDot::MenuSettingsLang
 		titleTexture&& [titleTexture] { SDL_DestroyTexture(titleTexture); return false; }();
 		cancelTexture&& [cancelTexture] { SDL_DestroyTexture(cancelTexture); return false; }();
 
-		return langSettingsMenuRunning;
+		return loadMenuRunning;
 	}
 
 	void _AnimateCarousel()
 	{
-		if (movingToLanguage == selectedLanguage)
+		if (movingToSavegame == selectedSavegame)
 		{
 			slideSpeed = 0;
 			return;
@@ -283,7 +282,7 @@ namespace blooDot::MenuSettingsLang
 
 		if (slideSpeed == 0)
 		{
-			targetOffsetLeft = bounceMargin + static_cast<int>(movingToLanguage) * vignetteWidth;
+			targetOffsetLeft = bounceMargin + movingToSavegame * vignetteWidth;
 			slideSpeed = 40;
 		}
 
@@ -294,7 +293,7 @@ namespace blooDot::MenuSettingsLang
 			if (sliderOffsetLeft >= targetOffsetLeft)
 			{
 				sliderOffsetLeft = targetOffsetLeft;
-				selectedLanguage = movingToLanguage;
+				selectedSavegame = movingToSavegame;
 			}
 		}
 		else
@@ -302,15 +301,16 @@ namespace blooDot::MenuSettingsLang
 			if (sliderOffsetLeft <= targetOffsetLeft)
 			{
 				sliderOffsetLeft = targetOffsetLeft;
-				selectedLanguage = movingToLanguage;
+				selectedSavegame = movingToSavegame;
 			}
 		}
 	}
 
 	void _PrepareControls(SDL_Renderer* renderer)
 	{
+		vignetteCount = std::max((unsigned short)1, Settings.NumberOfSavegames);
 		sliderTextureWidth = vignetteCount * vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * bounceMargin;
-		slidingLangs = SDL_CreateTexture(
+		slidingSavegames = SDL_CreateTexture(
 			renderer,
 			SDL_PIXELFORMAT_ARGB8888,
 			SDL_TEXTUREACCESS_TARGET,
@@ -318,19 +318,19 @@ namespace blooDot::MenuSettingsLang
 			vignetteHeight
 		);
 
-		if (slidingLangs)
+		if (slidingSavegames)
 		{
-			if (SDL_SetTextureBlendMode(slidingLangs, SDL_BLENDMODE_BLEND) < 0)
+			if (SDL_SetTextureBlendMode(slidingSavegames, SDL_BLENDMODE_BLEND) < 0)
 			{
 				const auto carouselBlendmodeError = SDL_GetError();
 				ReportError("Could not set blend mode of sliding texture", carouselBlendmodeError);
-				SDL_DestroyTexture(slidingLangs);
-				slidingLangs = NULL;
+				SDL_DestroyTexture(slidingSavegames);
+				slidingSavegames = NULL;
 
 				return;
 			}
 
-			if (SDL_SetRenderTarget(renderer, slidingLangs) < 0)
+			if (SDL_SetRenderTarget(renderer, slidingSavegames) < 0)
 			{
 				const auto targetError = SDL_GetError();
 				ReportError("Could not set sliding texture as the render target", targetError);
@@ -340,21 +340,31 @@ namespace blooDot::MenuSettingsLang
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 			SDL_RenderClear(renderer);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 0, 30, literalSettingsLanguageEN);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 0, 70, literalSettingsLanguageENDetails);
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 0, 190, literalSettingsLanguageENName);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 0, 30, literalSettingsScreenTemple);
+			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 0, 70, literalSettingsScreenTempleDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 0, 190, literalSettingsScreenTempleResolution);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 1, 30, literalSettingsLanguageFI);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 1, 70, literalSettingsLanguageFIDetails);
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 1, 190, literalSettingsLanguageFIName);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 1, 30, literalSettingsScreenHercules);
+			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 1, 70, literalSettingsScreenHerculesDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 1, 190, literalSettingsScreenHerculesResolution);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 2, 30, literalSettingsLanguageDE);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 2, 70, literalSettingsLanguageDEDetails);
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 2, 190, literalSettingsLanguageDEName);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 2, 30, literalSettingsScreenModeX);
+			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 2, 70, literalSettingsScreenModexDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 2, 190, literalSettingsScreenModeXResolution);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 3, 30, literalSettingsLanguageUA);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 3, 70, literalSettingsLanguageUADetails);
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 3, 190, literalSettingsLanguageUAName);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 3, 30, literalSettingsScreenSVGA);
+			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 3, 70, literalSettingsScreenSVGADetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 3, 190, literalSettingsScreenSVGAResolution);
+
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 4, 30, literalSettingsScreenNotebook);
+			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 4, 70, literalSettingsScreenNotebookDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 4, 190, literalSettingsScreenNotebookResolution);
+
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 5, 30, literalSettingsScreenSquare);
+			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 5, 70, literalSettingsScreenSquareDetails);
+
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 6, 30, literalSettingsScreenFull);
+			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 6, 70, literalSettingsScreenFullDetails);
 
 			if (SDL_SetRenderTarget(renderer, NULL) < 0)
 			{
@@ -395,6 +405,6 @@ namespace blooDot::MenuSettingsLang
 
 	void _Teardown()
 	{
-		slidingLangs&& [] { SDL_DestroyTexture(slidingLangs); return false; }();
+		slidingSavegames&& [] { SDL_DestroyTexture(slidingSavegames); return false; }();
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 constexpr char const* literalAlienMainMenuLabel = "MejnMenju";
+constexpr char const* literalAlienLoadMenuLabel = "Loud";
 constexpr char const* literalAlienSettingsMenuLabel = "Setins";
 constexpr char const* literalAlienScreenSettingsMenuLabel = "ScrinSaiz";
 constexpr char const* literalAlienLangSettingsMenuLabel = "lenguij";

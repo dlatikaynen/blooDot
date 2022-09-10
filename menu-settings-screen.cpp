@@ -9,6 +9,7 @@
 #include "settings.h"
 #include <regex>
 #include "constants.h"
+#include "sfx.h"
 
 constexpr int const bounceMargin = 10;
 constexpr int const vignetteWidth = 250;
@@ -111,7 +112,16 @@ namespace blooDot::MenuSettingsScreen
 					case SDL_SCANCODE_S:
 					case SDL_SCANCODE_PAGEDOWN:
 					case SDL_SCANCODE_END:
-						menuSelection = SSMI_VIDEOMODE;
+						if (menuSelection == SSMI_VIDEOMODE)
+						{
+							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+						}
+						else
+						{
+							menuSelection = SSMI_VIDEOMODE;
+							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
+						}
+
 						break;
 
 					case SDL_SCANCODE_UP:
@@ -119,7 +129,16 @@ namespace blooDot::MenuSettingsScreen
 					case SDL_SCANCODE_W:
 					case SDL_SCANCODE_PAGEUP:
 					case SDL_SCANCODE_HOME:
-						menuSelection = SSMI_CANCEL;
+						if (menuSelection == SSMI_CANCEL)
+						{
+							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+						}
+						else
+						{
+							menuSelection = SSMI_CANCEL;
+							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
+						}
+
 						break;
 
 					case SDL_SCANCODE_LEFT:
@@ -127,18 +146,17 @@ namespace blooDot::MenuSettingsScreen
 					case SDL_SCANCODE_A:
 						if (menuSelection == SSMI_CANCEL)
 						{
-							// TODO: soundeffect_moveinmenu_selecteditemchange
 							menuSelection = SSMI_VIDEOMODE;
 						}
 
 						if (selectedResolution == ViewportResolutions::VR_TEMPLE)
 						{
-							// TODO: soundeffect_moveinmenu_bounce
+							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
 						else if (movingToResolution == selectedResolution)
 						{
-							// TODO: soundeffect_moveinmenu_slide
 							movingToResolution = static_cast<ViewportResolutions>(static_cast<int>(selectedResolution) - 1);
+							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 						}
 						else if (movingToResolution != ViewportResolutions::VR_TEMPLE)
 						{
@@ -152,18 +170,17 @@ namespace blooDot::MenuSettingsScreen
 					case SDL_SCANCODE_D:
 						if (menuSelection == SSMI_CANCEL)
 						{
-							// TODO: soundeffect_moveinmenu_selecteditemchange
 							menuSelection = SSMI_VIDEOMODE;
 						}
 
 						if (selectedResolution == ViewportResolutions::VR_MAXOUT)
 						{
-							// TODO: soundeffect_moveinmenu_bounce
+							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
 						else if (movingToResolution == selectedResolution)
 						{
-							// TODO: soundeffect_moveinmenu_slide
 							movingToResolution = static_cast<ViewportResolutions>(static_cast<int>(selectedResolution) + 1);
+							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 						}
 						else if (movingToResolution != ViewportResolutions::VR_MAXOUT)
 						{
@@ -186,6 +203,7 @@ namespace blooDot::MenuSettingsScreen
 							screenSettingsMenuRunning = false;
 						}
 
+						blooDot::Sfx::Play(SoundEffect::SFX_SELCONF);
 						break;
 
 					case SDL_SCANCODE_ESCAPE:

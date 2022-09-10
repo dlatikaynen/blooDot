@@ -7,6 +7,7 @@
 #include "xlations.h"
 #include "settings.h"
 #include "constants.h"
+#include "sfx.h"
 
 extern SettingsStruct Settings;
 extern bool mainRunning;
@@ -90,9 +91,14 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 				case SDL_SCANCODE_UP:
 				case SDL_SCANCODE_KP_8:
 				case SDL_SCANCODE_W:
-					if (menuSelection != SMI_BACK)
+					if (menuSelection == SMI_BACK)
+					{
+						blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+					}
+					else
 					{
 						menuSelection = static_cast<SettingsMenuItems>(menuSelection - 1);
+						blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 					}
 
 					break;
@@ -100,27 +106,51 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 				case SDL_SCANCODE_DOWN:
 				case SDL_SCANCODE_KP_2:
 				case SDL_SCANCODE_S:
-					if (menuSelection != SMI_LANGUAGE)
+					if (menuSelection == SMI_LANGUAGE)
+					{
+						blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+					}
+					else
 					{
 						menuSelection = static_cast<SettingsMenuItems>(menuSelection + 1);
+						blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 					}
 
 					break;
 
 				case SDL_SCANCODE_PAGEDOWN:
 				case SDL_SCANCODE_END:
-					menuSelection = SMI_LANGUAGE;
+					if (menuSelection == SMI_LANGUAGE)
+					{
+						blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+					}
+					else
+					{
+						menuSelection = SMI_LANGUAGE;
+						blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
+					}
+
 					break;
 
 				case SDL_SCANCODE_PAGEUP:
 				case SDL_SCANCODE_HOME:
-					menuSelection = SMI_BACK;
+					if (menuSelection == SMI_BACK)
+					{
+						blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+					}
+					else
+					{
+						menuSelection = SMI_BACK;
+						blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
+					}
+
 					break;
 
 				case SDL_SCANCODE_RETURN:
 				case SDL_SCANCODE_RETURN2:
 				case SDL_SCANCODE_KP_ENTER:
 				case SDL_SCANCODE_SPACE:
+					blooDot::Sfx::Play(SoundEffect::SFX_SELCONF);
 					settingsMenuRunning = _EnterAndHandleSettingsMenu(renderer);
 					break;
 
@@ -194,6 +224,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 	SDL_DestroyTexture(screensizeTexture);
 	SDL_DestroyTexture(controlsTexture);
 	SDL_DestroyTexture(languageTexture);
+	SaveSettings();
 
 	return settingsMenuRunning;
 }
