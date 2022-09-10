@@ -2,8 +2,6 @@
 #include <SDL.h>
 #include "enums.h"
 
-constexpr char const* settingsFileName = "blooDot.ligma";
-
 extern void ReportError(const char*, const char*);
 
 void LoadSettings();

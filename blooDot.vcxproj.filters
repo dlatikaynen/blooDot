@@ -477,6 +477,9 @@
     <ClInclude Include="menu-load.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
+    <ClInclude Include="savegame.h">
+      <Filter>_Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -562,6 +565,9 @@
     </ClCompile>
     <ClCompile Include="menu-load.cpp">
       <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="savegame.cpp">
+      <Filter>_Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

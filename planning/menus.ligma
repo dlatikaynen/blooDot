@@ -65,9 +65,44 @@
   How does multiplayer and local/networking go together
   with savegames?
 
-   
+  [Continue]
+    --> if a savegame exists, load that savegame and launch immediately
+    --> if no savegame exists, show "nothing to continue from"
 
+  Basically, any game can join others.
+  Locally, by connecting controllers
+  Network-wise, by sharing the game code with others
+  The initiator is the one in control of the save file.
 
+  [Load]
+    --> shows savegames to pick from
+        if there is none, tells the use that he can start a new game
+        and shows tumbleweed
+    --> inside a savegame, which may be huge,
+        there may be more than one savepoint. restoring to an older
+        savepoint will result in deletion of any subsequent savepoints
+        if the progress made from that savepoint is overwritten by an
+        autosave or explicit save (warning on load already)
+
+  [(New) Single Player]
+    --> starts a new game
+
+  [(New) Local Multiplayer]
+    --> visual controller connection aid, then starts a new game with that
+
+  [(New) Net Multiplayer]
+    --> creates and shares a code to join, then starts a new game with that
+
+  Starting a new game...
+  ...immediately creates a new, unnamed savefile from the initial gamestate
+  (which is, basically, scullery with the number of players and their positions noted)
+
+  While a game is running... 
+
+  - save-wise, autosave is done periodically and on checkpoints,
+    explicit save is possible at any time basically;
+  
+  - loading-wise, we can only revert to previous savepoints in the current savefile
 
 
 ░▒▓█▄■▀█▓▒░

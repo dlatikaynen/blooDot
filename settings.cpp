@@ -3,12 +3,13 @@
 #include "enums.h"
 
 #include <stdio.h>
+#include "constants.h"
 
 SettingsStruct Settings;
 
 void LoadSettings()
 {	
-	const auto settingsFile = SDL_RWFromFile(settingsFileName, "rb");
+	const auto settingsFile = SDL_RWFromFile(SettingsFileName, "rb");
 	if (!settingsFile)
 	{
 		const auto loadError = SDL_GetError();
@@ -39,7 +40,7 @@ void LoadSettings()
 
 void SaveSettings()
 {
-	const auto settingsFile = SDL_RWFromFile(settingsFileName, "wb");
+	const auto settingsFile = SDL_RWFromFile(SettingsFileName, "wb");
 	if (!settingsFile)
 	{
 		const auto loadError = SDL_GetError();
