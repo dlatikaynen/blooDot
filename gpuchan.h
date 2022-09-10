@@ -6,6 +6,9 @@
 #include "scripture.h"
 #include "xlations.h"
 #include "drawing.h"
+#include "dialogcontrols.h"
+#include "constants.h"
+#include "resutil.h"
 
 bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title, std::string bubble);
 

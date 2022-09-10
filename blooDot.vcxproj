@@ -279,8 +279,10 @@
     <ClCompile Include="menu-settings.cpp" />
     <ClCompile Include="newworld.cpp" />
     <ClCompile Include="renderstate.cpp" />
+    <ClCompile Include="resutil.cpp" />
     <ClCompile Include="savegame.cpp" />
     <ClCompile Include="scripture.cpp" />
+    <ClInclude Include="resutil.h" />
     <ClInclude Include="savegame.h" />
     <ClInclude Include="scripture.h" />
     <ClInclude Include="SDL\include\begin_code.h" />
@@ -575,6 +577,18 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </Image>
+    <Image Include="res\icon-divine.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </Image>
+    <Image Include="res\icon-herc.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </Image>
+    <Image Include="res\it-runs-doom.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </Image>
     <Image Include="res\lettuce.png">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
@@ -683,8 +697,14 @@
     </Font>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="res\asterisk.wav" />
-    <Media Include="res\bump.wav" />
+    <Media Include="res\asterisk.wav">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </Media>
+    <Media Include="res\bump.wav">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </Media>
     <Media Include="res\projectile-decay.wav">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|Win32'">true</ExcludedFromBuild>
@@ -693,8 +713,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </Media>
-    <Media Include="res\selchg.wav" />
-    <Media Include="res\selconf.wav" />
+    <Media Include="res\selchg.wav">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </Media>
+    <Media Include="res\selconf.wav">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <None Include="planning\sfx.ligma">

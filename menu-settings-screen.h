@@ -6,6 +6,9 @@
 #include "splash.h"
 #include "boydsa.h"
 #include "enums.h"
+#include "sfx.h"
+#include "resutil.h"
+#include "geom2d.h"
 
 extern SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget, const int canvasWidth, const int canvasHeight);
 extern bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title, std::string bubble);
@@ -14,6 +17,8 @@ namespace blooDot::MenuSettingsScreen
 {
 	bool ScreenSettingsMenuLoop(SDL_Renderer*);
 
+	void _PrepareIconRect(SDL_Rect* rect, int vignetteIndex);
+	void _DrawIcon(SDL_Renderer* renderer, int chunkKey, int vignetteIndex);
 	void _PrepareControls(SDL_Renderer* renderer);
 	void _VignetteLabel(SDL_Renderer* renderer, int font, int size, int vignetteIndex, int y, const char* text);
 	void _AnimateCarousel();

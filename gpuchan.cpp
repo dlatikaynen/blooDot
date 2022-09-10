@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "gpuchan.h"
-#include "dialogcontrols.h"
-#include "constants.h"
 
 constexpr const SDL_Color titleTextColor = { 11,8,8,222 };
 constexpr const SDL_Color bubbleTextColor = { 12, 8, 8, 255 };
@@ -134,38 +132,12 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 
 void _Enter(SDL_Renderer* renderer)
 {
-	SDL_RWops* chanStream;
-	const auto chanMem = Retrieve(CHUNK_KEY_GPU_CHAN, &chanStream);
-	if (!chanMem)
-	{
-		chanRunning = false;
-		return;
-	}
-
-	const auto chanPicture = IMG_LoadPNG_RW(chanStream);
-	chanStream->close(chanStream);
-	SDL_free(chanMem);
-	if (!chanPicture)
-	{
-		const auto chanLoadError = IMG_GetError();
-		ReportError("Failed to load GPU-chan", chanLoadError);
-		chanRunning = false;
-		return;
-	}
-
-	gpuChan = SDL_CreateTextureFromSurface(renderer, chanPicture);
+	gpuChan = blooDot::Res::LoadPicture(renderer, CHUNK_KEY_GPU_CHAN, &chanDims);
 	if (!gpuChan)
 	{
-		const auto textureError = SDL_GetError();
-		SDL_free(chanPicture);
-		ReportError("Failed to create gpu-chan no texture", textureError);
 		chanRunning = false;
 		return;
 	}
-
-	chanDims.w = chanPicture->w;
-	chanDims.h = chanPicture->h;
-	SDL_free(chanPicture);
 }
 
 void _PullOut()

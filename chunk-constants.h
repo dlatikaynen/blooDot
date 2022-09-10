@@ -24,3 +24,6 @@ constexpr int const CHUNK_KEY_SFX_BUMP = 20;
 constexpr int const CHUNK_KEY_SFX_SELCHG = 21;
 constexpr int const CHUNK_KEY_SFX_SELCONF = 22;
 constexpr int const CHUNK_KEY_SFX_ASTERISK = 23;
+constexpr int const CHUNK_KEY_UI_ICON_MODEX = 24;
+constexpr int const CHUNK_KEY_UI_ICON_DIVINE = 25;
+constexpr int const CHUNK_KEY_UI_ICON_HERC = 26;

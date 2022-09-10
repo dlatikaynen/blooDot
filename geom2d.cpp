@@ -72,3 +72,12 @@ bool PointInRect(int x, int y, int x0, int y0, int x1, int y1)
     // bitwise is intentional here, https://stackoverflow.com/a/13685281/1132334
     return ((x0 < x) && (x < x1)) & ((y0 < y) && (y < y1));
 }
+
+void CenterRectInRect(SDL_Rect* container, SDL_Rect* candidate, __out SDL_Rect* centered)
+{
+    auto& result = *centered;
+    result.x = container->x + (container->w - candidate->w) / 2;
+    result.y = container->y + (container->h - candidate->h) / 2;
+    result.w = candidate->w;
+    result.h = candidate->h;
+}
