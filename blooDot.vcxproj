@@ -257,6 +257,7 @@
     <ClInclude Include="newworld.h" />
     <ClInclude Include="orchestrator.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="playerstate.h" />
     <ClInclude Include="renderstate.h" />
     <ClInclude Include="resource.h" />
     <ClCompile Include="boydsa.cpp" />

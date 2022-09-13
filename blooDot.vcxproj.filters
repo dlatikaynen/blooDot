@@ -483,6 +483,9 @@
     <ClInclude Include="resutil.h">
       <Filter>_Headers\res</Filter>
     </ClInclude>
+    <ClInclude Include="playerstate.h">
+      <Filter>_Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

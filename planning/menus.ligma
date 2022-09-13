@@ -67,7 +67,8 @@
 
   [Continue]
     --> if a savegame exists, load that savegame and launch immediately
-    --> if no savegame exists, show "nothing to continue from"
+        (we need to remember which of the savegames was the last one played)
+    --> if no savegame exists, show "nothing to continue from" (tumbleweed)
 
   Basically, any game can join others.
   Locally, by connecting controllers
@@ -89,13 +90,21 @@
 
   [(New) Local Multiplayer]
     --> visual controller connection aid, then starts a new game with that
+        and waits until all have sent input at least once. Inactive players
+        are bubble-dragged.
 
   [(New) Net Multiplayer]
     --> creates and shares a code to join, then starts a new game with that
+        and waits for others to join
 
   Starting a new game...
-  ...immediately creates a new, unnamed savefile from the initial gamestate
-  (which is, basically, scullery with the number of players and their positions noted)
+  if there is a continuable savefile, asks whether to create a new savegame in a blank slot,
+  or overwrite the continuable one.
+  on "blank" immediately creates a new, unnamed savefile from the initial gamestate stamped
+  with its creation time and location
+  (which is, basically, scullery with the number of players and their positions noted);
+  on "overwrite" does the same but reuses the savegame index of the continuable file.
+  if the continuable file has "significant progress", an extra "are you sure?" is shown.
 
   While a game is running... 
 
@@ -103,6 +112,7 @@
     explicit save is possible at any time basically;
   
   - loading-wise, we can only revert to previous savepoints in the current savefile
+    with a confirmation prompt, since you're losing progress.
 
 
 ░▒▓█▄■▀█▓▒░

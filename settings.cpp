@@ -43,8 +43,8 @@ void SaveSettings()
 	const auto settingsFile = SDL_RWFromFile(SettingsFileName, "wb");
 	if (!settingsFile)
 	{
-		const auto loadError = SDL_GetError();
-		ReportError("Could not open settings file for writing", loadError);
+		const auto openError = SDL_GetError();
+		ReportError("Could not open settings file for writing", openError);
 		return;
 	}
 
