@@ -486,6 +486,9 @@
     <ClInclude Include="playerstate.h">
       <Filter>_Headers</Filter>
     </ClInclude>
+    <ClInclude Include="menu-continue-empty.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -577,6 +580,9 @@
     </ClCompile>
     <ClCompile Include="resutil.cpp">
       <Filter>_Source Files\res</Filter>
+    </ClCompile>
+    <ClCompile Include="menu-continue-empty.cpp">
+      <Filter>_Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -721,6 +727,9 @@
       <Filter>Resource Files\ui</Filter>
     </Image>
     <Image Include="res\icon-herc.png">
+      <Filter>Resource Files\ui</Filter>
+    </Image>
+    <Image Include="res\menu-emptyness.png">
       <Filter>Resource Files\ui</Filter>
     </Image>
   </ItemGroup>

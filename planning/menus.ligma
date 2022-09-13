@@ -114,5 +114,9 @@
   - loading-wise, we can only revert to previous savepoints in the current savefile
     with a confirmation prompt, since you're losing progress.
 
+  Allocation of savegame indexes:
+  - one bitmask in settings encodes 16 slots and whether they're occupied
+  - settings screen shows only those corresponding to occupied bit slots without gaps
+
 
 ░▒▓█▄■▀█▓▒░

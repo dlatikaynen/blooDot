@@ -23,5 +23,6 @@ typedef struct SettingsStruct
 	ViewportResolutions SettingViewportResolution = VR_TEMPLE;
 	UserInterfaceLanguages SettingUserInterfaceLanguage = UIL_ENGLISH;
 	unsigned short NumberOfSavegames = 0;
-	unsigned short CurrentSavegameIndex = 0; // those are 1-based and appear in the file name
+	unsigned short CurrentSavegameIndex = 0;  // those are 1-based and appear in the file name
+	unsigned short OccupiedSavegameSlots = 0; // this is a bitmask with the LSB corresponding to savegameindex 1
 } SettingsStruct;

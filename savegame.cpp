@@ -3,27 +3,37 @@
 #include "savegame.h"
 #include <regex>
 #include "constants.h"
+#include "settings.h"
 
 using namespace std::chrono;
 
+extern SettingsStruct Settings;
+
 namespace blooDot::Savegame
 {
-	void Create(int savegameIndex)
+	int Create()
 	{
+		const auto savegameIndex = _FindFreeSavegameSlot();
+		if (savegameIndex == 0)
+		{
+			return savegameIndex;
+		}
+
 		SavegameHeader header;
+		header.SavegameIndex = static_cast<unsigned short>(savegameIndex);
 		_SetLocalTimestampStruct(&header.Created);
 
 		const auto& fileName = _GetFilename(savegameIndex);
-		const auto settingsFile = SDL_RWFromFile(fileName.c_str(), "wb");
-		if (!settingsFile)
+		const auto saveFile = SDL_RWFromFile(fileName.c_str(), "wb");
+		if (!saveFile)
 		{
 			const auto openError = SDL_GetError();
 			ReportError("Could not open savegame file for writing", openError);
-			return;
+			return 0;
 		}
 
-		const auto numWritten = settingsFile->write(
-			settingsFile,
+		const auto numWritten = saveFile->write(
+			saveFile,
 			(void*)(&header),
 			sizeof(SavegameHeaderStruct),
 			1
@@ -33,9 +43,14 @@ namespace blooDot::Savegame
 		{
 			const auto writeError = SDL_GetError();
 			ReportError("Failed to write savegame header", writeError);
+			return 0;
 		}
 
-		settingsFile->close(settingsFile);
+		saveFile->close(saveFile);
+		Settings.CurrentSavegameIndex = static_cast<unsigned short>(savegameIndex);
+		Settings.OccupiedSavegameSlots |= (1 << (savegameIndex - 1));
+
+		return savegameIndex;
 	}
 
 	void Append(int savegameIndex, bool isAutosave)
@@ -58,6 +73,20 @@ namespace blooDot::Savegame
 		std::stringstream index;
 		index << savegameIndex;
 		return std::regex_replace(SavegameFileName, std::regex("\\$i"), index.str());
+	}
+
+	int _FindFreeSavegameSlot()
+	{
+		const auto& slots = Settings.OccupiedSavegameSlots;
+		for (auto i = 0; i < 16; ++i)
+		{
+			if (!(slots & (1 << i)))
+			{
+				return i + 1;
+			}
+		}
+
+		return 0;
 	}
 
 	void _SetLocalTimestampStruct(LocalTimestamp* timestamp)

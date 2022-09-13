@@ -23,12 +23,23 @@ typedef struct LocalTimestampStruct
 
 namespace blooDot::Savegame
 {
-	void Create(int savegameIndex);
+	/// <summary>
+	/// Returns the 1-based savegame index
+	/// Returns 0 if no free slot was available
+	/// (in which case the user should be asked to overwrite an existing one
+	/// or load an existing one)
+	/// </summary>
+	int Create();
 	void Append(int savegameIndex, bool isAutosave);
 	void Load(int savegameIndex, int savepointIndex);
+	
+	/// <summary>
+	/// Frees the slot and physically removes the BOFA file
+	/// </summary>
 	void Delete(int savegameIndex);
 
 	std::string _GetFilename(int savegameIndex);
+	int _FindFreeSavegameSlot();
 	void _SetLocalTimestampStruct(LocalTimestamp* timestamp);
 }
 

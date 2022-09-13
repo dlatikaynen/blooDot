@@ -5,6 +5,7 @@ constexpr char const* literalAlienLoadMenuLabel = "Loud";
 constexpr char const* literalAlienSettingsMenuLabel = "Setins";
 constexpr char const* literalAlienScreenSettingsMenuLabel = "ScrinSaiz";
 constexpr char const* literalAlienLangSettingsMenuLabel = "lenguij";
+constexpr char const* literalAlienContinueEmptyLabel = "Empti";
 constexpr char const* literalManufacturer = "Copyright zOzz FlaminginSarjakuvatOj";
 constexpr char const* literalMenuContinue = "Continue";
 constexpr char const* literalMenuLoad = "Load";
@@ -22,6 +23,8 @@ constexpr char const* literalSettingsMenuScreensize = "Screen size";
 constexpr char const* literalSettingsMenuControls = "Controls";
 constexpr char const* literalSettingsMenuLanguage = "Language";
 constexpr char const* literalSettingsMenuScreensizeHint = "This setting will only affect the game window.\r\nSetting does not apply to the launcher.";
+constexpr char const* literalContinueEmptyHint = "This timeline has nothing to continue from.\r\nYou may want to start a new game first.";
+constexpr char const* literalLoadEmptyHint = "This timeline contains no savegames to load.\r\nYou may want to start a new game first.";
 constexpr char const* literalSettingsScreenTemple = "VGA";
 constexpr char const* literalSettingsScreenTempleResolution = "640 x 480";
 constexpr char const* literalSettingsScreenTempleDetails = "A resolution that\npleases the Lord";
@@ -57,7 +60,7 @@ constexpr char const* literalSettingsLanguageUA = "[ua]";
 constexpr char const* literalSettingsLanguageUADetails = "Ukrayin'ska";
 constexpr char const* literalSettingsLanguageUAName = "Ukrainian";
 
-constexpr char const* literalDialogTitleGpuChan = "GPU-chan says,";
+constexpr char const* literalDialogTitleGpuChan = "GPU-chan went like,";
 constexpr char const* literalDialogBubbleGpuChan = "Oh no,\nit's too\nbig!";
 
 constexpr char const* regionNameUnknown = "Here be dragons";

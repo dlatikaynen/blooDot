@@ -247,6 +247,7 @@
     <ClInclude Include="chunk-constants.h" />
     <ClInclude Include="gpuchan.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="menu-continue-empty.h" />
     <ClInclude Include="menu-load.h" />
     <ClInclude Include="menu-settings-lang.h" />
     <ClInclude Include="huff-comp.h" />
@@ -274,6 +275,7 @@
     <ClCompile Include="gpuchan.cpp" />
     <ClCompile Include="huff-comp.cpp" />
     <ClCompile Include="huff-deco.cpp" />
+    <ClCompile Include="menu-continue-empty.cpp" />
     <ClCompile Include="menu-load.cpp" />
     <ClCompile Include="menu-settings-lang.cpp" />
     <ClCompile Include="menu-settings-screen.cpp" />
@@ -597,6 +599,10 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</DeploymentContent>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
+    </Image>
+    <Image Include="res\menu-emptyness.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
     </Image>
     <Image Include="res\nn-splash-scene.png">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

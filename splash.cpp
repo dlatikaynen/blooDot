@@ -11,6 +11,9 @@
 #include "settings.h"
 #include "constants.h"
 #include "sfx.h"
+#include "resutil.h"
+#include "savegame.h"
+#include "menu-continue-empty.h"
 
 extern bool mainRunning;
 extern SettingsStruct Settings;
@@ -39,31 +42,10 @@ void LoadSplash(SDL_Renderer* renderer)
 		return;
 	}
 
-	SDL_RWops* splashStream;
-	const auto splashMem = Retrieve(CHUNK_KEY_SPLASH, &splashStream);
-	if (!splashMem)
-	{
-		mainRunning = false;
-		return;
-	}
-
-	const auto splashPicture = IMG_LoadPNG_RW(splashStream);
-	splashStream->close(splashStream);
-	SDL_free(splashMem);
-	if (!splashPicture)
-	{
-		const auto splashLoadError = IMG_GetError();
-		ReportError("Failed to load the title screen", splashLoadError);
-		mainRunning = false;
-		return;
-	}
-
-	splashTexture = SDL_CreateTextureFromSurface(renderer, splashPicture);
-	SDL_free(splashPicture);
+	SDL_Rect splashRect;
+	splashTexture = blooDot::Res::LoadPicture(renderer, CHUNK_KEY_SPLASH, &splashRect);
 	if (!splashTexture)
 	{
-		const auto textureError = SDL_GetError();
-		ReportError("Failed to create the title screen texture", textureError);
 		mainRunning = false;
 		return;
 	}
@@ -396,7 +378,8 @@ void AssignNewSpeed(__out int* speed)
 	}
 }
 
-void DelayBackgroundAnim() {
+void DelayBackgroundAnim()
+{
 	const auto random = distribution(generator);
 	backgroundAnimDelay = 101 * (random + 1);
 }
@@ -456,10 +439,91 @@ void Bounce(SDL_Rect* srcRect)
 	(*srcRect).y = (int)round(backgroundPosY);
 }
 
+bool _HandleContinue(SDL_Renderer* renderer)
+{
+	bool stayInMenu = true;
+	if (Settings.CurrentSavegameIndex == 0)
+	{
+		if (Settings.OccupiedSavegameSlots == 0)
+		{
+			/* there is no save game to choose from */
+			blooDot::MenuContinueEmpty::MenuLoop(renderer, literalContinueEmptyHint);
+		}
+		else
+		{
+			/* offer to choose from savegames to continue
+			 * (essentially, this is the same further workflow as ::Load) */
+
+		}
+	}
+	else
+	{
+		/* we can launch immediately */
+		stayInMenu = false;
+	}
+
+	return stayInMenu;
+}
+
+bool _HandleLoad(SDL_Renderer* renderer)
+{
+	bool stayInMenu = true;
+	if (Settings.OccupiedSavegameSlots == 0)
+	{
+		/* there is no save game to load from */
+		blooDot::MenuContinueEmpty::MenuLoop(renderer, literalLoadEmptyHint);
+	}
+	else
+	{
+		/* we show the list of savegames to load from */
+		stayInMenu = false;
+	}
+
+	return stayInMenu;
+}
+
+bool _HandleNew(SDL_Renderer* renderer)
+{
+	bool stayInMenu = false;
+	const auto& newSavegameIndex = blooDot::Savegame::Create();
+	if (newSavegameIndex == 0)
+	{
+		/* no free slot. ask to overwrite something else */
+		
+		stayInMenu = renderer != NULL;
+	}
+
+	return stayInMenu;
+}
+
 bool _EnterAndHandleMenu(SDL_Renderer* renderer)
 {
 	switch (menuSelection)
 	{
+	case MMI_CUE:
+		if (!_HandleContinue(renderer))
+		{
+			splashRunning = false;
+		}
+
+		break;
+
+	case MMI_LOAD:
+		if (!_HandleLoad(renderer))
+		{
+			splashRunning = false;
+		}
+
+		break;
+
+	case MMI_NEWSINGLE:
+		if (!_HandleNew(renderer))
+		{
+			splashRunning = false;
+		}
+
+		break;
+
 	case MMI_SETTINGS:
 		_EnterAndHandleSettings(renderer);
 		break;
