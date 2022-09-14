@@ -49,6 +49,7 @@ namespace blooDot::Savegame
 		saveFile->close(saveFile);
 		Settings.CurrentSavegameIndex = static_cast<unsigned short>(savegameIndex);
 		Settings.OccupiedSavegameSlots |= (1 << (savegameIndex - 1));
+		SaveSettings();
 
 		return savegameIndex;
 	}
@@ -58,6 +59,67 @@ namespace blooDot::Savegame
 		std::cout << savegameIndex << isAutosave;
 	}
 
+	/// <summary>
+	/// If this returns 0 as the savegameIndex in the header,
+	/// it means that it could not be opened or loaded
+	/// </summary>
+	SavegameChoiceDescriptor LoadInfoShallow(int savegameIndex)
+	{
+		SavegameChoiceDescriptor savegameDescriptor;
+		savegameDescriptor.Header.SavegameIndex = 0;
+		const auto& fileName = _GetFilename(savegameIndex);
+		const auto savegameFile = SDL_RWFromFile(fileName.c_str(), "rb");
+		if (!savegameFile)
+		{
+			const auto openError = SDL_GetError();
+			ReportError("Could not open savegame", openError);
+			return savegameDescriptor;
+		}
+
+		savegameFile->read(savegameFile, &savegameDescriptor.Header, sizeof(SavegameHeaderStruct), 1);
+		const SavegameHeader validator;
+		const auto isValid = _memicmp(
+			(const void*)(&validator.Preamble0),
+			(const void*)(&savegameDescriptor.Header.Preamble0),
+			sizeof(char) * 9
+		);
+
+		if (isValid != 0)
+		{
+			savegameFile->close(savegameFile);
+			ReportError("Could not load savegame", "Savegame store corrupted");
+			savegameDescriptor.Header.SavegameIndex = 0;
+			return savegameDescriptor;
+		}
+
+		if (savegameDescriptor.Header.SavegameIndex != savegameIndex)
+		{
+			savegameFile->close(savegameFile);
+			std::stringstream mismatchComposer;
+			mismatchComposer 
+				<< "Savegame index requested ("
+				<< savegameIndex
+				<< ") does not match the one found in the store (" 
+				<< savegameDescriptor.Header.SavegameIndex 
+				<< ")";
+
+			std::string mismatchError = mismatchComposer.str();
+			ReportError("Could not load savegame", mismatchError.c_str());
+			savegameDescriptor.Header.SavegameIndex = 0;
+			return savegameDescriptor;
+		}
+
+		size_t octetsLeft = savegameFile->size(savegameFile) - sizeof(SavegameHeaderStruct);
+		while (octetsLeft > 0)
+		{
+			std::cout << octetsLeft;
+		}
+
+		savegameFile->close(savegameFile);
+
+		return savegameDescriptor;
+	}
+
 	void Load(int savegameIndex, int savepointIndex)
 	{
 		std::cout << savegameIndex << ", " << savepointIndex;
@@ -65,7 +127,23 @@ namespace blooDot::Savegame
 
 	void Delete(int savegameIndex)
 	{
-		std::cout << savegameIndex;
+		if (savegameIndex <= 0 || savegameIndex >= 0xf)
+		{
+			std::cerr << "No such savegame slot: " << savegameIndex;
+			return;
+		}
+
+		const auto& delResult = _unlink(_GetFilename(savegameIndex).c_str());
+
+		std::cout << savegameIndex << "=>" << delResult;
+
+		Settings.OccupiedSavegameSlots &= ~(1 << (savegameIndex - 1));
+		if (Settings.CurrentSavegameIndex == savegameIndex)
+		{
+			Settings.CurrentSavegameIndex = 0;
+		}
+
+		SaveSettings();
 	}
 
 	std::string _GetFilename(int savegameIndex)

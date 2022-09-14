@@ -14,6 +14,7 @@
 #include "resutil.h"
 #include "savegame.h"
 #include "menu-continue-empty.h"
+#include "menu-load.h"
 
 extern bool mainRunning;
 extern SettingsStruct Settings;
@@ -166,7 +167,7 @@ bool SplashLoop(SDL_Renderer* renderer)
 		LoadSettings();
 		settingsLoaded = true;
 
-		menuSelection = Settings.NumberOfSavegames == 0 ? MMI_NEWSINGLE : MMI_CUE;
+		menuSelection = Settings.CurrentSavegameIndex == 0 ? MMI_NEWSINGLE : MMI_CUE;
 	}
 
 	unsigned short frame = 0L;
@@ -243,7 +244,7 @@ bool SplashLoop(SDL_Renderer* renderer)
 
 				case SDL_SCANCODE_HOME:
 				{
-					auto const& destSelection = Settings.NumberOfSavegames == 0 ? MMI_NEWSINGLE : MMI_CUE;
+					auto const& destSelection = Settings.CurrentSavegameIndex == 0 ? MMI_NEWSINGLE : MMI_CUE;
 					if (menuSelection == destSelection)
 					{
 						blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
@@ -476,7 +477,8 @@ bool _HandleLoad(SDL_Renderer* renderer)
 	else
 	{
 		/* we show the list of savegames to load from */
-		stayInMenu = false;
+		blooDot::MenuLoad::MenuLoop(renderer);
+		stayInMenu = true;
 	}
 
 	return stayInMenu;

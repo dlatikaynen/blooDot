@@ -489,6 +489,9 @@
     <ClInclude Include="menu-continue-empty.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
+    <ClInclude Include="harvard.h">
+      <Filter>_Headers\algo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -583,6 +586,9 @@
     </ClCompile>
     <ClCompile Include="menu-continue-empty.cpp">
       <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="harvard.cpp">
+      <Filter>_Source Files\algo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -767,6 +773,12 @@
       <Filter>Resource Files\sfx</Filter>
     </Media>
     <Media Include="res\selconf.wav">
+      <Filter>Resource Files\sfx</Filter>
+    </Media>
+    <Media Include="res\cricket-fritz.wav">
+      <Filter>Resource Files\sfx</Filter>
+    </Media>
+    <Media Include="res\cricket-franz.wav">
       <Filter>Resource Files\sfx</Filter>
     </Media>
   </ItemGroup>

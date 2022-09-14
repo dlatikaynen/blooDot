@@ -247,6 +247,7 @@
     <ClInclude Include="chunk-constants.h" />
     <ClInclude Include="gpuchan.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="harvard.h" />
     <ClInclude Include="menu-continue-empty.h" />
     <ClInclude Include="menu-load.h" />
     <ClInclude Include="menu-settings-lang.h" />
@@ -273,6 +274,7 @@
     <ClCompile Include="gameview.cpp" />
     <ClCompile Include="geom2d.cpp" />
     <ClCompile Include="gpuchan.cpp" />
+    <ClCompile Include="harvard.cpp" />
     <ClCompile Include="huff-comp.cpp" />
     <ClCompile Include="huff-deco.cpp" />
     <ClCompile Include="menu-continue-empty.cpp" />
@@ -709,6 +711,14 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
     </Media>
     <Media Include="res\bump.wav">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </Media>
+    <Media Include="res\cricket-franz.wav">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </Media>
+    <Media Include="res\cricket-fritz.wav">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
     </Media>

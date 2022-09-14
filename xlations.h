@@ -1,7 +1,7 @@
 #pragma once
 
 constexpr char const* literalAlienMainMenuLabel = "MejnMenju";
-constexpr char const* literalAlienLoadMenuLabel = "Loud";
+constexpr char const* literalAlienLoadMenuLabel = "loud";
 constexpr char const* literalAlienSettingsMenuLabel = "Setins";
 constexpr char const* literalAlienScreenSettingsMenuLabel = "ScrinSaiz";
 constexpr char const* literalAlienLangSettingsMenuLabel = "lenguij";
@@ -59,6 +59,11 @@ constexpr char const* literalSettingsLanguageDEName = "German";
 constexpr char const* literalSettingsLanguageUA = "[ua]";
 constexpr char const* literalSettingsLanguageUADetails = "Ukrayin'ska";
 constexpr char const* literalSettingsLanguageUAName = "Ukrainian";
+constexpr char const* literalSavegame = "Savegame";
+constexpr char const* literalSavegameBlank = "Initial";
+constexpr char const* literalSavepointSingular = "1 savepoint";
+constexpr char const* literalSavepointPlural = "$n savepoints";
+constexpr char const* literalCreated = "created";
 
 constexpr char const* literalDialogTitleGpuChan = "GPU-chan went like,";
 constexpr char const* literalDialogBubbleGpuChan = "Oh no,\nit's too\nbig!";

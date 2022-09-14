@@ -10,6 +10,8 @@
 #include <regex>
 #include "constants.h"
 #include "sfx.h"
+#include <iostream>
+#include "harvard.h"
 
 constexpr int const bounceMargin = 10;
 constexpr int const vignetteWidth = 250;
@@ -34,7 +36,7 @@ namespace blooDot::MenuLoad
 	int slideSpeed = 0;
 	int targetOffsetLeft = 0;
 
-	bool LoadMenuLoop(SDL_Renderer* renderer)
+	bool MenuLoop(SDL_Renderer* renderer)
 	{
 		constexpr int const startY = 94;
 		constexpr int const stride = 46;
@@ -174,6 +176,7 @@ namespace blooDot::MenuLoad
 					case SDL_SCANCODE_RETURN2:
 					case SDL_SCANCODE_KP_ENTER:
 					case SDL_SCANCODE_SPACE:
+						blooDot::Sfx::Play(SoundEffect::SFX_SELCONF);
 						if (menuSelection == LMI_SAVEGAME)
 						{
 							loadMenuRunning = false;
@@ -308,7 +311,8 @@ namespace blooDot::MenuLoad
 
 	void _PrepareControls(SDL_Renderer* renderer)
 	{
-		vignetteCount = std::max((unsigned short)1, Settings.NumberOfSavegames);
+		const auto& numberOfSavegames = SetBitCount(Settings.OccupiedSavegameSlots);
+		vignetteCount = std::max(1, numberOfSavegames);
 		sliderTextureWidth = vignetteCount * vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * bounceMargin;
 		slidingSavegames = SDL_CreateTexture(
 			renderer,
@@ -340,31 +344,65 @@ namespace blooDot::MenuLoad
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 			SDL_RenderClear(renderer);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 0, 30, literalSettingsScreenTemple);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 0, 70, literalSettingsScreenTempleDetails);
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 0, 190, literalSettingsScreenTempleResolution);
+			auto bitIndex = 0;
+			auto ordinal = 0;
+			for (auto i = 0; i < numberOfSavegames; ++i)
+			{
+				while (!(Settings.OccupiedSavegameSlots & (1 << bitIndex)))
+				{
+					++bitIndex;
+				}
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 1, 30, literalSettingsScreenHercules);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 1, 70, literalSettingsScreenHerculesDetails);
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 1, 190, literalSettingsScreenHerculesResolution);
+				const auto savegameIndex = bitIndex + 1;
+				const auto& savegameData = blooDot::Savegame::LoadInfoShallow(savegameIndex);
+				std::stringstream formatter;
+				formatter << literalSavegame << " #" << savegameData.Header.SavegameIndex;
+				std::string formatted;
+				formatted = formatter.str();
+				_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, ordinal, 30, formatted.c_str());
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 2, 30, literalSettingsScreenModeX);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 2, 70, literalSettingsScreenModexDetails);
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 2, 190, literalSettingsScreenModeXResolution);
+				formatter.str(std::string());
+				formatter.clear();
+				if (savegameData.Savepoints.size() == 0)
+				{
+					formatter << literalSavegameBlank;
+				}
+				else if (savegameData.Savepoints.size() == 1)
+				{
+					formatter << literalSavepointSingular;
+				}
+				else
+				{
+					std::stringstream savepointCount;
+					savepointCount << savegameData.Savepoints.size();
+					formatter << std::regex_replace(literalSavepointPlural, std::regex("\\$n"), savepointCount.str());
+				}
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 3, 30, literalSettingsScreenSVGA);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 3, 70, literalSettingsScreenSVGADetails);
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 3, 190, literalSettingsScreenSVGAResolution);
+				formatted = formatter.str();
+				_VignetteLabel(renderer, FONT_KEY_TITLE, 13, ordinal, 70, formatted.c_str());
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 4, 30, literalSettingsScreenNotebook);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 4, 70, literalSettingsScreenNotebookDetails);
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 4, 190, literalSettingsScreenNotebookResolution);
+				formatter.str(std::string());
+				formatter.clear();
+				formatter
+					<< literalCreated
+					<< " "
+					<< std::setw(2) << std::setfill('0') << (int)savegameData.Header.Created.Day
+					<< "/"
+					<< std::setw(2) << (int)savegameData.Header.Created.Month
+					<< "/"
+					<< (int)savegameData.Header.Created.Year
+					<< " "
+					<< std::setw(2) << (int)savegameData.Header.Created.Hour
+					<< ":"
+					<< std::setw(2) << (int)savegameData.Header.Created.Minute
+					<< ":"
+					<< std::setw(2) << (int)savegameData.Header.Created.Second;
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 5, 30, literalSettingsScreenSquare);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 5, 70, literalSettingsScreenSquareDetails);
-
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 6, 30, literalSettingsScreenFull);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 6, 70, literalSettingsScreenFullDetails);
+				formatted = formatter.str();
+				_VignetteLabel(renderer, FONT_KEY_TITLE, 13, ordinal, 190, formatted.c_str());
+				
+				++ordinal;
+			}
 
 			if (SDL_SetRenderTarget(renderer, NULL) < 0)
 			{

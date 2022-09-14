@@ -21,28 +21,6 @@ typedef struct LocalTimestampStruct
 	unsigned char Second = 0;
 } LocalTimestamp;
 
-namespace blooDot::Savegame
-{
-	/// <summary>
-	/// Returns the 1-based savegame index
-	/// Returns 0 if no free slot was available
-	/// (in which case the user should be asked to overwrite an existing one
-	/// or load an existing one)
-	/// </summary>
-	int Create();
-	void Append(int savegameIndex, bool isAutosave);
-	void Load(int savegameIndex, int savepointIndex);
-	
-	/// <summary>
-	/// Frees the slot and physically removes the BOFA file
-	/// </summary>
-	void Delete(int savegameIndex);
-
-	std::string _GetFilename(int savegameIndex);
-	int _FindFreeSavegameSlot();
-	void _SetLocalTimestampStruct(LocalTimestamp* timestamp);
-}
-
 typedef struct SavegameHeaderStruct
 {
 	char Preamble0 = '\3';
@@ -68,7 +46,7 @@ typedef struct SavepointHeaderStruct
 	char Preamble3 = 'L';
 	char Preamble9 = '\0';
 	LocalTimestamp Written = { 0 };
-	unsigned char RegionNameLength = 0;
+	int RegionId = 0;
 	unsigned int ScreenshotLength = 0;
 	unsigned long long DataLength;
 	int OriginDx = 0; // from gameview
@@ -80,3 +58,34 @@ typedef struct SavepointHeaderStruct
 	PlayerState Player4State;
 
 } SavepointHeader;
+
+typedef struct SavegameChoiceDescriporStruct
+{
+	SavegameHeader Header;
+	std::vector<SavepointHeader> Savepoints;
+	std::vector<SDL_Texture*> Screenshots;
+	SDL_Texture* MostRecentScreenshot;
+} SavegameChoiceDescriptor;
+
+namespace blooDot::Savegame
+{
+	/// <summary>
+	/// Returns the 1-based savegame index
+	/// Returns 0 if no free slot was available
+	/// (in which case the user should be asked to overwrite an existing one
+	/// or load an existing one)
+	/// </summary>
+	int Create();
+	void Append(int savegameIndex, bool isAutosave);
+	SavegameChoiceDescriptor LoadInfoShallow(int savegameIndex);
+	void Load(int savegameIndex, int savepointIndex);
+
+	/// <summary>
+	/// Frees the slot and physically removes the BOFA file
+	/// </summary>
+	void Delete(int savegameIndex);
+
+	std::string _GetFilename(int savegameIndex);
+	int _FindFreeSavegameSlot();
+	void _SetLocalTimestampStruct(LocalTimestamp* timestamp);
+}

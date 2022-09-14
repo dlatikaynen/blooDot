@@ -155,6 +155,15 @@ namespace blooDot::MenuContinueEmpty
 			SDL_RenderPresent(renderer);
 			SDL_Delay(16);
 			++frame;
+
+			if (frame % 128 == 0)
+			{
+				blooDot::Sfx::Play(SoundEffect::SFX_CRICKET_FRANZ);
+			}
+			else if (frame % 156 == 0)
+			{
+				blooDot::Sfx::Play(SoundEffect::SFX_CRICKET_FRITZ);
+			}
 		}
 
 		titleTexture&& [titleTexture] { SDL_DestroyTexture(titleTexture); return false; }();
