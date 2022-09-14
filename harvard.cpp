@@ -3,14 +3,12 @@
 
 int SetBitCount(unsigned short val)
 {
-	auto count = 0;
-	for (auto i = 0; i < 0xf; ++i)
+	unsigned int count = 0;
+	while (val)
 	{
-		if (val & (1 << i))
-		{
-			++count;
-		}
+		val &= (val - 1);
+		++count;
 	}
-
+	
 	return count;
 }
