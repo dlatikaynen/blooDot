@@ -89,49 +89,49 @@ char const* GetDingName(const Ding ding)
 	switch (ding)
 	{
 	case Ding::WallClassic:
-		return dingNameWallClassic;
+		return literaldingNameWallClassic;
 
 	case Ding::BarrelIndigo:
-		return dingNameBarrelIndigo;
+		return literaldingNameBarrelIndigo;
 
 	case Ding::BarrelWood:
-		return dingNameBarrelWood;
+		return literaldingNameBarrelWood;
 
 	case Ding::BarrelLoaded:
-		return dingNameBarrelLoaded;
+		return literaldingNameBarrelLoaded;
 
 	case Ding::FloorSlate:
-		return dingNameFloorSlate;
+		return literaldingNameFloorSlate;
 
 	case Ding::FloorPurple:
-		return dingNameFloorPurple;
+		return literaldingNameFloorPurple;
 
 	case Ding::FloorOchre:
-		return dingNameFloorOchre;
+		return literaldingNameFloorOchre;
 
 	case Ding::FloorRock:
-		return dingNameFloorRock;
+		return literaldingNameFloorRock;
 
 	case Ding::FloorRockCracked:
-		return dingNameFloorRockCracked;
+		return literaldingNameFloorRockCracked;
 
 	case Ding::Lettuce:
-		return dingNameLettuce;
+		return literaldingNameLettuce;
 
 	case Ding::Schaed:
-		return dingNameSchaed;
+		return literaldingNameSchaed;
 
 	case Ding::Snow:
-		return dingNameSnow;
+		return literaldingNameSnow;
 
 	case Ding::ChelF:
-		return dingNameChelF;
+		return literaldingNameChelF;
 
 	case Ding::Grass:
-		return dingNameGrass;
+		return literaldingNameGrass;
 
 	case Ding::RooofMesh:
-		return dingNameRooofMesh;
+		return literaldingNameRooofMesh;
 
 	default:
 		assert(ding != ding);

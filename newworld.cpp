@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "newworld.h"
+#include "xlations.h"
 
 bool InitializeNewWorld()
 {
@@ -8,7 +9,7 @@ bool InitializeNewWorld()
 	WorldRegion scullery;
 	scullery.belongsTo = NULL;
 	scullery.RegionId = 1;
-	scullery.RegionName = std::string(regionNameScullery);
+	scullery.RegionName = std::string(literalregionNameScullery);
 	scullery.polygon.push_back({ -3,-3 });
 	scullery.polygon.push_back({ 3,-3 });
 	scullery.polygon.push_back({ 3,3 });

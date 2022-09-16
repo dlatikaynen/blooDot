@@ -240,6 +240,7 @@
     <ClInclude Include="drawing.h" />
     <ClInclude Include="enums.h" />
     <ClInclude Include="enxassy.h" />
+    <ClInclude Include="enxlate.h" />
     <ClInclude Include="flap.h" />
     <ClInclude Include="gamestate.h" />
     <ClInclude Include="gameview.h" />
@@ -270,6 +271,7 @@
     <ClCompile Include="dingsheet.cpp" />
     <ClCompile Include="drawing.cpp" />
     <ClCompile Include="enxassy.cpp" />
+    <ClCompile Include="enxlate.cpp" />
     <ClCompile Include="flap.cpp" />
     <ClCompile Include="gamestate.cpp" />
     <ClCompile Include="gameview.cpp" />
@@ -400,7 +402,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
-    <None Include="gameres.xassy.recipe" />
+    <None Include="gameres.xassy.recipe">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="gameres.xlation.recipe">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
     <None Include="packages.config" />
     <None Include="planning\dramatis-personae.ligma">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

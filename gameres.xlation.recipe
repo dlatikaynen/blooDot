@@ -1,0 +1,329 @@
+AlienMainMenuLabel
+	[**]	MejnMenju
+
+AlienLoadMenuLabel
+	[**]	loud
+
+AlienSettingsMenuLabel
+	[**]	Setins
+
+AlienScreenSettingsMenuLabel
+	[**]	ScrinSaiz
+
+AlienInGameMenuLabel
+	[**]	Gejm
+
+AlienLangSettingsMenuLabel
+	[**]	lenguij
+
+AlienContinueEmptyLabel
+	[**]	Empti
+
+Manufacturer
+	[**]	Copyright zOzz FlaminginSarjakuvatOj
+
+MenuContinue
+	[en]	Continue
+	[de]	Fortsetzen
+
+MenuLoad
+	[en]	Load
+	[de]	Laden
+
+MenuSingle
+	[en]	Single player
+	[de]	Einzelpieler
+
+MenuLocalMulti
+	[en]	Local multiplayer
+	[de]	Lokal Mehrspieler
+
+MenuNetMulti
+	[en]	Net multiplayer
+	[de]	Netz Mehrspieler
+
+MenuSettings
+	[en]	Settings
+	[de]	Einstellungen
+
+MenuSave
+	[en]	Save
+	[de]	Speichern
+
+MenuExit
+	[en]	Exit
+	[de]	Beenden
+
+MenuBack
+	[en]	Back
+	[de]	Zurück
+
+MenuDismiss
+	[en]	Dismiss
+	[de]	Weiter
+
+MenuCancel
+	[en]	Cancel
+	[de]	Abbrechen
+
+MenuOk
+	[en]	Ok
+	[de]	Ok
+
+MenuLeave
+	[en]	Leave
+	[de]	Verlassen
+
+MenuControls
+	[en]	Controls
+	[de]	Steuerung
+
+MenuKnowledgebase
+	[en]	Knowledgebase
+	[de]	Enzyklopädie
+
+MenuMap
+	[en]	Map
+	[de]	Karte
+
+MenuInventory
+	[en]	Hammerspace
+	[de]	Inventar
+
+SettingsMenuScreensize
+	[en]	Screen size
+	[de]	Grafikmodus
+
+SettingsMenuLanguage
+	[en]	Language
+	[de]	Sprache
+
+SettingsMenuScreensizeHint
+	[en]	This setting will only affect the game window.\r\nSetting does not apply to the launcher.
+	[de]	Diese Einstellung wirkt nur auf das Spielfeld.\r\nDas Startfenster ändert sich nicht.
+
+ContinueEmptyHint
+	[en]	This timeline has nothing to continue from.\r\nYou may want to start a new game first.
+	[de]	In dieser Zeitlinie ist nichts fortzusetzen.\r\nErst muss ein neues Spiel gestartet werden.
+
+LoadEmptyHint
+	[en]	This timeline contains no savegames to load.\r\nYou may want to start a new game first.
+	[de]	In dieser Zeitlinie gibt es keine Spielstände.\r\nErst muss ein neues Spiel gestartet werden.
+
+SettingsScreenTemple
+	[**]	VGA
+
+SettingsScreenTempleResolution
+	[**]	640 x 480
+
+SettingsScreenTempleDetails
+	[en]	A resolution that\npleases the Lord
+	[de]	Eine gottgefällige\nBildschirmauflösung
+
+SettingsScreenHercules
+	[**]	Hercules
+
+SettingsScreenHerculesResolution
+	[**]	720 x 348
+
+SettingsScreenHerculesDetails
+	[en]	Awesome amber\nabomination
+	[de]	Toller gelber\nAugenschaden
+
+SettingsScreenModeX
+	[**]	mode X
+
+SettingsScreenModeXResolution
+	[**]	320 x 240
+
+SettingsScreenModexDetails
+	[en]	Doomed pixelated\nretro goodness
+	[de]	Pixelig und\naltmodisch
+
+SettingsScreenSVGA
+	[**]	SVGA
+
+SettingsScreenSVGAResolution
+	[**]	800 x 600
+
+SettingsScreenSVGADetails
+	[en]	Reasonably recent\nrectangular ratio
+	[de]	Halbwegs moderne\nrechteckige Größe
+
+SettingsScreenNotebook
+	[**]	HD
+
+SettingsScreenNotebookResolution
+	[**]	1280 x 768
+
+SettingsScreenNotebookDetails
+	[en]	Seven twenty\npee
+	[de]	sieben zwanzig pe
+
+SettingsScreenSquare
+	[en]	Square
+	[de]	Praktisch
+
+SettingsScreenSquareResolution
+	[**]	$h x $h
+
+SettingsScreenSquareDetails
+	[en]	Fullscreen\nbut square
+	[de]	Vollbild\naber quadratisch
+
+SettingsScreenFull
+	[en]	Full
+	[de]	Voll
+
+SettingsScreenFullResolution
+	[**]	$w x $h
+
+SettingsScreenFullDetails
+	[en]	I paid for the whole screen,\nI'mma use the whole screen
+	[de]	Ich zahle den ganzen Schirm,\nich nütze den ganzen Schirm
+
+MessageInsufficientScreenSize
+	[en]	You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.
+
+SettingsLanguageEN
+	[en]	[en]
+
+SettingsLanguageENDetails
+	[en]	American
+
+SettingsLanguageENName
+	[en]	English
+
+SettingsLanguageFI
+	[en]	[fi]
+
+SettingsLanguageFIDetails
+	[en]	Suomen kieli
+
+SettingsLanguageFIName
+	[en]	Finnish
+
+SettingsLanguageDE
+	[en]	[de]
+
+SettingsLanguageDEDetails
+	[en]	Deutsch
+
+SettingsLanguageDEName
+	[en]	German
+
+SettingsLanguageUA
+	[en]	[ua]
+
+SettingsLanguageUADetails
+	[en]	Ukrayin'ska
+
+SettingsLanguageUAName
+	[en]	Ukrainian
+
+Savegame
+	[en]	Savegame
+
+SavegameBlank
+	[en]	Initial
+
+SavepointSingular
+	[en]	1 savepoint
+
+SavepointPlural
+	[en]	$n savepoints
+
+Created
+	[en]	created
+
+DialogTitleGpuChan
+	[en]	GPU-chan went like,
+	[de]	GPU-chan hat gesagt,
+	
+DialogBubbleGpuChan
+	[en]	Oh no,\nit's too\nbig!
+	[de]	O nein, das\nist zu groß!
+
+regionNameUnknown
+	[en]	Here be dragons
+	[de]	Hier seyen Drachen
+
+regionNameScullery
+	[en]	The Scullery
+	[de]	Die Spülküche
+
+mainQuestTitleAwning
+	[en]	The Awning of the Sage of Asparagus
+	[de]	Die Spargelrentnermarkise
+
+mainQuestTitleDrawing
+	[en]	The Drawing of the Cage of a Platypus
+	[de]	Der Schnabeltierkäfiggrundriß
+
+mainQuestTitleDrowning
+	[en]	The Drowning of the Wage of an Octopus
+	[de]	Die Tintenfischgehaltsversenkung
+
+mainQuestTitleKermit
+	[en]	Get the Frog a Loan
+	[de]	Gib dem Frosch Kredit
+
+dingNameWallClassic
+	[en]	Wall cube
+	[de]	Mauerwürfel
+
+dingNameBarrelIndigo
+	[en]	Premium cask
+	[de]	Premiumfaß
+
+dingNameBarrelWood
+	[en]	Wooden cask
+	[de]	Holzfaß
+
+dingNameBarrelLoaded
+	[en]	Loaded barrel
+	[de]	Geladenes Faß
+
+dingNameFloorSlate
+	[en]	Slate floor
+	[de]	Schieferboden
+
+dingNameFloorPurple
+	[en]	Purple floor
+	[de]	Purpurboden
+
+dingNameFloorOchre
+	[en]	Ochre floor
+	[de]	Ockerboden
+
+dingNameFloorRock
+	[en]	Stone floor
+	[de]	Steinboden
+
+dingNameFloorRockCracked
+	[en]	Cracked stone floor
+	[de]	Beschädigter Steinboden
+
+dingNameLettuce
+	[en]	Lettuce
+	[de]	Salat
+
+dingNameSchaed
+	[en]	Skull
+	[de]	Schädel
+
+dingNameSnow
+	[en]	Snow
+	[de]	Schnee
+
+dingNameChelF
+	[en]	Fluorine
+	[de]	Fluor
+
+dingNameGrass
+	[en]	Grass
+	[de]	Rasen
+
+dingNameRooofMesh
+	[en]	Mesh
+	[de]	Gitterrost

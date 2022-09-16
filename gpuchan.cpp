@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "gpuchan.h"
+#include "xlations.h"
 
 constexpr const SDL_Color titleTextColor = { 11,8,8,222 };
 constexpr const SDL_Color bubbleTextColor = { 12, 8, 8, 255 };

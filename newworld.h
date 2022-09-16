@@ -1,7 +1,6 @@
 #pragma once
 #include <SDL.h>
 #include "gamestate.h"
-#include "xlations.h"
 
 extern void ReportError(const char*, const char*);
 

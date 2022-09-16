@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "enxassy.h"
-#include <iostream>
-#include <filesystem>
+#ifndef NDEBUG
 
 int Cook()
 {
@@ -154,3 +153,4 @@ int Cook()
 
 	return -1;
 }
+#endif

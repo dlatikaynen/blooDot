@@ -4,7 +4,6 @@
 #include "dexassy.h"
 #include <SDL_image.h>
 #include "scripture.h"
-#include "xlations.h"
 #include "drawing.h"
 #include "dialogcontrols.h"
 #include "constants.h"

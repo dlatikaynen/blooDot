@@ -21,12 +21,16 @@ void ReportError(const char* message, const char* error)
 
 #ifndef NDEBUG
 extern int Cook();
+extern int Xlate();
 
 int main(int argc, char** argv)
 {
 	if (argc == 2 && _strnicmp(argv[1], "xassy", _MAX_PATH) == 0)
 	{
-		return Cook();
+		auto const& cooked = Cook();
+		auto const& xlated = Xlate();
+
+		return cooked && xlated ? 0 : 0xacab;
 	}
 
 #else

@@ -1,7 +1,7 @@
 #include "pch.h"
+#include "xlations.h"
 #include "gamestate.h"
 #include "geom2d.h"
-#include "xlations.h"
 
 /* (0,0) is world center.
  * world data is loaded on demand, in 9 quadrants at a time
@@ -74,5 +74,5 @@ const char* GetRegionName(int worldX, int worldY)
 		}
 	}
 
-	return regionNameUnknown;
+	return literalregionNameUnknown;
 }
