@@ -56,6 +56,7 @@ typedef struct SavepointHeaderStruct
 	PlayerState Player2State;
 	PlayerState Player3State;
 	PlayerState Player4State;
+	char IsAutosave = 0;
 
 } SavepointHeader;
 

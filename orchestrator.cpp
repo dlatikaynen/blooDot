@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "orchestrator.h"
+#include "menu-ingame.h"
 
 extern SDL_Renderer* GameViewRenderer;
 
@@ -73,6 +74,10 @@ void MainLoop(SDL_Renderer* renderer)
 
 				case SDL_SCANCODE_KP_3:
 					Scroll(5, 5);
+					break;
+
+				case SDL_SCANCODE_ESCAPE:
+					blooDot::MenuInGame::MenuLoop(renderer);
 					break;
 				}
 

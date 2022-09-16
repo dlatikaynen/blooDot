@@ -56,7 +56,50 @@ namespace blooDot::Savegame
 
 	void Append(int savegameIndex, bool isAutosave)
 	{
-		std::cout << savegameIndex << isAutosave;
+		if (Settings.OccupiedSavegameSlots & (1 << (savegameIndex - 1)))
+		{
+			ReportError("Could not append to savegame", "Attempt to append to an empty savegame slot");
+			return;
+		}
+
+		const auto& fileName = _GetFilename(savegameIndex);
+		const auto saveFile = SDL_RWFromFile(fileName.c_str(), "ab");
+		if (!saveFile)
+		{
+			const auto openError = SDL_GetError();
+			ReportError("Could not open savegame file for append", openError);
+			return;
+		}
+
+		/* 1. write the descriptor */
+		SavepointHeader header;
+		_SetLocalTimestampStruct(&header.Written);
+		header.DataLength = 0;
+		header.ScreenshotLength = 0;
+		header.RegionId = 1;
+		header.OriginDx = 0;
+		header.OriginDy = 0;
+		header.PlayersJoined = 1;
+		header.IsAutosave = isAutosave ? 0xff : 0;
+		const auto numWritten = saveFile->write(
+			saveFile,
+			(void*)(&header),
+			sizeof(SavepointHeaderStruct),
+			1
+		);
+
+		if (numWritten != 1)
+		{
+			const auto appendError = SDL_GetError();
+			ReportError("Failed to write savepoint header", appendError);
+			return;
+		}
+
+		/* 2. write the screenshot */
+
+		/* 3. write the delta frame */
+
+		saveFile->close(saveFile);
 	}
 
 	/// <summary>

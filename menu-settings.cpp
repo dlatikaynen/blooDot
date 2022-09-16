@@ -60,7 +60,7 @@ bool SettingsMenuLoop(SDL_Renderer* renderer)
 		&controlsRect,
 		FONT_KEY_DIALOG,
 		23,
-		literalSettingsMenuControls,
+		literalMenuControls,
 		ButtonTextColor
 	);
 

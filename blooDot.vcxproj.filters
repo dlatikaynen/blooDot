@@ -492,6 +492,9 @@
     <ClInclude Include="harvard.h">
       <Filter>_Headers\algo</Filter>
     </ClInclude>
+    <ClInclude Include="menu-ingame.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -589,6 +592,9 @@
     </ClCompile>
     <ClCompile Include="harvard.cpp">
       <Filter>_Source Files\algo</Filter>
+    </ClCompile>
+    <ClCompile Include="menu-ingame.cpp">
+      <Filter>_Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

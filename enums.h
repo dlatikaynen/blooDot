@@ -49,6 +49,16 @@ enum LoadMenuItems {
 	LMI_SAVEGAME
 };
 
+enum InGameMenuItems {
+	IGMI_DISMISS,
+	IGMI_SAVE,
+	IGMI_INVENTORY,
+	IGMI_MAP,
+	IGMI_CONTROLS,
+	IGMI_KNOWLEDGEBASE,
+	IGMI_LEAVE
+};
+
 enum SettingsMenuItems {
 	SMI_BACK,
 	SMI_SCREENSIZE,
