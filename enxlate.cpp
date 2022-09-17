@@ -4,40 +4,15 @@
 
 int Xlate()
 {
-	std::stringstream xlations_h;
-	std::stringstream xlations_de_h;
-	std::stringstream xlations_fi_h;
-	std::stringstream xlations_ua_h;
-	
-	std::stringstream enPath;
-	std::stringstream dePath;
-	std::stringstream fiPath;
-	std::stringstream uaPath;
-
-	xlations_h
-		<< "#pragma once"
-		<< "\n\n";
-
-	xlations_de_h
-		<< "#pragma once"
-		<< "\n\n";
-
-	xlations_fi_h
-		<< "#pragma once"
-		<< "\n\n";
-
-	xlations_ua_h
-		<< "#pragma once"
-		<< "\n\n";
+	std::stringstream pathHeader;
+	std::stringstream pathSource;
 
 	auto const&& basePath = SDL_GetBasePath();
 	std::stringstream recipePath;
 	recipePath << basePath << "..\\..\\" << "gameres.xlation.recipe";
 	std::ifstream recipeFile(recipePath.str());
-	enPath << basePath << "..\\..\\" << "xlations-en.h";
-	dePath << basePath << "..\\..\\" << "xlations-de.h";
-	fiPath << basePath << "..\\..\\" << "xlations-fi.h";
-	uaPath << basePath << "..\\..\\" << "xlations-ua.h";
+	pathHeader << basePath << "..\\..\\" << "xlations.h";
+	pathSource << basePath << "..\\..\\" << "xlations.cpp";
 
 	if (recipeFile.is_open() && recipeFile.good())
 	{
@@ -120,137 +95,134 @@ int Xlate()
 		}
 
 		recipeFile.close();
-		std::ofstream enFile(enPath.str(), std::ios::binary);
-		std::ofstream deFile(dePath.str(), std::ios::binary);
-		std::ofstream fiFile(fiPath.str(), std::ios::binary);
-		std::ofstream uaFile(uaPath.str(), std::ios::binary);
+		std::ofstream headerFile(pathHeader.str());
+		std::ofstream sourceFile(pathSource.str());
+
+		headerFile
+			<< "#pragma once"
+			<< "\n\n";
+
+		sourceFile
+			<< "#include \"pch.h\"\n"
+			<< "#include \"xlations.h\"\n"
+			<< "#include \"xlations-en.h\"\n"
+			<< "#include \"xlations-de.h\"\n"
+			<< "#include \"xlations-fi.h\"\n"
+			<< "#include \"xlations-ua.h\"\n"
+			<< "\n";
 
 		for (auto& identifier : identifiers)
 		{
-			enFile
+			headerFile
+				<< "extern const char* literal"
+				<< identifier.Identifier
+				<< ";\n";
+
+			sourceFile
 				<< "const char* literal"
 				<< identifier.Identifier
 				<< " = \"\";\n";
 		}
 
-		enFile
-			<< "\nnamespace blooDot::en\n"
-			<< "{\n";
-
-		deFile
-			<< "#include \"xlations-en.h\"\n\n"
-			<< "namespace blooDot::de\n"
-			<< "{\n";
-
-		fiFile
-			<< "#include \"xlations-en.h\"\n\n"
-			<< "namespace blooDot::fi\n"
-			<< "{\n";
-
-		uaFile
-			<< "#include \"xlations-en.h\"\n\n"
-			<< "namespace blooDot::ua\n"
-			<< "{\n";
-
-		for (auto& identifier : identifiers)
+		for (auto i = 1; i <= 4; ++i)
 		{
-			if (identifier.HasEn)
-			{
-				enFile
-					<< "\tconstexpr char const* _literal_en_"
-					<< identifier.Identifier
-					<< " = \""
-					<< identifier.en
-					<< "\";\n";
+			std::string lcid;
+			switch (i) {
+			case 1:
+				lcid = "en";
+				break;
+
+			case 2:
+				lcid = "de";
+				break;
+
+			case 3:
+				lcid = "fi";
+				break;
+
+			case 4:
+				lcid = "ua";
+				break;
 			}
 
-			if (identifier.HasDe)
+			std::stringstream pathHeaderLang;
+			pathHeaderLang
+				<< basePath
+				<< "..\\..\\"
+				<< "xlations-"
+				<< lcid
+				<< ".h";
+
+			std::ofstream headerLangFile(pathHeaderLang.str());
+			headerLangFile
+				<< "#pragma once"
+				<< "\n\n"
+				<< "namespace blooDot::"
+				<< lcid
+				<< "\n{\n";
+
+			sourceFile
+				<< "\nnamespace blooDot::"
+				<< lcid
+				<< "\n{\n"
+				<< "\tvoid Set()\n"
+				<< "\t{\n";
+
+			for (auto& identifier : identifiers)
 			{
-				deFile
-					<< "\tconstexpr char const* _literal_de_"
+				headerLangFile
+					<< "\tconstexpr char const* _literal_"
+					<< lcid
+					<< "_"
 					<< identifier.Identifier
-					<< " = \""
-					<< identifier.de
+					<< " = \"";
+					
+				switch(i)
+				{ 
+				case 1:
+					headerLangFile << (identifier.HasEn ? identifier.en : "");
+					break;
+
+				case 2:
+					headerLangFile << (identifier.HasDe ? identifier.de : identifier.en);
+					break;
+
+				case 3:
+					headerLangFile << (identifier.HasFi ? identifier.fi : identifier.en);
+					break;
+
+				case 4:
+					headerLangFile << (identifier.HasUa ? identifier.ua : identifier.en);
+					break;
+				}
+
+				headerLangFile
 					<< "\";\n";
+
+				sourceFile
+					<< "\t\tliteral"
+					<< identifier.Identifier
+					<< " = _literal_"
+					<< lcid
+					<< "_"
+					<< identifier.Identifier
+					<< ";\n";
 			}
 
-			if (identifier.HasFi)
-			{
-				fiFile
-					<< "\tconstexpr char const* _literal_fi_"
-					<< identifier.Identifier
-					<< " = \""
-					<< identifier.fi
-					<< "\";\n";
-			}
+			sourceFile << "\t}\n}\n";
+			headerLangFile << "}\n";
+			headerLangFile.close();
 
-			if (identifier.HasUa)
-			{
-				uaFile
-					<< "\tconstexpr char const* _literal_ua_"
-					<< identifier.Identifier
-					<< " = \""
-					<< identifier.ua
-					<< "\";\n";
-			}
+			headerFile
+				<< "\nnamespace blooDot::"
+				<< lcid
+				<< "\n{\n"
+				<< "\tvoid Set();\n"
+				<< "}\n";
 		}
 
-		enFile
-			<< "\n\tvoid Set()\n"
-			<< "\t{\n";
-
-		deFile
-			<< "\n\tvoid Set()\n"
-			<< "\t{\n";
-
-		fiFile
-			<< "\n\tvoid Set()\n"
-			<< "\t{\n";
-
-		uaFile
-			<< "\n\tvoid Set()\n"
-			<< "\t{\n";
-
-		for (auto& identifier : identifiers)
-		{
-			enFile
-				<< "\t\tliteral"
-				<< identifier.Identifier
-				<< " = _literal_en_"
-				<< identifier.Identifier
-				<< ";\n";
-
-			deFile
-				<< "\t\tliteral"
-				<< identifier.Identifier
-				<< (identifier.HasDe ? " = _literal_de_" : " = blooDot::en::_literal_en_")
-				<< identifier.Identifier
-				<< ";\n";
-
-			fiFile
-				<< "\t\tliteral"
-				<< identifier.Identifier
-				<< (identifier.HasFi ? " = _literal_fi_" : " = blooDot::en::_literal_en_")
-				<< identifier.Identifier
-				<< ";\n";
-
-			uaFile
-				<< "\t\tliteral"
-				<< identifier.Identifier
-				<< (identifier.HasUa ? " = _literal_ua_" : " = blooDot::en::_literal_en_")
-				<< identifier.Identifier
-				<< ";\n";
-		}
-
-		enFile << "\t}\n}\n";
-		deFile << "\t}\n}\n";
-		fiFile << "\t}\n}\n";
-		uaFile << "\t}\n}\n";
-
-		enFile.close();
-		deFile.close();
-		fiFile.close();
-		uaFile.close();
+		headerFile.close();
+		sourceFile.close();
 
 		return XlateReturnCodeSuccess;
 	}

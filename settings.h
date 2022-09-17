@@ -5,6 +5,7 @@
 extern void ReportError(const char*, const char*);
 
 void LoadSettings();
+void ApplyLanguageSetting();
 void SaveSettings();
 void DefaultSettings();
 

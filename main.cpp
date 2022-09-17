@@ -8,6 +8,7 @@
 #include "huff-deco.h"
 #include "constants.h"
 #include "sfx.h"
+#include "xlations.h"
 
 const int ExitCodeNormally = 0x00;
 const int ExitCodeSDLInitFail = 0x55;
@@ -68,6 +69,8 @@ int main(int, char**)
 	{
 		std::cout << "Video driver \"" << SDL_GetVideoDriver(i) << "\" present\n";
 	}
+
+	std::cout << "Current video driver is " << SDL_GetCurrentVideoDriver() << "\n";
 
 	const auto connectedControllers = SDL_NumJoysticks();
 	if (connectedControllers == 0)

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "settings.h"
 #include "enums.h"
-
+#include "xlations.h"
 #include <stdio.h>
 #include "constants.h"
 
@@ -36,6 +36,26 @@ void LoadSettings()
 	}
 
 	settingsFile->close(settingsFile);
+}
+
+void ApplyLanguageSetting()
+{
+	switch (Settings.SettingUserInterfaceLanguage)
+	{
+	case UserInterfaceLanguages::UIL_GERMAN:
+		blooDot::de::Set();
+		return;
+
+	case UserInterfaceLanguages::UIL_FINNISH:
+		blooDot::fi::Set();
+		return;
+
+	case UserInterfaceLanguages::UIL_UKRAINIAN:
+		blooDot::ua::Set();
+		return;
+	}
+
+	blooDot::en::Set();
 }
 
 void SaveSettings()

@@ -218,6 +218,7 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="xlations.cpp" />
     <ClInclude Include="boydsa.h" />
     <ClInclude Include="cairo\cairo-deprecated.h" />
     <ClInclude Include="cairo\cairo-features.h" />
@@ -387,6 +388,10 @@
     <ClInclude Include="settings.h" />
     <ClInclude Include="sfx.h" />
     <ClInclude Include="splash.h" />
+    <ClInclude Include="xlations-de.h" />
+    <ClInclude Include="xlations-en.h" />
+    <ClInclude Include="xlations-fi.h" />
+    <ClInclude Include="xlations-ua.h" />
     <ClInclude Include="xlations.h" />
   </ItemGroup>
   <ItemGroup>

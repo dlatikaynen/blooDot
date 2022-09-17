@@ -43,6 +43,15 @@ void LoadSplash(SDL_Renderer* renderer)
 		return;
 	}
 
+	if (!settingsLoaded)
+	{
+		LoadSettings();
+		ApplyLanguageSetting();
+		settingsLoaded = true;
+
+		menuSelection = Settings.CurrentSavegameIndex == 0 ? MMI_NEWSINGLE : MMI_CUE;
+	}
+
 	SDL_Rect splashRect;
 	splashTexture = blooDot::Res::LoadPicture(renderer, CHUNK_KEY_SPLASH, &splashRect);
 	if (!splashTexture)
@@ -160,14 +169,6 @@ bool SplashLoop(SDL_Renderer* renderer)
 		SDL_GameControllerSetPlayerIndex(primaryController, 1);
 		SDL_GameControllerRumble(primaryController, 0xffff, 0xffff, 0xff);
 		SDL_GameControllerEventState(SDL_ENABLE);
-	}
-
-	if (!settingsLoaded)
-	{
-		LoadSettings();
-		settingsLoaded = true;
-
-		menuSelection = Settings.CurrentSavegameIndex == 0 ? MMI_NEWSINGLE : MMI_CUE;
 	}
 
 	unsigned short frame = 0L;

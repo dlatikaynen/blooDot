@@ -498,6 +498,18 @@
     <ClInclude Include="xlations.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
+    <ClInclude Include="xlations-en.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="xlations-de.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="xlations-fi.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="xlations-ua.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -600,6 +612,9 @@
       <Filter>_Source Files\ui</Filter>
     </ClCompile>
     <ClCompile Include="enxlate.cpp">
+      <Filter>_Source Files\res</Filter>
+    </ClCompile>
+    <ClCompile Include="xlations.cpp">
       <Filter>_Source Files\res</Filter>
     </ClCompile>
   </ItemGroup>

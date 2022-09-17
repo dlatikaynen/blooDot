@@ -174,6 +174,7 @@ namespace blooDot::MenuSettingsLang
 						if (menuSelection == LSMI_USER_INTERFACE_LANGUAGE)
 						{
 							Settings.SettingUserInterfaceLanguage = movingToLanguage;
+							ApplyLanguageSetting();
 							langSettingsMenuRunning = false;
 						}
 						else if (menuSelection == LSMI_CANCEL)
