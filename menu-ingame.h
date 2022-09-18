@@ -7,4 +7,7 @@
 namespace blooDot::MenuInGame
 {
 	bool MenuLoop(SDL_Renderer*);
+
+	void _HandleMenu();
+	void _HandleSave();
 }

@@ -22,6 +22,8 @@ namespace blooDot::Splash
 	bool SplashLoop(SDL_Renderer*);
 
 	void _Bounce(SDL_Rect* srcRect);
+	void _AssignNewSpeed(__out int* speed);
+	void _DelayBackgroundAnim();
 	void _PrepareText(SDL_Renderer* renderer, bool destroy = false);
 	bool _EnterAndHandleMenu(SDL_Renderer* renderer);
 	void _EnterAndHandleSettings(SDL_Renderer* renderer);

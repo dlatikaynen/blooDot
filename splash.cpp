@@ -316,37 +316,16 @@ namespace blooDot::Splash
 		return keepRunning;
 	}
 
-	void AssignNewSpeed(__out int* speed)
-	{
-		const auto value = distribution(generator);
-		if (value < 2)
-		{
-			/* -2, -1 */
-			(*speed) = value - 2;
-		}
-		else
-		{
-			/* 1, 2 */
-			(*speed) = value - 1;
-		}
-	}
-
-	void DelayBackgroundAnim()
-	{
-		const auto random = distribution(generator);
-		backgroundAnimDelay = 101 * (random + 1);
-	}
-
 	void _Bounce(SDL_Rect* srcRect)
 	{
 		if (backgroundSpeedX == 0)
 		{
-			AssignNewSpeed(&backgroundSpeedX);
+			_AssignNewSpeed(&backgroundSpeedX);
 		}
 
 		if (backgroundSpeedY == 0)
 		{
-			AssignNewSpeed(&backgroundSpeedY);
+			_AssignNewSpeed(&backgroundSpeedY);
 		}
 
 		if (backgroundAnimDelay > 0)
@@ -361,35 +340,56 @@ namespace blooDot::Splash
 		if (backgroundPosX < 0)
 		{
 			backgroundPosX = 0;
-			AssignNewSpeed(&backgroundSpeedX);
+			_AssignNewSpeed(&backgroundSpeedX);
 			backgroundSpeedX = abs(backgroundSpeedX);
-			DelayBackgroundAnim();
+			_DelayBackgroundAnim();
 		}
 		else if (backgroundPosX > backdropHorz)
 		{
 			backgroundPosX = backdropHorz;
-			AssignNewSpeed(&backgroundSpeedX);
+			_AssignNewSpeed(&backgroundSpeedX);
 			backgroundSpeedX = -abs(backgroundSpeedX);
-			DelayBackgroundAnim();
+			_DelayBackgroundAnim();
 		}
 
 		if (backgroundPosY < 0)
 		{
 			backgroundPosY = 0;
-			AssignNewSpeed(&backgroundSpeedY);
+			_AssignNewSpeed(&backgroundSpeedY);
 			backgroundSpeedY = abs(backgroundSpeedY);
-			DelayBackgroundAnim();
+			_DelayBackgroundAnim();
 		}
 		else if (backgroundPosY > backdropVert)
 		{
 			backgroundPosY = backdropVert;
-			AssignNewSpeed(&backgroundSpeedY);
+			_AssignNewSpeed(&backgroundSpeedY);
 			backgroundSpeedY = -abs(backgroundSpeedY);
-			DelayBackgroundAnim();
+			_DelayBackgroundAnim();
 		}
 
 		(*srcRect).x = (int)round(backgroundPosX);
 		(*srcRect).y = (int)round(backgroundPosY);
+	}
+
+	void _AssignNewSpeed(__out int* speed)
+	{
+		const auto value = distribution(generator);
+		if (value < 2)
+		{
+			/* -2, -1 */
+			(*speed) = value - 2;
+		}
+		else
+		{
+			/* 1, 2 */
+			(*speed) = value - 1;
+		}
+	}
+
+	void _DelayBackgroundAnim()
+	{
+		const auto random = distribution(generator);
+		backgroundAnimDelay = 101 * (random + 1);
 	}
 
 	void _PrepareText(SDL_Renderer* renderer, bool destroy)

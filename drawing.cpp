@@ -26,6 +26,9 @@ SDL_Texture* NewTexture(SDL_Renderer* renderer, int w, int h, bool transparentAb
 		{
 			const auto blendModeError = SDL_GetError();
 			ReportError("Failed to set texture blend mode", blendModeError);
+			SDL_DestroyTexture(newTexture);
+			
+			return NULL;
 		}
 	}
 

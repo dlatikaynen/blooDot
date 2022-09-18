@@ -1,101 +1,212 @@
 #include "pch.h"
 #include "orchestrator.h"
 #include "menu-ingame.h"
+#include "settings.h"
+#include "savegame.h"
 
+Uint32 SDL_USEREVENT_SAVE = 0;
+Uint32 SDL_USEREVENT_AUTOSAVE = 0;
+
+extern SettingsStruct Settings;
 extern SDL_Renderer* GameViewRenderer;
 
 bool mainRunning = true;
-SDL_Event mainEvent;
-
 #ifndef NDEBUG
 bool toggleDebugView = false;
 #endif
 
-void MainLoop(SDL_Renderer* renderer)
+namespace blooDot::Orchestrator
 {
-	if (!InitializeNewWorld())
-	{
-		mainRunning = false;
-	}
+	SDL_Event mainEvent;
 
-	GameViewRenderer = renderer;
-	if (mainRunning && !GameviewEnterWorld())
+	void MainLoop(SDL_Renderer* renderer)
 	{
-		mainRunning = false;
-	}
-
-	while (mainRunning)
-	{
-		while (SDL_PollEvent(&mainEvent) != 0)
+		if (!InitializeNewWorld())
 		{
-			switch (mainEvent.type)
+			mainRunning = false;
+		}
+
+		GameViewRenderer = renderer;
+		if (mainRunning && !GameviewEnterWorld())
+		{
+			mainRunning = false;
+		}
+
+		SDL_USEREVENT_SAVE = SDL_RegisterEvents(1);
+		SDL_USEREVENT_AUTOSAVE = SDL_RegisterEvents(1);
+
+		while (mainRunning)
+		{
+			while (SDL_PollEvent(&mainEvent) != 0)
 			{
-			case SDL_KEYDOWN:
-				switch (mainEvent.key.keysym.scancode)
+				switch (mainEvent.type)
 				{
-#ifndef NDEBUG
-				case SDL_SCANCODE_LEFTBRACKET:
-					/* this...is...the...bracket */
-					toggleDebugView = !toggleDebugView;
-					break;
+				case SDL_USEREVENT:
+				{
+					const auto& userEvent = mainEvent.user;
+					if (userEvent.type == SDL_USEREVENT_SAVE)
+					{
+						_HandleSave();
+					}
+					else if (userEvent.type == SDL_USEREVENT_AUTOSAVE)
+					{
+						_HandleSave(true);
+					}
 
-#endif
-				case SDL_SCANCODE_LEFT:
-				case SDL_SCANCODE_KP_4:
-					Scroll(-5, 0);
-					break;
-
-				case SDL_SCANCODE_RIGHT:
-				case SDL_SCANCODE_KP_6:
-					Scroll(5, 0);
-					break;
-
-				case SDL_SCANCODE_UP:
-				case SDL_SCANCODE_KP_8:
-					Scroll(0, -5);
-					break;
-
-				case SDL_SCANCODE_DOWN:
-				case SDL_SCANCODE_KP_2:
-					Scroll(0, 5);
-					break;
-
-				case SDL_SCANCODE_KP_7:
-					Scroll(-5, -5);
-					break;
-
-				case SDL_SCANCODE_KP_9:
-					Scroll(5, -5);
-					break;
-
-				case SDL_SCANCODE_KP_1:
-					Scroll(-5, 5);
-					break;
-
-				case SDL_SCANCODE_KP_3:
-					Scroll(5, 5);
-					break;
-
-				case SDL_SCANCODE_ESCAPE:
-					blooDot::MenuInGame::MenuLoop(renderer);
 					break;
 				}
 
-				break;
+				case SDL_KEYDOWN:
+					switch (mainEvent.key.keysym.scancode)
+					{
+#ifndef NDEBUG
+					case SDL_SCANCODE_LEFTBRACKET:
+						/* this...is...the...bracket */
+						toggleDebugView = !toggleDebugView;
+						break;
 
-			case SDL_QUIT:
-				mainRunning = false;
-				break;
+#endif
+					case SDL_SCANCODE_LEFT:
+					case SDL_SCANCODE_KP_4:
+						Scroll(-5, 0);
+						break;
+
+					case SDL_SCANCODE_RIGHT:
+					case SDL_SCANCODE_KP_6:
+						Scroll(5, 0);
+						break;
+
+					case SDL_SCANCODE_UP:
+					case SDL_SCANCODE_KP_8:
+						Scroll(0, -5);
+						break;
+
+					case SDL_SCANCODE_DOWN:
+					case SDL_SCANCODE_KP_2:
+						Scroll(0, 5);
+						break;
+
+					case SDL_SCANCODE_KP_7:
+						Scroll(-5, -5);
+						break;
+
+					case SDL_SCANCODE_KP_9:
+						Scroll(5, -5);
+						break;
+
+					case SDL_SCANCODE_KP_1:
+						Scroll(-5, 5);
+						break;
+
+					case SDL_SCANCODE_KP_3:
+						Scroll(5, 5);
+						break;
+
+					case SDL_SCANCODE_ESCAPE:
+						blooDot::MenuInGame::MenuLoop(renderer);
+						goto NEXTFRAME;
+					}
+
+					break;
+
+				case SDL_QUIT:
+					mainRunning = false;
+					break;
+				}
 			}
+NEXTFRAME:
+
+			SDL_RenderClear(renderer);
+			GameViewRenderFrame();
+			SDL_RenderPresent(renderer);
+			SDL_Delay(16);
 		}
 
-		SDL_RenderClear(renderer);
-		GameViewRenderFrame();
-		SDL_RenderPresent(renderer);
-		SDL_Delay(16);
+		TeardownDingSheets();
+		GameviewTeardown();
+		ClearWorldData();
 	}
 
-	TeardownDingSheets();
-	GameviewTeardown();
-	ClearWorldData();
+	void _HandleSave(bool isAutosave)
+	{
+		const auto& savegameIndex = Settings.CurrentSavegameIndex;
+		if (savegameIndex <= 0)
+		{
+			std::cerr << "Cannot save as long as no savegame index is established";
+			return;
+		}
+
+		/* 1. take a screenshot */
+		int viewportWidth = 0, viewportHeight = 0;
+		const int shotWidth = 200, shotHeight = 120;
+		SDL_GetRendererOutputSize(GameViewRenderer, &viewportWidth, &viewportHeight);
+		SDL_Surface* screenShot = SDL_CreateRGBSurface(
+			0,
+			viewportWidth,
+			viewportHeight,
+			32,
+			0x00ff0000,
+			0x0000ff00,
+			0x000000ff,
+			0xff000000
+		);
+
+		if (screenShot)
+		{
+			const auto& srcRect = SDL_Rect({
+				viewportWidth / 2 - shotWidth / 2,
+				viewportHeight / 2 - shotHeight / 2,
+				shotWidth,
+				shotHeight
+			});
+
+			if (SDL_RenderReadPixels(
+				GameViewRenderer,
+				&srcRect,
+				SDL_PIXELFORMAT_ARGB8888,
+				screenShot->pixels,
+				screenShot->pitch) < 0
+			)
+			{
+				const auto& shotError = SDL_GetError();
+				ReportError("Could not take screenshot", shotError);
+			}
+			else
+			{
+				if (SDL_SaveBMP(screenShot, "screenshot.bmp") < 0)
+				{
+					const auto& saveError = SDL_GetError();
+					ReportError("Could not save screenshot", saveError);
+				}
+
+				SDL_Surface* croppedShot = SDL_CreateRGBSurface(
+					0,
+					shotWidth,
+					shotHeight,
+					32,
+					0x00ff0000,
+					0x0000ff00,
+					0x000000ff,
+					0xff000000
+				);
+
+				const SDL_Rect cropDestRect = { 0,0,shotWidth,shotHeight };
+
+				SDL_BlitSurface(screenShot, &srcRect, croppedShot, &cropDestRect);
+			}
+
+			SDL_FreeSurface(screenShot);
+		}
+		else
+		{
+			const auto& surfaceError = SDL_GetError();
+			ReportError("Could not create surface for screenshot", surfaceError);
+		}
+
+		/* 2. in a separate thread,
+		 * which, while it will be running,
+		 * no new save can be initiated,
+		 * write the data to the savegame file */
+		blooDot::Savegame::Append(Settings.CurrentSavegameIndex, isAutosave);
+	}
 }

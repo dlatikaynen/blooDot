@@ -10,6 +10,8 @@
 #include "sfx.h"
 
 extern SettingsStruct Settings;
+extern Uint32 SDL_USEREVENT_SAVE;
+extern Uint32 SDL_USEREVENT_AUTOSAVE;
 
 namespace blooDot::MenuInGame
 {
@@ -180,15 +182,7 @@ namespace blooDot::MenuInGame
 					case SDL_SCANCODE_RETURN2:
 					case SDL_SCANCODE_KP_ENTER:
 					case SDL_SCANCODE_SPACE:
-						blooDot::Sfx::Play(SoundEffect::SFX_SELCONF);
-						if (menuSelection == IGMI_DISMISS)
-						{
-							menuRunning = false;
-						}
-
-
-
-
+						_HandleMenu();
 						break;
 
 					case SDL_SCANCODE_ESCAPE:
@@ -264,5 +258,31 @@ namespace blooDot::MenuInGame
 		SaveSettings();
 
 		return menuRunning;
+	}
+
+	void _HandleMenu()
+	{
+		blooDot::Sfx::Play(SoundEffect::SFX_SELCONF);
+		switch (menuSelection)
+		{
+		case InGameMenuItems::IGMI_SAVE:
+			_HandleSave();
+			break;
+		}
+
+		// by default, dismiss
+		menuRunning = false;
+	}
+
+	void _HandleSave()
+	{
+		SDL_Event saveEvent = { 0 };
+		saveEvent.type = SDL_USEREVENT;
+		saveEvent.user.type = SDL_USEREVENT_SAVE;
+		if (SDL_PushEvent(&saveEvent) < 0)
+		{
+			const auto& pushError = SDL_GetError();
+			ReportError("Could not post save event", pushError);
+		}
 	}
 }

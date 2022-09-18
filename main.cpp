@@ -171,7 +171,7 @@ int main(int, char**)
 		blooDot::Sfx::Play(SoundEffect::SFX_BULLET_DECAY);
 		if (blooDot::Splash::SplashLoop(renderer))
 		{
-			MainLoop(renderer);
+			blooDot::Orchestrator::MainLoop(renderer);
 		}
 
 		blooDot::Sfx::Teardown();
