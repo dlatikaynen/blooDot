@@ -3,13 +3,17 @@
 #include "scripture.h"
 #include "dexassy.h"
 
-TTF_Font* titleFont = NULL;
-SDL_RWops* titleFontSource = NULL;
-void* titleFontMem = NULL;
+TTF_Font* fancyFont = NULL;
+SDL_RWops* fancyFontSource = NULL;
+void* fancyFontMem = NULL;
 
 TTF_Font* dialogFont = NULL;
 SDL_RWops* dialogFontSource = NULL;
 void* dialogFontMem = NULL;
+
+TTF_Font* dialogFontFat = NULL;
+SDL_RWops* dialogFontFatSource = NULL;
+void* dialogFontFatMem = NULL;
 
 TTF_Font* alienFont = NULL;
 SDL_RWops* alienFontSource = NULL;
@@ -37,10 +41,10 @@ bool LoadFonts()
 			<< "\n";
 	}
 
-	if (!titleFont)
+	if (!fancyFont)
 	{
-		titleFontMem = LoadFontInternal(CHUNK_KEY_FONT_TITLE, &titleFont, &titleFontSource);
-		if (!titleFontMem)
+		fancyFontMem = LoadFontInternal(CHUNK_KEY_FONT_FANCY, &fancyFont, &fancyFontSource);
+		if (!fancyFontMem)
 		{
 			return false;
 		}
@@ -50,6 +54,15 @@ bool LoadFonts()
 	{
 		dialogFontMem = LoadFontInternal(CHUNK_KEY_FONT_DIALOG, &dialogFont, &dialogFontSource);
 		if (!dialogFontMem)
+		{
+			return false;
+		}
+	}
+
+	if (!dialogFontFat)
+	{
+		dialogFontFatMem = LoadFontInternal(CHUNK_KEY_FONT_DIALOG_FAT, &dialogFontFat, &dialogFontFatSource);
+		if (!dialogFontFatMem)
 		{
 			return false;
 		}
@@ -96,11 +109,14 @@ TTF_Font* GetFont(int fontKey)
 {
 	switch (fontKey)
 	{
-	case FONT_KEY_TITLE:
-		return titleFont;
-
 	case FONT_KEY_DIALOG:
 		return dialogFont;
+
+	case FONT_KEY_DIALOG_FAT:
+		return dialogFontFat;
+
+	case FONT_KEY_FANCY:
+		return fancyFont;
 
 	case FONT_KEY_ALIEN:
 		return alienFont;
@@ -149,12 +165,12 @@ SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_Rect* frame, int fontKey, in
 
 void CloseFonts()
 {
-	if (titleFont)
+	if (fancyFont)
 	{
-		TTF_CloseFont(titleFont);
-		titleFontSource->close(titleFontSource);
-		SDL_free(titleFontMem);
-		titleFont = NULL;
+		TTF_CloseFont(fancyFont);
+		fancyFontSource->close(fancyFontSource);
+		SDL_free(fancyFontMem);
+		fancyFont = NULL;
 	}
 
 	if (dialogFont)
@@ -163,6 +179,14 @@ void CloseFonts()
 		dialogFontSource->close(dialogFontSource);
 		SDL_free(dialogFontMem);
 		dialogFont = NULL;
+	}
+
+	if (dialogFontFat)
+	{
+		TTF_CloseFont(dialogFontFat);
+		dialogFontFatSource->close(dialogFontFatSource);
+		SDL_free(dialogFontFatMem);
+		dialogFontFat = NULL;
 	}
 
 	if (alienFont)

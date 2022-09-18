@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "enxassy.h"
+#include "dexassy.h"
 #ifndef NDEBUG
 
 int Cook()
@@ -20,7 +21,7 @@ int Cook()
 	recipePath << basePath << "..\\..\\" << "gameres.xassy.recipe";
 	std::ifstream recipeFile(recipePath.str());
 	std::stringstream cookedPath;
-	cookedPath << basePath << "xassy.cooked1.ngld";
+	cookedPath << basePath << XassyFile;
 	int resNumber = 0;
 
 	if (recipeFile.is_open() && recipeFile.good())
@@ -119,6 +120,35 @@ int Cook()
 		cookedFile.close();
 		recipeFile.close();
 
+		/* copy the cooked file two times into the other runtime folders */
+		std::stringstream debugPath;
+		debugPath << basePath << "..\\Debug\\" << XassyFile;
+		std::stringstream releasePath;
+		releasePath << basePath << "..\\Release\\" << XassyFile;
+		auto const& copiedToDebug = std::filesystem::copy_file(cookedPath.str(), debugPath.str(), std::filesystem::copy_options::overwrite_existing);
+		if (!copiedToDebug)
+		{
+			std::cerr
+				<< "Failed to copy "
+				<< cookedPath.str()
+				<< " to "
+				<< debugPath.str();
+
+			return CookReturnCodeCopyFail;
+		}
+		
+		auto const& copiedToRelease = std::filesystem::copy_file(cookedPath.str(), releasePath.str(), std::filesystem::copy_options::overwrite_existing);
+		if (!copiedToRelease)
+		{
+			std::cerr
+				<< "Failed to copy "
+				<< cookedPath.str()
+				<< " to "
+				<< releasePath.str();
+
+			return CookReturnCodeCopyFail;
+		}
+
 		/* write the chunk constants header */
 		std::stringstream chunkConstantsPath;
 		chunkConstantsPath << basePath << "..\\..\\" << "chunk-constants.h";
@@ -151,6 +181,6 @@ int Cook()
 		return CookReturnCodeSuccess;
 	}
 
-	return -1;
+	return CookReturnCodeRecipeFail;
 }
 #endif

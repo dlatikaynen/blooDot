@@ -26,7 +26,7 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 	const auto messageTexture = RenderText(
 		renderer,
 		&messageRect,
-		FONT_KEY_TITLE,
+		FONT_KEY_DIALOG,
 		13,
 		message,
 		titleTextColor
@@ -35,7 +35,7 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 	const auto titleTexture = RenderText(
 		renderer,
 		&titleRect,
-		FONT_KEY_TITLE,
+		FONT_KEY_DIALOG,
 		25,
 		title,
 		titleTextColor
@@ -44,7 +44,7 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 	const auto okTexture = RenderText(
 		renderer,
 		&okRect,
-		FONT_KEY_DIALOG,
+		FONT_KEY_DIALOG_FAT,
 		23,
 		literalMenuOk,
 		ButtonTextColor
@@ -53,7 +53,7 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 	const auto bubbleTexture = RenderText(
 		renderer,
 		&bubbleRect,
-		FONT_KEY_DIALOG,
+		FONT_KEY_FANCY,
 		23,
 		bubble.c_str(),
 		bubbleTextColor

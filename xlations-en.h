@@ -64,7 +64,7 @@ namespace blooDot::en
 	constexpr char const* _literal_en_SettingsLanguageDEDetails = "Deutsch";
 	constexpr char const* _literal_en_SettingsLanguageDEName = "German";
 	constexpr char const* _literal_en_SettingsLanguageUA = "[ua]";
-	constexpr char const* _literal_en_SettingsLanguageUADetails = "Ukrayin'ska";
+	constexpr char const* _literal_en_SettingsLanguageUADetails = "українська";
 	constexpr char const* _literal_en_SettingsLanguageUAName = "Ukrainian";
 	constexpr char const* _literal_en_Savegame = "Savegame";
 	constexpr char const* _literal_en_SavegameBlank = "Initial";

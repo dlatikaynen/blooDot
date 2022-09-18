@@ -49,7 +49,7 @@ namespace blooDot::MenuContinueEmpty
 		const auto backTexture = RenderText(
 			renderer,
 			&backRect,
-			FONT_KEY_DIALOG,
+			FONT_KEY_DIALOG_FAT,
 			23,
 			literalMenuBack,
 			ButtonTextColor
@@ -59,7 +59,7 @@ namespace blooDot::MenuContinueEmpty
 		const auto hintTexture = RenderText(
 			renderer,
 			&hintRect,
-			FONT_KEY_TITLE,
+			FONT_KEY_DIALOG,
 			13,
 			literalHint,
 			DialogTextColor
@@ -68,7 +68,7 @@ namespace blooDot::MenuContinueEmpty
 		const auto hintShadow = RenderText(
 			renderer,
 			&hintRect,
-			FONT_KEY_TITLE,
+			FONT_KEY_DIALOG,
 			13,
 			literalHint,
 			DialogTextShadowColor

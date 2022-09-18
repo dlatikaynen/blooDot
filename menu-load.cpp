@@ -379,7 +379,7 @@ namespace blooDot::MenuLoad
 				}
 
 				formatted = formatter.str();
-				_VignetteLabel(renderer, FONT_KEY_TITLE, 13, ordinal, 70, formatted.c_str());
+				_VignetteLabel(renderer, FONT_KEY_DIALOG, 13, ordinal, 70, formatted.c_str());
 
 				formatter.str(std::string());
 				formatter.clear();
@@ -399,7 +399,7 @@ namespace blooDot::MenuLoad
 					<< std::setw(2) << (int)savegameData.Header.Created.Second;
 
 				formatted = formatter.str();
-				_VignetteLabel(renderer, FONT_KEY_TITLE, 13, ordinal, 190, formatted.c_str());
+				_VignetteLabel(renderer, FONT_KEY_DIALOG, 13, ordinal, 190, formatted.c_str());
 				
 				++ordinal;
 			}

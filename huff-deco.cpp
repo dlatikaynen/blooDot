@@ -87,13 +87,13 @@ long long _HuffInflateInternal(SDL_RWops* in, unsigned char** result, HuffLookup
             if ((byte & (1 << bitNum)))
             {
                 pointer = pointer->right;
-                --bitNum;
             }
             else
             {
                 pointer = pointer->left;
-                --bitNum;
             }
+
+            --bitNum;
         }
     }
 

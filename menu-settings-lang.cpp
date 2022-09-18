@@ -341,20 +341,20 @@ namespace blooDot::MenuSettingsLang
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 			SDL_RenderClear(renderer);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 0, 30, literalSettingsLanguageEN);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 0, 70, literalSettingsLanguageENDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 0, 30, literalSettingsLanguageEN);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 13, 0, 70, literalSettingsLanguageENDetails);
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 0, 190, literalSettingsLanguageENName);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 1, 30, literalSettingsLanguageFI);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 1, 70, literalSettingsLanguageFIDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 1, 30, literalSettingsLanguageFI);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 13, 1, 70, literalSettingsLanguageFIDetails);
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 1, 190, literalSettingsLanguageFIName);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 2, 30, literalSettingsLanguageDE);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 2, 70, literalSettingsLanguageDEDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 2, 30, literalSettingsLanguageDE);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 13, 2, 70, literalSettingsLanguageDEDetails);
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 2, 190, literalSettingsLanguageDEName);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 3, 30, literalSettingsLanguageUA);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 3, 70, literalSettingsLanguageUADetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 3, 30, literalSettingsLanguageUA);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG, 13, 3, 70, literalSettingsLanguageUADetails);
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 3, 190, literalSettingsLanguageUAName);
 
 			if (SDL_SetRenderTarget(renderer, NULL) < 0)

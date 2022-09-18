@@ -17,7 +17,7 @@ SDL_Texture* NewTexture(SDL_Renderer* renderer, int w, int h, bool transparentAb
 	if (!newTexture)
 	{
 		const auto creationError = SDL_GetError();
-		ReportError("Failed to create flap texture", creationError);
+		ReportError("Failed to create texture", creationError);
 	}
 
 	if (transparentAble)
@@ -25,7 +25,7 @@ SDL_Texture* NewTexture(SDL_Renderer* renderer, int w, int h, bool transparentAb
 		if (SDL_SetTextureBlendMode(newTexture, SDL_BLENDMODE_BLEND) < 0)
 		{
 			const auto blendModeError = SDL_GetError();
-			ReportError("Failed to set flap texture blend mode", blendModeError);
+			ReportError("Failed to set texture blend mode", blendModeError);
 		}
 	}
 

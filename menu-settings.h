@@ -9,8 +9,12 @@
 
 extern bool ScreenSettingsMenuLoop(SDL_Renderer*);
 
-bool SettingsMenuLoop(SDL_Renderer*);
+namespace blooDot::MenuSettings
+{
+	bool MenuLoop(SDL_Renderer*);
 
-bool _EnterAndHandleSettingsMenu(SDL_Renderer* renderer);
-void _EnterAndHandleScreenSettings(SDL_Renderer* renderer);
-void _EnterAndHandleLanguageSettings(SDL_Renderer* renderer);
+	void _PrepareText(SDL_Renderer* renderer, bool destroy = false);
+	bool _EnterAndHandleSettingsMenu(SDL_Renderer* renderer);
+	void _EnterAndHandleScreenSettings(SDL_Renderer* renderer);
+	void _EnterAndHandleLanguageSettings(SDL_Renderer* renderer);
+}

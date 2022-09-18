@@ -15,6 +15,7 @@
 #include "savegame.h"
 #include "menu-continue-empty.h"
 #include "menu-load.h"
+#include "menu-settings.h"
 
 extern bool mainRunning;
 extern SettingsStruct Settings;
@@ -545,5 +546,5 @@ bool _EnterAndHandleMenu(SDL_Renderer* renderer)
 
 void _EnterAndHandleSettings(SDL_Renderer* renderer)
 {
-	SettingsMenuLoop(renderer);
+	blooDot::MenuSettings::MenuLoop(renderer);
 }

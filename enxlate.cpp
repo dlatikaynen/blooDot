@@ -10,9 +10,11 @@ int Xlate()
 	auto const&& basePath = SDL_GetBasePath();
 	std::stringstream recipePath;
 	recipePath << basePath << "..\\..\\" << "gameres.xlation.recipe";
-	std::ifstream recipeFile(recipePath.str());
-	pathHeader << basePath << "..\\..\\" << "xlations.h";
-	pathSource << basePath << "..\\..\\" << "xlations.cpp";
+	std::ifstream recipeFile;
+	recipeFile.imbue(std::locale("en_US.UTF8"));
+	recipeFile.open(recipePath.str());
+	pathHeader << basePath << "..\\..\\xlations.h";
+	pathSource << basePath << "..\\..\\xlations.cpp";
 
 	if (recipeFile.is_open() && recipeFile.good())
 	{
@@ -153,7 +155,10 @@ int Xlate()
 				<< lcid
 				<< ".h";
 
-			std::ofstream headerLangFile(pathHeaderLang.str());
+			std::ofstream headerLangFile;
+			headerLangFile.open(pathHeaderLang.str(), std::ios::out | std::ios::trunc);
+			std::locale utf8_locale;
+			headerLangFile.imbue(utf8_locale);
 			headerLangFile
 				<< "#pragma once"
 				<< "\n\n"

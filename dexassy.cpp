@@ -3,8 +3,6 @@
 #include "chunk-sizes.h"
 #include <iostream>
 
-constexpr char const* XassyFile = "xassy.cooked1.ngld";
-
 std::vector<size_t> chunkOffsets;
 SDL_RWops* cooked = NULL;
 

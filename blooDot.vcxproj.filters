@@ -11,9 +11,6 @@
     <Filter Include="Platform">
       <UniqueIdentifier>{8c724c14-eb4d-48aa-8a76-a4a26e4f0d34}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Licences">
-      <UniqueIdentifier>{3a8d3a08-876f-4930-8f3b-f3db288a21f1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Lib Headers">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -66,6 +63,9 @@
     </Filter>
     <Filter Include="_Source Files\audio">
       <UniqueIdentifier>{c8097a68-b789-45aa-add5-a50d87197559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\legalese">
+      <UniqueIdentifier>{4647e3d7-e770-4f1b-ab9c-02895c6d4626}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -770,22 +770,37 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ofl.txt">
-      <Filter>Licences</Filter>
-    </Text>
     <Text Include="LICENSE.txt" />
     <Text Include="boxchars.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="legalese\clearsans.txt">
+      <Filter>Resource Files\legalese</Filter>
+    </Text>
+    <Text Include="legalese\ofl.txt">
+      <Filter>Resource Files\legalese</Filter>
+    </Text>
+    <Text Include="legalese\SIL-Open-Font-License.txt">
+      <Filter>Resource Files\legalese</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="res\esl_gothic_shavian.ttf">
+    <Font Include="res\esl-gothic-shavian.ttf">
       <Filter>Resource Files\ui</Filter>
     </Font>
-    <Font Include="res\FreckleFace-Regular.ttf">
+    <Font Include="res\freckleface-regular-show.ttf">
       <Filter>Resource Files\ui</Filter>
     </Font>
-    <Font Include="res\FredokaOne-Regular.ttf">
+    <Font Include="res\fredokaone-regular-show.ttf">
+      <Filter>Resource Files\ui</Filter>
+    </Font>
+    <Font Include="res\yesevaone-regular-show.otf">
+      <Filter>Resource Files\ui</Filter>
+    </Font>
+    <Font Include="res\clear-sans-normie.ttf">
+      <Filter>Resource Files\ui</Filter>
+    </Font>
+    <Font Include="res\clear-sans-fat.ttf">
       <Filter>Resource Files\ui</Filter>
     </Font>
   </ItemGroup>

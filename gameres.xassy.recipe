@@ -1,9 +1,10 @@
 chel-f.png	CHUNK_KEY_DINGS_CHEL_F
 projectile-decay.wav	CHUNK_KEY_SFX_PROJECTILEDECAY
 nn-splash-scene.png	CHUNK_KEY_SPLASH
-FredokaOne-Regular.ttf	CHUNK_KEY_FONT_TITLE
-FreckleFace-Regular.ttf	CHUNK_KEY_FONT_DIALOG
-esl_gothic_shavian.ttf	CHUNK_KEY_FONT_ALIEN
+clear-sans-normie.ttf	CHUNK_KEY_FONT_DIALOG
+clear-sans-fat.ttf	CHUNK_KEY_FONT_DIALOG_FAT
+yesevaone-regular-show.otf	CHUNK_KEY_FONT_FANCY
+esl-gothic-shavian.ttf	CHUNK_KEY_FONT_ALIEN
 barrel-indigo.png	CHUNK_KEY_DINGS_BARREL_INDIGO
 barrel-wooden.png	CHUNK_KEY_DINGS_BARREL_WOODEN
 floorrocktile-cracked.png	CHUNK_KEY_DINGS_FLOORROCKTILE_CRACKED

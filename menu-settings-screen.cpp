@@ -76,7 +76,7 @@ namespace blooDot::MenuSettingsScreen
 		const auto hintTexture = RenderText(
 			renderer,
 			&hintRect,
-			FONT_KEY_TITLE,
+			FONT_KEY_DIALOG,
 			13,
 			literalSettingsMenuScreensizeHint,
 			DialogTextColor
@@ -85,7 +85,7 @@ namespace blooDot::MenuSettingsScreen
 		const auto hintShadow = RenderText(
 			renderer,
 			&hintRect,
-			FONT_KEY_TITLE,
+			FONT_KEY_DIALOG,
 			13,
 			literalSettingsMenuScreensizeHint,
 			DialogTextShadowColor
@@ -388,30 +388,30 @@ namespace blooDot::MenuSettingsScreen
 			SDL_RenderClear(renderer);
 
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 0, 30, literalSettingsScreenTemple);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 0, 70, literalSettingsScreenTempleDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 13, 0, 70, literalSettingsScreenTempleDetails);
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 0, 190, literalSettingsScreenTempleResolution);
 
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 1, 30, literalSettingsScreenHercules);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 1, 70, literalSettingsScreenHerculesDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 13, 1, 70, literalSettingsScreenHerculesDetails);
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 1, 190, literalSettingsScreenHerculesResolution);
 
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 2, 30, literalSettingsScreenModeX);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 2, 70, literalSettingsScreenModexDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 13, 2, 70, literalSettingsScreenModexDetails);
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 2, 190, literalSettingsScreenModeXResolution);
 
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 3, 30, literalSettingsScreenSVGA);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 3, 70, literalSettingsScreenSVGADetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 13, 3, 70, literalSettingsScreenSVGADetails);
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 3, 190, literalSettingsScreenSVGAResolution);
 
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 4, 30, literalSettingsScreenNotebook);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 4, 70, literalSettingsScreenNotebookDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 13, 4, 70, literalSettingsScreenNotebookDetails);
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 4, 190, literalSettingsScreenNotebookResolution);
 
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 5, 30, literalSettingsScreenSquare);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 5, 70, literalSettingsScreenSquareDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 13, 5, 70, literalSettingsScreenSquareDetails);
 
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, 6, 30, literalSettingsScreenFull);
-			_VignetteLabel(renderer, FONT_KEY_TITLE, 13, 6, 70, literalSettingsScreenFullDetails);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 13, 6, 70, literalSettingsScreenFullDetails);
 
 			SDL_Rect screen;
 			if (_GetResolution(VR_MAXOUT, &screen))

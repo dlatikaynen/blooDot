@@ -25,82 +25,117 @@ Manufacturer
 MenuContinue
 	[en]	Continue
 	[de]	Fortsetzen
+	[fi]	Jatkaa
+	[ua]	Продовжити
 
 MenuLoad
 	[en]	Load
 	[de]	Laden
+	[fi]	Lataa
+	[ua]	Завантажити
 
 MenuSingle
 	[en]	Single player
 	[de]	Einzelpieler
+	[ua]	Одиночний режим
 
 MenuLocalMulti
 	[en]	Local multiplayer
 	[de]	Lokal Mehrspieler
+	[ua]	Лок. мультиплеер
 
 MenuNetMulti
 	[en]	Net multiplayer
 	[de]	Netz Mehrspieler
+	[ua]	Мереж. мультипл.
 
 MenuSettings
 	[en]	Settings
 	[de]	Einstellungen
+	[fi]	Asetukset
+	[ua]	Налаштування
 
 MenuSave
 	[en]	Save
 	[de]	Speichern
+	[fi]	Tallenna
+	[ua]	Зберегти
 
 MenuExit
 	[en]	Exit
 	[de]	Beenden
+	[fi]	Poistu
+	[ua]	Вийти
 
 MenuBack
 	[en]	Back
-	[de]	Zur�ck
+	[de]	Zurück
+	[fi]	Takaisin
+	[ua]	Назад
 
 MenuDismiss
 	[en]	Dismiss
 	[de]	Weiter
+	[fi]	Sivuutta
+	[ua]	Залишся
 
 MenuCancel
 	[en]	Cancel
 	[de]	Abbrechen
+	[fi]	Peruutta
+	[ua]	Скасувати
 
 MenuOk
 	[en]	Ok
 	[de]	Ok
+	[fi]	Joo
+	[ua]	OK
 
 MenuLeave
 	[en]	Leave
 	[de]	Verlassen
+	[fi]	Jättää
+	[ua]	Залишати
 
 MenuControls
 	[en]	Controls
 	[de]	Steuerung
+	[fi]	Ohjaus
+	[ua]	Kерування
 
 MenuKnowledgebase
 	[en]	Knowledgebase
-	[de]	Enzyklop�die
+	[de]	Enzyklopädie
+	[fi]	Tietopohja
+	[ua]	база знань
 
 MenuMap
 	[en]	Map
+	[fi]	Kartta
 	[de]	Karte
+	[ua]	Карта
 
 MenuInventory
 	[en]	Hammerspace
+	[fi]	Inventaario
 	[de]	Inventar
+	[ua]	інвентар
 
 SettingsMenuScreensize
 	[en]	Screen size
 	[de]	Grafikmodus
+	[fi]	Grafiikkatila
+	[ua]	режим відео
 
 SettingsMenuLanguage
 	[en]	Language
 	[de]	Sprache
+	[fi]	Kieli
+	[ua]	Мова
 
 SettingsMenuScreensizeHint
 	[en]	This setting will only affect the game window.\r\nSetting does not apply to the launcher.
-	[de]	Diese Einstellung wirkt nur auf das Spielfeld.\r\nDas Startfenster �ndert sich nicht.
+	[de]	Diese Einstellung wirkt nur auf das Spielfeld.\r\nDas Startfenster ändert sich nicht.
 
 ContinueEmptyHint
 	[en]	This timeline has nothing to continue from.\r\nYou may want to start a new game first.
@@ -108,7 +143,7 @@ ContinueEmptyHint
 
 LoadEmptyHint
 	[en]	This timeline contains no savegames to load.\r\nYou may want to start a new game first.
-	[de]	In dieser Zeitlinie gibt es keine Spielst�nde.\r\nErst muss ein neues Spiel gestartet werden.
+	[de]	In dieser Zeitlinie gibt es keine Spielstände.\r\nErst muss ein neues Spiel gestartet werden.
 
 SettingsScreenTemple
 	[**]	VGA
@@ -118,7 +153,7 @@ SettingsScreenTempleResolution
 
 SettingsScreenTempleDetails
 	[en]	A resolution that\npleases the Lord
-	[de]	Eine gottgef�llige\nBildschirmaufl�sung
+	[de]	Eine gottgefällige\nBildschirmauflösung
 
 SettingsScreenHercules
 	[**]	Hercules
@@ -148,7 +183,7 @@ SettingsScreenSVGAResolution
 
 SettingsScreenSVGADetails
 	[en]	Reasonably recent\nrectangular ratio
-	[de]	Halbwegs moderne\nrechteckige Gr��e
+	[de]	Halbwegs moderne\nrechteckige Größe
 
 SettingsScreenNotebook
 	[**]	HD
@@ -180,7 +215,7 @@ SettingsScreenFullResolution
 
 SettingsScreenFullDetails
 	[en]	I paid for the whole screen,\nI'mma use the whole screen
-	[de]	Ich zahle den ganzen Schirm,\nich n�tze den ganzen Schirm
+	[de]	Ich zahle den ganzen Schirm,\nich nütze den ganzen Schirm
 
 MessageInsufficientScreenSize
 	[en]	You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.
@@ -202,6 +237,7 @@ SettingsLanguageFIDetails
 
 SettingsLanguageFIName
 	[en]	Finnish
+	[de]	Finnisch
 
 SettingsLanguageDE
 	[en]	[de]
@@ -211,30 +247,42 @@ SettingsLanguageDEDetails
 
 SettingsLanguageDEName
 	[en]	German
+	[de]	Deutsch
 
 SettingsLanguageUA
 	[en]	[ua]
 
 SettingsLanguageUADetails
-	[en]	Ukrayin'ska
+	[**]	українська
 
 SettingsLanguageUAName
 	[en]	Ukrainian
+	[de]	Ukrainisch
 
 Savegame
 	[en]	Savegame
+	[de]	Zeitlinie
+	[ua]	Зберегтигру
 
 SavegameBlank
 	[en]	Initial
+	[de]	Von Anfang
+	[ua]	Початковий
 
 SavepointSingular
 	[en]	1 savepoint
+	[de]	1 Spielstand
+	[ua]	1 збереження
 
 SavepointPlural
 	[en]	$n savepoints
+	[de]	$n Spielstände
+	[ua]	$n збереження
 
 Created
 	[en]	created
+	[de]	erstellt
+	[ua]	створено
 
 DialogTitleGpuChan
 	[en]	GPU-chan went like,
@@ -242,7 +290,7 @@ DialogTitleGpuChan
 	
 DialogBubbleGpuChan
 	[en]	Oh no,\nit's too\nbig!
-	[de]	O nein, das\nist zu gro�!
+	[de]	O nein, das\nist zu groß!
 
 regionNameUnknown
 	[en]	Here be dragons
@@ -250,7 +298,8 @@ regionNameUnknown
 
 regionNameScullery
 	[en]	The Scullery
-	[de]	Die Sp�lk�che
+	[de]	Die Spülküche
+	[ua]	Кухня посуду
 
 mainQuestTitleAwning
 	[en]	The Awning of the Sage of Asparagus
@@ -258,11 +307,15 @@ mainQuestTitleAwning
 
 mainQuestTitleDrawing
 	[en]	The Drawing of the Cage of a Platypus
-	[de]	Der Schnabeltierk�figgrundri�
+	[de]	Der Schnabeltierkäfiggrundriß
+	[fi]	Platypushäkinsuunnitelma
+	[ua]	План клітки качкодзьоба
 
 mainQuestTitleDrowning
 	[en]	The Drowning of the Wage of an Octopus
 	[de]	Die Tintenfischgehaltsversenkung
+	[fi]	Kalmareiden palkanlasku
+	[ua]	Просідання зарплати спрута
 
 mainQuestTitleKermit
 	[en]	Get the Frog a Loan
@@ -270,19 +323,19 @@ mainQuestTitleKermit
 
 dingNameWallClassic
 	[en]	Wall cube
-	[de]	Mauerw�rfel
+	[de]	Mauerwürfel
 
 dingNameBarrelIndigo
 	[en]	Premium cask
-	[de]	Premiumfa�
+	[de]	Premiumfaß
 
 dingNameBarrelWood
 	[en]	Wooden cask
-	[de]	Holzfa�
+	[de]	Holzfaß
 
 dingNameBarrelLoaded
 	[en]	Loaded barrel
-	[de]	Geladenes Fa�
+	[de]	Geladenes Faß
 
 dingNameFloorSlate
 	[en]	Slate floor
@@ -302,7 +355,7 @@ dingNameFloorRock
 
 dingNameFloorRockCracked
 	[en]	Cracked stone floor
-	[de]	Besch�digter Steinboden
+	[de]	Beschädigter Steinboden
 
 dingNameLettuce
 	[en]	Lettuce
@@ -310,7 +363,7 @@ dingNameLettuce
 
 dingNameSchaed
 	[en]	Skull
-	[de]	Sch�del
+	[de]	Schädel
 
 dingNameSnow
 	[en]	Snow
