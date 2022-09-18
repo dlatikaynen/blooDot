@@ -17,8 +17,12 @@ extern cairo_t* DrawChevron(cairo_t*, double, double, bool, unsigned short);
 extern void LoadSettings();
 extern bool SettingsMenuLoop(SDL_Renderer*);
 
-bool SplashLoop(SDL_Renderer*);
-void Bounce(SDL_Rect* srcRect);
+namespace blooDot::Splash
+{
+	bool SplashLoop(SDL_Renderer*);
 
-bool _EnterAndHandleMenu(SDL_Renderer* renderer);
-void _EnterAndHandleSettings(SDL_Renderer* renderer);
+	void _Bounce(SDL_Rect* srcRect);
+	void _PrepareText(SDL_Renderer* renderer, bool destroy = false);
+	bool _EnterAndHandleMenu(SDL_Renderer* renderer);
+	void _EnterAndHandleSettings(SDL_Renderer* renderer);
+}

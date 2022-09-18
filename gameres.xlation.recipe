@@ -1,3 +1,21 @@
+LCID
+	[en]	en
+	[de]	de
+	[fi]	fi
+	[ua]	ua
+
+LanguageName
+	[en]	English
+	[de]	Deutsch
+	[fi]	Suomi
+	[ua]	українська
+
+LanguageNameEnglish
+	[en]	American
+	[de]	German
+	[fi]	Finnish
+	[ua]	Ukrainian
+
 AlienMainMenuLabel
 	[**]	MejnMenju
 

@@ -2,6 +2,9 @@
 
 namespace blooDot::fi
 {
+	constexpr char const* _literal_fi_LCID = "fi";
+	constexpr char const* _literal_fi_LanguageName = "Suomi";
+	constexpr char const* _literal_fi_LanguageNameEnglish = "Finnish";
 	constexpr char const* _literal_fi_AlienMainMenuLabel = "MejnMenju";
 	constexpr char const* _literal_fi_AlienLoadMenuLabel = "loud";
 	constexpr char const* _literal_fi_AlienSettingsMenuLabel = "Setins";

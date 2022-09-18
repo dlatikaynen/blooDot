@@ -2,6 +2,9 @@
 
 namespace blooDot::de
 {
+	constexpr char const* _literal_de_LCID = "de";
+	constexpr char const* _literal_de_LanguageName = "Deutsch";
+	constexpr char const* _literal_de_LanguageNameEnglish = "German";
 	constexpr char const* _literal_de_AlienMainMenuLabel = "MejnMenju";
 	constexpr char const* _literal_de_AlienLoadMenuLabel = "loud";
 	constexpr char const* _literal_de_AlienSettingsMenuLabel = "Setins";

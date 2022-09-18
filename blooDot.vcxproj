@@ -221,6 +221,7 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="datetime.cpp" />
     <ClCompile Include="xlations.cpp" />
     <ClInclude Include="boydsa.h" />
     <ClInclude Include="cairo\cairo-deprecated.h" />
@@ -237,6 +238,7 @@
     <ClInclude Include="chunk-sizes.h" />
     <ClInclude Include="clumsypack.h" />
     <ClInclude Include="collision.h" />
+    <ClInclude Include="datetime.h" />
     <ClInclude Include="dexassy.h" />
     <ClInclude Include="dialogcontrols.h" />
     <ClInclude Include="ding.h" />

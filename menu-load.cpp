@@ -383,20 +383,8 @@ namespace blooDot::MenuLoad
 
 				formatter.str(std::string());
 				formatter.clear();
-				formatter
-					<< literalCreated
-					<< " "
-					<< std::setw(2) << std::setfill('0') << (int)savegameData.Header.Created.Day
-					<< "/"
-					<< std::setw(2) << (int)savegameData.Header.Created.Month
-					<< "/"
-					<< (int)savegameData.Header.Created.Year
-					<< " "
-					<< std::setw(2) << (int)savegameData.Header.Created.Hour
-					<< ":"
-					<< std::setw(2) << (int)savegameData.Header.Created.Minute
-					<< ":"
-					<< std::setw(2) << (int)savegameData.Header.Created.Second;
+				formatter << literalCreated << " ";
+				blooDot::Datetime::Format(&savegameData.Header.Created, &formatter);
 
 				formatted = formatter.str();
 				_VignetteLabel(renderer, FONT_KEY_DIALOG, 13, ordinal, 190, formatted.c_str());

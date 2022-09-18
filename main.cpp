@@ -169,7 +169,7 @@ int main(int, char**)
 
 		SDL_ShowWindow(mainWindow);
 		blooDot::Sfx::Play(SoundEffect::SFX_BULLET_DECAY);
-		if (SplashLoop(renderer))
+		if (blooDot::Splash::SplashLoop(renderer))
 		{
 			MainLoop(renderer);
 		}

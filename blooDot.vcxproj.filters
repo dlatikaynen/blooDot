@@ -510,6 +510,9 @@
     <ClInclude Include="xlations-ua.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
+    <ClInclude Include="datetime.h">
+      <Filter>_Headers\util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -616,6 +619,9 @@
     </ClCompile>
     <ClCompile Include="xlations.cpp">
       <Filter>_Source Files\res</Filter>
+    </ClCompile>
+    <ClCompile Include="datetime.cpp">
+      <Filter>_Source Files\util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

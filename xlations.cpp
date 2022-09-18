@@ -5,6 +5,9 @@
 #include "xlations-fi.h"
 #include "xlations-ua.h"
 
+const char* literalLCID = "";
+const char* literalLanguageName = "";
+const char* literalLanguageNameEnglish = "";
 const char* literalAlienMainMenuLabel = "";
 const char* literalAlienLoadMenuLabel = "";
 const char* literalAlienSettingsMenuLabel = "";
@@ -102,6 +105,9 @@ namespace blooDot::en
 {
 	void Set()
 	{
+		literalLCID = _literal_en_LCID;
+		literalLanguageName = _literal_en_LanguageName;
+		literalLanguageNameEnglish = _literal_en_LanguageNameEnglish;
 		literalAlienMainMenuLabel = _literal_en_AlienMainMenuLabel;
 		literalAlienLoadMenuLabel = _literal_en_AlienLoadMenuLabel;
 		literalAlienSettingsMenuLabel = _literal_en_AlienSettingsMenuLabel;
@@ -201,6 +207,9 @@ namespace blooDot::de
 {
 	void Set()
 	{
+		literalLCID = _literal_de_LCID;
+		literalLanguageName = _literal_de_LanguageName;
+		literalLanguageNameEnglish = _literal_de_LanguageNameEnglish;
 		literalAlienMainMenuLabel = _literal_de_AlienMainMenuLabel;
 		literalAlienLoadMenuLabel = _literal_de_AlienLoadMenuLabel;
 		literalAlienSettingsMenuLabel = _literal_de_AlienSettingsMenuLabel;
@@ -300,6 +309,9 @@ namespace blooDot::fi
 {
 	void Set()
 	{
+		literalLCID = _literal_fi_LCID;
+		literalLanguageName = _literal_fi_LanguageName;
+		literalLanguageNameEnglish = _literal_fi_LanguageNameEnglish;
 		literalAlienMainMenuLabel = _literal_fi_AlienMainMenuLabel;
 		literalAlienLoadMenuLabel = _literal_fi_AlienLoadMenuLabel;
 		literalAlienSettingsMenuLabel = _literal_fi_AlienSettingsMenuLabel;
@@ -399,6 +411,9 @@ namespace blooDot::ua
 {
 	void Set()
 	{
+		literalLCID = _literal_ua_LCID;
+		literalLanguageName = _literal_ua_LanguageName;
+		literalLanguageNameEnglish = _literal_ua_LanguageNameEnglish;
 		literalAlienMainMenuLabel = _literal_ua_AlienMainMenuLabel;
 		literalAlienLoadMenuLabel = _literal_ua_AlienLoadMenuLabel;
 		literalAlienSettingsMenuLabel = _literal_ua_AlienSettingsMenuLabel;

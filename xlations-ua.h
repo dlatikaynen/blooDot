@@ -2,6 +2,9 @@
 
 namespace blooDot::ua
 {
+	constexpr char const* _literal_ua_LCID = "ua";
+	constexpr char const* _literal_ua_LanguageName = "українська";
+	constexpr char const* _literal_ua_LanguageNameEnglish = "Ukrainian";
 	constexpr char const* _literal_ua_AlienMainMenuLabel = "MejnMenju";
 	constexpr char const* _literal_ua_AlienLoadMenuLabel = "loud";
 	constexpr char const* _literal_ua_AlienSettingsMenuLabel = "Setins";

@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <iostream>
 #include "playerstate.h"
+#include "datetime.h"
 
 /* storage format:
  * [1] SavegameHeaderStruct 
@@ -10,16 +11,6 @@
  *     SavepointHeader.ScreenshotLength chars of screenshot picture;
  *     SavepointHeader.DataLength chars of incremental gamestate.
  */
-
-typedef struct LocalTimestampStruct
-{
-	unsigned char Day = 0;
-	unsigned char Month = 0;
-	unsigned short Year = 0;
-	unsigned char Hour = 0; // local time
-	unsigned char Minute = 0;
-	unsigned char Second = 0;
-} LocalTimestamp;
 
 typedef struct SavegameHeaderStruct
 {
