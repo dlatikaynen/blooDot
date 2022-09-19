@@ -18,6 +18,8 @@ constexpr int const bounceMargin = 10;
 constexpr int const vignetteWidth = 250;
 constexpr int const vignetteHeight = 220;
 constexpr int const vignetteGap = 10;
+constexpr int const screenshotReduction = 38;
+constexpr int const screenshotShiftY = 16;
 
 extern SettingsStruct Settings;
 extern bool mainRunning;
@@ -406,10 +408,10 @@ namespace blooDot::MenuLoad
 
 					_PrepareScreenshotRect(&destRect, ordinal);
 					CenterRectInRect(&destRect, &screenshotSrc, &centerRect);
-					centerRect.w -= 38;
-					centerRect.h -= 38;
-					centerRect.x += 19;
-					centerRect.y += 16;
+					centerRect.w -= screenshotReduction;
+					centerRect.h -= screenshotReduction;
+					centerRect.x += screenshotReduction / 2;
+					centerRect.y += screenshotShiftY;
 					SDL_RenderCopy(
 						renderer,
 						savegameData.MostRecentScreenshot,

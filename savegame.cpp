@@ -97,12 +97,15 @@ namespace blooDot::Savegame
 		}
 
 		/* 2. write the screenshot */
-		numWritten = saveFile->write(saveFile, screenshot, screenshotLength, 1);
-		if (numWritten != 1)
+		if (screenshotLength > 0)
 		{
-			const auto appendError = SDL_GetError();
-			ReportError("Failed to write savepoint screenshot", appendError);
-			return;
+			numWritten = saveFile->write(saveFile, screenshot, screenshotLength, 1);
+			if (numWritten != 1)
+			{
+				const auto appendError = SDL_GetError();
+				ReportError("Failed to write savepoint screenshot", appendError);
+				return;
+			}
 		}
 
 		/* 3. write the delta frame */
@@ -193,6 +196,16 @@ namespace blooDot::Savegame
 					savegameFile,
 					&rect
 				);
+			}
+			else if(savepointDescriptor.ScreenshotLength > 0)
+			{
+				savegameFile->seek(savegameFile, savepointDescriptor.ScreenshotLength, SEEK_CUR);
+			}
+
+			/* for the shallow one, we skip stuff */
+			if (savepointDescriptor.DataLength > 0)
+			{
+				savegameFile->seek(savegameFile, savepointDescriptor.DataLength, SEEK_CUR);
 			}
 
 			octetsLeft -= savepointDescriptor.ScreenshotLength;

@@ -177,12 +177,6 @@ NEXTFRAME:
 			}
 			else
 			{
-				if (SDL_SaveBMP(screenShot, "screenshot.bmp") < 0)
-				{
-					const auto& saveError = SDL_GetError();
-					ReportError("Could not save screenshot", saveError);
-				}
-
 				const auto& screenshotSize = shotWidth * shotHeight * 32;
 				memoryBuffer = SDL_malloc(screenshotSize);
 				if (memoryBuffer)
