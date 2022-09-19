@@ -56,7 +56,7 @@ typedef struct SavegameChoiceDescriporStruct
 	SavegameHeader Header;
 	std::vector<SavepointHeader> Savepoints;
 	std::vector<SDL_Texture*> Screenshots;
-	SDL_Texture* MostRecentScreenshot;
+	SDL_Texture* MostRecentScreenshot = NULL;
 } SavegameChoiceDescriptor;
 
 namespace blooDot::Savegame

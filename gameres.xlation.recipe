@@ -151,6 +151,18 @@ SettingsMenuLanguage
 	[fi]	Kieli
 	[ua]	Мова
 
+SettingsMenuHelp
+	[en]	Help
+	[de]	Hilfe
+	[fi]	Apua
+	[ua]	Допомога
+
+SettingsMenuAbout
+	[de]	Über...
+	[en]	About...
+	[fi]	Tietoja...
+	[ua]	Про...
+
 SettingsMenuScreensizeHint
 	[en]	This setting will only affect the game window.\r\nSetting does not apply to the launcher.
 	[de]	Diese Einstellung wirkt nur auf das Spielfeld.\r\nDas Startfenster ändert sich nicht.

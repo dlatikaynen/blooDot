@@ -32,6 +32,8 @@ namespace blooDot::de
 	constexpr char const* _literal_de_MenuInventory = "Inventar";
 	constexpr char const* _literal_de_SettingsMenuScreensize = "Grafikmodus";
 	constexpr char const* _literal_de_SettingsMenuLanguage = "Sprache";
+	constexpr char const* _literal_de_SettingsMenuHelp = "Hilfe";
+	constexpr char const* _literal_de_SettingsMenuAbout = "Über...";
 	constexpr char const* _literal_de_SettingsMenuScreensizeHint = "Diese Einstellung wirkt nur auf das Spielfeld.\r\nDas Startfenster ändert sich nicht.";
 	constexpr char const* _literal_de_ContinueEmptyHint = "In dieser Zeitlinie ist nichts fortzusetzen.\r\nErst muss ein neues Spiel gestartet werden.";
 	constexpr char const* _literal_de_LoadEmptyHint = "In dieser Zeitlinie gibt es keine Spielstände.\r\nErst muss ein neues Spiel gestartet werden.";

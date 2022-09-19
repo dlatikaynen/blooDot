@@ -22,11 +22,15 @@ namespace blooDot::MenuSettings
 	SDL_Texture* screensizeTexture = NULL;
 	SDL_Texture* controlsTexture = NULL;
 	SDL_Texture* languageTexture = NULL;
+	SDL_Texture* helpTexture = NULL;
+	SDL_Texture* aboutTexture = NULL;
 
 	SDL_Rect backRect{ 0,0,0,0 };
 	SDL_Rect screensizeRect{ 0,0,0,0 };
 	SDL_Rect controlsRect{ 0,0,0,0 };
 	SDL_Rect languageRect{ 0,0,0,0 };
+	SDL_Rect helpRect{ 0,0,0,0 };
+	SDL_Rect aboutRect{ 0,0,0,0 };
 
 	bool MenuLoop(SDL_Renderer* renderer)
 	{
@@ -79,7 +83,7 @@ namespace blooDot::MenuSettings
 					case SDL_SCANCODE_DOWN:
 					case SDL_SCANCODE_KP_2:
 					case SDL_SCANCODE_S:
-						if (menuSelection == SMI_LANGUAGE)
+						if (menuSelection == SMI_ABOUT)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
@@ -93,13 +97,13 @@ namespace blooDot::MenuSettings
 
 					case SDL_SCANCODE_PAGEDOWN:
 					case SDL_SCANCODE_END:
-						if (menuSelection == SMI_LANGUAGE)
+						if (menuSelection == SMI_ABOUT)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
 						else
 						{
-							menuSelection = SMI_LANGUAGE;
+							menuSelection = SMI_ABOUT;
 							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 						}
 
@@ -162,7 +166,7 @@ namespace blooDot::MenuSettings
 				const int stride = 46;
 				const int backGap = stride / 2;
 				SettingsMenuItems itemToDraw = SMI_BACK;
-				for (auto y = 94; y < 296; y += stride)
+				for (auto y = 94; y < 411; y += stride)
 				{
 					DrawButton(drawingSink, 195, y, 250, 42, itemToDraw == menuSelection);
 					if (itemToDraw == menuSelection)
@@ -171,7 +175,7 @@ namespace blooDot::MenuSettings
 						DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
 					}
 
-					if (itemToDraw == SMI_BACK)
+					if (itemToDraw == SMI_BACK || itemToDraw == SMI_LANGUAGE)
 					{
 						y += backGap;
 					}
@@ -185,6 +189,8 @@ namespace blooDot::MenuSettings
 				DrawLabel(renderer, 235, 100 + 1 * stride + 1 * backGap, screensizeTexture, &screensizeRect);
 				DrawLabel(renderer, 235, 100 + 2 * stride + 1 * backGap, controlsTexture, &controlsRect);
 				DrawLabel(renderer, 235, 100 + 3 * stride + 1 * backGap, languageTexture, &languageRect);
+				DrawLabel(renderer, 235, 100 + 4 * stride + 2 * backGap, helpTexture, &helpRect);
+				DrawLabel(renderer, 235, 100 + 5 * stride + 2 * backGap, aboutTexture, &aboutRect);
 			}
 
 			SDL_RenderPresent(renderer);
@@ -201,10 +207,12 @@ namespace blooDot::MenuSettings
 
 	void _PrepareText(SDL_Renderer* renderer, bool destroy)
 	{
-		backTexture&& [] { SDL_DestroyTexture(backTexture); return false; }();
-		screensizeTexture&& [] { SDL_DestroyTexture(screensizeTexture); return false; }();
-		controlsTexture&& [] { SDL_DestroyTexture(controlsTexture); return false; }();
-		languageTexture&& [] { SDL_DestroyTexture(languageTexture); return false; }();
+		backTexture && [] { SDL_DestroyTexture(backTexture); return false; }();
+		screensizeTexture && [] { SDL_DestroyTexture(screensizeTexture); return false; }();
+		controlsTexture && [] { SDL_DestroyTexture(controlsTexture); return false; }();
+		languageTexture && [] { SDL_DestroyTexture(languageTexture); return false; }();
+		helpTexture && [] { SDL_DestroyTexture(helpTexture); return false; }();
+		aboutTexture && [] { SDL_DestroyTexture(aboutTexture); return false; }();
 
 		if (!destroy)
 		{
@@ -212,6 +220,8 @@ namespace blooDot::MenuSettings
 			screensizeTexture = RenderText(renderer, &screensizeRect, FONT_KEY_DIALOG, 23, literalSettingsMenuScreensize, ButtonTextColor);
 			controlsTexture = RenderText(renderer, &controlsRect, FONT_KEY_DIALOG, 23, literalMenuControls, ButtonTextColor);
 			languageTexture = RenderText(renderer, &languageRect, FONT_KEY_DIALOG, 23, literalSettingsMenuLanguage, ButtonTextColor);
+			helpTexture = RenderText(renderer, &helpRect, FONT_KEY_DIALOG, 23, literalSettingsMenuHelp, ButtonTextColor);
+			aboutTexture = RenderText(renderer, &aboutRect, FONT_KEY_DIALOG, 23, literalSettingsMenuAbout, ButtonTextColor);
 		}
 	}
 
@@ -225,6 +235,12 @@ namespace blooDot::MenuSettings
 
 		case SMI_LANGUAGE:
 			_EnterAndHandleLanguageSettings(renderer);
+			break;
+
+		case SMI_HELP:
+			break;
+
+		case SMI_ABOUT:
 			break;
 
 		default:

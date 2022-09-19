@@ -63,7 +63,9 @@ enum SettingsMenuItems {
 	SMI_BACK,
 	SMI_SCREENSIZE,
 	SMI_CONTROLS,
-	SMI_LANGUAGE
+	SMI_LANGUAGE,
+	SMI_HELP,
+	SMI_ABOUT
 };
 
 enum ScreenSettingsMenuItems {

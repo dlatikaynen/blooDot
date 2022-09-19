@@ -35,6 +35,8 @@ const char* literalMenuMap = "";
 const char* literalMenuInventory = "";
 const char* literalSettingsMenuScreensize = "";
 const char* literalSettingsMenuLanguage = "";
+const char* literalSettingsMenuHelp = "";
+const char* literalSettingsMenuAbout = "";
 const char* literalSettingsMenuScreensizeHint = "";
 const char* literalContinueEmptyHint = "";
 const char* literalLoadEmptyHint = "";
@@ -135,6 +137,8 @@ namespace blooDot::en
 		literalMenuInventory = _literal_en_MenuInventory;
 		literalSettingsMenuScreensize = _literal_en_SettingsMenuScreensize;
 		literalSettingsMenuLanguage = _literal_en_SettingsMenuLanguage;
+		literalSettingsMenuHelp = _literal_en_SettingsMenuHelp;
+		literalSettingsMenuAbout = _literal_en_SettingsMenuAbout;
 		literalSettingsMenuScreensizeHint = _literal_en_SettingsMenuScreensizeHint;
 		literalContinueEmptyHint = _literal_en_ContinueEmptyHint;
 		literalLoadEmptyHint = _literal_en_LoadEmptyHint;
@@ -237,6 +241,8 @@ namespace blooDot::de
 		literalMenuInventory = _literal_de_MenuInventory;
 		literalSettingsMenuScreensize = _literal_de_SettingsMenuScreensize;
 		literalSettingsMenuLanguage = _literal_de_SettingsMenuLanguage;
+		literalSettingsMenuHelp = _literal_de_SettingsMenuHelp;
+		literalSettingsMenuAbout = _literal_de_SettingsMenuAbout;
 		literalSettingsMenuScreensizeHint = _literal_de_SettingsMenuScreensizeHint;
 		literalContinueEmptyHint = _literal_de_ContinueEmptyHint;
 		literalLoadEmptyHint = _literal_de_LoadEmptyHint;
@@ -339,6 +345,8 @@ namespace blooDot::fi
 		literalMenuInventory = _literal_fi_MenuInventory;
 		literalSettingsMenuScreensize = _literal_fi_SettingsMenuScreensize;
 		literalSettingsMenuLanguage = _literal_fi_SettingsMenuLanguage;
+		literalSettingsMenuHelp = _literal_fi_SettingsMenuHelp;
+		literalSettingsMenuAbout = _literal_fi_SettingsMenuAbout;
 		literalSettingsMenuScreensizeHint = _literal_fi_SettingsMenuScreensizeHint;
 		literalContinueEmptyHint = _literal_fi_ContinueEmptyHint;
 		literalLoadEmptyHint = _literal_fi_LoadEmptyHint;
@@ -441,6 +449,8 @@ namespace blooDot::ua
 		literalMenuInventory = _literal_ua_MenuInventory;
 		literalSettingsMenuScreensize = _literal_ua_SettingsMenuScreensize;
 		literalSettingsMenuLanguage = _literal_ua_SettingsMenuLanguage;
+		literalSettingsMenuHelp = _literal_ua_SettingsMenuHelp;
+		literalSettingsMenuAbout = _literal_ua_SettingsMenuAbout;
 		literalSettingsMenuScreensizeHint = _literal_ua_SettingsMenuScreensizeHint;
 		literalContinueEmptyHint = _literal_ua_ContinueEmptyHint;
 		literalLoadEmptyHint = _literal_ua_LoadEmptyHint;

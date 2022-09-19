@@ -32,6 +32,8 @@ namespace blooDot::en
 	constexpr char const* _literal_en_MenuInventory = "Hammerspace";
 	constexpr char const* _literal_en_SettingsMenuScreensize = "Screen size";
 	constexpr char const* _literal_en_SettingsMenuLanguage = "Language";
+	constexpr char const* _literal_en_SettingsMenuHelp = "Help";
+	constexpr char const* _literal_en_SettingsMenuAbout = "About...";
 	constexpr char const* _literal_en_SettingsMenuScreensizeHint = "This setting will only affect the game window.\r\nSetting does not apply to the launcher.";
 	constexpr char const* _literal_en_ContinueEmptyHint = "This timeline has nothing to continue from.\r\nYou may want to start a new game first.";
 	constexpr char const* _literal_en_LoadEmptyHint = "This timeline contains no savegames to load.\r\nYou may want to start a new game first.";

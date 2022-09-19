@@ -30,6 +30,8 @@ extern const char* literalMenuMap;
 extern const char* literalMenuInventory;
 extern const char* literalSettingsMenuScreensize;
 extern const char* literalSettingsMenuLanguage;
+extern const char* literalSettingsMenuHelp;
+extern const char* literalSettingsMenuAbout;
 extern const char* literalSettingsMenuScreensizeHint;
 extern const char* literalContinueEmptyHint;
 extern const char* literalLoadEmptyHint;

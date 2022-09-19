@@ -32,6 +32,8 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_MenuInventory = "інвентар";
 	constexpr char const* _literal_ua_SettingsMenuScreensize = "режим відео";
 	constexpr char const* _literal_ua_SettingsMenuLanguage = "Мова";
+	constexpr char const* _literal_ua_SettingsMenuHelp = "Допомога";
+	constexpr char const* _literal_ua_SettingsMenuAbout = "Про...";
 	constexpr char const* _literal_ua_SettingsMenuScreensizeHint = "This setting will only affect the game window.\r\nSetting does not apply to the launcher.";
 	constexpr char const* _literal_ua_ContinueEmptyHint = "This timeline has nothing to continue from.\r\nYou may want to start a new game first.";
 	constexpr char const* _literal_ua_LoadEmptyHint = "This timeline contains no savegames to load.\r\nYou may want to start a new game first.";

@@ -32,6 +32,8 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_MenuInventory = "Inventaario";
 	constexpr char const* _literal_fi_SettingsMenuScreensize = "Grafiikkatila";
 	constexpr char const* _literal_fi_SettingsMenuLanguage = "Kieli";
+	constexpr char const* _literal_fi_SettingsMenuHelp = "Apua";
+	constexpr char const* _literal_fi_SettingsMenuAbout = "Tietoja...";
 	constexpr char const* _literal_fi_SettingsMenuScreensizeHint = "This setting will only affect the game window.\r\nSetting does not apply to the launcher.";
 	constexpr char const* _literal_fi_ContinueEmptyHint = "This timeline has nothing to continue from.\r\nYou may want to start a new game first.";
 	constexpr char const* _literal_fi_LoadEmptyHint = "This timeline contains no savegames to load.\r\nYou may want to start a new game first.";
