@@ -139,14 +139,15 @@ NEXTFRAME:
 		/* 1. take a screenshot */
 		const int shotWidth = 200, shotHeight = 120;
 		int viewportWidth = 0, viewportHeight = 0;
-		SDL_Surface* croppedShot = NULL;
+		SDL_RWops* screenshotStream = NULL;
+		size_t screenshotLength = 0;
 		void* memoryBuffer = NULL;
 		
 		SDL_GetRendererOutputSize(GameViewRenderer, &viewportWidth, &viewportHeight);
 		SDL_Surface* screenShot = SDL_CreateRGBSurface(
 			0,
-			viewportWidth,
-			viewportHeight,
+			shotWidth,
+			shotHeight,
 			32,
 			0x00ff0000,
 			0x0000ff00,
@@ -168,8 +169,8 @@ NEXTFRAME:
 				&srcRect,
 				SDL_PIXELFORMAT_ARGB8888,
 				screenShot->pixels,
-				screenShot->pitch) < 0
-			)
+				screenShot->pitch
+			) < 0)
 			{
 				const auto& shotError = SDL_GetError();
 				ReportError("Could not take screenshot", shotError);
@@ -182,80 +183,35 @@ NEXTFRAME:
 					ReportError("Could not save screenshot", saveError);
 				}
 
-				croppedShot = SDL_CreateRGBSurface(
-					0,
-					shotWidth,
-					shotHeight,
-					32,
-					0x00ff0000,
-					0x0000ff00,
-					0x000000ff,
-					0xff000000
-				);
-
-				if (croppedShot)
+				const auto& screenshotSize = shotWidth * shotHeight * 32;
+				memoryBuffer = SDL_malloc(screenshotSize);
+				if (memoryBuffer)
 				{
-					SDL_Rect cropDestRect = { 0,0,shotWidth,shotHeight };
-					if (SDL_BlitSurface(screenShot, &cropDestRect, croppedShot, &cropDestRect) < 0)
+					screenshotStream = SDL_RWFromMem(memoryBuffer, screenshotSize);
+					if (screenshotStream)
 					{
-						const auto& cropError = SDL_GetError();
-						ReportError("Failed to crop screenshot", cropError);
-						SDL_FreeSurface(croppedShot);
-						croppedShot = nullptr;
-					}
-					else
-					{
-						SDL_FreeSurface(screenShot);
-						screenShot = nullptr;
-						const auto& screenshotSize = shotWidth * shotHeight * 32;
-						memoryBuffer = SDL_malloc(screenshotSize);
-						if (memoryBuffer)
+						if (IMG_SavePNG_RW(screenShot, screenshotStream, 0) < 0)
 						{
-							auto memoryStream = SDL_RWFromMem(memoryBuffer, screenshotSize);
-							if (memoryStream)
-							{
-								if (SDL_SaveBMP(croppedShot, "screenshot-cropped.bmp") < 0)
-								{
-									const auto& saveCropError = SDL_GetError();
-									ReportError("Could not save cropped screenshot", saveCropError);
-								}
-
-								if (IMG_SavePNG_RW(croppedShot, memoryStream, 0) < 0)
-								{
-									const auto& pngError = IMG_GetError();
-									ReportError("Failed to convert screenshot", pngError);
-								}
-								else
-								{
-									const auto& pngSize = memoryStream->seek(memoryStream, 0, RW_SEEK_CUR);
-									std::cout << pngSize << "\n";
-								}
-
-								memoryStream->close(memoryStream);
-							}
-							else
-							{
-								const auto& convertError = SDL_GetError();
-								ReportError("Error writing converted screenshot", convertError);
-							}
+							const auto& pngError = IMG_GetError();
+							ReportError("Failed to convert screenshot", pngError);
 						}
 						else
 						{
-							const auto& allocError = SDL_GetError();
-							ReportError("Failed to allocate memory for screenshot conversion", allocError);
+							screenshotLength = screenshotStream->seek(screenshotStream, 0, RW_SEEK_CUR);
+							screenshotStream->seek(screenshotStream, 0, RW_SEEK_SET);
 						}
+					}
+					else
+					{
+						const auto& convertError = SDL_GetError();
+						ReportError("Error writing converted screenshot", convertError);
 					}
 				}
 				else
 				{
-					const auto& cropAllocError = SDL_GetError();
-					ReportError("Failed to allocate cropped screenshot", cropAllocError);
+					const auto& allocError = SDL_GetError();
+					ReportError("Failed to allocate memory for screenshot conversion", allocError);
 				}
-			}
-
-			if (screenShot)
-			{
-				SDL_FreeSurface(screenShot);
 			}
 		}
 		else
@@ -268,16 +224,21 @@ NEXTFRAME:
 		 * which, while it will be running,
 		 * no new save can be initiated,
 		 * write the data to the savegame file */
-		blooDot::Savegame::Append(Settings.CurrentSavegameIndex, isAutosave);
-
-		if (croppedShot)
-		{
-			SDL_FreeSurface(croppedShot);
-		}
+		blooDot::Savegame::Append(Settings.CurrentSavegameIndex, isAutosave, screenshotLength, memoryBuffer);
 
 		if (memoryBuffer)
 		{
 			SDL_free(memoryBuffer);
+		}
+
+		if (screenshotStream)
+		{
+			screenshotStream->close(screenshotStream);
+		}
+
+		if (screenShot)
+		{
+			SDL_FreeSurface(screenShot);
 		}
 	}
 }

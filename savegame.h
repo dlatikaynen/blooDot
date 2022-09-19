@@ -35,18 +35,18 @@ typedef struct SavepointHeaderStruct
 	char Preamble1 = 'L';
 	char Preamble2 = 'J';
 	char Preamble3 = 'L';
-	char Preamble9 = '\0';
+	char Preamble4 = '\0';
 	LocalTimestamp Written = { 0 };
 	int RegionId = 0;
 	unsigned int ScreenshotLength = 0;
-	unsigned long long DataLength;
+	unsigned long long DataLength = 0;
 	int OriginDx = 0; // from gameview
 	int OriginDy = 0; // from gameview
 	char PlayersJoined = 0; // bitfield, bit0 = player 1
-	PlayerState Player1State;
-	PlayerState Player2State;
-	PlayerState Player3State;
-	PlayerState Player4State;
+	PlayerState Player1State = { 0 };
+	PlayerState Player2State = { 0 };
+	PlayerState Player3State = { 0 };
+	PlayerState Player4State = { 0 };
 	char IsAutosave = 0;
 
 } SavepointHeader;
@@ -68,8 +68,8 @@ namespace blooDot::Savegame
 	/// or load an existing one)
 	/// </summary>
 	int Create();
-	void Append(int savegameIndex, bool isAutosave);
-	SavegameChoiceDescriptor LoadInfoShallow(int savegameIndex);
+	void Append(int savegameIndex, bool isAutosave, size_t screenshotLength, const void* screenshot);
+	SavegameChoiceDescriptor LoadInfoShallow(SDL_Renderer* renderer, int savegameIndex);
 	void Load(int savegameIndex, int savepointIndex);
 
 	/// <summary>

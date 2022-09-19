@@ -12,6 +12,7 @@
 #include "sfx.h"
 #include <iostream>
 #include "harvard.h"
+#include "geom2d.h"
 
 constexpr int const bounceMargin = 10;
 constexpr int const vignetteWidth = 250;
@@ -309,8 +310,14 @@ namespace blooDot::MenuLoad
 		}
 	}
 
+	void _PrepareScreenshotRect(SDL_Rect* rect, int vignetteIndex)
+	{
+		*rect = { bounceMargin + 30 + vignetteIndex * vignetteWidth, 102, vignetteWidth - 60, 64 };
+	}
+
 	void _PrepareControls(SDL_Renderer* renderer)
 	{
+		auto screenshotSrc = SDL_Rect { 0,0,200,120 };
 		const auto& numberOfSavegames = SetBitCount(Settings.OccupiedSavegameSlots);
 		vignetteCount = std::max(1, numberOfSavegames);
 		sliderTextureWidth = vignetteCount * vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * bounceMargin;
@@ -354,7 +361,11 @@ namespace blooDot::MenuLoad
 				}
 
 				const auto savegameIndex = bitIndex + 1;
-				const auto& savegameData = blooDot::Savegame::LoadInfoShallow(savegameIndex);
+				const auto& savegameData = blooDot::Savegame::LoadInfoShallow(
+					renderer,
+					savegameIndex
+				);
+
 				std::stringstream formatter;
 				formatter << literalSavegame << " #" << savegameData.Header.SavegameIndex;
 				std::string formatted;
@@ -388,7 +399,25 @@ namespace blooDot::MenuLoad
 
 				formatted = formatter.str();
 				_VignetteLabel(renderer, FONT_KEY_DIALOG, 13, ordinal, 190, formatted.c_str());
-				
+				if (savegameData.MostRecentScreenshot)
+				{
+					SDL_Rect centerRect;
+					SDL_Rect destRect;
+
+					_PrepareScreenshotRect(&destRect, ordinal);
+					CenterRectInRect(&destRect, &screenshotSrc, &centerRect);
+					centerRect.w -= 38;
+					centerRect.h -= 38;
+					centerRect.x += 19;
+					centerRect.y += 16;
+					SDL_RenderCopy(
+						renderer,
+						savegameData.MostRecentScreenshot,
+						&screenshotSrc,
+						&centerRect
+					);
+				}
+
 				++ordinal;
 			}
 

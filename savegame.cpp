@@ -4,6 +4,7 @@
 #include <regex>
 #include "constants.h"
 #include "settings.h"
+#include "resutil.h"
 
 using namespace std::chrono;
 
@@ -54,9 +55,9 @@ namespace blooDot::Savegame
 		return savegameIndex;
 	}
 
-	void Append(int savegameIndex, bool isAutosave)
+	void Append(int savegameIndex, bool isAutosave, size_t screenshotLength, const void* screenshot)
 	{
-		if (Settings.OccupiedSavegameSlots & (1 << (savegameIndex - 1)))
+		if (!(Settings.OccupiedSavegameSlots & (1 << (savegameIndex - 1))))
 		{
 			ReportError("Could not append to savegame", "Attempt to append to an empty savegame slot");
 			return;
@@ -75,13 +76,13 @@ namespace blooDot::Savegame
 		SavepointHeader header;
 		_SetLocalTimestampStruct(&header.Written);
 		header.DataLength = 0;
-		header.ScreenshotLength = 0;
+		header.ScreenshotLength = static_cast<unsigned int>(screenshotLength);
 		header.RegionId = 1;
 		header.OriginDx = 0;
 		header.OriginDy = 0;
 		header.PlayersJoined = 1;
 		header.IsAutosave = isAutosave ? 0xff : 0;
-		const auto numWritten = saveFile->write(
+		auto numWritten = saveFile->write(
 			saveFile,
 			(void*)(&header),
 			sizeof(SavepointHeaderStruct),
@@ -96,6 +97,13 @@ namespace blooDot::Savegame
 		}
 
 		/* 2. write the screenshot */
+		numWritten = saveFile->write(saveFile, screenshot, screenshotLength, 1);
+		if (numWritten != 1)
+		{
+			const auto appendError = SDL_GetError();
+			ReportError("Failed to write savepoint screenshot", appendError);
+			return;
+		}
 
 		/* 3. write the delta frame */
 
@@ -105,8 +113,9 @@ namespace blooDot::Savegame
 	/// <summary>
 	/// If this returns 0 as the savegameIndex in the header,
 	/// it means that it could not be opened or loaded
+	/// renderer: Because we load the screenshot
 	/// </summary>
-	SavegameChoiceDescriptor LoadInfoShallow(int savegameIndex)
+	SavegameChoiceDescriptor LoadInfoShallow(SDL_Renderer* renderer, int savegameIndex)
 	{
 		SavegameChoiceDescriptor savegameDescriptor;
 		savegameDescriptor.Header.SavegameIndex = 0;
@@ -155,7 +164,39 @@ namespace blooDot::Savegame
 		size_t octetsLeft = savegameFile->size(savegameFile) - sizeof(SavegameHeaderStruct);
 		while (octetsLeft > 0)
 		{
-			std::cout << octetsLeft;
+			SavepointHeader savepointDescriptor;
+			savegameFile->read(savegameFile, &savepointDescriptor, sizeof(SavepointHeaderStruct), 1);
+			const SavepointHeader validator2;
+			const auto isValid2 = _memicmp(
+				(const void*)(&validator2.Preamble0),
+				(const void*)(&savepointDescriptor.Preamble0),
+				sizeof(char) * 4
+			);
+
+			if (isValid2 != 0)
+			{
+				savegameFile->close(savegameFile);
+				ReportError("Could not load savegame", "Savepoint store corrupted");
+				savegameDescriptor.Header.SavegameIndex = 0;
+				return savegameDescriptor;
+			}
+
+			octetsLeft -= sizeof(SavepointHeaderStruct);
+			savegameDescriptor.Savepoints.push_back(savepointDescriptor);
+			
+			/* for the shallow one, we need but the last screenshot */
+			SDL_Rect rect;
+			if ((octetsLeft - savepointDescriptor.ScreenshotLength - savepointDescriptor.DataLength) == 0)
+			{
+				savegameDescriptor.MostRecentScreenshot = blooDot::Res::LoadPicture(
+					renderer,
+					savegameFile,
+					&rect
+				);
+			}
+
+			octetsLeft -= savepointDescriptor.ScreenshotLength;
+			octetsLeft -= savepointDescriptor.DataLength;
 		}
 
 		savegameFile->close(savegameFile);

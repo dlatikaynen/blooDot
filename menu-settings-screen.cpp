@@ -346,12 +346,12 @@ namespace blooDot::MenuSettingsScreen
 		SDL_Rect iconRect;
 		SDL_Rect centerRect;
 		SDL_Rect destRect;
-		auto iconModeX = blooDot::Res::LoadPicture(renderer, chunkKey, &iconRect);
+		auto icon = blooDot::Res::LoadPicture(renderer, chunkKey, &iconRect);
 		
 		_PrepareIconRect(&destRect, vignetteIndex);
 		CenterRectInRect(&destRect, &iconRect, &centerRect);
-		SDL_RenderCopy(renderer, iconModeX, &iconRect, &centerRect);
-		SDL_DestroyTexture(iconModeX);
+		SDL_RenderCopy(renderer, icon, &iconRect, &centerRect);
+		SDL_DestroyTexture(icon);
 	}
 
 	void _PrepareControls(SDL_Renderer* renderer)
