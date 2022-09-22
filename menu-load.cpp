@@ -320,7 +320,7 @@ namespace blooDot::MenuLoad
 	void _PrepareControls(SDL_Renderer* renderer)
 	{
 		auto screenshotSrc = SDL_Rect { 0,0,200,120 };
-		const auto& numberOfSavegames = SetBitCount(Settings.OccupiedSavegameSlots);
+		const auto& numberOfSavegames = SetBitCount(::Settings.OccupiedSavegameSlots);
 		vignetteCount = std::max(1, numberOfSavegames);
 		sliderTextureWidth = vignetteCount * vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * bounceMargin;
 		slidingSavegames = SDL_CreateTexture(
@@ -357,7 +357,7 @@ namespace blooDot::MenuLoad
 			auto ordinal = 0;
 			for (auto i = 0; i < numberOfSavegames; ++i)
 			{
-				while (!(Settings.OccupiedSavegameSlots & (1 << bitIndex)))
+				while (!(::Settings.OccupiedSavegameSlots & (1 << bitIndex)))
 				{
 					++bitIndex;
 				}

@@ -64,11 +64,11 @@ namespace blooDot::Splash
 
 		if (!settingsLoaded)
 		{
-			LoadSettings();
-			ApplyLanguageSetting();
+			blooDot::Settings::Load();
+			blooDot::Settings::ApplyLanguage();
 			settingsLoaded = true;
 
-			menuSelection = Settings.CurrentSavegameIndex == 0 ? MMI_NEWSINGLE : MMI_CUE;
+			menuSelection = ::Settings.CurrentSavegameIndex == 0 ? MMI_NEWSINGLE : MMI_CUE;
 		}
 
 		_PrepareText(renderer);
@@ -195,7 +195,7 @@ namespace blooDot::Splash
 
 					case SDL_SCANCODE_HOME:
 					{
-						auto const& destSelection = Settings.CurrentSavegameIndex == 0 ? MMI_NEWSINGLE : MMI_CUE;
+						auto const& destSelection = ::Settings.CurrentSavegameIndex == 0 ? MMI_NEWSINGLE : MMI_CUE;
 						if (menuSelection == destSelection)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
@@ -417,9 +417,9 @@ namespace blooDot::Splash
 	bool _HandleContinue(SDL_Renderer* renderer)
 	{
 		bool stayInMenu = true;
-		if (Settings.CurrentSavegameIndex == 0)
+		if (::Settings.CurrentSavegameIndex == 0)
 		{
-			if (Settings.OccupiedSavegameSlots == 0)
+			if (::Settings.OccupiedSavegameSlots == 0)
 			{
 				/* there is no save game to choose from */
 				blooDot::MenuContinueEmpty::MenuLoop(renderer, literalContinueEmptyHint);
@@ -443,7 +443,7 @@ namespace blooDot::Splash
 	bool _HandleLoad(SDL_Renderer* renderer)
 	{
 		bool stayInMenu = true;
-		if (Settings.OccupiedSavegameSlots == 0)
+		if (::Settings.OccupiedSavegameSlots == 0)
 		{
 			/* there is no save game to load from */
 			blooDot::MenuContinueEmpty::MenuLoop(renderer, literalLoadEmptyHint);

@@ -9,11 +9,17 @@
 #include "constants.h"
 #include "sfx.h"
 #include "xlations.h"
+#include "settings.h"
 
 const int ExitCodeNormally = 0x00;
 const int ExitCodeSDLInitFail = 0x55;
 const size_t MaxExpectedSDLErrorLength = 0x8000;
 const char* NameOfTheGame = "blooDot";
+
+extern SettingsStruct Settings;
+
+SDL_Window* mainWindow = NULL;
+SDL_Renderer* renderer = NULL;
 
 void ReportError(const char* message, const char* error)
 {
@@ -96,7 +102,7 @@ int main(int, char**)
 	while (true)
 	{
 		/* action */
-		const auto mainWindow = SDL_CreateWindow(
+		mainWindow = SDL_CreateWindow(
 			NameOfTheGame,
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
@@ -130,7 +136,7 @@ int main(int, char**)
 			<< unsigned(imagingVersion->patch)
 			<< "\n";
 
-		const auto renderer = SDL_CreateRenderer(mainWindow, -2, SDL_RENDERER_ACCELERATED);
+		renderer = SDL_CreateRenderer(mainWindow, -2, SDL_RENDERER_ACCELERATED);
 		if (!renderer)
 		{
 			const auto rendererError = SDL_GetError();
@@ -171,14 +177,25 @@ int main(int, char**)
 		blooDot::Sfx::Play(SoundEffect::SFX_BULLET_DECAY);
 		if (blooDot::Splash::SplashLoop(renderer))
 		{
-			blooDot::Orchestrator::MainLoop(renderer);
+			/* reaching this point means we're actually starting
+			 * in the arena. we create a new window and renderer
+			 * for the arena, even if the video mode matches */
+			_Launch();
 		}
 
 		blooDot::Sfx::Teardown();
 		Mix_Quit();
 		IMG_Quit();
-		SDL_DestroyRenderer(renderer);
-		SDL_DestroyWindow(mainWindow);
+
+		if (renderer)
+		{
+			SDL_DestroyRenderer(renderer);
+		}
+
+		if (mainWindow)
+		{
+			SDL_DestroyWindow(mainWindow);
+		}
 
 		break;
 	}
@@ -197,3 +214,110 @@ int main(int, char**)
 	return ExitCodeNormally;
 }
 
+void _Launch()
+{
+	SDL_HideWindow(mainWindow);
+	SDL_DestroyRenderer(renderer);
+	renderer = NULL;
+
+	SDL_DestroyWindow(mainWindow);
+	mainWindow = NULL;
+
+	switch(Settings.SettingViewportResolution)
+	{
+	case ViewportResolutions::VR_HERCMONO:
+		mainWindow = SDL_CreateWindow(
+			NameOfTheGame,
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			720,
+			348,
+			SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL
+		);
+
+		break;
+
+	case ViewportResolutions::VR_MODEX:
+		mainWindow = SDL_CreateWindow(
+			NameOfTheGame,
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			320,
+			240,
+			SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL
+		);
+
+		break;
+
+	case ViewportResolutions::VR_SVGA:
+		mainWindow = SDL_CreateWindow(
+			NameOfTheGame,
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			800,
+			600,
+			SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL
+		);
+
+		break;
+
+	case ViewportResolutions::VR_NOTEBOOK:
+		mainWindow = SDL_CreateWindow(
+			NameOfTheGame,
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			1280,
+			768,
+			SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL
+		);
+
+		break;
+
+	case ViewportResolutions::VR_SQUARE:
+	case ViewportResolutions::VR_MAXOUT:
+		mainWindow = SDL_CreateWindow(
+			NameOfTheGame,
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			0,
+			0,
+			0
+			| SDL_WINDOW_HIDDEN 
+			| SDL_WINDOW_OPENGL 
+			| SDL_WINDOW_BORDERLESS 
+			| SDL_WINDOW_FULLSCREEN_DESKTOP
+		);
+
+		break;
+
+	default:
+		mainWindow = SDL_CreateWindow(
+			NameOfTheGame,
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			GodsPreferredWidth,
+			GodsPreferredHight,
+			SDL_WINDOW_HIDDEN | SDL_WINDOW_OPENGL
+		);
+
+		break;
+	}
+
+	if (!mainWindow)
+	{
+		const auto windowError = SDL_GetError();
+		ReportError("Failed to create arena window", windowError);
+		return;
+	}
+
+	renderer = SDL_CreateRenderer(mainWindow, -2, SDL_RENDERER_ACCELERATED);
+	if (!renderer)
+	{
+		const auto rendererError = SDL_GetError();
+		ReportError("Failed to create arena GPU renderer", rendererError);
+		return;
+	}
+
+	SDL_ShowWindow(mainWindow);
+	blooDot::Orchestrator::MainLoop(renderer);
+}

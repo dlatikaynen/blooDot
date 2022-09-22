@@ -200,7 +200,7 @@ namespace blooDot::MenuSettings
 
 		SDL_DestroyTexture(titleTexture);
 		_PrepareText(renderer, true);
-		SaveSettings();
+		blooDot::Settings::Save();
 
 		return menuRunning;
 	}

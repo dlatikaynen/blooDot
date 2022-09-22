@@ -43,8 +43,8 @@ namespace blooDot::MenuSettingsScreen
 		_PrepareControls(renderer);
 		InitializeBoydsa(GodsPreferredWidth, GodsPreferredHight, 50, 370);
 		screenSettingsMenuRunning = true;
-		selectedResolution = Settings.SettingViewportResolution;
-		movingToResolution = Settings.SettingViewportResolution;
+		selectedResolution = ::Settings.SettingViewportResolution;
+		movingToResolution = ::Settings.SettingViewportResolution;
 		sliderOffsetLeft = static_cast<int>(selectedResolution) * vignetteWidth + bounceMargin;
 
 		SDL_Rect outerMenuRect{ 150,45,340,390 };
@@ -194,7 +194,7 @@ namespace blooDot::MenuSettingsScreen
 					case SDL_SCANCODE_SPACE:
 						if (menuSelection == SSMI_VIDEOMODE && _CanSelectMode(renderer))
 						{
-							Settings.SettingViewportResolution = movingToResolution;
+							::Settings.SettingViewportResolution = movingToResolution;
 							screenSettingsMenuRunning = false;
 						}
 						else if (menuSelection == SSMI_CANCEL)

@@ -42,8 +42,8 @@ namespace blooDot::MenuSettingsLang
 
 		_PrepareControls(renderer);
 		langSettingsMenuRunning = true;
-		selectedLanguage = Settings.SettingUserInterfaceLanguage;
-		movingToLanguage = Settings.SettingUserInterfaceLanguage;
+		selectedLanguage = ::Settings.SettingUserInterfaceLanguage;
+		movingToLanguage = ::Settings.SettingUserInterfaceLanguage;
 		sliderOffsetLeft = static_cast<int>(selectedLanguage) * vignetteWidth + bounceMargin;
 
 		SDL_Rect outerMenuRect{ 150,45,340,390 };
@@ -173,8 +173,8 @@ namespace blooDot::MenuSettingsLang
 					case SDL_SCANCODE_SPACE:
 						if (menuSelection == LSMI_USER_INTERFACE_LANGUAGE)
 						{
-							Settings.SettingUserInterfaceLanguage = movingToLanguage;
-							ApplyLanguageSetting();
+							::Settings.SettingUserInterfaceLanguage = movingToLanguage;
+							blooDot::Settings::ApplyLanguage();
 							langSettingsMenuRunning = false;
 						}
 						else if (menuSelection == LSMI_CANCEL)

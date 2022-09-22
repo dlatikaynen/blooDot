@@ -9,3 +9,5 @@ extern bool OpenCooked();
 extern void TeardownDialogControls();
 extern void CloseCooked();
 extern void CloseFonts();
+
+void _Launch();

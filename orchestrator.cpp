@@ -129,7 +129,7 @@ NEXTFRAME:
 
 	void _HandleSave(bool isAutosave)
 	{
-		const auto& savegameIndex = Settings.CurrentSavegameIndex;
+		const auto& savegameIndex = ::Settings.CurrentSavegameIndex;
 		if (savegameIndex <= 0)
 		{
 			std::cerr << "Cannot save as long as no savegame index is established";
@@ -218,7 +218,7 @@ NEXTFRAME:
 		 * which, while it will be running,
 		 * no new save can be initiated,
 		 * write the data to the savegame file */
-		blooDot::Savegame::Append(Settings.CurrentSavegameIndex, isAutosave, screenshotLength, memoryBuffer);
+		blooDot::Savegame::Append(::Settings.CurrentSavegameIndex, isAutosave, screenshotLength, memoryBuffer);
 
 		if (memoryBuffer)
 		{

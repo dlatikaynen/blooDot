@@ -14,7 +14,6 @@ extern cairo_t* GetDrawingSink();
 extern void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture);
 extern void DrawLabel(SDL_Renderer*, int, int, SDL_Texture*, SDL_Rect*);
 extern cairo_t* DrawChevron(cairo_t*, double, double, bool, unsigned short);
-extern void LoadSettings();
 extern bool SettingsMenuLoop(SDL_Renderer*);
 
 namespace blooDot::Splash

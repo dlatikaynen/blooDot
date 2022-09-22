@@ -4,10 +4,18 @@
 
 extern void ReportError(const char*, const char*);
 
-void LoadSettings();
-void ApplyLanguageSetting();
-void SaveSettings();
-void DefaultSettings();
+namespace blooDot::Settings
+{
+	void Load();
+	void ApplyLanguage();
+	void Save();
+	void Default();
+
+	int GetLogicalArenaWidth();
+	int GetPhysicalArenaWidth();
+	int GetLogicalArenaHeight();
+	int GetPhysicalArenaHeight();
+}
 
 typedef struct SettingsStruct
 {

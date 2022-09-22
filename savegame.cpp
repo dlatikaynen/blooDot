@@ -48,16 +48,16 @@ namespace blooDot::Savegame
 		}
 
 		saveFile->close(saveFile);
-		Settings.CurrentSavegameIndex = static_cast<unsigned short>(savegameIndex);
-		Settings.OccupiedSavegameSlots |= (1 << (savegameIndex - 1));
-		SaveSettings();
+		::Settings.CurrentSavegameIndex = static_cast<unsigned short>(savegameIndex);
+		::Settings.OccupiedSavegameSlots |= (1 << (savegameIndex - 1));
+		blooDot::Settings::Save();
 
 		return savegameIndex;
 	}
 
 	void Append(int savegameIndex, bool isAutosave, size_t screenshotLength, const void* screenshot)
 	{
-		if (!(Settings.OccupiedSavegameSlots & (1 << (savegameIndex - 1))))
+		if (!(::Settings.OccupiedSavegameSlots & (1 << (savegameIndex - 1))))
 		{
 			ReportError("Could not append to savegame", "Attempt to append to an empty savegame slot");
 			return;
@@ -234,13 +234,13 @@ namespace blooDot::Savegame
 
 		std::cout << savegameIndex << "=>" << delResult;
 
-		Settings.OccupiedSavegameSlots &= ~(1 << (savegameIndex - 1));
-		if (Settings.CurrentSavegameIndex == savegameIndex)
+		::Settings.OccupiedSavegameSlots &= ~(1 << (savegameIndex - 1));
+		if (::Settings.CurrentSavegameIndex == savegameIndex)
 		{
-			Settings.CurrentSavegameIndex = 0;
+			::Settings.CurrentSavegameIndex = 0;
 		}
 
-		SaveSettings();
+		blooDot::Settings::Save();
 	}
 
 	std::string _GetFilename(int savegameIndex)
@@ -252,7 +252,7 @@ namespace blooDot::Savegame
 
 	int _FindFreeSavegameSlot()
 	{
-		const auto& slots = Settings.OccupiedSavegameSlots;
+		const auto& slots = ::Settings.OccupiedSavegameSlots;
 		for (auto i = 0; i < 16; ++i)
 		{
 			if (!(slots & (1 << i)))

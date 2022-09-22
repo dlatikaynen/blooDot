@@ -255,7 +255,7 @@ namespace blooDot::MenuInGame
 		SDL_DestroyTexture(controlsTexture);
 		SDL_DestroyTexture(knowledgebaseTexture);
 		SDL_DestroyTexture(leaveTexture);
-		SaveSettings();
+		blooDot::Settings::Save();
 
 		return menuRunning;
 	}
