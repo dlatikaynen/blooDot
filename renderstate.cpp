@@ -8,6 +8,10 @@ extern SDL_Renderer* GameViewRenderer;
 extern int originDx;
 extern int originDy;
 
+/* for screens where we render only a part (square) */
+extern int viewportOffsetX;
+extern int viewportOffsetY;
+
 /* and this is to decide when we need a flapover in either direction */
 int flapLocalDx = 0;
 int flapLocalDy = 0;
@@ -55,6 +59,7 @@ unsigned short flapIndirection[9];
 
 FlappySituation constellation = FS_BUNGHOLE;
 SDL_Rect bunghole;
+SDL_Rect bungDst;
 SDL_Rect vertUpperSrc;
 SDL_Rect vertUpperDst;
 SDL_Rect vertLowerSrc;
@@ -87,8 +92,9 @@ bool InitializeAllFlaps(int width, int height)
 	halfH = height / 2;
 	flapoverTresholdY = height / 3 * 2;
 
-	/* the centerpiece is constantly identical to the viewport */
+	/* the centerpiece is constant wrt the viewport */
 	bunghole = SDL_Rect{ 0,0,width,height };
+	bungDst = SDL_Rect{ viewportOffsetX,viewportOffsetY,width,height };
 
 	for (auto i = 0; i < 9; ++i)
 	{
@@ -353,9 +359,9 @@ void Scroll(const int dx, const int dy)
 			/* freerange to horizontally gliding */
 			horzLeftRight = flapIndexNW == 0 || flapIndexNW == 3 ? 0 : 1;
 			horzLeftSrc = { quadrantNWSrc.x + dx,0,quadrantNWSrc.w - dx,flapH };
-			horzLeftDst = { quadrantNWDst.x,0,quadrantNWDst.w - dx,flapH };
+			horzLeftDst = { quadrantNWDst.x,viewportOffsetY,quadrantNWDst.w - dx,flapH };
 			horzRiteSrc = { quadrantNESrc.x,0,quadrantNESrc.w + dx,flapH };
-			horzRiteDst = { quadrantNEDst.x - dx,0,quadrantNEDst.w + dx,flapH };
+			horzRiteDst = { quadrantNEDst.x - dx,viewportOffsetY,quadrantNEDst.w + dx,flapH };
 
 #ifndef NDEBUG
 			std::cout << "RE-SNAPPED HORZ\n";
@@ -368,9 +374,9 @@ void Scroll(const int dx, const int dy)
 			/* freerange to vertically gliding */
 			vertUpperLower = flapIndexNW == 0 || flapIndexNW == 1 ? 0 : 1;
 			vertUpperSrc = { 0,quadrantNWSrc.y + dy,flapW,quadrantNWSrc.h - dy };
-			vertUpperDst = { 0,quadrantNWDst.y,flapW,quadrantNWDst.h - dy };
+			vertUpperDst = { viewportOffsetX,quadrantNWDst.y,flapW,quadrantNWDst.h - dy };
 			vertLowerSrc = { 0,quadrantSWSrc.y,flapW,quadrantSWSrc.h + dy };
-			vertLowerDst = { 0,quadrantSWDst.y - dy,flapW,quadrantSWDst.h + dy };
+			vertLowerDst = { viewportOffsetX,quadrantSWDst.y - dy,flapW,quadrantSWDst.h + dy };
 
 #ifndef NDEBUG
 			std::cout << "RE-SNAPPED VERT\n";
@@ -654,7 +660,7 @@ void _FlapoverRite()
 
 void RenderFloorBung()
 {	
-	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndirection[BUNGHOLE]], &bunghole, &bunghole);
+	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndirection[BUNGHOLE]], &bunghole, &bungDst);
 }
 
 void RenderFloorVert()
@@ -684,8 +690,8 @@ void RenderMobs()
 
 void RenderWallsAndRooofBung()
 {
-	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndirection[BUNGHOLE]], &bunghole, &bunghole);
-	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndirection[BUNGHOLE]], &bunghole, &bunghole);
+	SDL_RenderCopy(GameViewRenderer, flapsWalls[flapIndirection[BUNGHOLE]], &bunghole, &bungDst);
+	SDL_RenderCopy(GameViewRenderer, flapsRooof[flapIndirection[BUNGHOLE]], &bunghole, &bungDst);
 }
 
 void RenderWallsAndRooofVert()
@@ -747,17 +753,17 @@ void _SnapHorizontal(int dx)
 	{
 		horzLeftRight = 1;
 		horzLeftSrc = { dx,0,flapW - dx,flapH };
-		horzLeftDst = { 0,0,flapW - dx,flapH };
+		horzLeftDst = { viewportOffsetX,viewportOffsetY,flapW - dx,flapH };
 		horzRiteSrc = { 0,0,dx,flapH };
-		horzRiteDst = { flapW - dx,0,dx,flapH };
+		horzRiteDst = { viewportOffsetX + (flapW - dx),viewportOffsetY,dx,flapH };
 	}
 	else
 	{
 		horzLeftRight = 0;
 		horzLeftSrc = { flapW + dx,0,-dx,flapH };
-		horzLeftDst = { 0,0,-dx,flapH };
+		horzLeftDst = { viewportOffsetX,viewportOffsetY,-dx,flapH };
 		horzRiteSrc = { 0,0,flapW + dx,flapH };
-		horzRiteDst = { -dx,0,flapW + dx,flapH };
+		horzRiteDst = { viewportOffsetX - dx,viewportOffsetY,flapW + dx,flapH };
 	}
 
 #ifndef NDEBUG
@@ -773,17 +779,17 @@ void _SnapVertical(int dy)
 	{
 		vertUpperLower = 1;
 		vertUpperSrc = { 0,dy,flapW,flapH - dy };
-		vertUpperDst = { 0,0,flapW,flapH - dy };
+		vertUpperDst = { viewportOffsetX,viewportOffsetY,flapW,flapH - dy };
 		vertLowerSrc = { 0,0,flapW,dy };
-		vertLowerDst = { 0,flapH - dy,flapW,dy };
+		vertLowerDst = { viewportOffsetX,viewportOffsetY + (flapH - dy),flapW,dy };
 	}
 	else
 	{
 		vertUpperLower = 0;
 		vertUpperSrc = { 0,flapH + dy,flapW,-dy };
-		vertUpperDst = { 0,0,flapW,-dy };
+		vertUpperDst = { viewportOffsetX,viewportOffsetY,flapW,-dy };
 		vertLowerSrc = { 0,0,flapW,flapH + dy };
-		vertLowerDst = { 0,-dy,flapW,flapH + dy };
+		vertLowerDst = { viewportOffsetX,viewportOffsetY - dy,flapW,flapH + dy };
 	}
 
 #ifndef NDEBUG
@@ -801,8 +807,8 @@ void _Unsnap(int dx, int dy)
 		quadrantSWSrc.x = dx;
 		quadrantNWSrc.w = flapW - dx;
 		quadrantSWSrc.w = flapW - dx;
-		quadrantNWDst.x = 0;
-		quadrantSWDst.x = 0;
+		quadrantNWDst.x = viewportOffsetX;
+		quadrantSWDst.x = viewportOffsetX;
 		quadrantNWDst.w = flapW - dx;
 		quadrantSWDst.w = flapW - dx;
 
@@ -810,8 +816,8 @@ void _Unsnap(int dx, int dy)
 		quadrantSESrc.x = 0;
 		quadrantNESrc.w = dx;
 		quadrantSESrc.w = dx;
-		quadrantNEDst.x = flapW - dx;
-		quadrantSEDst.x = flapW - dx;
+		quadrantNEDst.x = viewportOffsetX + (flapW - dx);
+		quadrantSEDst.x = viewportOffsetX + (flapW - dx);
 		quadrantNEDst.w = dx;
 		quadrantSEDst.w = dx;
 	}
@@ -821,8 +827,8 @@ void _Unsnap(int dx, int dy)
 		quadrantSWSrc.x = flapW + dx;
 		quadrantNWSrc.w = -dx;
 		quadrantSWSrc.w = -dx;
-		quadrantNWDst.x = 0;
-		quadrantSWDst.x = 0;
+		quadrantNWDst.x = viewportOffsetX;
+		quadrantSWDst.x = viewportOffsetY;
 		quadrantNWDst.w = -dx;
 		quadrantSWDst.w = -dx;
 
@@ -830,8 +836,8 @@ void _Unsnap(int dx, int dy)
 		quadrantSESrc.x = 0;
 		quadrantNESrc.w = flapW + dx;
 		quadrantSESrc.w = flapW + dx;
-		quadrantNEDst.x = -dx;
-		quadrantSEDst.x = -dx;
+		quadrantNEDst.x = viewportOffsetX - dx;
+		quadrantSEDst.x = viewportOffsetX - dx;
 		quadrantNEDst.w = flapW + dx;
 		quadrantSEDst.w = flapW + dx;
 	}
@@ -842,8 +848,8 @@ void _Unsnap(int dx, int dy)
 		quadrantNESrc.y = dy;
 		quadrantNWSrc.h = flapH - dy;
 		quadrantNESrc.h = flapH - dy;
-		quadrantNWDst.y = 0;
-		quadrantNEDst.y = 0;
+		quadrantNWDst.y = viewportOffsetY;
+		quadrantNEDst.y = viewportOffsetY;
 		quadrantNWDst.h = flapH - dy;
 		quadrantNEDst.h = flapH - dy;
 
@@ -851,8 +857,8 @@ void _Unsnap(int dx, int dy)
 		quadrantSESrc.y = 0;
 		quadrantSWSrc.h = dy;
 		quadrantSESrc.h = dy;
-		quadrantSWDst.y = flapH - dy;
-		quadrantSEDst.y = flapH - dy;
+		quadrantSWDst.y = viewportOffsetY + (flapH - dy);
+		quadrantSEDst.y = viewportOffsetY + (flapH - dy);
 		quadrantSWDst.h = dy;
 		quadrantSEDst.h = dy;
 	}
@@ -862,8 +868,8 @@ void _Unsnap(int dx, int dy)
 		quadrantNESrc.y = flapH + dy;
 		quadrantNWSrc.h = -dy;
 		quadrantNESrc.h = -dy;
-		quadrantNWDst.y = 0;
-		quadrantNEDst.y = 0;
+		quadrantNWDst.y = viewportOffsetY;
+		quadrantNEDst.y = viewportOffsetY;
 		quadrantNWDst.h = -dy;
 		quadrantNEDst.h = -dy;
 
@@ -871,8 +877,8 @@ void _Unsnap(int dx, int dy)
 		quadrantSESrc.y = 0;
 		quadrantSWSrc.h = flapH + dy;
 		quadrantSESrc.h = flapH + dy;
-		quadrantSWDst.y = -dy;
-		quadrantSEDst.y = -dy;
+		quadrantSWDst.y = viewportOffsetY - dy;
+		quadrantSEDst.y = viewportOffsetY - dy;
 		quadrantSWDst.h = flapH + dy;
 		quadrantSEDst.h = flapH + dy;
 	}

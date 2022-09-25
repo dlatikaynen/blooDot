@@ -2,6 +2,7 @@
 #include "gameview.h"
 #include "gamestate.h"
 #include "enums.h"
+#include "settings.h"
 
 /* the gameview knows where we are in the world.
  * the gamestate tracks mobs and other entities
@@ -17,9 +18,22 @@ SDL_Renderer* GameViewRenderer;
 int originDx = 0;
 int originDy = 0;
 
+// Offsets for the square mode (when the viewport is a square but the screen
+// is a rectangle)
+int viewportOffsetX = 0;
+int viewportOffsetY = 0;
+
 bool GameviewEnterWorld()
 {
-	if (!InitializeAllFlaps(640, 480))
+	const auto& viewWidth = blooDot::Settings::GetPhysicalArenaWidth();
+	const auto& viewHight = blooDot::Settings::GetPhysicalArenaHeight();
+	const auto& flapWidth = blooDot::Settings::GetLogicalArenaWidth();
+	const auto& flapHight = blooDot::Settings::GetLogicalArenaHeight();
+
+	viewportOffsetX = (viewWidth - flapWidth) / 2;
+	viewportOffsetY = (viewHight - flapHight) / 2;
+
+	if (!InitializeAllFlaps(flapWidth, flapHight))
 	{
 		return false;
 	}

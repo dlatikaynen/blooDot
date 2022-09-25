@@ -35,10 +35,8 @@ SDL_Texture* NewTexture(SDL_Renderer* renderer, int w, int h, bool transparentAb
 	return newTexture;
 }
 
-cairo_t* BeginTextureDrawing(SDL_Texture* targetTexture)
+cairo_t* BeginTextureDrawing(SDL_Texture* targetTexture, const int canvasWidth, const int canvasHeight)
 {
-	int width = GodsPreferredWidth;
-	int height = GodsPreferredHight;
 	int pitch;
 	void* pixels;
 
@@ -48,8 +46,8 @@ cairo_t* BeginTextureDrawing(SDL_Texture* targetTexture)
 		const auto cairoSurface = cairo_image_surface_create_for_data(
 			static_cast<unsigned char*>(pixels),
 			CAIRO_FORMAT_ARGB32,
-			width,
-			height,
+			canvasWidth,
+			canvasHeight,
 			pitch
 		);
 

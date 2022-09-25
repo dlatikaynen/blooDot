@@ -15,6 +15,8 @@ namespace blooDot::Settings
 	int GetPhysicalArenaWidth();
 	int GetLogicalArenaHeight();
 	int GetPhysicalArenaHeight();
+
+	bool _GetScreenDimensions(__out SDL_Rect* dimensions);
 }
 
 typedef struct SettingsStruct

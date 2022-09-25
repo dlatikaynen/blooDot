@@ -57,7 +57,7 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 	SDL_RenderClear(GameViewRenderer);
 
 #ifndef NDEBUG
-	const auto drawingSink = BeginTextureDrawing(debugFlap);
+	const auto drawingSink = BeginTextureDrawing(debugFlap, flapW, flapH);
 	cairo_set_source_rgba(drawingSink, 0, 0, 0, 0);
 	cairo_rectangle(drawingSink, 0, 0, flapW, flapH);
 	cairo_fill(drawingSink);

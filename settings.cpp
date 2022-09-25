@@ -108,8 +108,18 @@ namespace blooDot::Settings
 			return 1280;
 
 		case ViewportResolutions::VR_SQUARE:
+		{
+			SDL_Rect rect = { 0 };
+			if (_GetScreenDimensions(&rect))
+			{
+				return std::min(rect.h, rect.w);
+			}
+
+			return GodsPreferredHight;
+		}
 
 		case ViewportResolutions::VR_MAXOUT:
+			return GetPhysicalArenaWidth();
 
 		default:
 			return GodsPreferredHight;
@@ -120,7 +130,17 @@ namespace blooDot::Settings
 	{
 		switch (::Settings.SettingViewportResolution)
 		{
+		case ViewportResolutions::VR_SQUARE:
 		case ViewportResolutions::VR_MAXOUT:
+		{
+			SDL_Rect rect = { 0 };
+			if (_GetScreenDimensions(&rect))
+			{
+				return rect.w;
+			}
+
+			return GodsPreferredWidth;
+		}
 
 		default:
 			return GetLogicalArenaWidth();
@@ -144,8 +164,18 @@ namespace blooDot::Settings
 			return 720;
 
 		case ViewportResolutions::VR_SQUARE:
+		{
+			SDL_Rect rect = { 0 };
+			if (_GetScreenDimensions(&rect))
+			{
+				return std::min(rect.w, rect.h);
+			}
+
+			return GodsPreferredHight;
+		}
 
 		case ViewportResolutions::VR_MAXOUT:
+			return GetPhysicalArenaHeight();
 
 		default:
 			return GodsPreferredHight;
@@ -156,9 +186,37 @@ namespace blooDot::Settings
 	{
 		switch (::Settings.SettingViewportResolution)
 		{
+		case ViewportResolutions::VR_SQUARE:
 		case ViewportResolutions::VR_MAXOUT:
+		{
+			SDL_Rect rect = { 0 };
+			if (_GetScreenDimensions(&rect))
+			{
+				return rect.h;
+			}
+
+			return GodsPreferredHight;
+		}
+
 		default:
 			return GetLogicalArenaHeight();
 		}
+	}
+
+	bool _GetScreenDimensions(__out SDL_Rect* dimensions)
+	{
+		auto& rect = (*dimensions);
+		SDL_DisplayMode displayMode = {};
+		if (SDL_GetDesktopDisplayMode(0, &displayMode) < 0)
+		{
+			const auto& queryError = SDL_GetError();
+			ReportError("Could not query screen dimensions", queryError);
+			return false;
+		}
+
+		rect.w = displayMode.w;
+		rect.h = displayMode.h;
+
+		return true;
 	}
 }
