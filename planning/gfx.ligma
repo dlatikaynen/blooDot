@@ -29,3 +29,10 @@
   Get their own pass as we don't paint it on the flaps because nonstatics
   would necessitate rendercopy twice on sides, and four times on corners.
 
+
+
+[ ] Mobs
+[ ] Player "HUD" indicator(s)
+[ ] Pinhole for covered structures
+[ ] Weather (fog, rain)
+[ ] Lighting (clipped transparent blobs?)

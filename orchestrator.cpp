@@ -3,6 +3,7 @@
 #include "menu-ingame.h"
 #include "settings.h"
 #include "savegame.h"
+#include "constants.h"
 
 Uint32 SDL_USEREVENT_SAVE = 0;
 Uint32 SDL_USEREVENT_AUTOSAVE = 0;
@@ -34,9 +35,17 @@ namespace blooDot::Orchestrator
 
 		SDL_USEREVENT_SAVE = SDL_RegisterEvents(1);
 		SDL_USEREVENT_AUTOSAVE = SDL_RegisterEvents(1);
+		
+		Uint64 frameEnded;
+		Uint64 frameStart;
+		const auto& preMultiplied = (float)SDL_GetPerformanceFrequency();
+#ifndef NDEBUG
+		long long frameNumber = 0;
+#endif
 
 		while (mainRunning)
 		{
+			frameStart = SDL_GetPerformanceCounter();
 			while (SDL_PollEvent(&mainEvent) != 0)
 			{
 				switch (mainEvent.type)
@@ -111,7 +120,7 @@ namespace blooDot::Orchestrator
 
 				case SDL_QUIT:
 					mainRunning = false;
-					break;
+					goto THAT_ESCALATED_QUICKLY;
 				}
 			}
 NEXTFRAME:
@@ -119,9 +128,23 @@ NEXTFRAME:
 			SDL_RenderClear(renderer);
 			GameViewRenderFrame();
 			SDL_RenderPresent(renderer);
-			SDL_Delay(16);
+			frameEnded = SDL_GetPerformanceCounter();
+			const auto& frameTime = (frameEnded - frameStart) / preMultiplied * 1000.f;
+			const auto& frameSlack = static_cast<int>(MillisecondsPerFrame - frameTime);
+			if (frameSlack > 0)
+			{
+				SDL_Delay(frameSlack);
+			}
+
+#ifndef NDEBUG
+			if (++frameNumber % 60 == 0)
+			{
+				std::cout << "FRAME TIME " << frameTime << "\n";
+			}
+#endif
 		}
 
+THAT_ESCALATED_QUICKLY:
 		TeardownDingSheets();
 		GameviewTeardown();
 		ClearWorldData();
