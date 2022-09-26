@@ -685,7 +685,10 @@ void RenderFloorQuart()
 
 void RenderMobs()
 {
-
+	const auto& schaed = GetDing(Ding::Schaed);
+	constexpr SDL_Rect dest = { 10,10,49,49 };
+	constexpr SDL_Point center = { 25,25 };
+	SDL_RenderCopyEx(GameViewRenderer, schaed->onSheet, &schaed->src, &dest, 35, &center, SDL_RendererFlip::SDL_FLIP_VERTICAL);
 }
 
 void RenderWallsAndRooofBung()
