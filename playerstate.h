@@ -1,8 +1,18 @@
 #pragma once
 #include "gamestate.h"
 
-typedef struct PlayerStateStruct
+typedef struct InventoryItemStruct
+{
+	Ding Ding;
+	int Quantity;
+	int Quality;
+} InventoryItem;
+
+typedef struct MobStateStruct
 {
 	unsigned short Vitals;
 	PointInWorld Position;
-} PlayerState;
+	SDL_Point Offset;
+	int Orientation;
+	std::list<InventoryItem> Inventory;
+} MobState;

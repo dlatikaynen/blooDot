@@ -222,6 +222,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="datetime.cpp" />
+    <ClCompile Include="playerstate.cpp" />
     <ClCompile Include="xlations.cpp" />
     <ClInclude Include="boydsa.h" />
     <ClInclude Include="cairo\cairo-deprecated.h" />

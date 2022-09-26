@@ -623,6 +623,9 @@
     <ClCompile Include="datetime.cpp">
       <Filter>_Source Files\util</Filter>
     </ClCompile>
+    <ClCompile Include="playerstate.cpp">
+      <Filter>_Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

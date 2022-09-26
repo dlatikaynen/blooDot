@@ -43,10 +43,10 @@ typedef struct SavepointHeaderStruct
 	int OriginDx = 0; // from gameview
 	int OriginDy = 0; // from gameview
 	char PlayersJoined = 0; // bitfield, bit0 = player 1
-	PlayerState Player1State = { 0 };
-	PlayerState Player2State = { 0 };
-	PlayerState Player3State = { 0 };
-	PlayerState Player4State = { 0 };
+	MobState Player1State = { 0 };
+	MobState Player2State = { 0 };
+	MobState Player3State = { 0 };
+	MobState Player4State = { 0 };
 	char IsAutosave = 0;
 
 } SavepointHeader;
