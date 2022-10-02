@@ -31,3 +31,4 @@ constexpr int const CHUNK_KEY_UI_ICON_HERC = 27;
 constexpr int const CHUNK_KEY_UI_MENU_EMPTY = 28;
 constexpr int const CHUNK_KEY_SFX_CRICKET_FRITZ = 29;
 constexpr int const CHUNK_KEY_SFX_CRICKET_FRANZ = 30;
+constexpr int const CHUNK_KEY_MOBS_PLAYER3 = 31;

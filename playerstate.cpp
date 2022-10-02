@@ -3,7 +3,7 @@
 
 namespace blooDot::Player
 {
-	auto NumPlayers = 0;
+	int NumPlayers = 0;
 	MobState Player[4] = {};
 	std::list<MobState> Mobs;
 }

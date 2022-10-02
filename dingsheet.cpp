@@ -143,7 +143,8 @@ DingLocator _PlaceOnDingSheet(SDL_Rect* dingDimensions, SDL_Texture* dingTexture
 	{
 		occupied.clear();
 		placeOnSheet = SDL_CreateTexture(
-			GameViewRenderer, SDL_PIXELFORMAT_ARGB8888,
+			GameViewRenderer,
+			SDL_PIXELFORMAT_ARGB8888,
 			SDL_TEXTUREACCESS_TARGET,
 			DING_SHEET_SIDE_LENGTH,
 			DING_SHEET_SIDE_LENGTH

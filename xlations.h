@@ -97,6 +97,11 @@ extern const char* literaldingNameSnow;
 extern const char* literaldingNameChelF;
 extern const char* literaldingNameGrass;
 extern const char* literaldingNameRooofMesh;
+extern const char* literalplayerName1;
+extern const char* literalplayerName2;
+extern const char* literalplayerName3;
+extern const char* literalplayerName4;
+extern const char* literaldialogPlayer3Perennial;
 
 namespace blooDot::en
 {

@@ -76,7 +76,7 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_SavepointSingular = "1 збереження";
 	constexpr char const* _literal_ua_SavepointPlural = "$n збереження";
 	constexpr char const* _literal_ua_Created = "створено";
-	constexpr char const* _literal_ua_DialogTitleGpuChan = "GPU-chan went like,";
+	constexpr char const* _literal_ua_DialogTitleGpuChan = "GPU-chan says,";
 	constexpr char const* _literal_ua_DialogBubbleGpuChan = "Oh no,\nit's too\nbig!";
 	constexpr char const* _literal_ua_regionNameUnknown = "Here be dragons";
 	constexpr char const* _literal_ua_regionNameScullery = "Кухня посуду";
@@ -99,4 +99,9 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_dingNameChelF = "Fluorine";
 	constexpr char const* _literal_ua_dingNameGrass = "Grass";
 	constexpr char const* _literal_ua_dingNameRooofMesh = "Mesh";
+	constexpr char const* _literal_ua_playerName1 = "Sipiasibasian";
+	constexpr char const* _literal_ua_playerName2 = "Ed";
+	constexpr char const* _literal_ua_playerName3 = "Cole Horn";
+	constexpr char const* _literal_ua_playerName4 = "Toni";
+	constexpr char const* _literal_ua_dialogPlayer3Perennial = "Are you threatening me?";
 }

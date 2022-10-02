@@ -315,8 +315,8 @@ Created
 	[ua]	створено
 
 DialogTitleGpuChan
-	[en]	GPU-chan went like,
-	[de]	GPU-chan hat gesagt,
+	[en]	GPU-chan says,
+	[de]	GPU-chan sagt
 	
 DialogBubbleGpuChan
 	[en]	Oh no,\nit's too\nbig!
@@ -410,3 +410,19 @@ dingNameGrass
 dingNameRooofMesh
 	[en]	Mesh
 	[de]	Gitterrost
+
+playerName1
+	[en]	Sipiasibasian
+
+playerName2
+	[en]	Ed
+
+playerName3
+	[en]	Cole Horn
+
+playerName4
+	[en]	Toni
+
+dialogPlayer3Perennial
+	[en]	Are you threatening me?
+	[de]	Willst du mir drohen?

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "renderstate.h"
 #include "ding.h"
+#include "xlations.h"
 
 extern SDL_Renderer* GameViewRenderer;
 
@@ -134,7 +135,7 @@ void RecomputeFlapConstellation()
 	{
 		constellation = FS_BUNGHOLE;
 #ifndef NDEBUG
-		std::cout << "Are you threatening me?\n";
+		std::cout << literaldialogPlayer3Perennial << "\n";
 #endif
 	}
 	else if (isVerticallyAligned)

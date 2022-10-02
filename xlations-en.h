@@ -76,7 +76,7 @@ namespace blooDot::en
 	constexpr char const* _literal_en_SavepointSingular = "1 savepoint";
 	constexpr char const* _literal_en_SavepointPlural = "$n savepoints";
 	constexpr char const* _literal_en_Created = "created";
-	constexpr char const* _literal_en_DialogTitleGpuChan = "GPU-chan went like,";
+	constexpr char const* _literal_en_DialogTitleGpuChan = "GPU-chan says,";
 	constexpr char const* _literal_en_DialogBubbleGpuChan = "Oh no,\nit's too\nbig!";
 	constexpr char const* _literal_en_regionNameUnknown = "Here be dragons";
 	constexpr char const* _literal_en_regionNameScullery = "The Scullery";
@@ -99,4 +99,9 @@ namespace blooDot::en
 	constexpr char const* _literal_en_dingNameChelF = "Fluorine";
 	constexpr char const* _literal_en_dingNameGrass = "Grass";
 	constexpr char const* _literal_en_dingNameRooofMesh = "Mesh";
+	constexpr char const* _literal_en_playerName1 = "Sipiasibasian";
+	constexpr char const* _literal_en_playerName2 = "Ed";
+	constexpr char const* _literal_en_playerName3 = "Cole Horn";
+	constexpr char const* _literal_en_playerName4 = "Toni";
+	constexpr char const* _literal_en_dialogPlayer3Perennial = "Are you threatening me?";
 }

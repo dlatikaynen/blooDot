@@ -222,6 +222,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="datetime.cpp" />
+    <ClCompile Include="playerhud.cpp" />
     <ClCompile Include="playerstate.cpp" />
     <ClCompile Include="xlations.cpp" />
     <ClInclude Include="boydsa.h" />
@@ -268,6 +269,7 @@
     <ClInclude Include="newworld.h" />
     <ClInclude Include="orchestrator.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="playerhud.h" />
     <ClInclude Include="playerstate.h" />
     <ClInclude Include="renderstate.h" />
     <ClInclude Include="resource.h" />
@@ -635,6 +637,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</DeploymentContent>
+    </Image>
+    <Image Include="res\player3.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
     </Image>
     <Image Include="res\rooof-meshtile.png">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

@@ -10,6 +10,7 @@
 #include "sfx.h"
 #include "xlations.h"
 #include "settings.h"
+#include "playerstate.h"
 
 const int ExitCodeNormally = 0x00;
 const int ExitCodeSDLInitFail = 0x55;
@@ -180,6 +181,7 @@ int main(int, char**)
 			/* reaching this point means we're actually starting
 			 * in the arena. we create a new window and renderer
 			 * for the arena, even if the video mode matches */
+			blooDot::Player::NumPlayers = 4;
 			_Launch();
 		}
 

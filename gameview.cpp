@@ -3,6 +3,7 @@
 #include "gamestate.h"
 #include "enums.h"
 #include "settings.h"
+#include "playerhud.h"
 
 /* the gameview knows where we are in the world.
  * the gamestate tracks mobs and other entities
@@ -23,6 +24,8 @@ int originDy = 0;
 int viewportOffsetX = 0;
 int viewportOffsetY = 0;
 
+bool gotHud = false;
+
 bool GameviewEnterWorld()
 {
 	const auto& viewWidth = blooDot::Settings::GetPhysicalArenaWidth();
@@ -39,6 +42,7 @@ bool GameviewEnterWorld()
 	}
 
 	PopulateAllFlaps();
+	gotHud = blooDot::Hud::Initialize();
 
 #ifndef NDEBUG
 	std::cout
@@ -78,6 +82,11 @@ void GameViewRenderFrame()
 		RenderMobs();
 		RenderWallsAndRooofBung();
 		break;
+	}
+
+	if (gotHud)
+	{
+		blooDot::Hud::Render();
 	}
 }
 

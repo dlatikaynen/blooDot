@@ -102,6 +102,11 @@ const char* literaldingNameSnow = "";
 const char* literaldingNameChelF = "";
 const char* literaldingNameGrass = "";
 const char* literaldingNameRooofMesh = "";
+const char* literalplayerName1 = "";
+const char* literalplayerName2 = "";
+const char* literalplayerName3 = "";
+const char* literalplayerName4 = "";
+const char* literaldialogPlayer3Perennial = "";
 
 namespace blooDot::en
 {
@@ -204,6 +209,11 @@ namespace blooDot::en
 		literaldingNameChelF = _literal_en_dingNameChelF;
 		literaldingNameGrass = _literal_en_dingNameGrass;
 		literaldingNameRooofMesh = _literal_en_dingNameRooofMesh;
+		literalplayerName1 = _literal_en_playerName1;
+		literalplayerName2 = _literal_en_playerName2;
+		literalplayerName3 = _literal_en_playerName3;
+		literalplayerName4 = _literal_en_playerName4;
+		literaldialogPlayer3Perennial = _literal_en_dialogPlayer3Perennial;
 	}
 }
 
@@ -308,6 +318,11 @@ namespace blooDot::de
 		literaldingNameChelF = _literal_de_dingNameChelF;
 		literaldingNameGrass = _literal_de_dingNameGrass;
 		literaldingNameRooofMesh = _literal_de_dingNameRooofMesh;
+		literalplayerName1 = _literal_de_playerName1;
+		literalplayerName2 = _literal_de_playerName2;
+		literalplayerName3 = _literal_de_playerName3;
+		literalplayerName4 = _literal_de_playerName4;
+		literaldialogPlayer3Perennial = _literal_de_dialogPlayer3Perennial;
 	}
 }
 
@@ -412,6 +427,11 @@ namespace blooDot::fi
 		literaldingNameChelF = _literal_fi_dingNameChelF;
 		literaldingNameGrass = _literal_fi_dingNameGrass;
 		literaldingNameRooofMesh = _literal_fi_dingNameRooofMesh;
+		literalplayerName1 = _literal_fi_playerName1;
+		literalplayerName2 = _literal_fi_playerName2;
+		literalplayerName3 = _literal_fi_playerName3;
+		literalplayerName4 = _literal_fi_playerName4;
+		literaldialogPlayer3Perennial = _literal_fi_dialogPlayer3Perennial;
 	}
 }
 
@@ -516,5 +536,10 @@ namespace blooDot::ua
 		literaldingNameChelF = _literal_ua_dingNameChelF;
 		literaldingNameGrass = _literal_ua_dingNameGrass;
 		literaldingNameRooofMesh = _literal_ua_dingNameRooofMesh;
+		literalplayerName1 = _literal_ua_playerName1;
+		literalplayerName2 = _literal_ua_playerName2;
+		literalplayerName3 = _literal_ua_playerName3;
+		literalplayerName4 = _literal_ua_playerName4;
+		literaldialogPlayer3Perennial = _literal_ua_dialogPlayer3Perennial;
 	}
 }

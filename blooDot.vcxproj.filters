@@ -67,6 +67,9 @@
     <Filter Include="Resource Files\legalese">
       <UniqueIdentifier>{4647e3d7-e770-4f1b-ab9c-02895c6d4626}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\mobs">
+      <UniqueIdentifier>{5da7e730-5f9e-4e00-8329-92da6bf0f75a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL\include\begin_code.h">
@@ -513,6 +516,9 @@
     <ClInclude Include="datetime.h">
       <Filter>_Headers\util</Filter>
     </ClInclude>
+    <ClInclude Include="playerhud.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -625,6 +631,9 @@
     </ClCompile>
     <ClCompile Include="playerstate.cpp">
       <Filter>_Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="playerhud.cpp">
+      <Filter>_Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -776,6 +785,9 @@
     </Image>
     <Image Include="res\menu-emptyness.png">
       <Filter>Resource Files\ui</Filter>
+    </Image>
+    <Image Include="res\player3.png">
+      <Filter>Resource Files\mobs</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
