@@ -434,6 +434,7 @@ namespace blooDot::MenuSettingsScreen
 			_DrawIcon(renderer, CHUNK_KEY_UI_ICON_DIVINE, 0);
 			_DrawIcon(renderer, CHUNK_KEY_UI_ICON_HERC, 1);
 			_DrawIcon(renderer, CHUNK_KEY_UI_ICON_MODEX, 2);
+			_DrawIcon(renderer, CHUNK_KEY_UI_ICON_HD, 4);
 			if (SDL_SetRenderTarget(renderer, NULL) < 0)
 			{
 				const auto restoreError = SDL_GetError();

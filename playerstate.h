@@ -17,7 +17,8 @@ typedef struct InventoryItemStruct
 
 typedef struct MobStateStruct
 {
-	unsigned short Vitals;
+	Uint8 Slots;
+	Uint32 Vitals;
 	PointInWorld Position;
 	SDL_Point Offset;
 	int Orientation;
@@ -27,4 +28,6 @@ typedef struct MobStateStruct
 namespace blooDot::Player
 {
 	extern int NumPlayers;
+
+	MobState* GetState(int ofPlayerIndex);
 }

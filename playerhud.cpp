@@ -127,10 +127,18 @@ namespace blooDot::Hud
 		auto const& midpointX = static_cast<float>(Source.w / 2);
 		auto const& midpointY = static_cast<float>(Source.h / 2);
 
+		auto const& playerInfo = blooDot::Player::GetState(ofPlayerIndex);
+		
+
 		cairo_set_source_rgb(canvas, .7, 1., .7);
 		cairo_set_line_width(canvas, 3.);
 		cairo_arc(canvas, midpointX, midpointY, midpointY, 0, M_PI * 2);
-		cairo_fill(canvas);
+		for (auto s = 0; s < playerInfo->Slots; ++s)
+		{
+			
+		}
+		
+		//cairo_fill(canvas);
 		cairo_set_source_rgb(canvas, .2, .7, .2);
 		cairo_stroke(canvas);
 

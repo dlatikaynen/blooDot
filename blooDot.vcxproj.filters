@@ -789,6 +789,9 @@
     <Image Include="res\player3.png">
       <Filter>Resource Files\mobs</Filter>
     </Image>
+    <Image Include="res\icon-hd.png">
+      <Filter>Resource Files\ui</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="LICENSE.txt" />
