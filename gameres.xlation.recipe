@@ -17,13 +17,13 @@ LanguageNameEnglish
 	[ua]	Ukrainian
 
 AlienMainMenuLabel
-	[**]	MejnMenju
+	[**]	mEnmenV
 
 AlienLoadMenuLabel
-	[**]	loud
+	[**]	lOd
 
 AlienSettingsMenuLabel
-	[**]	Setins
+	[**]	SetiNz
 
 AlienScreenSettingsMenuLabel
 	[**]	ScrinSaiz
@@ -412,7 +412,7 @@ dingNameRooofMesh
 	[de]	Gitterrost
 
 playerName1
-	[en]	Sipiasibasian
+	[en]	sipWsibasWn
 
 playerName2
 	[en]	Ed

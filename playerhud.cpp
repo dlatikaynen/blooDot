@@ -129,19 +129,26 @@ namespace blooDot::Hud
 
 		auto const& playerInfo = blooDot::Player::GetState(ofPlayerIndex);
 		
-
-		cairo_set_source_rgb(canvas, .7, 1., .7);
 		cairo_set_line_width(canvas, 3.);
-		cairo_arc(canvas, midpointX, midpointY, midpointY, 0, M_PI * 2);
-		for (auto s = 0; s < playerInfo->Slots; ++s)
-		{
-			
-		}
-		
-		//cairo_fill(canvas);
 		cairo_set_source_rgb(canvas, .2, .7, .2);
+		cairo_arc(canvas, midpointX, midpointY, midpointY - 5, 0, M_PI * 2);
 		cairo_stroke(canvas);
 
+		cairo_set_source_rgb(canvas, 0.7, 1., 0);
+		cairo_set_line_width(canvas, 1.3);
+		cairo_move_to(canvas, midpointX, midpointY);
+		cairo_curve_to(
+			canvas,
+			midpointX, midpointY, // first control point
+			midpointX + midpointX - 8, midpointY, // second control point
+			midpointX + midpointX - 5., midpointY + 8); // end point
+		
+		cairo_stroke(canvas);
+
+		for (auto s = 0; s < playerInfo->Slots; ++s)
+		{
+		}
+		
 		EndRenderDrawing(GameViewRenderer, canvasTexture);
 		if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
 		{

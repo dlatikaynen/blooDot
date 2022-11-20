@@ -5,9 +5,9 @@ namespace blooDot::de
 	constexpr char const* _literal_de_LCID = "de";
 	constexpr char const* _literal_de_LanguageName = "Deutsch";
 	constexpr char const* _literal_de_LanguageNameEnglish = "German";
-	constexpr char const* _literal_de_AlienMainMenuLabel = "MejnMenju";
-	constexpr char const* _literal_de_AlienLoadMenuLabel = "loud";
-	constexpr char const* _literal_de_AlienSettingsMenuLabel = "Setins";
+	constexpr char const* _literal_de_AlienMainMenuLabel = "mEnmenV";
+	constexpr char const* _literal_de_AlienLoadMenuLabel = "lOd";
+	constexpr char const* _literal_de_AlienSettingsMenuLabel = "SetiNz";
 	constexpr char const* _literal_de_AlienScreenSettingsMenuLabel = "ScrinSaiz";
 	constexpr char const* _literal_de_AlienInGameMenuLabel = "Gejm";
 	constexpr char const* _literal_de_AlienLangSettingsMenuLabel = "lenguij";
@@ -99,7 +99,7 @@ namespace blooDot::de
 	constexpr char const* _literal_de_dingNameChelF = "Fluor";
 	constexpr char const* _literal_de_dingNameGrass = "Rasen";
 	constexpr char const* _literal_de_dingNameRooofMesh = "Gitterrost";
-	constexpr char const* _literal_de_playerName1 = "Sipiasibasian";
+	constexpr char const* _literal_de_playerName1 = "sipWsibasWn";
 	constexpr char const* _literal_de_playerName2 = "Ed";
 	constexpr char const* _literal_de_playerName3 = "Cole Horn";
 	constexpr char const* _literal_de_playerName4 = "Toni";
