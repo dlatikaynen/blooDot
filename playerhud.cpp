@@ -131,18 +131,109 @@ namespace blooDot::Hud
 		
 		cairo_set_line_width(canvas, 3.);
 		cairo_set_source_rgb(canvas, .2, .7, .2);
-		cairo_arc(canvas, midpointX, midpointY, midpointY - 5, 0, M_PI * 2);
-		cairo_stroke(canvas);
+		//cairo_arc(canvas, midpointX, midpointY, midpointY - 5, 0, M_PI * 2);
+		//cairo_stroke(canvas);
 
-		cairo_set_source_rgb(canvas, 0.7, 1., 0);
 		cairo_set_line_width(canvas, 1.3);
+		cairo_set_source_rgb(canvas, 0.7, 1., 0);
+
+		/* x-axis part of SE quadrant */
 		cairo_move_to(canvas, midpointX, midpointY);
 		cairo_curve_to(
 			canvas,
 			midpointX, midpointY, // first control point
-			midpointX + midpointX - 8, midpointY, // second control point
-			midpointX + midpointX - 5., midpointY + 8); // end point
-		
+			midpointX + midpointX - 7., midpointY, // second control point
+			midpointX + midpointX - 5., midpointY + 7); // end point
+
+		/* outer arc of SE quadrant */
+		cairo_curve_to(
+			canvas,
+			2.2 * midpointX, 1.5 * midpointY, // first control point
+			1.5 * midpointX, 2.2 * midpointY, // second control point
+			midpointX + 7, midpointY + midpointY - 5.); // end point
+
+		/* y-axis part of SE quadrant */
+		cairo_curve_to(
+			canvas,
+			midpointX, midpointY + midpointY - 7, // first control point
+			midpointX, midpointY, // second control point
+			midpointX, midpointY); // end point
+
+		cairo_stroke(canvas);
+		cairo_set_source_rgb(canvas, .97, .03, .03);
+
+		/* x-axis part of NE quadrant */
+		cairo_move_to(canvas, midpointX, midpointY);
+		cairo_curve_to(
+			canvas,
+			midpointX, midpointY, // first control point
+			midpointX + midpointX - 7., midpointY, // second control point
+			midpointX + midpointX - 5., midpointY - 7); // end point
+
+		/* outer arc of NE quadrant */
+		cairo_curve_to(
+			canvas,
+			2.2 * midpointX, midpointY - 0.5 * midpointY, // first control point
+			1.5 * midpointX, midpointY - 1.2 * midpointY, // second control point
+			midpointX + 7., 5.); // end point
+
+		/* y-axis part of NE quadrant */
+		cairo_curve_to(
+			canvas,
+			midpointX, 7., // first control point
+			midpointX, midpointY, // second control point
+			midpointX, midpointY); // end point
+
+		cairo_stroke(canvas);
+		cairo_set_source_rgb(canvas, 1., .65, .2);
+
+		/* x-axis part of SW quadrant */
+		cairo_move_to(canvas, midpointX, midpointY);
+		cairo_curve_to(
+			canvas,
+			midpointX, midpointY, // first control point
+			7., midpointY, // second control point
+			5., midpointY + 7.); // end point
+
+		/* outer arc of SW quadrant */
+		cairo_curve_to(
+			canvas,
+			midpointX - 1.2 * midpointX, 1.5 * midpointY, // first control point
+			midpointX - 0.5 * midpointX, 2.2 * midpointY, // second control point
+			midpointX - 7, midpointY + midpointY - 5.); // end point
+
+		/* y-axis part of SW quadrant */
+		cairo_curve_to(
+			canvas,
+			midpointX, midpointY + midpointY - 7, // first control point
+			midpointX, midpointY, // second control point
+			midpointX, midpointY); // end point
+
+		cairo_stroke(canvas);
+		cairo_set_source_rgb(canvas, .43, .68, .94);
+
+		/* x-axis part of NW quadrant */
+		cairo_move_to(canvas, midpointX, midpointY);
+		cairo_curve_to(
+			canvas,
+			midpointX, midpointY, // first control point
+			7., midpointY, // second control point
+			5., midpointY - 7.); // end point
+
+		/* outer arc of NW quadrant */
+		cairo_curve_to(
+			canvas,
+			midpointX - 1.2 * midpointX, midpointY - 0.5 * midpointY, // first control point
+			midpointX - 0.5 * midpointX, midpointY - 1.2 * midpointY, // second control point
+			midpointX - 7, 5.); // end point
+
+		/* y-axis part of NW quadrant */
+		cairo_curve_to(
+			canvas,
+			midpointX, 7., // first control point
+			midpointX, midpointY, // second control point
+			midpointX, midpointY); // end point
+
 		cairo_stroke(canvas);
 
 		for (auto s = 0; s < playerInfo->Slots; ++s)
