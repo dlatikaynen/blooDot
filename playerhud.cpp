@@ -127,7 +127,7 @@ namespace blooDot::Hud
 		auto const& midpointX = static_cast<float>(Source.w / 2);
 		auto const& midpointY = static_cast<float>(Source.h / 2);
 
-		auto const& playerInfo = blooDot::Player::GetState(ofPlayerIndex);
+		//auto const& playerInfo = blooDot::Player::GetState(ofPlayerIndex);
 		
 		cairo_set_line_width(canvas, 3.);
 		cairo_set_source_rgb(canvas, .2, .7, .2);
@@ -143,19 +143,19 @@ namespace blooDot::Hud
 			canvas,
 			midpointX, midpointY, // first control point
 			midpointX + midpointX - 7., midpointY, // second control point
-			midpointX + midpointX - 5., midpointY + 7); // end point
+			midpointX + midpointX - 5., midpointY + 7.); // end point
 
 		/* outer arc of SE quadrant */
 		cairo_curve_to(
 			canvas,
 			2.2 * midpointX, 1.5 * midpointY, // first control point
 			1.5 * midpointX, 2.2 * midpointY, // second control point
-			midpointX + 7, midpointY + midpointY - 5.); // end point
+			midpointX + 7., midpointY + midpointY - 5.); // end point
 
 		/* y-axis part of SE quadrant */
 		cairo_curve_to(
 			canvas,
-			midpointX, midpointY + midpointY - 7, // first control point
+			midpointX, midpointY + midpointY - 7., // first control point
 			midpointX, midpointY, // second control point
 			midpointX, midpointY); // end point
 
@@ -168,7 +168,7 @@ namespace blooDot::Hud
 			canvas,
 			midpointX, midpointY, // first control point
 			midpointX + midpointX - 7., midpointY, // second control point
-			midpointX + midpointX - 5., midpointY - 7); // end point
+			midpointX + midpointX - 5., midpointY - 7.); // end point
 
 		/* outer arc of NE quadrant */
 		cairo_curve_to(
@@ -236,7 +236,15 @@ namespace blooDot::Hud
 
 		cairo_stroke(canvas);
 
-		for (auto s = 0; s < playerInfo->Slots; ++s)
+		/*
+		
+		each petal has one inner, and two outer slots which are roughly the same area
+		there are always four petals
+		one petal can overfill, killing the contents of the nearest petal and making it its own
+		once the player picks up on a seized petal, it reinitializes to its proper category
+
+		*/
+		for (auto s = 0; s < 4; ++s)
 		{
 		}
 		

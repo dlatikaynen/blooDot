@@ -15,10 +15,22 @@ typedef struct InventoryItemStruct
 	int Quality;
 } InventoryItem;
 
+typedef enum VitalSlotDedicationEnum
+{
+	VSL_Phys = 0,
+	VSL_Heat = 1,
+	VSL_Cold = 2,
+	VSL_Chem = 3
+} VitalSlotDedication;
+
 typedef struct MobStateStruct
 {
-	Uint8 Slots;
-	Uint32 Vitals;
+	// bits 0..1 --> NE petal, 2..3 --> NW petal, 4..5 --> SW petal, 6..7 --> SE petal
+	Uint8 SlotDedication; 
+
+	// bits 0..3 --> phys, 4..7 --> heat, 8..11 --> cold, 12..15 --> chem
+	Uint16 Vitals;
+	
 	PointInWorld Position;
 	SDL_Point Offset;
 	int Orientation;
@@ -30,4 +42,6 @@ namespace blooDot::Player
 	extern int NumPlayers;
 
 	MobState* GetState(int ofPlayerIndex);
+	void VitalIncrease(MobState* mobState, VitalSlotDedication dedication);
+	void VitalDecrease(MobState* mobState, VitalSlotDedication dedication);
 }
