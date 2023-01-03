@@ -12,7 +12,7 @@ namespace blooDot::Hud
 {
 	constexpr SDL_Rect Source = { 0,0,49,49 };
 	constexpr int const Padding = 9;
-	constexpr Uint8 const LetterboxGray = 0xa;
+	constexpr Uint8 const LetterboxGray = 0xf;
 
 	SDL_Texture* Current[4];
 	SDL_Rect Destination[4];
@@ -238,7 +238,7 @@ namespace blooDot::Hud
 
 		/*
 		
-		each petal has one inner, and two outer slots which are roughly the same area
+		each petal has one inner, and two outer slots which are ~roughly~ the same area
 		there are always four petals
 		one petal can overfill, killing the contents of the nearest petal and making it its own
 		once the player picks up on a seized petal, it reinitializes to its proper category

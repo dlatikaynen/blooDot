@@ -15,7 +15,7 @@ namespace blooDot::de
 	constexpr char const* _literal_de_Manufacturer = "Copyright zOzz FlaminginSarjakuvatOj";
 	constexpr char const* _literal_de_MenuContinue = "Fortsetzen";
 	constexpr char const* _literal_de_MenuLoad = "Laden";
-	constexpr char const* _literal_de_MenuSingle = "Einzelpieler";
+	constexpr char const* _literal_de_MenuSingle = "Einzelspieler";
 	constexpr char const* _literal_de_MenuLocalMulti = "Lokal Mehrspieler";
 	constexpr char const* _literal_de_MenuNetMulti = "Netz Mehrspieler";
 	constexpr char const* _literal_de_MenuSettings = "Einstellungen";
