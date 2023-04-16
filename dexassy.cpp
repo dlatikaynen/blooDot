@@ -37,6 +37,26 @@ bool OpenCooked()
 		return false;
 	}
 
+	SDL_RWops* dlgStream;
+	const auto resMem = Retrieve(CHUNK_KEY_DLG_MANUFACTURER, &dlgStream);
+	if (!resMem)
+	{
+		const auto retrieveError = SDL_GetError();
+		ReportError("Could not retrieve from wad", retrieveError);
+		return false;
+	}
+
+	char ch;
+	auto readResult = dlgStream->read(dlgStream, &ch, sizeof(ch), 1);
+	while(readResult != 0)
+	{
+		std::cout << ch;
+		readResult = dlgStream->read(dlgStream, &ch, sizeof(ch), 1);
+	}
+
+	dlgStream->close(dlgStream);
+	SDL_free(resMem);
+
 	return true;
 }
 

@@ -157,12 +157,13 @@ namespace blooDot::MenuSettings
 				menuRunning = false;
 			};
 
-			DrawLabel(renderer, 286, 54, titleTexture, &titleRect);
+			DrawLabel(renderer, 286, 51, titleTexture, &titleRect);
 
 			const auto drawingTexture = BeginRenderDrawing(renderer, GodsPreferredWidth, GodsPreferredHight);
 			if (drawingTexture) [[likely]]
 			{
 				const auto drawingSink = GetDrawingSink();
+				const int yStart = 94;
 				const int stride = 46;
 				const int backGap = stride / 2;
 				SettingsMenuItems itemToDraw = SMI_BACK;
@@ -185,12 +186,12 @@ namespace blooDot::MenuSettings
 
 				EndRenderDrawing(renderer, drawingTexture);
 
-				DrawLabel(renderer, 235, 100 + 0 * stride + 0 * backGap, backTexture, &backRect);
-				DrawLabel(renderer, 235, 100 + 1 * stride + 1 * backGap, screensizeTexture, &screensizeRect);
-				DrawLabel(renderer, 235, 100 + 2 * stride + 1 * backGap, controlsTexture, &controlsRect);
-				DrawLabel(renderer, 235, 100 + 3 * stride + 1 * backGap, languageTexture, &languageRect);
-				DrawLabel(renderer, 235, 100 + 4 * stride + 2 * backGap, helpTexture, &helpRect);
-				DrawLabel(renderer, 235, 100 + 5 * stride + 2 * backGap, aboutTexture, &aboutRect);
+				DrawLabel(renderer, 235, yStart + 0 * stride + 0 * backGap, backTexture, &backRect);
+				DrawLabel(renderer, 235, yStart + 1 * stride + 1 * backGap, screensizeTexture, &screensizeRect);
+				DrawLabel(renderer, 235, yStart + 2 * stride + 1 * backGap, controlsTexture, &controlsRect);
+				DrawLabel(renderer, 235, yStart + 3 * stride + 1 * backGap, languageTexture, &languageRect);
+				DrawLabel(renderer, 235, yStart + 4 * stride + 2 * backGap, helpTexture, &helpRect);
+				DrawLabel(renderer, 235, yStart + 5 * stride + 2 * backGap, aboutTexture, &aboutRect);
 			}
 
 			SDL_RenderPresent(renderer);

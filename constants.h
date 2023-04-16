@@ -5,6 +5,8 @@
 constexpr int const GodsPreferredWidth = 640;
 constexpr int const GodsPreferredHight = 480;
 
+constexpr int const LayoutMetricButtonLabelOffsetY = 3;
+
 constexpr float const MillisecondsPerFrame = 16.666f;
 
 constexpr SDL_Color const AlienTextColor = { 250,200,200,222 };

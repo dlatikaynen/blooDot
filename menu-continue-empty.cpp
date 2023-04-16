@@ -132,7 +132,7 @@ namespace blooDot::MenuContinueEmpty
 				continueEmptyRunning = false;
 			};
 
-			DrawLabel(renderer, 286, 54, titleTexture, &titleRect);
+			DrawLabel(renderer, 286, 51, titleTexture, &titleRect);
 
 			const auto drawingTexture = BeginRenderDrawing(renderer, GodsPreferredWidth, GodsPreferredHight);
 			if (drawingTexture) [[likely]]
@@ -145,9 +145,9 @@ namespace blooDot::MenuContinueEmpty
 
 				EndRenderDrawing(renderer, drawingTexture);
 
-				DrawLabel(renderer, 235, 100, backTexture, &backRect);
-				DrawLabel(renderer, 181, 392, hintShadow, &hintRect);
-				DrawLabel(renderer, 180, 391, hintTexture, &hintRect);
+				DrawLabel(renderer, 235, 97, backTexture, &backRect);
+				DrawLabel(renderer, 181, 389, hintShadow, &hintRect);
+				DrawLabel(renderer, 180, 388, hintTexture, &hintRect);
 
 				SDL_RenderCopy(renderer, tumbleTexture, &tumbleRect, &tumbleRect);
 			}

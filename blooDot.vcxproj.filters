@@ -70,6 +70,9 @@
     <Filter Include="Resource Files\mobs">
       <UniqueIdentifier>{5da7e730-5f9e-4e00-8329-92da6bf0f75a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_Source Files\ui\offscreen">
+      <UniqueIdentifier>{d2235282-5cfb-480c-bf22-00f8358755a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL\include\begin_code.h">
@@ -519,6 +522,9 @@
     <ClInclude Include="playerhud.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
+    <ClInclude Include="offscreen-rendering.h">
+      <Filter>_Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -635,6 +641,12 @@
     <ClCompile Include="playerhud.cpp">
       <Filter>_Source Files\ui</Filter>
     </ClCompile>
+    <ClCompile Include="offscreen-rendering.cpp">
+      <Filter>_Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="offscreen-renderer-quest.cpp">
+      <Filter>_Source Files\ui\offscreen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -695,6 +707,9 @@
     </None>
     <None Include="gameres.xlation.recipe">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\manufacturer.dlg">
+      <Filter>Resource Files\ui</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

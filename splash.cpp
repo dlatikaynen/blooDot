@@ -265,16 +265,17 @@ namespace blooDot::Splash
 				splashRunning = false;
 			};
 
-			DrawLabel(renderer, 286, 54, titleTexture, &titleRect);
-			DrawLabel(renderer, 346, 454, authorTexture, &authorRect);
+			DrawLabel(renderer, 286, 51, titleTexture, &titleRect);
+			DrawLabel(renderer, 346, 451, authorTexture, &authorRect);
 
 			const auto drawingTexture = BeginRenderDrawing(renderer, GodsPreferredWidth, GodsPreferredHight);
 			if (drawingTexture) [[likely]]
 			{
 				const auto drawingSink = GetDrawingSink();
+				const int yStart = 94;
 				const int stride = 46;
 				MainMenuItems itemToDraw = MMI_CUE;
-				for (auto y = 94; y < 400; y += stride)
+				for (auto y = yStart; y < 400; y += stride)
 				{
 					DrawButton(drawingSink, 195, y, 250, 42, itemToDraw == menuSelection);
 					if (itemToDraw == menuSelection)
@@ -288,13 +289,13 @@ namespace blooDot::Splash
 
 				EndRenderDrawing(renderer, drawingTexture);
 
-				DrawLabel(renderer, 235, 100 + 0 * stride, continueTexture, &continueRect);
-				DrawLabel(renderer, 235, 100 + 1 * stride, loadTexture, &loadRect);
-				DrawLabel(renderer, 235, 100 + 2 * stride, singleTexture, &singleRect);
-				DrawLabel(renderer, 235, 100 + 3 * stride, localMultiTexture, &localMultiRect);
-				DrawLabel(renderer, 235, 100 + 4 * stride, netMultiTexture, &netMultiRect);
-				DrawLabel(renderer, 235, 100 + 5 * stride, settingsTexture, &settingsRect);
-				DrawLabel(renderer, 235, 100 + 6 * stride, quitTexture, &quitRect);
+				DrawLabel(renderer, 235, yStart + 0 * stride, continueTexture, &continueRect);
+				DrawLabel(renderer, 235, yStart + 1 * stride, loadTexture, &loadRect);
+				DrawLabel(renderer, 235, yStart + 2 * stride, singleTexture, &singleRect);
+				DrawLabel(renderer, 235, yStart + 3 * stride, localMultiTexture, &localMultiRect);
+				DrawLabel(renderer, 235, yStart + 4 * stride, netMultiTexture, &netMultiRect);
+				DrawLabel(renderer, 235, yStart + 5 * stride, settingsTexture, &settingsRect);
+				DrawLabel(renderer, 235, yStart + 6 * stride, quitTexture, &quitRect);
 			}
 
 			SDL_RenderPresent(renderer);

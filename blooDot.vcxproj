@@ -222,6 +222,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="datetime.cpp" />
+    <ClCompile Include="offscreen-renderer-quest.cpp" />
+    <ClCompile Include="offscreen-rendering.cpp" />
     <ClCompile Include="playerhud.cpp" />
     <ClCompile Include="playerstate.cpp" />
     <ClCompile Include="xlations.cpp" />
@@ -267,6 +269,7 @@
     <ClInclude Include="menu-settings-screen.h" />
     <ClInclude Include="menu-settings.h" />
     <ClInclude Include="newworld.h" />
+    <ClInclude Include="offscreen-rendering.h" />
     <ClInclude Include="orchestrator.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="playerhud.h" />
@@ -490,6 +493,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </None>
+    <None Include="res\manufacturer.dlg" />
     <None Include="SDL\lib\x64\libcairo-2.dll" />
     <None Include="SDL\lib\x64\libexpat-1.dll" />
     <None Include="SDL\lib\x64\libfontconfig-1.dll" />

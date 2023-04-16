@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "dialogcontrols.h"
+#include "constants.h"
 #include <math.h>
 
 constexpr auto HALFPI = M_PI / 2.0;
@@ -103,7 +104,7 @@ cairo_t* DrawButton(cairo_t* context, double x, double y, double w, double h, bo
 void DrawLabel(SDL_Renderer* renderer, int x, int y, SDL_Texture* texture, SDL_Rect* frame)
 {
 	(*frame).x = x;
-	(*frame).y = y;
+	(*frame).y = y + LayoutMetricButtonLabelOffsetY;
 
 	SDL_RenderCopy(renderer, texture, NULL, frame);
 }

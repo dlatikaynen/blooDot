@@ -211,7 +211,7 @@ namespace blooDot::MenuSettingsLang
 				langSettingsMenuRunning = false;
 			};
 
-			DrawLabel(renderer, 286, 54, titleTexture, &titleRect);
+			DrawLabel(renderer, 286, 51, titleTexture, &titleRect);
 
 			const auto drawingTexture = BeginRenderDrawing(renderer, 640, 480);
 			if (drawingTexture) [[likely]]
@@ -254,7 +254,7 @@ namespace blooDot::MenuSettingsLang
 
 				EndRenderDrawing(renderer, drawingTexture);
 
-				DrawLabel(renderer, 235, 100 + 0 * stride + 0 * backGap, cancelTexture, &cancelRect);
+				DrawLabel(renderer, 235, startY + 0 * stride + 0 * backGap, cancelTexture, &cancelRect);
 
 				/* render the carousel choice (and the sliding animation) */
 				_AnimateCarousel();

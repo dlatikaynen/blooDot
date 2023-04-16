@@ -21,6 +21,9 @@ namespace blooDot::MenuInGame
 
 	bool MenuLoop(SDL_Renderer* renderer)
 	{
+		const auto& physicalW = blooDot::Settings::GetPhysicalArenaWidth();
+		const auto& physicalH = blooDot::Settings::GetPhysicalArenaHeight();
+
 		menuRunning = true;
 
 		SDL_Rect outerMenuRect{ 150,45,340,390 };
@@ -107,6 +110,8 @@ namespace blooDot::MenuInGame
 		);
 
 		unsigned short frame = 0;
+		constexpr auto topItem = IGMI_DISMISS;
+		constexpr auto bottomItem = IGMI_LEAVE;
 		while (menuRunning)
 		{
 			while (SDL_PollEvent(&menuEvent) != 0)
@@ -123,7 +128,7 @@ namespace blooDot::MenuInGame
 					case SDL_SCANCODE_UP:
 					case SDL_SCANCODE_KP_8:
 					case SDL_SCANCODE_W:
-						if (menuSelection == IGMI_DISMISS)
+						if (menuSelection == topItem)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
@@ -138,7 +143,7 @@ namespace blooDot::MenuInGame
 					case SDL_SCANCODE_DOWN:
 					case SDL_SCANCODE_KP_2:
 					case SDL_SCANCODE_S:
-						if (menuSelection == IGMI_LEAVE)
+						if (menuSelection == bottomItem)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
@@ -152,13 +157,13 @@ namespace blooDot::MenuInGame
 
 					case SDL_SCANCODE_PAGEDOWN:
 					case SDL_SCANCODE_END:
-						if (menuSelection == IGMI_LEAVE)
+						if (menuSelection == bottomItem)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
 						else
 						{
-							menuSelection = IGMI_LEAVE;
+							menuSelection = bottomItem;
 							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 						}
 
@@ -166,13 +171,13 @@ namespace blooDot::MenuInGame
 
 					case SDL_SCANCODE_PAGEUP:
 					case SDL_SCANCODE_HOME:
-						if (menuSelection == IGMI_DISMISS)
+						if (menuSelection == topItem)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
 						else
 						{
-							menuSelection = IGMI_DISMISS;
+							menuSelection = topItem;
 							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 						}
 
@@ -211,15 +216,16 @@ namespace blooDot::MenuInGame
 				menuRunning = false;
 			};
 
-			DrawLabel(renderer, 286, 54, titleTexture, &titleRect);
+			DrawLabel(renderer, 283, 54, titleTexture, &titleRect);
 
-			const auto drawingTexture = BeginRenderDrawing(renderer, GodsPreferredWidth, GodsPreferredHight);
+			const auto drawingTexture = BeginRenderDrawing(renderer, physicalW, physicalH);
 			if (drawingTexture) [[likely]]
 			{
 				const auto drawingSink = GetDrawingSink();
+				constexpr auto firstY = 94;
 				const int stride = 46;
 				InGameMenuItems itemToDraw = IGMI_DISMISS;
-				for (auto y = 94; y < 400; y += stride)
+				for (auto y = firstY; y < 400; y += stride)
 				{
 					DrawButton(drawingSink, 195, y, 250, 42, itemToDraw == menuSelection);
 					if (itemToDraw == menuSelection)
@@ -233,13 +239,13 @@ namespace blooDot::MenuInGame
 
 				EndRenderDrawing(renderer, drawingTexture);
 
-				DrawLabel(renderer, 235, 100 + 0 * stride, dismissTexture, &dismissRect);
-				DrawLabel(renderer, 235, 100 + 1 * stride, saveTexture, &saveRect);
-				DrawLabel(renderer, 235, 100 + 2 * stride, inventoryTexture, &inventoryRect);
-				DrawLabel(renderer, 235, 100 + 3 * stride, mapTexture, &mapRect);
-				DrawLabel(renderer, 235, 100 + 4 * stride, controlsTexture, &controlsRect);
-				DrawLabel(renderer, 235, 100 + 5 * stride, knowledgebaseTexture, &knowledgebaseRect);
-				DrawLabel(renderer, 235, 100 + 6 * stride, leaveTexture, &leaveRect);
+				DrawLabel(renderer, 235, firstY + 0 * stride, dismissTexture, &dismissRect);
+				DrawLabel(renderer, 235, firstY + 1 * stride, saveTexture, &saveRect);
+				DrawLabel(renderer, 235, firstY + 2 * stride, inventoryTexture, &inventoryRect);
+				DrawLabel(renderer, 235, firstY + 3 * stride, mapTexture, &mapRect);
+				DrawLabel(renderer, 235, firstY + 4 * stride, controlsTexture, &controlsRect);
+				DrawLabel(renderer, 235, firstY + 5 * stride, knowledgebaseTexture, &knowledgebaseRect);
+				DrawLabel(renderer, 235, firstY + 6 * stride, leaveTexture, &leaveRect);
 			}
 
 			SDL_RenderPresent(renderer);
