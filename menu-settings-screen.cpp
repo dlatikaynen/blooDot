@@ -36,9 +36,12 @@ namespace blooDot::MenuSettingsScreen
 	{
 		constexpr int const startY = 94;
 		constexpr int const stride = 46;
+		constexpr int const labelInsetX = 45;
 		constexpr int backGap = stride / 2;
 		constexpr int const sliderY = startY + stride + backGap;
-		constexpr SDL_Rect const carouselDestRect = { 195,sliderY,vignetteWidth,vignetteHeight };
+		
+		constexpr SDL_Rect outerMenuRect{ 150,45,340,390 };
+		constexpr SDL_Rect const carouselDestRect = { outerMenuRect.x + labelInsetX,sliderY,vignetteWidth,vignetteHeight };
 
 		_PrepareControls(renderer);
 		InitializeBoydsa(GodsPreferredWidth, GodsPreferredHight, 50, 370);
@@ -47,7 +50,6 @@ namespace blooDot::MenuSettingsScreen
 		movingToResolution = ::Settings.SettingViewportResolution;
 		sliderOffsetLeft = static_cast<int>(selectedResolution) * vignetteWidth + bounceMargin;
 
-		SDL_Rect outerMenuRect{ 150,45,340,390 };
 		SDL_Rect titleRect{ 0,0,0,0 };
 		SDL_Rect cancelRect{ 0,0,0,0 };
 		SDL_Rect hintRect{ 0,0,0,0 };
@@ -242,11 +244,12 @@ namespace blooDot::MenuSettingsScreen
 				RenderBoydsa(drawingSink);
 
 				ScreenSettingsMenuItems itemToDraw = SSMI_CANCEL;
+				constexpr int const buttonLeft = outerMenuRect.x + labelInsetX;
 				for (auto y = startY; y < 200; y += stride)
 				{
 					DrawButton(
 						drawingSink,
-						195,
+						buttonLeft,
 						y,
 						vignetteWidth,
 						itemToDraw > SSMI_CANCEL ? vignetteHeight : 42,
@@ -257,13 +260,13 @@ namespace blooDot::MenuSettingsScreen
 					{
 						if (menuSelection == SSMI_CANCEL)
 						{
-							DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);
-							DrawChevron(drawingSink, 195 + vignetteWidth + 7, y + 21, true, frame);
+							DrawChevron(drawingSink, buttonLeft - 7, y + 21, false, frame);
+							DrawChevron(drawingSink, buttonLeft + vignetteWidth + 7, y + 21, true, frame);
 						}
 						else
 						{
-							DrawChevron(drawingSink, 195 - 9, y + 105, true, frame);
-							DrawChevron(drawingSink, 195 + vignetteWidth + 9, y + 105, false, frame);
+							DrawChevron(drawingSink, buttonLeft - 9, y + 105, true, frame);
+							DrawChevron(drawingSink, buttonLeft + vignetteWidth + 9, y + 105, false, frame);
 						}
 					}
 

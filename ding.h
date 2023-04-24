@@ -23,7 +23,11 @@ enum Ding : unsigned short
 	Schaed,
 	Snow,
 	ChelF,
-	RooofMesh
+	RooofMesh,
+	Player1,
+	Player2,
+	Player3,
+	Player4
 };
 
 DingProps GetDingDefaultProps(const Ding ding);

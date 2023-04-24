@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "renderstate.h"
+#include "playerstate.h"
 #include "ding.h"
 #include "xlations.h"
 
@@ -27,6 +28,16 @@ int flapoverTresholdY = 0;
 SDL_Texture* flapsFloor[9];
 SDL_Texture* flapsWalls[9];
 SDL_Texture* flapsRooof[9];
+
+MobState* player1 = NULL;
+MobState* player2 = NULL;
+MobState* player3 = NULL;
+MobState* player4 = NULL;
+
+DingLocator* sprite1 = NULL;
+DingLocator* sprite2 = NULL;
+DingLocator* sprite3 = NULL;
+DingLocator* sprite4 = NULL;
 
 #ifndef NDEBUG
 SDL_Texture* debugFlap;
@@ -684,12 +695,147 @@ void RenderFloorQuart()
 	SDL_RenderCopy(GameViewRenderer, flapsFloor[flapIndirection[flapIndexSE]], &quadrantSESrc, &quadrantSEDst);
 }
 
+void NudgePlayer(int playerIndex, int accelerationX, int accelerationY)
+{
+	if (playerIndex == iP1)
+	{
+		player1->Offset.x += accelerationX;
+		player1->Offset.y += accelerationY;
+	}
+}
+
 void RenderMobs()
 {
-	const auto& schaed = GetDing(Ding::Schaed);
-	constexpr SDL_Rect dest = { 10,10,49,49 };
+	if (player1 == NULL)
+	{
+		player1 = blooDot::Player::GetState(iP1);
+	}
+
+	if (sprite1 == NULL)
+	{
+		sprite1 = GetDing(player1->WhoIsIt);
+	}
+
+	if (blooDot::Player::NumPlayers >= 2)
+	{
+		if (player2 == NULL)
+		{
+			player2 = blooDot::Player::GetState(iP2);
+		}
+
+		if (blooDot::Player::NumPlayers >= 3)
+		{
+			if (player3 == NULL)
+			{
+				player3 = blooDot::Player::GetState(iP3);
+			}
+
+			if (player4 == NULL && blooDot::Player::NumPlayers == 4)
+			{
+				player4 = blooDot::Player::GetState(iP4);
+			}
+		}
+	}
+
+	const SDL_Rect dst1 = {
+		player1->Offset.x,
+		player1->Offset.y,
+		49,
+		49 
+	};
+
 	constexpr SDL_Point center = { 25,25 };
-	SDL_RenderCopyEx(GameViewRenderer, schaed->onSheet, &schaed->src, &dest, 35, &center, SDL_RendererFlip::SDL_FLIP_VERTICAL);
+
+	SDL_RenderCopyEx(
+		GameViewRenderer,
+		sprite1->onSheet,
+		&sprite1->src,
+		&dst1,
+		(const double)player1->Orientation,
+		&center,
+		SDL_RendererFlip::SDL_FLIP_VERTICAL
+	);
+
+	if(blooDot::Player::NumPlayers == 1 || player2 == NULL)
+	{
+		return;
+	}
+
+	if (sprite2 == NULL)
+	{
+		sprite2 = GetDing(player2->WhoIsIt);
+	}
+
+	const SDL_Rect dst2 = {
+		player2->Offset.x,
+		player2->Offset.y,
+		49,
+		49
+	};
+
+	SDL_RenderCopyEx(
+		GameViewRenderer,
+		sprite2->onSheet,
+		&sprite2->src,
+		&dst2,
+		(const double)player2->Orientation,
+		&center,
+		SDL_RendererFlip::SDL_FLIP_VERTICAL
+	);
+
+	if (blooDot::Player::NumPlayers == 2 || player3 == NULL)
+	{
+		return;
+	}
+
+	if (sprite3 == NULL)
+	{
+		sprite3 = GetDing(player3->WhoIsIt);
+	}
+
+	const SDL_Rect dst3 = {
+		player3->Offset.x,
+		player3->Offset.y,
+		49,
+		49
+	};
+
+	SDL_RenderCopyEx(
+		GameViewRenderer,
+		sprite3->onSheet,
+		&sprite3->src,
+		&dst3,
+		(const double)player3->Orientation,
+		&center,
+		SDL_RendererFlip::SDL_FLIP_VERTICAL
+	);
+
+	if (blooDot::Player::NumPlayers == 3 || player4 == NULL)
+	{
+		return;
+	}
+
+	if (sprite4 == NULL)
+	{
+		sprite4 = GetDing(player4->WhoIsIt);
+	}
+
+	const SDL_Rect dst4 = {
+		player4->Offset.x,
+		player4->Offset.y,
+		49,
+		49
+	};
+
+	SDL_RenderCopyEx(
+		GameViewRenderer,
+		sprite4->onSheet,
+		&sprite4->src,
+		&dst4,
+		(const double)player4->Orientation,
+		&center,
+		SDL_RendererFlip::SDL_FLIP_VERTICAL
+	);
 }
 
 void RenderWallsAndRooofBung()

@@ -807,6 +807,15 @@
     <Image Include="res\icon-hd.png">
       <Filter>Resource Files\ui</Filter>
     </Image>
+    <Image Include="res\player2.png">
+      <Filter>Resource Files\mobs</Filter>
+    </Image>
+    <Image Include="res\player4.png">
+      <Filter>Resource Files\mobs</Filter>
+    </Image>
+    <Image Include="res\player1.png">
+      <Filter>Resource Files\mobs</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="LICENSE.txt" />

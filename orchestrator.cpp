@@ -75,6 +75,22 @@ namespace blooDot::Orchestrator
 						break;
 
 #endif
+					case SDL_SCANCODE_A:
+						NudgePlayer(iP1, -5, 0);
+						break;
+
+					case SDL_SCANCODE_D:
+						NudgePlayer(iP1, 5, 0);
+						break;
+
+					case SDL_SCANCODE_S:
+						NudgePlayer(iP1, 0, 5);
+						break;
+
+					case SDL_SCANCODE_W:
+						NudgePlayer(iP1, 0, -5);
+						break;
+
 					case SDL_SCANCODE_LEFT:
 					case SDL_SCANCODE_KP_4:
 						Scroll(-5, 0);
@@ -123,8 +139,8 @@ namespace blooDot::Orchestrator
 					goto THAT_ESCALATED_QUICKLY;
 				}
 			}
-NEXTFRAME:
 
+NEXTFRAME:
 			SDL_RenderClear(renderer);
 			GameViewRenderFrame();
 			SDL_RenderPresent(renderer);
@@ -139,7 +155,7 @@ NEXTFRAME:
 #ifndef NDEBUG
 			if (++frameNumber % 60 == 0)
 			{
-				std::cout << "FRAME TIME " << frameTime << "\n";
+				std::cout << "FRAME TIME " << frameTime << ", SLACK " << frameSlack << "\n";
 			}
 #endif
 		}

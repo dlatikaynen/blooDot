@@ -25,6 +25,8 @@ typedef enum VitalSlotDedicationEnum
 
 typedef struct MobStateStruct
 {
+	Ding WhoIsIt;
+
 	// bits 0..1 --> NE petal, 2..3 --> NW petal, 4..5 --> SW petal, 6..7 --> SE petal
 	Uint8 SlotDedication; 
 
@@ -47,6 +49,7 @@ namespace blooDot::Player
 {
 	extern int NumPlayers;
 
+	void InitializePlayers(int numPlayers);
 	MobState* GetState(int ofPlayerIndex);
 	void VitalIncrease(MobState* mobState, VitalSlotDedication dedication);
 	void VitalDecrease(MobState* mobState, VitalSlotDedication dedication);

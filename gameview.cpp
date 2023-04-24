@@ -4,6 +4,7 @@
 #include "enums.h"
 #include "settings.h"
 #include "playerhud.h"
+#include "playerstate.h"
 
 /* the gameview knows where we are in the world.
  * the gamestate tracks mobs and other entities
@@ -42,6 +43,7 @@ bool GameviewEnterWorld()
 	}
 
 	PopulateAllFlaps();
+	blooDot::Player::InitializePlayers(4);
 	gotHud = blooDot::Hud::Initialize();
 
 #ifndef NDEBUG

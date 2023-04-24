@@ -6,6 +6,12 @@ DingProps GetDingDefaultProps(const Ding ding)
 {
 	switch (ding)
 	{
+	case Ding::Player1:
+	case Ding::Player2:
+	case Ding::Player3:
+	case Ding::Player4:
+		return DingProps::Mob | DingProps::Walls;
+
 	case Ding::BarrelIndigo:
 	case Ding::BarrelWood:
 	case Ding::BarrelLoaded:
@@ -36,6 +42,18 @@ int GetDingResourceKey(const Ding ding)
 {
 	switch (ding)
 	{
+	case Ding::Player1:
+		return CHUNK_KEY_MOBS_PLAYER1;
+
+	case Ding::Player2:
+		return CHUNK_KEY_MOBS_PLAYER2;
+
+	case Ding::Player3:
+		return CHUNK_KEY_MOBS_PLAYER3;
+
+	case Ding::Player4:
+		return CHUNK_KEY_MOBS_PLAYER4;
+
 	case Ding::BarrelIndigo:
 		return CHUNK_KEY_DINGS_BARREL_INDIGO;
 
@@ -88,6 +106,18 @@ char const* GetDingName(const Ding ding)
 {
 	switch (ding)
 	{
+	case Ding::Player1:
+		return literalplayerName1;
+
+	case Ding::Player2:
+		return literalplayerName2;
+
+	case Ding::Player3:
+		return literalplayerName3;
+
+	case Ding::Player4:
+		return literalplayerName4;
+
 	case Ding::WallClassic:
 		return literaldingNameWallClassic;
 

@@ -4,6 +4,7 @@
 extern bool InitializeNewWorld();
 extern bool GameviewEnterWorld();
 extern void GameViewRenderFrame();
+extern void NudgePlayer(int playerIndex, int accelerationX, int accelerationY);
 extern void Scroll(int, int);
 extern void TeardownDingSheets();
 extern void GameviewTeardown();
