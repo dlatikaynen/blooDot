@@ -91,6 +91,38 @@ namespace blooDot::Orchestrator
 						NudgePlayer(iP1, 0, -5);
 						break;
 
+					case SDL_SCANCODE_F:
+						NudgePlayer(iP2, -5, 0);
+						break;
+
+					case SDL_SCANCODE_H:
+						NudgePlayer(iP2, 5, 0);
+						break;
+
+					case SDL_SCANCODE_G:
+						NudgePlayer(iP2, 0, 5);
+						break;
+
+					case SDL_SCANCODE_T:
+						NudgePlayer(iP2, 0, -5);
+						break;
+
+					case SDL_SCANCODE_J:
+						NudgePlayer(iP3, -5, 0);
+						break;
+
+					case SDL_SCANCODE_L:
+						NudgePlayer(iP3, 5, 0);
+						break;
+
+					case SDL_SCANCODE_K:
+						NudgePlayer(iP3, 0, 5);
+						break;
+
+					case SDL_SCANCODE_I:
+						NudgePlayer(iP3, 0, -5);
+						break;
+
 					case SDL_SCANCODE_LEFT:
 					case SDL_SCANCODE_KP_4:
 						Scroll(-5, 0);

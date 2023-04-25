@@ -697,10 +697,28 @@ void RenderFloorQuart()
 
 void NudgePlayer(int playerIndex, int accelerationX, int accelerationY)
 {
-	if (playerIndex == iP1)
+	switch (playerIndex)
 	{
+	case iP1:
 		player1->Offset.x += accelerationX;
 		player1->Offset.y += accelerationY;
+		break;
+
+	case iP2:
+		player2->Offset.x += accelerationX;
+		player2->Offset.y += accelerationY;
+		break;
+
+	case iP3:
+		player3->Offset.x += accelerationX;
+		player3->Offset.y += accelerationY;
+		break;
+
+	case iP4:
+		player4->Offset.x += accelerationX;
+		player4->Offset.y += accelerationY;
+		break;
+
 	}
 }
 
