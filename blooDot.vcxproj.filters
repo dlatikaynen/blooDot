@@ -717,6 +717,15 @@
     <None Include="res\dingdescriptions.1.bml">
       <Filter>Resource Files\dingdescr</Filter>
     </None>
+    <None Include="res\gameplay.ligma">
+      <Filter>Planning</Filter>
+    </None>
+    <None Include="res\quests.ligma">
+      <Filter>Planning</Filter>
+    </None>
+    <None Include="res\worldbuilding.ligma">
+      <Filter>Planning</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\lib\x64\SDL2.lib">

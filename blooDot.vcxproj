@@ -494,7 +494,10 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </None>
     <None Include="res\dingdescriptions.1.bml" />
+    <None Include="res\gameplay.ligma" />
     <None Include="res\manufacturer.dlg" />
+    <None Include="res\quests.ligma" />
+    <None Include="res\worldbuilding.ligma" />
     <None Include="SDL\lib\x64\libcairo-2.dll" />
     <None Include="SDL\lib\x64\libexpat-1.dll" />
     <None Include="SDL\lib\x64\libfontconfig-1.dll" />

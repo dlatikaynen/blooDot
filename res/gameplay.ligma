@@ -1,0 +1,71 @@
+
+  Inventory.
+└───────────
+
+  The players share a hammerspace. It is full of squares with the silhouette
+  of a hammer each, and the players refer to it as the hammerspace in-game.
+  The hammer silhouette is replaced by the actual object whenever an inventory
+  slot is occupied by an actual object. There can be multiple instances of
+  an object, which is indicated by a vertically scroll-extending slot and a number.
+  Players also have their own private section in each hammerspace. The hammerspace
+  is in itself organized and explorable like the overworld itself. it is a kind
+  of "physical mind palace". Also, the memories can be stored there in a mine.
+
+  Examples of inventory objects:
+  .) Hourflower - a plant that players can smoke to get more time in an otherwise
+     life-draining environment. It grows near the snail of life's slime trail
+  .) Hourflour - a dried plant that players can snort to get even more time in an
+     otherwise life-draining environment
+
+
+  Gameplay UX in general.
+└────────────────────────
+
+  There are four players.
+  
+  If they are controlled from one computer/display unit, they cannot leave the visible
+  screen area:
+  
+  If they attempt to do so anyway, they are embubbled and bounce in the vicinity of the
+  screen edge(s) until they intersect with an unbubbled player so they debubble themselves.
+  There is no way to embubble oneself without attempting to escape the viewport.
+  When two players attempt to escape the viewport on opposite edges at the same time,
+  the player with more HP/EP prevails whilst the other one is embubbled. When they are
+  the same, the player with the lower player index wins.
+
+  When they are controlled from different computer/display units linked over the network,
+  then they can move freely and no embubbling ever takes place across a system boundary.
+
+  The viewport will scroll in the leading player's general direction. Leading player is the
+  *moving* player with the most HP/EP, for those with identical values the one with the 
+  lower player index. Players that are not currently moving at all (ie., not attempting to
+  "drag the scroll") are always embubbled regardless of the hacking order.
+
+  Players who die are embubbled as skeletons until they are touched by the snail of life
+  or fly over its slime track or are given a vial with its slime by another player.
+
+  If there is only one player left and that player also dies (or, in the simplest scenario,
+  the player in a single-player session dies), then the game ends and the only option to
+  carry on with the game is to respawn at the last savepoint. Savepoints, for this purpose,
+  contain the exact positions of players at the moment of saving. An interesting opportunity
+  for multiplayer glitches will be the fact that the EnterWorld logic upon savepoint loading
+  will actively "smartly" reposition individual players' spawnpoints if there is something
+  dynamic going on where they last stood preventing them from spawning exactly there.
+
+  Controllers with right stick can "turn the camera" so the viewport rotates. This should
+  only be supported if all players have 360° sticks since otherwise following a direction
+  would become unnecessarily tedious.
+
+  World rendering composition, top-down:
+
+    Skies <> also darkness masks, lighting and particles | does not scroll with the viewport
+    Rooof <> players and mobs (sometimes)                | scrolls with the viewport
+    Walls <> players and mobs (mostly)                   | scrolls with the viewport
+    Floor                                                | scrolls with the viewport
+
+  Whenever there is a secret entrance into a roofed, wall-like structure,
+  or a bigger wall-like structure,
+  then the roof layer will be used to uncover that area, and a player entering
+  the hidden area will have a circular transparency mask piercing the roof layer
+  around that area, so that the wall and floor section of the hidden area becomes
+  visible in their immediate vicinity.
