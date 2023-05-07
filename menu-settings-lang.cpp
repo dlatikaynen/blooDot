@@ -24,8 +24,8 @@ namespace blooDot::MenuSettingsLang
 	SDL_Event langSettingsMenuEvent;
 	bool langSettingsMenuRunning = false;
 	auto menuSelection = LangSettingsMenuItems::LSMI_CANCEL;
-	auto selectedLanguage = UserInterfaceLanguages::UIL_ENGLISH;
-	auto movingToLanguage = UserInterfaceLanguages::UIL_ENGLISH;
+	auto selectedLanguage = UserInterfaceLanguages::UIL_AMERICAN;
+	auto movingToLanguage = UserInterfaceLanguages::UIL_AMERICAN;
 	SDL_Texture* slidingLangs;
 	int sliderTextureWidth;
 	int sliderOffsetLeft = bounceMargin;
@@ -127,7 +127,7 @@ namespace blooDot::MenuSettingsLang
 							menuSelection = LSMI_USER_INTERFACE_LANGUAGE;
 						}
 
-						if (selectedLanguage == UserInterfaceLanguages::UIL_ENGLISH)
+						if (selectedLanguage == UserInterfaceLanguages::UIL_AMERICAN)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
@@ -136,7 +136,7 @@ namespace blooDot::MenuSettingsLang
 							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 							movingToLanguage = static_cast<UserInterfaceLanguages>(static_cast<int>(selectedLanguage) - 1);
 						}
-						else if (movingToLanguage != UserInterfaceLanguages::UIL_ENGLISH)
+						else if (movingToLanguage != UserInterfaceLanguages::UIL_AMERICAN)
 						{
 							--movingToLanguage;
 						}

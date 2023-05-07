@@ -2,7 +2,7 @@
 
 extern const char* literalLCID;
 extern const char* literalLanguageName;
-extern const char* literalLanguageNameEnglish;
+extern const char* literalLanguageNameAmerican;
 extern const char* literalAlienMainMenuLabel;
 extern const char* literalAlienLoadMenuLabel;
 extern const char* literalAlienSettingsMenuLabel;

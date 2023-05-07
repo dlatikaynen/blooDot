@@ -32,7 +32,7 @@ typedef struct SettingsStruct
 	char Preamble8 = '\5';
 	char Preamble9 = '\0';
 	ViewportResolutions SettingViewportResolution = VR_TEMPLE;
-	UserInterfaceLanguages SettingUserInterfaceLanguage = UIL_ENGLISH;
+	UserInterfaceLanguages SettingUserInterfaceLanguage = UIL_AMERICAN;
 	unsigned short CurrentSavegameIndex = 0;  // those are 1-based and appear in the file name
 	unsigned short OccupiedSavegameSlots = 0; // this is a bitmask with the LSB corresponding to savegameindex 1
 } SettingsStruct;

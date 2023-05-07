@@ -4,7 +4,7 @@ namespace blooDot::ua
 {
 	constexpr char const* _literal_ua_LCID = "ua";
 	constexpr char const* _literal_ua_LanguageName = "українська";
-	constexpr char const* _literal_ua_LanguageNameEnglish = "Ukrainian";
+	constexpr char const* _literal_ua_LanguageNameAmerican = "Ukrainian";
 	constexpr char const* _literal_ua_AlienMainMenuLabel = "mEnmenV";
 	constexpr char const* _literal_ua_AlienLoadMenuLabel = "lOd";
 	constexpr char const* _literal_ua_AlienSettingsMenuLabel = "SetiNz";
@@ -59,9 +59,9 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_SettingsScreenFullResolution = "$w x $h";
 	constexpr char const* _literal_ua_SettingsScreenFullDetails = "I paid for the whole screen,\nI'mma use the whole screen";
 	constexpr char const* _literal_ua_MessageInsufficientScreenSize = "You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.";
-	constexpr char const* _literal_ua_SettingsLanguageEN = "[en]";
+	constexpr char const* _literal_ua_SettingsLanguageEN = "[am]";
 	constexpr char const* _literal_ua_SettingsLanguageENDetails = "American";
-	constexpr char const* _literal_ua_SettingsLanguageENName = "English";
+	constexpr char const* _literal_ua_SettingsLanguageENName = "American";
 	constexpr char const* _literal_ua_SettingsLanguageFI = "[fi]";
 	constexpr char const* _literal_ua_SettingsLanguageFIDetails = "Suomen kieli";
 	constexpr char const* _literal_ua_SettingsLanguageFIName = "Finnish";

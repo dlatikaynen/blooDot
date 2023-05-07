@@ -37,3 +37,4 @@ constexpr int const CHUNK_KEY_MOBS_PLAYER2 = 33;
 constexpr int const CHUNK_KEY_MOBS_PLAYER3 = 34;
 constexpr int const CHUNK_KEY_MOBS_PLAYER4 = 35;
 constexpr int const CHUNK_KEY_DLG_MANUFACTURER = 36;
+constexpr int const CHUNK_KEY_DING_DESCRIPTIONS_1 = 37;

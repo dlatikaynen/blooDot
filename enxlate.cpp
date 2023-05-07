@@ -48,7 +48,7 @@ int Xlate()
 				}
 				else
 				{
-					if (lcid == "[**]" || lcid == "[en]")
+					if (lcid == "[**]" || lcid == "[am]")
 					{
 						currentIdentifier.HasEn = true;
 						currentIdentifier.en = literal;

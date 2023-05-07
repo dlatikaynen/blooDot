@@ -169,6 +169,21 @@ char const* GetDingName(const Ding ding)
 	}
 }
 
+int GetDingDescriptionsResourceKey(const Ding)
+{
+	return CHUNK_KEY_DING_DESCRIPTIONS_1;
+}
+
+char const* GetDingDescriptionIndexEntry(const Ding _ding)
+{
+	return (char const *)_ding;
+}
+
+BloodotMarkup* GetDingDescription(const Ding _ding)
+{
+	return (BloodotMarkup *)_ding;
+}
+
 void DrawDing(const Ding ding, cairo_t* canvas)
 {
 	switch (ding)

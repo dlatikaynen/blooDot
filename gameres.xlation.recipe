@@ -1,17 +1,17 @@
 LCID
-	[en]	en
+	[am]	am
 	[de]	de
 	[fi]	fi
 	[ua]	ua
 
 LanguageName
-	[en]	English
+	[am]	American
 	[de]	Deutsch
 	[fi]	Suomi
 	[ua]	українська
 
-LanguageNameEnglish
-	[en]	American
+LanguageNameAmerican
+	[am]	American
 	[de]	German
 	[fi]	Finnish
 	[ua]	Ukrainian
@@ -41,138 +41,138 @@ Manufacturer
 	[**]	Copyright zOzz FlaminginSarjakuvatOj
 
 MenuContinue
-	[en]	Continue
+	[am]	Continue
 	[de]	Fortsetzen
 	[fi]	Jatkaa
 	[ua]	Продовжити
 
 MenuLoad
-	[en]	Load
+	[am]	Load
 	[de]	Laden
 	[fi]	Lataa
 	[ua]	Завантажити
 
 MenuSingle
-	[en]	Single player
+	[am]	Single player
 	[de]	Einzelspieler
 	[ua]	Одиночний режим
 
 MenuLocalMulti
-	[en]	Local multiplayer
+	[am]	Local multiplayer
 	[de]	Lokal Mehrspieler
 	[ua]	Лок. мультиплеер
 
 MenuNetMulti
-	[en]	Net multiplayer
+	[am]	Net multiplayer
 	[de]	Netz Mehrspieler
 	[ua]	Мереж. мультипл.
 
 MenuSettings
-	[en]	Settings
+	[am]	Settings
 	[de]	Einstellungen
 	[fi]	Asetukset
 	[ua]	Налаштування
 
 MenuSave
-	[en]	Save
+	[am]	Save
 	[de]	Speichern
 	[fi]	Tallenna
 	[ua]	Зберегти
 
 MenuExit
-	[en]	Exit
+	[am]	Exit
 	[de]	Beenden
 	[fi]	Poistu
 	[ua]	Вийти
 
 MenuBack
-	[en]	Back
+	[am]	Back
 	[de]	Zurück
 	[fi]	Takaisin
 	[ua]	Назад
 
 MenuDismiss
-	[en]	Dismiss
+	[am]	Dismiss
 	[de]	Weiter
 	[fi]	Sivuutta
 	[ua]	Залишся
 
 MenuCancel
-	[en]	Cancel
+	[am]	Cancel
 	[de]	Abbrechen
 	[fi]	Peruutta
 	[ua]	Скасувати
 
 MenuOk
-	[en]	Ok
+	[am]	Ok
 	[de]	Ok
 	[fi]	Joo
 	[ua]	OK
 
 MenuLeave
-	[en]	Leave
+	[am]	Leave
 	[de]	Verlassen
 	[fi]	Jättää
 	[ua]	Залишати
 
 MenuControls
-	[en]	Controls
+	[am]	Controls
 	[de]	Steuerung
 	[fi]	Ohjaus
 	[ua]	Kерування
 
 MenuKnowledgebase
-	[en]	Knowledgebase
+	[am]	Knowledgebase
 	[de]	Enzyklopädie
 	[fi]	Tietopohja
 	[ua]	база знань
 
 MenuMap
-	[en]	Map
+	[am]	Map
 	[fi]	Kartta
 	[de]	Karte
 	[ua]	Карта
 
 MenuInventory
-	[en]	Hammerspace
+	[am]	Hammerspace
 	[fi]	Inventaario
 	[de]	Inventar
 	[ua]	інвентар
 
 SettingsMenuScreensize
-	[en]	Screen size
+	[am]	Screen size
 	[de]	Grafikmodus
 	[fi]	Grafiikkatila
 	[ua]	режим відео
 
 SettingsMenuLanguage
-	[en]	Language
+	[am]	Language
 	[de]	Sprache
 	[fi]	Kieli
 	[ua]	Мова
 
 SettingsMenuHelp
-	[en]	Help
+	[am]	Help
 	[de]	Hilfe
 	[fi]	Apua
 	[ua]	Допомога
 
 SettingsMenuAbout
 	[de]	Über...
-	[en]	About...
+	[am]	About...
 	[fi]	Tietoja...
 	[ua]	Про...
 
 SettingsMenuScreensizeHint
-	[en]	This setting will only affect the game window.\r\nSetting does not apply to the launcher.
+	[am]	This setting will only affect the game window.\r\nSetting does not apply to the launcher.
 	[de]	Diese Einstellung wirkt nur auf das Spielfeld.\r\nDas Startfenster ändert sich nicht.
 
 ContinueEmptyHint
-	[en]	This timeline has nothing to continue from.\r\nYou may want to start a new game first.
+	[am]	This timeline has nothing to continue from.\r\nYou may want to start a new game first.
 	[de]	In dieser Zeitlinie ist nichts fortzusetzen.\r\nErst muss ein neues Spiel gestartet werden.
 
 LoadEmptyHint
-	[en]	This timeline contains no savegames to load.\r\nYou may want to start a new game first.
+	[am]	This timeline contains no savegames to load.\r\nYou may want to start a new game first.
 	[de]	In dieser Zeitlinie gibt es keine Spielstände.\r\nErst muss ein neues Spiel gestartet werden.
 
 SettingsScreenTemple
@@ -182,7 +182,7 @@ SettingsScreenTempleResolution
 	[**]	640 x 480
 
 SettingsScreenTempleDetails
-	[en]	A resolution that\npleases the Lord
+	[am]	A resolution that\npleases the Lord
 	[de]	Eine gottgefällige\nBildschirmauflösung
 
 SettingsScreenHercules
@@ -192,7 +192,7 @@ SettingsScreenHerculesResolution
 	[**]	720 x 348
 
 SettingsScreenHerculesDetails
-	[en]	Awesome amber\nabomination
+	[am]	Awesome amber\nabomination
 	[de]	Toller gelber\nAugenschaden
 
 SettingsScreenModeX
@@ -202,7 +202,7 @@ SettingsScreenModeXResolution
 	[**]	320 x 240
 
 SettingsScreenModexDetails
-	[en]	Doomed pixelated\nretro goodness
+	[am]	Doomed pixelated\nretro goodness
 	[de]	Pixelig und\naltmodisch
 
 SettingsScreenSVGA
@@ -212,7 +212,7 @@ SettingsScreenSVGAResolution
 	[**]	800 x 600
 
 SettingsScreenSVGADetails
-	[en]	Reasonably recent\nrectangular ratio
+	[am]	Reasonably recent\nrectangular ratio
 	[de]	Halbwegs moderne\nrechteckige Größe
 
 SettingsScreenNotebook
@@ -222,207 +222,207 @@ SettingsScreenNotebookResolution
 	[**]	1280 x 768
 
 SettingsScreenNotebookDetails
-	[en]	Seven twenty\npee
+	[am]	Seven twenty\npee
 	[de]	sieben zwanzig pe
 
 SettingsScreenSquare
-	[en]	Square
+	[am]	Square
 	[de]	Praktisch
 
 SettingsScreenSquareResolution
 	[**]	$h x $h
 
 SettingsScreenSquareDetails
-	[en]	Fullscreen\nbut square
+	[am]	Fullscreen\nbut square
 	[de]	Vollbild\naber quadratisch
 
 SettingsScreenFull
-	[en]	Full
+	[am]	Full
 	[de]	Voll
 
 SettingsScreenFullResolution
 	[**]	$w x $h
 
 SettingsScreenFullDetails
-	[en]	I paid for the whole screen,\nI'mma use the whole screen
+	[am]	I paid for the whole screen,\nI'mma use the whole screen
 	[de]	Ich zahle den ganzen Schirm,\nich nütze den ganzen Schirm
 
 MessageInsufficientScreenSize
-	[en]	You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.
+	[am]	You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.
 
 SettingsLanguageEN
-	[en]	[en]
+	[am]	[am]
 
 SettingsLanguageENDetails
-	[en]	American
+	[am]	American
 
 SettingsLanguageENName
-	[en]	English
+	[am]	American
 
 SettingsLanguageFI
-	[en]	[fi]
+	[am]	[fi]
 
 SettingsLanguageFIDetails
-	[en]	Suomen kieli
+	[am]	Suomen kieli
 
 SettingsLanguageFIName
-	[en]	Finnish
+	[am]	Finnish
 	[de]	Finnisch
 
 SettingsLanguageDE
-	[en]	[de]
+	[am]	[de]
 
 SettingsLanguageDEDetails
-	[en]	Deutsch
+	[am]	Deutsch
 
 SettingsLanguageDEName
-	[en]	German
+	[am]	German
 	[de]	Deutsch
 
 SettingsLanguageUA
-	[en]	[ua]
+	[am]	[ua]
 
 SettingsLanguageUADetails
 	[**]	українська
 
 SettingsLanguageUAName
-	[en]	Ukrainian
+	[am]	Ukrainian
 	[de]	Ukrainisch
 
 Savegame
-	[en]	Savegame
+	[am]	Savegame
 	[de]	Zeitlinie
 	[ua]	Зберегтигру
 
 SavegameBlank
-	[en]	Initial
+	[am]	Initial
 	[de]	Von Anfang
 	[ua]	Початковий
 
 SavepointSingular
-	[en]	1 savepoint
+	[am]	1 savepoint
 	[de]	1 Spielstand
 	[ua]	1 збереження
 
 SavepointPlural
-	[en]	$n savepoints
+	[am]	$n savepoints
 	[de]	$n Spielstände
 	[ua]	$n збереження
 
 Created
-	[en]	created
+	[am]	created
 	[de]	erstellt
 	[ua]	створено
 
 DialogTitleGpuChan
-	[en]	GPU-chan says,
+	[am]	GPU-chan says,
 	[de]	GPU-chan sagt
 	
 DialogBubbleGpuChan
-	[en]	Oh no,\nit's too\nbig!
+	[am]	Oh no,\nit's too\nbig!
 	[de]	O nein, das\nist zu groß!
 
 regionNameUnknown
-	[en]	Here be dragons
+	[am]	Here be dragons
 	[de]	Hier seyen Drachen
 
 regionNameScullery
-	[en]	The Scullery
+	[am]	The Scullery
 	[de]	Die Spülküche
 	[ua]	Кухня посуду
 
 mainQuestTitleAwning
-	[en]	The Awning of the Sage of Asparagus
+	[am]	The Awning of the Sage of Asparagus
 	[de]	Die Spargelrentnermarkise
 
 mainQuestTitleDrawing
-	[en]	The Drawing of the Cage of a Platypus
+	[am]	The Drawing of the Cage of a Platypus
 	[de]	Der Schnabeltierkäfiggrundriß
 	[fi]	Platypushäkinsuunnitelma
 	[ua]	План клітки качкодзьоба
 
 mainQuestTitleDrowning
-	[en]	The Drowning of the Wage of an Octopus
+	[am]	The Drowning of the Wage of an Octopus
 	[de]	Die Tintenfischgehaltsversenkung
 	[fi]	Kalmareiden palkanlasku
 	[ua]	Просідання зарплати спрута
 
 mainQuestTitleKermit
-	[en]	Get the Frog a Loan
+	[am]	Get the Frog a Loan
 	[de]	Gib dem Frosch Kredit
 
 dingNameWallClassic
-	[en]	Wall cube
+	[am]	Wall cube
 	[de]	Mauerwürfel
 
 dingNameBarrelIndigo
-	[en]	Premium cask
+	[am]	Premium cask
 	[de]	Premiumfaß
 
 dingNameBarrelWood
-	[en]	Wooden cask
+	[am]	Wooden cask
 	[de]	Holzfaß
 
 dingNameBarrelLoaded
-	[en]	Loaded barrel
+	[am]	Loaded barrel
 	[de]	Geladenes Faß
 
 dingNameFloorSlate
-	[en]	Slate floor
+	[am]	Slate floor
 	[de]	Schieferboden
 
 dingNameFloorPurple
-	[en]	Purple floor
+	[am]	Purple floor
 	[de]	Purpurboden
 
 dingNameFloorOchre
-	[en]	Ochre floor
+	[am]	Ochre floor
 	[de]	Ockerboden
 
 dingNameFloorRock
-	[en]	Stone floor
+	[am]	Stone floor
 	[de]	Steinboden
 
 dingNameFloorRockCracked
-	[en]	Cracked stone floor
+	[am]	Cracked stone floor
 	[de]	Beschädigter Steinboden
 
 dingNameLettuce
-	[en]	Lettuce
+	[am]	Lettuce
 	[de]	Salat
 
 dingNameSchaed
-	[en]	Skull
+	[am]	Skull
 	[de]	Schädel
 
 dingNameSnow
-	[en]	Snow
+	[am]	Snow
 	[de]	Schnee
 
 dingNameChelF
-	[en]	Fluorine
+	[am]	Fluorine
 	[de]	Fluor
 
 dingNameGrass
-	[en]	Grass
+	[am]	Grass
 	[de]	Rasen
 
 dingNameRooofMesh
-	[en]	Mesh
+	[am]	Mesh
 	[de]	Gitterrost
 
 playerName1
-	[en]	sipWsibasWn
+	[am]	sipWsibasWn
 
 playerName2
-	[en]	Ed
+	[am]	Ed
 
 playerName3
-	[en]	Cole Horn
+	[am]	Cole Horn
 
 playerName4
-	[en]	Toni
+	[am]	Toni
 
 dialogPlayer3Perennial
-	[en]	Are you threatening me?
+	[am]	Are you threatening me?
 	[de]	Willst du mir drohen?

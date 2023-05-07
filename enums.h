@@ -21,7 +21,7 @@ enum SoundEffect {
 };
 
 enum UserInterfaceLanguages : char {
-	UIL_ENGLISH,
+	UIL_AMERICAN,
 	UIL_FINNISH,
 	UIL_GERMAN,
 	UIL_UKRAINIAN

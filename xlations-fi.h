@@ -4,7 +4,7 @@ namespace blooDot::fi
 {
 	constexpr char const* _literal_fi_LCID = "fi";
 	constexpr char const* _literal_fi_LanguageName = "Suomi";
-	constexpr char const* _literal_fi_LanguageNameEnglish = "Finnish";
+	constexpr char const* _literal_fi_LanguageNameAmerican = "Finnish";
 	constexpr char const* _literal_fi_AlienMainMenuLabel = "mEnmenV";
 	constexpr char const* _literal_fi_AlienLoadMenuLabel = "lOd";
 	constexpr char const* _literal_fi_AlienSettingsMenuLabel = "SetiNz";
@@ -59,9 +59,9 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_SettingsScreenFullResolution = "$w x $h";
 	constexpr char const* _literal_fi_SettingsScreenFullDetails = "I paid for the whole screen,\nI'mma use the whole screen";
 	constexpr char const* _literal_fi_MessageInsufficientScreenSize = "You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.";
-	constexpr char const* _literal_fi_SettingsLanguageEN = "[en]";
+	constexpr char const* _literal_fi_SettingsLanguageEN = "[am]";
 	constexpr char const* _literal_fi_SettingsLanguageENDetails = "American";
-	constexpr char const* _literal_fi_SettingsLanguageENName = "English";
+	constexpr char const* _literal_fi_SettingsLanguageENName = "American";
 	constexpr char const* _literal_fi_SettingsLanguageFI = "[fi]";
 	constexpr char const* _literal_fi_SettingsLanguageFIDetails = "Suomen kieli";
 	constexpr char const* _literal_fi_SettingsLanguageFIName = "Finnish";

@@ -73,6 +73,9 @@
     <Filter Include="_Source Files\ui\offscreen">
       <UniqueIdentifier>{d2235282-5cfb-480c-bf22-00f8358755a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\dingdescr">
+      <UniqueIdentifier>{aeadab9e-2d85-4b37-8b38-b7d3210c6c6e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL\include\begin_code.h">
@@ -710,6 +713,9 @@
     </None>
     <None Include="res\manufacturer.dlg">
       <Filter>Resource Files\ui</Filter>
+    </None>
+    <None Include="res\dingdescriptions.1.bml">
+      <Filter>Resource Files\dingdescr</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

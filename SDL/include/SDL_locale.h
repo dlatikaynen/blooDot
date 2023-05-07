@@ -42,7 +42,7 @@ extern "C" {
 
 typedef struct SDL_Locale
 {
-    const char *language;  /**< A language name, like "en" for English. */
+    const char *language;  /**< A language name, like "am" for American. */
     const char *country;  /**< A country, like "US" for America. Can be NULL. */
 } SDL_Locale;
 
