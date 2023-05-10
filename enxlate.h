@@ -11,11 +11,11 @@ constexpr int const XlateReturnCodeSuccess = 0;
 typedef struct XlatableIdentifierStruct
 {
 	std::string Identifier;
-	bool HasEn;
+	bool HasAm;
 	bool HasDe;
 	bool HasFi;
 	bool HasUa;
-	std::string en;
+	std::string am;
 	std::string de;
 	std::string fi;
 	std::string ua;

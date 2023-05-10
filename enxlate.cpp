@@ -50,8 +50,8 @@ int Xlate()
 				{
 					if (lcid == "[**]" || lcid == "[am]")
 					{
-						currentIdentifier.HasEn = true;
-						currentIdentifier.en = literal;
+						currentIdentifier.HasAm = true;
+						currentIdentifier.am = literal;
 					}
 					if (lcid == "[de]")
 					{
@@ -80,7 +80,7 @@ int Xlate()
 
 				XlatableIdentifier newIdentifier;
 				newIdentifier.Identifier = rawLine.str();
-				newIdentifier.HasEn = false;
+				newIdentifier.HasAm = false;
 				newIdentifier.HasDe = false;
 				newIdentifier.HasFi = false;
 				newIdentifier.HasUa = false;
@@ -185,19 +185,19 @@ int Xlate()
 				switch(i)
 				{ 
 				case 1:
-					headerLangFile << (identifier.HasEn ? identifier.en : "");
+					headerLangFile << (identifier.HasAm ? identifier.am : "");
 					break;
 
 				case 2:
-					headerLangFile << (identifier.HasDe ? identifier.de : identifier.en);
+					headerLangFile << (identifier.HasDe ? identifier.de : identifier.am);
 					break;
 
 				case 3:
-					headerLangFile << (identifier.HasFi ? identifier.fi : identifier.en);
+					headerLangFile << (identifier.HasFi ? identifier.fi : identifier.am);
 					break;
 
 				case 4:
-					headerLangFile << (identifier.HasUa ? identifier.ua : identifier.en);
+					headerLangFile << (identifier.HasUa ? identifier.ua : identifier.am);
 					break;
 				}
 
