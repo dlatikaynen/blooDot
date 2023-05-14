@@ -528,6 +528,9 @@
     <ClInclude Include="offscreen-rendering.h">
       <Filter>_Headers</Filter>
     </ClInclude>
+    <ClInclude Include="region-banner.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -649,6 +652,9 @@
     </ClCompile>
     <ClCompile Include="offscreen-renderer-quest.cpp">
       <Filter>_Source Files\ui\offscreen</Filter>
+    </ClCompile>
+    <ClCompile Include="region-banner.cpp">
+      <Filter>_Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

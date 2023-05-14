@@ -5,6 +5,7 @@
 #include "settings.h"
 #include "playerhud.h"
 #include "playerstate.h"
+#include "region-banner.h"
 
 /* the gameview knows where we are in the world.
  * the gamestate tracks mobs and other entities
@@ -26,6 +27,7 @@ int viewportOffsetX = 0;
 int viewportOffsetY = 0;
 
 bool gotHud = false;
+bool gotRegionBanner = false;
 
 bool GameviewEnterWorld()
 {
@@ -45,6 +47,7 @@ bool GameviewEnterWorld()
 	PopulateAllFlaps();
 	blooDot::Player::InitializePlayers(4);
 	gotHud = blooDot::Hud::Initialize();
+	gotRegionBanner = blooDot::RegionBanner::Initialize();
 
 #ifndef NDEBUG
 	std::cout
@@ -90,9 +93,23 @@ void GameViewRenderFrame()
 	{
 		blooDot::Hud::Render();
 	}
+
+	if (gotRegionBanner)
+	{
+		blooDot::RegionBanner::Render();
+	}
 }
 
 void GameviewTeardown()
 {
 	RenderstateTeardown();
+	if (gotHud)
+	{
+		blooDot::Hud::Teardown();
+	}
+
+	if (gotRegionBanner)
+	{
+		blooDot::RegionBanner::Teardown();
+	}
 }

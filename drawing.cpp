@@ -75,6 +75,7 @@ SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget, const int canvasWidt
 
 	if (targetTexture)
 	{
+		SDL_SetTextureBlendMode(targetTexture, SDL_BLENDMODE_BLEND);
 		SDL_LockTexture(targetTexture, NULL, &pixels, &pitch);
 		const auto cairoSurface = cairo_image_surface_create_for_data(
 			static_cast<unsigned char*>(pixels),

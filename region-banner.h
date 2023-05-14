@@ -2,10 +2,10 @@
 #include <SDL.h>
 #include <SDL_render.h>
 
-namespace blooDot::Hud
+namespace blooDot::RegionBanner
 {
 	bool Initialize();
-	bool Redraw(int ofPlayerIndex);
+	bool Redraw(int ofRegion);
 	void Render();
 	void Teardown();
 }

@@ -14,7 +14,7 @@ namespace blooDot::Hud
 	constexpr int const Padding = 9;
 	constexpr Uint8 const LetterboxGray = 0xf;
 
-	SDL_Texture* Current[4];
+	SDL_Texture* Current[4] = { nullptr, nullptr, nullptr, nullptr };
 	SDL_Rect Destination[4];
 	SDL_Rect Letterboxes[2];
 	int letterboxWidth = 0;
@@ -99,6 +99,8 @@ namespace blooDot::Hud
 				ReportError("Failed to create a HUD texture", createError);
 				return false;
 			}
+
+			SDL_SetTextureBlendMode(Current[i], SDL_BlendMode::SDL_BLENDMODE_BLEND);
 
 			Current[i] = hudTexture;
 			if (!Redraw(i))
@@ -277,6 +279,17 @@ namespace blooDot::Hud
 		for (auto i = 0; i < blooDot::Player::NumPlayers; ++i)
 		{
 			SDL_RenderCopy(GameViewRenderer, Current[i], &Source, &Destination[i]);
+		}
+	}
+
+	void Teardown()
+	{
+		for (auto i = 0; i < 4; ++i)
+		{
+			if (Current[i])
+			{
+				SDL_DestroyTexture(Current[i]);
+			}
 		}
 	}
 }

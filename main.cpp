@@ -145,6 +145,16 @@ int main(int, char**)
 			break;
 		}
 
+		SDL_RendererInfo rendererInfo;
+		if(SDL_GetRendererInfo(renderer, &rendererInfo) != 0)
+		{
+			const auto infoError = SDL_GetError();
+			ReportError("Failed to obtain GPU renderer info", infoError);
+			break;
+		}
+
+		std::cout << "Gfx engine is " << rendererInfo.name << std::endl;
+
 		if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 8192) < 0)
 		{
 			const auto mixerError = Mix_GetError();

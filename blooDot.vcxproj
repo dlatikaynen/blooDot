@@ -226,6 +226,7 @@
     <ClCompile Include="offscreen-rendering.cpp" />
     <ClCompile Include="playerhud.cpp" />
     <ClCompile Include="playerstate.cpp" />
+    <ClCompile Include="region-banner.cpp" />
     <ClCompile Include="xlations.cpp" />
     <ClInclude Include="boydsa.h" />
     <ClInclude Include="cairo\cairo-deprecated.h" />
@@ -274,6 +275,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="playerhud.h" />
     <ClInclude Include="playerstate.h" />
+    <ClInclude Include="region-banner.h" />
     <ClInclude Include="renderstate.h" />
     <ClInclude Include="resource.h" />
     <ClCompile Include="boydsa.cpp" />
@@ -494,10 +496,19 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </None>
     <None Include="res\dingdescriptions.1.bml" />
-    <None Include="res\gameplay.ligma" />
+    <None Include="res\gameplay.ligma">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
     <None Include="res\manufacturer.dlg" />
-    <None Include="res\quests.ligma" />
-    <None Include="res\worldbuilding.ligma" />
+    <None Include="res\quests.ligma">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
+    <None Include="res\worldbuilding.ligma">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
     <None Include="SDL\lib\x64\libcairo-2.dll" />
     <None Include="SDL\lib\x64\libexpat-1.dll" />
     <None Include="SDL\lib\x64\libfontconfig-1.dll" />
