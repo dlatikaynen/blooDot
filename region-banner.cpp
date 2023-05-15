@@ -11,6 +11,11 @@ namespace blooDot::RegionBanner
 {
 	constexpr Uint8 const BannerGray = 0x80;
 	constexpr Uint8 const BannerTransparency = 0x6a;
+	constexpr const long AnimationCap = 5000;
+
+	bool animationStarted;
+	bool animationComplet;
+	long animationTickers;
 
 	SDL_Rect Source = { 0,0,0,0 };
 	SDL_Texture* Current = nullptr;
@@ -123,7 +128,38 @@ namespace blooDot::RegionBanner
 			return false;
 		}
 
+		_ResetAnimation();
+
 		return true;
+	}
+
+	void _ResetAnimation()
+	{
+		animationComplet = false;
+		animationStarted = false;
+	}
+
+	void Update()
+	{
+		if (animationComplet)
+		{
+			return;
+		}
+
+		if (!animationStarted)
+		{
+			animationTickers = 0;
+			animationStarted = true;
+		} 
+
+		--uprBar.w;
+		++lwrBar.x;
+
+		++animationTickers;
+		if (animationTickers == AnimationCap)
+		{
+			animationComplet = true;
+		}
 	}
 
 	void Render()

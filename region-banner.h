@@ -6,6 +6,9 @@ namespace blooDot::RegionBanner
 {
 	bool Initialize();
 	bool Redraw(int ofRegion);
+	void Update();
 	void Render();
 	void Teardown();
+
+	void _ResetAnimation();
 }

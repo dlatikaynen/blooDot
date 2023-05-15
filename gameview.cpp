@@ -96,6 +96,7 @@ void GameViewRenderFrame()
 
 	if (gotRegionBanner)
 	{
+		blooDot::RegionBanner::Update();
 		blooDot::RegionBanner::Render();
 	}
 }
