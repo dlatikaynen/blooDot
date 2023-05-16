@@ -12,10 +12,24 @@ namespace blooDot::RegionBanner
 	constexpr Uint8 const BannerGray = 0x80;
 	constexpr Uint8 const BannerTransparency = 0x6a;
 	constexpr const long AnimationCap = 5000;
+	constexpr const int nearIndent = 68;
 
+	/// <summary>
+	/// These banners' animations go like that:
+	/// we have the upper bar coming in from the far,
+	/// the lower bar coming in from the near,
+	/// and then the lower bar indents from the near to
+	/// until where the text is on the x,
+	/// which the upper bar mirrors from the far.
+	/// </summary>
 	bool animationStarted;
 	bool animationComplet;
 	long animationTickers;
+	int animationTraveled;
+	int animationDistance1;
+	int animationDistance2;
+	int animationPhase;
+	int animationShved;
 
 	SDL_Rect Source = { 0,0,0,0 };
 	SDL_Texture* Current = nullptr;
@@ -52,6 +66,12 @@ namespace blooDot::RegionBanner
 		uprBar.y = Destination.y;
 		lwrBar.x = Destination.x;
 		lwrBar.y = Destination.y + Destination.h - 14;
+
+		animationDistance1 = lwrBar.w;
+		animationDistance2 = nearIndent;
+		lwrBar.w = 0;
+		uprBar.x = Destination.x + Destination.w;
+		uprBar.w = 0;
 
 		const auto& bannerTexture = SDL_CreateTexture(
 			GameViewRenderer,
@@ -116,8 +136,13 @@ namespace blooDot::RegionBanner
 			CAIRO_FONT_WEIGHT_BOLD
 		);
 
+		cairo_move_to(canvas, nearIndent, 54);
+		cairo_set_antialias(canvas, CAIRO_ANTIALIAS_SUBPIXEL);
 		cairo_set_font_size(canvas, 35);
-		cairo_move_to(canvas, 68, 54);
+		cairo_font_options_t* fo = cairo_font_options_create();
+		cairo_get_font_options(canvas, fo);
+		cairo_font_options_set_antialias(fo, CAIRO_ANTIALIAS_SUBPIXEL);
+		cairo_set_font_options(canvas, fo);
 		cairo_show_text(canvas, regionStr.data());
 
 		EndRenderDrawing(GameViewRenderer, canvasTexture);
@@ -137,6 +162,9 @@ namespace blooDot::RegionBanner
 	{
 		animationComplet = false;
 		animationStarted = false;
+		animationTraveled = 0;
+		animationPhase = 1;
+		animationShved = 0;
 	}
 
 	void Update()
@@ -150,10 +178,35 @@ namespace blooDot::RegionBanner
 		{
 			animationTickers = 0;
 			animationStarted = true;
+			animationShved = 10;
 		} 
 
-		--uprBar.w;
-		++lwrBar.x;
+		if (animationPhase == 2)
+		{
+			lwrBar.x += animationShved;
+			lwrBar.w -= animationShved;
+			uprBar.w -= animationShved;
+			animationTraveled += animationShved;
+
+			if (animationTraveled >= animationDistance1 + animationDistance2)
+			{
+				animationPhase = 0;
+				animationComplet = true;
+			}
+		}
+
+		if (animationPhase == 1)
+		{
+			uprBar.x -= animationShved;
+			uprBar.w += animationShved;
+			lwrBar.w += animationShved;
+			animationTraveled += animationShved;
+
+			if (animationTraveled >= animationDistance1)
+			{
+				animationPhase = 2;
+			}
+		}
 
 		++animationTickers;
 		if (animationTickers == AnimationCap)
@@ -172,6 +225,7 @@ namespace blooDot::RegionBanner
 			BannerTransparency
 		);
 
+		// TODO: try moving this to where the arena renderer is created
 		if (SDL_SetRenderDrawBlendMode(GameViewRenderer, SDL_BLENDMODE_BLEND) != 0)
 		{
 			const auto modeError = SDL_GetError();
