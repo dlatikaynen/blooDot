@@ -76,6 +76,21 @@
     <Filter Include="Resource Files\dingdescr">
       <UniqueIdentifier>{aeadab9e-2d85-4b37-8b38-b7d3210c6c6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_Headers\core">
+      <UniqueIdentifier>{6c2f0e75-3967-4208-bc28-bb2c84451d65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Headers\game">
+      <UniqueIdentifier>{24b42705-744c-4a2c-90ec-bbdcf305ee3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\core">
+      <UniqueIdentifier>{e1de3dc3-a8f0-4088-a701-a047f612f763}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\game">
+      <UniqueIdentifier>{ad5cc62b-2eed-4559-9f5b-4b704cb044f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\convo">
+      <UniqueIdentifier>{a137cce1-cebc-4ff4-add5-01fcfd55b560}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL\include\begin_code.h">
@@ -348,15 +363,6 @@
     <ClInclude Include="SDL\include\SDL_ttf.h">
       <Filter>Lib Headers</Filter>
     </ClInclude>
-    <ClInclude Include="orchestrator.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="scripture.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
     <ClInclude Include="cairo\cairo.h">
       <Filter>Lib Headers</Filter>
     </ClInclude>
@@ -389,39 +395,6 @@
     </ClInclude>
     <ClInclude Include="cairo\cairo-win32.h">
       <Filter>Lib Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="drawing.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="main.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="settings.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="enums.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="gameview.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="gamestate.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="renderstate.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="newworld.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ding.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="dingsheet.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="flap.h">
-      <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-settings.h">
       <Filter>_Headers\ui</Filter>
@@ -468,9 +441,6 @@
     <ClInclude Include="gpuchan.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
-    <ClInclude Include="constants.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
     <ClInclude Include="menu-settings-lang.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
@@ -483,14 +453,8 @@
     <ClInclude Include="menu-load.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
-    <ClInclude Include="savegame.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
     <ClInclude Include="resutil.h">
       <Filter>_Headers\res</Filter>
-    </ClInclude>
-    <ClInclude Include="playerstate.h">
-      <Filter>_Headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-continue-empty.h">
       <Filter>_Headers\ui</Filter>
@@ -525,50 +489,65 @@
     <ClInclude Include="playerhud.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
-    <ClInclude Include="offscreen-rendering.h">
-      <Filter>_Headers</Filter>
-    </ClInclude>
     <ClInclude Include="region-banner.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>_Headers\core</Filter>
+    </ClInclude>
+    <ClInclude Include="enums.h">
+      <Filter>_Headers\core</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>_Headers\core</Filter>
+    </ClInclude>
+    <ClInclude Include="offscreen-rendering.h">
+      <Filter>_Headers\core</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>_Headers\core</Filter>
+    </ClInclude>
+    <ClInclude Include="scripture.h">
+      <Filter>_Headers\core</Filter>
+    </ClInclude>
+    <ClInclude Include="settings.h">
+      <Filter>_Headers\core</Filter>
+    </ClInclude>
+    <ClInclude Include="ding.h">
+      <Filter>_Headers\game</Filter>
+    </ClInclude>
+    <ClInclude Include="dingsheet.h">
+      <Filter>_Headers\game</Filter>
+    </ClInclude>
+    <ClInclude Include="flap.h">
+      <Filter>_Headers\game</Filter>
+    </ClInclude>
+    <ClInclude Include="gamestate.h">
+      <Filter>_Headers\game</Filter>
+    </ClInclude>
+    <ClInclude Include="gameview.h">
+      <Filter>_Headers\game</Filter>
+    </ClInclude>
+    <ClInclude Include="newworld.h">
+      <Filter>_Headers\game</Filter>
+    </ClInclude>
+    <ClInclude Include="orchestrator.h">
+      <Filter>_Headers\game</Filter>
+    </ClInclude>
+    <ClInclude Include="playerstate.h">
+      <Filter>_Headers\game</Filter>
+    </ClInclude>
+    <ClInclude Include="renderstate.h">
+      <Filter>_Headers\game</Filter>
+    </ClInclude>
+    <ClInclude Include="savegame.h">
+      <Filter>_Headers\game</Filter>
+    </ClInclude>
+    <ClInclude Include="drawing.h">
+      <Filter>_Headers\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="orchestrator.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="scripture.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="drawing.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="settings.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gameview.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gamestate.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="renderstate.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="newworld.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dingsheet.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="flap.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ding.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="dialogcontrols.cpp">
       <Filter>_Source Files\ui</Filter>
     </ClCompile>
@@ -617,9 +596,6 @@
     <ClCompile Include="menu-load.cpp">
       <Filter>_Source Files\ui</Filter>
     </ClCompile>
-    <ClCompile Include="savegame.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="resutil.cpp">
       <Filter>_Source Files\res</Filter>
     </ClCompile>
@@ -641,20 +617,59 @@
     <ClCompile Include="datetime.cpp">
       <Filter>_Source Files\util</Filter>
     </ClCompile>
-    <ClCompile Include="playerstate.cpp">
-      <Filter>_Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="playerhud.cpp">
       <Filter>_Source Files\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="offscreen-rendering.cpp">
-      <Filter>_Source Files</Filter>
     </ClCompile>
     <ClCompile Include="offscreen-renderer-quest.cpp">
       <Filter>_Source Files\ui\offscreen</Filter>
     </ClCompile>
     <ClCompile Include="region-banner.cpp">
       <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ding.cpp">
+      <Filter>_Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="dingsheet.cpp">
+      <Filter>_Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="flap.cpp">
+      <Filter>_Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="gamestate.cpp">
+      <Filter>_Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="gameview.cpp">
+      <Filter>_Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="newworld.cpp">
+      <Filter>_Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="orchestrator.cpp">
+      <Filter>_Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="playerstate.cpp">
+      <Filter>_Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="renderstate.cpp">
+      <Filter>_Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="savegame.cpp">
+      <Filter>_Source Files\game</Filter>
+    </ClCompile>
+    <ClCompile Include="drawing.cpp">
+      <Filter>_Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>_Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="offscreen-rendering.cpp">
+      <Filter>_Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="scripture.cpp">
+      <Filter>_Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="settings.cpp">
+      <Filter>_Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -731,6 +746,9 @@
     </None>
     <None Include="res\worldbuilding.ligma">
       <Filter>Planning</Filter>
+    </None>
+    <None Include="res\convo.1.bml">
+      <Filter>Resource Files\convo</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
