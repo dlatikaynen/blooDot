@@ -12,12 +12,13 @@ namespace blooDot::Hud
 {
 	constexpr SDL_Rect Source = { 0,0,49,49 };
 	constexpr int const Padding = 9;
-	constexpr Uint8 const LetterboxGray = 0xf;
 
+	SDL_Texture* LetterboxBackdrop = nullptr;
 	SDL_Texture* Current[4] = { nullptr, nullptr, nullptr, nullptr };
 	SDL_Rect Destination[4];
 	SDL_Rect Letterboxes[2];
 	int letterboxWidth = 0;
+	bool useLetterboxesForHud = false;
 
 	/// <summary>
 	/// Layout depends on number of players and resolution
@@ -30,6 +31,7 @@ namespace blooDot::Hud
 		const auto& logicalW = blooDot::Settings::GetLogicalArenaWidth();
 		const auto& logicalH = blooDot::Settings::GetLogicalArenaHeight();
 		const auto& physiclW = blooDot::Settings::GetPhysicalArenaWidth();
+		const auto& physiclH = blooDot::Settings::GetPhysicalArenaHeight();
 		const auto& availabW = physiclW - logicalW;
 		if (availabW >= (Source.w * 3 / 2))
 		{
@@ -58,6 +60,15 @@ namespace blooDot::Hud
 			// bottom right
 			Destination[iP4].x = Destination[iP1].x;
 			Destination[iP4].y = Destination[iP3].y;
+
+			/* when the letterboxes are sufficiently wide
+			 * to accomodate huda/map, we place them in
+			 * the otherwise unused bars to the left and right */
+			useLetterboxesForHud = letterboxWidth >= 200;
+			if (!_DrawLetterboxBackdrop(physiclH))
+			{
+				return false;
+			}
 		}
 		else
 		{
@@ -265,20 +276,20 @@ namespace blooDot::Hud
 	{
 		if (letterboxWidth > 0)
 		{
-			SDL_SetRenderDrawColor(
-				GameViewRenderer,
-				LetterboxGray,
-				LetterboxGray,
-				LetterboxGray,
-				SDL_ALPHA_OPAQUE
-			);
-
-			SDL_RenderFillRects(GameViewRenderer, Letterboxes, 2);
+			// the placement of the left one is always identical with its own source rect
+			SDL_RenderCopy(GameViewRenderer, LetterboxBackdrop, &Letterboxes[0], &Letterboxes[0]);
+			SDL_RenderCopyEx(GameViewRenderer, LetterboxBackdrop, &Letterboxes[0], &Letterboxes[1], 0, NULL, SDL_FLIP_HORIZONTAL);
 		}
 
-		for (auto i = 0; i < blooDot::Player::NumPlayers; ++i)
+		if (useLetterboxesForHud)
 		{
-			SDL_RenderCopy(GameViewRenderer, Current[i], &Source, &Destination[i]);
+			// HP flowers
+			for (auto i = 0; i < blooDot::Player::NumPlayers; ++i)
+			{
+				SDL_RenderCopy(GameViewRenderer, Current[i], &Source, &Destination[i]);
+			}
+
+			// TODO: map
 		}
 	}
 
@@ -291,5 +302,53 @@ namespace blooDot::Hud
 				SDL_DestroyTexture(Current[i]);
 			}
 		}
+
+		if (LetterboxBackdrop)
+		{
+			SDL_DestroyTexture(LetterboxBackdrop);
+		}
+	}
+
+	bool _DrawLetterboxBackdrop(int height)
+	{
+		LetterboxBackdrop = SDL_CreateTexture(
+			GameViewRenderer,
+			SDL_PIXELFORMAT_ARGB8888,
+			SDL_TEXTUREACCESS_TARGET,
+			letterboxWidth,
+			height
+		);
+
+		if (!LetterboxBackdrop)
+		{
+			const auto backdropError = SDL_GetError();
+			ReportError("Failed to create HUD backdrop texture", backdropError);
+			return false;
+		}
+
+		if (SDL_SetRenderTarget(GameViewRenderer, LetterboxBackdrop) < 0)
+		{
+			const auto targetError = SDL_GetError();
+			ReportError("Failed to set a HUD letterbox backdrop texture as the render target", targetError);
+			return false;
+		}
+
+		SDL_SetRenderDrawColor(GameViewRenderer, 0x48 / 2, 0x3d / 2, 0x8b / 2, SDL_ALPHA_OPAQUE);
+		SDL_RenderClear(GameViewRenderer);
+		SDL_SetRenderDrawColor(GameViewRenderer, 0x48 / 3, 0x3d / 3, 0x8b / 3, SDL_ALPHA_OPAQUE);
+		SDL_Rect border = { letterboxWidth - 3, 0, 3, height };
+		SDL_RenderFillRect(GameViewRenderer, &border);
+		SDL_SetRenderDrawColor(GameViewRenderer, static_cast<Uint8>(0x48 / 2.5), static_cast<Uint8>(0x3d / 2.5), static_cast<Uint8>(0x8b / 2.5), SDL_ALPHA_OPAQUE);
+		SDL_Rect fineBorder = { letterboxWidth - 4, 0, 1, height };
+		SDL_RenderFillRect(GameViewRenderer, &fineBorder);
+
+		if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
+		{
+			const auto resetError = SDL_GetError();
+			ReportError("Failed to reset the render target after rendering to HUD letterbox backdrop", resetError);
+			return false;
+		}
+
+		return true;
 	}
 }

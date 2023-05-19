@@ -84,7 +84,7 @@ namespace blooDot::RegionBanner
 		if (!bannerTexture)
 		{
 			const auto createError = SDL_GetError();
-			ReportError("Failed to create a HUD texture", createError);
+			ReportError("Failed to create a region banner texture", createError);
 			return false;
 		}
 

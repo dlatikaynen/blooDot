@@ -8,4 +8,6 @@ namespace blooDot::Hud
 	bool Redraw(int ofPlayerIndex);
 	void Render();
 	void Teardown();
+
+	bool _DrawLetterboxBackdrop(int height);
 }
