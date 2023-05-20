@@ -322,11 +322,18 @@ void _Launch()
 		return;
 	}
 
-	renderer = SDL_CreateRenderer(mainWindow, -2, SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
 	if (!renderer)
 	{
 		const auto rendererError = SDL_GetError();
 		ReportError("Failed to create arena GPU renderer", rendererError);
+		return;
+	}
+
+    if (SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND) != 0)
+	{
+		const auto modeError = SDL_GetError();
+		ReportError("Failed to set blend mode", modeError);
 		return;
 	}
 

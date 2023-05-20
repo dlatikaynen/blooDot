@@ -75,19 +75,19 @@ namespace blooDot::Hud
 			letterboxWidth = 0;
 
 			// top right
-			Destination[iP1].x = logicalW - Padding - Source.w;
+			Destination[iP1].x = logicalW - Padding + 3 - Source.w;
 			Destination[iP1].y = Padding;
 
 			// top left
-			Destination[iP2].x = Padding;
+			Destination[iP2].x = Padding - 3;
 			Destination[iP2].y = Padding;
 
 			// bottom left
-			Destination[iP3].x = Destination[iP2].x;
+			Destination[iP3].x = Destination[iP2].x - 3;
 			Destination[iP3].y = logicalH - Padding - Source.h;
 
 			// bottom right
-			Destination[iP4].x = Destination[iP1].x;
+			Destination[iP4].x = Destination[iP1].x + 3;
 			Destination[iP4].y = Destination[iP3].y;
 		}
 
@@ -111,8 +111,6 @@ namespace blooDot::Hud
 				return false;
 			}
 
-			SDL_SetTextureBlendMode(Current[i], SDL_BlendMode::SDL_BLENDMODE_BLEND);
-
 			Current[i] = hudTexture;
 			if (!Redraw(i))
 			{
@@ -132,6 +130,7 @@ namespace blooDot::Hud
 			return false;
 		}
 
+		SDL_SetTextureBlendMode(Current[ofPlayerIndex], SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(GameViewRenderer, 0, 0, 0, SDL_ALPHA_TRANSPARENT);
 		SDL_RenderClear(GameViewRenderer);
 
@@ -278,7 +277,7 @@ namespace blooDot::Hud
 		{
 			// the placement of the left one is always identical with its own source rect
 			SDL_RenderCopy(GameViewRenderer, LetterboxBackdrop, &Letterboxes[0], &Letterboxes[0]);
-			SDL_RenderCopyEx(GameViewRenderer, LetterboxBackdrop, &Letterboxes[0], &Letterboxes[1], 0, NULL, SDL_FLIP_HORIZONTAL);
+			SDL_RenderCopyEx(GameViewRenderer, LetterboxBackdrop, &Letterboxes[0], &Letterboxes[1], 0, NULL, static_cast<SDL_RendererFlip>(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL));
 		}
 
 		if (useLetterboxesForHud)

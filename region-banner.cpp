@@ -9,6 +9,7 @@ extern SettingsStruct Settings;
 
 namespace blooDot::RegionBanner
 {
+	constexpr Uint8 const BannerReddish = 0x85;
 	constexpr Uint8 const BannerGray = 0x80;
 	constexpr Uint8 const BannerTransparency = 0x6a;
 	constexpr const long AnimationCap = 5000;
@@ -219,19 +220,11 @@ namespace blooDot::RegionBanner
 	{
 		SDL_SetRenderDrawColor(
 			GameViewRenderer,
-			BannerGray,
+			BannerReddish,
 			BannerGray,
 			BannerGray,
 			BannerTransparency
 		);
-
-		// TODO: try moving this to where the arena renderer is created
-		if (SDL_SetRenderDrawBlendMode(GameViewRenderer, SDL_BLENDMODE_BLEND) != 0)
-		{
-			const auto modeError = SDL_GetError();
-			ReportError("Failed to set blend mode", modeError);
-			return;
-		}
 
 		SDL_RenderFillRect(GameViewRenderer, &Destination);
 		SDL_RenderFillRect(GameViewRenderer, &uprBar);

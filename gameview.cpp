@@ -89,15 +89,15 @@ void GameViewRenderFrame()
 		break;
 	}
 
-	if (gotHud)
-	{
-		blooDot::Hud::Render();
-	}
-
 	if (gotRegionBanner)
 	{
 		blooDot::RegionBanner::Update();
 		blooDot::RegionBanner::Render();
+	}
+
+	if (gotHud)
+	{
+		blooDot::Hud::Render();
 	}
 }
 
