@@ -203,7 +203,12 @@ namespace blooDot::Settings
 		}
 	}
 
-	bool _GetScreenDimensions(__out SDL_Rect* dimensions)
+	bool ShowMinimap()
+	{
+		return ::Settings.ShowMinimap != 0;
+	}
+
+	bool _GetScreenDimensions(_Inout_ SDL_Rect* dimensions)
 	{
 		auto& rect = (*dimensions);
 		SDL_DisplayMode displayMode = {};

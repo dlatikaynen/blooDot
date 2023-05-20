@@ -9,5 +9,5 @@ namespace blooDot::Hud
 	void Render();
 	void Teardown();
 
-	bool _DrawLetterboxBackdrop(int height);
+	bool _DrawLetterboxBackdrops(int height);
 }

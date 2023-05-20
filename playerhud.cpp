@@ -3,6 +3,7 @@
 #include "playerstate.h"
 #include "settings.h"
 #include "drawing.h"
+#include "resutil.h"
 
 extern SDL_Renderer* GameViewRenderer;
 extern SettingsStruct Settings;
@@ -13,12 +14,19 @@ namespace blooDot::Hud
 	constexpr SDL_Rect Source = { 0,0,49,49 };
 	constexpr int const Padding = 9;
 
-	SDL_Texture* LetterboxBackdrop = nullptr;
+	SDL_Texture* LetterboxBackdropL = nullptr;
+	SDL_Texture* LetterboxBackdropR = nullptr;
 	SDL_Texture* Current[4] = { nullptr, nullptr, nullptr, nullptr };
 	SDL_Rect Destination[4];
 	SDL_Rect Letterboxes[2];
 	int letterboxWidth = 0;
 	bool useLetterboxesForHud = false;
+	bool doMinimap = false;
+
+	SDL_Texture* Minimap = nullptr;
+	SDL_Rect minimapDims = { 0 };
+	SDL_Rect minimapSurc = { 0 };
+	SDL_Rect minimapDest = { 0 };
 
 	/// <summary>
 	/// Layout depends on number of players and resolution
@@ -28,6 +36,10 @@ namespace blooDot::Hud
 	/// </summary>
 	bool Initialize()
 	{
+		doMinimap = Settings::ShowMinimap();
+		minimapDest.w = 182;
+		minimapDest.h = 182;
+
 		const auto& logicalW = blooDot::Settings::GetLogicalArenaWidth();
 		const auto& logicalH = blooDot::Settings::GetLogicalArenaHeight();
 		const auto& physiclW = blooDot::Settings::GetPhysicalArenaWidth();
@@ -65,7 +77,13 @@ namespace blooDot::Hud
 			 * to accomodate huda/map, we place them in
 			 * the otherwise unused bars to the left and right */
 			useLetterboxesForHud = letterboxWidth >= 200;
-			if (!_DrawLetterboxBackdrop(physiclH))
+			if (useLetterboxesForHud)
+			{
+				minimapDest.x = letterboxWidth / 2 - minimapDest.w / 2;
+				minimapDest.y = physiclH - minimapDest.h - 2 * Padding - 2 * GRIDUNIT;
+			}
+
+			if (!_DrawLetterboxBackdrops(physiclH))
 			{
 				return false;
 			}
@@ -116,6 +134,18 @@ namespace blooDot::Hud
 			{
 				return false;
 			}
+		}
+
+		if(doMinimap) 
+		{
+			Minimap = blooDot::Res::LoadPicture(GameViewRenderer, CHUNK_KEY_SAMPLE_MAP, &minimapDims);
+			if (!Minimap)
+			{
+				return false;
+			}
+
+			minimapSurc.w = minimapDest.w;
+			minimapSurc.h = minimapDest.h;
 		}
 
 		return true;
@@ -276,8 +306,8 @@ namespace blooDot::Hud
 		if (letterboxWidth > 0)
 		{
 			// the placement of the left one is always identical with its own source rect
-			SDL_RenderCopy(GameViewRenderer, LetterboxBackdrop, &Letterboxes[0], &Letterboxes[0]);
-			SDL_RenderCopyEx(GameViewRenderer, LetterboxBackdrop, &Letterboxes[0], &Letterboxes[1], 0, NULL, static_cast<SDL_RendererFlip>(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL));
+			SDL_RenderCopy(GameViewRenderer, LetterboxBackdropL, &Letterboxes[0], &Letterboxes[0]);
+			SDL_RenderCopy(GameViewRenderer, LetterboxBackdropR, &Letterboxes[0], &Letterboxes[1]);
 		}
 
 		if (useLetterboxesForHud)
@@ -288,7 +318,11 @@ namespace blooDot::Hud
 				SDL_RenderCopy(GameViewRenderer, Current[i], &Source, &Destination[i]);
 			}
 
-			// TODO: map
+			// minimap
+			if (doMinimap)
+			{
+				SDL_RenderCopy(GameViewRenderer, Minimap, &minimapSurc, &minimapDest);
+			}
 		}
 	}
 
@@ -302,15 +336,14 @@ namespace blooDot::Hud
 			}
 		}
 
-		if (LetterboxBackdrop)
-		{
-			SDL_DestroyTexture(LetterboxBackdrop);
-		}
+		LetterboxBackdropL&& [] { SDL_DestroyTexture(LetterboxBackdropL); return false; }();
+		LetterboxBackdropR&& [] { SDL_DestroyTexture(LetterboxBackdropR); return false; }();
+		Minimap&& [] { SDL_DestroyTexture(Minimap); return false; }();
 	}
 
-	bool _DrawLetterboxBackdrop(int height)
+	bool _DrawLetterboxBackdrops(int height)
 	{
-		LetterboxBackdrop = SDL_CreateTexture(
+		LetterboxBackdropL = SDL_CreateTexture(
 			GameViewRenderer,
 			SDL_PIXELFORMAT_ARGB8888,
 			SDL_TEXTUREACCESS_TARGET,
@@ -318,17 +351,33 @@ namespace blooDot::Hud
 			height
 		);
 
-		if (!LetterboxBackdrop)
+		if (!LetterboxBackdropL)
 		{
 			const auto backdropError = SDL_GetError();
-			ReportError("Failed to create HUD backdrop texture", backdropError);
+			ReportError("Failed to create near HUD backdrop texture", backdropError);
 			return false;
 		}
 
-		if (SDL_SetRenderTarget(GameViewRenderer, LetterboxBackdrop) < 0)
+		LetterboxBackdropR = SDL_CreateTexture(
+			GameViewRenderer,
+			SDL_PIXELFORMAT_ARGB8888,
+			SDL_TEXTUREACCESS_TARGET,
+			letterboxWidth,
+			height
+		);
+
+		if (!LetterboxBackdropR)
+		{
+			const auto backdropError = SDL_GetError();
+			ReportError("Failed to create far HUD backdrop texture", backdropError);
+			return false;
+		}
+
+		/* draw the mostly static parts of the left letterbox */
+		if (SDL_SetRenderTarget(GameViewRenderer, LetterboxBackdropL) < 0)
 		{
 			const auto targetError = SDL_GetError();
-			ReportError("Failed to set a HUD letterbox backdrop texture as the render target", targetError);
+			ReportError("Failed to set near HUD letterbox backdrop texture as the render target", targetError);
 			return false;
 		}
 
@@ -338,9 +387,36 @@ namespace blooDot::Hud
 		SDL_Rect border = { letterboxWidth - 3, 0, 3, height };
 		SDL_RenderFillRect(GameViewRenderer, &border);
 		SDL_SetRenderDrawColor(GameViewRenderer, static_cast<Uint8>(0x48 / 2.5), static_cast<Uint8>(0x3d / 2.5), static_cast<Uint8>(0x8b / 2.5), SDL_ALPHA_OPAQUE);
-		SDL_Rect fineBorder = { letterboxWidth - 4, 0, 1, height };
+		SDL_Rect fineBorder = { letterboxWidth - 5, 0, 1, height };
+		SDL_RenderFillRect(GameViewRenderer, &fineBorder);
+		
+		if (doMinimap)
+		{
+			SDL_Rect minimapHole = { minimapDest.x - 6,minimapDest.y - 6,minimapDest.w + 12,minimapDest.h + 12 };
+			SDL_SetRenderDrawBlendMode(GameViewRenderer, SDL_BLENDMODE_MOD);
+			SDL_SetRenderDrawColor(GameViewRenderer, 0x0e, 0x0d, 0x0d, SDL_ALPHA_OPAQUE);
+			SDL_RenderFillRect(GameViewRenderer, &minimapHole);
+			SDL_SetRenderDrawBlendMode(GameViewRenderer, SDL_BLENDMODE_BLEND);
+		}
+
+		/* draw the mostly static parts of the right letterbox */
+		if (SDL_SetRenderTarget(GameViewRenderer, LetterboxBackdropR) < 0)
+		{
+			const auto targetError = SDL_GetError();
+			ReportError("Failed to set far HUD letterbox backdrop texture as the render target", targetError);
+			return false;
+		}
+
+		SDL_SetRenderDrawColor(GameViewRenderer, 0x48 / 2, 0x3d / 2, 0x8b / 2, SDL_ALPHA_OPAQUE);
+		SDL_RenderClear(GameViewRenderer);
+		SDL_SetRenderDrawColor(GameViewRenderer, 0x48 / 3, 0x3d / 3, 0x8b / 3, SDL_ALPHA_OPAQUE);
+		border = { 0, 0, 3, height };
+		SDL_RenderFillRect(GameViewRenderer, &border);
+		SDL_SetRenderDrawColor(GameViewRenderer, static_cast<Uint8>(0x48 / 2.5), static_cast<Uint8>(0x3d / 2.5), static_cast<Uint8>(0x8b / 2.5), SDL_ALPHA_OPAQUE);
+		fineBorder = { 4, 0, 1, height };
 		SDL_RenderFillRect(GameViewRenderer, &fineBorder);
 
+		/* cleanup */
 		if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
 		{
 			const auto resetError = SDL_GetError();

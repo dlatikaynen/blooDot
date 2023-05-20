@@ -855,6 +855,9 @@
     <Image Include="res\player1.png">
       <Filter>Resource Files\mobs</Filter>
     </Image>
+    <Image Include="res\sample-map.png">
+      <Filter>Resource Files\ui</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="LICENSE.txt" />

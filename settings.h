@@ -15,8 +15,9 @@ namespace blooDot::Settings
 	int GetPhysicalArenaWidth();
 	int GetLogicalArenaHeight();
 	int GetPhysicalArenaHeight();
+	bool ShowMinimap();
 
-	bool _GetScreenDimensions(__out SDL_Rect* dimensions);
+	bool _GetScreenDimensions(_Inout_ SDL_Rect* dimensions);
 }
 
 typedef struct SettingsStruct
@@ -35,4 +36,5 @@ typedef struct SettingsStruct
 	UserInterfaceLanguages SettingUserInterfaceLanguage = UIL_AMERICAN;
 	unsigned short CurrentSavegameIndex = 0;  // those are 1-based and appear in the file name
 	unsigned short OccupiedSavegameSlots = 0; // this is a bitmask with the LSB corresponding to savegameindex 1
+	char ShowMinimap = 0x1;
 } SettingsStruct;
