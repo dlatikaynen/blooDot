@@ -237,7 +237,7 @@ namespace blooDot::MenuInGame
 					itemToDraw = static_cast<InGameMenuItems>(itemToDraw + 1);
 				}
 
-				EndRenderDrawing(renderer, drawingTexture);
+				EndRenderDrawing(renderer, drawingTexture, nullptr);
 
 				DrawLabel(renderer, 235, firstY + 0 * stride, dismissTexture, &dismissRect);
 				DrawLabel(renderer, 235, firstY + 1 * stride, saveTexture, &saveRect);

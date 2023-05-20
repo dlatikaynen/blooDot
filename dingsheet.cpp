@@ -115,7 +115,7 @@ SDL_Texture* _OwnerDrawDing(Ding ding, __out SDL_Rect* dimensions)
 	auto canvasTexture = BeginRenderDrawing(GameViewRenderer, GRIDUNIT, GRIDUNIT);
 	auto const& canvas = GetDrawingSink();
 	DrawDing(ding, canvas);
-	EndRenderDrawing(GameViewRenderer, canvasTexture);
+	EndRenderDrawing(GameViewRenderer, canvasTexture, nullptr);
 	if (SDL_SetRenderTarget(GameViewRenderer, restoreTarget) < 0)
 	{
 		const auto restoreError = SDL_GetError();

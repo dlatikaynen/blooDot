@@ -290,7 +290,7 @@ namespace blooDot::Hud
 		{
 		}
 		
-		EndRenderDrawing(GameViewRenderer, canvasTexture);
+		EndRenderDrawing(GameViewRenderer, canvasTexture, nullptr);
 		if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
 		{
 			const auto resetError = SDL_GetError();
@@ -393,10 +393,46 @@ namespace blooDot::Hud
 		if (doMinimap)
 		{
 			SDL_Rect minimapHole = { minimapDest.x - 6,minimapDest.y - 6,minimapDest.w + 12,minimapDest.h + 12 };
+			SDL_Rect minimapChrome = { minimapDest.x - 10,minimapDest.y - 10,minimapDest.w + 20,minimapDest.h + 20 };
 			SDL_SetRenderDrawBlendMode(GameViewRenderer, SDL_BLENDMODE_MOD);
 			SDL_SetRenderDrawColor(GameViewRenderer, 0x0e, 0x0d, 0x0d, SDL_ALPHA_OPAQUE);
 			SDL_RenderFillRect(GameViewRenderer, &minimapHole);
 			SDL_SetRenderDrawBlendMode(GameViewRenderer, SDL_BLENDMODE_BLEND);
+
+			const auto& chrome = BeginRenderDrawing(GameViewRenderer, minimapChrome.w, minimapChrome.h);
+			const auto& canvas = GetDrawingSink();
+			cairo_move_to(canvas, 5, minimapChrome.h - 5);
+			cairo_curve_to(canvas,
+				1, minimapChrome.h / 2,
+				1, minimapChrome.h / 2,
+				5, 5
+			);
+
+			cairo_curve_to(canvas,
+				minimapChrome.w / 2, 1,
+				minimapChrome.w / 2, 1,
+				minimapChrome.w - 5, 5
+			);
+
+			cairo_curve_to(canvas,
+				minimapChrome.w - 1, minimapChrome.h / 2,
+				minimapChrome.w - 1, minimapChrome.h / 2,
+				minimapChrome.w - 5, minimapChrome.h - 5
+			);
+
+			cairo_curve_to(canvas,
+				minimapChrome.w / 2, minimapChrome.h - 1,
+				minimapChrome.w / 2, minimapChrome.h - 1,
+				5, minimapChrome.h - 5
+			);
+
+			//cairo_rectangle(canvas, 0, 0, minimapChrome.w, minimapChrome.h);
+			cairo_set_line_width(canvas, 3);
+			cairo_set_source_rgb(canvas, (0x48 / 3) / 255., (0x3d / 3) / 255., (0x8b / 3) / 255.);
+			//cairo_set_source_rgb(canvas, 0, 1, 0);
+			cairo_stroke(canvas);
+
+			EndRenderDrawing(GameViewRenderer, chrome, &minimapChrome);
 		}
 
 		/* draw the mostly static parts of the right letterbox */

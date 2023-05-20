@@ -184,7 +184,7 @@ namespace blooDot::MenuSettings
 					itemToDraw = static_cast<SettingsMenuItems>(itemToDraw + 1);
 				}
 
-				EndRenderDrawing(renderer, drawingTexture);
+				EndRenderDrawing(renderer, drawingTexture, nullptr);
 
 				DrawLabel(renderer, 235, yStart + 0 * stride + 0 * backGap, backTexture, &backRect);
 				DrawLabel(renderer, 235, yStart + 1 * stride + 1 * backGap, screensizeTexture, &screensizeRect);

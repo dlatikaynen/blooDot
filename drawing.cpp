@@ -97,11 +97,11 @@ cairo_t* GetDrawingSink()
 	return drawingSink;
 }
 
-void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture)
+void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture, SDL_Rect* destRect)
 {
 	SDL_UnlockTexture(targetTexture);
 	SDL_SetTextureBlendMode(targetTexture, SDL_BLENDMODE_BLEND);
-	SDL_RenderCopy(renderTarget, targetTexture, NULL, NULL);
+	SDL_RenderCopy(renderTarget, targetTexture, NULL, destRect);
 
 	SDL_DestroyTexture(targetTexture);
 	cairo_destroy(drawingSink);

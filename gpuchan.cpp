@@ -107,7 +107,7 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 
 			DrawChevron(drawingSink, 28 - 7, 419 + 21, false, frame);
 			DrawChevron(drawingSink, 28 + 120 + 7, 419 + 21, true, frame);
-			EndRenderDrawing(renderer, drawingTexture);
+			EndRenderDrawing(renderer, drawingTexture, nullptr);
 		}
 
 		SDL_RenderCopy(renderer, gpuChan, &chanDims, &center);

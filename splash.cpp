@@ -287,7 +287,7 @@ namespace blooDot::Splash
 					itemToDraw = static_cast<MainMenuItems>(itemToDraw + 1);
 				}
 
-				EndRenderDrawing(renderer, drawingTexture);
+				EndRenderDrawing(renderer, drawingTexture, nullptr);
 
 				DrawLabel(renderer, 235, yStart + 0 * stride, continueTexture, &continueRect);
 				DrawLabel(renderer, 235, yStart + 1 * stride, loadTexture, &loadRect);

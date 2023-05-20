@@ -257,7 +257,7 @@ namespace blooDot::MenuLoad
 					itemToDraw = static_cast<LoadMenuItems>(itemToDraw + 1);
 				}
 
-				EndRenderDrawing(renderer, drawingTexture);
+				EndRenderDrawing(renderer, drawingTexture, nullptr);
 				DrawLabel(renderer, 235, startY + 0 * stride + 0 * backGap, cancelTexture, &cancelRect);
 
 				/* render the carousel choice (and the sliding animation) */

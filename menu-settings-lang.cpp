@@ -252,7 +252,7 @@ namespace blooDot::MenuSettingsLang
 					itemToDraw = static_cast<LangSettingsMenuItems>(itemToDraw + 1);
 				}
 
-				EndRenderDrawing(renderer, drawingTexture);
+				EndRenderDrawing(renderer, drawingTexture, nullptr);
 
 				DrawLabel(renderer, 235, startY + 0 * stride + 0 * backGap, cancelTexture, &cancelRect);
 

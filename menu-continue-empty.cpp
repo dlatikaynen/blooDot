@@ -143,7 +143,7 @@ namespace blooDot::MenuContinueEmpty
 				DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);
 				DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
 
-				EndRenderDrawing(renderer, drawingTexture);
+				EndRenderDrawing(renderer, drawingTexture, nullptr);
 
 				DrawLabel(renderer, 235, 97, backTexture, &backRect);
 				DrawLabel(renderer, 181, 389, hintShadow, &hintRect);

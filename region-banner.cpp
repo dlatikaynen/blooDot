@@ -146,7 +146,7 @@ namespace blooDot::RegionBanner
 		cairo_set_font_options(canvas, fo);
 		cairo_show_text(canvas, regionStr.data());
 
-		EndRenderDrawing(GameViewRenderer, canvasTexture);
+		EndRenderDrawing(GameViewRenderer, canvasTexture, nullptr);
 		if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
 		{
 			const auto resetError = SDL_GetError();
