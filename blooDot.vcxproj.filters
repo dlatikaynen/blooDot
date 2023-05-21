@@ -91,6 +91,9 @@
     <Filter Include="Resource Files\convo">
       <UniqueIdentifier>{a137cce1-cebc-4ff4-add5-01fcfd55b560}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lib Dependencies">
+      <UniqueIdentifier>{603576c5-37f0-43d0-8df3-be3480405803}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL\include\begin_code.h">
@@ -749,6 +752,9 @@
     </None>
     <None Include="planning\worldbuilding.ligma">
       <Filter>Planning</Filter>
+    </None>
+    <None Include="package-box2d.cmd">
+      <Filter>Lib Dependencies</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

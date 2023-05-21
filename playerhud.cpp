@@ -4,6 +4,7 @@
 #include "settings.h"
 #include "drawing.h"
 #include "resutil.h"
+#include "collision.h"
 
 extern SDL_Renderer* GameViewRenderer;
 extern SettingsStruct Settings;
@@ -39,6 +40,8 @@ namespace blooDot::Hud
 		doMinimap = Settings::ShowMinimap();
 		minimapDest.w = 182;
 		minimapDest.h = 182;
+
+		TestCollision();
 
 		const auto& logicalW = blooDot::Settings::GetLogicalArenaWidth();
 		const auto& logicalH = blooDot::Settings::GetLogicalArenaHeight();
@@ -426,10 +429,8 @@ namespace blooDot::Hud
 				5, minimapChrome.h - 5
 			);
 
-			//cairo_rectangle(canvas, 0, 0, minimapChrome.w, minimapChrome.h);
 			cairo_set_line_width(canvas, 3);
 			cairo_set_source_rgb(canvas, (0x48 / 3) / 255., (0x3d / 3) / 255., (0x8b / 3) / 255.);
-			//cairo_set_source_rgb(canvas, 0, 1, 0);
 			cairo_stroke(canvas);
 
 			EndRenderDrawing(GameViewRenderer, chrome, &minimapChrome);

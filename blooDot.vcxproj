@@ -79,8 +79,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);cairo;SDL\include</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);SDL\lib\x64</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);cairo;SDL\include;C:\lc\blooDot\packages\box2d\include\box2d</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);SDL\lib\x64;C:\lc\blooDot\packages\box2d\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);cairo;SDL\include</IncludePath>
@@ -122,8 +122,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SDL\lib\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)SDL\lib\x64\SDL2.lib;$(ProjectDir)SDL\lib\x64\SDL2main.lib;$(ProjectDir)SDL\lib\x64\SDL2_image.lib;$(ProjectDir)SDL\lib\x64\SDL2_mixer.lib;$(ProjectDir)SDL\lib\x64\SDL2_ttf.lib;$(ProjectDir)SDL\lib\x64\cairo.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SDL\lib\x64;C:\lc\blooDot\packages\box2d\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)SDL\lib\x64\SDL2.lib;$(ProjectDir)SDL\lib\x64\SDL2main.lib;$(ProjectDir)SDL\lib\x64\SDL2_image.lib;$(ProjectDir)SDL\lib\x64\SDL2_mixer.lib;$(ProjectDir)SDL\lib\x64\SDL2_ttf.lib;$(ProjectDir)SDL\lib\x64\cairo.lib;$(ProjectDir)packages\box2d\lib\box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TurnOffAssemblyGeneration Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</TurnOffAssemblyGeneration>
       <EnableUAC Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableUAC>
       <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">libcairo-2.dll</DelayLoadDLLs>
@@ -428,6 +428,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
     </None>
+    <None Include="package-box2d.cmd">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
     <None Include="packages.config" />
     <None Include="planning\dramatis-personae.ligma">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -437,7 +441,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </None>
-    <None Include="planning\gameplay.ligma" />
+    <None Include="planning\gameplay.ligma">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
     <None Include="planning\gfx.ligma">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
@@ -474,7 +481,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </None>
-    <None Include="planning\quests.ligma" />
+    <None Include="planning\quests.ligma">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
     <None Include="planning\scraps.ligma">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|Win32'">true</ExcludedFromBuild>
@@ -497,7 +507,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </None>
-    <None Include="planning\worldbuilding.ligma" />
+    <None Include="planning\worldbuilding.ligma">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+    </None>
     <None Include="res\convo.1.bml" />
     <None Include="res\dingdescriptions.1.bml" />
     <None Include="res\manufacturer.dlg" />
