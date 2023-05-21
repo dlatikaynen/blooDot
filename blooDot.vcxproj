@@ -437,6 +437,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </None>
+    <None Include="planning\gameplay.ligma" />
     <None Include="planning\gfx.ligma">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
@@ -473,6 +474,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </None>
+    <None Include="planning\quests.ligma" />
     <None Include="planning\scraps.ligma">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|Win32'">true</ExcludedFromBuild>
@@ -495,21 +497,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </None>
+    <None Include="planning\worldbuilding.ligma" />
     <None Include="res\convo.1.bml" />
     <None Include="res\dingdescriptions.1.bml" />
-    <None Include="res\gameplay.ligma">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
-    </None>
     <None Include="res\manufacturer.dlg" />
-    <None Include="res\quests.ligma">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
-    </None>
-    <None Include="res\worldbuilding.ligma">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
-    </None>
     <None Include="SDL\lib\x64\libcairo-2.dll" />
     <None Include="SDL\lib\x64\libexpat-1.dll" />
     <None Include="SDL\lib\x64\libfontconfig-1.dll" />

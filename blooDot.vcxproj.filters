@@ -738,17 +738,17 @@
     <None Include="res\dingdescriptions.1.bml">
       <Filter>Resource Files\dingdescr</Filter>
     </None>
-    <None Include="res\gameplay.ligma">
-      <Filter>Planning</Filter>
-    </None>
-    <None Include="res\quests.ligma">
-      <Filter>Planning</Filter>
-    </None>
-    <None Include="res\worldbuilding.ligma">
-      <Filter>Planning</Filter>
-    </None>
     <None Include="res\convo.1.bml">
       <Filter>Resource Files\convo</Filter>
+    </None>
+    <None Include="planning\gameplay.ligma">
+      <Filter>Planning</Filter>
+    </None>
+    <None Include="planning\quests.ligma">
+      <Filter>Planning</Filter>
+    </None>
+    <None Include="planning\worldbuilding.ligma">
+      <Filter>Planning</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
