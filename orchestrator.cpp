@@ -7,6 +7,7 @@
 
 Uint32 SDL_USEREVENT_SAVE = 0;
 Uint32 SDL_USEREVENT_AUTOSAVE = 0;
+Uint32 SDL_USEREVENT_LEAVE = 0; // [sic], they're only allocated later
 
 extern SettingsStruct Settings;
 extern SDL_Renderer* GameViewRenderer;
@@ -35,6 +36,7 @@ namespace blooDot::Orchestrator
 
 		SDL_USEREVENT_SAVE = SDL_RegisterEvents(1);
 		SDL_USEREVENT_AUTOSAVE = SDL_RegisterEvents(1);
+		SDL_USEREVENT_LEAVE = SDL_RegisterEvents(1);
 		
 		Uint64 frameEnded;
 		Uint64 frameStart;
@@ -50,21 +52,6 @@ namespace blooDot::Orchestrator
 			{
 				switch (mainEvent.type)
 				{
-				case SDL_USEREVENT:
-				{
-					const auto& userEvent = mainEvent.user;
-					if (userEvent.type == SDL_USEREVENT_SAVE)
-					{
-						_HandleSave();
-					}
-					else if (userEvent.type == SDL_USEREVENT_AUTOSAVE)
-					{
-						_HandleSave(true);
-					}
-
-					break;
-				}
-
 				case SDL_KEYDOWN:
 					switch (mainEvent.key.keysym.scancode)
 					{
@@ -167,8 +154,19 @@ namespace blooDot::Orchestrator
 					break;
 
 				case SDL_QUIT:
+LEAVE:
 					mainRunning = false;
 					goto THAT_ESCALATED_QUICKLY;
+				}
+
+				if (mainEvent.type == SDL_USEREVENT_SAVE)
+				{
+					_HandleSave();
+					continue;
+				}
+				else if (mainEvent.type == SDL_USEREVENT_LEAVE)
+				{
+					goto LEAVE;
 				}
 			}
 

@@ -10,4 +10,5 @@ namespace blooDot::MenuInGame
 
 	void _HandleMenu();
 	void _HandleSave();
+	void _HandleLeave();
 }

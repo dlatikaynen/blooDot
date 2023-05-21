@@ -41,8 +41,6 @@ namespace blooDot::Hud
 		minimapDest.w = 182;
 		minimapDest.h = 182;
 
-		TestCollision();
-
 		const auto& logicalW = blooDot::Settings::GetLogicalArenaWidth();
 		const auto& logicalH = blooDot::Settings::GetLogicalArenaHeight();
 		const auto& physiclW = blooDot::Settings::GetPhysicalArenaWidth();

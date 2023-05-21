@@ -12,6 +12,7 @@
 extern SettingsStruct Settings;
 extern Uint32 SDL_USEREVENT_SAVE;
 extern Uint32 SDL_USEREVENT_AUTOSAVE;
+extern Uint32 SDL_USEREVENT_LEAVE;
 
 namespace blooDot::MenuInGame
 {
@@ -26,7 +27,7 @@ namespace blooDot::MenuInGame
 
 		menuRunning = true;
 
-		SDL_Rect outerMenuRect{ 150,45,340,390 };
+		SDL_Rect outerMenuRect{ physicalW / 2 - 340 / 2, physicalH / 2 - 390 / 2,340,390 };
 		SDL_Rect titleRect{ 0,0,0,0 };
 		SDL_Rect dismissRect{ 0,0,0,0 };
 		SDL_Rect saveRect{ 0,0,0,0 };
@@ -199,12 +200,6 @@ namespace blooDot::MenuInGame
 				}
 			}
 
-		/*	if (SDL_RenderClear(renderer) < 0)
-			{
-				const auto clearError = IMG_GetError();
-				ReportError("Failed to clear the in-game menu screen", clearError);
-			}*/
-
 			SDL_SetRenderDrawBlendMode(renderer, SDL_BlendMode::SDL_BLENDMODE_BLEND);
 			SDL_SetRenderDrawColor(renderer, 0x40, 0x40, 0x40, 0xcf);
 			SDL_RenderFillRect(renderer, &outerMenuRect);
@@ -216,22 +211,25 @@ namespace blooDot::MenuInGame
 				menuRunning = false;
 			};
 
-			DrawLabel(renderer, 283, 54, titleTexture, &titleRect);
+			DrawLabel(renderer, outerMenuRect.x + 133, outerMenuRect.y + 9, titleTexture, &titleRect);
 
 			const auto drawingTexture = BeginRenderDrawing(renderer, physicalW, physicalH);
 			if (drawingTexture) [[likely]]
 			{
 				const auto drawingSink = GetDrawingSink();
-				constexpr auto firstY = 94;
-				const int stride = 46;
+				const auto firstY = outerMenuRect.y + 49;
+				const auto bottom = outerMenuRect.y + 355;
+				const auto left = outerMenuRect.x + 45;
+				const auto labelLeft = outerMenuRect.x + 85;
+				constexpr const int stride = 46;
 				InGameMenuItems itemToDraw = IGMI_DISMISS;
-				for (auto y = firstY; y < 400; y += stride)
+				for (auto y = firstY; y < bottom; y += stride)
 				{
-					DrawButton(drawingSink, 195, y, 250, 42, itemToDraw == menuSelection);
+					DrawButton(drawingSink, left, y, 250, 42, itemToDraw == menuSelection);
 					if (itemToDraw == menuSelection)
 					{
-						DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);
-						DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
+						DrawChevron(drawingSink, left - 7, y + 21, false, frame);
+						DrawChevron(drawingSink, left + 250 + 7, y + 21, true, frame);
 					}
 
 					itemToDraw = static_cast<InGameMenuItems>(itemToDraw + 1);
@@ -239,13 +237,13 @@ namespace blooDot::MenuInGame
 
 				EndRenderDrawing(renderer, drawingTexture, nullptr);
 
-				DrawLabel(renderer, 235, firstY + 0 * stride, dismissTexture, &dismissRect);
-				DrawLabel(renderer, 235, firstY + 1 * stride, saveTexture, &saveRect);
-				DrawLabel(renderer, 235, firstY + 2 * stride, inventoryTexture, &inventoryRect);
-				DrawLabel(renderer, 235, firstY + 3 * stride, mapTexture, &mapRect);
-				DrawLabel(renderer, 235, firstY + 4 * stride, controlsTexture, &controlsRect);
-				DrawLabel(renderer, 235, firstY + 5 * stride, knowledgebaseTexture, &knowledgebaseRect);
-				DrawLabel(renderer, 235, firstY + 6 * stride, leaveTexture, &leaveRect);
+				DrawLabel(renderer, labelLeft, firstY + 0 * stride, dismissTexture, &dismissRect);
+				DrawLabel(renderer, labelLeft, firstY + 1 * stride, saveTexture, &saveRect);
+				DrawLabel(renderer, labelLeft, firstY + 2 * stride, inventoryTexture, &inventoryRect);
+				DrawLabel(renderer, labelLeft, firstY + 3 * stride, mapTexture, &mapRect);
+				DrawLabel(renderer, labelLeft, firstY + 4 * stride, controlsTexture, &controlsRect);
+				DrawLabel(renderer, labelLeft, firstY + 5 * stride, knowledgebaseTexture, &knowledgebaseRect);
+				DrawLabel(renderer, labelLeft, firstY + 6 * stride, leaveTexture, &leaveRect);
 			}
 
 			SDL_RenderPresent(renderer);
@@ -274,6 +272,10 @@ namespace blooDot::MenuInGame
 		case InGameMenuItems::IGMI_SAVE:
 			_HandleSave();
 			break;
+
+		case InGameMenuItems::IGMI_LEAVE:
+			_HandleLeave();
+			break;
 		}
 
 		// by default, dismiss
@@ -283,12 +285,22 @@ namespace blooDot::MenuInGame
 	void _HandleSave()
 	{
 		SDL_Event saveEvent = { 0 };
-		saveEvent.type = SDL_USEREVENT;
-		saveEvent.user.type = SDL_USEREVENT_SAVE;
+		saveEvent.type = SDL_USEREVENT_SAVE;
 		if (SDL_PushEvent(&saveEvent) < 0)
 		{
 			const auto& pushError = SDL_GetError();
 			ReportError("Could not post save event", pushError);
+		}
+	}
+
+	void _HandleLeave()
+	{
+		SDL_Event leaveEvent = { 0 };
+		leaveEvent.type = SDL_USEREVENT_LEAVE;
+		if (SDL_PushEvent(&leaveEvent) < 0)
+		{
+			const auto& pushError = SDL_GetError();
+			ReportError("Could not post leave event", pushError);
 		}
 	}
 }
