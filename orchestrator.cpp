@@ -45,6 +45,8 @@ namespace blooDot::Orchestrator
 		long long frameNumber = 0;
 #endif
 
+		int numKeys;
+		SDL_GetKeyboardState(&numKeys);
 		while (mainRunning)
 		{
 			frameStart = SDL_GetPerformanceCounter();
@@ -52,113 +54,12 @@ namespace blooDot::Orchestrator
 			{
 				switch (mainEvent.type)
 				{
-				case SDL_KEYDOWN:
-					switch (mainEvent.key.keysym.scancode)
-					{
-#ifndef NDEBUG
-					case SDL_SCANCODE_LEFTBRACKET:
-						/* this...is...the...bracket */
-						toggleDebugView = !toggleDebugView;
-						break;
-
-#endif
-					case SDL_SCANCODE_A:
-						NudgePlayer(iP1, -5, 0);
-						break;
-
-					case SDL_SCANCODE_D:
-						NudgePlayer(iP1, 5, 0);
-						break;
-
-					case SDL_SCANCODE_S:
-						NudgePlayer(iP1, 0, 5);
-						break;
-
-					case SDL_SCANCODE_W:
-						NudgePlayer(iP1, 0, -5);
-						break;
-
-					case SDL_SCANCODE_F:
-						NudgePlayer(iP2, -5, 0);
-						break;
-
-					case SDL_SCANCODE_H:
-						NudgePlayer(iP2, 5, 0);
-						break;
-
-					case SDL_SCANCODE_G:
-						NudgePlayer(iP2, 0, 5);
-						break;
-
-					case SDL_SCANCODE_T:
-						NudgePlayer(iP2, 0, -5);
-						break;
-
-					case SDL_SCANCODE_J:
-						NudgePlayer(iP3, -5, 0);
-						break;
-
-					case SDL_SCANCODE_L:
-						NudgePlayer(iP3, 5, 0);
-						break;
-
-					case SDL_SCANCODE_K:
-						NudgePlayer(iP3, 0, 5);
-						break;
-
-					case SDL_SCANCODE_I:
-						NudgePlayer(iP3, 0, -5);
-						break;
-
-					case SDL_SCANCODE_LEFT:
-					case SDL_SCANCODE_KP_4:
-						Scroll(-5, 0);
-						break;
-
-					case SDL_SCANCODE_RIGHT:
-					case SDL_SCANCODE_KP_6:
-						Scroll(5, 0);
-						break;
-
-					case SDL_SCANCODE_UP:
-					case SDL_SCANCODE_KP_8:
-						Scroll(0, -5);
-						break;
-
-					case SDL_SCANCODE_DOWN:
-					case SDL_SCANCODE_KP_2:
-						Scroll(0, 5);
-						break;
-
-					case SDL_SCANCODE_KP_7:
-						Scroll(-5, -5);
-						break;
-
-					case SDL_SCANCODE_KP_9:
-						Scroll(5, -5);
-						break;
-
-					case SDL_SCANCODE_KP_1:
-						Scroll(-5, 5);
-						break;
-
-					case SDL_SCANCODE_KP_3:
-						Scroll(5, 5);
-						break;
-
-					case SDL_SCANCODE_ESCAPE:
-						blooDot::MenuInGame::MenuLoop(renderer);
-						goto NEXTFRAME;
-					}
-
-					break;
-
 				case SDL_QUIT:
-LEAVE:
+				LEAVE:
 					mainRunning = false;
 					goto THAT_ESCALATED_QUICKLY;
 				}
-
+			
 				if (mainEvent.type == SDL_USEREVENT_SAVE)
 				{
 					_HandleSave();
@@ -167,6 +68,122 @@ LEAVE:
 				else if (mainEvent.type == SDL_USEREVENT_LEAVE)
 				{
 					goto LEAVE;
+				}
+			}
+
+			if (numKeys > 0)
+			{
+				const auto& keys = SDL_GetKeyboardState(NULL);
+#ifndef NDEBUG
+				if (keys[SDL_SCANCODE_LEFTBRACKET])
+				{
+					/* this...is...the...bracket */
+					toggleDebugView = !toggleDebugView;
+				}
+#endif
+
+				if (keys[SDL_SCANCODE_A])
+				{
+					NudgePlayer(iP1, -5, 0);
+				}
+				else if (keys[SDL_SCANCODE_D])
+				{
+					NudgePlayer(iP1, 5, 0);
+				}
+
+				if (keys[SDL_SCANCODE_S])
+				{
+					NudgePlayer(iP1, 0, 5);
+				}
+				else if (keys[SDL_SCANCODE_W])
+				{
+					NudgePlayer(iP1, 0, -5);
+				}
+
+				if(keys[SDL_SCANCODE_F])
+				{
+					NudgePlayer(iP2, -5, 0);
+				}
+
+				if(keys[SDL_SCANCODE_H])
+				{
+					NudgePlayer(iP2, 5, 0);
+				}
+
+				if(keys[SDL_SCANCODE_G])
+				{
+					NudgePlayer(iP2, 0, 5);
+				}
+
+				if(keys[SDL_SCANCODE_T])
+				{
+					NudgePlayer(iP2, 0, -5);
+				}
+
+				if(keys[SDL_SCANCODE_J])
+				{
+					NudgePlayer(iP3, -5, 0);
+				}
+
+				if(keys[SDL_SCANCODE_L])
+				{
+					NudgePlayer(iP3, 5, 0);
+				}
+
+				if(keys[SDL_SCANCODE_K])
+				{
+					NudgePlayer(iP3, 0, 5);
+				}
+
+				if(keys[SDL_SCANCODE_I])
+				{
+					NudgePlayer(iP3, 0, -5);
+				}
+
+				if(keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_KP_4])
+				{
+					Scroll(-5, 0);
+				}
+
+				if(keys[SDL_SCANCODE_RIGHT] || keys[SDL_SCANCODE_KP_6])
+				{
+					Scroll(5, 0);
+				}
+
+				if(keys[SDL_SCANCODE_UP] || keys[SDL_SCANCODE_KP_8])
+				{
+					Scroll(0, -5);
+				}
+
+				if(keys[SDL_SCANCODE_DOWN] || keys[SDL_SCANCODE_KP_2])
+				{
+					Scroll(0, 5);
+				}
+
+				if(keys[SDL_SCANCODE_KP_7])
+				{
+					Scroll(-5, -5);
+				}
+
+				if(keys[SDL_SCANCODE_KP_9])
+				{
+					Scroll(5, -5);
+				}
+
+				if(keys[SDL_SCANCODE_KP_1])
+				{
+					Scroll(-5, 5);
+				}
+
+				if(keys[SDL_SCANCODE_KP_3])
+				{
+					Scroll(5, 5);
+				}
+
+				if(keys[SDL_SCANCODE_ESCAPE])
+				{
+					blooDot::MenuInGame::MenuLoop(renderer);
+					goto NEXTFRAME;
 				}
 			}
 
