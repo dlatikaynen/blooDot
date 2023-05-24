@@ -75,9 +75,8 @@ namespace blooDot::Orchestrator
 			{
 				const auto& keys = SDL_GetKeyboardState(NULL);
 #ifndef NDEBUG
-				if (keys[SDL_SCANCODE_LEFTBRACKET])
+				if (keys[SDL_SCANCODE_F6])
 				{
-					/* this...is...the...bracket */
 					toggleDebugView = !toggleDebugView;
 				}
 #endif
@@ -138,6 +137,26 @@ namespace blooDot::Orchestrator
 				if(keys[SDL_SCANCODE_I])
 				{
 					NudgePlayer(iP3, 0, -5);
+				}
+
+				if (keys[SDL_SCANCODE_SEMICOLON])
+				{
+					NudgePlayer(iP4, -5, 0);
+				}
+
+				if (keys[SDL_SCANCODE_BACKSLASH])
+				{
+					NudgePlayer(iP4, 5, 0);
+				}
+
+				if (keys[SDL_SCANCODE_APOSTROPHE])
+				{
+					NudgePlayer(iP4, 0, 5);
+				}
+
+				if (keys[SDL_SCANCODE_LEFTBRACKET])
+				{
+					NudgePlayer(iP4, 0, -5);
 				}
 
 				if(keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_KP_4])
