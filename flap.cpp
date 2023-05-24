@@ -104,18 +104,18 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 			cairo_stroke(drawingSink);
 #endif
 
-			const auto cellPiece = GetPieceRelative(worldX, worldY);
-			if (!cellPiece.dings.empty())
+			const auto cellPieces = GetPiecesRelative(worldX, worldY);
+			if (!cellPieces.empty())
 			{
-				for (auto& ding : cellPiece.dings)
+				for (auto& ding : cellPieces)
 				{
-					const auto dingLocator = GetDing(ding.ding);
+					const auto dingLocator = GetDing(ding->ding);
 					if (dingLocator->onSheet) [[likely]]
 					{
 #ifndef NDEBUG
 						++objectCount;
 #endif
-						if (ding.props & DingProps::Walls)
+						if (ding->props & DingProps::Walls)
 						{
 							if (SDL_SetRenderTarget(GameViewRenderer, walls) < 0)
 							{
@@ -123,7 +123,7 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 								ReportError("Could not set render target to walls", wallsError);
 							}
 						}
-						else if (ding.props & DingProps::Rooof)
+						else if (ding->props & DingProps::Rooof)
 						{
 							if (SDL_SetRenderTarget(GameViewRenderer, rooof) < 0)
 							{

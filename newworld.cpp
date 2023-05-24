@@ -1,22 +1,32 @@
 #include "pch.h"
 #include "newworld.h"
 #include "xlations.h"
+#include <iostream>
 
 bool InitializeNewWorld()
 {
 	ClearWorldData();
 
 	WorldRegion scullery;
-	scullery.belongsTo = NULL;
+	//scullery.belongsTo = NULL;
 	scullery.RegionId = 1;
 	scullery.RegionName = std::string(literalregionNameScullery);
 	scullery.polygon.push_back({ -3,-3 });
 	scullery.polygon.push_back({ 3,-3 });
 	scullery.polygon.push_back({ 3,3 });
 	scullery.polygon.push_back({ -3,3 });
+
+	scullery.polygon.push_back({ -3,3 });
+	scullery.polygon.push_back({ -3,3 });
+	scullery.polygon.push_back({ -3,3 });
+	scullery.polygon.push_back({ -3,3 });
+	scullery.polygon.push_back({ -3,3 });
+	scullery.polygon.push_back({ -3,3 });
+
 	AddRegion(scullery);
 
-	const auto centerSheet = (WorldSheet *)SDL_malloc(sizeof(WorldSheet));
+	auto centerSheet = std::make_shared<WorldSheet>();
+	// *)SDL_malloc(sizeof(WorldSheet));
 	if (!centerSheet)
 	{
 		const auto allocError = SDL_GetError();
@@ -77,18 +87,18 @@ bool InitializeNewWorld()
 	}
 
 
-	ReplaceWorldSheet(0, 0, centerSheet);
+	ReplaceWorldSheet(0, 0, centerSheet.get());
 
 	return true;
 }
 
-void _Put(WorldSheet* sheet, int x, int y, Ding ding, DingProps props)
+void _Put(std::shared_ptr<WorldSheet> sheet, int x, int y, Ding ding, DingProps props)
 {
-	DingInstance instance{};
+	//auto inst = new DingInstance();
+	auto& instance = sheet->stuff.emplace_back(DingInstance());
 	instance.ding = ding;
 	instance.props = props == DingProps::Default ? GetDingDefaultProps(ding) : props;
 	const auto pieceIndex = (y + WORLD_SHEET_CENTERPOINT) * WORLD_SHEET_SIDELENGTH + x + WORLD_SHEET_CENTERPOINT;
-	sheet->arena[pieceIndex]
-		.dings
-		.push_back(instance);
+	sheet->arena[pieceIndex].push_back(&instance);
+	std::cout << x << y << props << instance.ding << ding;
 }
