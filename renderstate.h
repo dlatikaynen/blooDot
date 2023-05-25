@@ -19,7 +19,7 @@ extern SDL_Texture* NewTexture(SDL_Renderer* renderer, int w, int h, bool transp
 extern cairo_t* BeginTextureDrawing(SDL_Texture* targetTexture, const int canvasWidth, const int canvasHeight);
 extern void EndTextureDrawing(SDL_Texture*, cairo_t*);
 extern void PopulateFlap(int, int, int);
-extern WorldPieces GetPiecesRelative(int, int);
+extern WorldPieces* GetPiecesRelative(int, int);
 extern int FlapAwarenessLeft();
 extern int FlapAwarenessRite();
 extern int FlapAwarenessUuup();

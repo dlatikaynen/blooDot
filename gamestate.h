@@ -41,19 +41,27 @@ struct DingInstance {
 /// Multi-cell objects are repeated as
 /// pointers in every neighboring cell
 /// </summary>
-typedef std::vector<DingInstance *> WorldPieces;
+typedef std::vector<std::shared_ptr<DingInstance>> WorldPieces;
 
 /// <summary>
 /// The instance storage of all the Worldpieces
 /// </summary>
-typedef std::vector<DingInstance> WorldPieceRepository;
+typedef std::vector<std::shared_ptr<DingInstance>> WorldPieceRepoEntry;
+typedef std::shared_ptr<WorldPieceRepoEntry> WorldPieceRepository;
 
 /// <summary>
 /// Use arena to look up the coarse collision environment
 /// Use the ding instances inside 
 /// </summary>
-typedef struct WorldSheet
+typedef class WorldSheet
 {
+public:
+	WorldSheet()
+	{
+		auto newStuff = std::make_shared<WorldPieceRepoEntry>();
+		this->stuff = newStuff;
+	}
+
 	/// <summary>
 	/// How many sheets from the center sheet
 	/// </summary>
@@ -73,7 +81,7 @@ typedef struct WorldSheet
 	/// <summary>
 	/// Directly adressable x-y-wise by grid unit index in world sheet sidelength stride
 	/// </summary>
-	std::array<WorldPieces, WORLD_SHEET_SIDELENGTH * WORLD_SHEET_SIDELENGTH> arena;
+    std::array<WorldPieces, WORLD_SHEET_SIDELENGTH * WORLD_SHEET_SIDELENGTH> arena;
 } WorldSheet;
 
 typedef struct PointInWorld
@@ -99,6 +107,6 @@ typedef struct WorldRegion
 void ClearWorldData();
 void ClearWorldSheet(int sheetIndex);
 void AddRegion(WorldRegion regionDescriptor);
-void ReplaceWorldSheet(int sheetX, int sheetY, WorldSheet* content);
-WorldPieces GetPiecesRelative(int worldX, int worldY);
+std::shared_ptr<WorldSheet> GetWorldSheet(int sheetX, int sheetY);
+WorldPieces* GetPiecesRelative(int worldX, int worldY);
 const char* GetRegionName(int worldX, int worldY);

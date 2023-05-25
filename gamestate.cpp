@@ -7,7 +7,7 @@
  * world data is loaded on demand, in 9 quadrants at a time
  * the data structure is a two-dimensional linked and stacked matrix */
 
-std::array<WorldSheet*, 9> worldSheets;
+std::array<std::shared_ptr<WorldSheet>, 9> worldSheets = { 0 };
 std::vector<WorldRegion> worldRegions;
 
 void ClearWorldData()
@@ -25,22 +25,18 @@ void ClearWorldSheet(int sheetIndex)
 	assert(sheetIndex >= 0 && sheetIndex < 9);
 	if (worldSheets[sheetIndex])
 	{
-		SDL_free(worldSheets[sheetIndex]);
+		worldSheets[sheetIndex].reset();
 	}
 
-	worldSheets[sheetIndex] = NULL;
+	worldSheets[sheetIndex] = std::make_shared<WorldSheet>();
 }
 
-void ReplaceWorldSheet(int sheetX, int sheetY, WorldSheet* content)
+std::shared_ptr<WorldSheet> GetWorldSheet(int sheetX, int sheetY)
 {
 	const auto sheetIndex = (sheetY + 1) * 3 + (sheetX + 1);
 	assert(sheetIndex >= 0 && sheetIndex < 9);
-	if (worldSheets[sheetIndex])
-	{
-		SDL_free(worldSheets[sheetIndex]);
-	}
 
-	worldSheets[sheetIndex] = content;
+	return worldSheets[sheetIndex];
 }
 
 void AddRegion(WorldRegion regionDescriptor)
@@ -49,12 +45,12 @@ void AddRegion(WorldRegion regionDescriptor)
 	worldRegions.push_back(regionDescriptor);
 }
 
-WorldPieces GetPiecesRelative(int worldX, int worldY)
+WorldPieces* GetPiecesRelative(int worldX, int worldY)
 {
-	const auto sheet = worldSheets[static_cast<std::array<WorldSheet*, 9Ui64>::size_type>(1 * 3) + 1];
+	const auto sheet = GetWorldSheet(0, 0);
 	const auto pieceIndex = ((worldY + WORLD_SHEET_CENTERPOINT) * WORLD_SHEET_SIDELENGTH + worldX + WORLD_SHEET_CENTERPOINT);
 	
-	return sheet->arena[pieceIndex];
+	return &sheet->arena[pieceIndex];
 }
 
 const char* GetRegionName(int worldX, int worldY)

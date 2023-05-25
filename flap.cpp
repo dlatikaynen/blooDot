@@ -105,9 +105,9 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 #endif
 
 			const auto cellPieces = GetPiecesRelative(worldX, worldY);
-			if (!cellPieces.empty())
+			if (!cellPieces->empty())
 			{
-				for (auto& ding : cellPieces)
+				for (auto& ding : *cellPieces)
 				{
 					const auto dingLocator = GetDing(ding->ding);
 					if (dingLocator->onSheet) [[likely]]

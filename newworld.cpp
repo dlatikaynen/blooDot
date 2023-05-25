@@ -24,13 +24,12 @@ bool InitializeNewWorld()
 	scullery.polygon.push_back({ -3,3 });
 
 	AddRegion(scullery);
-
-	auto centerSheet = std::make_shared<WorldSheet>();
-	// *)SDL_malloc(sizeof(WorldSheet));
+	
+	auto centerSheet = GetWorldSheet(0, 0);
 	if (!centerSheet)
 	{
 		const auto allocError = SDL_GetError();
-		ReportError("Failed to allocate center sheet", allocError);
+		ReportError("Encountered unallocated center sheet", allocError);
 		return false;
 	}
 
@@ -86,19 +85,17 @@ bool InitializeNewWorld()
 		_Put(centerSheet, i, y, Ding::Schaed);
 	}
 
-
-	ReplaceWorldSheet(0, 0, centerSheet.get());
-
 	return true;
 }
 
 void _Put(std::shared_ptr<WorldSheet> sheet, int x, int y, Ding ding, DingProps props)
 {
-	//auto inst = new DingInstance();
-	auto& instance = sheet->stuff.emplace_back(DingInstance());
-	instance.ding = ding;
-	instance.props = props == DingProps::Default ? GetDingDefaultProps(ding) : props;
 	const auto pieceIndex = (y + WORLD_SHEET_CENTERPOINT) * WORLD_SHEET_SIDELENGTH + x + WORLD_SHEET_CENTERPOINT;
-	sheet->arena[pieceIndex].push_back(&instance);
-	std::cout << x << y << props << instance.ding << ding;
+	auto instancePtr = std::make_shared<DingInstance>();
+	sheet->stuff->push_back(instancePtr);
+	auto arenaPtr = instancePtr;
+	sheet->arena[pieceIndex].push_back(arenaPtr);
+	instancePtr->ding = ding;
+	instancePtr->props = props == DingProps::Default ? GetDingDefaultProps(ding) : props;
+	std::cout << x << y << props << ding;
 }
