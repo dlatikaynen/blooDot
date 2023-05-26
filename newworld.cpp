@@ -104,7 +104,7 @@ void _Put(std::shared_ptr<WorldSheet> sheet, int x, int y, Ding ding, DingProps 
 	/* 3. place its anchor point into the grid cell where it is anchored */
 	sheet->arena[pieceIndex].push_back(instancePtr);
 
-	/* 4. compute all other grid cells which it touches, so collision
+	/* 4. TODO: compute all other grid cells which it touches, so collision
 	 *    detection via bounding squares will work */
 
 }
