@@ -7,7 +7,8 @@
 constexpr auto WORLD_SHEET_SIDELENGTH = 120;
 constexpr auto WORLD_SHEET_CENTERPOINT = WORLD_SHEET_SIDELENGTH / 2;
 
-struct DingInstance {
+struct DingInstance
+{
 	Ding ding = Ding::None;
 	DingProps props = DingProps::Default;
 	
