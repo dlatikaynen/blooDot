@@ -1,10 +1,13 @@
 #pragma once
 #include <SDL.h>
+#include <box2d.h>
 
 extern bool InitializeNewWorld();
 extern bool GameviewEnterWorld();
+extern void EnsurePlayers();
 extern void GameViewRenderFrame();
 extern void NudgePlayer(int playerIndex, int accelerationX, int accelerationY);
+extern void SetPlayerPosition(int playerIndex, int positionX, int positionY);
 extern void Scroll(int, int);
 extern void TeardownDingSheets();
 extern void GameviewTeardown();

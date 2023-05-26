@@ -756,6 +756,12 @@
     <None Include="package-box2d.cmd">
       <Filter>Lib Dependencies</Filter>
     </None>
+    <None Include="package-box2d-release.cmd">
+      <Filter>Lib Dependencies</Filter>
+    </None>
+    <None Include="box2d-licence.txt">
+      <Filter>Resource Files\legalese</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\lib\x64\SDL2.lib">

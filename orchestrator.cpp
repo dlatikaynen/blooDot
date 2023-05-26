@@ -20,9 +20,31 @@ bool toggleDebugView = false;
 namespace blooDot::Orchestrator
 {
 	SDL_Event mainEvent;
+	b2Vec2 gravity(0.f, 0.f);
+	b2World world(gravity);
+	b2BodyDef bodyDef;
+	b2PolygonShape dynamicBox;
+	b2FixtureDef fixtureDef;
+	float timeStep = MillisecondsPerFrame / 1000.f;
+	int32 velocityIterations = 6;
+	int32 positionIterations = 2;
 
 	void MainLoop(SDL_Renderer* renderer)
 	{
+		bodyDef.type = b2_dynamicBody;
+		bodyDef.position.Set(555.f / static_cast<float>(GRIDUNIT), 219.f / static_cast<float>(GRIDUNIT));
+		bodyDef.linearDamping = 6.68f;
+		
+		b2Body* body = world.CreateBody(&bodyDef);
+
+		dynamicBox.SetAsBox(1.0f, 1.0f);
+		
+		fixtureDef.shape = &dynamicBox;
+		fixtureDef.density = 1.0f;
+		fixtureDef.friction = 0.3f;
+
+		body->CreateFixture(&fixtureDef);
+
 		if (!InitializeNewWorld())
 		{
 			mainRunning = false;
@@ -71,6 +93,7 @@ namespace blooDot::Orchestrator
 				}
 			}
 
+			EnsurePlayers();
 			if (numKeys > 0)
 			{
 				const auto& keys = SDL_GetKeyboardState(NULL);
@@ -141,22 +164,22 @@ namespace blooDot::Orchestrator
 
 				if (keys[SDL_SCANCODE_SEMICOLON])
 				{
-					NudgePlayer(iP4, -5, 0);
+					body->ApplyLinearImpulseToCenter({ -1.7f, 0 }, true);
 				}
 
 				if (keys[SDL_SCANCODE_BACKSLASH])
 				{
-					NudgePlayer(iP4, 5, 0);
+					body->ApplyLinearImpulseToCenter({ 1.7f, 0 }, true);
 				}
 
 				if (keys[SDL_SCANCODE_APOSTROPHE])
 				{
-					NudgePlayer(iP4, 0, 5);
+					body->ApplyLinearImpulseToCenter({ 0, 1.7f }, true);
 				}
 
 				if (keys[SDL_SCANCODE_LEFTBRACKET])
 				{
-					NudgePlayer(iP4, 0, -5);
+					body->ApplyLinearImpulseToCenter({ 0, -1.7f }, true);
 				}
 
 				if(keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_KP_4])
@@ -203,6 +226,17 @@ namespace blooDot::Orchestrator
 				{
 					blooDot::MenuInGame::MenuLoop(renderer);
 					goto NEXTFRAME;
+				}
+			}
+
+			// rare use for a scope block, guess why
+			{
+				world.Step(timeStep, velocityIterations, positionIterations);
+				b2Vec2 position = body->GetPosition();
+				SetPlayerPosition(iP4, (int)(position.x * static_cast<float>(GRIDUNIT)), (int)(position.y * static_cast<float>(GRIDUNIT)));
+				if (body->GetLinearVelocity().Length() < 0.3f)
+				{
+					body->SetLinearVelocity({ 0,0 });
 				}
 			}
 

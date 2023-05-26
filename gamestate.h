@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include <box2d.h>
 #include "ding.h"
 #include "enums.h"
 
@@ -7,32 +8,48 @@ constexpr auto WORLD_SHEET_SIDELENGTH = 120;
 constexpr auto WORLD_SHEET_CENTERPOINT = WORLD_SHEET_SIDELENGTH / 2;
 
 struct DingInstance {
-	Ding ding;
-	DingProps props;
+	Ding ding = Ding::None;
+	DingProps props = DingProps::Default;
 	
 	/// <summary>
 	/// grid position of the placed ding's own anchor point on the world sheet
 	/// moves with the instance, when it moves relative to the sheet it's on
 	/// </summary>
-	int gridAnchorX;
+	int gridAnchorX = 0;
 
 	/// <summary>
 	/// grid position of the placed ding's own anchor point on the world sheet
 	/// moves with the instance, when it moves relative to the sheet it's on
 	/// </summary>
-	int gridAnchorY;
+	int gridAnchorY = 0;
+
+	/// <summary>
+	/// The array of convex polygons that define the collision boundary of the
+	/// entity in world sheet absolute coordinates. The special case is wall-likes,
+	/// where this equals nullptr, then the collision polygon is identical to the
+	/// entitie's grid square.
+	/// Note that a group of entities can share a common hull collision polygon.
+	/// In this case, more than one instance points to the same vector.
+	/// </summary>
+	std::shared_ptr<std::vector<b2PolygonShape>> collisionPolygon = nullptr;
 
 	/// <summary>
 	/// pixel offset from the grid unit where the anchor point is on,
 	/// for fine structure position adjustment
 	/// </summary>
-	int pixOffsetX;
+	int pixOffsetX = 0;
 
 	/// <summary>
 	/// pixel offset from the grid unit where the anchor point is on,
 	/// for fine structure position adjustment
 	/// </summary>
-	int pixOffsetY;
+	int pixOffsetY = 0;
+
+	/// <summary>
+	/// Angle in integer radians,
+	/// for non-rectangular positioning on a worldsheet
+	/// </summary>
+	int rotationAngle = 0;
 };
 
 /// <summary>

@@ -722,7 +722,34 @@ void NudgePlayer(int playerIndex, int accelerationX, int accelerationY)
 	}
 }
 
-void RenderMobs()
+void SetPlayerPosition(int playerIndex, int positionX, int positionY)
+{
+	switch (playerIndex)
+	{
+	case iP1:
+		player1->Offset.x = positionX;
+		player1->Offset.y = positionY;
+		break;
+
+	case iP2:
+		player2->Offset.x = positionX;
+		player2->Offset.y = positionY;
+		break;
+
+	case iP3:
+		player3->Offset.x = positionX;
+		player3->Offset.y = positionY;
+		break;
+
+	case iP4:
+		player4->Offset.x = positionX;
+		player4->Offset.y = positionY;
+		break;
+
+	}
+}
+
+void EnsurePlayers()
 {
 	if (player1 == NULL)
 	{
@@ -754,7 +781,10 @@ void RenderMobs()
 			}
 		}
 	}
+}
 
+void RenderMobs()
+{
 	const SDL_Rect dst1 = {
 		player1->Offset.x,
 		player1->Offset.y,

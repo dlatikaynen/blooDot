@@ -87,8 +87,8 @@
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);SDL\lib\x64</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);cairo;SDL\include</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);SDL\lib\x64</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);cairo;SDL\include;C:\lc\blooDot\packages\box2d\include\box2d</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);SDL\lib\x64;C:\lc\blooDot\packages\box2d_release\lib</LibraryPath>
     <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
     <CustomBuildBeforeTargets>Link</CustomBuildBeforeTargets>
   </PropertyGroup>
@@ -122,7 +122,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SDL\lib\x64;C:\lc\blooDot\packages\box2d\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SDL\lib\x64;packages\box2d\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)SDL\lib\x64\SDL2.lib;$(ProjectDir)SDL\lib\x64\SDL2main.lib;$(ProjectDir)SDL\lib\x64\SDL2_image.lib;$(ProjectDir)SDL\lib\x64\SDL2_mixer.lib;$(ProjectDir)SDL\lib\x64\SDL2_ttf.lib;$(ProjectDir)SDL\lib\x64\cairo.lib;$(ProjectDir)packages\box2d\lib\box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TurnOffAssemblyGeneration Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</TurnOffAssemblyGeneration>
       <EnableUAC Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableUAC>
@@ -201,13 +201,14 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)SDL\lib\x64\SDL2.lib;$(ProjectDir)SDL\lib\x64\SDL2main.lib;$(ProjectDir)SDL\lib\x64\SDL2_image.lib;$(ProjectDir)SDL\lib\x64\SDL2_mixer.lib;$(ProjectDir)SDL\lib\x64\SDL2_ttf.lib;$(ProjectDir)SDL\lib\x64\cairo.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)SDL\lib\x64\SDL2.lib;$(ProjectDir)SDL\lib\x64\SDL2main.lib;$(ProjectDir)SDL\lib\x64\SDL2_image.lib;$(ProjectDir)SDL\lib\x64\SDL2_mixer.lib;$(ProjectDir)SDL\lib\x64\SDL2_ttf.lib;$(ProjectDir)SDL\lib\x64\cairo.lib;$(ProjectDir)packages\box2d_release\lib\box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TurnOffAssemblyGeneration Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</TurnOffAssemblyGeneration>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SDL\lib\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SDL\lib\x64;packages\box2d_release\lib</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</IgnoreAllDefaultLibraries>
       <EnableUAC Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</EnableUAC>
-      <IgnoreSpecificDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Release|x64'">user32;gdi32;comctl32;winspool;comdlg32;advapi32;shell32;shlwapi;ole32;oleaut32;uuid;odbc32;odbccp32</IgnoreSpecificDefaultLibraries>
-      <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">libcairo-2.dll</DelayLoadDLLs>
+      <IgnoreSpecificDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MSVCRTD;user32;gdi32;comctl32;winspool;comdlg32;advapi32;shell32;shlwapi;ole32;oleaut32;uuid;odbc32;odbccp32</IgnoreSpecificDefaultLibraries>
+      <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </DelayLoadDLLs>
       <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">libcairo-2.dll</DelayLoadDLLs>
     </Link>
     <ProjectReference>
@@ -428,9 +429,13 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
     </None>
+    <None Include="package-box2d-release.cmd">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
+    </None>
     <None Include="package-box2d.cmd">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </None>
     <None Include="packages.config" />
     <None Include="planning\dramatis-personae.ligma">
@@ -709,6 +714,10 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <None Include="box2d-licence.txt">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
+    </None>
     <Text Include="boxchars.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>

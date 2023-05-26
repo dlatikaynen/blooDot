@@ -9,6 +9,7 @@ extern void RenderFloorBung();
 extern void RenderFloorVert();
 extern void RenderFloorHorz();
 extern void RenderFloorQuart();
+extern void EnsurePlayers();
 extern void RenderMobs();
 extern void RenderWallsAndRooofBung();
 extern void RenderstateTeardown();
