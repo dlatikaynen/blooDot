@@ -91,11 +91,20 @@ bool InitializeNewWorld()
 void _Put(std::shared_ptr<WorldSheet> sheet, int x, int y, Ding ding, DingProps props)
 {
 	const auto pieceIndex = (y + WORLD_SHEET_CENTERPOINT) * WORLD_SHEET_SIDELENGTH + x + WORLD_SHEET_CENTERPOINT;
-	auto instancePtr = std::make_shared<DingInstance>();
-	sheet->stuff->push_back(instancePtr);
-	auto arenaPtr = instancePtr;
-	sheet->arena[pieceIndex].push_back(arenaPtr);
+	const auto instancePtr = std::make_shared<DingInstance>();
+
+	/* 1. assign the properties */
 	instancePtr->ding = ding;
 	instancePtr->props = props == DingProps::Default ? GetDingDefaultProps(ding) : props;
-	std::cout << x << y << props << ding;
+
+	/* 2. register the entity in the world sheet storage.
+	*     this step may become obsolete since they now live on the heap */
+	sheet->stuff->push_back(instancePtr);
+
+	/* 3. place its anchor point into the grid cell where it is anchored */
+	sheet->arena[pieceIndex].push_back(instancePtr);
+
+	/* 4. compute all other grid cells which it touches, so collision
+	 *    detection via bounding squares will work */
+
 }
