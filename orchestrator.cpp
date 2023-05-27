@@ -16,6 +16,11 @@ Uint32 SDL_USEREVENT_LEAVE = 0; // [sic], they're only allocated later
 extern SettingsStruct Settings;
 extern SDL_Renderer* GameViewRenderer;
 
+/* for screens where we render only a part (square) */
+extern int viewportOffsetX;
+extern int viewportOffsetY;
+
+
 bool mainRunning = true;
 #ifndef NDEBUG
 bool toggleDebugView = false;
@@ -77,9 +82,12 @@ namespace blooDot::Orchestrator
 			fixtureDef.restitution = .27f;
 			p2Body->CreateFixture(&fixtureDef);
 			p4Body->CreateFixture(&fixtureDef);
-
 			/* wall physics */
-			AttachWorldPhysics(&world);
+			AttachWorldPhysics(
+				&world,
+				12 * GRIDUNIT - 29 + GRIDUNIT / 2 + viewportOffsetX,
+				12 * GRIDUNIT - 29 + GRIDUNIT / 2 + viewportOffsetY
+			);
 
 			/* input */
 			SDL_USEREVENT_SAVE = SDL_RegisterEvents(1);
@@ -218,21 +226,25 @@ namespace blooDot::Orchestrator
 					if (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_KP_4])
 					{
 						Scroll(-5, 0);
+						world.ShiftOrigin({ -5 / static_cast<float>(GRIDUNIT),0 });
 					}
 
 					if (keys[SDL_SCANCODE_RIGHT] || keys[SDL_SCANCODE_KP_6])
 					{
 						Scroll(5, 0);
+						world.ShiftOrigin({ 5 / static_cast<float>(GRIDUNIT),0 });
 					}
 
 					if (keys[SDL_SCANCODE_UP] || keys[SDL_SCANCODE_KP_8])
 					{
 						Scroll(0, -5);
+						world.ShiftOrigin({ 0, -5 / static_cast<float>(GRIDUNIT) });
 					}
 
 					if (keys[SDL_SCANCODE_DOWN] || keys[SDL_SCANCODE_KP_2])
 					{
 						Scroll(0, 5);
+						world.ShiftOrigin({ 0, 5 / static_cast<float>(GRIDUNIT) });
 					}
 
 					if (keys[SDL_SCANCODE_KP_7])

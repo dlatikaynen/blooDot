@@ -92,7 +92,7 @@ bool InitializeNewWorld()
 	return true;
 }
 
-void AttachWorldPhysics(b2World* world)
+void AttachWorldPhysics(b2World* world, int flapOffsetX, int flapOffsetY)
 {
 	auto centerSheet = GetWorldSheet(0, 0);
 	auto entities = *centerSheet->stuff;
@@ -105,8 +105,8 @@ void AttachWorldPhysics(b2World* world)
 
 		wallDef.type = b2_staticBody;
 		wallDef.position.Set(
-			static_cast<float>(entity->gridAnchorX * GRIDUNIT + entity->pixOffsetX) / static_cast<float>(GRIDUNIT),
-			static_cast<float>(entity->gridAnchorY * GRIDUNIT + entity->pixOffsetY) / static_cast<float>(GRIDUNIT)
+			static_cast<float>(flapOffsetX + entity->gridAnchorX * GRIDUNIT + entity->pixOffsetX) / static_cast<float>(GRIDUNIT),
+			static_cast<float>(flapOffsetY + entity->gridAnchorY * GRIDUNIT + entity->pixOffsetY) / static_cast<float>(GRIDUNIT)
 		);
 
 		const auto& wallBody = world->CreateBody(&wallDef);
