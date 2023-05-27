@@ -73,6 +73,11 @@ enum ScreenSettingsMenuItems {
 	SSMI_VIDEOMODE
 };
 
+enum MultiMonitorMenuItems {
+	MMMI_CANCEL,
+	MMMI_DISPLAY
+};
+
 enum LangSettingsMenuItems {
 	LSMI_CANCEL,
 	LSMI_USER_INTERFACE_LANGUAGE

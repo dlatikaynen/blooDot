@@ -24,11 +24,11 @@ namespace blooDot::MultiMonitorMenuScreen
 	SDL_Event monitorChoiceMenuEvent;
 	bool multiMonitorMenuRunning = false;
 	bool confirmed = false;
-	auto menuSelection = ScreenSettingsMenuItems::SSMI_CANCEL;
+	auto menuSelection = MultiMonitorMenuItems::MMMI_DISPLAY;
 	auto selectedDisplay = 0;
 	auto movingToDisplay = 0;
 	int vignetteCount = 0;
-	SDL_Texture* slidingModes;
+	SDL_Texture* slidingMonitors;
 	int sliderTextureWidth;
 	int sliderOffsetLeft = bounceMargin;
 	int slideSpeed = 0;
@@ -93,13 +93,13 @@ namespace blooDot::MultiMonitorMenuScreen
 					case SDL_SCANCODE_S:
 					case SDL_SCANCODE_PAGEDOWN:
 					case SDL_SCANCODE_END:
-						if (menuSelection == SSMI_VIDEOMODE)
+						if (menuSelection == MMMI_DISPLAY)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
 						else
 						{
-							menuSelection = SSMI_VIDEOMODE;
+							menuSelection = MMMI_DISPLAY;
 							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 						}
 
@@ -110,13 +110,13 @@ namespace blooDot::MultiMonitorMenuScreen
 					case SDL_SCANCODE_W:
 					case SDL_SCANCODE_PAGEUP:
 					case SDL_SCANCODE_HOME:
-						if (menuSelection == SSMI_CANCEL)
+						if (menuSelection == MMMI_CANCEL)
 						{
 							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
 						}
 						else
 						{
-							menuSelection = SSMI_CANCEL;
+							menuSelection = MMMI_CANCEL;
 							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 						}
 
@@ -125,9 +125,9 @@ namespace blooDot::MultiMonitorMenuScreen
 					case SDL_SCANCODE_LEFT:
 					case SDL_SCANCODE_KP_4:
 					case SDL_SCANCODE_A:
-						if (menuSelection == SSMI_CANCEL)
+						if (menuSelection == MMMI_CANCEL)
 						{
-							menuSelection = SSMI_VIDEOMODE;
+							menuSelection = MMMI_DISPLAY;
 						}
 
 						if (selectedDisplay == 0)
@@ -136,7 +136,7 @@ namespace blooDot::MultiMonitorMenuScreen
 						}
 						else if (movingToDisplay == selectedDisplay)
 						{
-							movingToDisplay = static_cast<ViewportResolutions>(static_cast<int>(selectedDisplay) - 1);
+							movingToDisplay = selectedDisplay - 1;
 							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
 						}
 						else if (movingToDisplay != 0)
@@ -149,9 +149,9 @@ namespace blooDot::MultiMonitorMenuScreen
 					case SDL_SCANCODE_RIGHT:
 					case SDL_SCANCODE_KP_6:
 					case SDL_SCANCODE_D:
-						if (menuSelection == SSMI_CANCEL)
+						if (menuSelection == MMMI_CANCEL)
 						{
-							menuSelection = SSMI_VIDEOMODE;
+							menuSelection = MMMI_DISPLAY;
 						}
 
 						if (selectedDisplay == vignetteCount - 1)
@@ -174,13 +174,13 @@ namespace blooDot::MultiMonitorMenuScreen
 					case SDL_SCANCODE_RETURN2:
 					case SDL_SCANCODE_KP_ENTER:
 					case SDL_SCANCODE_SPACE:
-						if (menuSelection == SSMI_VIDEOMODE)
+						if (menuSelection == MMMI_DISPLAY)
 						{
 							::Settings.FullscreenDisplayIndex = static_cast<unsigned char>(movingToDisplay);
 							confirmed = true;
 							multiMonitorMenuRunning = false;
 						}
-						else if (menuSelection == SSMI_CANCEL)
+						else if (menuSelection == MMMI_CANCEL)
 						{
 							multiMonitorMenuRunning = false;
 						}
@@ -221,7 +221,7 @@ namespace blooDot::MultiMonitorMenuScreen
 			{
 				auto const& drawingSink = GetDrawingSink();
 
-				ScreenSettingsMenuItems itemToDraw = SSMI_CANCEL;
+				MultiMonitorMenuItems itemToDraw = MMMI_CANCEL;
 				constexpr int const buttonLeft = outerMenuRect.x + labelInsetX;
 				for (auto y = startY; y < 200; y += stride)
 				{
@@ -230,30 +230,37 @@ namespace blooDot::MultiMonitorMenuScreen
 						buttonLeft,
 						y,
 						vignetteWidth,
-						itemToDraw > SSMI_CANCEL ? vignetteHeight : 42,
+						itemToDraw > MMMI_CANCEL ? vignetteHeight : 42,
 						itemToDraw == menuSelection
 					);
 
 					if (itemToDraw == menuSelection)
 					{
-						if (menuSelection == SSMI_CANCEL)
+						if (menuSelection == MMMI_CANCEL)
 						{
 							DrawChevron(drawingSink, buttonLeft - 7, y + 21, false, frame);
 							DrawChevron(drawingSink, buttonLeft + vignetteWidth + 7, y + 21, true, frame);
 						}
 						else
 						{
-							DrawChevron(drawingSink, buttonLeft - 9, y + 105, true, frame);
-							DrawChevron(drawingSink, buttonLeft + vignetteWidth + 9, y + 105, false, frame);
+							if (movingToDisplay > 0 && selectedDisplay > 0)
+							{
+								DrawChevron(drawingSink, buttonLeft - 9, y + 105, true, frame);
+							}
+
+							if (movingToDisplay < vignetteCount - 1 && selectedDisplay < vignetteCount - 1)
+							{
+								DrawChevron(drawingSink, buttonLeft + vignetteWidth + 9, y + 105, false, frame);
+							}
 						}
 					}
 
-					if (itemToDraw == SSMI_CANCEL)
+					if (itemToDraw == MMMI_CANCEL)
 					{
 						y += backGap;
 					}
 
-					itemToDraw = static_cast<ScreenSettingsMenuItems>(itemToDraw + 1);
+					itemToDraw = static_cast<MultiMonitorMenuItems>(itemToDraw + 1);
 				}
 
 				EndRenderDrawing(renderer, drawingTexture, nullptr);
@@ -263,7 +270,7 @@ namespace blooDot::MultiMonitorMenuScreen
 				/* render the carousel choice (and the sliding animation) */
 				_AnimateCarousel();
 				carouselSrcRect.x = sliderOffsetLeft;
-				SDL_RenderCopy(renderer, slidingModes, &carouselSrcRect, &carouselDestRect);
+				SDL_RenderCopy(renderer, slidingMonitors, &carouselSrcRect, &carouselDestRect);
 			}
 
 			SDL_RenderPresent(renderer);
@@ -322,7 +329,7 @@ namespace blooDot::MultiMonitorMenuScreen
 		}
 
 		sliderTextureWidth = vignetteCount * vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * bounceMargin;
-		slidingModes = SDL_CreateTexture(
+		slidingMonitors = SDL_CreateTexture(
 			renderer,
 			SDL_PIXELFORMAT_ARGB8888,
 			SDL_TEXTUREACCESS_TARGET,
@@ -330,19 +337,19 @@ namespace blooDot::MultiMonitorMenuScreen
 			vignetteHeight
 		);
 
-		if (slidingModes)
+		if (slidingMonitors)
 		{
-			if (SDL_SetTextureBlendMode(slidingModes, SDL_BLENDMODE_BLEND) < 0)
+			if (SDL_SetTextureBlendMode(slidingMonitors, SDL_BLENDMODE_BLEND) < 0)
 			{
 				const auto carouselBlendmodeError = SDL_GetError();
 				ReportError("Could not set blend mode of sliding texture", carouselBlendmodeError);
-				SDL_DestroyTexture(slidingModes);
-				slidingModes = NULL;
+				SDL_DestroyTexture(slidingMonitors);
+				slidingMonitors = NULL;
 
 				return;
 			}
 
-			if (SDL_SetRenderTarget(renderer, slidingModes) < 0)
+			if (SDL_SetRenderTarget(renderer, slidingMonitors) < 0)
 			{
 				const auto targetError = SDL_GetError();
 				ReportError("Could not set sliding texture as the render target", targetError);
@@ -418,6 +425,6 @@ namespace blooDot::MultiMonitorMenuScreen
 
 	void _Teardown()
 	{
-		slidingModes&& [] { SDL_DestroyTexture(slidingModes); return false; }();
+		slidingMonitors&& [] { SDL_DestroyTexture(slidingMonitors); return false; }();
 	}
 }
