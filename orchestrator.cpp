@@ -57,15 +57,15 @@ namespace blooDot::Orchestrator
 			bodyDef.type = b2_dynamicBody;
 			bodyDef.linearDamping = 6.68f;
 			bodyDef.position.Set(
-				static_cast<float>(p2->Offset.x) / static_cast<float>(GRIDUNIT),
-				static_cast<float>(p2->Offset.y) / static_cast<float>(GRIDUNIT)
+				static_cast<float>(p2->Offset.x + GRIDUNIT / 2) / static_cast<float>(GRIDUNIT),
+				static_cast<float>(p2->Offset.y + GRIDUNIT / 2) / static_cast<float>(GRIDUNIT)
 			);
 
 			const auto& p2Body = world.CreateBody(&bodyDef);
 
 			bodyDef.position.Set(
-				p4->Offset.x / static_cast<float>(GRIDUNIT),
-				p4->Offset.y / static_cast<float>(GRIDUNIT)
+				(p4->Offset.x + GRIDUNIT / 2) / static_cast<float>(GRIDUNIT),
+				(p4->Offset.y + GRIDUNIT / 2) / static_cast<float>(GRIDUNIT)
 			);
 
 			const auto& p4Body = world.CreateBody(&bodyDef);
@@ -274,14 +274,24 @@ namespace blooDot::Orchestrator
 				{
 					world.Step(timeStep, velocityIterations, positionIterations);
 					const auto& p2Position = p2Body->GetPosition();
-					SetPlayerPosition(iP2, (int)(p2Position.x* static_cast<float>(GRIDUNIT)), (int)(p2Position.y* static_cast<float>(GRIDUNIT)));
+					SetPlayerPosition(
+						iP2,
+						(int)(p2Position.x* static_cast<float>(GRIDUNIT)) - GRIDUNIT / 2,
+						(int)(p2Position.y* static_cast<float>(GRIDUNIT)) - GRIDUNIT / 2
+					);
+
 					if (p2Body->GetLinearVelocity().Length() < 0.3f)
 					{
 						p2Body->SetLinearVelocity({ 0,0 });
 					}
 
 					const auto& p4Position = p4Body->GetPosition();
-					SetPlayerPosition(iP4, (int)(p4Position.x* static_cast<float>(GRIDUNIT)), (int)(p4Position.y* static_cast<float>(GRIDUNIT)));
+					SetPlayerPosition(
+						iP4,
+						(int)(p4Position.x* static_cast<float>(GRIDUNIT)) - GRIDUNIT / 2,
+						(int)(p4Position.y* static_cast<float>(GRIDUNIT)) - GRIDUNIT / 2
+					);
+
 					if (p4Body->GetLinearVelocity().Length() < 0.3f)
 					{
 						p4Body->SetLinearVelocity({ 0,0 });

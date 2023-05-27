@@ -264,7 +264,6 @@ namespace blooDot::MultiMonitorMenuScreen
 				}
 
 				EndRenderDrawing(renderer, drawingTexture, nullptr);
-
 				DrawLabel(renderer, 235, startY + 0 * stride + 0 * backGap, cancelTexture, &cancelRect);
 
 				/* render the carousel choice (and the sliding animation) */
@@ -339,6 +338,73 @@ namespace blooDot::MultiMonitorMenuScreen
 
 		if (slidingMonitors)
 		{
+			/* compute the display (monitor) arrangement
+			 * using a downscaled rendition of their screen rects.
+			 * we also use the horizontal offset ordering to represent
+			 * an accurate left-to-right listing of the monitors,
+			 * because everything else is annoying and unsophisticated */
+			SDL_Rect maximums = { 0 };
+			std::vector<SDL_Rect> representations;
+			bool doDrawArrangement = true;
+			bool anyMonitors = false;
+			for (int i = 0; i < vignetteCount; ++i)
+			{
+				SDL_Rect bounds = { 0 };
+				if (SDL_GetDisplayBounds(i, &bounds) < 0)
+				{
+					const auto boundsError = SDL_GetError();
+					ReportError("Failed to obtain display bounds", boundsError);
+					doDrawArrangement = false;
+					anyMonitors = false;
+				}
+				else
+				{
+					/* there is no need to query for orientation separately,
+					 * as the representations' aspects will retain the orientations
+					 * just fine */
+					representations.push_back(bounds);
+					anyMonitors = true;
+				}
+
+				maximums.x = std::min(bounds.x, maximums.x);
+				maximums.y = std::min(bounds.y, maximums.y);
+				maximums.w = std::max(bounds.x + bounds.w, maximums.w);
+				maximums.h = std::max(bounds.y + bounds.h, maximums.h);
+			}
+
+			if (anyMonitors && (representations.size() != vignetteCount || maximums.w == 0 || maximums.h == 0))
+			{
+				/* we don't draw representations of the arrangement
+				 * if one of the constituents could not be fetched */
+				anyMonitors = false;
+			}
+			else
+			{
+				/* move them so they start at zero, which 
+				 * is where I am on the scale of caring */
+				if (maximums.x < 0)
+				{
+					auto shiftX = -maximums.x;
+					for (auto& representation : representations)
+					{
+						representation.x += shiftX;
+					}
+
+					maximums.x = 0;
+				}
+
+				if (maximums.y < 0)
+				{
+					auto shiftY = -maximums.y;
+					for (auto& representation : representations)
+					{
+						representation.y += shiftY;
+					}
+
+					maximums.y = 0;
+				}
+			}
+
 			if (SDL_SetTextureBlendMode(slidingMonitors, SDL_BLENDMODE_BLEND) < 0)
 			{
 				const auto carouselBlendmodeError = SDL_GetError();
@@ -361,6 +427,7 @@ namespace blooDot::MultiMonitorMenuScreen
 
 			for (int i = 0; i < vignetteCount; ++i)
 			{
+				/* 1. show the ordinal of the display */
 				std::stringstream displayNumber;
 				displayNumber << (i + 1);
 				std::string displayNumberTemplate;
@@ -368,6 +435,7 @@ namespace blooDot::MultiMonitorMenuScreen
 				auto displayNumberLabel = std::regex_replace(displayNumberTemplate, std::regex("\\$n"), displayNumber.str());
 				_VignetteLabel(renderer, FONT_KEY_DIALOG, 28, i, 30, displayNumberLabel.c_str());
 
+				/* 2. show resolution and refresh rate */
 				SDL_DisplayMode mode;
 				if (SDL_GetDesktopDisplayMode(i, &mode) < 0) 
 				{
@@ -382,8 +450,41 @@ namespace blooDot::MultiMonitorMenuScreen
 					_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 13, i, 70, displayModeLabel.c_str());
 				}
 
+				/* 3. show the name of the display model */
 				const auto& displayName = SDL_GetDisplayName(i);
 				_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, i, 190, displayName);
+
+				/* 4. draw a scaled representation of the display
+				 * arrangement, highlighting the current display */
+				if (anyMonitors)
+				{
+					SDL_Rect arrangementBounds;
+					_PrepareRepresentationRect(&arrangementBounds, i);
+
+					/* the scaled arrangement is a square. therefore,
+					 * we must determine the orientation of the true
+					 * arrangement so we can letterbox it properly */
+					float scaleFactor = 0;
+					if (maximums.w > maximums.h)
+					{
+						scaleFactor = static_cast<float>(arrangementBounds.w) / static_cast<float>(maximums.h);
+					}
+					else
+					{
+						scaleFactor = static_cast<float>(arrangementBounds.h) / static_cast<float>(maximums.w);
+					}
+
+					int displayIndex = 0;
+					for (const auto& representation : representations)
+					{
+						SDL_Rect scaledRepresentation;
+						scaledRepresentation.x = static_cast<int>(static_cast<float>(representation.x) * scaleFactor);
+						scaledRepresentation.y = static_cast<int>(static_cast<float>(representation.y) * scaleFactor);
+						scaledRepresentation.w = static_cast<int>(static_cast<float>(representation.w) * scaleFactor);
+						scaledRepresentation.h = static_cast<int>(static_cast<float>(representation.h) * scaleFactor);
+						_DisplayRepresentation(renderer, &scaledRepresentation, i, i == displayIndex++);
+					}
+				}
 			}
 
 			if (SDL_SetRenderTarget(renderer, NULL) < 0)
@@ -398,6 +499,11 @@ namespace blooDot::MultiMonitorMenuScreen
 
 		const auto newCarouselError = SDL_GetError();
 		ReportError("Could not allocate sliding texture", newCarouselError);
+	}
+
+	void _PrepareRepresentationRect(SDL_Rect* rect, int vignetteIndex)
+	{
+		*rect = { bounceMargin + 30 + vignetteIndex * vignetteWidth, 102, vignetteWidth - 60, 64 };
 	}
 
 	void _VignetteLabel(SDL_Renderer* renderer, int font, int size, int vignetteIndex, int y, const char* text)
@@ -421,6 +527,23 @@ namespace blooDot::MultiMonitorMenuScreen
 		);
 
 		SDL_DestroyTexture(textureLabel);
+	}
+
+	void _DisplayRepresentation(SDL_Renderer* renderer, SDL_Rect* dimension, int vignetteIndex, bool isCurrent)
+	{
+		SDL_Rect finalRect = {
+			bounceMargin + vignetteIndex * vignetteWidth + dimension->x,
+			150 + dimension->y,
+			dimension->w,
+			dimension->h
+		};
+
+		if (isCurrent)
+		{
+			SDL_RenderFillRect(renderer, &finalRect);
+		}
+
+		SDL_RenderDrawRect(renderer, &finalRect);
 	}
 
 	void _Teardown()

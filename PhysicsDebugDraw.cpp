@@ -28,9 +28,9 @@ void PhysicsDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, co
 
 	SDL_SetRenderDrawColor(
 		debugRenderer,
+		static_cast<uint8>(ceil(color.b * 255.f)),
 		static_cast<uint8>(ceil(color.r * 255.f)),
 		static_cast<uint8>(ceil(color.g * 255.f)),
-		static_cast<uint8>(ceil(color.b * 255.f)),
 		static_cast<uint8>(ceil(color.a * 255.f))
 	);
 
@@ -59,9 +59,9 @@ void PhysicsDebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCoun
 
 	SDL_SetRenderDrawColor(
 		debugRenderer,
+		static_cast<uint8>(ceil(color.b * 255.f)),
 		static_cast<uint8>(ceil(color.r * 255.f)),
 		static_cast<uint8>(ceil(color.g * 255.f)),
-		static_cast<uint8>(ceil(color.b * 255.f)),
 		static_cast<uint8>(ceil(color.a * 255.f))
 	);
 
@@ -84,9 +84,9 @@ void PhysicsDebugDraw::DrawCircle(const b2Vec2& center, float radius, const b2Co
 
 	SDL_SetRenderDrawColor(
 		debugRenderer,
+		static_cast<uint8>(ceil(color.b * 255.f)),
 		static_cast<uint8>(ceil(color.r * 255.f)),
 		static_cast<uint8>(ceil(color.g * 255.f)),
-		static_cast<uint8>(ceil(color.b * 255.f)),
 		static_cast<uint8>(ceil(color.a * 255.f))
 	);
 
@@ -142,9 +142,9 @@ void PhysicsDebugDraw::DrawSolidCircle(const b2Vec2& center, float radius, const
 
 	SDL_SetRenderDrawColor(
 		debugRenderer,
+		static_cast<uint8>(ceil(color.b * 255.f)),
 		static_cast<uint8>(ceil(color.r * 255.f)),
 		static_cast<uint8>(ceil(color.g * 255.f)),
-		static_cast<uint8>(ceil(color.b * 255.f)),
 		static_cast<uint8>(ceil(color.a * 255.f))
 	);
 

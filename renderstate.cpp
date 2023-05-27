@@ -792,7 +792,7 @@ void RenderMobs()
 		49 
 	};
 
-	constexpr SDL_Point center = { 25,25 };
+	//constexpr SDL_Point center = { 25,25 };
 
 	SDL_RenderCopyEx(
 		GameViewRenderer,
@@ -800,7 +800,7 @@ void RenderMobs()
 		&sprite1->src,
 		&dst1,
 		(const double)player1->Orientation,
-		&center,
+		NULL, //&center,
 		SDL_RendererFlip::SDL_FLIP_VERTICAL
 	);
 
@@ -827,7 +827,7 @@ void RenderMobs()
 		&sprite2->src,
 		&dst2,
 		(const double)player2->Orientation,
-		&center,
+		NULL, //&center,
 		SDL_RendererFlip::SDL_FLIP_VERTICAL
 	);
 
@@ -854,7 +854,7 @@ void RenderMobs()
 		&sprite3->src,
 		&dst3,
 		(const double)player3->Orientation,
-		&center,
+		NULL, //&center,
 		SDL_RendererFlip::SDL_FLIP_VERTICAL
 	);
 
@@ -881,7 +881,7 @@ void RenderMobs()
 		&sprite4->src,
 		&dst4,
 		(const double)player4->Orientation,
-		&center,
+		NULL, //&center,
 		SDL_RendererFlip::SDL_FLIP_VERTICAL
 	);
 }
