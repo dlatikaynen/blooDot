@@ -79,19 +79,7 @@ namespace blooDot::Orchestrator
 			p4Body->CreateFixture(&fixtureDef);
 
 			/* wall physics */
-			wallDef.type = b2_staticBody;
-			wallDef.position.Set(
-				static_cast<float>(p4->Offset.x + 4 * GRIDUNIT) / static_cast<float>(GRIDUNIT),
-				static_cast<float>(p2->Offset.y - 1.5f * GRIDUNIT) / static_cast<float>(GRIDUNIT)
-			);
-
-			const auto& wallBody = world.CreateBody(&wallDef);
-
-			wallShape.SetAsBox(.5f, .5f);
-			wallFixtureDef.shape = &wallShape;
-			wallFixtureDef.friction = 0.32f;
-			wallFixtureDef.restitution = .02f;
-			wallBody->CreateFixture(&wallFixtureDef);
+			AttachWorldPhysics(&world);
 
 			/* input */
 			SDL_USEREVENT_SAVE = SDL_RegisterEvents(1);
@@ -118,6 +106,16 @@ namespace blooDot::Orchestrator
 				{
 					switch (mainEvent.type)
 					{
+#ifndef NDEBUG
+					case SDL_KEYUP:
+						if (mainEvent.key.keysym.scancode == SDL_SCANCODE_F6)
+						{
+							toggleDebugView = !toggleDebugView;
+						}
+
+						break;
+
+#endif
 					case SDL_QUIT:
 					LEAVE:
 						mainRunning = false;
@@ -138,12 +136,6 @@ namespace blooDot::Orchestrator
 				if (numKeys > 0)
 				{
 					const auto& keys = SDL_GetKeyboardState(NULL);
-#ifndef NDEBUG
-					if (keys[SDL_SCANCODE_F6])
-					{
-						toggleDebugView = !toggleDebugView;
-					}
-#endif
 
 					if (keys[SDL_SCANCODE_A])
 					{
@@ -302,7 +294,11 @@ namespace blooDot::Orchestrator
 				SDL_RenderClear(renderer);
 				GameViewRenderFrame();
 #ifndef NDEBUG
-				world.DebugDraw();
+				if (toggleDebugView)
+				{
+					world.DebugDraw();
+				}
+
 #endif
 				SDL_RenderPresent(renderer);
 				frameEnded = SDL_GetPerformanceCounter();
@@ -312,8 +308,8 @@ namespace blooDot::Orchestrator
 				{
 					SDL_Delay(frameSlack);
 				}
-
 #ifndef NDEBUG
+
 				if (++frameNumber % 60 == 0)
 				{
 					std::cout << "FRAME TIME " << frameTime << ", SLACK " << frameSlack << "\n";

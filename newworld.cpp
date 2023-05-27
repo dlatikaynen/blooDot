@@ -92,6 +92,34 @@ bool InitializeNewWorld()
 	return true;
 }
 
+void AttachWorldPhysics(b2World* world)
+{
+	auto centerSheet = GetWorldSheet(0, 0);
+	auto entities = *centerSheet->stuff;
+
+	for (const auto& entity : entities)
+	{
+		b2BodyDef wallDef;
+		b2PolygonShape wallShape;
+		b2FixtureDef wallFixtureDef;
+
+		wallDef.type = b2_staticBody;
+		wallDef.position.Set(
+			static_cast<float>(entity->gridAnchorX * GRIDUNIT + entity->pixOffsetX) / static_cast<float>(GRIDUNIT),
+			static_cast<float>(entity->gridAnchorY * GRIDUNIT + entity->pixOffsetY) / static_cast<float>(GRIDUNIT)
+		);
+
+		const auto& wallBody = world->CreateBody(&wallDef);
+
+		wallShape.SetAsBox(.5f, .5f);
+		wallFixtureDef.shape = &wallShape;
+		wallFixtureDef.friction = 0.32f;
+		wallFixtureDef.restitution = .02f;
+		wallBody->CreateFixture(&wallFixtureDef);
+	}
+}
+
+
 void _Put(std::shared_ptr<WorldSheet> sheet, int x, int y, Ding ding, DingProps props)
 {
 	const auto pieceIndex = (y + WORLD_SHEET_CENTERPOINT) * WORLD_SHEET_SIDELENGTH + x + WORLD_SHEET_CENTERPOINT;
@@ -100,6 +128,8 @@ void _Put(std::shared_ptr<WorldSheet> sheet, int x, int y, Ding ding, DingProps 
 	/* 1. assign the properties */
 	instancePtr->ding = ding;
 	instancePtr->props = props == DingProps::Default ? GetDingDefaultProps(ding) : props;
+	instancePtr->gridAnchorX = x;
+	instancePtr->gridAnchorY = y;
 
 	/* 2. register the entity in the world sheet storage.
 	*     this step may become obsolete since they now live on the heap */
