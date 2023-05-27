@@ -79,16 +79,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);cairo;SDL\include;C:\lc\blooDot\packages\box2d\include\box2d</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);SDL\lib\x64;C:\lc\blooDot\packages\box2d\lib</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);cairo;SDL\include;packages\box2d\include\box2d</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);SDL\lib\x64;packages\box2d\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);cairo;SDL\include</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);SDL\lib\x64</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);cairo;SDL\include;packages\box2d\include\box2d</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);SDL\lib\x64;packages\box2d\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);cairo;SDL\include;C:\lc\blooDot\packages\box2d\include\box2d</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);SDL\lib\x64;C:\lc\blooDot\packages\box2d_release\lib</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);cairo;SDL\include;packages\box2d\include\box2d</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);SDL\lib\x64;packages\box2d_release\lib</LibraryPath>
     <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
     <CustomBuildBeforeTargets>Link</CustomBuildBeforeTargets>
   </PropertyGroup>
@@ -162,11 +162,12 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">SDL\lib\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">$(ProjectDir)SDL\lib\x64\SDL2.lib;$(ProjectDir)SDL\lib\x64\SDL2main.lib;$(ProjectDir)SDL\lib\x64\SDL2_image.lib;$(ProjectDir)SDL\lib\x64\SDL2_mixer.lib;$(ProjectDir)SDL\lib\x64\SDL2_ttf.lib;$(ProjectDir)SDL\lib\x64\cairo.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">SDL\lib\x64;packages\box2d\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">$(ProjectDir)SDL\lib\x64\SDL2.lib;$(ProjectDir)SDL\lib\x64\SDL2main.lib;$(ProjectDir)SDL\lib\x64\SDL2_image.lib;$(ProjectDir)SDL\lib\x64\SDL2_mixer.lib;$(ProjectDir)SDL\lib\x64\SDL2_ttf.lib;$(ProjectDir)SDL\lib\x64\cairo.lib;$(ProjectDir)packages\box2d\lib\box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TurnOffAssemblyGeneration Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</TurnOffAssemblyGeneration>
       <EnableUAC Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</EnableUAC>
-      <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">libcairo-2.dll</DelayLoadDLLs>
+      <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">
+      </DelayLoadDLLs>
     </Link>
     <PostBuildEvent>
       <Command Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">xcopy /i /d /y $(ProjectDir)SDL\lib\x64\*.dll $(OutDirFullPath)</Command>
@@ -235,6 +236,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="datetime.cpp" />
+    <ClCompile Include="menu-multimonitor.cpp" />
     <ClCompile Include="offscreen-renderer-quest.cpp" />
     <ClCompile Include="offscreen-rendering.cpp" />
     <ClCompile Include="physicsdebugdraw.cpp" />
@@ -277,6 +279,7 @@
     <ClInclude Include="menu-continue-empty.h" />
     <ClInclude Include="menu-ingame.h" />
     <ClInclude Include="menu-load.h" />
+    <ClInclude Include="menu-multimonitor.h" />
     <ClInclude Include="menu-settings-lang.h" />
     <ClInclude Include="huff-comp.h" />
     <ClInclude Include="huff-deco.h" />

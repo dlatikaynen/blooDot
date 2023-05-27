@@ -11,6 +11,7 @@ namespace blooDot::Settings
 	void Save();
 	void Default();
 
+	int GetDisplayIndex();
 	int GetLogicalArenaWidth();
 	int GetPhysicalArenaWidth();
 	int GetLogicalArenaHeight();

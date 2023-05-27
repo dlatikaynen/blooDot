@@ -91,6 +91,11 @@ namespace blooDot::Settings
 		::Settings.SettingViewportResolution = VR_TEMPLE;
 	}
 
+	int GetDisplayIndex()
+	{
+		return ::Settings.FullscreenDisplayIndex;
+	}
+
 	int GetLogicalArenaWidth()
 	{
 		switch (::Settings.SettingViewportResolution)

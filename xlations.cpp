@@ -12,6 +12,7 @@ const char* literalAlienMainMenuLabel = "";
 const char* literalAlienLoadMenuLabel = "";
 const char* literalAlienSettingsMenuLabel = "";
 const char* literalAlienScreenSettingsMenuLabel = "";
+const char* literalAlienMultiMonitorMenuLabel = "";
 const char* literalAlienInGameMenuLabel = "";
 const char* literalAlienLangSettingsMenuLabel = "";
 const char* literalAlienContinueEmptyLabel = "";
@@ -61,6 +62,7 @@ const char* literalSettingsScreenSquareDetails = "";
 const char* literalSettingsScreenFull = "";
 const char* literalSettingsScreenFullResolution = "";
 const char* literalSettingsScreenFullDetails = "";
+const char* literalMultiMonitorMenuDisplayLabel = "";
 const char* literalMessageInsufficientScreenSize = "";
 const char* literalSettingsLanguageEN = "";
 const char* literalSettingsLanguageENDetails = "";
@@ -119,6 +121,7 @@ namespace blooDot::en
 		literalAlienLoadMenuLabel = _literal_en_AlienLoadMenuLabel;
 		literalAlienSettingsMenuLabel = _literal_en_AlienSettingsMenuLabel;
 		literalAlienScreenSettingsMenuLabel = _literal_en_AlienScreenSettingsMenuLabel;
+		literalAlienMultiMonitorMenuLabel = _literal_en_AlienMultiMonitorMenuLabel;
 		literalAlienInGameMenuLabel = _literal_en_AlienInGameMenuLabel;
 		literalAlienLangSettingsMenuLabel = _literal_en_AlienLangSettingsMenuLabel;
 		literalAlienContinueEmptyLabel = _literal_en_AlienContinueEmptyLabel;
@@ -168,6 +171,7 @@ namespace blooDot::en
 		literalSettingsScreenFull = _literal_en_SettingsScreenFull;
 		literalSettingsScreenFullResolution = _literal_en_SettingsScreenFullResolution;
 		literalSettingsScreenFullDetails = _literal_en_SettingsScreenFullDetails;
+		literalMultiMonitorMenuDisplayLabel = _literal_en_MultiMonitorMenuDisplayLabel;
 		literalMessageInsufficientScreenSize = _literal_en_MessageInsufficientScreenSize;
 		literalSettingsLanguageEN = _literal_en_SettingsLanguageEN;
 		literalSettingsLanguageENDetails = _literal_en_SettingsLanguageENDetails;
@@ -228,6 +232,7 @@ namespace blooDot::de
 		literalAlienLoadMenuLabel = _literal_de_AlienLoadMenuLabel;
 		literalAlienSettingsMenuLabel = _literal_de_AlienSettingsMenuLabel;
 		literalAlienScreenSettingsMenuLabel = _literal_de_AlienScreenSettingsMenuLabel;
+		literalAlienMultiMonitorMenuLabel = _literal_de_AlienMultiMonitorMenuLabel;
 		literalAlienInGameMenuLabel = _literal_de_AlienInGameMenuLabel;
 		literalAlienLangSettingsMenuLabel = _literal_de_AlienLangSettingsMenuLabel;
 		literalAlienContinueEmptyLabel = _literal_de_AlienContinueEmptyLabel;
@@ -277,6 +282,7 @@ namespace blooDot::de
 		literalSettingsScreenFull = _literal_de_SettingsScreenFull;
 		literalSettingsScreenFullResolution = _literal_de_SettingsScreenFullResolution;
 		literalSettingsScreenFullDetails = _literal_de_SettingsScreenFullDetails;
+		literalMultiMonitorMenuDisplayLabel = _literal_de_MultiMonitorMenuDisplayLabel;
 		literalMessageInsufficientScreenSize = _literal_de_MessageInsufficientScreenSize;
 		literalSettingsLanguageEN = _literal_de_SettingsLanguageEN;
 		literalSettingsLanguageENDetails = _literal_de_SettingsLanguageENDetails;
@@ -337,6 +343,7 @@ namespace blooDot::fi
 		literalAlienLoadMenuLabel = _literal_fi_AlienLoadMenuLabel;
 		literalAlienSettingsMenuLabel = _literal_fi_AlienSettingsMenuLabel;
 		literalAlienScreenSettingsMenuLabel = _literal_fi_AlienScreenSettingsMenuLabel;
+		literalAlienMultiMonitorMenuLabel = _literal_fi_AlienMultiMonitorMenuLabel;
 		literalAlienInGameMenuLabel = _literal_fi_AlienInGameMenuLabel;
 		literalAlienLangSettingsMenuLabel = _literal_fi_AlienLangSettingsMenuLabel;
 		literalAlienContinueEmptyLabel = _literal_fi_AlienContinueEmptyLabel;
@@ -386,6 +393,7 @@ namespace blooDot::fi
 		literalSettingsScreenFull = _literal_fi_SettingsScreenFull;
 		literalSettingsScreenFullResolution = _literal_fi_SettingsScreenFullResolution;
 		literalSettingsScreenFullDetails = _literal_fi_SettingsScreenFullDetails;
+		literalMultiMonitorMenuDisplayLabel = _literal_fi_MultiMonitorMenuDisplayLabel;
 		literalMessageInsufficientScreenSize = _literal_fi_MessageInsufficientScreenSize;
 		literalSettingsLanguageEN = _literal_fi_SettingsLanguageEN;
 		literalSettingsLanguageENDetails = _literal_fi_SettingsLanguageENDetails;
@@ -446,6 +454,7 @@ namespace blooDot::ua
 		literalAlienLoadMenuLabel = _literal_ua_AlienLoadMenuLabel;
 		literalAlienSettingsMenuLabel = _literal_ua_AlienSettingsMenuLabel;
 		literalAlienScreenSettingsMenuLabel = _literal_ua_AlienScreenSettingsMenuLabel;
+		literalAlienMultiMonitorMenuLabel = _literal_ua_AlienMultiMonitorMenuLabel;
 		literalAlienInGameMenuLabel = _literal_ua_AlienInGameMenuLabel;
 		literalAlienLangSettingsMenuLabel = _literal_ua_AlienLangSettingsMenuLabel;
 		literalAlienContinueEmptyLabel = _literal_ua_AlienContinueEmptyLabel;
@@ -495,6 +504,7 @@ namespace blooDot::ua
 		literalSettingsScreenFull = _literal_ua_SettingsScreenFull;
 		literalSettingsScreenFullResolution = _literal_ua_SettingsScreenFullResolution;
 		literalSettingsScreenFullDetails = _literal_ua_SettingsScreenFullDetails;
+		literalMultiMonitorMenuDisplayLabel = _literal_ua_MultiMonitorMenuDisplayLabel;
 		literalMessageInsufficientScreenSize = _literal_ua_MessageInsufficientScreenSize;
 		literalSettingsLanguageEN = _literal_ua_SettingsLanguageEN;
 		literalSettingsLanguageENDetails = _literal_ua_SettingsLanguageENDetails;

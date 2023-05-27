@@ -28,6 +28,9 @@ AlienSettingsMenuLabel
 AlienScreenSettingsMenuLabel
 	[**]	ScrinSaiz
 
+AlienMultiMonitorMenuLabel
+	[**]	MaltiDisplej
+
 AlienInGameMenuLabel
 	[**]	Gejm
 
@@ -246,6 +249,12 @@ SettingsScreenFullResolution
 SettingsScreenFullDetails
 	[am]	I paid for the whole screen,\nI'mma use the whole screen
 	[de]	Ich zahle den ganzen Schirm,\nich nütze den ganzen Schirm
+
+MultiMonitorMenuDisplayLabel
+	[am]	Display # $n
+	[de]	Bildschirm $n
+	[fi]	Näyttö #$n
+	[ua]	Екран № $n
 
 MessageInsufficientScreenSize
 	[am]	You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.

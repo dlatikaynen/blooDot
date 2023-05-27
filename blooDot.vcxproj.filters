@@ -100,6 +100,9 @@
     <Filter Include="_Headers\physics">
       <UniqueIdentifier>{296e0256-b8d1-40a2-9992-8e2a5ca08db1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\win">
+      <UniqueIdentifier>{8d6e5c2f-3348-4a3f-abdf-d3d3c6740eaf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL\include\begin_code.h">
@@ -558,6 +561,9 @@
     <ClInclude Include="physicsdebugdraw.h">
       <Filter>_Headers\physics</Filter>
     </ClInclude>
+    <ClInclude Include="menu-multimonitor.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -686,9 +692,11 @@
     <ClCompile Include="physicsdebugdraw.cpp">
       <Filter>_Source Files\physics</Filter>
     </ClCompile>
+    <ClCompile Include="menu-multimonitor.cpp">
+      <Filter>_Source Files\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="SDL\lib\x64\SDL2.dll">
       <Filter>Platform</Filter>
     </None>
@@ -731,7 +739,6 @@
     <None Include="planning\gfx.ligma">
       <Filter>Planning</Filter>
     </None>
-    <None Include="cpp.hint" />
     <None Include="planning\sidequests.ligma">
       <Filter>Planning</Filter>
     </None>
@@ -774,6 +781,12 @@
     <None Include="box2d-licence.txt">
       <Filter>Resource Files\legalese</Filter>
     </None>
+    <None Include="packages.config">
+      <Filter>Resource Files\win</Filter>
+    </None>
+    <None Include="cpp.hint">
+      <Filter>Resource Files\win</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL\lib\x64\SDL2.lib">
@@ -797,11 +810,6 @@
     <Library Include="SDL\lib\x64\cairo.lib">
       <Filter>Lib Files</Filter>
     </Library>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="blooDot.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\barrel-indigo.png">
@@ -883,7 +891,7 @@
       <Filter>Resource Files\ui</Filter>
     </Image>
     <Image Include="blooDot.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\win</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -943,5 +951,10 @@
     <Media Include="res\cricket-franz.wav">
       <Filter>Resource Files\sfx</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="blooDot.rc">
+      <Filter>Resource Files\win</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -9,6 +9,7 @@ namespace blooDot::en
 	constexpr char const* _literal_en_AlienLoadMenuLabel = "lOd";
 	constexpr char const* _literal_en_AlienSettingsMenuLabel = "SetiNz";
 	constexpr char const* _literal_en_AlienScreenSettingsMenuLabel = "ScrinSaiz";
+	constexpr char const* _literal_en_AlienMultiMonitorMenuLabel = "MaltiDisplej";
 	constexpr char const* _literal_en_AlienInGameMenuLabel = "Gejm";
 	constexpr char const* _literal_en_AlienLangSettingsMenuLabel = "lenguij";
 	constexpr char const* _literal_en_AlienContinueEmptyLabel = "Empti";
@@ -58,6 +59,7 @@ namespace blooDot::en
 	constexpr char const* _literal_en_SettingsScreenFull = "Full";
 	constexpr char const* _literal_en_SettingsScreenFullResolution = "$w x $h";
 	constexpr char const* _literal_en_SettingsScreenFullDetails = "I paid for the whole screen,\nI'mma use the whole screen";
+	constexpr char const* _literal_en_MultiMonitorMenuDisplayLabel = "Display # $n";
 	constexpr char const* _literal_en_MessageInsufficientScreenSize = "You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.";
 	constexpr char const* _literal_en_SettingsLanguageEN = "[am]";
 	constexpr char const* _literal_en_SettingsLanguageENDetails = "American";

@@ -16,6 +16,7 @@
 #include "menu-continue-empty.h"
 #include "menu-load.h"
 #include "menu-settings.h"
+#include "menu-multimonitor.h"
 
 extern bool mainRunning;
 extern SettingsStruct Settings;
@@ -434,11 +435,11 @@ namespace blooDot::Splash
 		}
 		else
 		{
-			/* we can launch immediately */
+			/* we can launch now */
 			stayInMenu = false;
 		}
 
-		return stayInMenu;
+		return _HandleLaunch(renderer, stayInMenu);
 	}
 
 	bool _HandleLoad(SDL_Renderer* renderer)
@@ -456,7 +457,7 @@ namespace blooDot::Splash
 			stayInMenu = true;
 		}
 
-		return stayInMenu;
+		return _HandleLaunch(renderer, stayInMenu);
 	}
 
 	bool _HandleNew(SDL_Renderer* renderer)
@@ -468,6 +469,30 @@ namespace blooDot::Splash
 			/* no free slot. ask to overwrite something else */
 
 			stayInMenu = renderer != NULL;
+		}
+
+		return _HandleLaunch(renderer, stayInMenu);
+	}
+
+	/// <summary>
+	/// The point of this function is to have a hook for the 
+	/// multi-display choice submenu immediately before we
+	/// launch into the arena
+	/// </summary>
+	bool _HandleLaunch(SDL_Renderer* renderer, bool stayInMenu)
+	{
+		if (!stayInMenu)
+		{
+			if (SDL_GetNumVideoDisplays() > 1)
+			{
+				if (!blooDot::MultiMonitorMenuScreen::MultiMonitorMenuLoop(renderer))
+				{
+					/* bit confusing.but it means, that we left the dialog
+					 * with the cancel button, so the intention is to stay
+					 * in the splash menu, as opposed to leave it for the arena */					
+					stayInMenu = true;
+				}
+			}
 		}
 
 		return stayInMenu;
