@@ -287,20 +287,35 @@ void _Launch()
 
 	case ViewportResolutions::VR_SQUARE:
 	case ViewportResolutions::VR_MAXOUT:
+	{
+		/* these are fullscreen modes. we remember the choice of monitor
+		 * so we don't annoy users who have multiple displays (as one does) */
+		const auto& numDisplays = SDL_GetNumVideoDisplays();
+		int displayIndex = 0;
+		if (numDisplays > 1)
+		{
+			const auto& configuredDisplayIndex = Settings.FullscreenDisplayIndex;
+			if (configuredDisplayIndex >= 0 && configuredDisplayIndex < numDisplays)
+			{
+				displayIndex = configuredDisplayIndex;
+			}
+		}
+
 		mainWindow = SDL_CreateWindow(
 			NameOfTheGame,
-			SDL_WINDOWPOS_UNDEFINED,
-			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_CENTERED_DISPLAY(displayIndex),
+			SDL_WINDOWPOS_CENTERED_DISPLAY(displayIndex),
 			0,
 			0,
 			0
-			| SDL_WINDOW_HIDDEN 
-			| SDL_WINDOW_OPENGL 
-			| SDL_WINDOW_BORDERLESS 
+			| SDL_WINDOW_HIDDEN
+			| SDL_WINDOW_OPENGL
+			| SDL_WINDOW_BORDERLESS
 			| SDL_WINDOW_FULLSCREEN_DESKTOP
 		);
 
 		break;
+	}
 
 	default:
 		mainWindow = SDL_CreateWindow(

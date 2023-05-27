@@ -37,4 +37,5 @@ typedef struct SettingsStruct
 	unsigned short CurrentSavegameIndex = 0;  // those are 1-based and appear in the file name
 	unsigned short OccupiedSavegameSlots = 0; // this is a bitmask with the LSB corresponding to savegameindex 1
 	char ShowMinimap = 0x1;
+	unsigned char FullscreenDisplayIndex = 0;
 } SettingsStruct;

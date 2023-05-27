@@ -882,6 +882,9 @@
     <Image Include="res\sample-map.png">
       <Filter>Resource Files\ui</Filter>
     </Image>
+    <Image Include="blooDot.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="LICENSE.txt" />

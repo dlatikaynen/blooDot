@@ -137,6 +137,10 @@
     <ProjectReference>
       <LinkLibraryDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkLibraryDependencies>
     </ProjectReference>
+    <Manifest>
+      <SuppressStartupBanner Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</SuppressStartupBanner>
+      <EnableDpiAwareness Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Xassy'">
     <ClCompile>
@@ -176,6 +180,10 @@
     <CustomBuildStep>
       <Command Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">xcopy /Y $(IntermediateOutputPath)\xassy.cooked1.ngld $(IntermediateOutputPath)\..\Debug\</Command>
     </CustomBuildStep>
+    <Manifest>
+      <SuppressStartupBanner Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</SuppressStartupBanner>
+      <EnableDpiAwareness Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
     <ClCompile>
@@ -220,6 +228,10 @@
     <CustomBuildStep>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Packaging Resources</Message>
     </CustomBuildStep>
+    <Manifest>
+      <SuppressStartupBanner Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</SuppressStartupBanner>
+      <EnableDpiAwareness Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="datetime.cpp" />
@@ -549,6 +561,7 @@
     <ResourceCompile Include="blooDot.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="blooDot.ico" />
     <Image Include="res\barrel-indigo.png">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
