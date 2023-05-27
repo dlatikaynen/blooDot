@@ -5,6 +5,10 @@
 #include "savegame.h"
 #include "constants.h"
 
+#ifndef NDEBUG
+#include "physicsdebugdraw.h"
+#endif
+
 Uint32 SDL_USEREVENT_SAVE = 0;
 Uint32 SDL_USEREVENT_AUTOSAVE = 0;
 Uint32 SDL_USEREVENT_LEAVE = 0; // [sic], they're only allocated later
@@ -22,9 +26,10 @@ namespace blooDot::Orchestrator
 	SDL_Event mainEvent;
 	b2Vec2 gravity(0.f, 0.f);
 	b2World world(gravity);
-	b2BodyDef bodyDef;
+	b2BodyDef bodyDef, wallDef;
 	b2CircleShape pShape;
-	b2FixtureDef fixtureDef;
+	b2PolygonShape wallShape;
+	b2FixtureDef fixtureDef, wallFixtureDef;
 	float timeStep = MillisecondsPerFrame / 1000.f;
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
@@ -43,6 +48,7 @@ namespace blooDot::Orchestrator
 		}
 		else
 		{
+			/* player physics */
 			EnsurePlayers();
 
 			const auto& p2 = Player::GetState(iP2);
@@ -66,12 +72,28 @@ namespace blooDot::Orchestrator
 
 			pShape.m_radius = .33f;
 			fixtureDef.shape = &pShape;
-			fixtureDef.density = 1.6f * M_PI;
+			fixtureDef.density = 1.6f * static_cast<float>(M_PI);
 			fixtureDef.friction = 0.3f;
 			fixtureDef.restitution = .27f;
 			p2Body->CreateFixture(&fixtureDef);
 			p4Body->CreateFixture(&fixtureDef);
 
+			/* wall physics */
+			wallDef.type = b2_staticBody;
+			wallDef.position.Set(
+				static_cast<float>(p4->Offset.x + 4 * GRIDUNIT) / static_cast<float>(GRIDUNIT),
+				static_cast<float>(p2->Offset.y - 1.5f * GRIDUNIT) / static_cast<float>(GRIDUNIT)
+			);
+
+			const auto& wallBody = world.CreateBody(&wallDef);
+
+			wallShape.SetAsBox(.5f, .5f);
+			wallFixtureDef.shape = &wallShape;
+			wallFixtureDef.friction = 0.32f;
+			wallFixtureDef.restitution = .02f;
+			wallBody->CreateFixture(&wallFixtureDef);
+
+			/* input */
 			SDL_USEREVENT_SAVE = SDL_RegisterEvents(1);
 			SDL_USEREVENT_AUTOSAVE = SDL_RegisterEvents(1);
 			SDL_USEREVENT_LEAVE = SDL_RegisterEvents(1);
@@ -81,6 +103,10 @@ namespace blooDot::Orchestrator
 			const auto& preMultiplied = (float)SDL_GetPerformanceFrequency();
 #ifndef NDEBUG
 			long long frameNumber = 0;
+
+			PhysicsDebugDraw physicsDebugDraw(GameViewRenderer);
+			physicsDebugDraw.SetFlags(0xffff);
+			world.SetDebugDraw(&physicsDebugDraw);
 #endif
 
 			int numKeys;
@@ -265,6 +291,9 @@ namespace blooDot::Orchestrator
 			NEXTFRAME:
 				SDL_RenderClear(renderer);
 				GameViewRenderFrame();
+#ifndef NDEBUG
+				world.DebugDraw();
+#endif
 				SDL_RenderPresent(renderer);
 				frameEnded = SDL_GetPerformanceCounter();
 				const auto& frameTime = (frameEnded - frameStart) / preMultiplied * 1000.f;

@@ -225,6 +225,7 @@
     <ClCompile Include="datetime.cpp" />
     <ClCompile Include="offscreen-renderer-quest.cpp" />
     <ClCompile Include="offscreen-rendering.cpp" />
+    <ClCompile Include="physicsdebugdraw.cpp" />
     <ClCompile Include="playerhud.cpp" />
     <ClCompile Include="playerstate.cpp" />
     <ClCompile Include="region-banner.cpp" />
@@ -274,6 +275,7 @@
     <ClInclude Include="offscreen-rendering.h" />
     <ClInclude Include="orchestrator.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="physicsdebugdraw.h" />
     <ClInclude Include="playerhud.h" />
     <ClInclude Include="playerstate.h" />
     <ClInclude Include="region-banner.h" />

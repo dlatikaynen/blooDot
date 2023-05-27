@@ -94,6 +94,12 @@
     <Filter Include="Lib Dependencies">
       <UniqueIdentifier>{603576c5-37f0-43d0-8df3-be3480405803}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_Source Files\physics">
+      <UniqueIdentifier>{55e47453-b47c-4a9e-8c19-cb2489cd9710}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Headers\physics">
+      <UniqueIdentifier>{296e0256-b8d1-40a2-9992-8e2a5ca08db1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL\include\begin_code.h">
@@ -549,6 +555,9 @@
     <ClInclude Include="drawing.h">
       <Filter>_Headers\core</Filter>
     </ClInclude>
+    <ClInclude Include="physicsdebugdraw.h">
+      <Filter>_Headers\physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -673,6 +682,9 @@
     </ClCompile>
     <ClCompile Include="settings.cpp">
       <Filter>_Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="physicsdebugdraw.cpp">
+      <Filter>_Source Files\physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
