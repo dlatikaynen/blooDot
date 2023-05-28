@@ -21,6 +21,8 @@ extern bool mainRunning;
 
 namespace blooDot::MultiMonitorMenuScreen
 {
+	const SDL_Color labelColor = { 250, 230, 230, 245 };
+
 	SDL_Event monitorChoiceMenuEvent;
 	bool multiMonitorMenuRunning = false;
 	bool confirmed = false;
@@ -465,9 +467,9 @@ namespace blooDot::MultiMonitorMenuScreen
 					 * we must determine the orientation of the true
 					 * arrangement so we can letterbox it properly */
 					float scaleFactor = 0;
-					if (maximums.w > maximums.h)
+					if (maximums.h > maximums.w)
 					{
-						scaleFactor = static_cast<float>(arrangementBounds.w) / static_cast<float>(maximums.h);
+						scaleFactor = static_cast<float>(arrangementBounds.h) / static_cast<float>(maximums.h);
 					}
 					else
 					{
@@ -481,7 +483,7 @@ namespace blooDot::MultiMonitorMenuScreen
 						scaledRepresentation.x = static_cast<int>(static_cast<float>(representation.x) * scaleFactor);
 						scaledRepresentation.y = static_cast<int>(static_cast<float>(representation.y) * scaleFactor);
 						scaledRepresentation.w = static_cast<int>(static_cast<float>(representation.w) * scaleFactor);
-						scaledRepresentation.h = static_cast<int>(static_cast<float>(representation.h) * scaleFactor);
+						scaledRepresentation.h = static_cast<int>(static_cast<float>(representation.h) * scaleFactor);	
 						_DisplayRepresentation(renderer, &scaledRepresentation, i, i == displayIndex++);
 					}
 				}
@@ -501,11 +503,6 @@ namespace blooDot::MultiMonitorMenuScreen
 		ReportError("Could not allocate sliding texture", newCarouselError);
 	}
 
-	void _PrepareRepresentationRect(SDL_Rect* rect, int vignetteIndex)
-	{
-		*rect = { bounceMargin + 30 + vignetteIndex * vignetteWidth, 102, vignetteWidth - 60, 64 };
-	}
-
 	void _VignetteLabel(SDL_Renderer* renderer, int font, int size, int vignetteIndex, int y, const char* text)
 	{
 		SDL_Rect rectLabel = { 0,0,0,0 };
@@ -515,7 +512,7 @@ namespace blooDot::MultiMonitorMenuScreen
 			font,
 			size,
 			text,
-			{ 250, 230, 230, 245 }
+			labelColor
 		);
 
 		CenterLabel(
@@ -529,20 +526,32 @@ namespace blooDot::MultiMonitorMenuScreen
 		SDL_DestroyTexture(textureLabel);
 	}
 
+	void _PrepareRepresentationRect(SDL_Rect* rect, int vignetteIndex)
+	{
+		*rect = {
+			bounceMargin + 30 + vignetteIndex * vignetteWidth,
+			102,
+			vignetteWidth - 60,
+			190
+		};
+	}
+
 	void _DisplayRepresentation(SDL_Renderer* renderer, SDL_Rect* dimension, int vignetteIndex, bool isCurrent)
 	{
 		SDL_Rect finalRect = {
-			bounceMargin + vignetteIndex * vignetteWidth + dimension->x,
-			150 + dimension->y,
+			bounceMargin + 30 + vignetteIndex * vignetteWidth + dimension->x,
+			102 + dimension->y,
 			dimension->w,
 			dimension->h
 		};
 
 		if (isCurrent)
 		{
+			SDL_SetRenderDrawColor(renderer, 7, 29, 215, 156);
 			SDL_RenderFillRect(renderer, &finalRect);
 		}
 
+		SDL_SetRenderDrawColor(renderer, labelColor.r, labelColor.g, labelColor.b, labelColor.a);		
 		SDL_RenderDrawRect(renderer, &finalRect);
 	}
 
