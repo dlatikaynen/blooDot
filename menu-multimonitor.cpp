@@ -21,7 +21,8 @@ extern bool mainRunning;
 
 namespace blooDot::MultiMonitorMenuScreen
 {
-	const SDL_Color labelColor = { 250, 230, 230, 245 };
+	constexpr const SDL_Color labelColor = { 250, 230, 230, 245 };
+	constexpr const SDL_Color accentColor = { 7, 29, 215, 156 };
 
 	SDL_Event monitorChoiceMenuEvent;
 	bool multiMonitorMenuRunning = false;
@@ -547,7 +548,7 @@ namespace blooDot::MultiMonitorMenuScreen
 
 		if (isCurrent)
 		{
-			SDL_SetRenderDrawColor(renderer, 7, 29, 215, 156);
+			SDL_SetRenderDrawColor(renderer, accentColor.r, accentColor.g, accentColor.b, accentColor.a);
 			SDL_RenderFillRect(renderer, &finalRect);
 		}
 
