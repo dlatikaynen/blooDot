@@ -4,7 +4,6 @@
 
 extern bool InitializeNewWorld();
 extern bool GameviewEnterWorld();
-extern void AttachWorldPhysics(b2World* world, int flapOffsetX, int flapOffsetY);
 extern void EnsurePlayers();
 extern void GameViewRenderFrame();
 extern void NudgePlayer(int playerIndex, int accelerationX, int accelerationY);

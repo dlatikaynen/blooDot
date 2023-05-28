@@ -4,6 +4,7 @@
 #include "settings.h"
 #include "savegame.h"
 #include "constants.h"
+#include "physics-render-binding.h"
 
 #ifndef NDEBUG
 #include "physicsdebugdraw.h"
@@ -15,11 +16,6 @@ Uint32 SDL_USEREVENT_LEAVE = 0; // [sic], they're only allocated later
 
 extern SettingsStruct Settings;
 extern SDL_Renderer* GameViewRenderer;
-
-/* for screens where we render only a part (square) */
-extern int viewportOffsetX;
-extern int viewportOffsetY;
-
 
 bool mainRunning = true;
 #ifndef NDEBUG
@@ -82,12 +78,9 @@ namespace blooDot::Orchestrator
 			fixtureDef.restitution = .27f;
 			p2Body->CreateFixture(&fixtureDef);
 			p4Body->CreateFixture(&fixtureDef);
+			
 			/* wall physics */
-			AttachWorldPhysics(
-				&world,
-				12 * GRIDUNIT - 29 + GRIDUNIT / 2 + viewportOffsetX,
-				12 * GRIDUNIT - 29 + GRIDUNIT / 2 + viewportOffsetY
-			);
+			blooDot::Physics::AttachWorldPhysics(&world);
 
 			/* input */
 			SDL_USEREVENT_SAVE = SDL_RegisterEvents(1);

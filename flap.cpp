@@ -350,6 +350,11 @@ FlapAwareness* _FigureOutAwarenessFor(int flapIndex, int flapInWorldX, int flapI
 	return awarenessEntry;
 }
 
+FlapAwareness GetFlapAwareness(int flapIndex)
+{
+	return flapAwareness[flapIndex];
+}
+
 int FlapAwarenessLeft()
 {
 	flapAwareness[2] = flapAwareness[1];

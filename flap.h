@@ -41,6 +41,7 @@ typedef struct FlapAwareness {
 } FlapAwareness;
 
 void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY);
+FlapAwareness GetFlapAwareness(int flapIndex);
 int FlapAwarenessLeft();
 int FlapAwarenessRite();
 int FlapAwarenessUuup();

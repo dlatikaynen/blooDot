@@ -564,6 +564,9 @@
     <ClInclude Include="menu-multimonitor.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
+    <ClInclude Include="physics-render-binding.h">
+      <Filter>_Headers\physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -694,6 +697,9 @@
     </ClCompile>
     <ClCompile Include="menu-multimonitor.cpp">
       <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="physics-render-binding.cpp">
+      <Filter>_Source Files\physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
