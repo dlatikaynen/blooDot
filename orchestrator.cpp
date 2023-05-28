@@ -16,6 +16,7 @@ Uint32 SDL_USEREVENT_LEAVE = 0; // [sic], they're only allocated later
 
 extern SettingsStruct Settings;
 extern SDL_Renderer* GameViewRenderer;
+extern char activePlayers;
 
 bool mainRunning = true;
 #ifndef NDEBUG
@@ -25,12 +26,10 @@ bool toggleDebugView = false;
 namespace blooDot::Orchestrator
 {
 	SDL_Event mainEvent;
-	b2Vec2 gravity(0.f, 0.f);
-	b2World world(gravity);
-	b2BodyDef bodyDef, wallDef;
+	b2World world({ 0,0 });
+	b2BodyDef bodyDef;
 	b2CircleShape pShape;
-	b2PolygonShape wallShape;
-	b2FixtureDef fixtureDef, wallFixtureDef;
+	b2FixtureDef fixtureDef;
 	float timeStep = MillisecondsPerFrame / 1000.f;
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
@@ -52,23 +51,36 @@ namespace blooDot::Orchestrator
 			/* player physics */
 			EnsurePlayers();
 
+			const auto& p1 = Player::GetState(iP1);
 			const auto& p2 = Player::GetState(iP2);
+			const auto& p3 = Player::GetState(iP3);
 			const auto& p4 = Player::GetState(iP4);
 
 			bodyDef.type = b2_dynamicBody;
 			bodyDef.linearDamping = 6.68f;
 			bodyDef.position.Set(
-				static_cast<float>(p2->Offset.x + GRIDUNIT / 2) / static_cast<float>(GRIDUNIT),
-				static_cast<float>(p2->Offset.y + GRIDUNIT / 2) / static_cast<float>(GRIDUNIT)
+				(p1->Offset.x + GRIDUNIT / 2.f) / static_cast<float>(GRIDUNIT),
+				(p2->Offset.y + GRIDUNIT / 2.f) / static_cast<float>(GRIDUNIT)
+			);
+
+			const auto& p1Body = world.CreateBody(&bodyDef);
+			bodyDef.position.Set(
+				(p2->Offset.x + GRIDUNIT / 2.f) / static_cast<float>(GRIDUNIT),
+				(p2->Offset.y + GRIDUNIT / 2.f) / static_cast<float>(GRIDUNIT)
 			);
 
 			const auto& p2Body = world.CreateBody(&bodyDef);
-
 			bodyDef.position.Set(
-				(p4->Offset.x + GRIDUNIT / 2) / static_cast<float>(GRIDUNIT),
-				(p4->Offset.y + GRIDUNIT / 2) / static_cast<float>(GRIDUNIT)
+				(p3->Offset.x + GRIDUNIT / 2.f) / static_cast<float>(GRIDUNIT),
+				(p3->Offset.y + GRIDUNIT / 2.f) / static_cast<float>(GRIDUNIT)
 			);
 
+			const auto& p3Body = world.CreateBody(&bodyDef);
+			bodyDef.position.Set(
+				(p4->Offset.x + GRIDUNIT / 2.f) / static_cast<float>(GRIDUNIT),
+				(p4->Offset.y + GRIDUNIT / 2.f) / static_cast<float>(GRIDUNIT)
+			);
+			
 			const auto& p4Body = world.CreateBody(&bodyDef);
 
 			pShape.m_radius = .33f;
@@ -76,7 +88,9 @@ namespace blooDot::Orchestrator
 			fixtureDef.density = 1.6f * static_cast<float>(M_PI);
 			fixtureDef.friction = 0.3f;
 			fixtureDef.restitution = .27f;
+			p1Body->CreateFixture(&fixtureDef);
 			p2Body->CreateFixture(&fixtureDef);
+			p3Body->CreateFixture(&fixtureDef);
 			p4Body->CreateFixture(&fixtureDef);
 			
 			/* wall physics */
@@ -140,20 +154,20 @@ namespace blooDot::Orchestrator
 
 					if (keys[SDL_SCANCODE_A])
 					{
-						NudgePlayer(iP1, -5, 0);
+						p1Body->ApplyLinearImpulseToCenter({ -1.7f, 0 }, true);
 					}
 					else if (keys[SDL_SCANCODE_D])
 					{
-						NudgePlayer(iP1, 5, 0);
+						p1Body->ApplyLinearImpulseToCenter({ 1.7f, 0 }, true);
 					}
 
 					if (keys[SDL_SCANCODE_S])
 					{
-						NudgePlayer(iP1, 0, 5);
+						p1Body->ApplyLinearImpulseToCenter({ 0, 1.7f }, true);
 					}
 					else if (keys[SDL_SCANCODE_W])
 					{
-						NudgePlayer(iP1, 0, -5);
+						p1Body->ApplyLinearImpulseToCenter({ 0, -1.7f }, true);
 					}
 
 					if (keys[SDL_SCANCODE_F])
@@ -178,22 +192,22 @@ namespace blooDot::Orchestrator
 
 					if (keys[SDL_SCANCODE_J])
 					{
-						NudgePlayer(iP3, -5, 0);
+						p3Body->ApplyLinearImpulseToCenter({ -1.7f, 0 }, true);
 					}
 
 					if (keys[SDL_SCANCODE_L])
 					{
-						NudgePlayer(iP3, 5, 0);
+						p3Body->ApplyLinearImpulseToCenter({ 1.7f, 0 }, true);
 					}
 
 					if (keys[SDL_SCANCODE_K])
 					{
-						NudgePlayer(iP3, 0, 5);
+						p3Body->ApplyLinearImpulseToCenter({ 0, 1.7f }, true);
 					}
 
 					if (keys[SDL_SCANCODE_I])
 					{
-						NudgePlayer(iP3, 0, -5);
+						p3Body->ApplyLinearImpulseToCenter({ 0, -1.7f }, true);
 					}
 
 					if (keys[SDL_SCANCODE_SEMICOLON])
@@ -269,29 +283,72 @@ namespace blooDot::Orchestrator
 
 				// rare use for a scope block, guess why
 				{
+					/* compute one physics step and set the positions
+					 * and rotations for the next frame to render */
 					world.Step(timeStep, velocityIterations, positionIterations);
-					const auto& p2Position = p2Body->GetPosition();
-					SetPlayerPosition(
-						iP2,
-						(int)(p2Position.x* static_cast<float>(GRIDUNIT)) - GRIDUNIT / 2,
-						(int)(p2Position.y* static_cast<float>(GRIDUNIT)) - GRIDUNIT / 2
-					);
 
-					if (p2Body->GetLinearVelocity().Length() < 0.3f)
+					if (activePlayers & 1)
 					{
-						p2Body->SetLinearVelocity({ 0,0 });
+						const auto& pPosition = p1Body->GetPosition();
+						SetPlayerPosition(
+							iP1,
+							(int)(pPosition.x* static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
+							(int)(pPosition.y* static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f)
+						);
+
+						const auto velocity = p1Body->GetLinearVelocity().Length();
+						if (velocity < 0.3f && velocity != 0)
+						{
+							p1Body->SetLinearVelocity({ 0,0 });
+						}
 					}
 
-					const auto& p4Position = p4Body->GetPosition();
-					SetPlayerPosition(
-						iP4,
-						(int)(p4Position.x* static_cast<float>(GRIDUNIT)) - GRIDUNIT / 2,
-						(int)(p4Position.y* static_cast<float>(GRIDUNIT)) - GRIDUNIT / 2
-					);
-
-					if (p4Body->GetLinearVelocity().Length() < 0.3f)
+					if (activePlayers & 2)
 					{
-						p4Body->SetLinearVelocity({ 0,0 });
+						const auto& pPosition = p2Body->GetPosition();
+						SetPlayerPosition(
+							iP2,
+							(int)(pPosition.x * static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
+							(int)(pPosition.y * static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f)
+						);
+
+						const auto velocity = p2Body->GetLinearVelocity().Length();
+						if (velocity < 0.3f && velocity != 0)
+						{
+							p2Body->SetLinearVelocity({ 0,0 });
+						}
+					}
+
+					if (activePlayers & 4)
+					{
+						const auto& pPosition = p3Body->GetPosition();
+						SetPlayerPosition(
+							iP3,
+							(int)(pPosition.x* static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
+							(int)(pPosition.y* static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f)
+						);
+
+						const auto velocity = p3Body->GetLinearVelocity().Length();
+						if (velocity < 0.3f && velocity != 0)
+						{
+							p3Body->SetLinearVelocity({ 0,0 });
+						}
+					}
+
+					if (activePlayers & 8)
+					{
+						const auto& pPosition = p4Body->GetPosition();
+						SetPlayerPosition(
+							iP4,
+							(int)(pPosition.x * static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
+							(int)(pPosition.y * static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f)
+						);
+
+						const auto velocity = p4Body->GetLinearVelocity().Length();
+						if (velocity < 0.3f && velocity != 0)
+						{
+							p4Body->SetLinearVelocity({ 0,0 });
+						}
 					}
 				}
 

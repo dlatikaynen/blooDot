@@ -29,6 +29,7 @@ SDL_Texture* flapsFloor[9];
 SDL_Texture* flapsWalls[9];
 SDL_Texture* flapsRooof[9];
 
+char activePlayers = 0;
 MobState* player1 = NULL;
 MobState* player2 = NULL;
 MobState* player3 = NULL;
@@ -761,12 +762,16 @@ void EnsurePlayers()
 		sprite1 = GetDing(player1->WhoIsIt);
 	}
 
+	activePlayers |= 1;
+
 	if (blooDot::Player::NumPlayers >= 2)
 	{
 		if (player2 == NULL)
 		{
 			player2 = blooDot::Player::GetState(iP2);
 		}
+
+		activePlayers |= 2;
 
 		if (blooDot::Player::NumPlayers >= 3)
 		{
@@ -775,9 +780,12 @@ void EnsurePlayers()
 				player3 = blooDot::Player::GetState(iP3);
 			}
 
+			activePlayers |= 4;
+
 			if (player4 == NULL && blooDot::Player::NumPlayers == 4)
 			{
 				player4 = blooDot::Player::GetState(iP4);
+				activePlayers |= 8;
 			}
 		}
 	}
