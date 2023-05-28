@@ -81,7 +81,7 @@ namespace blooDot::de
 	constexpr char const* _literal_de_DialogTitleGpuChan = "GPU-chan sagt";
 	constexpr char const* _literal_de_DialogBubbleGpuChan = "O nein, das\nist zu groß!";
 	constexpr char const* _literal_de_regionNameUnknown = "Hier seyen Drachen";
-	constexpr char const* _literal_de_regionNameScullery = "Die Spülküche";
+	constexpr char const* _literal_de_regionNameScullery = "Spülküche";
 	constexpr char const* _literal_de_mainQuestTitleAwning = "Die Spargelrentnermarkise";
 	constexpr char const* _literal_de_mainQuestTitleDrawing = "Der Schnabeltierkäfiggrundriß";
 	constexpr char const* _literal_de_mainQuestTitleDrowning = "Die Tintenfischgehaltsversenkung";

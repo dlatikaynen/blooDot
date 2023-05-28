@@ -81,7 +81,7 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_DialogTitleGpuChan = "GPU-chan says,";
 	constexpr char const* _literal_fi_DialogBubbleGpuChan = "Oh no,\nit's too\nbig!";
 	constexpr char const* _literal_fi_regionNameUnknown = "Here be dragons";
-	constexpr char const* _literal_fi_regionNameScullery = "The Scullery";
+	constexpr char const* _literal_fi_regionNameScullery = "Scullery";
 	constexpr char const* _literal_fi_mainQuestTitleAwning = "The Awning of the Sage of Asparagus";
 	constexpr char const* _literal_fi_mainQuestTitleDrawing = "Platypushäkinsuunnitelma";
 	constexpr char const* _literal_fi_mainQuestTitleDrowning = "Kalmareiden palkanlasku";

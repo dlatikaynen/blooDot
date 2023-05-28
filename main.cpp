@@ -37,8 +37,16 @@ int main(int argc, char** argv)
 	{
 		auto const& cooked = Cook();
 		auto const& xlated = Xlate();
-
-		return cooked && xlated ? 0 : 0xacab;
+		std::cout 
+			<< "cooked "
+			<< cooked
+			<< ", xlated " 
+			<< xlated 
+			<< ((cooked || xlated) ? " \033[31mFAIL" : " \033[32mSUCCESS")
+			<< "\033[0m"
+			<< '\n';
+		system("pause");
+		return cooked || xlated ? 0xacab : 0;
 	}
 
 #else

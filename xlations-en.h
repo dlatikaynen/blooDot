@@ -81,7 +81,7 @@ namespace blooDot::en
 	constexpr char const* _literal_en_DialogTitleGpuChan = "GPU-chan says,";
 	constexpr char const* _literal_en_DialogBubbleGpuChan = "Oh no,\nit's too\nbig!";
 	constexpr char const* _literal_en_regionNameUnknown = "Here be dragons";
-	constexpr char const* _literal_en_regionNameScullery = "The Scullery";
+	constexpr char const* _literal_en_regionNameScullery = "Scullery";
 	constexpr char const* _literal_en_mainQuestTitleAwning = "The Awning of the Sage of Asparagus";
 	constexpr char const* _literal_en_mainQuestTitleDrawing = "The Drawing of the Cage of a Platypus";
 	constexpr char const* _literal_en_mainQuestTitleDrowning = "The Drowning of the Wage of an Octopus";
