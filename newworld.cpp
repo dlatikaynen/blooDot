@@ -25,6 +25,10 @@ bool InitializeNewWorld()
 
 	AddRegion(scullery);
 	
+	WorldRegion gardenOFRidiculouslyPoisonousPlants;
+	gardenOFRidiculouslyPoisonousPlants.RegionId = 2;
+	gardenOFRidiculouslyPoisonousPlants.RegionName = std::string(literallandmarkNameGardenOfRidiculouslyPoisonousPlants);
+
 	auto centerSheet = GetWorldSheet(0, 0);
 	if (!centerSheet)
 	{

@@ -3,7 +3,7 @@
 #include "dexassy.h"
 #ifndef NDEBUG
 
-int Cook()
+int Cook(XassyCookInfo *cookStats)
 {
 	std::stringstream chunkConstants;
 	std::stringstream chunkSizes;
@@ -15,6 +15,10 @@ int Cook()
 		<< "#pragma once"
 		<< "\n\n"
 		<< "size_t chunkSizes[] = {\n";
+
+	cookStats->numFiles = 0;
+	cookStats->numBytesBefore = 0;
+	cookStats->numBytesAfter = 0;
 
 	auto const&& basePath = SDL_GetBasePath();
 	std::stringstream recipePath;
@@ -95,6 +99,9 @@ int Cook()
 
 						rawFile.close();
 						++resNumber;
+						++cookStats->numFiles;
+						cookStats->numBytesBefore += uncompressedSize;
+						cookStats->numBytesAfter += compressedSize;
 					}
 
 					previousIdentifier = identifier;

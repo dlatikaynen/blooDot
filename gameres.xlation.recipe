@@ -340,6 +340,54 @@ regionNameScullery
 	[de]	Spülküche
 	[ua]	Кухня посуду
 
+regionNameCity
+	[am]	City of Urban Settlement
+	[de]	Stadt der urbanen Siedlung
+
+regionNameLabyrinthOfUnreasonableSizeAndComplexity
+	[am]	Labyrinth of Unreasonable Size and Complexity
+	[de]	Labyrinth der unvernünftigen Größe und Komplexität
+
+regionNameDesertOfCollossalTemperatureDifferences
+	[am]	Desert of Collossal Temperature Differences
+	[de]	Wüste der kollossalen Temperaturunterschiede
+
+regionNameOceanOfImmeasurableDisappointmentAnyARuinedDay
+	[am]	Ocean of Immeasurable Disappointment
+	[de]	Meer der unermeßlichen Enttäuschung
+
+regionNameNonMountainsOfTwoDimensionalFlatness
+	[am]	Mountain'ts of Sheer Flatness And Absolutely No Elevation
+	[de]	Nichtberge der völligen Flachheit ohne jegliche Erhebung
+
+regionNameMarshesOfDoubtfulDrowningHazard
+	[am]	Marshes of Rather Doubtful Drowning Hazard
+	[de]	Sümpfe der eher zweifelhaften Ertrinkungsgefahr
+
+landmarkNameUniversityOfScience
+	[am]	University of Science
+	[de]	Wissenschaftsuniversität
+
+landmarkNameLibraryOfTheUniversityOfScience
+	[am]	Library of the University of Science
+	[de]	Bibliothek der Wissenschaftsuniversität
+
+landmarkNameGardenOfRidiculouslyPoisonousPlants
+	[am]	Garden of Ridiculously Poisonous Plants
+	[de]	Garten der lächerlich giftigen Pflanzen
+
+landmarkNameSnurch
+	[am]	Snurch
+	[de]	Schnirche
+
+landmarkNameSnathedral
+	[am]	Snanctum of the Snathedral
+	[de]	Snanktum der Schnathedrale
+
+regionSensorLabel
+	[am]	%s in your area
+	[de]	%s in deiner Nähe
+
 mainQuestTitleAwning
 	[am]	The Awning of the Sage of Asparagus
 	[de]	Die Spargelrentnermarkise
@@ -359,6 +407,10 @@ mainQuestTitleDrowning
 mainQuestTitleKermit
 	[am]	Get the Frog a Loan
 	[de]	Gib dem Frosch Kredit
+
+mainQuestWarning
+	[am]	It is dangerous to take a loan.
+	[de]	Es ist gefährlich, an der Leine zu gehen.
 
 dingNameWallClassic
 	[am]	Wall cube
@@ -419,6 +471,16 @@ dingNameGrass
 dingNameRooofMesh
 	[am]	Mesh
 	[de]	Gitterrost
+
+dingNameHoe
+	[am]	Hoe
+	[de]	Hacke
+	[fi]	Kuokka
+
+dingNameHoePlural
+	[am]	Hoes
+	[de]	Hacken
+	[fi]	Kukot
 
 playerName1
 	[am]	sipWsibasWn

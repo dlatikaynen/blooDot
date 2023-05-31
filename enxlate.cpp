@@ -2,10 +2,13 @@
 #include "enxlate.h"
 #ifndef NDEBUG
 
-int Xlate()
+int Xlate(XassyXlatInfo* xlatInfo)
 {
 	std::stringstream pathHeader;
 	std::stringstream pathSource;
+
+	xlatInfo->numFiles = 0;
+	xlatInfo->numLiterals = 0;
 
 	auto const&& basePath = SDL_GetBasePath();
 	std::stringstream recipePath;
@@ -97,6 +100,8 @@ int Xlate()
 		}
 
 		recipeFile.close();
+		++xlatInfo->numFiles;
+
 		std::ofstream headerFile(pathHeader.str());
 		std::ofstream sourceFile(pathSource.str());
 
@@ -124,6 +129,8 @@ int Xlate()
 				<< "const char* literal"
 				<< identifier.Identifier
 				<< " = \"\";\n";
+
+			++xlatInfo->numLiterals;
 		}
 
 		for (auto i = 1; i <= 4; ++i)

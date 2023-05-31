@@ -8,6 +8,11 @@
 
 constexpr int const XlateReturnCodeSuccess = 0;
 
+struct XassyXlatInfo {
+	int numFiles;
+	int numLiterals;
+};
+
 typedef struct XlatableIdentifierStruct
 {
 	std::string Identifier;
@@ -21,6 +26,6 @@ typedef struct XlatableIdentifierStruct
 	std::string ua;
 } XlatableIdentifier;
 
-int Xlate();
+int Xlate(XassyXlatInfo*);
 
 #endif

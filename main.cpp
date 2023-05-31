@@ -12,6 +12,15 @@
 #include "settings.h"
 #include "playerstate.h"
 
+#ifndef NDEBUG
+#include "enxassy.h"
+#include "enxlate.h"
+#endif
+
+const int major = 3;
+const int minor = 1;
+const int patch = 0;
+
 const int ExitCodeNormally = 0x00;
 const int ExitCodeSDLInitFail = 0x55;
 const size_t MaxExpectedSDLErrorLength = 0x8000;
@@ -28,16 +37,30 @@ void ReportError(const char* message, const char* error)
 }
 
 #ifndef NDEBUG
-extern int Cook();
+extern int Cook(XassyCookInfo*);
 extern int Xlate();
 
 int main(int argc, char** argv)
 {
 	if (argc == 2 && _strnicmp(argv[1], "xassy", _MAX_PATH) == 0)
 	{
-		auto const& cooked = Cook();
-		auto const& xlated = Xlate();
+		XassyCookInfo cookStats;
+		XassyXlatInfo xlatStats;
+		auto const& cooked = Cook(&cookStats);
+		auto const& xlated = Xlate(&xlatStats);
 		std::cout 
+			<< "Xassy has assembled "
+			<< cookStats.numFiles
+			<< " items, getting down to "
+			<< cookStats.numBytesAfter
+			<< " from originally "
+			<< cookStats.numBytesBefore
+			<< " bytes\n"
+			<< "Xassy has assembled "
+			<< xlatStats.numLiterals
+			<< " literals from "
+			<< xlatStats.numFiles
+			<< " file(s)\n"
 			<< "cooked "
 			<< cooked
 			<< ", xlated " 
@@ -54,6 +77,15 @@ int main(int, char**)
 {
 #endif
 	/* startup */
+	std::cout
+		<< "NameOfTheGame Version "
+		<< unsigned(major)
+		<< "."
+		<< unsigned(minor)
+		<< "."
+		<< unsigned(patch)
+		<< "\n";
+
 	const auto initResult = SDL_Init(SDL_INIT_EVERYTHING);
 	if (initResult < 0)
 	{
