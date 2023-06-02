@@ -384,6 +384,14 @@ landmarkNameSnathedral
 	[am]	Snanctum of the Snathedral
 	[de]	Snanktum der Schnathedrale
 
+landmarkNameBlimpcombe
+	[am]	Blimpcombe
+	[de]	Niederluftschiffingen
+
+landmarkNameSoftlossnonminster
+	[am]	Softlossnonminster
+	[de]	Verlierweichunkirchen
+
 regionSensorLabel
 	[am]	%s in your area
 	[de]	%s in deiner Nähe
@@ -410,7 +418,11 @@ mainQuestTitleKermit
 
 mainQuestWarning
 	[am]	It is dangerous to take a loan.
-	[de]	Es ist gefährlich, an der Leine zu gehen.
+	[de]	Es ist gefährlich, an Leine zu gehen.
+
+sideQuestServeAYouthfulPorpoise
+	[am]	Serve a Youthful Porpoise
+	[de]	Die Schweinswalbedienung
 
 dingNameWallClassic
 	[am]	Wall cube

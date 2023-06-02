@@ -93,7 +93,7 @@ enum DingProps : unsigned char
 	Loot = 16
 };
 
-inline DingProps operator|(DingProps a, DingProps b)
+inline constexpr DingProps operator|(DingProps a, DingProps b)
 {
 	return static_cast<DingProps>(static_cast<int>(a) | static_cast<int>(b));
 }

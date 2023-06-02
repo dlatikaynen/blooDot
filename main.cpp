@@ -78,7 +78,8 @@ int main(int, char**)
 #endif
 	/* startup */
 	std::cout
-		<< "NameOfTheGame Version "
+		<< NameOfTheGame 
+		<< " Version "
 		<< unsigned(major)
 		<< "."
 		<< unsigned(minor)

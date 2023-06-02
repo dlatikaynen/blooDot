@@ -18,8 +18,16 @@ namespace blooDot::Physics
 		int flapOffsetX = -flapInfo.myGridLeftX * GRIDUNIT + flapInfo.localDrawingOffsetX + GRIDUNIT / 2 + viewportOffsetX;
 		int flapOffsetY = -flapInfo.myGridToopY * GRIDUNIT + flapInfo.localDrawingOffsetY + GRIDUNIT / 2 + viewportOffsetY;
 
+		constexpr const DingProps collisionMask = DingProps::Walls | DingProps::Mob;
+
 		for (const auto& entity : entities)
 		{
+			if ((entity->props & collisionMask) == DingProps::Default)
+			{
+				/* only bother creating one if the entity is collidable */
+				continue;
+			}
+
 			b2BodyDef wallDef;
 			b2PolygonShape wallShape;
 			b2FixtureDef wallFixtureDef;
