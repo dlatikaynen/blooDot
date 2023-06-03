@@ -42,7 +42,7 @@ typedef struct MobStateStruct
 	PointInWorld Position;
 	SDL_Point Offset;
 	int Orientation;
-	std::list<InventoryItem> Inventory;
+	//std::list<InventoryItem> Inventory;
 } MobState;
 
 namespace blooDot::Player

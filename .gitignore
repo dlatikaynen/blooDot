@@ -364,4 +364,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/*.bofa
+
+# savegames and settings store
+*.bofa
+blooDot.ligma

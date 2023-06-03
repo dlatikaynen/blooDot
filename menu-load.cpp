@@ -421,6 +421,7 @@ namespace blooDot::MenuLoad
 				}
 
 				++ordinal;
+				++bitIndex;
 			}
 
 			if (SDL_SetRenderTarget(renderer, NULL) < 0)
@@ -430,6 +431,7 @@ namespace blooDot::MenuLoad
 				return;
 			}
 
+			lastSavegameIndex = vignetteCount - 1;
 			return;
 		}
 
