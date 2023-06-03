@@ -33,6 +33,7 @@ namespace blooDot::Orchestrator
 	float timeStep = MillisecondsPerFrame / 1000.f;
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
+	SDL_GameController* controller = nullptr;
 
 	void MainLoop(SDL_Renderer* renderer)
 	{
@@ -114,6 +115,16 @@ namespace blooDot::Orchestrator
 
 			int numKeys;
 			SDL_GetKeyboardState(&numKeys);
+			SDL_GameControllerEventState(SDL_ENABLE);
+			for (int i = 0; i < SDL_NumJoysticks(); ++i) 
+			{
+				if (SDL_IsGameController(i))
+				{
+					controller = SDL_GameControllerOpen(i);
+					break;
+				}
+			}
+
 			while (mainRunning)
 			{
 				frameStart = SDL_GetPerformanceCounter();
@@ -131,6 +142,28 @@ namespace blooDot::Orchestrator
 						break;
 
 #endif
+					case SDL_CONTROLLERDEVICEADDED:
+					{
+						std::cout << "DEVICEADDED\n";
+					}
+
+					case SDL_CONTROLLERDEVICEREMOVED:
+					{
+						std::cout << "DEVICEREMOVED\n";
+					}
+
+					break;
+
+					case SDL_CONTROLLERAXISMOTION:
+					{
+						const SDL_JoystickID joystickID = mainEvent.caxis.which;
+						const SDL_GameControllerAxis axis = (SDL_GameControllerAxis)mainEvent.caxis.axis;
+						const float value = mainEvent.caxis.value / (float)SDL_JOYSTICK_AXIS_MAX;
+						std::cout << "joystick " << joystickID << " on axis " << axis << " says " << value << "\n";						
+					}
+
+					break;
+
 					case SDL_QUIT:
 					LEAVE:
 						mainRunning = false;
@@ -380,7 +413,12 @@ namespace blooDot::Orchestrator
 			}
 		}
 
-THAT_ESCALATED_QUICKLY:
+	THAT_ESCALATED_QUICKLY:
+		if (controller != nullptr)
+		{
+			SDL_GameControllerClose(controller);
+		}
+
 		TeardownDingSheets();
 		GameviewTeardown();
 		ClearWorldData();
