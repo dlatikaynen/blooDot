@@ -5,6 +5,7 @@ typedef struct MenuDialogInteractionStruct {
 	int itemCount = 0;
 	bool enterMenuItem = false;
 	bool leaveDialog = false;
+	bool leaveMain = false;
 } MenuDialogInteraction;
 
 namespace blooDot::MenuCommon

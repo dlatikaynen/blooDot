@@ -8,15 +8,15 @@
 #include "settings.h"
 #include "constants.h"
 #include "sfx.h"
+#include "menu-common.h"
 
 extern SettingsStruct Settings;
 extern bool mainRunning;
 
 namespace blooDot::MenuSettings
 {
-	SDL_Event menuEvent;
+	MenuDialogInteraction menuState;
 	bool menuRunning = false;
-	SettingsMenuItems menuSelection = SMI_BACK;
 
 	SDL_Texture* backTexture = NULL;
 	SDL_Texture* screensizeTexture = NULL;
@@ -35,6 +35,7 @@ namespace blooDot::MenuSettings
 	bool MenuLoop(SDL_Renderer* renderer)
 	{
 		menuRunning = true;
+		menuState.selectedItemIndex = SMI_BACK;
 
 		SDL_Rect outerMenuRect{ 150,45,340,390 };
 		SDL_Rect titleRect{ 0,0,0,0 };
@@ -53,91 +54,19 @@ namespace blooDot::MenuSettings
 		unsigned short frame = 0;
 		while (menuRunning && mainRunning)
 		{
-			while (SDL_PollEvent(&menuEvent) != 0)
+			blooDot::MenuCommon::HandleMenu(&menuState);
+			if (menuState.leaveDialog)
 			{
-				switch (menuEvent.type)
-				{
-				case SDL_QUIT:
-					mainRunning = false;
-					menuRunning = false;
-					break;
+				menuRunning = false;
+			}
+			else if (menuState.enterMenuItem)
+			{
+				menuRunning = _EnterAndHandleSettingsMenu(renderer);
+			}
 
-				case SDL_KEYDOWN:
-					switch (menuEvent.key.keysym.scancode)
-					{
-					case SDL_SCANCODE_UP:
-					case SDL_SCANCODE_KP_8:
-					case SDL_SCANCODE_W:
-						if (menuSelection == SMI_BACK)
-						{
-							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-						}
-						else
-						{
-							menuSelection = static_cast<SettingsMenuItems>(menuSelection - 1);
-							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-						}
-
-						break;
-
-					case SDL_SCANCODE_DOWN:
-					case SDL_SCANCODE_KP_2:
-					case SDL_SCANCODE_S:
-						if (menuSelection == SMI_ABOUT)
-						{
-							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-						}
-						else
-						{
-							menuSelection = static_cast<SettingsMenuItems>(menuSelection + 1);
-							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-						}
-
-						break;
-
-					case SDL_SCANCODE_PAGEDOWN:
-					case SDL_SCANCODE_END:
-						if (menuSelection == SMI_ABOUT)
-						{
-							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-						}
-						else
-						{
-							menuSelection = SMI_ABOUT;
-							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-						}
-
-						break;
-
-					case SDL_SCANCODE_PAGEUP:
-					case SDL_SCANCODE_HOME:
-						if (menuSelection == SMI_BACK)
-						{
-							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-						}
-						else
-						{
-							menuSelection = SMI_BACK;
-							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-						}
-
-						break;
-
-					case SDL_SCANCODE_RETURN:
-					case SDL_SCANCODE_RETURN2:
-					case SDL_SCANCODE_KP_ENTER:
-					case SDL_SCANCODE_SPACE:
-						blooDot::Sfx::Play(SoundEffect::SFX_SELCONF);
-						menuRunning = _EnterAndHandleSettingsMenu(renderer);
-						break;
-
-					case SDL_SCANCODE_ESCAPE:
-						menuRunning = false;
-						break;
-					}
-
-					break;
-				}
+			if (menuState.leaveMain)
+			{
+				mainRunning = false;
 			}
 
 			if (SDL_RenderClear(renderer) < 0)
@@ -169,8 +98,9 @@ namespace blooDot::MenuSettings
 				SettingsMenuItems itemToDraw = SMI_BACK;
 				for (auto y = 94; y < 411; y += stride)
 				{
-					DrawButton(drawingSink, 195, y, 250, 42, itemToDraw == menuSelection);
-					if (itemToDraw == menuSelection)
+					const auto thisItem = itemToDraw == menuState.selectedItemIndex;
+					DrawButton(drawingSink, 195, y, 250, 42, thisItem);
+					if (thisItem)
 					{
 						DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);
 						DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
@@ -228,7 +158,7 @@ namespace blooDot::MenuSettings
 
 	bool _EnterAndHandleSettingsMenu(SDL_Renderer* renderer)
 	{
-		switch (menuSelection)
+		switch (menuState.selectedItemIndex)
 		{
 		case SMI_SCREENSIZE:
 			_EnterAndHandleScreenSettings(renderer);

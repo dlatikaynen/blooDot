@@ -17,6 +17,11 @@ namespace blooDot::MenuCommon
 			interactionState->leaveDialog = false;
 		}
 
+		if (interactionState->leaveMain)
+		{
+			interactionState->leaveMain = false;
+		}
+
 		if (interactionState->enterMenuItem)
 		{
 			interactionState->enterMenuItem = false;
@@ -28,6 +33,7 @@ namespace blooDot::MenuCommon
 			{
 			case SDL_QUIT:
 				interactionState->leaveDialog = true;
+				interactionState->leaveMain = true;
 				break;
 
 			case SDL_KEYDOWN:

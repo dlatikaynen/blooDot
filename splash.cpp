@@ -127,7 +127,7 @@ namespace blooDot::Splash
 		while (splashRunning && mainRunning)
 		{
 			blooDot::MenuCommon::HandleMenu(&menuState);
-			if (menuState.leaveDialog)
+			if (menuState.leaveDialog || menuState.leaveMain)
 			{
 				splashRunning = false;
 				mainRunning = false;
@@ -135,7 +135,7 @@ namespace blooDot::Splash
 			}
 			else if (menuState.enterMenuItem)
 			{
-				keepRunning = _EnterAndHandleMenu(renderer);
+				keepRunning = _EnterAndHandleMenu(renderer) && mainRunning;
 			}
 
 			_Bounce(&srcRect);
