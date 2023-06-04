@@ -14,9 +14,9 @@ namespace blooDot::MenuSettingsAbout
 	bool menuRunning = false;
 
 	SDL_Texture* backTexture = NULL;
-	std::vector<SDL_Texture*> sectionTextures;
-	std::vector<SDL_Texture*> chapterTextures;
-	std::vector<SDL_Texture*> creditsTextures;
+	std::vector<CreditsMention> creditMentions;
+	std::vector<CreditsChapter> creditChapters;
+	std::vector<CreditsSection> creditSections;
 
 	SDL_Rect backRect{ 0,0,0,0 };
 	std::vector<SDL_Rect> sectionRects;
@@ -108,8 +108,13 @@ namespace blooDot::MenuSettingsAbout
 				DrawLabel(renderer, 235, yStart + 0 * stride + 0 * backGap, backTexture, &backRect);
 
 				/* the storyboarded "rolling credits */
-				DrawLabel(renderer, 195, yStart + 1 * stride + 1 * backGap, sectionTextures[0], &sectionRects[0]);
-
+				const auto& section = creditSections[0];
+				SDL_Rect rect = section.rect;
+				DrawLabel(renderer, 195, yStart + 1 * stride + 1 * backGap, section.texture, &rect);
+				rect = section.chapters[0]->rect;
+				DrawLabel(renderer, 10, yStart + 2 * stride + 1 * backGap, section.chapters[0]->texture, &rect);
+				rect = section.chapters[0]->mentions[0]->rect;
+				DrawLabel(renderer, 195, yStart + 2 * stride + 1 * backGap, section.chapters[0]->mentions[0]->texture, &rect);
 			}
 
 			SDL_RenderPresent(renderer);
@@ -125,47 +130,134 @@ namespace blooDot::MenuSettingsAbout
 
 	void _PrepareText(SDL_Renderer* renderer)
 	{
+		SDL_Texture* mentionTexture;
+		SDL_Texture* chapterTexture;
+		SDL_Texture* sectionTexture;
+		SDL_Rect textureRect;
+
 		backTexture = RenderText(renderer, &backRect, FONT_KEY_DIALOG, 23, literalMenuBack, ButtonTextColor);
 		
-		SDL_Rect textureRect;
-		const auto& texture001 = RenderText(renderer, &textureRect, FONT_KEY_DIALOG, 28, literalAboutClassificationProduction, ButtonTextColor, true);
-		if (texture001)
-		{
-			sectionTextures.push_back(texture001);
-			sectionRects.emplace_back(textureRect);
-		}
+		/* 1. build all the distinct mentions that there are */
+
+		mentionTexture = _MentionTexture(literalAboutCreditsMentionDlatikay, &textureRect, renderer);
+		_AddMention(mentionTexture, &textureRect);
+		const auto& dlatikay = &creditMentions[0];
+
+		//mentionTexture = _MentionTexture(literalAboutCreditsMentionLlatikay, &textureRect, renderer);
+		//const auto& llatikay = _AddMention(mentionTexture, &textureRect);
+
+		//mentionTexture = _MentionTexture(literalAboutCreditsMentionJlatikay, &textureRect, renderer);
+		//const auto& jlatikay = _AddMention(mentionTexture, &textureRect);
+
+		//mentionTexture = _MentionTexture(literalAboutCreditsMentionNnebel, &textureRect, renderer);
+		//const auto& nnebel = _AddMention(mentionTexture, &textureRect);
+
+		/* 2. build the hierarchy */
+		sectionTexture = _SectionTexture(literalAboutClassificationProduction, &textureRect, renderer);
+		_AddSection(sectionTexture, &textureRect);
+
+		chapterTexture = _ChapterTexture(literalAboutClassificationProducer, &textureRect, renderer);
+		_AddChapter(chapterTexture, &textureRect);
+		const auto& producer = &creditChapters[0];
+		creditSections[0].chapters.push_back(producer);
+		creditSections[0].chapters[0]->mentions.push_back(dlatikay);
+	}
+
+	SDL_Texture* _MentionTexture(const char* literal, SDL_Rect* rect, SDL_Renderer* renderer)
+	{
+		return RenderText(
+			renderer,
+			rect,
+			FONT_KEY_DIALOG,
+			15,
+			literal,
+			ButtonTextColor
+		);
+	}
+
+	SDL_Texture* _SectionTexture(const char* literal, SDL_Rect* rect, SDL_Renderer* renderer)
+	{
+		return RenderText(
+			renderer,
+			rect,
+			FONT_KEY_DIALOG,
+			28,
+			literal,
+			ButtonTextColor,
+			true
+		);
+	}
+
+	SDL_Texture* _ChapterTexture(const char* literal, SDL_Rect* rect, SDL_Renderer* renderer)
+	{
+		return RenderText(
+			renderer,
+			rect,
+			FONT_KEY_DIALOG,
+			17,
+			literal,
+			ChapterTextColor,
+			true
+		);
+	}
+
+	CreditsMention& _AddMention(SDL_Texture* mentionTexture, SDL_Rect* textureRect)
+	{
+		CreditsMention mention;
+		mention.rect = *textureRect;
+		mention.texture = mentionTexture;
+		
+		return creditMentions.emplace_back(mention);
+	}
+
+	void _AddSection(SDL_Texture* sectionTexture, SDL_Rect* textureRect)
+	{
+		CreditsSection section;
+		section.rect = *textureRect;
+		section.texture = sectionTexture;
+		creditSections.emplace_back(section);
+	}
+
+	CreditsChapter& _AddChapter(SDL_Texture* chapterTexture, SDL_Rect* textureRect)
+	{
+		CreditsChapter chapter;
+		chapter.rect = *textureRect;
+		chapter.texture = chapterTexture;
+
+		return creditChapters.emplace_back(chapter);
 	}
 
 	void _Teardown()
 	{
 		backTexture&& [] { SDL_DestroyTexture(backTexture); return false; }();
 
-		for (const auto& texture : creditsTextures)
+		for (const auto& mention : creditMentions)
 		{
-			if (texture)
+			if (mention.texture)
 			{
-				SDL_DestroyTexture(texture);
+				SDL_DestroyTexture(mention.texture);
 			}
 		}
 
-		creditsTextures.clear();
-		for (const auto& texture : chapterTextures)
+		creditMentions.clear();
+		for (auto& section : creditSections)
 		{
-			if (texture)
+			auto& chapters = section.chapters;
+			for (const auto& chapter : chapters)
 			{
-				SDL_DestroyTexture(texture);
+				if (chapter->texture)
+				{
+					SDL_DestroyTexture(chapter->texture);
+				}
+			}
+
+			section.chapters.clear();
+			if (section.texture)
+			{
+				SDL_DestroyTexture(section.texture);
 			}
 		}
 
-		chapterTextures.clear();
-		for (const auto& texture : sectionTextures)
-		{
-			if (texture)
-			{
-				SDL_DestroyTexture(texture);
-			}
-		}
-
-		sectionTextures.clear();
+		creditSections.clear();
 	}
 }

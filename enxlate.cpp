@@ -188,24 +188,37 @@ int Xlate(XassyXlatInfo* xlatInfo)
 					<< "_"
 					<< identifier.Identifier
 					<< " = \"";
-					
+				
+				std::string literal;
 				switch(i)
 				{ 
 				case 1:
-					headerLangFile << (identifier.HasAm ? identifier.am : "");
+					literal = (identifier.HasAm ? identifier.am : "");
 					break;
 
 				case 2:
-					headerLangFile << (identifier.HasDe ? identifier.de : identifier.am);
+					literal = (identifier.HasDe ? identifier.de : identifier.am);
 					break;
 
 				case 3:
-					headerLangFile << (identifier.HasFi ? identifier.fi : identifier.am);
+					literal = (identifier.HasFi ? identifier.fi : identifier.am);
 					break;
 
 				case 4:
-					headerLangFile << (identifier.HasUa ? identifier.ua : identifier.am);
+					literal = (identifier.HasUa ? identifier.ua : identifier.am);
 					break;
+				}
+
+				for(const auto& ch: literal)
+				{
+					if (ch == '\"')
+					{
+						headerLangFile << "\\\"";
+					}
+					else
+					{
+						headerLangFile << ch;
+					}
 				}
 
 				headerLangFile

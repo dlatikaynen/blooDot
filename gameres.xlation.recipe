@@ -528,6 +528,22 @@ AboutClassificationOtherTechShavianCopyr
 	[am]	(c) 2003 Ethan Lamoreaux
 	[de]	(c) 2003 Ethan Lamoreaux
 
+AboutCreditsMentionDlatikay
+	[am]	Daniel "dlatikay" Latikaynen
+	[de]	Daniel "dlatikay" Latikaynen
+
+AboutCreditsMentionLlatikay
+	[am]	Lukas S. Latikaynen
+	[de]	Lukas S. Latikaynen
+
+AboutCreditsMentionJlatikay
+	[am]	Jonas M. Latikaynen
+	[de]	Jonas M. Latikaynen
+
+AboutCreditsMentionNnebel
+	[am]	Nadine Nebel
+	[de]	Nadine Nebel
+
 Savegame
 	[am]	Savegame
 	[de]	Zeitlinie
@@ -582,7 +598,7 @@ regionNameDesertOfCollossalTemperatureDifferences
 	[am]	Desert of Collossal Temperature Differences
 	[de]	Wüste der kollossalen Temperaturunterschiede
 
-regionNameOceanOfImmeasurableDisappointmentAnyARuinedDay
+regionNameOceanOfImmeasurableDisappointment
 	[am]	Ocean of Immeasurable Disappointment
 	[de]	Meer der unermeßlichen Enttäuschung
 

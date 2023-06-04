@@ -131,6 +131,10 @@ namespace blooDot::de
 	constexpr char const* _literal_de_AboutClassificationOtherTechYesevaCopyr = "(c) 2011-2012 Jovanny Lemonad";
 	constexpr char const* _literal_de_AboutClassificationOtherTechShavian = "Die Shavian Gothic Schrift";
 	constexpr char const* _literal_de_AboutClassificationOtherTechShavianCopyr = "(c) 2003 Ethan Lamoreaux";
+	constexpr char const* _literal_de_AboutCreditsMentionDlatikay = "Daniel \"dlatikay\" Latikaynen";
+	constexpr char const* _literal_de_AboutCreditsMentionLlatikay = "Lukas S. Latikaynen";
+	constexpr char const* _literal_de_AboutCreditsMentionJlatikay = "Jonas M. Latikaynen";
+	constexpr char const* _literal_de_AboutCreditsMentionNnebel = "Nadine Nebel";
 	constexpr char const* _literal_de_Savegame = "Zeitlinie";
 	constexpr char const* _literal_de_SavegameBlank = "Von Anfang";
 	constexpr char const* _literal_de_SavepointSingular = "1 Spielstand";
@@ -143,7 +147,7 @@ namespace blooDot::de
 	constexpr char const* _literal_de_regionNameCity = "Stadt der urbanen Siedlung";
 	constexpr char const* _literal_de_regionNameLabyrinthOfUnreasonableSizeAndComplexity = "Labyrinth der unvernünftigen Größe und Komplexität";
 	constexpr char const* _literal_de_regionNameDesertOfCollossalTemperatureDifferences = "Wüste der kollossalen Temperaturunterschiede";
-	constexpr char const* _literal_de_regionNameOceanOfImmeasurableDisappointmentAnyARuinedDay = "Meer der unermeßlichen Enttäuschung";
+	constexpr char const* _literal_de_regionNameOceanOfImmeasurableDisappointment = "Meer der unermeßlichen Enttäuschung";
 	constexpr char const* _literal_de_regionNameNonMountainsOfTwoDimensionalFlatness = "Nichtberge der völligen Flachheit ohne jegliche Erhebung";
 	constexpr char const* _literal_de_regionNameMarshesOfDoubtfulDrowningHazard = "Sümpfe der eher zweifelhaften Ertrinkungsgefahr";
 	constexpr char const* _literal_de_landmarkNameUniversityOfScience = "Wissenschaftsuniversität";
