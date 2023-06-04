@@ -17,4 +17,6 @@ namespace blooDot::MenuSettings
 	bool _EnterAndHandleSettingsMenu(SDL_Renderer* renderer);
 	void _EnterAndHandleScreenSettings(SDL_Renderer* renderer);
 	void _EnterAndHandleLanguageSettings(SDL_Renderer* renderer);
+	void _EnterAndHandleAbout(SDL_Renderer* renderer);
+	void _EnterAndHandleHelp(SDL_Renderer* renderer);
 }

@@ -9,6 +9,8 @@
 #include "constants.h"
 #include "sfx.h"
 #include "menu-common.h"
+#include "menu-settings-about.h"
+#include "menu-settings-help.h"
 
 extern SettingsStruct Settings;
 extern bool mainRunning;
@@ -35,7 +37,8 @@ namespace blooDot::MenuSettings
 	bool MenuLoop(SDL_Renderer* renderer)
 	{
 		menuRunning = true;
-		menuState.selectedItemIndex = SMI_BACK;
+		menuState.itemCount = SettingsMenuItems::SMI_ABOUT + 1;
+		menuState.selectedItemIndex = SettingsMenuItems::SMI_BACK;
 
 		SDL_Rect outerMenuRect{ 150,45,340,390 };
 		SDL_Rect titleRect{ 0,0,0,0 };
@@ -106,7 +109,7 @@ namespace blooDot::MenuSettings
 						DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
 					}
 
-					if (itemToDraw == SMI_BACK || itemToDraw == SMI_LANGUAGE)
+					if (itemToDraw == SettingsMenuItems::SMI_BACK || itemToDraw == SettingsMenuItems::SMI_LANGUAGE)
 					{
 						y += backGap;
 					}
@@ -160,18 +163,20 @@ namespace blooDot::MenuSettings
 	{
 		switch (menuState.selectedItemIndex)
 		{
-		case SMI_SCREENSIZE:
+		case SettingsMenuItems::SMI_SCREENSIZE:
 			_EnterAndHandleScreenSettings(renderer);
 			break;
 
-		case SMI_LANGUAGE:
+		case SettingsMenuItems::SMI_LANGUAGE:
 			_EnterAndHandleLanguageSettings(renderer);
 			break;
 
-		case SMI_HELP:
+		case SettingsMenuItems::SMI_HELP:
+			_EnterAndHandleHelp(renderer);
 			break;
 
-		case SMI_ABOUT:
+		case SettingsMenuItems::SMI_ABOUT:
+			_EnterAndHandleAbout(renderer);
 			break;
 
 		default:
@@ -190,5 +195,15 @@ namespace blooDot::MenuSettings
 	{
 		blooDot::MenuSettingsLang::LanguageSettingsMenuLoop(renderer);
 		_PrepareText(renderer);
+	}
+
+	void _EnterAndHandleAbout(SDL_Renderer* renderer)
+	{
+		blooDot::MenuSettingsAbout::MenuLoop(renderer);
+	}
+
+	void _EnterAndHandleHelp(SDL_Renderer* renderer)
+	{
+		blooDot::MenuSettingsHelp::HelpMenuLoop(renderer);
 	}
 }

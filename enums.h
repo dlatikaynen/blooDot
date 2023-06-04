@@ -68,6 +68,11 @@ enum SettingsMenuItems {
 	SMI_ABOUT
 };
 
+enum AboutMenuItems
+{
+	HAM_BACK
+};
+
 enum ScreenSettingsMenuItems {
 	SSMI_CANCEL,
 	SSMI_VIDEOMODE

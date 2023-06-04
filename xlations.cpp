@@ -11,6 +11,8 @@ const char* literalLanguageNameAmerican = "";
 const char* literalAlienMainMenuLabel = "";
 const char* literalAlienLoadMenuLabel = "";
 const char* literalAlienSettingsMenuLabel = "";
+const char* literalliteralAlienAboutMenuLabel = "";
+const char* literalliteralAlienHelpMenuLabel = "";
 const char* literalAlienScreenSettingsMenuLabel = "";
 const char* literalAlienMultiMonitorMenuLabel = "";
 const char* literalAlienInGameMenuLabel = "";
@@ -138,6 +140,8 @@ namespace blooDot::en
 		literalAlienMainMenuLabel = _literal_en_AlienMainMenuLabel;
 		literalAlienLoadMenuLabel = _literal_en_AlienLoadMenuLabel;
 		literalAlienSettingsMenuLabel = _literal_en_AlienSettingsMenuLabel;
+		literalliteralAlienAboutMenuLabel = _literal_en_literalAlienAboutMenuLabel;
+		literalliteralAlienHelpMenuLabel = _literal_en_literalAlienHelpMenuLabel;
 		literalAlienScreenSettingsMenuLabel = _literal_en_AlienScreenSettingsMenuLabel;
 		literalAlienMultiMonitorMenuLabel = _literal_en_AlienMultiMonitorMenuLabel;
 		literalAlienInGameMenuLabel = _literal_en_AlienInGameMenuLabel;
@@ -267,6 +271,8 @@ namespace blooDot::de
 		literalAlienMainMenuLabel = _literal_de_AlienMainMenuLabel;
 		literalAlienLoadMenuLabel = _literal_de_AlienLoadMenuLabel;
 		literalAlienSettingsMenuLabel = _literal_de_AlienSettingsMenuLabel;
+		literalliteralAlienAboutMenuLabel = _literal_de_literalAlienAboutMenuLabel;
+		literalliteralAlienHelpMenuLabel = _literal_de_literalAlienHelpMenuLabel;
 		literalAlienScreenSettingsMenuLabel = _literal_de_AlienScreenSettingsMenuLabel;
 		literalAlienMultiMonitorMenuLabel = _literal_de_AlienMultiMonitorMenuLabel;
 		literalAlienInGameMenuLabel = _literal_de_AlienInGameMenuLabel;
@@ -396,6 +402,8 @@ namespace blooDot::fi
 		literalAlienMainMenuLabel = _literal_fi_AlienMainMenuLabel;
 		literalAlienLoadMenuLabel = _literal_fi_AlienLoadMenuLabel;
 		literalAlienSettingsMenuLabel = _literal_fi_AlienSettingsMenuLabel;
+		literalliteralAlienAboutMenuLabel = _literal_fi_literalAlienAboutMenuLabel;
+		literalliteralAlienHelpMenuLabel = _literal_fi_literalAlienHelpMenuLabel;
 		literalAlienScreenSettingsMenuLabel = _literal_fi_AlienScreenSettingsMenuLabel;
 		literalAlienMultiMonitorMenuLabel = _literal_fi_AlienMultiMonitorMenuLabel;
 		literalAlienInGameMenuLabel = _literal_fi_AlienInGameMenuLabel;
@@ -525,6 +533,8 @@ namespace blooDot::ua
 		literalAlienMainMenuLabel = _literal_ua_AlienMainMenuLabel;
 		literalAlienLoadMenuLabel = _literal_ua_AlienLoadMenuLabel;
 		literalAlienSettingsMenuLabel = _literal_ua_AlienSettingsMenuLabel;
+		literalliteralAlienAboutMenuLabel = _literal_ua_literalAlienAboutMenuLabel;
+		literalliteralAlienHelpMenuLabel = _literal_ua_literalAlienHelpMenuLabel;
 		literalAlienScreenSettingsMenuLabel = _literal_ua_AlienScreenSettingsMenuLabel;
 		literalAlienMultiMonitorMenuLabel = _literal_ua_AlienMultiMonitorMenuLabel;
 		literalAlienInGameMenuLabel = _literal_ua_AlienInGameMenuLabel;

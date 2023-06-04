@@ -6,6 +6,8 @@ extern const char* literalLanguageNameAmerican;
 extern const char* literalAlienMainMenuLabel;
 extern const char* literalAlienLoadMenuLabel;
 extern const char* literalAlienSettingsMenuLabel;
+extern const char* literalliteralAlienAboutMenuLabel;
+extern const char* literalliteralAlienHelpMenuLabel;
 extern const char* literalAlienScreenSettingsMenuLabel;
 extern const char* literalAlienMultiMonitorMenuLabel;
 extern const char* literalAlienInGameMenuLabel;

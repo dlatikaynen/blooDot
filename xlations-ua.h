@@ -8,6 +8,8 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_AlienMainMenuLabel = "mEnmenV";
 	constexpr char const* _literal_ua_AlienLoadMenuLabel = "lOd";
 	constexpr char const* _literal_ua_AlienSettingsMenuLabel = "SetiNz";
+	constexpr char const* _literal_ua_literalAlienAboutMenuLabel = "Ebaut";
+	constexpr char const* _literal_ua_literalAlienHelpMenuLabel = "Help";
 	constexpr char const* _literal_ua_AlienScreenSettingsMenuLabel = "ScrinSaiz";
 	constexpr char const* _literal_ua_AlienMultiMonitorMenuLabel = "MaltiDisplej";
 	constexpr char const* _literal_ua_AlienInGameMenuLabel = "Gejm";

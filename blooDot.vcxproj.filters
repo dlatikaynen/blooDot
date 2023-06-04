@@ -570,6 +570,12 @@
     <ClInclude Include="menu-common.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
+    <ClInclude Include="menu-settings-help.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="menu-settings-about.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -705,6 +711,12 @@
       <Filter>_Source Files\physics</Filter>
     </ClCompile>
     <ClCompile Include="menu-common.cpp">
+      <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="menu-settings-help.cpp">
+      <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="menu-settings-about.cpp">
       <Filter>_Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>

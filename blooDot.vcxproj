@@ -238,6 +238,8 @@
     <ClCompile Include="datetime.cpp" />
     <ClCompile Include="menu-common.cpp" />
     <ClCompile Include="menu-multimonitor.cpp" />
+    <ClCompile Include="menu-settings-about.cpp" />
+    <ClCompile Include="menu-settings-help.cpp" />
     <ClCompile Include="offscreen-renderer-quest.cpp" />
     <ClCompile Include="offscreen-rendering.cpp" />
     <ClCompile Include="physics-render-binding.cpp" />
@@ -283,6 +285,8 @@
     <ClInclude Include="menu-ingame.h" />
     <ClInclude Include="menu-load.h" />
     <ClInclude Include="menu-multimonitor.h" />
+    <ClInclude Include="menu-settings-about.h" />
+    <ClInclude Include="menu-settings-help.h" />
     <ClInclude Include="menu-settings-lang.h" />
     <ClInclude Include="huff-comp.h" />
     <ClInclude Include="huff-deco.h" />

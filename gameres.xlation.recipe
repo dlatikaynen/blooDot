@@ -25,6 +25,12 @@ AlienLoadMenuLabel
 AlienSettingsMenuLabel
 	[**]	SetiNz
 
+literalAlienAboutMenuLabel
+	[**]	Ebaut
+
+literalAlienHelpMenuLabel
+	[**]	Help
+
 AlienScreenSettingsMenuLabel
 	[**]	ScrinSaiz
 

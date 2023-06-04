@@ -8,6 +8,8 @@ namespace blooDot::en
 	constexpr char const* _literal_en_AlienMainMenuLabel = "mEnmenV";
 	constexpr char const* _literal_en_AlienLoadMenuLabel = "lOd";
 	constexpr char const* _literal_en_AlienSettingsMenuLabel = "SetiNz";
+	constexpr char const* _literal_en_literalAlienAboutMenuLabel = "Ebaut";
+	constexpr char const* _literal_en_literalAlienHelpMenuLabel = "Help";
 	constexpr char const* _literal_en_AlienScreenSettingsMenuLabel = "ScrinSaiz";
 	constexpr char const* _literal_en_AlienMultiMonitorMenuLabel = "MaltiDisplej";
 	constexpr char const* _literal_en_AlienInGameMenuLabel = "Gejm";
