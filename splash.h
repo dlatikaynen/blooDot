@@ -8,7 +8,7 @@ extern void ReportError(const char*, const char*);
 extern void* Retrieve(int chunkKey, __out SDL_RWops** const stream);
 extern bool LoadFonts();
 extern TTF_Font* GetFont(int fontKey);
-extern SDL_Texture* RenderText(SDL_Renderer*, SDL_Rect*, int, int, const char*, SDL_Color);
+extern SDL_Texture* RenderText(SDL_Renderer*, SDL_Rect*, int, int, const char*, SDL_Color, bool bold);
 extern SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget, const int canvasWidth, const int canvasHeight);
 extern cairo_t* GetDrawingSink();
 extern void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture, SDL_Rect* destRect);

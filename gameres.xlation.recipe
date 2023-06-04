@@ -304,6 +304,230 @@ SettingsLanguageUAName
 	[am]	Ukrainian
 	[de]	Ukrainisch
 
+AboutClassificationProduction
+	[am]	Production
+	[de]	Produktion
+
+AboutClassificationProducer
+	[am]	Producer
+	[de]	Produzent
+
+AboutClassificationProducerJunior
+	[am]	Junior Producer
+	[de]	Junior Producer
+
+AboutClassificationSupervisor
+	[am]	Supervisor
+	[de]	Supervisor
+
+AboutClassificationDesign
+	[am]	Design
+	[de]	Design
+
+AboutClassificationDesignOriginal
+	[am]	Original Concept
+	[de]	Originalkonzept
+
+AboutClassificationDesignAdditionalMiniboss
+	[am]	Additional Minibosses
+	[de]	Zusätzliche Minibosse
+
+AboutClassificationDesignQuest
+	[am]	Quest Design
+	[de]	Quest Design
+
+AboutClassificationProgramming
+	[am]	Programming
+	[de]	Programmierung
+
+AboutClassificationProgrammingEngineering
+	[am]	Engineering
+	[de]	Entwicklung
+
+AboutClassificationProgrammingAdditional
+	[am]	Additional Coding
+	[de]	Zusätzliches Coding
+
+AboutClassificationProgrammingRendering
+	[am]	Rendering
+	[de]	Render
+
+AboutClassificationProgrammingPhysics
+	[am]	Physics
+	[de]	Physik
+
+AboutClassificationWriters
+	[am]	Writers
+	[de]	Skript
+
+AboutClassificationWritersStory
+	[am]	Story
+	[de]	Narrativ
+
+AboutClassificationWritersWorldbuilding
+	[am]	Worldbuilding
+	[de]	Worldbuilding
+
+AboutClassificationWritersDialogue
+	[am]	Dialogue
+	[de]	Dialog
+
+AboutClassificationArtGraphics
+	[am]	Art/Graphics
+	[de]	Kunst/Grafik
+
+AboutClassificationArtGraphicsCharacterDesign
+	[am]	Character Design
+	[de]	Character Design
+
+AboutClassificationArtGraphicsConceptArt
+	[am]	Concept Art
+	[de]	Concept Art
+
+AboutClassificationArtGraphicsIllustration
+	[am]	Illustration
+	[de]	Illustration
+
+AboutClassificationArtGraphicsStoryboard
+	[am]	Storyboard
+	[de]	Storyboard
+
+AboutClassificationArtGraphicsMenuHud
+	[am]	Menu/HUD
+	[de]	Dialogoberfläche
+
+AboutClassificationAudio
+	[am]	Audio
+	[de]	Ton
+
+AboutClassificationAudioComposer
+	[am]	Composer
+	[de]	Komponist
+
+AboutClassificationAudioSfx
+	[am]	Sound FX
+	[de]	Soundeffekte
+
+AboutClassificationQualityAssurance
+	[am]	Quality Assurance
+	[de]	Qualitätssicherung
+
+AboutClassificationQualityAssuranceTesters
+	[am]	Testers
+	[de]	Tester
+
+AboutClassificationQualityAssurancePlaytesting
+	[am]	Playtesting
+	[de]	Playtest
+
+AboutClassificationQualityAssuranceCompatibility
+	[am]	Compatibility
+	[de]	Kompatibilität
+
+AboutClassificationLocalization
+	[am]	Localization
+	[de]	Lokalisierung
+
+AboutClassificationLocalizationDe
+	[am]	German locale
+	[de]	Deutsche Fassung
+
+AboutClassificationLocalizationAm
+	[am]	American locale
+	[de]	Amerikanische Fassung
+
+AboutClassificationLocalizationFi
+	[am]	Finnish locale
+	[de]	Finnische Fassung
+
+AboutClassificationLocalizationUa
+	[am]	Ukrainian locale
+	[de]	Ukrainische Fassung
+
+AboutClassificationLocalizationSnailian
+	[am]	Snalian locale
+	[de]	Schnecklische Fassung
+
+AboutClassificationLocalizationTranslation
+	[am]	Translation
+	[de]	Übersetzung
+
+AboutClassificationCreativeServices
+	[am]	Creative Services
+	[de]	Kreatives
+
+AboutClassificationCreativeServicesCoverArt
+	[am]	Cover Art
+	[de]	Titelbild
+
+AboutClassificationThanks
+	[am]	Thanks
+	[de]	Dank
+
+AboutClassificationThanksDedicatedTo
+	[am]	Dedicated to
+	[de]	Gewidmet
+
+AboutClassificationThanksInMemoryOf
+	[am]	In Memory of
+	[de]	In Memoriam
+
+AboutClassificationThanksSpecial
+	[am]	Special Thanks
+	[de]	Besonderer Dank
+
+AboutClassificationOther
+	[am]	Other
+	[de]	Sonstige
+
+AboutClassificationOtherTech
+	[am]	Technologies
+	[de]	Technologien
+
+AboutClassificationOtherTechSDL
+	[am]	Simple DirectMedia Layer
+	[de]	Simple DirectMedia Layer
+
+AboutClassificationOtherTechSDLCopyr
+	[am]	(c) 1997-2022 Sam Lantinga
+	[de]	(c) 1997-2022 Sam Lantinga
+
+AboutClassificationOtherTechBox2D
+	[am]	Box2D, A 2D physics engine for games
+	[de]	Box2D, eine 2D Physik-Engine für Spiele
+
+AboutClassificationOtherTechBox2DCopyr
+	[am]	(c) 2019 Erin Catto
+	[de]	(c) 2019 Erin Catto
+
+AboutClassificationOtherTechClearSans
+	[am]	Intel, the Clear Sans font
+	[de]	Intel, die Clear Sans Schrift
+
+AboutClassificationOtherTechFreckle
+	[am]	Astigmatic, the Freckle Face font
+	[de]	Astigmatic, die Freckle Face Schrift
+
+AboutClassificationOtherTechFreckleCopyr
+	[am]	(c) 2012 Brian J. Bonislawsky
+	[de]	(c) 2012 Brian J. Bonislawsky
+
+AboutClassificationOtherTechYeseva
+	[am]	The Yeseva font
+	[de]	DIe Yeseva Schrift
+
+AboutClassificationOtherTechYesevaCopyr
+	[am]	(c) 2011-2012 Jovanny Lemonad
+	[de]	(c) 2011-2012 Jovanny Lemonad
+
+AboutClassificationOtherTechShavian
+	[am]	The Shavian Gothic font
+	[de]	Die Shavian Gothic Schrift
+
+AboutClassificationOtherTechShavianCopyr
+	[am]	(c) 2003 Ethan Lamoreaux
+	[de]	(c) 2003 Ethan Lamoreaux
+
 Savegame
 	[am]	Savegame
 	[de]	Zeitlinie

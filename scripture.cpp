@@ -125,7 +125,7 @@ TTF_Font* GetFont(int fontKey)
 	return NULL;
 }
 
-SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_Rect* frame, int fontKey, int sizePt, const char* text, SDL_Color color)
+SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_Rect* frame, int fontKey, int sizePt, const char* text, SDL_Color color, bool bold)
 {
 	SDL_Texture* textTexture = NULL;
 
@@ -135,7 +135,8 @@ SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_Rect* frame, int fontKey, in
 		const auto sizeError = TTF_GetError();
 		ReportError("Failed to set font size", sizeError);
 	}
-
+	
+	TTF_SetFontStyle(font, bold ? TTF_STYLE_BOLD : TTF_STYLE_NORMAL);
 	const auto textSurface = TTF_RenderUTF8_Blended_Wrapped(font, text, color, 0);
 
 	if (textSurface)

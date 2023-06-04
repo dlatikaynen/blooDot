@@ -14,7 +14,14 @@ namespace blooDot::MenuSettingsAbout
 	bool menuRunning = false;
 
 	SDL_Texture* backTexture = NULL;
+	std::vector<SDL_Texture*> sectionTextures;
+	std::vector<SDL_Texture*> chapterTextures;
+	std::vector<SDL_Texture*> creditsTextures;
+
 	SDL_Rect backRect{ 0,0,0,0 };
+	std::vector<SDL_Rect> sectionRects;
+	std::vector<SDL_Rect> chapterRects;
+	std::vector<SDL_Rect> creditsRects;
 
 	bool MenuLoop(SDL_Renderer* renderer)
 	{
@@ -99,6 +106,10 @@ namespace blooDot::MenuSettingsAbout
 				EndRenderDrawing(renderer, drawingTexture, nullptr);
 
 				DrawLabel(renderer, 235, yStart + 0 * stride + 0 * backGap, backTexture, &backRect);
+
+				/* the storyboarded "rolling credits */
+				DrawLabel(renderer, 195, yStart + 1 * stride + 1 * backGap, sectionTextures[0], &sectionRects[0]);
+
 			}
 
 			SDL_RenderPresent(renderer);
@@ -106,6 +117,7 @@ namespace blooDot::MenuSettingsAbout
 			++frame;
 		}
 
+		_Teardown();
 		SDL_DestroyTexture(titleTexture);
 
 		return menuRunning;
@@ -114,10 +126,46 @@ namespace blooDot::MenuSettingsAbout
 	void _PrepareText(SDL_Renderer* renderer)
 	{
 		backTexture = RenderText(renderer, &backRect, FONT_KEY_DIALOG, 23, literalMenuBack, ButtonTextColor);
+		
+		SDL_Rect textureRect;
+		const auto& texture001 = RenderText(renderer, &textureRect, FONT_KEY_DIALOG, 28, literalAboutClassificationProduction, ButtonTextColor, true);
+		if (texture001)
+		{
+			sectionTextures.push_back(texture001);
+			sectionRects.emplace_back(textureRect);
+		}
 	}
 
 	void _Teardown()
 	{
 		backTexture&& [] { SDL_DestroyTexture(backTexture); return false; }();
+
+		for (const auto& texture : creditsTextures)
+		{
+			if (texture)
+			{
+				SDL_DestroyTexture(texture);
+			}
+		}
+
+		creditsTextures.clear();
+		for (const auto& texture : chapterTextures)
+		{
+			if (texture)
+			{
+				SDL_DestroyTexture(texture);
+			}
+		}
+
+		chapterTextures.clear();
+		for (const auto& texture : sectionTextures)
+		{
+			if (texture)
+			{
+				SDL_DestroyTexture(texture);
+			}
+		}
+
+		sectionTextures.clear();
 	}
 }
