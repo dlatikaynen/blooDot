@@ -40,3 +40,4 @@ constexpr int const CHUNK_KEY_DLG_MANUFACTURER = 36;
 constexpr int const CHUNK_KEY_DING_DESCRIPTIONS_1 = 37;
 constexpr int const CHUNK_KEY_CONVO_1 = 38;
 constexpr int const CHUNK_KEY_SAMPLE_MAP = 39;
+constexpr int const CHUNK_KEY_GAME_CONTROLLER_DB_TXT = 40;

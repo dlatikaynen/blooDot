@@ -93,12 +93,15 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_landmarkNameGardenOfRidiculouslyPoisonousPlants = "Garden of Ridiculously Poisonous Plants";
 	constexpr char const* _literal_ua_landmarkNameSnurch = "Snurch";
 	constexpr char const* _literal_ua_landmarkNameSnathedral = "Snanctum of the Snathedral";
+	constexpr char const* _literal_ua_landmarkNameBlimpcombe = "Blimpcombe";
+	constexpr char const* _literal_ua_landmarkNameSoftlossnonminster = "Softlossnonminster";
 	constexpr char const* _literal_ua_regionSensorLabel = "%s in your area";
 	constexpr char const* _literal_ua_mainQuestTitleAwning = "The Awning of the Sage of Asparagus";
 	constexpr char const* _literal_ua_mainQuestTitleDrawing = "План клітки качкодзьоба";
 	constexpr char const* _literal_ua_mainQuestTitleDrowning = "Просідання зарплати спрута";
 	constexpr char const* _literal_ua_mainQuestTitleKermit = "Get the Frog a Loan";
 	constexpr char const* _literal_ua_mainQuestWarning = "It is dangerous to take a loan.";
+	constexpr char const* _literal_ua_sideQuestServeAYouthfulPorpoise = "Serve a Youthful Porpoise";
 	constexpr char const* _literal_ua_dingNameWallClassic = "Wall cube";
 	constexpr char const* _literal_ua_dingNameBarrelIndigo = "Premium cask";
 	constexpr char const* _literal_ua_dingNameBarrelWood = "Wooden cask";

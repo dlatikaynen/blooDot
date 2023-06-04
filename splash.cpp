@@ -3,6 +3,7 @@
 #include "dexassy.h"
 #include "scripture.h"
 #include "drawing.h"
+#include "menu-common.h"
 #include "dialogcontrols.h"
 #include <cairo.h>
 #include "xlations.h"
@@ -36,7 +37,7 @@ namespace blooDot::Splash
 	auto backgroundAnimDelay = 237;
 	std::default_random_engine generator;
 	std::uniform_int_distribution<int> distribution(0, 3);
-	MainMenuItems menuSelection = MMI_CUE;
+	MenuDialogInteraction menuState;
 
 	SDL_Rect continueRect{ 0,0,0,0 };
 	SDL_Rect loadRect{ 0,0,0,0 };
@@ -68,10 +69,10 @@ namespace blooDot::Splash
 			blooDot::Settings::Load();
 			blooDot::Settings::ApplyLanguage();
 			settingsLoaded = true;
-
-			menuSelection = ::Settings.CurrentSavegameIndex == 0 ? MMI_NEWSINGLE : MMI_CUE;
 		}
 
+		menuState.itemCount = MMI_EXIT + 1;
+		menuState.selectedItemIndex = ::Settings.CurrentSavegameIndex == 0 ? MMI_NEWSINGLE : MMI_CUE;
 		_PrepareText(renderer);
 
 		SDL_Rect splashRect;
@@ -125,119 +126,16 @@ namespace blooDot::Splash
 		unsigned short frame = 0L;
 		while (splashRunning && mainRunning)
 		{
-			while (SDL_PollEvent(&splashEvent) != 0)
+			blooDot::MenuCommon::HandleMenu(&menuState);
+			if (menuState.leaveDialog)
 			{
-				switch (splashEvent.type)
-				{
-				case SDL_QUIT:
-					mainRunning = false;
-					splashRunning = false;
-					break;
-
-				case SDL_KEYDOWN:
-					switch (splashEvent.key.keysym.scancode)
-					{
-					case SDL_SCANCODE_UP:
-					case SDL_SCANCODE_KP_8:
-					case SDL_SCANCODE_W:
-						if (menuSelection == MMI_CUE)
-						{
-							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-						}
-						else
-						{
-							menuSelection = static_cast<MainMenuItems>(menuSelection - 1);
-							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-						}
-
-						break;
-
-					case SDL_SCANCODE_DOWN:
-					case SDL_SCANCODE_KP_2:
-					case SDL_SCANCODE_S:
-						if (menuSelection == MMI_EXIT)
-						{
-							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-						}
-						else
-						{
-							menuSelection = static_cast<MainMenuItems>(menuSelection + 1);
-							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-						}
-
-						break;
-
-					case SDL_SCANCODE_PAGEDOWN:
-					case SDL_SCANCODE_END:
-						if (menuSelection == MMI_EXIT)
-						{
-							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-						}
-						else
-						{
-							menuSelection = MMI_EXIT;
-							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-						}
-
-						break;
-
-					case SDL_SCANCODE_PAGEUP:
-						if (menuSelection == MMI_CUE)
-						{
-							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-						}
-						else
-						{
-							menuSelection = MMI_CUE;
-							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-						}
-
-						break;
-
-					case SDL_SCANCODE_HOME:
-					{
-						auto const& destSelection = ::Settings.CurrentSavegameIndex == 0 ? MMI_NEWSINGLE : MMI_CUE;
-						if (menuSelection == destSelection)
-						{
-							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-						}
-						else
-						{
-							menuSelection = destSelection;
-							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-						}
-
-						break;
-					}
-
-					case SDL_SCANCODE_RETURN:
-					case SDL_SCANCODE_RETURN2:
-					case SDL_SCANCODE_KP_ENTER:
-					case SDL_SCANCODE_SPACE:
-						blooDot::Sfx::Play(SoundEffect::SFX_SELCONF);
-						keepRunning = _EnterAndHandleMenu(renderer);
-						break;
-
-					case SDL_SCANCODE_ESCAPE:
-						splashRunning = false;
-						keepRunning = false;
-					}
-
-					break;
-
-				case SDL_CONTROLLERAXISMOTION:
-					if (splashEvent.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX)
-					{
-						srcRect.x += splashEvent.caxis.value / 8192;
-					}
-
-					if (splashEvent.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY)
-					{
-						srcRect.y += splashEvent.caxis.value / 8192;
-					}
-
-					break;
-				}
+				splashRunning = false;
+				mainRunning = false;
+				keepRunning = false;
+			}
+			else if (menuState.enterMenuItem)
+			{
+				keepRunning = _EnterAndHandleMenu(renderer);
 			}
 
 			_Bounce(&srcRect);
@@ -278,8 +176,9 @@ namespace blooDot::Splash
 				MainMenuItems itemToDraw = MMI_CUE;
 				for (auto y = yStart; y < 400; y += stride)
 				{
-					DrawButton(drawingSink, 195, y, 250, 42, itemToDraw == menuSelection);
-					if (itemToDraw == menuSelection)
+					auto thisItem = itemToDraw == menuState.selectedItemIndex;
+					DrawButton(drawingSink, 195, y, 250, 42, thisItem);
+					if (thisItem)
 					{
 						DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);
 						DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
@@ -489,7 +388,7 @@ namespace blooDot::Splash
 				{
 					/* bit confusing.but it means, that we left the dialog
 					 * with the cancel button, so the intention is to stay
-					 * in the splash menu, as opposed to leave it for the arena */					
+					 * in the splash menu, as opposed to leave it for the arena */
 					stayInMenu = true;
 				}
 			}
@@ -500,7 +399,7 @@ namespace blooDot::Splash
 
 	bool _EnterAndHandleMenu(SDL_Renderer* renderer)
 	{
-		switch (menuSelection)
+		switch (menuState.selectedItemIndex)
 		{
 		case MMI_CUE:
 			if (!_HandleContinue(renderer))

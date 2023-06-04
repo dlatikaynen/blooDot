@@ -93,12 +93,15 @@ namespace blooDot::en
 	constexpr char const* _literal_en_landmarkNameGardenOfRidiculouslyPoisonousPlants = "Garden of Ridiculously Poisonous Plants";
 	constexpr char const* _literal_en_landmarkNameSnurch = "Snurch";
 	constexpr char const* _literal_en_landmarkNameSnathedral = "Snanctum of the Snathedral";
+	constexpr char const* _literal_en_landmarkNameBlimpcombe = "Blimpcombe";
+	constexpr char const* _literal_en_landmarkNameSoftlossnonminster = "Softlossnonminster";
 	constexpr char const* _literal_en_regionSensorLabel = "%s in your area";
 	constexpr char const* _literal_en_mainQuestTitleAwning = "The Awning of the Sage of Asparagus";
 	constexpr char const* _literal_en_mainQuestTitleDrawing = "The Drawing of the Cage of a Platypus";
 	constexpr char const* _literal_en_mainQuestTitleDrowning = "The Drowning of the Wage of an Octopus";
 	constexpr char const* _literal_en_mainQuestTitleKermit = "Get the Frog a Loan";
 	constexpr char const* _literal_en_mainQuestWarning = "It is dangerous to take a loan.";
+	constexpr char const* _literal_en_sideQuestServeAYouthfulPorpoise = "Serve a Youthful Porpoise";
 	constexpr char const* _literal_en_dingNameWallClassic = "Wall cube";
 	constexpr char const* _literal_en_dingNameBarrelIndigo = "Premium cask";
 	constexpr char const* _literal_en_dingNameBarrelWood = "Wooden cask";

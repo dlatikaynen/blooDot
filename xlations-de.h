@@ -93,12 +93,15 @@ namespace blooDot::de
 	constexpr char const* _literal_de_landmarkNameGardenOfRidiculouslyPoisonousPlants = "Garten der lächerlich giftigen Pflanzen";
 	constexpr char const* _literal_de_landmarkNameSnurch = "Schnirche";
 	constexpr char const* _literal_de_landmarkNameSnathedral = "Snanktum der Schnathedrale";
+	constexpr char const* _literal_de_landmarkNameBlimpcombe = "Niederluftschiffingen";
+	constexpr char const* _literal_de_landmarkNameSoftlossnonminster = "Verlierweichunkirchen";
 	constexpr char const* _literal_de_regionSensorLabel = "%s in deiner Nähe";
 	constexpr char const* _literal_de_mainQuestTitleAwning = "Die Spargelrentnermarkise";
 	constexpr char const* _literal_de_mainQuestTitleDrawing = "Der Schnabeltierkäfiggrundriß";
 	constexpr char const* _literal_de_mainQuestTitleDrowning = "Die Tintenfischgehaltsversenkung";
 	constexpr char const* _literal_de_mainQuestTitleKermit = "Gib dem Frosch Kredit";
-	constexpr char const* _literal_de_mainQuestWarning = "Es ist gefährlich, an der Leine zu gehen.";
+	constexpr char const* _literal_de_mainQuestWarning = "Es ist gefährlich, an Leine zu gehen.";
+	constexpr char const* _literal_de_sideQuestServeAYouthfulPorpoise = "Die Schweinswalbedienung";
 	constexpr char const* _literal_de_dingNameWallClassic = "Mauerwürfel";
 	constexpr char const* _literal_de_dingNameBarrelIndigo = "Premiumfaß";
 	constexpr char const* _literal_de_dingNameBarrelWood = "Holzfaß";

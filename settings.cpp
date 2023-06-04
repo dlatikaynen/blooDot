@@ -4,6 +4,8 @@
 #include "xlations.h"
 #include <stdio.h>
 #include "constants.h"
+#include "chunk-constants.h"
+#include "dexassy.h"
 
 SettingsStruct Settings;
 
@@ -38,6 +40,20 @@ namespace blooDot::Settings
 		}
 
 		settingsFile->close(settingsFile);
+	}
+
+	void PreloadControllerMappings()
+	{
+		SDL_RWops* mappingsFile;
+		const auto mappingsMem = Retrieve(CHUNK_KEY_GAME_CONTROLLER_DB_TXT, &mappingsFile);
+		if (SDL_GameControllerAddMappingsFromRW(mappingsFile, 0) == -1)
+		{
+			const auto loadError = SDL_GetError();
+			ReportError("Could not load controller mappings", loadError);
+		}
+
+		mappingsFile->close(mappingsFile);
+		SDL_free(mappingsMem);
 	}
 
 	void ApplyLanguage()

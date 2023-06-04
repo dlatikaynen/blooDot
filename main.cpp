@@ -224,6 +224,7 @@ int main(int, char**)
 		PrepareIndex();
 		OpenCooked();
 		blooDot::Sfx::PreloadMenuSfx();
+		blooDot::Settings::PreloadControllerMappings();
 
 		SDL_ShowWindow(mainWindow);
 		blooDot::Sfx::Play(SoundEffect::SFX_BULLET_DECAY);

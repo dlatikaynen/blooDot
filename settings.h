@@ -7,6 +7,7 @@ extern void ReportError(const char*, const char*);
 namespace blooDot::Settings
 {
 	void Load();
+	void PreloadControllerMappings();
 	void ApplyLanguage();
 	void Save();
 	void Default();

@@ -567,6 +567,9 @@
     <ClInclude Include="physics-render-binding.h">
       <Filter>_Headers\physics</Filter>
     </ClInclude>
+    <ClInclude Include="menu-common.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -701,6 +704,9 @@
     <ClCompile Include="physics-render-binding.cpp">
       <Filter>_Source Files\physics</Filter>
     </ClCompile>
+    <ClCompile Include="menu-common.cpp">
+      <Filter>_Source Files\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SDL\lib\x64\SDL2.dll">
@@ -783,9 +789,6 @@
     </None>
     <None Include="package-box2d-release.cmd">
       <Filter>Lib Dependencies</Filter>
-    </None>
-    <None Include="box2d-licence.txt">
-      <Filter>Resource Files\legalese</Filter>
     </None>
     <None Include="packages.config">
       <Filter>Resource Files\win</Filter>
@@ -913,6 +916,15 @@
     </Text>
     <Text Include="legalese\SIL-Open-Font-License.txt">
       <Filter>Resource Files\legalese</Filter>
+    </Text>
+    <Text Include="legalese\box2d-licence.txt">
+      <Filter>Resource Files\legalese</Filter>
+    </Text>
+    <Text Include="legalese\sdl-and-gamecontrollerdb-licence.txt">
+      <Filter>Resource Files\legalese</Filter>
+    </Text>
+    <Text Include="res\gamecontrollerdb.txt">
+      <Filter>Resource Files\ui</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

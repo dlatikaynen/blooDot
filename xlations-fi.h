@@ -93,12 +93,15 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_landmarkNameGardenOfRidiculouslyPoisonousPlants = "Garden of Ridiculously Poisonous Plants";
 	constexpr char const* _literal_fi_landmarkNameSnurch = "Snurch";
 	constexpr char const* _literal_fi_landmarkNameSnathedral = "Snanctum of the Snathedral";
+	constexpr char const* _literal_fi_landmarkNameBlimpcombe = "Blimpcombe";
+	constexpr char const* _literal_fi_landmarkNameSoftlossnonminster = "Softlossnonminster";
 	constexpr char const* _literal_fi_regionSensorLabel = "%s in your area";
 	constexpr char const* _literal_fi_mainQuestTitleAwning = "The Awning of the Sage of Asparagus";
 	constexpr char const* _literal_fi_mainQuestTitleDrawing = "Platypushäkinsuunnitelma";
 	constexpr char const* _literal_fi_mainQuestTitleDrowning = "Kalmareiden palkanlasku";
 	constexpr char const* _literal_fi_mainQuestTitleKermit = "Get the Frog a Loan";
 	constexpr char const* _literal_fi_mainQuestWarning = "It is dangerous to take a loan.";
+	constexpr char const* _literal_fi_sideQuestServeAYouthfulPorpoise = "Serve a Youthful Porpoise";
 	constexpr char const* _literal_fi_dingNameWallClassic = "Wall cube";
 	constexpr char const* _literal_fi_dingNameBarrelIndigo = "Premium cask";
 	constexpr char const* _literal_fi_dingNameBarrelWood = "Wooden cask";
