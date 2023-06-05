@@ -14,8 +14,8 @@ namespace blooDot::MenuSettingsAbout
 	bool menuRunning = false;
 
 	SDL_Texture* backTexture = NULL;
-	std::vector<CreditsMention> creditMentions;
-	std::vector<CreditsChapter> creditChapters;
+	std::vector<std::shared_ptr<CreditsMention>> creditMentions;
+	std::vector<std::shared_ptr<CreditsChapter>> creditChapters;
 	std::vector<CreditsSection> creditSections;
 
 	SDL_Rect backRect{ 0,0,0,0 };
@@ -138,29 +138,168 @@ namespace blooDot::MenuSettingsAbout
 		backTexture = RenderText(renderer, &backRect, FONT_KEY_DIALOG, 23, literalMenuBack, ButtonTextColor);
 		
 		/* 1. build all the distinct mentions that there are */
-
 		mentionTexture = _MentionTexture(literalAboutCreditsMentionDlatikay, &textureRect, renderer);
-		_AddMention(mentionTexture, &textureRect);
-		const auto& dlatikay = &creditMentions[0];
+		const auto& dlatikay = _AddMention(mentionTexture, &textureRect);
 
-		//mentionTexture = _MentionTexture(literalAboutCreditsMentionLlatikay, &textureRect, renderer);
-		//const auto& llatikay = _AddMention(mentionTexture, &textureRect);
+		mentionTexture = _MentionTexture(literalAboutCreditsMentionLlatikay, &textureRect, renderer);
+		const auto& llatikay = _AddMention(mentionTexture, &textureRect);
 
-		//mentionTexture = _MentionTexture(literalAboutCreditsMentionJlatikay, &textureRect, renderer);
-		//const auto& jlatikay = _AddMention(mentionTexture, &textureRect);
+		mentionTexture = _MentionTexture(literalAboutCreditsMentionJlatikay, &textureRect, renderer);
+		const auto& jlatikay = _AddMention(mentionTexture, &textureRect);
+
+		// TODO: Max
+		mentionTexture = _MentionTexture(literalAboutCreditsMentionJlatikay, &textureRect, renderer);
+		const auto& mlatikay = _AddMention(mentionTexture, &textureRect);
 
 		//mentionTexture = _MentionTexture(literalAboutCreditsMentionNnebel, &textureRect, renderer);
 		//const auto& nnebel = _AddMention(mentionTexture, &textureRect);
 
-		/* 2. build the hierarchy */
+		/* 2. build the hierarchy,
+		 * classification "production" */
 		sectionTexture = _SectionTexture(literalAboutClassificationProduction, &textureRect, renderer);
 		_AddSection(sectionTexture, &textureRect);
 
 		chapterTexture = _ChapterTexture(literalAboutClassificationProducer, &textureRect, renderer);
-		_AddChapter(chapterTexture, &textureRect);
-		const auto& producer = &creditChapters[0];
+		const auto& producer = _AddChapter(chapterTexture, &textureRect);
+		producer->mentions.push_back(dlatikay);
 		creditSections[0].chapters.push_back(producer);
-		creditSections[0].chapters[0]->mentions.push_back(dlatikay);
+
+		chapterTexture = _ChapterTexture(literalAboutClassificationProducerJunior, &textureRect, renderer);
+		const auto& producerJunior = _AddChapter(chapterTexture, &textureRect);
+		producerJunior->mentions.push_back(llatikay);
+		producerJunior->mentions.push_back(jlatikay);
+		creditSections[0].chapters.push_back(producerJunior);
+
+		chapterTexture = _ChapterTexture(literalAboutClassificationSupervisor, &textureRect, renderer);
+		const auto& supervisor = _AddChapter(chapterTexture, &textureRect);
+		producerJunior->mentions.push_back(mlatikay);
+		creditSections[0].chapters.push_back(supervisor);
+
+		/* classification "Design" */
+		sectionTexture = _SectionTexture(literalAboutClassificationDesign, &textureRect, renderer);
+		_AddSection(sectionTexture, &textureRect);
+
+		chapterTexture = _ChapterTexture(literalAboutClassificationDesignOriginal, &textureRect, renderer);
+		const auto& designerOriginal = _AddChapter(chapterTexture, &textureRect);
+		designerOriginal->mentions.push_back(dlatikay);
+		creditSections[1].chapters.push_back(designerOriginal);
+
+		chapterTexture = _ChapterTexture(literalAboutClassificationDesignAdditionalMiniboss, &textureRect, renderer);
+		const auto& additionalMiniboss = _AddChapter(chapterTexture, &textureRect);
+		additionalMiniboss->mentions.push_back(jlatikay);
+		additionalMiniboss->mentions.push_back(llatikay);
+		creditSections[1].chapters.push_back(additionalMiniboss);
+
+		chapterTexture = _ChapterTexture(literalAboutClassificationDesignQuest, &textureRect, renderer);
+		const auto& designedQuest = _AddChapter(chapterTexture, &textureRect);
+		designedQuest->mentions.push_back(dlatikay);
+		designedQuest->mentions.push_back(llatikay);
+		designedQuest->mentions.push_back(jlatikay);
+		creditSections[1].chapters.push_back(designedQuest);
+
+		/* classification "Programming" */
+		sectionTexture = _SectionTexture(literalAboutClassificationProgramming, &textureRect, renderer);
+		_AddSection(sectionTexture, &textureRect);
+
+		chapterTexture = _ChapterTexture(literalAboutClassificationProgrammingEngineering, &textureRect, renderer);
+		const auto& engineering = _AddChapter(chapterTexture, &textureRect);
+		engineering->mentions.push_back(dlatikay);
+		creditSections[2].chapters.push_back(engineering);
+
+		chapterTexture = _ChapterTexture(literalAboutClassificationProgrammingAdditional, &textureRect, renderer);
+		const auto& programmingAdditional = _AddChapter(chapterTexture, &textureRect);
+		programmingAdditional->mentions.push_back(llatikay);
+		creditSections[2].chapters.push_back(programmingAdditional);
+
+		chapterTexture = _ChapterTexture(literalAboutClassificationProgrammingRendering, &textureRect, renderer);
+		const auto& rendering = _AddChapter(chapterTexture, &textureRect);
+		rendering->mentions.push_back(dlatikay);
+		creditSections[2].chapters.push_back(rendering);
+
+		chapterTexture = _ChapterTexture(literalAboutClassificationProgrammingPhysics, &textureRect, renderer);
+		const auto& physics = _AddChapter(chapterTexture, &textureRect);
+		physics->mentions.push_back(dlatikay);
+		creditSections[2].chapters.push_back(physics);
+
+		/* classification "Writing" */
+		sectionTexture = _SectionTexture(literalAboutClassificationWriters, &textureRect, renderer);
+		_AddSection(sectionTexture, &textureRect);
+
+		chapterTexture = _ChapterTexture(literalAboutClassificationWritersStory, &textureRect, renderer);
+		const auto& story = _AddChapter(chapterTexture, &textureRect);
+		story->mentions.push_back(dlatikay);
+		creditSections[3].chapters.push_back(story);
+
+		chapterTexture = _ChapterTexture(literalAboutClassificationWritersWorldbuilding, &textureRect, renderer);
+		const auto& worldbuilding = _AddChapter(chapterTexture, &textureRect);
+		worldbuilding->mentions.push_back(dlatikay);
+		worldbuilding->mentions.push_back(jlatikay);
+		creditSections[3].chapters.push_back(worldbuilding);
+
+		chapterTexture = _ChapterTexture(literalAboutClassificationWritersDialogue, &textureRect, renderer);
+		const auto& dialogue = _AddChapter(chapterTexture, &textureRect);
+		dialogue->mentions.push_back(dlatikay);
+		creditSections[3].chapters.push_back(dialogue);
+
+		/* classification "Graphics" */
+		sectionTexture = _SectionTexture(literalAboutClassificationArtGraphics, &textureRect, renderer);
+		_AddSection(sectionTexture, &textureRect);
+//literalAboutClassificationArtGraphicsCharacterDesign = "";
+//literalAboutClassificationArtGraphicsConceptArt = "";
+//literalAboutClassificationArtGraphicsIllustration = "";
+//literalAboutClassificationArtGraphicsStoryboard = "";
+//literalAboutClassificationArtGraphicsMenuHud = "";
+
+		/* classification "Audio" */
+		sectionTexture = _SectionTexture(literalAboutClassificationAudio, &textureRect, renderer);
+		_AddSection(sectionTexture, &textureRect);
+//literalAboutClassificationAudioComposer = "";
+//literalAboutClassificationAudioSfx = "";
+
+		/* classification "Quality Assurance" */
+		sectionTexture = _SectionTexture(literalAboutClassificationQualityAssurance, &textureRect, renderer);
+		_AddSection(sectionTexture, &textureRect);
+//literalAboutClassificationQualityAssuranceTesters = "";
+//literalAboutClassificationQualityAssurancePlaytesting = "";
+//literalAboutClassificationQualityAssuranceCompatibility = "";
+
+		/* classification "Localization" */
+		sectionTexture = _SectionTexture(literalAboutClassificationLocalization, &textureRect, renderer);
+		_AddSection(sectionTexture, &textureRect);
+//literalAboutClassificationLocalizationDe = "";
+//literalAboutClassificationLocalizationAm = "";
+//literalAboutClassificationLocalizationFi = "";
+//literalAboutClassificationLocalizationUa = "";
+//literalAboutClassificationLocalizationSnailian = "";
+//literalAboutClassificationLocalizationTranslation = "";
+
+		/* classification "Creative Services" */
+		sectionTexture = _SectionTexture(literalAboutClassificationCreativeServices, &textureRect, renderer);
+		_AddSection(sectionTexture, &textureRect);
+//literalAboutClassificationCreativeServicesCoverArt = "";
+		
+		/* classification "Thanks" */
+		sectionTexture = _SectionTexture(literalAboutClassificationThanks, &textureRect, renderer);
+		_AddSection(sectionTexture, &textureRect);
+//literalAboutClassificationThanksDedicatedTo = "";
+//literalAboutClassificationThanksInMemoryOf = "";
+//literalAboutClassificationThanksSpecial = "";
+
+		/* classification "Other" */
+		sectionTexture = _SectionTexture(literalAboutClassificationOther, &textureRect, renderer);
+		_AddSection(sectionTexture, &textureRect);
+//literalAboutClassificationOtherTech = "";
+//literalAboutClassificationOtherTechSDL = "";
+//literalAboutClassificationOtherTechSDLCopyr = "";
+//literalAboutClassificationOtherTechBox2D = "";
+//literalAboutClassificationOtherTechBox2DCopyr = "";
+//literalAboutClassificationOtherTechClearSans = "";
+//literalAboutClassificationOtherTechFreckle = "";
+//literalAboutClassificationOtherTechFreckleCopyr = "";
+//literalAboutClassificationOtherTechYeseva = "";
+//literalAboutClassificationOtherTechYesevaCopyr = "";
+//literalAboutClassificationOtherTechShavian = "";
+//literalAboutClassificationOtherTechShavianCopyr = "";
 	}
 
 	SDL_Texture* _MentionTexture(const char* literal, SDL_Rect* rect, SDL_Renderer* renderer)
@@ -201,13 +340,14 @@ namespace blooDot::MenuSettingsAbout
 		);
 	}
 
-	CreditsMention& _AddMention(SDL_Texture* mentionTexture, SDL_Rect* textureRect)
+	std::shared_ptr<CreditsMention> _AddMention(SDL_Texture* mentionTexture, SDL_Rect* textureRect)
 	{
-		CreditsMention mention;
-		mention.rect = *textureRect;
-		mention.texture = mentionTexture;
-		
-		return creditMentions.emplace_back(mention);
+		auto mention = std::make_shared<CreditsMention>();
+		mention->rect = *textureRect;
+		mention->texture = mentionTexture;
+		creditMentions.push_back(mention);
+
+		return mention;
 	}
 
 	void _AddSection(SDL_Texture* sectionTexture, SDL_Rect* textureRect)
@@ -218,28 +358,20 @@ namespace blooDot::MenuSettingsAbout
 		creditSections.emplace_back(section);
 	}
 
-	CreditsChapter& _AddChapter(SDL_Texture* chapterTexture, SDL_Rect* textureRect)
+	std::shared_ptr<CreditsChapter> _AddChapter(SDL_Texture* chapterTexture, SDL_Rect* textureRect)
 	{
-		CreditsChapter chapter;
-		chapter.rect = *textureRect;
-		chapter.texture = chapterTexture;
+		auto chapter = std::make_shared<CreditsChapter>();
+		chapter->rect = *textureRect;
+		chapter->texture = chapterTexture;
+		creditChapters.push_back(chapter);
 
-		return creditChapters.emplace_back(chapter);
+		return chapter;
 	}
 
 	void _Teardown()
 	{
 		backTexture&& [] { SDL_DestroyTexture(backTexture); return false; }();
 
-		for (const auto& mention : creditMentions)
-		{
-			if (mention.texture)
-			{
-				SDL_DestroyTexture(mention.texture);
-			}
-		}
-
-		creditMentions.clear();
 		for (auto& section : creditSections)
 		{
 			auto& chapters = section.chapters;
@@ -259,5 +391,15 @@ namespace blooDot::MenuSettingsAbout
 		}
 
 		creditSections.clear();
+		creditChapters.clear();
+		for (const auto& mention : creditMentions)
+		{
+			if (mention->texture)
+			{
+				SDL_DestroyTexture(mention->texture);
+			}
+		}
+
+		creditMentions.clear();
 	}
 }

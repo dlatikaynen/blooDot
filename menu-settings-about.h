@@ -18,13 +18,13 @@ namespace blooDot::MenuSettingsAbout
 	typedef struct CreditsChapterStruct {
 		SDL_Texture* texture;
 		SDL_Rect rect;
-		std::vector<const CreditsMention*> mentions;
+		std::vector<std::shared_ptr<CreditsMention>> mentions;
 	} CreditsChapter;
 
 	typedef struct CreditsSectionStruct {
 		SDL_Texture* texture;
 		SDL_Rect rect;
-		std::vector<CreditsChapter*> chapters;
+		std::vector<std::shared_ptr<CreditsChapter>> chapters;
 	} CreditsSection;
 
 	bool MenuLoop(SDL_Renderer*);
@@ -34,7 +34,7 @@ namespace blooDot::MenuSettingsAbout
 	SDL_Texture* _SectionTexture(const char* literal, SDL_Rect* rect, SDL_Renderer* renderer);
 	SDL_Texture* _ChapterTexture(const char* literal, SDL_Rect* rect, SDL_Renderer* renderer);
 	void _AddSection(SDL_Texture* sectionTexture, SDL_Rect* textureRect);
-	CreditsChapter& _AddChapter(SDL_Texture* chapterTexture, SDL_Rect* textureRect);
-	CreditsMention& _AddMention(SDL_Texture* mentionTexture, SDL_Rect* textureRect);
+	std::shared_ptr<CreditsChapter> _AddChapter(SDL_Texture* chapterTexture, SDL_Rect* textureRect);
+	std::shared_ptr<CreditsMention> _AddMention(SDL_Texture* mentionTexture, SDL_Rect* textureRect);
 	void _Teardown();
 }
