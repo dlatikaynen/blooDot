@@ -476,15 +476,15 @@ AboutClassificationThanksSpecial
 	[am]	Special Thanks
 	[de]	Besonderer Dank
 
-AboutClassificationOther
-	[am]	Other
-	[de]	Sonstige
-
 AboutClassificationOtherTech
 	[am]	Technologies
 	[de]	Technologien
 
 AboutClassificationOtherTechSDL
+	[am]	Engine
+	[de]	Engine
+
+AboutClassificationOtherTechSDLName
 	[am]	Simple DirectMedia Layer
 	[de]	Simple DirectMedia Layer
 
@@ -493,6 +493,10 @@ AboutClassificationOtherTechSDLCopyr
 	[de]	(c) 1997-2022 Sam Lantinga
 
 AboutClassificationOtherTechBox2D
+	[am]	Physics Engine
+	[de]	Physik-Engine
+
+AboutClassificationOtherTechBox2DName
 	[am]	Box2D, A 2D physics engine for games
 	[de]	Box2D, eine 2D Physik-Engine für Spiele
 
@@ -501,10 +505,22 @@ AboutClassificationOtherTechBox2DCopyr
 	[de]	(c) 2019 Erin Catto
 
 AboutClassificationOtherTechClearSans
-	[am]	Intel, the Clear Sans font
-	[de]	Intel, die Clear Sans Schrift
+	[am]	Dialog Font
+	[de]	Dialogschrift
+
+AboutClassificationOtherTechClearSansName
+	[am]	The Clear Sans font
+	[de]	Die Clear Sans Schrift
+
+AboutClassificationOtherTechClearSansCopyr
+	[am]	Intel
+	[de]	Intel
 
 AboutClassificationOtherTechFreckle
+	[am]	Fancy Font
+	[de]	Zierschrift
+
+AboutClassificationOtherTechFreckleName
 	[am]	Astigmatic, the Freckle Face font
 	[de]	Astigmatic, die Freckle Face Schrift
 
@@ -513,6 +529,10 @@ AboutClassificationOtherTechFreckleCopyr
 	[de]	(c) 2012 Brian J. Bonislawsky
 
 AboutClassificationOtherTechYeseva
+	[am]	Title Font
+	[de]	Titelschrift
+
+AboutClassificationOtherTechYesevaName
 	[am]	The Yeseva font
 	[de]	DIe Yeseva Schrift
 
@@ -521,6 +541,10 @@ AboutClassificationOtherTechYesevaCopyr
 	[de]	(c) 2011-2012 Jovanny Lemonad
 
 AboutClassificationOtherTechShavian
+	[am]	Snailian Font
+	[de]	Schneckschnrift
+
+AboutClassificationOtherTechShavianName
 	[am]	The Shavian Gothic font
 	[de]	Die Shavian Gothic Schrift
 
@@ -539,6 +563,10 @@ AboutCreditsMentionLlatikay
 AboutCreditsMentionJlatikay
 	[am]	Jonas M. Latikaynen
 	[de]	Jonas M. Latikaynen
+
+AboutCreditsMentionMlatikay
+	[am]	HCN Max I.
+	[de]	SKM Max I.
 
 AboutCreditsMentionNnebel
 	[am]	Nadine Nebel
