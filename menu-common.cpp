@@ -3,6 +3,8 @@
 #include "menu-common.h"
 #include "settings.h"
 #include "sfx.h"
+#include "resutil.h"
+#include "geom2d.h"
 
 extern SettingsStruct Settings;
 
@@ -160,5 +162,23 @@ namespace blooDot::MenuCommon
 				break;
 			}
 		}
+	}
+
+	void PrepareIconRect(SDL_Rect* rect, int vignetteIndex, int vignetteWidth, int bounceMargin)
+	{
+		*rect = { bounceMargin + 30 + vignetteIndex * vignetteWidth, 102, vignetteWidth - 60, 64 };
+	}
+
+	void DrawIcon(SDL_Renderer* renderer, int chunkKey, int vignetteIndex, int vignetteWidth, int bounceMargin)
+	{
+		SDL_Rect iconRect;
+		SDL_Rect centerRect;
+		SDL_Rect destRect;
+		auto icon = blooDot::Res::LoadPicture(renderer, chunkKey, &iconRect);
+
+		PrepareIconRect(&destRect, vignetteIndex, vignetteWidth, bounceMargin);
+		CenterRectInRect(&destRect, &iconRect, &centerRect);
+		SDL_RenderCopy(renderer, icon, &iconRect, &centerRect);
+		SDL_DestroyTexture(icon);
 	}
 }

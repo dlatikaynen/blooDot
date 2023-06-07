@@ -41,3 +41,7 @@ constexpr int const CHUNK_KEY_DING_DESCRIPTIONS_1 = 37;
 constexpr int const CHUNK_KEY_CONVO_1 = 38;
 constexpr int const CHUNK_KEY_SAMPLE_MAP = 39;
 constexpr int const CHUNK_KEY_GAME_CONTROLLER_DB_TXT = 40;
+constexpr int const CHUNK_KEY_LANG_FLAG_AM_PNG = 41;
+constexpr int const CHUNK_KEY_LANG_FLAG_DE_PNG = 42;
+constexpr int const CHUNK_KEY_LANG_FLAG_FI_PNG = 43;
+constexpr int const CHUNK_KEY_LANG_FLAG_UA_PNG = 44;

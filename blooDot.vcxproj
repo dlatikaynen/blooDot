@@ -543,7 +543,10 @@
     </None>
     <None Include="res\convo.1.bml" />
     <None Include="res\dingdescriptions.1.bml" />
-    <None Include="res\manufacturer.dlg" />
+    <None Include="res\manufacturer.dlg">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</DeploymentContent>
+    </None>
     <None Include="SDL\lib\x64\libcairo-2.dll" />
     <None Include="SDL\lib\x64\libexpat-1.dll" />
     <None Include="SDL\lib\x64\libfontconfig-1.dll" />
@@ -677,6 +680,22 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
     </Image>
+    <Image Include="res\langflag-am.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</DeploymentContent>
+    </Image>
+    <Image Include="res\langflag-de.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</DeploymentContent>
+    </Image>
+    <Image Include="res\langflag-fi.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</DeploymentContent>
+    </Image>
+    <Image Include="res\langflag-ua.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</DeploymentContent>
+    </Image>
     <Image Include="res\lettuce.png">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
@@ -721,7 +740,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </Image>
-    <Image Include="res\sample-map.png" />
+    <Image Include="res\sample-map.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</DeploymentContent>
+    </Image>
     <Image Include="res\schaedel.png">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>

@@ -914,6 +914,18 @@
     <Image Include="blooDot.ico">
       <Filter>Resource Files\win</Filter>
     </Image>
+    <Image Include="res\langflag-am.png">
+      <Filter>Resource Files\ui</Filter>
+    </Image>
+    <Image Include="res\langflag-de.png">
+      <Filter>Resource Files\ui</Filter>
+    </Image>
+    <Image Include="res\langflag-fi.png">
+      <Filter>Resource Files\ui</Filter>
+    </Image>
+    <Image Include="res\langflag-ua.png">
+      <Filter>Resource Files\ui</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="LICENSE.txt" />

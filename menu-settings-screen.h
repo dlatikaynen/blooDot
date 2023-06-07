@@ -17,8 +17,6 @@ namespace blooDot::MenuSettingsScreen
 {
 	bool ScreenSettingsMenuLoop(SDL_Renderer*);
 
-	void _PrepareIconRect(SDL_Rect* rect, int vignetteIndex);
-	void _DrawIcon(SDL_Renderer* renderer, int chunkKey, int vignetteIndex);
 	void _PrepareControls(SDL_Renderer* renderer);
 	void _VignetteLabel(SDL_Renderer* renderer, int font, int size, int vignetteIndex, int y, const char* text);
 	void _AnimateCarousel();

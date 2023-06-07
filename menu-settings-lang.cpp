@@ -9,6 +9,7 @@
 #include "settings.h"
 #include "constants.h"
 #include "sfx.h"
+#include "menu-common.h"
 
 constexpr int const bounceMargin = 10;
 constexpr int const vignetteWidth = 250;
@@ -356,6 +357,11 @@ namespace blooDot::MenuSettingsLang
 			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 3, 30, literalSettingsLanguageUA);
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 13, 3, 70, literalSettingsLanguageUADetails);
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 3, 190, literalSettingsLanguageUAName);
+
+			blooDot::MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_AM_PNG, 0, vignetteWidth, bounceMargin);
+			blooDot::MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_FI_PNG, 1, vignetteWidth, bounceMargin);
+			blooDot::MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_DE_PNG, 2, vignetteWidth, bounceMargin);
+			blooDot::MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_UA_PNG, 3, vignetteWidth, bounceMargin);
 
 			if (SDL_SetRenderTarget(renderer, NULL) < 0)
 			{

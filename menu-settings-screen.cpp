@@ -9,6 +9,7 @@
 #include "settings.h"
 #include <regex>
 #include "constants.h"
+#include "menu-common.h"
 
 constexpr int const bounceMargin = 10;
 constexpr int const vignetteWidth = 250;
@@ -339,24 +340,6 @@ namespace blooDot::MenuSettingsScreen
 		}
 	}
 
-	void _PrepareIconRect(SDL_Rect* rect, int vignetteIndex)
-	{
-		*rect = { bounceMargin + 30 + vignetteIndex * vignetteWidth, 102, vignetteWidth - 60, 64 };
-	}
-
-	void _DrawIcon(SDL_Renderer* renderer, int chunkKey, int vignetteIndex)
-	{
-		SDL_Rect iconRect;
-		SDL_Rect centerRect;
-		SDL_Rect destRect;
-		auto icon = blooDot::Res::LoadPicture(renderer, chunkKey, &iconRect);
-		
-		_PrepareIconRect(&destRect, vignetteIndex);
-		CenterRectInRect(&destRect, &iconRect, &centerRect);
-		SDL_RenderCopy(renderer, icon, &iconRect, &centerRect);
-		SDL_DestroyTexture(icon);
-	}
-
 	void _PrepareControls(SDL_Renderer* renderer)
 	{
 		sliderTextureWidth = vignetteCount * vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * bounceMargin;
@@ -434,10 +417,10 @@ namespace blooDot::MenuSettingsScreen
 				_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 6, 190, fullScreenDims2.c_str());
 			}
 			
-			_DrawIcon(renderer, CHUNK_KEY_UI_ICON_DIVINE, 0);
-			_DrawIcon(renderer, CHUNK_KEY_UI_ICON_HERC, 1);
-			_DrawIcon(renderer, CHUNK_KEY_UI_ICON_MODEX, 2);
-			_DrawIcon(renderer, CHUNK_KEY_UI_ICON_HD, 4);
+			blooDot::MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_DIVINE, 0, vignetteWidth, bounceMargin);
+			blooDot::MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_HERC, 1, vignetteWidth, bounceMargin);
+			blooDot::MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_MODEX, 2, vignetteWidth, bounceMargin);
+			blooDot::MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_HD, 4, vignetteWidth, bounceMargin);
 			if (SDL_SetRenderTarget(renderer, NULL) < 0)
 			{
 				const auto restoreError = SDL_GetError();
