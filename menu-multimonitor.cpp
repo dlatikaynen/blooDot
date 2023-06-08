@@ -31,6 +31,7 @@ namespace blooDot::MultiMonitorMenuScreen
 	auto selectedDisplay = 0;
 	auto movingToDisplay = 0;
 	int vignetteCount = 0;
+	std::vector<DisplayRepresentation> representations;
 	SDL_Texture* slidingMonitors;
 	int sliderTextureWidth;
 	int sliderOffsetLeft = bounceMargin;
@@ -179,9 +180,18 @@ namespace blooDot::MultiMonitorMenuScreen
 					case SDL_SCANCODE_SPACE:
 						if (menuSelection == MMMI_DISPLAY)
 						{
-							::Settings.FullscreenDisplayIndex = static_cast<unsigned char>(movingToDisplay);
-							confirmed = true;
-							multiMonitorMenuRunning = false;
+							if (movingToDisplay >= 0 && movingToDisplay < representations.size()) 
+							{
+								const auto& representation = representations.at(movingToDisplay);
+								::Settings.FullscreenDisplayIndex = static_cast<unsigned char>(representation.displayIndex);
+								confirmed = true;
+								multiMonitorMenuRunning = false;
+							}
+							else 
+							{
+								blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+								break;
+							}
 						}
 						else if (menuSelection == MMMI_CANCEL)
 						{
@@ -323,6 +333,7 @@ namespace blooDot::MultiMonitorMenuScreen
 
 	void _PrepareControls(SDL_Renderer* renderer)
 	{
+		representations.clear();
 		vignetteCount = SDL_GetNumVideoDisplays();
 		if (vignetteCount < 2)
 		{
@@ -347,13 +358,13 @@ namespace blooDot::MultiMonitorMenuScreen
 			 * an accurate left-to-right listing of the monitors,
 			 * because everything else is annoying and unsophisticated */
 			SDL_Rect maximums = { 0 };
-			std::vector<SDL_Rect> representations;
 			bool doDrawArrangement = true;
 			bool anyMonitors = false;
 			for (int i = 0; i < vignetteCount; ++i)
 			{
-				SDL_Rect bounds = { 0 };
-				if (SDL_GetDisplayBounds(i, &bounds) < 0)
+				DisplayRepresentation bounds = { 0 };
+				bounds.displayIndex = i;
+				if (SDL_GetDisplayBounds(i, &bounds.rect) < 0)
 				{
 					const auto boundsError = SDL_GetError();
 					ReportError("Failed to obtain display bounds", boundsError);
@@ -369,11 +380,16 @@ namespace blooDot::MultiMonitorMenuScreen
 					anyMonitors = true;
 				}
 
-				maximums.x = std::min(bounds.x, maximums.x);
-				maximums.y = std::min(bounds.y, maximums.y);
-				maximums.w = std::max(bounds.x + bounds.w, maximums.w);
-				maximums.h = std::max(bounds.y + bounds.h, maximums.h);
+				maximums.x = std::min(bounds.rect.x, maximums.x);
+				maximums.y = std::min(bounds.rect.y, maximums.y);
+				maximums.w = std::max(bounds.rect.x + bounds.rect.w, maximums.w);
+				maximums.h = std::max(bounds.rect.y + bounds.rect.h, maximums.h);
 			}
+
+			std::sort(representations.begin(), representations.end(), [](DisplayRepresentation& a, DisplayRepresentation& b)
+			{
+				return a.rect.x < b.rect.x; 
+			});
 
 			if (anyMonitors && (representations.size() != vignetteCount || maximums.w == 0 || maximums.h == 0))
 			{
@@ -390,7 +406,7 @@ namespace blooDot::MultiMonitorMenuScreen
 					auto shiftX = -maximums.x;
 					for (auto& representation : representations)
 					{
-						representation.x += shiftX;
+						representation.rect.x += shiftX;
 					}
 
 					maximums.w -= maximums.x;
@@ -402,7 +418,7 @@ namespace blooDot::MultiMonitorMenuScreen
 					auto shiftY = -maximums.y;
 					for (auto& representation : representations)
 					{
-						representation.y += shiftY;
+						representation.rect.y += shiftY;
 					}
 
 					maximums.h -= maximums.y;
@@ -432,6 +448,9 @@ namespace blooDot::MultiMonitorMenuScreen
 
 			for (int i = 0; i < vignetteCount; ++i)
 			{
+				auto& displayDescriptor = representations.at(i);
+				int displayIndex = displayDescriptor.displayIndex;
+
 				/* 1. show the ordinal of the display */
 				std::stringstream displayNumber;
 				displayNumber << (i + 1);
@@ -442,7 +461,7 @@ namespace blooDot::MultiMonitorMenuScreen
 
 				/* 2. show resolution and refresh rate */
 				SDL_DisplayMode mode;
-				if (SDL_GetDesktopDisplayMode(i, &mode) < 0) 
+				if (SDL_GetDesktopDisplayMode(displayIndex, &mode) < 0)
 				{
 					const auto modeError = SDL_GetError();
 					ReportError("Failed to query display mode", modeError);
@@ -456,7 +475,7 @@ namespace blooDot::MultiMonitorMenuScreen
 				}
 
 				/* 3. show the name of the display model */
-				const auto& displayName = SDL_GetDisplayName(i);
+				const auto& displayName = SDL_GetDisplayName(displayIndex);
 				_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, i, 204, displayName);
 
 				/* 4. draw a scaled representation of the display
@@ -479,17 +498,17 @@ namespace blooDot::MultiMonitorMenuScreen
 						scaleFactor = static_cast<float>(arrangementBounds.h) / static_cast<float>(maximums.h);
 					}
 
-					int displayIndex = 0;
+					int runningIndex = 0;
 					int offsetX = static_cast<int>((static_cast<float>(arrangementBounds.w) - static_cast<float>(maximums.w) * scaleFactor) / 2.);
 					int offsetY = static_cast<int>((static_cast<float>(arrangementBounds.h) - static_cast<float>(maximums.h) * scaleFactor) / 2.);
 					for (const auto& representation : representations)
 					{
 						SDL_Rect scaledRepresentation;
-						scaledRepresentation.x = static_cast<int>(static_cast<float>(representation.x) * scaleFactor) + offsetX;
-						scaledRepresentation.y = static_cast<int>(static_cast<float>(representation.y) * scaleFactor) + offsetY;
-						scaledRepresentation.w = static_cast<int>(static_cast<float>(representation.w) * scaleFactor);
-						scaledRepresentation.h = static_cast<int>(static_cast<float>(representation.h) * scaleFactor);	
-						_DisplayRepresentation(renderer, &scaledRepresentation, i, i == displayIndex++);
+						scaledRepresentation.x = static_cast<int>(static_cast<float>(representation.rect.x) * scaleFactor) + offsetX;
+						scaledRepresentation.y = static_cast<int>(static_cast<float>(representation.rect.y) * scaleFactor) + offsetY;
+						scaledRepresentation.w = static_cast<int>(static_cast<float>(representation.rect.w) * scaleFactor);
+						scaledRepresentation.h = static_cast<int>(static_cast<float>(representation.rect.h) * scaleFactor);
+						_DisplayRepresentation(renderer, &scaledRepresentation, i, i == runningIndex++);
 					}
 				}
 			}

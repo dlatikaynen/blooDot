@@ -13,6 +13,11 @@ extern SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget, const int can
 
 namespace blooDot::MultiMonitorMenuScreen
 {
+	typedef struct DisplayRepresentationStruct {
+		SDL_Rect rect;
+		int displayIndex;
+	} DisplayRepresentation;
+
 	bool MultiMonitorMenuLoop(SDL_Renderer*);
 
 	void _PrepareControls(SDL_Renderer* renderer);
