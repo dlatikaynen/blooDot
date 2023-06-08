@@ -13,7 +13,6 @@
 
 constexpr int const bounceMargin = 10;
 constexpr int const vignetteWidth = 250;
-constexpr int const vignetteHeight = 220;
 constexpr int const vignetteGap = 10;
 
 extern SettingsStruct Settings;
@@ -21,6 +20,7 @@ extern bool mainRunning;
 
 namespace blooDot::MultiMonitorMenuScreen
 {
+	constexpr int const vignetteHeight = 234;
 	constexpr const SDL_Color labelColor = { 250, 230, 230, 245 };
 	constexpr const SDL_Color accentColor = { 7, 29, 215, 156 };
 
@@ -393,6 +393,7 @@ namespace blooDot::MultiMonitorMenuScreen
 						representation.x += shiftX;
 					}
 
+					maximums.w -= maximums.x;
 					maximums.x = 0;
 				}
 
@@ -404,6 +405,7 @@ namespace blooDot::MultiMonitorMenuScreen
 						representation.y += shiftY;
 					}
 
+					maximums.h -= maximums.y;
 					maximums.y = 0;
 				}
 			}
@@ -455,7 +457,7 @@ namespace blooDot::MultiMonitorMenuScreen
 
 				/* 3. show the name of the display model */
 				const auto& displayName = SDL_GetDisplayName(i);
-				_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, i, 190, displayName);
+				_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, i, 204, displayName);
 
 				/* 4. draw a scaled representation of the display
 				 * arrangement, highlighting the current display */
@@ -470,19 +472,21 @@ namespace blooDot::MultiMonitorMenuScreen
 					float scaleFactor = 0;
 					if (maximums.h > maximums.w)
 					{
-						scaleFactor = static_cast<float>(arrangementBounds.h) / static_cast<float>(maximums.h);
+						scaleFactor = static_cast<float>(arrangementBounds.w) / static_cast<float>(maximums.w);
 					}
 					else
 					{
-						scaleFactor = static_cast<float>(arrangementBounds.h) / static_cast<float>(maximums.w);
+						scaleFactor = static_cast<float>(arrangementBounds.h) / static_cast<float>(maximums.h);
 					}
 
 					int displayIndex = 0;
+					int offsetX = static_cast<int>((static_cast<float>(arrangementBounds.w) - static_cast<float>(maximums.w) * scaleFactor) / 2.);
+					int offsetY = static_cast<int>((static_cast<float>(arrangementBounds.h) - static_cast<float>(maximums.h) * scaleFactor) / 2.);
 					for (const auto& representation : representations)
 					{
 						SDL_Rect scaledRepresentation;
-						scaledRepresentation.x = static_cast<int>(static_cast<float>(representation.x) * scaleFactor);
-						scaledRepresentation.y = static_cast<int>(static_cast<float>(representation.y) * scaleFactor);
+						scaledRepresentation.x = static_cast<int>(static_cast<float>(representation.x) * scaleFactor) + offsetX;
+						scaledRepresentation.y = static_cast<int>(static_cast<float>(representation.y) * scaleFactor) + offsetY;
 						scaledRepresentation.w = static_cast<int>(static_cast<float>(representation.w) * scaleFactor);
 						scaledRepresentation.h = static_cast<int>(static_cast<float>(representation.h) * scaleFactor);	
 						_DisplayRepresentation(renderer, &scaledRepresentation, i, i == displayIndex++);
@@ -533,7 +537,7 @@ namespace blooDot::MultiMonitorMenuScreen
 			bounceMargin + 30 + vignetteIndex * vignetteWidth,
 			102,
 			vignetteWidth - 60,
-			190
+			74
 		};
 	}
 
@@ -546,6 +550,12 @@ namespace blooDot::MultiMonitorMenuScreen
 			dimension->h
 		};
 
+#ifndef NDEBUG
+		SDL_Rect arra;
+		_PrepareRepresentationRect(&arra, vignetteIndex);
+		SDL_SetRenderDrawColor(renderer, 255, 196, 4, 120);
+		SDL_RenderDrawRect(renderer, &arra);
+#endif
 		if (isCurrent)
 		{
 			SDL_SetRenderDrawColor(renderer, accentColor.r, accentColor.g, accentColor.b, accentColor.a);
