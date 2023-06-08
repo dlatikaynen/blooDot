@@ -3,6 +3,8 @@
 #include "gamestate.h"
 #include "geom2d.h"
 
+using namespace blooDot::Geometry2d;
+
 /* (0,0) is world center.
  * world data is loaded on demand, in 9 quadrants at a time
  * the data structure is a two-dimensional linked and stacked matrix */

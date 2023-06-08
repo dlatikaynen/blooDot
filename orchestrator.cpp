@@ -9,6 +9,7 @@
 #ifndef NDEBUG
 #include "physicsdebugdraw.h"
 #endif
+#include "geom2d.h"
 
 Uint32 SDL_USEREVENT_SAVE = 0;
 Uint32 SDL_USEREVENT_AUTOSAVE = 0;
@@ -105,6 +106,7 @@ namespace blooDot::Orchestrator
 			Uint64 frameEnded;
 			Uint64 frameStart;
 			const auto& preMultiplied = (float)SDL_GetPerformanceFrequency();
+			const auto& frequencyMill = preMultiplied * 1000.f;
 #ifndef NDEBUG
 			long long frameNumber = 0;
 
@@ -323,7 +325,7 @@ namespace blooDot::Orchestrator
 					if (activePlayers & 1)
 					{
 						const auto& pPosition = p1Body->GetPosition();
-						const auto& pAngle = static_cast<int>(p1Body->GetAngle() * 180 / M_PI);
+						const auto& pAngle = static_cast<int>(p1Body->GetAngle() * blooDot::Geometry2d::Rad2DegFact);
 						SetPlayerPosition(
 							iP1,
 							(int)(pPosition.x* static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
@@ -341,7 +343,7 @@ namespace blooDot::Orchestrator
 					if (activePlayers & 2)
 					{
 						const auto& pPosition = p2Body->GetPosition();
-						const auto& pAngle = static_cast<int>(p2Body->GetAngle() * 180 / M_PI);
+						const auto& pAngle = static_cast<int>(p2Body->GetAngle() * blooDot::Geometry2d::Rad2DegFact);
 						SetPlayerPosition(
 							iP2,
 							(int)(pPosition.x * static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
@@ -359,7 +361,7 @@ namespace blooDot::Orchestrator
 					if (activePlayers & 4)
 					{
 						const auto& pPosition = p3Body->GetPosition();
-						const auto& pAngle = static_cast<int>(p3Body->GetAngle() * 180 / M_PI);
+						const auto& pAngle = static_cast<int>(p3Body->GetAngle() * blooDot::Geometry2d::Rad2DegFact);
 						SetPlayerPosition(
 							iP3,
 							(int)(pPosition.x* static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
@@ -377,7 +379,7 @@ namespace blooDot::Orchestrator
 					if (activePlayers & 8)
 					{
 						const auto& pPosition = p4Body->GetPosition();
-						const auto& pAngle = static_cast<int>(p4Body->GetAngle() * 180 / M_PI);
+						const auto& pAngle = static_cast<int>(p4Body->GetAngle() * blooDot::Geometry2d::Rad2DegFact);
 						SetPlayerPosition(
 							iP4,
 							(int)(pPosition.x * static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
@@ -405,7 +407,7 @@ namespace blooDot::Orchestrator
 #endif
 				SDL_RenderPresent(renderer);
 				frameEnded = SDL_GetPerformanceCounter();
-				const auto& frameTime = (frameEnded - frameStart) / preMultiplied * 1000.f;
+				const auto& frameTime = (frameEnded - frameStart) / frequencyMill;
 				const auto& frameSlack = static_cast<int>(MillisecondsPerFrame - frameTime);
 				if (frameSlack > 0)
 				{

@@ -24,6 +24,7 @@ constexpr int const screenshotShiftY = 16;
 extern SettingsStruct Settings;
 extern bool mainRunning;
 
+using namespace blooDot::Geometry2d;
 namespace blooDot::MenuLoad
 {
 	SDL_Event loadMenuEvent;

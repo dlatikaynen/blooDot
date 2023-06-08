@@ -8,6 +8,7 @@
 
 extern SettingsStruct Settings;
 
+using namespace blooDot::Geometry2d;
 namespace blooDot::MenuCommon
 {
 	SDL_Event dialogEvent;
