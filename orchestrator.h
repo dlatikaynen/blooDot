@@ -7,7 +7,7 @@ extern bool GameviewEnterWorld();
 extern void EnsurePlayers();
 extern void GameViewRenderFrame();
 extern void NudgePlayer(int playerIndex, int accelerationX, int accelerationY);
-extern void SetPlayerPosition(int playerIndex, int positionX, int positionY);
+extern void SetPlayerPosition(int playerIndex, int positionX, int positionY, int orientation);
 extern void Scroll(int, int);
 extern void TeardownDingSheets();
 extern void GameviewTeardown();

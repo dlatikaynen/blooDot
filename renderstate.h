@@ -31,7 +31,7 @@ bool InitializeAllFlaps(int width, int height);
 void RecomputeFlapConstellation();
 void Scroll(int dx, int dy);
 void NudgePlayer(int playerIndex, int accelerationX, int accelerationY); // TODO: unused
-void SetPlayerPosition(int playerIndex, int positionX, int positionY);
+void SetPlayerPosition(int playerIndex, int positionX, int positionY, int orientation);
 void PopulateAllFlaps();
 void RenderFloorBung();
 void RenderFloorVert();
