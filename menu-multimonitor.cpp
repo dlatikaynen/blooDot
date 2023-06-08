@@ -292,7 +292,7 @@ namespace blooDot::MultiMonitorMenuScreen
 				maximums.h = std::max(bounds.rect.y + bounds.rect.h, maximums.h);
 			}
 
-			std::sort(representations.begin(), representations.end(), [](DisplayRepresentation& a, DisplayRepresentation& b)
+			std::sort(representations.begin(), representations.end(), <:](DisplayRepresentation& a, DisplayRepresentation& b)
 			{
 				return a.rect.x < b.rect.x; 
 			});
