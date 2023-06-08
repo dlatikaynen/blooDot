@@ -4,7 +4,7 @@
 #include "ding.h"
 #include "enums.h"
 
-constexpr auto WORLD_SHEET_SIDELENGTH = 120;
+constexpr auto WORLD_SHEET_SIDELENGTH = 200;
 constexpr auto WORLD_SHEET_CENTERPOINT = WORLD_SHEET_SIDELENGTH / 2;
 
 struct DingInstance

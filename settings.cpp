@@ -131,7 +131,7 @@ namespace blooDot::Settings
 		case ViewportResolutions::VR_SQUARE:
 		{
 			SDL_Rect rect = { 0 };
-			if (_GetScreenDimensions(&rect))
+			if (_GetScreenDimensions(Settings::GetDisplayIndex(), &rect))
 			{
 				return std::min(rect.h, rect.w);
 			}
@@ -155,7 +155,7 @@ namespace blooDot::Settings
 		case ViewportResolutions::VR_MAXOUT:
 		{
 			SDL_Rect rect = { 0 };
-			if (_GetScreenDimensions(&rect))
+			if (_GetScreenDimensions(Settings::GetDisplayIndex(), &rect))
 			{
 				return rect.w;
 			}
@@ -187,7 +187,7 @@ namespace blooDot::Settings
 		case ViewportResolutions::VR_SQUARE:
 		{
 			SDL_Rect rect = { 0 };
-			if (_GetScreenDimensions(&rect))
+			if (_GetScreenDimensions(Settings::GetDisplayIndex(), &rect))
 			{
 				return std::min(rect.w, rect.h);
 			}
@@ -211,7 +211,7 @@ namespace blooDot::Settings
 		case ViewportResolutions::VR_MAXOUT:
 		{
 			SDL_Rect rect = { 0 };
-			if (_GetScreenDimensions(&rect))
+			if (_GetScreenDimensions(Settings::GetDisplayIndex(), &rect))
 			{
 				return rect.h;
 			}
@@ -229,11 +229,11 @@ namespace blooDot::Settings
 		return ::Settings.ShowMinimap != 0;
 	}
 
-	bool _GetScreenDimensions(_Inout_ SDL_Rect* dimensions)
+	bool _GetScreenDimensions(int displayIndex, _Inout_ SDL_Rect* dimensions)
 	{
 		auto& rect = (*dimensions);
 		SDL_DisplayMode displayMode = {};
-		if (SDL_GetDesktopDisplayMode(0, &displayMode) < 0)
+		if (SDL_GetDesktopDisplayMode(displayIndex, &displayMode) < 0)
 		{
 			const auto& queryError = SDL_GetError();
 			ReportError("Could not query screen dimensions", queryError);

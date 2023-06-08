@@ -19,7 +19,7 @@ namespace blooDot::Settings
 	int GetPhysicalArenaHeight();
 	bool ShowMinimap();
 
-	bool _GetScreenDimensions(_Inout_ SDL_Rect* dimensions);
+	bool _GetScreenDimensions(int displayIndex, _Inout_ SDL_Rect* dimensions);
 }
 
 typedef struct SettingsStruct
