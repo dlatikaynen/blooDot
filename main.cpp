@@ -406,6 +406,43 @@ void _Launch()
 		return;
 	}
 
+	SDL_RendererInfo rendererInfo;
+	if (SDL_GetRendererInfo(renderer, &rendererInfo) != 0)
+	{
+		const auto infoError = SDL_GetError();
+		ReportError("Failed to obtain renderer info", infoError);
+		return;
+	}
+
+	std::cout
+		<< "Using renderer "
+		<< rendererInfo.name
+		<< ", maxing out at "
+		<< rendererInfo.max_texture_width
+		<< " x "
+		<< rendererInfo.max_texture_height
+		<< "\n";
+
+	if (rendererInfo.flags & SDL_RendererFlags::SDL_RENDERER_ACCELERATED)
+	{
+		std::cout << "This renderer is using the GPU\n";
+	}
+
+	if (rendererInfo.flags & SDL_RendererFlags::SDL_RENDERER_SOFTWARE)
+	{
+		std::cout << "This renderer supports software rendering\n";
+	}
+
+	if (rendererInfo.flags & SDL_RendererFlags::SDL_RENDERER_PRESENTVSYNC)
+	{
+		std::cout << "This renderer supports vertical flyback synchronization\n";
+	}
+
+	if (rendererInfo.flags & SDL_RendererFlags::SDL_RENDERER_TARGETTEXTURE)
+	{
+		std::cout << "This renderer supports rendering to textures\n";
+	}
+
     if (SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND) != 0)
 	{
 		const auto modeError = SDL_GetError();
