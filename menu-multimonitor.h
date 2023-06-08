@@ -18,7 +18,7 @@ namespace blooDot::MultiMonitorMenuScreen
 		int displayIndex;
 	} DisplayRepresentation;
 
-	bool MultiMonitorMenuLoop(SDL_Renderer*);
+	bool MenuLoop(SDL_Renderer*);
 
 	void _PrepareControls(SDL_Renderer* renderer);
 	void _PrepareRepresentationRect(SDL_Rect* rect, int vignetteIndex);

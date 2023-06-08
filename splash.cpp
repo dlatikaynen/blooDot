@@ -384,7 +384,7 @@ namespace blooDot::Splash
 		{
 			if (SDL_GetNumVideoDisplays() > 1)
 			{
-				if (!blooDot::MultiMonitorMenuScreen::MultiMonitorMenuLoop(renderer))
+				if (!blooDot::MultiMonitorMenuScreen::MenuLoop(renderer))
 				{
 					/* bit confusing.but it means, that we left the dialog
 					 * with the cancel button, so the intention is to stay

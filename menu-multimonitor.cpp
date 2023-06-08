@@ -10,6 +10,7 @@
 #include "constants.h"
 #include <iostream>
 #include <regex>
+#include "menu-common.h"
 
 constexpr int const bounceMargin = 10;
 constexpr int const vignetteWidth = 250;
@@ -24,12 +25,10 @@ namespace blooDot::MultiMonitorMenuScreen
 	constexpr const SDL_Color labelColor = { 250, 230, 230, 245 };
 	constexpr const SDL_Color accentColor = { 7, 29, 215, 156 };
 
+	MenuDialogInteraction menuState;
 	SDL_Event monitorChoiceMenuEvent;
 	bool multiMonitorMenuRunning = false;
 	bool confirmed = false;
-	auto menuSelection = MultiMonitorMenuItems::MMMI_DISPLAY;
-	auto selectedDisplay = 0;
-	auto movingToDisplay = 0;
 	int vignetteCount = 0;
 	std::vector<DisplayRepresentation> representations;
 	SDL_Texture* slidingMonitors;
@@ -38,7 +37,7 @@ namespace blooDot::MultiMonitorMenuScreen
 	int slideSpeed = 0;
 	int targetOffsetLeft = 0;
 
-	bool MultiMonitorMenuLoop(SDL_Renderer* renderer)
+	bool MenuLoop(SDL_Renderer* renderer)
 	{
 		constexpr int const startY = 94;
 		constexpr int const stride = 46;
@@ -50,8 +49,12 @@ namespace blooDot::MultiMonitorMenuScreen
 		constexpr SDL_Rect const carouselDestRect = { outerMenuRect.x + labelInsetX,sliderY,vignetteWidth,vignetteHeight };
 
 		_PrepareControls(renderer);
+		menuState.itemCount = MultiMonitorMenuItems::MMMI_DISPLAY + 1;
+		menuState.selectedItemIndex = MultiMonitorMenuItems::MMMI_DISPLAY;
+		menuState.carouselItemIndex = MultiMonitorMenuItems::MMMI_DISPLAY;
+		menuState.carouselCount = vignetteCount;
 		multiMonitorMenuRunning = true;
-		sliderOffsetLeft = selectedDisplay * vignetteWidth + bounceMargin;
+		sliderOffsetLeft = menuState.carouselSelectedIndex * vignetteWidth + bounceMargin;
 
 		SDL_Rect titleRect{ 0,0,0,0 };
 		SDL_Rect cancelRect{ 0,0,0,0 };
@@ -80,134 +83,36 @@ namespace blooDot::MultiMonitorMenuScreen
 		unsigned short frame = 0L;
 		while (multiMonitorMenuRunning)
 		{
-			while (SDL_PollEvent(&monitorChoiceMenuEvent) != 0)
+			blooDot::MenuCommon::HandleMenu(&menuState);
+			if (menuState.leaveDialog)
 			{
-				switch (monitorChoiceMenuEvent.type)
+				multiMonitorMenuRunning = false;
+			}
+			else if (menuState.enterMenuItem)
+			{
+				if (menuState.selectedItemIndex == MultiMonitorMenuItems::MMMI_DISPLAY)
 				{
-				case SDL_QUIT:
-					mainRunning = false;
-					multiMonitorMenuRunning = false;
-					break;
-
-				case SDL_KEYDOWN:
-					switch (monitorChoiceMenuEvent.key.keysym.scancode)
+					if (menuState.carouselMoveTo >= 0 && menuState.carouselMoveTo < representations.size())
 					{
-					case SDL_SCANCODE_DOWN:
-					case SDL_SCANCODE_KP_2:
-					case SDL_SCANCODE_S:
-					case SDL_SCANCODE_PAGEDOWN:
-					case SDL_SCANCODE_END:
-						if (menuSelection == MMMI_DISPLAY)
-						{
-							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-						}
-						else
-						{
-							menuSelection = MMMI_DISPLAY;
-							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-						}
-
-						break;
-
-					case SDL_SCANCODE_UP:
-					case SDL_SCANCODE_KP_8:
-					case SDL_SCANCODE_W:
-					case SDL_SCANCODE_PAGEUP:
-					case SDL_SCANCODE_HOME:
-						if (menuSelection == MMMI_CANCEL)
-						{
-							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-						}
-						else
-						{
-							menuSelection = MMMI_CANCEL;
-							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-						}
-
-						break;
-
-					case SDL_SCANCODE_LEFT:
-					case SDL_SCANCODE_KP_4:
-					case SDL_SCANCODE_A:
-						if (menuSelection == MMMI_CANCEL)
-						{
-							menuSelection = MMMI_DISPLAY;
-						}
-
-						if (selectedDisplay == 0)
-						{
-							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-						}
-						else if (movingToDisplay == selectedDisplay)
-						{
-							movingToDisplay = selectedDisplay - 1;
-							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-						}
-						else if (movingToDisplay != 0)
-						{
-							--movingToDisplay;
-						}
-
-						break;
-
-					case SDL_SCANCODE_RIGHT:
-					case SDL_SCANCODE_KP_6:
-					case SDL_SCANCODE_D:
-						if (menuSelection == MMMI_CANCEL)
-						{
-							menuSelection = MMMI_DISPLAY;
-						}
-
-						if (selectedDisplay == vignetteCount - 1)
-						{
-							blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-						}
-						else if (movingToDisplay == selectedDisplay)
-						{
-							movingToDisplay = selectedDisplay + 1;
-							blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
-						}
-						else if (movingToDisplay != vignetteCount - 1)
-						{
-							++movingToDisplay;
-						}
-
-						break;
-
-					case SDL_SCANCODE_RETURN:
-					case SDL_SCANCODE_RETURN2:
-					case SDL_SCANCODE_KP_ENTER:
-					case SDL_SCANCODE_SPACE:
-						if (menuSelection == MMMI_DISPLAY)
-						{
-							if (movingToDisplay >= 0 && movingToDisplay < representations.size()) 
-							{
-								const auto& representation = representations.at(movingToDisplay);
-								::Settings.FullscreenDisplayIndex = static_cast<unsigned char>(representation.displayIndex);
-								confirmed = true;
-								multiMonitorMenuRunning = false;
-							}
-							else 
-							{
-								blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
-								break;
-							}
-						}
-						else if (menuSelection == MMMI_CANCEL)
-						{
-							multiMonitorMenuRunning = false;
-						}
-
-						blooDot::Sfx::Play(SoundEffect::SFX_SELCONF);
-						break;
-
-					case SDL_SCANCODE_ESCAPE:
+						const auto& representation = representations.at(menuState.carouselMoveTo);
+						::Settings.FullscreenDisplayIndex = static_cast<unsigned char>(representation.displayIndex);
+						confirmed = true;
 						multiMonitorMenuRunning = false;
-						break;
 					}
-
-					break;
+					else
+					{
+						blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+					}
 				}
+				else 
+				{
+					multiMonitorMenuRunning = false;
+				}
+			}
+
+			if (menuState.leaveMain)
+			{
+				mainRunning = false;
 			}
 
 			if (SDL_RenderClear(renderer) < 0)
@@ -238,30 +143,31 @@ namespace blooDot::MultiMonitorMenuScreen
 				constexpr int const buttonLeft = outerMenuRect.x + labelInsetX;
 				for (auto y = startY; y < 200; y += stride)
 				{
+					const auto& thisItem = itemToDraw == menuState.selectedItemIndex;
 					DrawButton(
 						drawingSink,
 						buttonLeft,
 						y,
 						vignetteWidth,
 						itemToDraw > MMMI_CANCEL ? vignetteHeight : 42,
-						itemToDraw == menuSelection
+						thisItem
 					);
 
-					if (itemToDraw == menuSelection)
+					if (thisItem)
 					{
-						if (menuSelection == MMMI_CANCEL)
+						if (menuState.selectedItemIndex == MMMI_CANCEL)
 						{
 							DrawChevron(drawingSink, buttonLeft - 7, y + 21, false, frame);
 							DrawChevron(drawingSink, buttonLeft + vignetteWidth + 7, y + 21, true, frame);
 						}
 						else
 						{
-							if (movingToDisplay > 0 && selectedDisplay > 0)
+							if (menuState.carouselMoveTo > 0 && menuState.carouselSelectedIndex > 0)
 							{
 								DrawChevron(drawingSink, buttonLeft - 9, y + 105, true, frame);
 							}
 
-							if (movingToDisplay < vignetteCount - 1 && selectedDisplay < vignetteCount - 1)
+							if (menuState.carouselMoveTo < vignetteCount - 1 && menuState.carouselSelectedIndex < vignetteCount - 1)
 							{
 								DrawChevron(drawingSink, buttonLeft + vignetteWidth + 9, y + 105, false, frame);
 							}
@@ -299,7 +205,7 @@ namespace blooDot::MultiMonitorMenuScreen
 
 	void _AnimateCarousel()
 	{
-		if (movingToDisplay == selectedDisplay)
+		if (menuState.carouselMoveTo == menuState.carouselSelectedIndex)
 		{
 			slideSpeed = 0;
 			return;
@@ -307,7 +213,7 @@ namespace blooDot::MultiMonitorMenuScreen
 
 		if (slideSpeed == 0)
 		{
-			targetOffsetLeft = bounceMargin + movingToDisplay * vignetteWidth;
+			targetOffsetLeft = bounceMargin + menuState.carouselMoveTo * vignetteWidth;
 			slideSpeed = 40;
 		}
 
@@ -318,7 +224,7 @@ namespace blooDot::MultiMonitorMenuScreen
 			if (sliderOffsetLeft >= targetOffsetLeft)
 			{
 				sliderOffsetLeft = targetOffsetLeft;
-				selectedDisplay = movingToDisplay;
+				menuState.carouselSelectedIndex = menuState.carouselMoveTo;
 			}
 		}
 		else
@@ -326,7 +232,7 @@ namespace blooDot::MultiMonitorMenuScreen
 			if (sliderOffsetLeft <= targetOffsetLeft)
 			{
 				sliderOffsetLeft = targetOffsetLeft;
-				selectedDisplay = movingToDisplay;
+				menuState.carouselSelectedIndex = menuState.carouselMoveTo;
 			}
 		}
 	}

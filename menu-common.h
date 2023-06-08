@@ -6,6 +6,10 @@ typedef struct MenuDialogInteractionStruct {
 	bool enterMenuItem = false;
 	bool leaveDialog = false;
 	bool leaveMain = false;
+	int carouselItemIndex = -1;
+	int carouselCount = 0;
+	int carouselSelectedIndex = 0;
+	int carouselMoveTo = 0;
 } MenuDialogInteraction;
 
 namespace blooDot::MenuCommon

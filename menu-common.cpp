@@ -116,6 +116,54 @@ namespace blooDot::MenuCommon
 					break;
 				}
 
+				case SDL_SCANCODE_LEFT:
+				case SDL_SCANCODE_KP_4:
+				case SDL_SCANCODE_A:
+					if (interactionState->selectedItemIndex != interactionState->carouselItemIndex)
+					{
+						interactionState->selectedItemIndex = interactionState->carouselItemIndex;
+					}
+
+					if (interactionState->carouselSelectedIndex == 0)
+					{
+						blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+					}
+					else if (interactionState->carouselMoveTo == interactionState->carouselSelectedIndex)
+					{
+						interactionState->carouselMoveTo = interactionState->carouselSelectedIndex - 1;
+						blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
+					}
+					else if (interactionState->carouselMoveTo != 0)
+					{
+						--interactionState->carouselMoveTo;
+					}
+
+					break;
+
+				case SDL_SCANCODE_RIGHT:
+				case SDL_SCANCODE_KP_6:
+				case SDL_SCANCODE_D:
+					if (interactionState->selectedItemIndex != interactionState->carouselItemIndex)
+					{
+						interactionState->selectedItemIndex = interactionState->carouselItemIndex;
+					}
+
+					if (interactionState->carouselSelectedIndex == interactionState->carouselCount - 1)
+					{
+						blooDot::Sfx::Play(SoundEffect::SFX_ASTERISK);
+					}
+					else if (interactionState->carouselMoveTo == interactionState->carouselSelectedIndex)
+					{
+						interactionState->carouselMoveTo = interactionState->carouselSelectedIndex + 1;
+						blooDot::Sfx::Play(SoundEffect::SFX_SELCHG);
+					}
+					else if (interactionState->carouselMoveTo != interactionState->carouselCount - 1)
+					{
+						++interactionState->carouselMoveTo;
+					}
+
+					break;
+
 				case SDL_SCANCODE_RETURN:
 				case SDL_SCANCODE_RETURN2:
 				case SDL_SCANCODE_KP_ENTER:
