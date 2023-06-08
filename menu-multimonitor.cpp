@@ -397,11 +397,11 @@ namespace blooDot::MultiMonitorMenuScreen
 					float scaleFactor = 0;
 					if (maximums.h > maximums.w)
 					{
-						scaleFactor = static_cast<float>(arrangementBounds.w) / static_cast<float>(maximums.w);
+						scaleFactor = static_cast<float>(arrangementBounds.h) / static_cast<float>(maximums.h);
 					}
 					else
 					{
-						scaleFactor = static_cast<float>(arrangementBounds.h) / static_cast<float>(maximums.h);
+						scaleFactor = static_cast<float>(arrangementBounds.w) / static_cast<float>(maximums.w);
 					}
 
 					int runningIndex = 0;
