@@ -1,5 +1,5 @@
 #pragma once
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "chunk-constants.h"
 
 constexpr char const* XassyFile = "xassy-cooked.1.ngld";

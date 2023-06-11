@@ -5,7 +5,7 @@
 #include "drawing.h"
 #include "menu-common.h"
 #include "dialogcontrols.h"
-#include <cairo.h>
+#include <cairo/cairo.h>
 #include "xlations.h"
 #include <random>
 #include <iostream>

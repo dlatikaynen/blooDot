@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "huff-deco.h"
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 void* HuffInflate(SDL_RWops* inFile, long long const sourceSize, long long* originalSize, long long* actuallyRead)
 {

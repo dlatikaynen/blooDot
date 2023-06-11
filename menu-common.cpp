@@ -1,5 +1,5 @@
 #include "pch.h"
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "menu-common.h"
 #include "settings.h"
 #include "sfx.h"

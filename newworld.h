@@ -1,5 +1,5 @@
 #pragma once
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "gamestate.h"
 
 extern void ReportError(const char*, const char*);

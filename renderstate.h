@@ -1,7 +1,7 @@
 #pragma once
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <iostream>
-#include <cairo.h>
+#include <cairo/cairo.h>
 #include "enums.h"
 #include "gamestate.h"
 #include "dingsheet.h"

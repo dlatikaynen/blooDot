@@ -368,3 +368,4 @@ FodyWeavers.xsd
 # savegames and settings store
 *.bofa
 blooDot.ligma
+vcpkg_installed/

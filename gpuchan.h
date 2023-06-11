@@ -1,8 +1,8 @@
 #pragma once
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <iostream>
 #include "dexassy.h"
-#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
 #include "scripture.h"
 #include "drawing.h"
 #include "dialogcontrols.h"

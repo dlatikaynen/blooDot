@@ -1,5 +1,5 @@
 #pragma once
-#include <box2d.h>
+#include <box2d/box2d.h>
 #include "flap.h"
 
 extern FlapAwareness GetFlapAwareness(int flapIndex);

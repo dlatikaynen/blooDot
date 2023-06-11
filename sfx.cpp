@@ -77,7 +77,7 @@ namespace blooDot::Sfx
 		const auto& chunkKey = _GetResourceKey(effect);
 		SDL_RWops* soundFile;
 		const auto soundMem = Retrieve(chunkKey, &soundFile);
-		const auto& soundEffect = Mix_LoadWAV_RW(soundFile, true);
+		const auto& soundEffect = Mix_LoadWAV_RW(soundFile, 0);
 		if (!soundEffect)
 		{
 			const auto loadError = SDL_GetError();

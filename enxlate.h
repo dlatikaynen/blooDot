@@ -1,7 +1,7 @@
 #pragma once
 #ifndef NDEBUG
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <fstream>
 #include <iostream>
 #include <filesystem>

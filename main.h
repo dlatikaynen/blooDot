@@ -1,7 +1,12 @@
 #pragma once
-#include <SDL.h>
-#include <SDL_mixer.h>
-#include <SDL_image.h>
+
+/* first of all:
+ * get rid of that library-dictates-platform-linking bullshit */
+#define SDL_MAIN_HANDLED
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 
 extern void PrepareIndex();

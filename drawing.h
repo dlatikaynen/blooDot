@@ -1,6 +1,6 @@
 #pragma once
-#include <cairo.h>
-#include <SDL.h>
+#include <cairo/cairo.h>
+#include <SDL2/SDL.h>
 
 extern void ReportError(const char*, const char*);
 

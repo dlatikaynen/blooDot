@@ -1,5 +1,5 @@
 #pragma once
-#include <SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 
 constexpr auto FONT_KEY_DIALOG = 0;
 constexpr auto FONT_KEY_DIALOG_FAT = 1;

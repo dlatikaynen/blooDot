@@ -4,7 +4,7 @@
 #include "scripture.h"
 #include "drawing.h"
 #include "dialogcontrols.h"
-#include <cairo.h>
+#include <cairo/cairo.h>
 #include "xlations.h"
 #include "settings.h"
 #include "constants.h"

@@ -1,6 +1,6 @@
 #pragma once
-#include <SDL.h>
-#include <cairo.h>
+#include <SDL2/SDL.h>
+#include <cairo/cairo.h>
 #include "enums.h"
 #include "dexassy.h"
 

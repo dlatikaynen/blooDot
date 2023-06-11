@@ -1,7 +1,7 @@
 #pragma once
 #ifndef NDEBUG
-#include <SDL.h>
-#include <box2d.h>
+#include <SDL2/SDL.h>
+#include <box2d/box2d.h>
 
 class PhysicsDebugDraw : public b2Draw
 {

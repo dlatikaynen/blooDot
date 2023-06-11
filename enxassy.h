@@ -1,6 +1,6 @@
 #pragma once
 #ifndef NDEBUG
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "huff-comp.h"
 #include <fstream>
 #include <iostream>

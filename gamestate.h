@@ -1,6 +1,6 @@
 #pragma once
-#include <SDL.h>
-#include <box2d.h>
+#include <SDL2/SDL.h>
+#include <box2d/box2d.h>
 #include "ding.h"
 #include "enums.h"
 
