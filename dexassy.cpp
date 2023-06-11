@@ -123,7 +123,6 @@ void CloseCooked()
 	if (cooked)
 	{
 		cooked->close(cooked);
-		SDL_free(cooked);
 		cooked = NULL;
 	}
 }
