@@ -107,9 +107,24 @@ namespace blooDot::Settings
 		::Settings.SettingViewportResolution = VR_TEMPLE;
 	}
 
-	int GetDisplayIndex()
+	int GetDisplayIndexCapped()
 	{
-		return ::Settings.FullscreenDisplayIndex;
+		auto storedIndex = ::Settings.FullscreenDisplayIndex;
+		auto numDisplays = SDL_GetNumVideoDisplays();
+		int cappedIndex = 0;
+		if (numDisplays < 0)
+		{
+			const auto queryError = SDL_GetError();
+			ReportError("Could not query number of video displays", queryError);
+			numDisplays = 0;
+		}
+
+		if (storedIndex < numDisplays)
+		{
+			cappedIndex = storedIndex;
+		}
+
+		return cappedIndex;
 	}
 
 	int GetLogicalArenaWidth()
@@ -131,7 +146,7 @@ namespace blooDot::Settings
 		case ViewportResolutions::VR_SQUARE:
 		{
 			SDL_Rect rect = { 0 };
-			if (_GetScreenDimensions(Settings::GetDisplayIndex(), &rect))
+			if (_GetScreenDimensions(Settings::GetDisplayIndexCapped(), &rect))
 			{
 				return std::min(rect.h, rect.w);
 			}
@@ -155,7 +170,7 @@ namespace blooDot::Settings
 		case ViewportResolutions::VR_MAXOUT:
 		{
 			SDL_Rect rect = { 0 };
-			if (_GetScreenDimensions(Settings::GetDisplayIndex(), &rect))
+			if (_GetScreenDimensions(Settings::GetDisplayIndexCapped(), &rect))
 			{
 				return rect.w;
 			}
@@ -187,7 +202,7 @@ namespace blooDot::Settings
 		case ViewportResolutions::VR_SQUARE:
 		{
 			SDL_Rect rect = { 0 };
-			if (_GetScreenDimensions(Settings::GetDisplayIndex(), &rect))
+			if (_GetScreenDimensions(Settings::GetDisplayIndexCapped(), &rect))
 			{
 				return std::min(rect.w, rect.h);
 			}
@@ -211,7 +226,7 @@ namespace blooDot::Settings
 		case ViewportResolutions::VR_MAXOUT:
 		{
 			SDL_Rect rect = { 0 };
-			if (_GetScreenDimensions(Settings::GetDisplayIndex(), &rect))
+			if (_GetScreenDimensions(Settings::GetDisplayIndexCapped(), &rect))
 			{
 				return rect.h;
 			}

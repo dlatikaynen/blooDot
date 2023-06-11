@@ -233,6 +233,7 @@
       <LanguageStandard_C Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdc17</LanguageStandard_C>
       <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</TreatWarningAsError>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MultiThreaded</RuntimeLibrary>
+      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -240,7 +241,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">version.lib;dinput8.lib;dxguid.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;shell32.lib;uuid.lib;iconv.lib;advapi32.lib;setupapi.lib</AdditionalDependencies>
-      <TurnOffAssemblyGeneration Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</TurnOffAssemblyGeneration>
+      <TurnOffAssemblyGeneration Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </TurnOffAssemblyGeneration>
       <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</IgnoreAllDefaultLibraries>
@@ -250,6 +252,9 @@
       </DelayLoadDLLs>
       <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">libcairo-2.dll</DelayLoadDLLs>
       <Version Condition="'$(Configuration)|$(Platform)'=='Release|x64'">3.5</Version>
+      <GenerateDebugInformation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</GenerateDebugInformation>
+      <ProgramDatabaseFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+      <AssemblyDebug Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</AssemblyDebug>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkLibraryDependencies>

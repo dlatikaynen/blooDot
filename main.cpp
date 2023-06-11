@@ -33,12 +33,16 @@ SDL_Renderer* renderer = NULL;
 
 void ReportError(const char* message, const char* error)
 {
-	std::cerr << message << ", whatever that means, " << error;
+	std::cerr
+		<< message
+		<< ", whatever that means, "
+		<< error
+		<< "\n";
 }
 
 #ifndef NDEBUG
 extern int Cook(XassyCookInfo*);
-extern int Xlate();
+extern int ::Xlate(XassyXlatInfo *info);
 
 int main(int argc, char** argv)
 {
@@ -224,8 +228,14 @@ int main(int, char**)
 
 		std::cout << "AHALLO.\n";
 
-		PrepareIndex();
-		OpenCooked();
+		/* https://stackoverflow.com/a/31926842/1132334 */
+		::PrepareIndex();
+		if (!OpenCooked())
+		{
+			/* this happens when the assets file is not present */
+			goto Abort;
+		}
+
 		blooDot::Sfx::PreloadMenuSfx();
 		blooDot::Settings::PreloadControllerMappings();
 
@@ -237,12 +247,12 @@ int main(int, char**)
 			 * in the arena. we create a new window and renderer
 			 * for the arena, even if the video mode matches */
 			blooDot::Player::NumPlayers = 4;
-			_Launch();
+			::_Launch();
 		}
 
 		blooDot::Sfx::Teardown();
-		Mix_Quit();
-		IMG_Quit();
+		::Mix_Quit();
+		::IMG_Quit();
 
 		if (renderer)
 		{
@@ -258,11 +268,12 @@ int main(int, char**)
 	}
 
 	/* shitdown */
-	CloseCooked();
-	CloseFonts();
-	TeardownDialogControls();
+	::CloseCooked();
+	::CloseFonts();
+	::TeardownDialogControls();
+Abort:
 	SDL_ClearError();
-	SDL_Quit();
+	::SDL_Quit();
 	const auto shutdownError = SDL_GetError();
 	if (strnlen(shutdownError, MaxExpectedSDLErrorLength) > 0) {
 		ReportError("Could not quit cleanly", shutdownError);
