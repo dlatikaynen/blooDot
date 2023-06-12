@@ -60,6 +60,7 @@ namespace blooDot::Orchestrator
 
 			bodyDef.type = b2_dynamicBody;
 			bodyDef.linearDamping = 6.68f;
+			bodyDef.angularDamping = 12.9f; // this will reduce on ice
 			bodyDef.position.Set(
 				(p1->Offset.x + GRIDUNIT / 2.f) / static_cast<float>(GRIDUNIT),
 				(p2->Offset.y + GRIDUNIT / 2.f) / static_cast<float>(GRIDUNIT)
@@ -186,23 +187,64 @@ namespace blooDot::Orchestrator
 				if (numKeys > 0)
 				{
 					const auto& keys = SDL_GetKeyboardState(NULL);
+					float p1ImpulseX = .0f;
+					float p1ImpulseY = .0f;
 
 					if (keys[SDL_SCANCODE_A])
 					{
-						p1Body->ApplyLinearImpulseToCenter({ -1.7f, 0 }, true);
+						p1ImpulseX = -1.7f;
 					}
 					else if (keys[SDL_SCANCODE_D])
 					{
-						p1Body->ApplyLinearImpulseToCenter({ 1.7f, 0 }, true);
+						p1ImpulseX = 1.7f;
 					}
 
 					if (keys[SDL_SCANCODE_S])
 					{
-						p1Body->ApplyLinearImpulseToCenter({ 0, 1.7f }, true);
+						p1ImpulseY = 1.7f;
 					}
 					else if (keys[SDL_SCANCODE_W])
 					{
-						p1Body->ApplyLinearImpulseToCenter({ 0, -1.7f }, true);
+						p1ImpulseY = -1.7f;
+					}
+
+					if (p1ImpulseX != 0 || p1ImpulseY != 0)
+					{
+						p1Body->ApplyLinearImpulseToCenter({ p1ImpulseX, p1ImpulseY }, true);
+						/* at this point, the new velocity is already imparted, so
+						 * our linear velocity victor points to where we want to go.
+						 * we compare it to our orientation victor:
+						 * if the orientation victor is significantly different, we
+						 * convert most of our intended linear motion into an angular
+						 * movement to orient us towards the walking direction (as a
+						 * biped would). if the orientation victor is only marginally
+						 * different, we just veer a bit toward it, so it aligns perfectly
+						 * almost immediately (except player 4, who always goes off on a
+						 * bit of a tangent. speaking of which, caution, trigonomometrical
+						 * algebraics ahead, sine and her cousins too. */
+						const auto& newVelocitty = p1Body->GetLinearVelocity();
+						if (newVelocitty.LengthSquared() != 0) {
+							const auto& currentAngle = p1Body->GetAngle();
+							const auto& towardsAngle = std::atan2f(newVelocitty.x, newVelocitty.y);
+							p1Body->SetAngularVelocity(blooDot::Geometry2d::sgn(towardsAngle - currentAngle) * 6.8f);
+							const auto& magnitude = std::fabsf(towardsAngle - currentAngle);
+							if (magnitude > .5f)
+							{
+								p1Body->ApplyLinearImpulseToCenter(
+								{ 
+									-p1ImpulseX,
+									-p1ImpulseY
+								}, true);
+							}
+							else if (magnitude > .15f)
+							{
+								p1Body->ApplyLinearImpulseToCenter(
+								{
+									-p1ImpulseX * magnitude / static_cast<float>(M_PI),
+									-p1ImpulseY * magnitude / static_cast<float>(M_PI)
+								}, true);
+							}
+						}
 					}
 
 					if (keys[SDL_SCANCODE_F])
@@ -316,10 +358,10 @@ namespace blooDot::Orchestrator
 					}
 				}
 
-				// rare use for a scope block, guess why
+				// rare legit use for a minge & bracket, guess why
 				{
 					/* compute one physics step and set the positions
-					 * and rotations for the next frame to render */
+					 * and orientations for the next frame to rrender */
 					world.Step(timeStep, velocityIterations, positionIterations);
 
 					if (activePlayers & 1)

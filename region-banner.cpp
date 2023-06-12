@@ -116,7 +116,7 @@ namespace blooDot::RegionBanner
 		auto const& canvas = GetDrawingSink();
 
 		cairo_set_line_width(canvas, 3.3);
-		cairo_set_source_rgb(canvas, 0.7, 1., 0);
+		cairo_set_source_rgb(canvas, 0.7, 1., ofRegion);
 		cairo_move_to(canvas, 0, 0);
 		cairo_curve_to(
 			canvas,
@@ -126,7 +126,7 @@ namespace blooDot::RegionBanner
 
 		cairo_stroke(canvas);
 		std::stringstream regionName;
-		regionName << ofRegion << ". " << literalregionNameScullery;
+		regionName << literalregionNameOceanOfImmeasurableDisappointment;
 		auto regionStr = regionName.str();
 
 		cairo_set_source_rgb(canvas, .7, .7, 1);

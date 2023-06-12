@@ -273,6 +273,7 @@ SettingsLanguageENDetails
 
 SettingsLanguageENName
 	[am]	American
+	[am]	Amerikanisch
 
 SettingsLanguageFI
 	[am]	[fi]
@@ -293,6 +294,7 @@ SettingsLanguageDEDetails
 SettingsLanguageDEName
 	[am]	German
 	[de]	Deutsch
+	[de]	Saksa
 
 SettingsLanguageUA
 	[am]	[ua]
