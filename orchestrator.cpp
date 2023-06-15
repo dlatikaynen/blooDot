@@ -225,11 +225,12 @@ namespace blooDot::Orchestrator
 						const auto& newVelocitty = p1Body->GetLinearVelocity();
 						if (newVelocitty.LengthSquared() != 0) {
 							const auto& currentAngle = p1Body->GetAngle();
-							const auto& towardsAngle = std::atan2f(newVelocitty.x, newVelocitty.y);
+							const auto& towardsAngle = std::atan2f(-newVelocitty.x, newVelocitty.y);
 							p1Body->SetAngularVelocity(blooDot::Geometry2d::sgn(towardsAngle - currentAngle) * 6.8f);
 							const auto& magnitude = std::fabsf(towardsAngle - currentAngle);
 							if (magnitude > .5f)
 							{
+								// stop in their tracks when much rotation is needed first
 								p1Body->ApplyLinearImpulseToCenter(
 								{ 
 									-p1ImpulseX,
@@ -238,6 +239,7 @@ namespace blooDot::Orchestrator
 							}
 							else if (magnitude > .15f)
 							{
+								// hefty, but tresholded rotation to orient towards direction of movement
 								p1Body->ApplyLinearImpulseToCenter(
 								{
 									-p1ImpulseX * magnitude / static_cast<float>(M_PI),
