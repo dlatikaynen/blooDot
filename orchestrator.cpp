@@ -192,85 +192,102 @@ namespace blooDot::Orchestrator
 					float pImpulseY = .0f;
 
 					// p1
-					if (keys[SDL_SCANCODE_A])
+					if (activePlayers & (1 << iP1))
 					{
-						pImpulseX = -1.7f;
-					}
-					else if (keys[SDL_SCANCODE_D])
-					{
-						pImpulseX = 1.7f;
-					}
+						if (keys[SDL_SCANCODE_A])
+						{
+							pImpulseX = -1.7f;
+						}
+						else if (keys[SDL_SCANCODE_D])
+						{
+							pImpulseX = 1.7f;
+						}
 
-					if (keys[SDL_SCANCODE_S])
-					{
-						pImpulseY = 1.7f;
-					}
-					else if (keys[SDL_SCANCODE_W])
-					{
-						pImpulseY = -1.7f;
-					}
+						if (keys[SDL_SCANCODE_S])
+						{
+							pImpulseY = 1.7f;
+						}
+						else if (keys[SDL_SCANCODE_W])
+						{
+							pImpulseY = -1.7f;
+						}
 
-					_InitiatePlayerMovement(p1Body, pImpulseX, pImpulseY);
-					pImpulseX = pImpulseY = 0;
+						_InitiatePlayerMovement(p1Body, pImpulseX, pImpulseY);
+						pImpulseX = pImpulseY = 0;
+					}
 
 					// p2
-					if (keys[SDL_SCANCODE_F])
+					if (activePlayers & (1 << iP2))
 					{
-						pImpulseX = -1.7f;
-					}
-					else if (keys[SDL_SCANCODE_H])
-					{
-						pImpulseX = 1.7f;
-					}
+						if (keys[SDL_SCANCODE_F])
+						{
+							pImpulseX = -1.7f;
+						}
+						else if (keys[SDL_SCANCODE_H])
+						{
+							pImpulseX = 1.7f;
+						}
 
-					if (keys[SDL_SCANCODE_G])
-					{
-						pImpulseY = 1.7f;
-					}
-					else if (keys[SDL_SCANCODE_T])
-					{
-						pImpulseY = -1.7f;
-					}
+						if (keys[SDL_SCANCODE_G])
+						{
+							pImpulseY = 1.7f;
+						}
+						else if (keys[SDL_SCANCODE_T])
+						{
+							pImpulseY = -1.7f;
+						}
 
-					_InitiatePlayerMovement(p2Body, pImpulseX, pImpulseY);
-					pImpulseX = pImpulseY = 0;
+						_InitiatePlayerMovement(p2Body, pImpulseX, pImpulseY);
+						pImpulseX = pImpulseY = 0;
+					}
 
 					// p3
-					if (keys[SDL_SCANCODE_J])
+					if (activePlayers & (1 << iP3))
 					{
-						p3Body->ApplyLinearImpulseToCenter({ -1.7f, 0 }, true);
-					}
-					else if (keys[SDL_SCANCODE_L])
-					{
-						p3Body->ApplyLinearImpulseToCenter({ 1.7f, 0 }, true);
-					}
+						if (keys[SDL_SCANCODE_J])
+						{
+							pImpulseX = -1.7f;
+						}
+						else if (keys[SDL_SCANCODE_L])
+						{
+							pImpulseX = 1.7f;
+						}
 
-					if (keys[SDL_SCANCODE_K])
-					{
-						p3Body->ApplyLinearImpulseToCenter({ 0, 1.7f }, true);
-					}
-					else if (keys[SDL_SCANCODE_I])
-					{
-						p3Body->ApplyLinearImpulseToCenter({ 0, -1.7f }, true);
+						if (keys[SDL_SCANCODE_K])
+						{
+							pImpulseY = 1.7f;
+						}
+						else if (keys[SDL_SCANCODE_I])
+						{
+							pImpulseY = -1.7f;
+						}
+
+						_InitiatePlayerMovement(p3Body, pImpulseX, pImpulseY);
+						pImpulseX = pImpulseY = 0;
 					}
 
 					// p4
-					if (keys[SDL_SCANCODE_SEMICOLON])
+					if (activePlayers & (1 << iP4))
 					{
-						p4Body->ApplyLinearImpulseToCenter({ -1.7f, 0 }, true);
-					}
-					else if (keys[SDL_SCANCODE_BACKSLASH])
-					{
-						p4Body->ApplyLinearImpulseToCenter({ 1.7f, 0 }, true);
-					}
+						if (keys[SDL_SCANCODE_SEMICOLON])
+						{
+							pImpulseX = -1.7f;
+						}
+						else if (keys[SDL_SCANCODE_BACKSLASH])
+						{
+							pImpulseX = 1.7f;
+						}
 
-					if (keys[SDL_SCANCODE_APOSTROPHE])
-					{
-						p4Body->ApplyLinearImpulseToCenter({ 0, 1.7f }, true);
-					}
-					else if (keys[SDL_SCANCODE_LEFTBRACKET])
-					{
-						p4Body->ApplyLinearImpulseToCenter({ 0, -1.7f }, true);
+						if (keys[SDL_SCANCODE_APOSTROPHE])
+						{
+							pImpulseY = 1.7f;
+						}
+						else if (keys[SDL_SCANCODE_LEFTBRACKET])
+						{
+							pImpulseY = -1.7f;
+						}
+
+						_InitiatePlayerMovement(p4Body, pImpulseX, pImpulseY);
 					}
 
 					// viewport scrolling
@@ -331,22 +348,22 @@ namespace blooDot::Orchestrator
 					 * and orientations for the next frame to rrender */
 					world.Step(timeStep, velocityIterations, positionIterations);
 
-					if (activePlayers & 1)
+					if (activePlayers & (1 << iP1))
 					{
 						SetPlayerPosition(p1Body, player[iP1]);
 					}
 
-					if (activePlayers & 2)
+					if (activePlayers & (1 << iP2))
 					{
 						SetPlayerPosition(p2Body, player[iP2]);
 					}
 
-					if (activePlayers & 4)
+					if (activePlayers & (1 << iP3))
 					{
 						SetPlayerPosition(p3Body, player[iP3]);
 					}
 
-					if (activePlayers & 8)
+					if (activePlayers & (1 << iP4))
 					{
 						SetPlayerPosition(p4Body, player[iP4]);
 					}
