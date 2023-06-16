@@ -5,6 +5,7 @@
 #include "enums.h"
 #include "gamestate.h"
 #include "dingsheet.h"
+#include "playerstate.h"
 
 /* what else would the almighty bunghole be? */
 constexpr unsigned short BUNGHOLE = 4;
@@ -31,7 +32,7 @@ bool InitializeAllFlaps(int width, int height);
 void RecomputeFlapConstellation();
 void Scroll(int dx, int dy);
 void NudgePlayer(int playerIndex, int accelerationX, int accelerationY); // TODO: unused
-void SetPlayerPosition(int playerIndex, int positionX, int positionY, int orientation);
+void SetPlayerPosition(b2Body* body, MobState* player);
 void PopulateAllFlaps();
 void RenderFloorBung();
 void RenderFloorVert();

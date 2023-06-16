@@ -7,7 +7,6 @@ extern bool GameviewEnterWorld();
 extern void EnsurePlayers();
 extern void GameViewRenderFrame();
 extern void NudgePlayer(int playerIndex, int accelerationX, int accelerationY);
-extern void SetPlayerPosition(int playerIndex, int positionX, int positionY, int orientation);
 extern void Scroll(int, int);
 extern void TeardownDingSheets();
 extern void GameviewTeardown();
@@ -18,5 +17,6 @@ namespace blooDot::Orchestrator
 {
 	void MainLoop(SDL_Renderer*);
 
+	void _InitiatePlayerMovement(b2Body* body, float impulseX, float impulseY);
 	void _HandleSave(bool isAutosave = false);
 }

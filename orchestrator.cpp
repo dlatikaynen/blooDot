@@ -18,6 +18,7 @@ Uint32 SDL_USEREVENT_LEAVE = 0; // [sic], they're only allocated later
 extern SettingsStruct Settings;
 extern SDL_Renderer* GameViewRenderer;
 extern char activePlayers;
+extern MobState* player[4];
 
 bool mainRunning = true;
 #ifndef NDEBUG
@@ -187,94 +188,59 @@ namespace blooDot::Orchestrator
 				if (numKeys > 0)
 				{
 					const auto& keys = SDL_GetKeyboardState(NULL);
-					float p1ImpulseX = .0f;
-					float p1ImpulseY = .0f;
+					float pImpulseX = .0f;
+					float pImpulseY = .0f;
 
+					// p1
 					if (keys[SDL_SCANCODE_A])
 					{
-						p1ImpulseX = -1.7f;
+						pImpulseX = -1.7f;
 					}
 					else if (keys[SDL_SCANCODE_D])
 					{
-						p1ImpulseX = 1.7f;
+						pImpulseX = 1.7f;
 					}
 
 					if (keys[SDL_SCANCODE_S])
 					{
-						p1ImpulseY = 1.7f;
+						pImpulseY = 1.7f;
 					}
 					else if (keys[SDL_SCANCODE_W])
 					{
-						p1ImpulseY = -1.7f;
+						pImpulseY = -1.7f;
 					}
 
-					if (p1ImpulseX != 0 || p1ImpulseY != 0)
-					{
-						p1Body->ApplyLinearImpulseToCenter({ p1ImpulseX, p1ImpulseY }, true);
-						/* at this point, the new velocity is already imparted, so
-						 * our linear velocity victor points to where we want to go.
-						 * we compare it to our orientation victor:
-						 * if the orientation victor is significantly different, we
-						 * convert most of our intended linear motion into an angular
-						 * movement to orient us towards the walking direction (as a
-						 * biped would). if the orientation victor is only marginally
-						 * different, we just veer a bit toward it, so it aligns perfectly
-						 * almost immediately (except player 4, who always goes off on a
-						 * bit of a tangent. speaking of which, caution, trigonomometrical
-						 * algebraics ahead, sine and her cousins too. */
-						const auto& newVelocitty = p1Body->GetLinearVelocity();
-						if (newVelocitty.LengthSquared() != 0) {
-							const auto& currentAngle = p1Body->GetAngle();
-							const auto& towardsAngle = std::atan2f(-newVelocitty.x, newVelocitty.y);
-							p1Body->SetAngularVelocity(blooDot::Geometry2d::sgn(towardsAngle - currentAngle) * 6.8f);
-							const auto& magnitude = std::fabsf(towardsAngle - currentAngle);
-							if (magnitude > .5f)
-							{
-								// stop in their tracks when much rotation is needed first
-								p1Body->ApplyLinearImpulseToCenter(
-								{ 
-									-p1ImpulseX,
-									-p1ImpulseY
-								}, true);
-							}
-							else if (magnitude > .15f)
-							{
-								// hefty, but tresholded rotation to orient towards direction of movement
-								p1Body->ApplyLinearImpulseToCenter(
-								{
-									-p1ImpulseX * magnitude / static_cast<float>(M_PI),
-									-p1ImpulseY * magnitude / static_cast<float>(M_PI)
-								}, true);
-							}
-						}
-					}
+					_InitiatePlayerMovement(p1Body, pImpulseX, pImpulseY);
+					pImpulseX = pImpulseY = 0;
 
+					// p2
 					if (keys[SDL_SCANCODE_F])
 					{
-						p2Body->ApplyLinearImpulseToCenter({ -1.7f, 0 }, true);
+						pImpulseX = -1.7f;
 					}
-
-					if (keys[SDL_SCANCODE_H])
+					else if (keys[SDL_SCANCODE_H])
 					{
-						p2Body->ApplyLinearImpulseToCenter({ 1.7f, 0 }, true);
+						pImpulseX = 1.7f;
 					}
 
 					if (keys[SDL_SCANCODE_G])
 					{
-						p2Body->ApplyLinearImpulseToCenter({ 0, 1.7f }, true);
+						pImpulseY = 1.7f;
 					}
-
-					if (keys[SDL_SCANCODE_T])
+					else if (keys[SDL_SCANCODE_T])
 					{
-						p2Body->ApplyLinearImpulseToCenter({ 0, -1.7f }, true);
+						pImpulseY = -1.7f;
 					}
 
+					_InitiatePlayerMovement(p2Body, pImpulseX, pImpulseY);
+					pImpulseX = pImpulseY = 0;
+
+					// p3
 					if (keys[SDL_SCANCODE_J])
 					{
 						p3Body->ApplyLinearImpulseToCenter({ -1.7f, 0 }, true);
 					}
-
-					if (keys[SDL_SCANCODE_L])
+					else if (keys[SDL_SCANCODE_L])
 					{
 						p3Body->ApplyLinearImpulseToCenter({ 1.7f, 0 }, true);
 					}
@@ -283,18 +249,17 @@ namespace blooDot::Orchestrator
 					{
 						p3Body->ApplyLinearImpulseToCenter({ 0, 1.7f }, true);
 					}
-
-					if (keys[SDL_SCANCODE_I])
+					else if (keys[SDL_SCANCODE_I])
 					{
 						p3Body->ApplyLinearImpulseToCenter({ 0, -1.7f }, true);
 					}
 
+					// p4
 					if (keys[SDL_SCANCODE_SEMICOLON])
 					{
 						p4Body->ApplyLinearImpulseToCenter({ -1.7f, 0 }, true);
 					}
-
-					if (keys[SDL_SCANCODE_BACKSLASH])
+					else if (keys[SDL_SCANCODE_BACKSLASH])
 					{
 						p4Body->ApplyLinearImpulseToCenter({ 1.7f, 0 }, true);
 					}
@@ -303,12 +268,12 @@ namespace blooDot::Orchestrator
 					{
 						p4Body->ApplyLinearImpulseToCenter({ 0, 1.7f }, true);
 					}
-
-					if (keys[SDL_SCANCODE_LEFTBRACKET])
+					else if (keys[SDL_SCANCODE_LEFTBRACKET])
 					{
 						p4Body->ApplyLinearImpulseToCenter({ 0, -1.7f }, true);
 					}
 
+					// viewport scrolling
 					if (keys[SDL_SCANCODE_LEFT] || keys[SDL_SCANCODE_KP_4])
 					{
 						Scroll(-5, 0);
@@ -368,74 +333,22 @@ namespace blooDot::Orchestrator
 
 					if (activePlayers & 1)
 					{
-						const auto& pPosition = p1Body->GetPosition();
-						const auto& pAngle = static_cast<int>(p1Body->GetAngle() * blooDot::Geometry2d::Rad2DegFact);
-						SetPlayerPosition(
-							iP1,
-							(int)(pPosition.x* static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
-							(int)(pPosition.y* static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
-							pAngle
-						);
-
-						const auto velocity = p1Body->GetLinearVelocity().Length();
-						if (velocity < 0.3f && velocity != 0)
-						{
-							p1Body->SetLinearVelocity({ 0,0 });
-						}
+						SetPlayerPosition(p1Body, player[iP1]);
 					}
 
 					if (activePlayers & 2)
 					{
-						const auto& pPosition = p2Body->GetPosition();
-						const auto& pAngle = static_cast<int>(p2Body->GetAngle() * blooDot::Geometry2d::Rad2DegFact);
-						SetPlayerPosition(
-							iP2,
-							(int)(pPosition.x * static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
-							(int)(pPosition.y * static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
-							pAngle
-						);
-
-						const auto velocity = p2Body->GetLinearVelocity().Length();
-						if (velocity < 0.3f && velocity != 0)
-						{
-							p2Body->SetLinearVelocity({ 0,0 });
-						}
+						SetPlayerPosition(p2Body, player[iP2]);
 					}
 
 					if (activePlayers & 4)
 					{
-						const auto& pPosition = p3Body->GetPosition();
-						const auto& pAngle = static_cast<int>(p3Body->GetAngle() * blooDot::Geometry2d::Rad2DegFact);
-						SetPlayerPosition(
-							iP3,
-							(int)(pPosition.x* static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
-							(int)(pPosition.y* static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
-							pAngle
-						);
-
-						const auto velocity = p3Body->GetLinearVelocity().Length();
-						if (velocity < 0.3f && velocity != 0)
-						{
-							p3Body->SetLinearVelocity({ 0,0 });
-						}
+						SetPlayerPosition(p3Body, player[iP3]);
 					}
 
 					if (activePlayers & 8)
 					{
-						const auto& pPosition = p4Body->GetPosition();
-						const auto& pAngle = static_cast<int>(p4Body->GetAngle() * blooDot::Geometry2d::Rad2DegFact);
-						SetPlayerPosition(
-							iP4,
-							(int)(pPosition.x * static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
-							(int)(pPosition.y * static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f),
-							pAngle
-						);
-
-						const auto velocity = p4Body->GetLinearVelocity().Length();
-						if (velocity < 0.3f && velocity != 0)
-						{
-							p4Body->SetLinearVelocity({ 0,0 });
-						}
+						SetPlayerPosition(p4Body, player[iP4]);
 					}
 				}
 
@@ -476,6 +389,51 @@ namespace blooDot::Orchestrator
 		TeardownDingSheets();
 		GameviewTeardown();
 		ClearWorldData();
+	}
+
+	void _InitiatePlayerMovement(b2Body* body, float impulseX, float impulseY)
+	{
+		if (impulseX != 0 || impulseY != 0)
+		{
+			body->ApplyLinearImpulseToCenter({ impulseX, impulseY }, true);
+			/* at this point, the new velocity is already imparted, so
+			 * our linear velocity victor points to where we want to go.
+			 * we compare it to our orientation victor:
+			 * if the orientation victor is significantly different, we
+			 * convert most of our intended linear motion into an angular
+			 * movement to orient us towards the walking direction (as a
+			 * biped would). if the orientation victor is only marginally
+			 * different, we just veer a bit toward it, so it aligns perfectly
+			 * almost immediately (except player 4, who always goes off on a
+			 * bit of a tangent. speaking of which, caution, trigonomometrical
+			 * algebraics ahead, sine and her cousins too. */
+			const auto& newVelocitty = body->GetLinearVelocity();
+			if (newVelocitty.LengthSquared() != 0)
+			{
+				const auto& currentAngle = body->GetAngle();
+				const auto& towardsAngle = std::atan2f(-newVelocitty.x, newVelocitty.y);
+				body->SetAngularVelocity(blooDot::Geometry2d::sgn(towardsAngle - currentAngle) * 6.8f);
+				const auto& magnitude = std::fabsf(towardsAngle - currentAngle);
+				if (magnitude > .5f)
+				{
+					// stop in their tracks when much rotation is needed first
+					body->ApplyLinearImpulseToCenter(
+					{
+						-impulseX,
+						-impulseY
+					}, true);
+				}
+				else if (magnitude > .15f)
+				{
+					// hefty, but tresholded rotation to orient towards direction of movement
+					body->ApplyLinearImpulseToCenter(
+					{
+						-impulseX * magnitude / static_cast<float>(M_PI),
+						-impulseY * magnitude / static_cast<float>(M_PI)
+					}, true);
+				}
+			}
+		}
 	}
 
 	void _HandleSave(bool isAutosave)

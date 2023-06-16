@@ -3,6 +3,7 @@
 #include "playerstate.h"
 #include "ding.h"
 #include "xlations.h"
+#include "geom2d.h"
 
 extern SDL_Renderer* GameViewRenderer;
 
@@ -30,10 +31,7 @@ SDL_Texture* flapsWalls[9];
 SDL_Texture* flapsRooof[9];
 
 char activePlayers = 0;
-MobState* player1 = NULL;
-MobState* player2 = NULL;
-MobState* player3 = NULL;
-MobState* player4 = NULL;
+MobState* player[4] = { NULL, NULL, NULL, NULL };
 
 DingLocator* sprite1 = NULL;
 DingLocator* sprite2 = NULL;
@@ -701,94 +699,80 @@ void NudgePlayer(int playerIndex, int accelerationX, int accelerationY)
 	switch (playerIndex)
 	{
 	case iP1:
-		player1->Offset.x += accelerationX;
-		player1->Offset.y += accelerationY;
+		player[iP1]->Offset.x += accelerationX;
+		player[iP1]->Offset.y += accelerationY;
 		break;
 
 	case iP2:
-		player2->Offset.x += accelerationX;
-		player2->Offset.y += accelerationY;
+		player[iP2]->Offset.x += accelerationX;
+		player[iP2]->Offset.y += accelerationY;
 		break;
 
 	case iP3:
-		player3->Offset.x += accelerationX;
-		player3->Offset.y += accelerationY;
+		player[iP3]->Offset.x += accelerationX;
+		player[iP3]->Offset.y += accelerationY;
 		break;
 
 	case iP4:
-		player4->Offset.x += accelerationX;
-		player4->Offset.y += accelerationY;
+		player[iP4]->Offset.x += accelerationX;
+		player[iP4]->Offset.y += accelerationY;
 		break;
 
 	}
 }
 
-void SetPlayerPosition(int playerIndex, int positionX, int positionY, int orientation)
+void SetPlayerPosition(b2Body* body, MobState* playr)
 {
-	switch (playerIndex)
+	const auto& pPosition = body->GetPosition();
+	const auto& pAngle = static_cast<int>(body->GetAngle() * blooDot::Geometry2d::Rad2DegFact);
+
+	playr->Offset.x = (int)(pPosition.x * static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f);
+	playr->Offset.y = (int)(pPosition.y * static_cast<float>(GRIDUNIT) - GRIDUNIT / 2.f);
+	playr->Orientation = pAngle;
+
+	const auto velocity = body->GetLinearVelocity().Length();
+	
+	if (velocity < 0.3f && velocity != 0)
 	{
-	case iP1:
-		player1->Offset.x = positionX;
-		player1->Offset.y = positionY;
-		player1->Orientation = orientation;
-		break;
-
-	case iP2:
-		player2->Offset.x = positionX;
-		player2->Offset.y = positionY;
-		player2->Orientation = orientation;
-		break;
-
-	case iP3:
-		player3->Offset.x = positionX;
-		player3->Offset.y = positionY;
-		player3->Orientation = orientation;
-		break;
-
-	case iP4:
-		player4->Offset.x = positionX;
-		player4->Offset.y = positionY;
-		player4->Orientation = orientation;
-		break;
-
+		body->SetLinearVelocity({ 0,0 });
 	}
 }
 
 void EnsurePlayers()
 {
-	if (player1 == NULL)
+	if (player[iP1] == NULL)
 	{
-		player1 = blooDot::Player::GetState(iP1);
+		player[iP1] = blooDot::Player::GetState(iP1);
 	}
 
 	if (sprite1 == NULL)
 	{
-		sprite1 = GetDing(player1->WhoIsIt);
+		sprite1 = GetDing(player[iP1]->WhoIsIt);
 	}
 
 	activePlayers |= 1;
 
 	if (blooDot::Player::NumPlayers >= 2)
 	{
-		if (player2 == NULL)
+		if (player[iP2] == NULL)
 		{
-			player2 = blooDot::Player::GetState(iP2);
+			player[iP2] = blooDot::Player::GetState(iP2);
 		}
 
 		activePlayers |= 2;
 
 		if (blooDot::Player::NumPlayers >= 3)
 		{
-			if (player3 == NULL)
+			if (player[iP3] == NULL)
 			{
-				player3 = blooDot::Player::GetState(iP3);
+				player[iP3] = blooDot::Player::GetState(iP3);
 			}
 
 			activePlayers |= 4;
 
-			if (player4 == NULL && blooDot::Player::NumPlayers == 4)
+			if (player[iP4] == NULL && blooDot::Player::NumPlayers == 4)
 			{
-				player4 = blooDot::Player::GetState(iP4);
+				player[iP4] = blooDot::Player::GetState(iP4);
 				activePlayers |= 8;
 			}
 		}
@@ -798,8 +782,8 @@ void EnsurePlayers()
 void RenderMobs()
 {
 	const SDL_Rect dst1 = {
-		player1->Offset.x,
-		player1->Offset.y,
+		player[iP1]->Offset.x,
+		player[iP1]->Offset.y,
 		49,
 		49 
 	};
@@ -811,24 +795,24 @@ void RenderMobs()
 		sprite1->onSheet,
 		&sprite1->src,
 		&dst1,
-		(const double)player1->Orientation,
+		(const double)player[iP1]->Orientation,
 		NULL, //&center,
 		SDL_RendererFlip::SDL_FLIP_VERTICAL
 	);
 
-	if(blooDot::Player::NumPlayers == 1 || player2 == NULL)
+	if(blooDot::Player::NumPlayers == 1 || player[iP2] == NULL)
 	{
 		return;
 	}
 
 	if (sprite2 == NULL)
 	{
-		sprite2 = GetDing(player2->WhoIsIt);
+		sprite2 = GetDing(player[iP2]->WhoIsIt);
 	}
 
 	const SDL_Rect dst2 = {
-		player2->Offset.x,
-		player2->Offset.y,
+		player[iP2]->Offset.x,
+		player[iP2]->Offset.y,
 		49,
 		49
 	};
@@ -838,24 +822,24 @@ void RenderMobs()
 		sprite2->onSheet,
 		&sprite2->src,
 		&dst2,
-		(const double)player2->Orientation,
+		(const double)player[iP2]->Orientation,
 		NULL, //&center,
 		SDL_RendererFlip::SDL_FLIP_VERTICAL
 	);
 
-	if (blooDot::Player::NumPlayers == 2 || player3 == NULL)
+	if (blooDot::Player::NumPlayers == 2 || player[iP2] == NULL)
 	{
 		return;
 	}
 
 	if (sprite3 == NULL)
 	{
-		sprite3 = GetDing(player3->WhoIsIt);
+		sprite3 = GetDing(player[iP3]->WhoIsIt);
 	}
 
 	const SDL_Rect dst3 = {
-		player3->Offset.x,
-		player3->Offset.y,
+		player[iP3]->Offset.x,
+		player[iP3]->Offset.y,
 		49,
 		49
 	};
@@ -865,24 +849,24 @@ void RenderMobs()
 		sprite3->onSheet,
 		&sprite3->src,
 		&dst3,
-		(const double)player3->Orientation,
+		(const double)player[iP3]->Orientation,
 		NULL, //&center,
 		SDL_RendererFlip::SDL_FLIP_VERTICAL
 	);
 
-	if (blooDot::Player::NumPlayers == 3 || player4 == NULL)
+	if (blooDot::Player::NumPlayers == 3 || player[iP4] == NULL)
 	{
 		return;
 	}
 
 	if (sprite4 == NULL)
 	{
-		sprite4 = GetDing(player4->WhoIsIt);
+		sprite4 = GetDing(player[iP4]->WhoIsIt);
 	}
 
 	const SDL_Rect dst4 = {
-		player4->Offset.x,
-		player4->Offset.y,
+		player[iP4]->Offset.x,
+		player[iP4]->Offset.y,
 		49,
 		49
 	};
@@ -892,7 +876,7 @@ void RenderMobs()
 		sprite4->onSheet,
 		&sprite4->src,
 		&dst4,
-		(const double)player4->Orientation,
+		(const double)player[iP4]->Orientation,
 		NULL, //&center,
 		SDL_RendererFlip::SDL_FLIP_VERTICAL
 	);
