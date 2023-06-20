@@ -260,6 +260,9 @@
     <ClInclude Include="menu-settings-about.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
+    <ClInclude Include="mapregion.h">
+      <Filter>_Headers\res</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -454,6 +457,9 @@
       <Filter>Resource Files\win</Filter>
     </None>
     <None Include="vcpkg.json" />
+    <None Include="mapregion.cpp">
+      <Filter>_Source Files\game</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\barrel-indigo.png">

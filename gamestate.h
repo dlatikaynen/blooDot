@@ -7,7 +7,7 @@
 constexpr auto WORLD_SHEET_SIDELENGTH = 200;
 constexpr auto WORLD_SHEET_CENTERPOINT = WORLD_SHEET_SIDELENGTH / 2;
 
-struct DingInstance
+typedef struct DingInstanceStruct
 {
 	Ding ding = Ding::None;
 	DingProps props = DingProps::Default;
@@ -51,7 +51,7 @@ struct DingInstance
 	/// for non-rectangular positioning on a worldsheet
 	/// </summary>
 	int rotationAngle = 0;
-};
+} DingInstance;
 
 /// <summary>
 /// One grid unit full of information.
@@ -102,7 +102,7 @@ public:
     std::array<WorldPieces, WORLD_SHEET_SIDELENGTH * WORLD_SHEET_SIDELENGTH> arena;
 } WorldSheet;
 
-typedef struct PointInWorld
+typedef struct PointInWorldStruct
 {
 	int x;
 	int y;
@@ -113,7 +113,7 @@ typedef struct PointInWorld
 /// Disjunct parts of regions point to their main region
 /// for naming and identification
 /// </summary>
-typedef struct WorldRegion
+typedef struct WorldRegionStruct
 {
 	int RegionId;
 	std::string RegionName;

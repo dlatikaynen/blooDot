@@ -306,6 +306,7 @@
     <ClInclude Include="gpuchan.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="harvard.h" />
+    <ClInclude Include="mapregion.h" />
     <ClInclude Include="menu-common.h" />
     <ClInclude Include="menu-continue-empty.h" />
     <ClInclude Include="menu-ingame.h" />
@@ -390,6 +391,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
     </None>
+    <None Include="mapregion.cpp" />
     <None Include="planning\dramatis-personae.ligma">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
