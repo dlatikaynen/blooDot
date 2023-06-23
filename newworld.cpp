@@ -17,30 +17,26 @@ bool InitializeNewWorld()
 	auto sculleryStatic = std::make_unique<StaticMapRegionDescriptor>();
 	blooDot::Map::LoadStaticRegion(1, sculleryStatic);
 
+	/* instantiate the regions in our surrounding */
 	ClearWorldData();
 
-	WorldRegion scullery;
-	//scullery.belongsTo = NULL;
-	scullery.RegionId = 1;
-	scullery.RegionName = std::string(literalregionNameScullery);
-	scullery.polygon.push_back({ -3,-3 });
-	scullery.polygon.push_back({ 3,-3 });
-	scullery.polygon.push_back({ 3,3 });
-	scullery.polygon.push_back({ -3,3 });
-
-	scullery.polygon.push_back({ -3,3 });
-	scullery.polygon.push_back({ -3,3 });
-	scullery.polygon.push_back({ -3,3 });
-	scullery.polygon.push_back({ -3,3 });
-	scullery.polygon.push_back({ -3,3 });
-	scullery.polygon.push_back({ -3,3 });
-
-	AddRegion(scullery);
-	
 	WorldRegion gardenOFRidiculouslyPoisonousPlants;
 	gardenOFRidiculouslyPoisonousPlants.RegionId = 2;
 	gardenOFRidiculouslyPoisonousPlants.RegionName = std::string(literallandmarkNameGardenOfRidiculouslyPoisonousPlants);
+	AddRegion(&gardenOFRidiculouslyPoisonousPlants);
 
+	WorldRegion scullery;
+	//scullery.belongsTo = NULL;
+	scullery.RegionId = sculleryStatic->region.RegionId;
+	scullery.RegionName = std::string(literalregionNameScullery);
+	for (auto& poly : sculleryStatic->region.polygon)
+	{
+		scullery.polygon.push_back(poly);
+	}
+
+	AddRegion(&scullery);
+	
+	/* populate from the current region */
 	auto centerSheet = GetWorldSheet(0, 0);
 	if (!centerSheet)
 	{
@@ -49,60 +45,15 @@ bool InitializeNewWorld()
 		return false;
 	}
 
-	_Put(centerSheet, -7, -5, Ding::BarrelIndigo);
-
-	for (auto y = -3; y < 3; ++y)
+	for (auto& placement : sculleryStatic->dingPlacement)
 	{
-		for (auto x = -4; x < 4; ++x)
-		{
-			_Put(centerSheet, x, y, Ding::FloorSlate);
-		}
-	}
-
-	_Put(centerSheet, 1, 1, Ding::BarrelIndigo);
-	_Put(centerSheet, -1, 1, Ding::BarrelIndigo);
-	_Put(centerSheet, 1, -1, Ding::BarrelWood);
-	_Put(centerSheet, 0, 0, Ding::ChelF);
-	_Put(centerSheet, -1, -1, Ding::BarrelLoaded);
-	_Put(centerSheet, -1, -1, Ding::RooofMesh);
-	_Put(centerSheet, 2, 1, Ding::Grass);
-	_Put(centerSheet, -2, 0, Ding::Lettuce);
-	_Put(centerSheet, 2, 0, Ding::Schaed);
-	_Put(centerSheet, 0, -2, Ding::Snow);
-	_Put(centerSheet, 0, -3, Ding::WallClassic);
-	_Put(centerSheet, 1, -3, Ding::WallClassic);
-	_Put(centerSheet, 2, -3, Ding::WallClassic);
-	_Put(centerSheet, 2, -4, Ding::WallClassic);
-	_Put(centerSheet, 2, -5, Ding::WallClassic);
-
-	_Put(centerSheet, 6, 4, Ding::Grass);
-	_Put(centerSheet, 7, 4, Ding::Grass);
-	_Put(centerSheet, 6, 5, Ding::Grass);
-	_Put(centerSheet, 7, 5, Ding::Grass);
-
-	_Put(centerSheet, -10, 0, Ding::Lettuce);
-	_Put(centerSheet, 8, 0, Ding::Lettuce);
-
-	auto y = 2;
-	for (auto i = 10; i < 120; ++i)
-	{
-		if (i % 5 == 0)
-		{
-			++y;
-		}
-
-		_Put(centerSheet, i, y, Ding::Lettuce);
-	}
-
-	y = 2;
-	for (auto i = -10; i > -120; --i)
-	{
-		if (i % 5 == 0)
-		{
-			--y;
-		}
-
-		_Put(centerSheet, i, y, Ding::Schaed);
+		_Put(
+			centerSheet,
+			placement.fromOriginX,
+			placement.fromOriginY,
+			placement.ding,
+			placement.props
+		);
 	}
 
 	return true;

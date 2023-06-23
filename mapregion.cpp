@@ -41,6 +41,37 @@ namespace blooDot::Map
 			return false;
 		}
 		
+		const int32 numPlacements = static_cast<int32>(descriptor->dingPlacement.size());
+		const auto numPlacementsWritten = staticRegionFile->write(
+			staticRegionFile,
+			(void*)&numPlacements,
+			sizeof(int32),
+			1
+		);
+
+		if (numPlacementsWritten != 1)
+		{
+			const auto writeError = SDL_GetError();
+			ReportError("Failed to write static region map placement count", writeError);
+			return false;
+		}
+
+		for (auto& ding : descriptor->dingPlacement)
+		{
+			const auto placementWritten = staticRegionFile->write(
+				staticRegionFile,
+				(void*)&ding,
+				sizeof(StaticDingPlacementStruct),
+				1
+			);
+
+			if (placementWritten != 1)
+			{
+				const auto writeError = SDL_GetError();
+				ReportError("Failed to write static region map placement", writeError);
+				return false;
+			}
+		}
 
 		staticRegionFile->close(staticRegionFile);
 
@@ -87,13 +118,40 @@ namespace blooDot::Map
 				<< ")";
 
 			std::string mismatchError = mismatchComposer.str();
-			ReportError("Could not load savegame", mismatchError.c_str());
+			ReportError("Could not load static region map", mismatchError.c_str());
 			descriptor->region.RegionId = 0;
 			return false;
 		}
 
 		descriptor->region.RegionId = header.RegionId;
 		_ReadString(staticRegionFile, &descriptor->region.RegionName);
+
+		int32 placementCount;
+		const auto placementCountRead = staticRegionFile->read(staticRegionFile, (void*)&placementCount, sizeof(int32), 1);
+		if(placementCountRead != 1)
+		{
+			ReportError("Could not read static region map", "Failed to read placement count");
+			return false;
+		}
+
+		for (auto i = 0; i < placementCount; ++i)
+		{
+			DingPlacement placement;
+			const auto placementRead = staticRegionFile->read(
+				staticRegionFile,
+				(void*)&placement,
+				sizeof(StaticDingPlacementStruct),
+				1
+			);
+
+			if (placementRead != 1)
+			{
+				ReportError("Could not read static region map", "Failed to read placement");
+				return false;
+			}
+
+			descriptor->dingPlacement.push_back(placement);
+		}
 
 		return true;
 	}
@@ -180,7 +238,7 @@ namespace blooDot::Map
 		return std::regex_replace(StaticRegionFileName, std::regex("\\$i"), index.str());
 	}
 
-	void _Define(std::unique_ptr<StaticMapRegionDescriptor>& region, int x, int y, Ding ding, int pixX, int pixY, int angle, DingProps props)
+	void _Define(std::unique_ptr<StaticMapRegionDescriptor>& region, int x, int y, Ding ding, short pixX, short pixY, short angle, DingProps props)
 	{
 		auto placement = DingPlacement();
 		placement.ding = ding;

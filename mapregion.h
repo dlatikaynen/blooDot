@@ -12,7 +12,7 @@ namespace blooDot::Map
 	 * with the game, and as it is initialized when a new game
 	 * is started.
 	 * represents the storage format of that data in what we
-	 * might call "level files" */
+	 * might call "level files", and is immediately serializable */
 
 	typedef struct StaticDingPlacementStruct
 	{
@@ -22,15 +22,15 @@ namespace blooDot::Map
 		/// <summary>
 		/// grid position in the region (0 is center)
 		/// </summary>
-		int fromOriginX = 0;
-		int fromOriginY = 0;
+		int32 fromOriginX = 0;
+		int32 fromOriginY = 0;
 
 		/// <summary>
 		/// fine tuning of the placement
 		/// </summary>
-		int pixOffsetX = 0;
-		int pixOffsetY = 0;
-		int rotationAngle = 0;
+		short pixOffsetX = 0;
+		short pixOffsetY = 0;
+		short rotationAngle = 0;
 	} DingPlacement;
 
 	typedef struct StaticMapRegionDescriptorStruct {
@@ -58,5 +58,5 @@ namespace blooDot::Map
 	bool _WriteString(SDL_RWops* file, std::string text);
 	bool _ReadString(SDL_RWops* file, std::string* sink);
 	std::string _GetFilename(int regionId);
-	void _Define(std::unique_ptr<StaticMapRegionDescriptor>& region, int x, int y, Ding ding, int pixX = 0, int pixY = 0, int angle = 0, DingProps props = DingProps::Default);
+	void _Define(std::unique_ptr<StaticMapRegionDescriptor>& region, int x, int y, Ding ding, short pixX = 0, short pixY = 0, short angle = 0, DingProps props = DingProps::Default);
 }

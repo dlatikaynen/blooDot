@@ -124,7 +124,7 @@ typedef struct WorldRegionStruct
 
 void ClearWorldData();
 void ClearWorldSheet(int sheetIndex);
-void AddRegion(WorldRegion regionDescriptor);
+void AddRegion(WorldRegion* regionDescriptor);
 std::shared_ptr<WorldSheet> GetWorldSheet(int sheetX, int sheetY);
 WorldPieces* GetPiecesRelative(int worldX, int worldY);
 const char* GetRegionName(int worldX, int worldY);

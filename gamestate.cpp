@@ -41,10 +41,10 @@ std::shared_ptr<WorldSheet> GetWorldSheet(int sheetX, int sheetY)
 	return worldSheets[sheetIndex];
 }
 
-void AddRegion(WorldRegion regionDescriptor)
+void AddRegion(WorldRegion* regionDescriptor)
 {
-	regionDescriptor.bounds = GetPolyBoundingBox(&regionDescriptor.polygon);
-	worldRegions.push_back(regionDescriptor);
+	regionDescriptor->bounds = GetPolyBoundingBox(&regionDescriptor->polygon);
+	worldRegions.push_back(*regionDescriptor);
 }
 
 WorldPieces* GetPiecesRelative(int worldX, int worldY)
