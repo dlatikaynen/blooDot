@@ -6,7 +6,7 @@
 #include "settings.h"
 #include "resutil.h"
 
-using namespace std::chrono;
+using namespace blooDot::Datetime;
 
 extern SettingsStruct Settings;
 
@@ -22,7 +22,7 @@ namespace blooDot::Savegame
 
 		SavegameHeader header;
 		header.SavegameIndex = static_cast<unsigned short>(savegameIndex);
-		_SetLocalTimestampStruct(&header.Created);
+		SetLocalTimestampStruct(&header.Created);
 
 		const auto& fileName = _GetFilename(savegameIndex);
 		const auto saveFile = SDL_RWFromFile(fileName.c_str(), "wb");
@@ -74,7 +74,7 @@ namespace blooDot::Savegame
 
 		/* 1. write the descriptor */
 		SavepointHeader header;
-		_SetLocalTimestampStruct(&header.Written);
+		SetLocalTimestampStruct(&header.Written);
 		header.DataLength = 0;
 		header.ScreenshotLength = static_cast<unsigned int>(screenshotLength);
 		header.RegionId = 1;
@@ -262,25 +262,5 @@ namespace blooDot::Savegame
 		}
 
 		return 0;
-	}
-
-	void _SetLocalTimestampStruct(LocalTimestamp* timestamp)
-	{
-		auto& result = *timestamp;
-		auto tp = zoned_time{ current_zone(), system_clock::now() }.get_local_time();
-		auto dp = floor<days>(tp);
-		year_month_day ymd{ dp };
-		hh_mm_ss time{ floor<milliseconds>(tp - dp) };
-
-		const auto& year = ymd.year().operator int();
-		result.Year = static_cast<unsigned short>(year);
-		const auto& month = ymd.month().operator unsigned int();
-		result.Month = static_cast<unsigned char>(month);
-		const auto& day = ymd.day().operator unsigned int();
-		result.Day = static_cast<unsigned char>(day);
-
-		result.Hour = static_cast<unsigned char>(time.hours().count());
-		result.Minute = static_cast<unsigned char>(time.minutes().count());
-		result.Second = static_cast<unsigned char>(time.seconds().count());
 	}
 }

@@ -263,6 +263,9 @@
     <ClInclude Include="mapregion.h">
       <Filter>_Headers\res</Filter>
     </ClInclude>
+    <ClInclude Include="procedurally-generate.h">
+      <Filter>_Headers\res</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -406,6 +409,12 @@
     <ClCompile Include="menu-settings-about.cpp">
       <Filter>_Source Files\ui</Filter>
     </ClCompile>
+    <ClCompile Include="mapregion.cpp">
+      <Filter>_Source Files\res</Filter>
+    </ClCompile>
+    <ClCompile Include="procedurally-generate.cpp">
+      <Filter>_Source Files\res</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="planning\menus.ligma">
@@ -457,9 +466,6 @@
       <Filter>Resource Files\win</Filter>
     </None>
     <None Include="vcpkg.json" />
-    <None Include="mapregion.cpp">
-      <Filter>_Source Files\game</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\barrel-indigo.png">

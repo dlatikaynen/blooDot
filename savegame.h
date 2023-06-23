@@ -79,5 +79,4 @@ namespace blooDot::Savegame
 
 	std::string _GetFilename(int savegameIndex);
 	int _FindFreeSavegameSlot();
-	void _SetLocalTimestampStruct(LocalTimestamp* timestamp);
 }

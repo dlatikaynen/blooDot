@@ -14,4 +14,5 @@ typedef struct LocalTimestampStruct
 namespace blooDot::Datetime
 {
 	void Format(const LocalTimestamp* dateTime, std::stringstream* sink);
+	void SetLocalTimestampStruct(LocalTimestamp* timestamp);
 }

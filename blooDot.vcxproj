@@ -283,6 +283,7 @@
     <ClCompile Include="physicsdebugdraw.cpp" />
     <ClCompile Include="playerhud.cpp" />
     <ClCompile Include="playerstate.cpp" />
+    <ClCompile Include="procedurally-generate.cpp" />
     <ClCompile Include="region-banner.cpp" />
     <ClCompile Include="xlations.cpp" />
     <ClInclude Include="boydsa.h" />
@@ -328,6 +329,7 @@
     <ClInclude Include="physicsdebugdraw.h" />
     <ClInclude Include="playerhud.h" />
     <ClInclude Include="playerstate.h" />
+    <ClInclude Include="procedurally-generate.h" />
     <ClInclude Include="region-banner.h" />
     <ClInclude Include="renderstate.h" />
     <ClInclude Include="resource.h" />
@@ -391,7 +393,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DeploymentContent>
     </None>
-    <None Include="mapregion.cpp" />
+    <ClCompile Include="mapregion.cpp" />
     <None Include="planning\dramatis-personae.ligma">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>

@@ -17,3 +17,4 @@ constexpr SDL_Color const DialogTextShadowColor = { 65, 56, 56, 200 };
 
 constexpr char const* SettingsFileName = "blooDot.ligma";
 constexpr char const* SavegameFileName = "blooDot.$i.bofa";
+constexpr char const* StaticRegionFileName = "blooDot.$i.syp";

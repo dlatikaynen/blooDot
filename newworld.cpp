@@ -1,10 +1,22 @@
 #include "pch.h"
 #include "newworld.h"
 #include "xlations.h"
+#include "procedurally-generate.h"
 #include <iostream>
+
+using namespace blooDot::Map;
 
 bool InitializeNewWorld()
 {
+	/* provisional procedural generation of static
+	 * world regions for prototyping purposes */
+	auto sculleryTemplate = std::make_unique<StaticMapRegionDescriptor>();
+	blooDot::Map::ProcedurallyGenerateScullery(sculleryTemplate);
+	blooDot::Map::WriteStaticRegion(sculleryTemplate);
+	
+	auto sculleryStatic = std::make_unique<StaticMapRegionDescriptor>();
+	blooDot::Map::LoadStaticRegion(1, sculleryStatic);
+
 	ClearWorldData();
 
 	WorldRegion scullery;

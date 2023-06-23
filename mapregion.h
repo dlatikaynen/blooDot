@@ -2,6 +2,7 @@
 #include <vector>
 #include "gamestate.h"
 #include <memory>
+#include "datetime.h"
 
 namespace blooDot::Map
 {
@@ -37,7 +38,25 @@ namespace blooDot::Map
 		std::vector<DingPlacement> dingPlacement;
 	} StaticMapRegionDescriptor;
 
-	bool _LoadStaticRegion(int regionId, std::unique_ptr<StaticMapRegionDescriptor>& descriptor);
-	void _Define(std::unique_ptr<StaticMapRegionDescriptor> region, int x, int y, int pixX, int pixY, int angle, Ding ding, DingProps props);
-	bool _WriteStaticRegion(int regionId, std::unique_ptr<StaticMapRegionDescriptor>& descriptor);
+	typedef struct StaticMapRegionFileHeaderStruct
+	{
+		char Preamble0 = '\3';
+		char Preamble1 = 'L';
+		char Preamble2 = 'L';
+		char Preamble3 = '\5';
+		char Preamble4 = 'J';
+		char Preamble5 = 'L';
+		char Preamble6 = '\4';
+		char Preamble7 = '\0';
+		unsigned short RegionId = 0; // must match the file number
+		LocalTimestamp Created = { 0 };
+	} StaticMapRegionFileHeader;
+
+	bool LoadStaticRegion(int regionId, std::unique_ptr<StaticMapRegionDescriptor>& descriptor);
+	bool WriteStaticRegion(std::unique_ptr<StaticMapRegionDescriptor>& descriptor);
+
+	bool _WriteString(SDL_RWops* file, std::string text);
+	bool _ReadString(SDL_RWops* file, std::string* sink);
+	std::string _GetFilename(int regionId);
+	void _Define(std::unique_ptr<StaticMapRegionDescriptor>& region, int x, int y, Ding ding, int pixX = 0, int pixY = 0, int angle = 0, DingProps props = DingProps::Default);
 }
