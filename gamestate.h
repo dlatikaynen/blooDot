@@ -38,19 +38,19 @@ typedef struct DingInstanceStruct
 	/// pixel offset from the grid unit where the anchor point is on,
 	/// for fine structure position adjustment
 	/// </summary>
-	int pixOffsetX = 0;
+	short pixOffsetX = 0;
 
 	/// <summary>
 	/// pixel offset from the grid unit where the anchor point is on,
 	/// for fine structure position adjustment
 	/// </summary>
-	int pixOffsetY = 0;
+	short pixOffsetY = 0;
 
 	/// <summary>
 	/// Angle in integer radians,
 	/// for non-rectangular positioning on a worldsheet
 	/// </summary>
-	int rotationAngle = 0;
+	short rotationAngle = 0;
 } DingInstance;
 
 /// <summary>

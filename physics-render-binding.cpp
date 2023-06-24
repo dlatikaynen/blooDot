@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "physics-render-binding.h"
 #include "ding.h"
+#include "geom2d.h"
 
 extern int viewportOffsetX;
 extern int viewportOffsetY;
@@ -33,6 +34,7 @@ namespace blooDot::Physics
 			b2FixtureDef wallFixtureDef;
 
 			wallDef.type = b2_staticBody;
+			wallDef.angle = entity->rotationAngle / blooDot::Geometry2d::Rad2DegFact;
 			wallDef.position.Set(
 				static_cast<float>(flapOffsetX + entity->gridAnchorX * GRIDUNIT + entity->pixOffsetX) / static_cast<float>(GRIDUNIT),
 				static_cast<float>(flapOffsetY + entity->gridAnchorY * GRIDUNIT + entity->pixOffsetY) / static_cast<float>(GRIDUNIT)

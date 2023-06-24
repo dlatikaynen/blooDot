@@ -32,6 +32,8 @@ namespace blooDot::Map
 			}
 		}
 
+		_Define(descriptor, -4, 2, Ding::WallClassic, -4, 7, 33);
+
 		_Define(descriptor, 1, 1, Ding::BarrelIndigo);
 		_Define(descriptor, -1, 1, Ding::BarrelIndigo);
 		_Define(descriptor, 1, -1, Ding::BarrelWood);

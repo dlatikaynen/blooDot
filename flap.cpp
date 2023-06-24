@@ -140,11 +140,33 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 							}
 						}
 
-						SDL_Rect dest = { x,y,GRIDUNIT,GRIDUNIT };
-						if (SDL_RenderCopy(GameViewRenderer, dingLocator->onSheet, &(dingLocator->src), &dest) < 0)
+						SDL_Rect dest = { 
+							x + ding->pixOffsetX,
+							y + ding->pixOffsetY,
+							GRIDUNIT,
+							GRIDUNIT 
+						};
+
+						if (ding->rotationAngle == 0)
+						{
+							if (SDL_RenderCopy(GameViewRenderer, dingLocator->onSheet, &(dingLocator->src), &dest) < 0)
+							{
+								const auto placeError = SDL_GetError();
+								ReportError("Could not place ding on flap", placeError);
+							}
+						}
+						else if (SDL_RenderCopyEx(
+							GameViewRenderer,
+							dingLocator->onSheet,
+							&(dingLocator->src),
+							&dest,
+							ding->rotationAngle,
+							nullptr,
+							SDL_RendererFlip::SDL_FLIP_NONE
+						) < 0)
 						{
 							const auto placeError = SDL_GetError();
-							ReportError("Could not place ding on flap", placeError);
+							ReportError("Could not warp ding onto flap", placeError);
 						}
 					}
 				}

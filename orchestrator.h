@@ -2,7 +2,6 @@
 #include <SDL2/SDL.h>
 #include <box2d/box2d.h>
 
-extern bool InitializeNewWorld();
 extern bool GameviewEnterWorld();
 extern void EnsurePlayers();
 extern void GameViewRenderFrame();

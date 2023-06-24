@@ -10,6 +10,8 @@
 #include "physicsdebugdraw.h"
 #endif
 #include "geom2d.h"
+#include "newworld.h"
+using namespace blooDot::World;
 
 Uint32 SDL_USEREVENT_SAVE = 0;
 Uint32 SDL_USEREVENT_AUTOSAVE = 0;
