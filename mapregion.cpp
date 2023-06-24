@@ -36,11 +36,46 @@ namespace blooDot::Map
 			return false;
 		}
 
+		/* name */
 		if (!_WriteString(staticRegionFile, descriptor->region.RegionName))
 		{
 			return false;
 		}
-		
+
+		/* bounding polygon */
+		const short numPolypoints = static_cast<short>(descriptor->region.polygon.size());
+		const auto numPolypointsWritten = staticRegionFile->write(
+			staticRegionFile,
+			(void*)&numPolypoints,
+			sizeof(short),
+			1
+		);
+
+		if (numPolypointsWritten != 1)
+		{
+			const auto writeError = SDL_GetError();
+			ReportError("Failed to write static region map polypoint count", writeError);
+			return false;
+		}
+
+		for (auto& polypoint : descriptor->region.polygon)
+		{
+			const auto polypointWritten = staticRegionFile->write(
+				staticRegionFile,
+				(void*)&polypoint,
+				sizeof(PointInWorldStruct),
+				1
+			);
+
+			if (polypointWritten != 1)
+			{
+				const auto writeError = SDL_GetError();
+				ReportError("Failed to write static region map polypoint", writeError);
+				return false;
+			}
+		}
+
+		/* placements */
 		const int32 numPlacements = static_cast<int32>(descriptor->dingPlacement.size());
 		const auto numPlacementsWritten = staticRegionFile->write(
 			staticRegionFile,
