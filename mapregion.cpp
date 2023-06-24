@@ -158,9 +158,39 @@ namespace blooDot::Map
 			return false;
 		}
 
+		/* name */
 		descriptor->region.RegionId = header.RegionId;
 		_ReadString(staticRegionFile, &descriptor->region.RegionName);
 
+		/* bounding polygon */
+		short polypointCount;
+		const auto polypointCountRead = staticRegionFile->read(staticRegionFile, (void*)&polypointCount, sizeof(short), 1);
+		if (polypointCountRead != 1)
+		{
+			ReportError("Could not read static region map", "Failed to read bounding polygon vertex count");
+			return false;
+		}
+
+		for (auto i = 0; i < polypointCount; ++i)
+		{
+			PointInWorld polypoint;
+			const auto polypointRead = staticRegionFile->read(
+				staticRegionFile,
+				(void*)&polypoint,
+				sizeof(PointInWorldStruct),
+				1
+			);
+
+			if (polypointRead != 1)
+			{
+				ReportError("Could not read static region map", "Failed to read bounding polygon vertex");
+				return false;
+			}
+
+			descriptor->region.polygon.push_back(polypoint);
+		}
+
+		/* placements */
 		int32 placementCount;
 		const auto placementCountRead = staticRegionFile->read(staticRegionFile, (void*)&placementCount, sizeof(int32), 1);
 		if(placementCountRead != 1)
