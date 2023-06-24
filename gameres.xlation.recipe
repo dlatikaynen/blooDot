@@ -273,7 +273,7 @@ SettingsLanguageENDetails
 
 SettingsLanguageENName
 	[am]	American
-	[am]	Amerikanisch
+	[de]	Amerikanisch
 
 SettingsLanguageFI
 	[am]	[fi]
@@ -294,7 +294,7 @@ SettingsLanguageDEDetails
 SettingsLanguageDEName
 	[am]	German
 	[de]	Deutsch
-	[de]	Saksa
+	[fi]	Saksa
 
 SettingsLanguageUA
 	[am]	[ua]
@@ -618,15 +618,15 @@ regionNameScullery
 
 regionNameCity
 	[am]	City of Urban Settlement
-	[de]	Stadt der urbanen Siedlung
+	[de]	Stadt der urbanen Ansiedlung
 
 regionNameLabyrinthOfUnreasonableSizeAndComplexity
 	[am]	Labyrinth of Unreasonable Size and Complexity
-	[de]	Labyrinth der unvernünftigen Größe und Komplexität
+	[de]	Labyrinth der unnötigen Größe und Komplexität
 
 regionNameDesertOfCollossalTemperatureDifferences
-	[am]	Desert of Collossal Temperature Differences
-	[de]	Wüste der kollossalen Temperaturunterschiede
+	[am]	Desert of Considerable Temperature Differences
+	[de]	Wüste der beträchtlichen Temperaturunterschiede
 
 regionNameOceanOfImmeasurableDisappointment
 	[am]	Ocean of Immeasurable Disappointment
@@ -641,16 +641,16 @@ regionNameMarshesOfDoubtfulDrowningHazard
 	[de]	Sümpfe der eher zweifelhaften Ertrinkungsgefahr
 
 landmarkNameUniversityOfScience
-	[am]	University of Science
-	[de]	Wissenschaftsuniversität
+	[am]	University of Snience
+	[de]	Wissenschnaftsuniversität
 
 landmarkNameLibraryOfTheUniversityOfScience
-	[am]	Library of the University of Science
-	[de]	Bibliothek der Wissenschaftsuniversität
+	[am]	Library of the University of Snience
+	[de]	Bibliothek der Wissenschnaftsuniversität
 
 landmarkNameGardenOfRidiculouslyPoisonousPlants
 	[am]	Garden of Ridiculously Poisonous Plants
-	[de]	Garten der lächerlich giftigen Pflanzen
+	[de]	Garten der absurd giftigen Pflanzen
 
 landmarkNameSnurch
 	[am]	Snurch
@@ -668,6 +668,62 @@ landmarkNameSoftlossnonminster
 	[am]	Softlossnonminster
 	[de]	Verlierweichunkirchen
 
+teleportPointNameSingleDishNonArray
+	[am]	Single Dish Non-Array
+	[de]	Einschüsselobservatorium
+
+teleportPointNameMinusculeArray
+	[am]	Minuscule Array
+	[de]	Miniobservatorium
+
+teleportPointNameAverageArray
+	[am]	Average Array
+	[de]	Durchschnittsobservatorium
+
+teleportPointNameGoldilocksArray
+	[am]	Goldilocks Array
+	[de]	Observatorium idealer Größe
+
+teleportPointNameLargeArray
+	[am]	Large Array
+	[de]	Großes Observatorium
+
+teleportPointNameVeryLargeArray
+	[am]	Very Large Array
+	[de]	Sehr Großes Observatorium
+
+teleportPointNameEvenLargerArray
+	[am]	Even Larger Array
+	[de]	Noch Größeres Observatorium
+
+teleportPointNameUltraLargeArray
+	[am]	Ultra Large Array
+	[de]	Ultragroßes Observatorium
+
+teleportPointNameGinormousArray
+	[am]	Ginormous Array
+	[de]	Gigantisches Observatorium
+
+teleportPointNameCollossallyLargeArray
+	[am]	Collossally Large Array
+	[de]	Kollossales Observatorium
+
+teleportPointNameSupercollossalArray
+	[am]	Supercollossal Array
+	[de]	Superkollossales Observatorium
+
+teleportPointNameJumboMamouthArray
+	[am]	Jumbo Mamouth Array
+	[de]	Jumbo Mammut Observatorium
+
+teleportPointNameStChungusArray
+	[am]	St. Chungus Hyperarray
+	[de]	St. Chungus Hyper-Observatorium
+
+teleportPointNameArrayOfIndeterminateSize
+	[am]	Array of Indeterminate Size
+	[de]	Observatorium der unbestimmten Größe
+
 regionSensorLabel
 	[am]	%s in your area
 	[de]	%s in deiner Nähe
@@ -679,7 +735,7 @@ mainQuestTitleAwning
 mainQuestTitleDrawing
 	[am]	The Drawing of the Cage of a Platypus
 	[de]	Der Schnabeltierkäfiggrundriß
-	[fi]	Platypushäkinsuunnitelma
+	[fi]	Vesinokkaeläinhäkinsuunnitelma
 	[ua]	План клітки качкодзьоба
 
 mainQuestTitleDrowning
