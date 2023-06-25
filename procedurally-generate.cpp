@@ -80,4 +80,17 @@ namespace blooDot::Map
 			_Define(descriptor, i, y, Ding::Schaed);
 		}
 	}
+
+	void ProcedurallyGenerateSnurch(std::unique_ptr<StaticMapRegionDescriptor>& descriptor)
+	{
+		descriptor->region.RegionId = 3;
+		descriptor->region.RegionName = std::string(literallandmarkNameSnurch);
+
+		descriptor->region.polygon.push_back({ -3,-3 });
+		descriptor->region.polygon.push_back({ 3,-3 });
+		descriptor->region.polygon.push_back({ 3,3 });
+
+		_Define(descriptor, 0, 0, Ding::SnaviorMonumentFloor);
+		_Define(descriptor, 0, 0, Ding::SnaviorMonumentHead);
+	}
 }

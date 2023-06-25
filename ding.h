@@ -30,7 +30,9 @@ enum Ding : unsigned short
 	Player4,
 	Hourflower,
 	Hourflour,
-	Hourpower
+	Hourpower,
+	SnaviorMonumentHead,
+	SnaviorMonumentFloor
 };
 
 typedef char const BloodotMarkup;

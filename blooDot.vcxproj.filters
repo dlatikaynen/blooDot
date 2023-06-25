@@ -90,6 +90,24 @@
     <Filter Include="Resource Files\win">
       <UniqueIdentifier>{8d6e5c2f-3348-4a3f-abdf-d3d3c6740eaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\dings\floor">
+      <UniqueIdentifier>{74085e62-dfb3-4416-9628-7b0e7f804534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\dings\rooof">
+      <UniqueIdentifier>{0a25eafb-a3b4-4da6-9b0f-d060a56b98f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\dings\walls">
+      <UniqueIdentifier>{03128c1a-a7c5-47d3-b4d3-004e503ede14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\dings\looot">
+      <UniqueIdentifier>{7de0fa6b-1920-484b-b0e3-5f64390f68ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\dings\mobs">
+      <UniqueIdentifier>{d02fb934-e704-4ee0-9779-a109404260d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\dings\unique">
+      <UniqueIdentifier>{8f6064af-55e2-4f23-88c5-1c45d3712151}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="menu-settings.h">
@@ -468,48 +486,6 @@
     <None Include="vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\barrel-indigo.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
-    <Image Include="res\barrel-wooden.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
-    <Image Include="res\chel-f.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
-    <Image Include="res\floorrocktile.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
-    <Image Include="res\floorrocktile-cracked.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
-    <Image Include="res\floorstonetile-ochre.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
-    <Image Include="res\floorstonetile-purple.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
-    <Image Include="res\floorstonetile-slate.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
-    <Image Include="res\grass.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
-    <Image Include="res\lettuce.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
-    <Image Include="res\schaedel.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
-    <Image Include="res\snowblock.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
-    <Image Include="res\barrel-loaded.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
-    <Image Include="res\rooof-meshtile.png">
-      <Filter>Resource Files\dings</Filter>
-    </Image>
     <Image Include="res\nn-splash-scene.png">
       <Filter>Resource Files\ui</Filter>
     </Image>
@@ -560,6 +536,54 @@
     </Image>
     <Image Include="res\langflag-ua.png">
       <Filter>Resource Files\ui</Filter>
+    </Image>
+    <Image Include="res\snurch-snavior-floor.png">
+      <Filter>Resource Files\dings\unique</Filter>
+    </Image>
+    <Image Include="res\snurch-snavior-head-rooof.png">
+      <Filter>Resource Files\dings\unique</Filter>
+    </Image>
+    <Image Include="res\barrel-wooden.png">
+      <Filter>Resource Files\dings\mobs</Filter>
+    </Image>
+    <Image Include="res\barrel-loaded.png">
+      <Filter>Resource Files\dings\mobs</Filter>
+    </Image>
+    <Image Include="res\barrel-indigo.png">
+      <Filter>Resource Files\dings\mobs</Filter>
+    </Image>
+    <Image Include="res\chel-f.png">
+      <Filter>Resource Files\dings\looot</Filter>
+    </Image>
+    <Image Include="res\floorrocktile.png">
+      <Filter>Resource Files\dings\floor</Filter>
+    </Image>
+    <Image Include="res\floorrocktile-cracked.png">
+      <Filter>Resource Files\dings\floor</Filter>
+    </Image>
+    <Image Include="res\floorstonetile-ochre.png">
+      <Filter>Resource Files\dings\floor</Filter>
+    </Image>
+    <Image Include="res\floorstonetile-purple.png">
+      <Filter>Resource Files\dings\floor</Filter>
+    </Image>
+    <Image Include="res\floorstonetile-slate.png">
+      <Filter>Resource Files\dings\floor</Filter>
+    </Image>
+    <Image Include="res\grass.png">
+      <Filter>Resource Files\dings\floor</Filter>
+    </Image>
+    <Image Include="res\lettuce.png">
+      <Filter>Resource Files\dings\looot</Filter>
+    </Image>
+    <Image Include="res\rooof-meshtile.png">
+      <Filter>Resource Files\dings\rooof</Filter>
+    </Image>
+    <Image Include="res\schaedel.png">
+      <Filter>Resource Files\dings\mobs</Filter>
+    </Image>
+    <Image Include="res\snowblock.png">
+      <Filter>Resource Files\dings\floor</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

@@ -45,3 +45,5 @@ constexpr int const CHUNK_KEY_LANG_FLAG_AM_PNG = 41;
 constexpr int const CHUNK_KEY_LANG_FLAG_DE_PNG = 42;
 constexpr int const CHUNK_KEY_LANG_FLAG_FI_PNG = 43;
 constexpr int const CHUNK_KEY_LANG_FLAG_UA_PNG = 44;
+constexpr int const CHUNK_KEY_DINGS_SNURCH_SNAVIOR_HEAD_ROOOF = 45;
+constexpr int const CHUNK_KEY_DINGS_SNURCH_SNAVIOR_FLOOR = 46;

@@ -12,23 +12,25 @@ namespace blooDot::World
 	{
 		/* provisional procedural generation of static
 		 * world regions for prototyping purposes */
-		auto sculleryTemplate = std::make_unique<StaticMapRegionDescriptor>();
-		blooDot::Map::ProcedurallyGenerateScullery(sculleryTemplate);
-		blooDot::Map::WriteStaticRegion(sculleryTemplate);
-
-		auto sculleryStatic = std::make_unique<StaticMapRegionDescriptor>();
-		blooDot::Map::LoadStaticRegion(1, sculleryStatic);
 
 		/* instantiate the regions in our surrounding */
 		ClearWorldData();
 
+		/* garden instantiation */
 		WorldRegion gardenOFRidiculouslyPoisonousPlants;
 		gardenOFRidiculouslyPoisonousPlants.RegionId = 2;
 		gardenOFRidiculouslyPoisonousPlants.RegionName = std::string(literallandmarkNameGardenOfRidiculouslyPoisonousPlants);
 		AddRegion(&gardenOFRidiculouslyPoisonousPlants);
 
+		/* scullery instantiation */
+		auto sculleryTemplate = std::make_unique<StaticMapRegionDescriptor>();
+		blooDot::Map::ProcedurallyGenerateScullery(sculleryTemplate);
+		blooDot::Map::WriteStaticRegion(sculleryTemplate);
+
+		auto sculleryStatic = std::make_unique<StaticMapRegionDescriptor>();
+		blooDot::Map::LoadStaticRegion(sculleryTemplate->region.RegionId, sculleryStatic);
+
 		WorldRegion scullery;
-		//scullery.belongsTo = NULL;
 		scullery.RegionId = sculleryStatic->region.RegionId;
 		scullery.RegionName = std::string(literalregionNameScullery);
 		for (auto& poly : sculleryStatic->region.polygon)
@@ -37,6 +39,24 @@ namespace blooDot::World
 		}
 
 		AddRegion(&scullery);
+
+		/* snurch instantiation */
+		auto snurchTemplate = std::make_unique<StaticMapRegionDescriptor>();
+		blooDot::Map::ProcedurallyGenerateSnurch(snurchTemplate);
+		blooDot::Map::WriteStaticRegion(snurchTemplate);
+
+		auto snurchStatic = std::make_unique<StaticMapRegionDescriptor>();
+		blooDot::Map::LoadStaticRegion(snurchTemplate->region.RegionId, snurchStatic);
+
+		WorldRegion snurch;
+		snurch.RegionId = snurchStatic->region.RegionId;
+		snurch.RegionName = std::string(literallandmarkNameSnurch);
+		for (auto& poly : snurchStatic->region.polygon)
+		{
+			snurch.polygon.push_back(poly);
+		}
+
+		AddRegion(&snurch);
 
 		/* populate from the current region */
 		auto centerSheet = GetWorldSheet(0, 0);
@@ -47,7 +67,8 @@ namespace blooDot::World
 			return false;
 		}
 
-		_InstantiateStaticRegionOnWorldsheet(centerSheet, sculleryStatic);
+		//_InstantiateStaticRegionOnWorldsheet(centerSheet, sculleryStatic);
+		_InstantiateStaticRegionOnWorldsheet(centerSheet, snurchStatic);
 
 		return true;
 	}

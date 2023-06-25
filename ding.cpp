@@ -10,16 +10,19 @@ DingProps GetDingDefaultProps(const Ding ding)
 	case Ding::Player2:
 	case Ding::Player3:
 	case Ding::Player4:
-		return DingProps::Mob | DingProps::Walls;
-
 	case Ding::BarrelIndigo:
 	case Ding::BarrelWood:
 	case Ding::BarrelLoaded:
+		return DingProps::Mob | DingProps::Walls;
+
 	case Ding::WallClassic:
 		return DingProps::Walls;
 
 	case Ding::Lettuce:
 	case Ding::ChelF:
+	case Ding::Hourflower:
+	case Ding::Hourflour:
+	case Ding::Hourpower:
 		return DingProps::Loot | DingProps::Walls;
 
 	case Ding::Schaed:
@@ -27,6 +30,12 @@ DingProps GetDingDefaultProps(const Ding ding)
 
 	case Ding::RooofMesh:
 		return DingProps::Rooof;
+
+	case Ding::SnaviorMonumentHead:
+		return DingProps::Rooof;
+
+	case Ding::SnaviorMonumentFloor:
+		return DingProps::Floor;
 
 	default:
 		return DingProps::Floor;
@@ -96,6 +105,12 @@ int GetDingResourceKey(const Ding ding)
 	case Ding::RooofMesh:
 		return CHUNK_KEY_DINGS_ROOOFTILE_MESH;
 
+	case Ding::SnaviorMonumentHead:
+		return CHUNK_KEY_DINGS_SNURCH_SNAVIOR_HEAD_ROOOF;
+
+	case Ding::SnaviorMonumentFloor:
+		return CHUNK_KEY_DINGS_SNURCH_SNAVIOR_FLOOR;
+
 	default:
 		assert(ding != ding);
 		return -1;
@@ -162,6 +177,10 @@ char const* GetDingName(const Ding ding)
 
 	case Ding::RooofMesh:
 		return literaldingNameRooofMesh;
+
+	case Ding::SnaviorMonumentFloor:
+	case Ding::SnaviorMonumentHead:
+		return "";
 
 	default:
 		assert(ding != ding);

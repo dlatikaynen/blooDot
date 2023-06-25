@@ -675,6 +675,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </Image>
+    <Image Include="res\snurch-snavior-floor.png" />
+    <Image Include="res\snurch-snavior-head-rooof.png" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="boxchars.txt">
