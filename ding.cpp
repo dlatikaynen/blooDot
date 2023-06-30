@@ -280,6 +280,7 @@ namespace blooDot::Dings
 	{
 		snaviorCollision.clear();
 	}
+						<< " contains an ill-defined vertex (number of points != 2)\n";
 }
 
 void DrawDing(const Ding ding, cairo_t* canvas)
