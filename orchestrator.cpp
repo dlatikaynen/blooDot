@@ -43,8 +43,12 @@ namespace blooDot::Orchestrator
 
 	void MainLoop(SDL_Renderer* renderer)
 	{
-		InitializeDings();
-		if (!InitializeNewWorld())
+		if (!InitializeDings())
+		{
+			mainRunning = false;
+		}
+		
+		if (mainRunning && !InitializeNewWorld())
 		{
 			mainRunning = false;
 		}

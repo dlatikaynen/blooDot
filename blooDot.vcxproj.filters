@@ -57,9 +57,6 @@
     <Filter Include="Resource Files\legalese">
       <UniqueIdentifier>{4647e3d7-e770-4f1b-ab9c-02895c6d4626}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\mobs">
-      <UniqueIdentifier>{5da7e730-5f9e-4e00-8329-92da6bf0f75a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="_Source Files\ui\offscreen">
       <UniqueIdentifier>{d2235282-5cfb-480c-bf22-00f8358755a9}</UniqueIdentifier>
     </Filter>
@@ -490,6 +487,9 @@
       <Filter>Resource Files\win</Filter>
     </None>
     <None Include="vcpkg.json" />
+    <None Include="res\snurch-snavior-collision.csv">
+      <Filter>Resource Files\dings\unique</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\nn-splash-scene.png">
@@ -510,20 +510,8 @@
     <Image Include="res\menu-emptyness.png">
       <Filter>Resource Files\ui</Filter>
     </Image>
-    <Image Include="res\player3.png">
-      <Filter>Resource Files\mobs</Filter>
-    </Image>
     <Image Include="res\icon-hd.png">
       <Filter>Resource Files\ui</Filter>
-    </Image>
-    <Image Include="res\player2.png">
-      <Filter>Resource Files\mobs</Filter>
-    </Image>
-    <Image Include="res\player4.png">
-      <Filter>Resource Files\mobs</Filter>
-    </Image>
-    <Image Include="res\player1.png">
-      <Filter>Resource Files\mobs</Filter>
     </Image>
     <Image Include="res\sample-map.png">
       <Filter>Resource Files\ui</Filter>
@@ -590,6 +578,18 @@
     </Image>
     <Image Include="res\snowblock.png">
       <Filter>Resource Files\dings\floor</Filter>
+    </Image>
+    <Image Include="res\player1.png">
+      <Filter>Resource Files\dings\mobs</Filter>
+    </Image>
+    <Image Include="res\player2.png">
+      <Filter>Resource Files\dings\mobs</Filter>
+    </Image>
+    <Image Include="res\player3.png">
+      <Filter>Resource Files\dings\mobs</Filter>
+    </Image>
+    <Image Include="res\player4.png">
+      <Filter>Resource Files\dings\mobs</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

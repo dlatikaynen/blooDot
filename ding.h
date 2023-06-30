@@ -1,6 +1,8 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include <cairo/cairo.h>
+#include <iostream>
+
 #include "enums.h"
 #include "dexassy.h"
 #include "box2d/box2d.h"
@@ -53,4 +55,6 @@ namespace blooDot::Dings
 	bool HasNontrivialCollisionPoly(const ::Ding ding);
 	std::vector<b2PolygonShape> GetNontrivialCollisionPoly(const ::Ding ding);
 	void TeardownDings();
+
+	bool _LoadAndRegisterNonTrivialCollision(int chunkKey, std::vector<b2PolygonShape>* storeIn);
 }
