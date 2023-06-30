@@ -90,7 +90,9 @@ namespace blooDot::Map
 		descriptor->region.polygon.push_back({ 3,-3 });
 		descriptor->region.polygon.push_back({ 3,3 });
 
+		/* the momument is composite; its head is elevated
+		 * so mobs can move underneath it */
 		_Define(descriptor, 0, 0, Ding::SnaviorMonumentFloor);
-		_Define(descriptor, 0, 0, Ding::SnaviorMonumentHead);
+		_Define(descriptor, 0, 0, Ding::SnaviorMonumentHead, 48, 147);
 	}
 }

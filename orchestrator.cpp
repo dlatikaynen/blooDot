@@ -11,6 +11,8 @@
 #endif
 #include "geom2d.h"
 #include "newworld.h"
+
+using namespace blooDot::Dings;
 using namespace blooDot::World;
 
 Uint32 SDL_USEREVENT_SAVE = 0;
@@ -41,6 +43,7 @@ namespace blooDot::Orchestrator
 
 	void MainLoop(SDL_Renderer* renderer)
 	{
+		InitializeDings();
 		if (!InitializeNewWorld())
 		{
 			mainRunning = false;
@@ -408,6 +411,7 @@ namespace blooDot::Orchestrator
 		TeardownDingSheets();
 		GameviewTeardown();
 		ClearWorldData();
+		TeardownDings();
 	}
 
 	void _InitiatePlayerMovement(b2Body* body, float impulseX, float impulseY)

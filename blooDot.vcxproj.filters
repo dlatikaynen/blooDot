@@ -284,6 +284,9 @@
     <ClInclude Include="procedurally-generate.h">
       <Filter>_Headers\res</Filter>
     </ClInclude>
+    <ClInclude Include="polypartition.h">
+      <Filter>_Headers\algo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -432,6 +435,9 @@
     </ClCompile>
     <ClCompile Include="procedurally-generate.cpp">
       <Filter>_Source Files\res</Filter>
+    </ClCompile>
+    <ClCompile Include="polypartition.cpp">
+      <Filter>_Source Files\algo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -608,6 +614,9 @@
     </Text>
     <Text Include="res\gamecontrollerdb.txt">
       <Filter>Resource Files\ui</Filter>
+    </Text>
+    <Text Include="legalese\polypartition-license.txt">
+      <Filter>Resource Files\legalese</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

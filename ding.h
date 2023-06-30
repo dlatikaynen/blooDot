@@ -3,6 +3,7 @@
 #include <cairo/cairo.h>
 #include "enums.h"
 #include "dexassy.h"
+#include "box2d/box2d.h"
 
 constexpr auto GRIDUNIT = 49;
 
@@ -45,3 +46,11 @@ char const* GetDingDescriptionIndexEntry(const Ding ding);
 char const* GetDingName(const Ding ding);
 BloodotMarkup* GetDingDescription(const Ding ding);
 void DrawDing(const Ding ding, cairo_t* canvas);
+
+namespace blooDot::Dings
+{
+	bool InitializeDings();
+	bool HasNontrivialCollisionPoly(const ::Ding ding);
+	std::vector<b2PolygonShape> GetNontrivialCollisionPoly(const ::Ding ding);
+	void TeardownDings();
+}

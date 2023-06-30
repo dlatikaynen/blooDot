@@ -283,6 +283,7 @@
     <ClCompile Include="physicsdebugdraw.cpp" />
     <ClCompile Include="playerhud.cpp" />
     <ClCompile Include="playerstate.cpp" />
+    <ClCompile Include="polypartition.cpp" />
     <ClCompile Include="procedurally-generate.cpp" />
     <ClCompile Include="region-banner.cpp" />
     <ClCompile Include="xlations.cpp" />
@@ -329,6 +330,7 @@
     <ClInclude Include="physicsdebugdraw.h" />
     <ClInclude Include="playerhud.h" />
     <ClInclude Include="playerstate.h" />
+    <ClInclude Include="polypartition.h" />
     <ClInclude Include="procedurally-generate.h" />
     <ClInclude Include="region-banner.h" />
     <ClInclude Include="renderstate.h" />
@@ -690,6 +692,8 @@
     <Text Include="legalese\box2d-licence.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </Text>
     <Text Include="legalese\clearsans.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -703,9 +707,15 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</DeploymentContent>
     </Text>
+    <Text Include="legalese\polypartition-license.txt">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
+    </Text>
     <Text Include="legalese\sdl-and-gamecontrollerdb-licence.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </Text>
     <Text Include="legalese\SIL-Open-Font-License.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

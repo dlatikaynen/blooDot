@@ -140,11 +140,11 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 							}
 						}
 
-						SDL_Rect dest = { 
+						SDL_Rect dest = {
 							x + ding->pixOffsetX,
 							y + ding->pixOffsetY,
-							GRIDUNIT,
-							GRIDUNIT 
+							dingLocator->src.w,
+							dingLocator->src.h 
 						};
 
 						if (ding->rotationAngle == 0)

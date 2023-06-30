@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ding.h"
 #include "xlations.h"
+#include "polypartition.h"
 
 DingProps GetDingDefaultProps(const Ding ding)
 {
@@ -203,6 +204,84 @@ BloodotMarkup* GetDingDescription(const Ding _ding)
 	return (BloodotMarkup *)_ding;
 }
 
+namespace blooDot::Dings
+{
+	std::vector<b2PolygonShape> snaviorCollision;
+
+	bool InitializeDings()
+	{
+		const auto& slicer = new TPPLPartition();
+		TPPLPoly poly;
+		poly.Init(4);
+		poly[0].x = 1;
+		poly[0].y = 2;
+		poly[1].x = 7;
+		poly[1].y = 3;
+		poly[2].x = 5;
+		poly[2].y = 9;
+		poly[3].x = -3;
+		poly[3].y = 5;
+		TPPLPolyList polyList;
+		if (slicer->ConvexPartition_OPT(&poly, &polyList) == 0)
+		{
+			delete slicer;
+			return false;
+		}
+
+		for (const auto& finalPoly : polyList)
+		{
+			const auto numPoints = finalPoly.GetNumPoints();
+			std::vector<b2Vec2> collisionPoly;
+			for (auto i = 0; i < numPoints; ++i)
+			{
+				const auto& point = finalPoly.GetPoint(i);
+				collisionPoly.push_back(b2Vec2(static_cast<float>(point.x), static_cast<float>(point.y)));
+			}
+
+			const auto numVertices = static_cast<int>(collisionPoly.size());
+			if (numVertices != 0)
+			{
+				b2PolygonShape sC;
+				sC.Set(collisionPoly.data(), numVertices);
+				snaviorCollision.push_back(sC);
+			}
+		}
+
+		delete slicer;
+		return true;
+	}
+
+	bool HasNontrivialCollisionPoly(const ::Ding ding)
+	{
+		switch (ding)
+		{
+		case SnaviorMonumentFloor:
+			return true;
+		}
+
+		return false;
+	}
+
+	std::vector<b2PolygonShape> GetNontrivialCollisionPoly(const ::Ding ding)
+	{
+		switch (ding)
+		{
+		case SnaviorMonumentFloor:
+			return snaviorCollision;
+
+		default:
+			assert(!"Not a ding with nontrivial collision poly");
+		}
+
+		return std::vector<b2PolygonShape>();
+	}
+
+	void TeardownDings()
+	{
+		snaviorCollision.clear();
+	}
+}
+
 void DrawDing(const Ding ding, cairo_t* canvas)
 {
 	switch (ding)
@@ -218,6 +297,6 @@ void DrawDing(const Ding ding, cairo_t* canvas)
 		break;
 
 	default:
-		assert(!"Don't know how to draw");
+		assert(!"Don't know how to draw/not an ownerdrawn ding");
 	}
 }
