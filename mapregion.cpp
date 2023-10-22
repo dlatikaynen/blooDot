@@ -303,16 +303,41 @@ namespace blooDot::Map
 		return std::regex_replace(StaticRegionFileName, std::regex("\\$i"), index.str());
 	}
 
-	void _Define(std::unique_ptr<StaticMapRegionDescriptor>& region, int x, int y, Ding ding, short pixX, short pixY, short angle, DingProps props)
+	void _Define(std::unique_ptr<StaticMapRegionDescriptor>& region, DingOnMapPositioning positioning)
 	{
 		auto placement = DingPlacement();
-		placement.ding = ding;
-		placement.props = props;
-		placement.fromOriginX = x;
-		placement.fromOriginY = y;
-		placement.pixOffsetX = pixX;
-		placement.pixOffsetY = pixY;
-		placement.rotationAngle = angle;
+
+		placement.ding = positioning.ding;
+		placement.props = positioning.props;
+		placement.fromOriginX = positioning.x;
+		placement.fromOriginY = positioning.y;
+		placement.pixOffsetX = positioning.pixX;
+		placement.pixOffsetY = positioning.pixY;
+		placement.rotationAngle = positioning.angle;
 		region->dingPlacement.push_back(placement);
+	}
+
+	void _FloorTileUnlessCovered(std::unique_ptr<StaticMapRegionDescriptor>& region, DingOnMapPositioning positioning)
+	{
+		if (!_IsFloorTileCovered(region, positioning))
+		{
+			_Define(region, positioning);
+		}
+	}
+
+	/// <summary>
+	/// Strategy: region-"paint" everything. Cut out the area for which we
+	/// are checking. If there are no transparent pixels left,
+	/// then we are completely covered.
+	/// We can afford to do this because this is design-time,
+	/// and region sheets have a limited size.
+	/// </summary>
+	bool _IsFloorTileCovered(std::unique_ptr<StaticMapRegionDescriptor>& region, DingOnMapPositioning positioning)
+	{
+		
+		region->designtimeRendition;
+		positioning.angle;
+
+		return false;
 	}
 }

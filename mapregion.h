@@ -36,6 +36,7 @@ namespace blooDot::Map
 	typedef struct StaticMapRegionDescriptorStruct {
 		WorldRegion region;
 		std::vector<DingPlacement> dingPlacement;
+		SDL_Texture* designtimeRendition;
 	} StaticMapRegionDescriptor;
 
 	typedef struct StaticMapRegionFileHeaderStruct
@@ -52,11 +53,24 @@ namespace blooDot::Map
 		LocalTimestamp Created = { 0 };
 	} StaticMapRegionFileHeader;
 
+	typedef struct DingOnMapPositioningStruct
+	{
+		int x; 
+		int y;
+		Ding ding;
+		short pixX = 0;
+		short pixY = 0;
+		short angle = 0;
+		DingProps props = DingProps::Default;
+	} DingOnMapPositioning;
+
 	bool LoadStaticRegion(int regionId, std::unique_ptr<StaticMapRegionDescriptor>& descriptor);
 	bool WriteStaticRegion(std::unique_ptr<StaticMapRegionDescriptor>& descriptor);
 
 	bool _WriteString(SDL_RWops* file, std::string text);
 	bool _ReadString(SDL_RWops* file, std::string* sink);
 	std::string _GetFilename(int regionId);
-	void _Define(std::unique_ptr<StaticMapRegionDescriptor>& region, int x, int y, Ding ding, short pixX = 0, short pixY = 0, short angle = 0, DingProps props = DingProps::Default);
+	void _Define(std::unique_ptr<StaticMapRegionDescriptor>& region, DingOnMapPositioning positioning);
+	void _FloorTileUnlessCovered(std::unique_ptr<StaticMapRegionDescriptor>& region, DingOnMapPositioning positioning);
+	bool _IsFloorTileCovered(std::unique_ptr<StaticMapRegionDescriptor>& region, DingOnMapPositioning positioning);
 }
