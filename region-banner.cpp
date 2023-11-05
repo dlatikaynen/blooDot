@@ -3,6 +3,7 @@
 #include "settings.h"
 #include "drawing.h"
 #include "xlations.h"
+#include "gamestate.h"
 
 extern SDL_Renderer* GameViewRenderer;
 extern SettingsStruct Settings;
@@ -126,7 +127,7 @@ namespace blooDot::RegionBanner
 
 		cairo_stroke(canvas);
 		std::stringstream regionName;
-		regionName << literalregionNameOceanOfImmeasurableDisappointment;
+		regionName << GetCurrentRegionName();
 		auto regionStr = regionName.str();
 
 		cairo_set_source_rgb(canvas, .7, .7, 1);

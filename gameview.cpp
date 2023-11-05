@@ -48,11 +48,12 @@ bool GameviewEnterWorld()
 	blooDot::Player::InitializePlayers(4);
 	gotHud = blooDot::Hud::Initialize();
 	gotRegionBanner = blooDot::RegionBanner::Initialize();
+	DetermineCurrentRegion(0, 0);
 
 #ifndef NDEBUG
 	std::cout
 		<< ">> "
-		<< GetRegionName(0, 0)
+		<< GetCurrentRegionName()
 		<< " <<\n";
 #endif
 

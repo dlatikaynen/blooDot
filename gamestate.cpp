@@ -11,6 +11,7 @@ using namespace blooDot::Geometry2d;
 
 std::array<std::shared_ptr<WorldSheet>, 9> worldSheets = { 0 };
 std::vector<WorldRegion> worldRegions;
+int currentRegion;
 
 void ClearWorldData()
 {
@@ -55,8 +56,10 @@ WorldPieces* GetPiecesRelative(int worldX, int worldY)
 	return &sheet->arena[pieceIndex];
 }
 
-const char* GetRegionName(int worldX, int worldY)
+const void DetermineCurrentRegion(int worldX, int worldY)
 {
+	int regionIndex = 0;
+
 	/* 1. intersect with the bounding boxes. first wins
 	 *    if it has a fitting polygon, so overlapping regions
 	 *    would be matched in the order of their adding to the world */
@@ -67,9 +70,23 @@ const char* GetRegionName(int worldX, int worldY)
 			/* 2. now intersect with the polygon */
 			if (WorldCoordinateInRegion(&region.polygon, worldX, worldY))
 			{
-				return region.RegionName.c_str();
+				currentRegion = regionIndex;
+
+				return;
 			}
 		}
+
+		++regionIndex;
+	}
+
+	currentRegion = -1;
+}
+
+const char* GetCurrentRegionName()
+{
+	if (currentRegion >= 0)
+	{
+		return worldRegions[currentRegion].RegionName.c_str();
 	}
 
 	return literalregionNameUnknown;
