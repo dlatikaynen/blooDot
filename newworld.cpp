@@ -8,7 +8,7 @@ using namespace blooDot::Map;
 
 namespace blooDot::World
 {
-	bool InitializeNewWorld()
+	bool InitializeNewWorld(SDL_Renderer* renderer)
 	{
 		/* provisional procedural generation of static
 		 * world regions for prototyping purposes */
@@ -24,7 +24,7 @@ namespace blooDot::World
 
 		/* scullery instantiation */
 		auto sculleryTemplate = std::make_unique<StaticMapRegionDescriptor>();
-		blooDot::Map::ProcedurallyGenerateScullery(sculleryTemplate);
+		blooDot::Map::ProcedurallyGenerateScullery(renderer, sculleryTemplate);
 		blooDot::Map::WriteStaticRegion(sculleryTemplate);
 
 		auto sculleryStatic = std::make_unique<StaticMapRegionDescriptor>();
@@ -42,7 +42,7 @@ namespace blooDot::World
 
 		/* snurch instantiation */
 		auto snurchTemplate = std::make_unique<StaticMapRegionDescriptor>();
-		blooDot::Map::ProcedurallyGenerateSnurch(snurchTemplate);
+		blooDot::Map::ProcedurallyGenerateSnurch(renderer, snurchTemplate);
 		blooDot::Map::WriteStaticRegion(snurchTemplate);
 
 		auto snurchStatic = std::make_unique<StaticMapRegionDescriptor>();

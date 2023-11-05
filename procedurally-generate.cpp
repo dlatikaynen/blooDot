@@ -7,7 +7,7 @@
 
 namespace blooDot::Map
 {
-	bool ProcedurallyGenerateScullery(std::unique_ptr<StaticMapRegionDescriptor>& descriptor)
+	bool ProcedurallyGenerateScullery(SDL_Renderer* renderer, std::unique_ptr<StaticMapRegionDescriptor>& descriptor)
 	{
 		descriptor->region.RegionId = 1;
 		descriptor->region.RegionName = std::string(literalregionNameScullery);
@@ -23,7 +23,7 @@ namespace blooDot::Map
 		descriptor->region.polygon.push_back({ -3,3 });
 		descriptor->region.polygon.push_back({ -3,3 });
 		descriptor->region.polygon.push_back({ -3,3 });
-		if (!_PrepareDesigntimeRepresentation(descriptor))
+		if (!_PrepareDesigntimeRepresentation(renderer, descriptor))
 		{
 			return false;
 		}
@@ -90,7 +90,7 @@ namespace blooDot::Map
 		return true;
 	}
 
-	bool ProcedurallyGenerateSnurch(std::unique_ptr<StaticMapRegionDescriptor>& descriptor)
+	bool ProcedurallyGenerateSnurch(SDL_Renderer* renderer, std::unique_ptr<StaticMapRegionDescriptor>& descriptor)
 	{
 		descriptor->region.RegionId = 3;
 		descriptor->region.RegionName = std::string(literallandmarkNameSnurch);
@@ -98,7 +98,7 @@ namespace blooDot::Map
 		descriptor->region.polygon.push_back({ -3,-3 });
 		descriptor->region.polygon.push_back({ 3,-3 });
 		descriptor->region.polygon.push_back({ 3,3 });
-		if (!_PrepareDesigntimeRepresentation(descriptor))
+		if (!_PrepareDesigntimeRepresentation(renderer, descriptor))
 		{
 			return false;
 		}
@@ -129,14 +129,14 @@ namespace blooDot::Map
 		return true;
 	}
 
-	bool _PrepareDesigntimeRepresentation(std::unique_ptr<StaticMapRegionDescriptor>& descriptor)
+	bool _PrepareDesigntimeRepresentation(SDL_Renderer* renderer, std::unique_ptr<StaticMapRegionDescriptor>& descriptor)
 	{
 		if (descriptor->designtimeRendition != nullptr)
 		{
 			_TeardownDesigntimeRepresentation(descriptor);
 		}
 
-		descriptor->designtimeRendition = SDL_CreateTexture(NULL, 0, 0, 100, 100);
+		descriptor->designtimeRendition = SDL_CreateTexture(renderer, 0, 0, 100, 100);
 		if (descriptor->designtimeRendition == nullptr)
 		{
 			const auto& errMsg = SDL_GetError();

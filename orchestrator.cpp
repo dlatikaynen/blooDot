@@ -48,7 +48,7 @@ namespace blooDot::Orchestrator
 			mainRunning = false;
 		}
 		
-		if (mainRunning && !InitializeNewWorld())
+		if (mainRunning && !InitializeNewWorld(renderer))
 		{
 			mainRunning = false;
 		}
