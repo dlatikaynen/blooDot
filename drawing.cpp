@@ -112,3 +112,16 @@ void EndTextureDrawing(SDL_Texture* targetTexture, cairo_t* drawer)
 	SDL_UnlockTexture(targetTexture);
 	cairo_destroy(drawer);
 }
+
+void DestroyTexture(SDL_Texture** texture)
+{
+	if (texture != NULL)
+	{
+		if ((*texture) != NULL)
+		{
+			SDL_DestroyTexture(*texture);
+		}
+
+		(*texture) = NULL;
+	}
+}

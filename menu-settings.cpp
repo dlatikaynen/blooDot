@@ -141,12 +141,12 @@ namespace blooDot::MenuSettings
 
 	void _PrepareText(SDL_Renderer* renderer, bool destroy)
 	{
-		backTexture && [] { SDL_DestroyTexture(backTexture); return false; }();
-		screensizeTexture && [] { SDL_DestroyTexture(screensizeTexture); return false; }();
-		controlsTexture && [] { SDL_DestroyTexture(controlsTexture); return false; }();
-		languageTexture && [] { SDL_DestroyTexture(languageTexture); return false; }();
-		helpTexture && [] { SDL_DestroyTexture(helpTexture); return false; }();
-		aboutTexture && [] { SDL_DestroyTexture(aboutTexture); return false; }();
+		DestroyTexture(&backTexture);
+		DestroyTexture(&screensizeTexture);
+		DestroyTexture(&controlsTexture);
+		DestroyTexture(&languageTexture);
+		DestroyTexture(&helpTexture);
+		DestroyTexture(&aboutTexture);
 
 		if (!destroy)
 		{

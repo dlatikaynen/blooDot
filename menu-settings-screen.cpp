@@ -460,7 +460,7 @@ namespace blooDot::MenuSettingsScreen
 
 	void _Teardown()
 	{
-		slidingModes&& [] { SDL_DestroyTexture(slidingModes); return false; }();
+		DestroyTexture(&slidingModes);
 	}
 
 	bool _CanSelectMode(SDL_Renderer* renderer)

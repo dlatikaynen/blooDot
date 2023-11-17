@@ -210,9 +210,16 @@ namespace blooDot::Splash
 			SDL_GameControllerClose(primaryController);
 		}
 
-		splashTexture && [] { SDL_DestroyTexture(splashTexture); return false;  }();
-		titleTexture && [titleTexture] { SDL_DestroyTexture(titleTexture); return false;  }();
-		authorTexture && [authorTexture] { SDL_DestroyTexture(authorTexture); return false;  }();
+		DestroyTexture(&splashTexture);
+		if (titleTexture != nullptr)
+		{
+			SDL_DestroyTexture(titleTexture);
+		}
+
+		if (authorTexture != nullptr)
+		{
+			SDL_DestroyTexture(authorTexture);
+		}
 
 		_PrepareText(renderer, true);
 
@@ -297,13 +304,13 @@ namespace blooDot::Splash
 
 	void _PrepareText(SDL_Renderer* renderer, bool destroy)
 	{
-		continueTexture && [] { SDL_DestroyTexture(continueTexture); return false; }();
-		loadTexture && [] { SDL_DestroyTexture(loadTexture); return false; }();
-		singleTexture && [] { SDL_DestroyTexture(singleTexture); return false; }();
-		localMultiTexture && [] { SDL_DestroyTexture(localMultiTexture); return false; }();
-		creatorModeTexture && [] { SDL_DestroyTexture(creatorModeTexture); return false; }();
-		settingsTexture && [] { SDL_DestroyTexture(settingsTexture); return false; }();
-		quitTexture && [] { SDL_DestroyTexture(quitTexture); return false; }();
+		DestroyTexture(&continueTexture);
+		DestroyTexture(&loadTexture);
+		DestroyTexture(&singleTexture);
+		DestroyTexture(&localMultiTexture);
+		DestroyTexture(&creatorModeTexture);
+		DestroyTexture(&settingsTexture);
+		DestroyTexture(&quitTexture);
 
 		if (!destroy)
 		{

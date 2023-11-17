@@ -465,6 +465,6 @@ namespace blooDot::MenuLoad
 
 	void _Teardown()
 	{
-		slidingSavegames&& [] { SDL_DestroyTexture(slidingSavegames); return false; }();
+		DestroyTexture(&slidingSavegames);
 	}
 }

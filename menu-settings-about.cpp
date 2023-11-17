@@ -5,6 +5,7 @@
 #include "scripture.h"
 #include "xlations.h"
 #include "dialogcontrols.h"
+#include "drawing.h"
 
 extern bool mainRunning;
 
@@ -516,7 +517,7 @@ namespace blooDot::MenuSettingsAbout
 
 	void _Teardown()
 	{
-		backTexture&& [] { SDL_DestroyTexture(backTexture); return false; }();
+		DestroyTexture(&backTexture);
 
 		for (auto& section : creditSections)
 		{

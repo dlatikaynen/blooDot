@@ -493,6 +493,6 @@ namespace blooDot::MultiMonitorMenuScreen
 
 	void _Teardown()
 	{
-		slidingMonitors&& [] { SDL_DestroyTexture(slidingMonitors); return false; }();
+		DestroyTexture(&slidingMonitors);
 	}
 }

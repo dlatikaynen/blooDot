@@ -337,9 +337,9 @@ namespace blooDot::Hud
 			}
 		}
 
-		LetterboxBackdropL&& [] { SDL_DestroyTexture(LetterboxBackdropL); return false; }();
-		LetterboxBackdropR&& [] { SDL_DestroyTexture(LetterboxBackdropR); return false; }();
-		Minimap&& [] { SDL_DestroyTexture(Minimap); return false; }();
+		DestroyTexture(&LetterboxBackdropL);
+		DestroyTexture(&LetterboxBackdropR);
+		DestroyTexture(&Minimap);
 	}
 
 	bool _DrawLetterboxBackdrops(int height)

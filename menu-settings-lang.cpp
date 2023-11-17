@@ -402,6 +402,6 @@ namespace blooDot::MenuSettingsLang
 
 	void _Teardown()
 	{
-		slidingLangs&& [] { SDL_DestroyTexture(slidingLangs); return false; }();
+		DestroyTexture(&slidingLangs);
 	}
 }
