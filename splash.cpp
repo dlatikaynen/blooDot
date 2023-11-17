@@ -16,10 +16,12 @@
 #include "savegame.h"
 #include "menu-continue-empty.h"
 #include "menu-load.h"
+#include "menu-creatormode.h"
 #include "menu-settings.h"
 #include "menu-multimonitor.h"
 
 extern bool mainRunning;
+extern bool isCreatorMode;
 extern SettingsStruct Settings;
 
 namespace blooDot::Splash
@@ -43,7 +45,7 @@ namespace blooDot::Splash
 	SDL_Rect loadRect{ 0,0,0,0 };
 	SDL_Rect singleRect{ 0,0,0,0 };
 	SDL_Rect localMultiRect{ 0,0,0,0 };
-	SDL_Rect netMultiRect{ 0,0,0,0 };
+	SDL_Rect creatorModeRect{ 0,0,0,0 };
 	SDL_Rect settingsRect{ 0,0,0,0 };
 	SDL_Rect quitRect{ 0,0,0,0 };
 
@@ -51,7 +53,7 @@ namespace blooDot::Splash
 	SDL_Texture* loadTexture = NULL;
 	SDL_Texture* singleTexture = NULL;
 	SDL_Texture* localMultiTexture = NULL;
-	SDL_Texture* netMultiTexture = NULL;
+	SDL_Texture* creatorModeTexture = NULL;
 	SDL_Texture* settingsTexture = NULL;
 	SDL_Texture* quitTexture = NULL;
 
@@ -193,7 +195,7 @@ namespace blooDot::Splash
 				DrawLabel(renderer, 235, yStart + 1 * stride, loadTexture, &loadRect);
 				DrawLabel(renderer, 235, yStart + 2 * stride, singleTexture, &singleRect);
 				DrawLabel(renderer, 235, yStart + 3 * stride, localMultiTexture, &localMultiRect);
-				DrawLabel(renderer, 235, yStart + 4 * stride, netMultiTexture, &netMultiRect);
+				DrawLabel(renderer, 235, yStart + 4 * stride, creatorModeTexture, &creatorModeRect);
 				DrawLabel(renderer, 235, yStart + 5 * stride, settingsTexture, &settingsRect);
 				DrawLabel(renderer, 235, yStart + 6 * stride, quitTexture, &quitRect);
 			}
@@ -299,7 +301,7 @@ namespace blooDot::Splash
 		loadTexture && [] { SDL_DestroyTexture(loadTexture); return false; }();
 		singleTexture && [] { SDL_DestroyTexture(singleTexture); return false; }();
 		localMultiTexture && [] { SDL_DestroyTexture(localMultiTexture); return false; }();
-		netMultiTexture && [] { SDL_DestroyTexture(netMultiTexture); return false; }();
+		creatorModeTexture && [] { SDL_DestroyTexture(creatorModeTexture); return false; }();
 		settingsTexture && [] { SDL_DestroyTexture(settingsTexture); return false; }();
 		quitTexture && [] { SDL_DestroyTexture(quitTexture); return false; }();
 
@@ -309,7 +311,7 @@ namespace blooDot::Splash
 			loadTexture = RenderText(renderer, &loadRect, FONT_KEY_DIALOG, 23, literalMenuLoad, { 250, 230, 230, 245 });
 			singleTexture = RenderText(renderer, &singleRect, FONT_KEY_DIALOG, 23, literalMenuSingle, { 250, 230, 230, 245 });
 			localMultiTexture = RenderText(renderer, &localMultiRect, FONT_KEY_DIALOG, 23, literalMenuLocalMulti, { 250, 230, 230, 245 });
-			netMultiTexture = RenderText(renderer, &netMultiRect, FONT_KEY_DIALOG, 23, literalMenuNetMulti, { 250, 230, 230, 245 });
+			creatorModeTexture = RenderText(renderer, &creatorModeRect, FONT_KEY_DIALOG, 23, literalMenuMaker, { 250, 230, 230, 245 });
 			settingsTexture = RenderText(renderer, &settingsRect, FONT_KEY_DIALOG, 23, literalMenuSettings, { 250, 230, 230, 245 });
 			quitTexture = RenderText(renderer, &quitRect, FONT_KEY_DIALOG, 23, literalMenuExit, { 250, 230, 230, 245 });
 		}
@@ -399,6 +401,7 @@ namespace blooDot::Splash
 
 	bool _EnterAndHandleMenu(SDL_Renderer* renderer)
 	{
+		isCreatorMode = false;
 		switch (menuState.selectedItemIndex)
 		{
 		case MMI_CUE:
@@ -418,11 +421,17 @@ namespace blooDot::Splash
 			break;
 
 		case MMI_NEWSINGLE:
+		case MMI_NEWMULTI:
 			if (!_HandleNew(renderer))
 			{
 				splashRunning = false;
 			}
 
+			break;
+
+		case MMI_CREATORMODE:
+			isCreatorMode = true;
+			_EnterAndHandleCreatorMode(renderer);
 			break;
 
 		case MMI_SETTINGS:
@@ -439,6 +448,11 @@ namespace blooDot::Splash
 		}
 
 		return true;
+	}
+
+	void _EnterAndHandleCreatorMode(SDL_Renderer* renderer)
+	{
+		blooDot::MenuCreatorMode::MenuLoop(renderer);
 	}
 
 	void _EnterAndHandleSettings(SDL_Renderer* renderer)

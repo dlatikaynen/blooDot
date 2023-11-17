@@ -71,10 +71,9 @@ MenuLocalMulti
 	[de]	Lokal Mehrspieler
 	[ua]	Лок. мультиплеер
 
-MenuNetMulti
-	[am]	Net multiplayer
-	[de]	Netz Mehrspieler
-	[ua]	Мереж. мультипл.
+MenuMaker
+	[am]	Creator mode
+	[de]	Schöpfermodus
 
 MenuSettings
 	[am]	Settings

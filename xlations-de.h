@@ -20,7 +20,7 @@ namespace blooDot::de
 	constexpr char const* _literal_de_MenuLoad = "Laden";
 	constexpr char const* _literal_de_MenuSingle = "Einzelspieler";
 	constexpr char const* _literal_de_MenuLocalMulti = "Lokal Mehrspieler";
-	constexpr char const* _literal_de_MenuNetMulti = "Netz Mehrspieler";
+	constexpr char const* _literal_de_MenuMaker = "Schöpfermodus";
 	constexpr char const* _literal_de_MenuSettings = "Einstellungen";
 	constexpr char const* _literal_de_MenuSave = "Speichern";
 	constexpr char const* _literal_de_MenuExit = "Beenden";

@@ -144,12 +144,10 @@ SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_Rect* frame, int fontKey, in
 		(*frame).w = textSurface->w;
 		(*frame).h = textSurface->h;
 		textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-		if (!textTexture)
+		if (textTexture == NULL)
 		{
 			const auto textureError = SDL_GetError();
 			ReportError("Failed to create a text texture", textureError);
-
-			return NULL;
 		}
 	}
 	else

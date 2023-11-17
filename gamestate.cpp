@@ -5,10 +5,11 @@
 
 using namespace blooDot::Geometry2d;
 
+bool isCreatorMode;
+
 /* (0,0) is world center.
  * world data is loaded on demand, in 9 quadrants at a time
  * the data structure is a two-dimensional linked and stacked matrix */
-
 std::array<std::shared_ptr<WorldSheet>, 9> worldSheets = { 0 };
 std::vector<WorldRegion> worldRegions;
 int currentRegion;

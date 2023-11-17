@@ -284,6 +284,9 @@
     <ClInclude Include="polypartition.h">
       <Filter>_Headers\algo</Filter>
     </ClInclude>
+    <ClInclude Include="menu-creatormode.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -435,6 +438,9 @@
     </ClCompile>
     <ClCompile Include="polypartition.cpp">
       <Filter>_Source Files\algo</Filter>
+    </ClCompile>
+    <ClCompile Include="menu-creatormode.cpp">
+      <Filter>_Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

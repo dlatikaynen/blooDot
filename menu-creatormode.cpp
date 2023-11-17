@@ -1,21 +1,17 @@
 #include <cairo/cairo.h>
 #include "pch.h"
-#include "menu-settings.h"
+#include "menu-creatormode.h"
 #include "scripture.h"
 #include "drawing.h"
 #include "dialogcontrols.h"
 #include "xlations.h"
-#include "settings.h"
 #include "constants.h"
 #include "sfx.h"
 #include "menu-common.h"
-#include "menu-settings-about.h"
-#include "menu-settings-help.h"
 
-extern SettingsStruct Settings;
 extern bool mainRunning;
 
-namespace blooDot::MenuSettings
+namespace blooDot::MenuCreatorMode
 {
 	MenuDialogInteraction menuState;
 	bool menuRunning = false;
@@ -64,7 +60,7 @@ namespace blooDot::MenuSettings
 			}
 			else if (menuState.enterMenuItem)
 			{
-				menuRunning = _EnterAndHandleSettingsMenu(renderer);
+				menuRunning = _EnterAndHandleCreatorModeMenu(/*renderer*/);
 			}
 
 			if (menuState.leaveMain)
@@ -75,7 +71,7 @@ namespace blooDot::MenuSettings
 			if (SDL_RenderClear(renderer) < 0)
 			{
 				const auto clearError = IMG_GetError();
-				ReportError("Failed to clear the settings menu screen", clearError);
+				ReportError("Failed to clear the creator mode menu screen", clearError);
 			}
 
 			SDL_SetRenderDrawBlendMode(renderer, SDL_BlendMode::SDL_BLENDMODE_BLEND);
@@ -85,7 +81,7 @@ namespace blooDot::MenuSettings
 			if (SDL_RenderDrawRect(renderer, &outerMenuRect) < 0)
 			{
 				const auto drawRectError = SDL_GetError();
-				ReportError("Failed to draw settings menu panel border", drawRectError);
+				ReportError("Failed to draw creator mode menu panel border", drawRectError);
 				menuRunning = false;
 			};
 
@@ -134,7 +130,6 @@ namespace blooDot::MenuSettings
 
 		SDL_DestroyTexture(titleTexture);
 		_PrepareText(renderer, true);
-		blooDot::Settings::Save();
 
 		return menuRunning;
 	}
@@ -159,24 +154,12 @@ namespace blooDot::MenuSettings
 		}
 	}
 
-	bool _EnterAndHandleSettingsMenu(SDL_Renderer* renderer)
+	bool _EnterAndHandleCreatorModeMenu(/*SDL_Renderer* renderer*/)
 	{
 		switch (menuState.selectedItemIndex)
 		{
 		case SettingsMenuItems::SMI_SCREENSIZE:
-			_EnterAndHandleScreenSettings(renderer);
-			break;
-
-		case SettingsMenuItems::SMI_LANGUAGE:
-			_EnterAndHandleLanguageSettings(renderer);
-			break;
-
-		case SettingsMenuItems::SMI_HELP:
-			_EnterAndHandleHelp(renderer);
-			break;
-
-		case SettingsMenuItems::SMI_ABOUT:
-			_EnterAndHandleAbout(renderer);
+			//_EnterAndHandleScreenSettings(renderer);
 			break;
 
 		default:
@@ -184,26 +167,5 @@ namespace blooDot::MenuSettings
 		}
 
 		return true;
-	}
-
-	void _EnterAndHandleScreenSettings(SDL_Renderer* renderer)
-	{
-		blooDot::MenuSettingsScreen::ScreenSettingsMenuLoop(renderer);
-	}
-
-	void _EnterAndHandleLanguageSettings(SDL_Renderer* renderer)
-	{
-		blooDot::MenuSettingsLang::LanguageSettingsMenuLoop(renderer);
-		_PrepareText(renderer);
-	}
-
-	void _EnterAndHandleAbout(SDL_Renderer* renderer)
-	{
-		blooDot::MenuSettingsAbout::MenuLoop(renderer);
-	}
-
-	void _EnterAndHandleHelp(SDL_Renderer* renderer)
-	{
-		blooDot::MenuSettingsHelp::HelpMenuLoop(renderer);
 	}
 }

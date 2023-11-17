@@ -18,7 +18,7 @@ extern const char* literalMenuContinue;
 extern const char* literalMenuLoad;
 extern const char* literalMenuSingle;
 extern const char* literalMenuLocalMulti;
-extern const char* literalMenuNetMulti;
+extern const char* literalMenuMaker;
 extern const char* literalMenuSettings;
 extern const char* literalMenuSave;
 extern const char* literalMenuExit;

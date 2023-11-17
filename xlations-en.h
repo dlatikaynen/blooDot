@@ -20,7 +20,7 @@ namespace blooDot::en
 	constexpr char const* _literal_en_MenuLoad = "Load";
 	constexpr char const* _literal_en_MenuSingle = "Single player";
 	constexpr char const* _literal_en_MenuLocalMulti = "Local multiplayer";
-	constexpr char const* _literal_en_MenuNetMulti = "Net multiplayer";
+	constexpr char const* _literal_en_MenuMaker = "Creator mode";
 	constexpr char const* _literal_en_MenuSettings = "Settings";
 	constexpr char const* _literal_en_MenuSave = "Save";
 	constexpr char const* _literal_en_MenuExit = "Exit";

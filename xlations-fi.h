@@ -20,7 +20,7 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_MenuLoad = "Lataa";
 	constexpr char const* _literal_fi_MenuSingle = "Single player";
 	constexpr char const* _literal_fi_MenuLocalMulti = "Local multiplayer";
-	constexpr char const* _literal_fi_MenuNetMulti = "Net multiplayer";
+	constexpr char const* _literal_fi_MenuMaker = "Creator mode";
 	constexpr char const* _literal_fi_MenuSettings = "Asetukset";
 	constexpr char const* _literal_fi_MenuSave = "Tallenna";
 	constexpr char const* _literal_fi_MenuExit = "Poistu";

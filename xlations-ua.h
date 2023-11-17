@@ -20,7 +20,7 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_MenuLoad = "Завантажити";
 	constexpr char const* _literal_ua_MenuSingle = "Одиночний режим";
 	constexpr char const* _literal_ua_MenuLocalMulti = "Лок. мультиплеер";
-	constexpr char const* _literal_ua_MenuNetMulti = "Мереж. мультипл.";
+	constexpr char const* _literal_ua_MenuMaker = "Creator mode";
 	constexpr char const* _literal_ua_MenuSettings = "Налаштування";
 	constexpr char const* _literal_ua_MenuSave = "Зберегти";
 	constexpr char const* _literal_ua_MenuExit = "Вийти";

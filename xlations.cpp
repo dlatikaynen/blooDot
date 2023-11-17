@@ -23,7 +23,7 @@ const char* literalMenuContinue = "";
 const char* literalMenuLoad = "";
 const char* literalMenuSingle = "";
 const char* literalMenuLocalMulti = "";
-const char* literalMenuNetMulti = "";
+const char* literalMenuMaker = "";
 const char* literalMenuSettings = "";
 const char* literalMenuSave = "";
 const char* literalMenuExit = "";
@@ -233,7 +233,7 @@ namespace blooDot::en
 		literalMenuLoad = _literal_en_MenuLoad;
 		literalMenuSingle = _literal_en_MenuSingle;
 		literalMenuLocalMulti = _literal_en_MenuLocalMulti;
-		literalMenuNetMulti = _literal_en_MenuNetMulti;
+		literalMenuMaker = _literal_en_MenuMaker;
 		literalMenuSettings = _literal_en_MenuSettings;
 		literalMenuSave = _literal_en_MenuSave;
 		literalMenuExit = _literal_en_MenuExit;
@@ -445,7 +445,7 @@ namespace blooDot::de
 		literalMenuLoad = _literal_de_MenuLoad;
 		literalMenuSingle = _literal_de_MenuSingle;
 		literalMenuLocalMulti = _literal_de_MenuLocalMulti;
-		literalMenuNetMulti = _literal_de_MenuNetMulti;
+		literalMenuMaker = _literal_de_MenuMaker;
 		literalMenuSettings = _literal_de_MenuSettings;
 		literalMenuSave = _literal_de_MenuSave;
 		literalMenuExit = _literal_de_MenuExit;
@@ -657,7 +657,7 @@ namespace blooDot::fi
 		literalMenuLoad = _literal_fi_MenuLoad;
 		literalMenuSingle = _literal_fi_MenuSingle;
 		literalMenuLocalMulti = _literal_fi_MenuLocalMulti;
-		literalMenuNetMulti = _literal_fi_MenuNetMulti;
+		literalMenuMaker = _literal_fi_MenuMaker;
 		literalMenuSettings = _literal_fi_MenuSettings;
 		literalMenuSave = _literal_fi_MenuSave;
 		literalMenuExit = _literal_fi_MenuExit;
@@ -869,7 +869,7 @@ namespace blooDot::ua
 		literalMenuLoad = _literal_ua_MenuLoad;
 		literalMenuSingle = _literal_ua_MenuSingle;
 		literalMenuLocalMulti = _literal_ua_MenuLocalMulti;
-		literalMenuNetMulti = _literal_ua_MenuNetMulti;
+		literalMenuMaker = _literal_ua_MenuMaker;
 		literalMenuSettings = _literal_ua_MenuSettings;
 		literalMenuSave = _literal_ua_MenuSave;
 		literalMenuExit = _literal_ua_MenuExit;
