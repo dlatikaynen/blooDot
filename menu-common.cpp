@@ -120,6 +120,11 @@ namespace blooDot::MenuCommon
 				case SDL_SCANCODE_LEFT:
 				case SDL_SCANCODE_KP_4:
 				case SDL_SCANCODE_A:
+					if (interactionState->carouselItemIndex == -1)
+					{
+						break;
+					}
+
 					if (interactionState->selectedItemIndex != interactionState->carouselItemIndex)
 					{
 						interactionState->selectedItemIndex = interactionState->carouselItemIndex;
@@ -144,6 +149,11 @@ namespace blooDot::MenuCommon
 				case SDL_SCANCODE_RIGHT:
 				case SDL_SCANCODE_KP_6:
 				case SDL_SCANCODE_D:
+					if (interactionState->carouselItemIndex == -1)
+					{
+						break;
+					}
+
 					if (interactionState->selectedItemIndex != interactionState->carouselItemIndex)
 					{
 						interactionState->selectedItemIndex = interactionState->carouselItemIndex;
