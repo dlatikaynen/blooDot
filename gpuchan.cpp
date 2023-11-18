@@ -27,7 +27,7 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 		renderer,
 		&messageRect,
 		FONT_KEY_DIALOG,
-		13,
+		17,
 		message,
 		titleTextColor
 	);
@@ -115,7 +115,7 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 		DrawLabel(renderer, 28, 12, messageTexture, &messageRect);
 		CenterLabel(renderer, 88, 438, okTexture, &okRect);
 		DrawLabel(renderer, 28, 116, titleTexture, &titleRect);
-		DrawLabel(renderer, 288, 329, bubbleTexture, &bubbleRect);
+		DrawLabel(renderer, 271, 337, bubbleTexture, &bubbleRect);
 
 		SDL_RenderPresent(renderer);
 		SDL_Delay(12);

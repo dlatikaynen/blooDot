@@ -7,9 +7,10 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_LanguageNameAmerican = "Ukrainian";
 	constexpr char const* _literal_ua_AlienMainMenuLabel = "mEnmenV";
 	constexpr char const* _literal_ua_AlienLoadMenuLabel = "lOd";
+	constexpr char const* _literal_ua_AlienMakerMenuLabel = "Godmod";
 	constexpr char const* _literal_ua_AlienSettingsMenuLabel = "SetiNz";
-	constexpr char const* _literal_ua_literalAlienAboutMenuLabel = "Ebaut";
-	constexpr char const* _literal_ua_literalAlienHelpMenuLabel = "Help";
+	constexpr char const* _literal_ua_AlienAboutMenuLabel = "Ebaut";
+	constexpr char const* _literal_ua_AlienHelpMenuLabel = "Help";
 	constexpr char const* _literal_ua_AlienScreenSettingsMenuLabel = "ScrinSaiz";
 	constexpr char const* _literal_ua_AlienMultiMonitorMenuLabel = "MaltiDisplej";
 	constexpr char const* _literal_ua_AlienInGameMenuLabel = "Gejm";
@@ -33,6 +34,9 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_MenuKnowledgebase = "база знань";
 	constexpr char const* _literal_ua_MenuMap = "Карта";
 	constexpr char const* _literal_ua_MenuInventory = "інвентар";
+	constexpr char const* _literal_ua_MakerMenuInitial = "Origin";
+	constexpr char const* _literal_ua_MakerMenuLast = "Last location";
+	constexpr char const* _literal_ua_MakerMenuTeleport = "Quantum move";
 	constexpr char const* _literal_ua_SettingsMenuScreensize = "режим відео";
 	constexpr char const* _literal_ua_SettingsMenuLanguage = "Мова";
 	constexpr char const* _literal_ua_SettingsMenuHelp = "Допомога";
@@ -63,6 +67,7 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_SettingsScreenFullDetails = "I paid for the whole screen,\nI'mma use the whole screen";
 	constexpr char const* _literal_ua_MultiMonitorMenuDisplayLabel = "Екран № $n";
 	constexpr char const* _literal_ua_MessageInsufficientScreenSize = "You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.";
+	constexpr char const* _literal_ua_MessageMakerNoTeleportTargets = "You cannot teleport to anywhere else on the map, because\nyou did not previously place a snail shell anywhere.";
 	constexpr char const* _literal_ua_SettingsLanguageEN = "[am]";
 	constexpr char const* _literal_ua_SettingsLanguageENDetails = "American";
 	constexpr char const* _literal_ua_SettingsLanguageENName = "American";
@@ -149,6 +154,7 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_Created = "створено";
 	constexpr char const* _literal_ua_DialogTitleGpuChan = "GPU-chan says,";
 	constexpr char const* _literal_ua_DialogBubbleGpuChan = "Oh no,\nit's too\nbig!";
+	constexpr char const* _literal_ua_DialogBubbleGpuChanEmpty = "Oh no,\nit's too\nempty!";
 	constexpr char const* _literal_ua_regionNameUnknown = "Here be dragons";
 	constexpr char const* _literal_ua_regionNameScullery = "Кухня посуду";
 	constexpr char const* _literal_ua_regionNameCity = "City of Urban Settlement";
@@ -164,7 +170,7 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_landmarkNameSnathedral = "Snanctum of the Snathedral";
 	constexpr char const* _literal_ua_landmarkNameBlimpcombe = "Blimpcombe";
 	constexpr char const* _literal_ua_landmarkNameSoftlossnonminster = "Softlossnonminster";
-	constexpr char const* _literal_ua_teleportPointNameSingleDishNonArray = "Single Dish Non-Array";
+	constexpr char const* _literal_ua_teleportPointNameSingleDishNonArray = "Одноантенні Немасив";
 	constexpr char const* _literal_ua_teleportPointNameMinusculeArray = "Minuscule Array";
 	constexpr char const* _literal_ua_teleportPointNameAverageArray = "Average Array";
 	constexpr char const* _literal_ua_teleportPointNameGoldilocksArray = "Goldilocks Array";

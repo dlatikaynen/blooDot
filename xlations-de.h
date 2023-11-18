@@ -7,9 +7,10 @@ namespace blooDot::de
 	constexpr char const* _literal_de_LanguageNameAmerican = "German";
 	constexpr char const* _literal_de_AlienMainMenuLabel = "mEnmenV";
 	constexpr char const* _literal_de_AlienLoadMenuLabel = "lOd";
+	constexpr char const* _literal_de_AlienMakerMenuLabel = "Godmod";
 	constexpr char const* _literal_de_AlienSettingsMenuLabel = "SetiNz";
-	constexpr char const* _literal_de_literalAlienAboutMenuLabel = "Ebaut";
-	constexpr char const* _literal_de_literalAlienHelpMenuLabel = "Help";
+	constexpr char const* _literal_de_AlienAboutMenuLabel = "Ebaut";
+	constexpr char const* _literal_de_AlienHelpMenuLabel = "Help";
 	constexpr char const* _literal_de_AlienScreenSettingsMenuLabel = "ScrinSaiz";
 	constexpr char const* _literal_de_AlienMultiMonitorMenuLabel = "MaltiDisplej";
 	constexpr char const* _literal_de_AlienInGameMenuLabel = "Gejm";
@@ -33,6 +34,9 @@ namespace blooDot::de
 	constexpr char const* _literal_de_MenuKnowledgebase = "Enzyklopädie";
 	constexpr char const* _literal_de_MenuMap = "Karte";
 	constexpr char const* _literal_de_MenuInventory = "Inventar";
+	constexpr char const* _literal_de_MakerMenuInitial = "Ursprung";
+	constexpr char const* _literal_de_MakerMenuLast = "Letzter Standort";
+	constexpr char const* _literal_de_MakerMenuTeleport = "Quantensprung";
 	constexpr char const* _literal_de_SettingsMenuScreensize = "Grafikmodus";
 	constexpr char const* _literal_de_SettingsMenuLanguage = "Sprache";
 	constexpr char const* _literal_de_SettingsMenuHelp = "Hilfe";
@@ -63,6 +67,7 @@ namespace blooDot::de
 	constexpr char const* _literal_de_SettingsScreenFullDetails = "Ich zahle den ganzen Schirm,\nich nütze den ganzen Schirm";
 	constexpr char const* _literal_de_MultiMonitorMenuDisplayLabel = "Bildschirm $n";
 	constexpr char const* _literal_de_MessageInsufficientScreenSize = "You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.";
+	constexpr char const* _literal_de_MessageMakerNoTeleportTargets = "Man kann sich nicht auf die Map teleportieren,\nohne zuvor ein Schneckenhaus platziert zu haben.";
 	constexpr char const* _literal_de_SettingsLanguageEN = "[am]";
 	constexpr char const* _literal_de_SettingsLanguageENDetails = "American";
 	constexpr char const* _literal_de_SettingsLanguageENName = "Amerikanisch";
@@ -149,6 +154,7 @@ namespace blooDot::de
 	constexpr char const* _literal_de_Created = "erstellt";
 	constexpr char const* _literal_de_DialogTitleGpuChan = "GPU-chan sagt";
 	constexpr char const* _literal_de_DialogBubbleGpuChan = "O nein, das\nist zu groß!";
+	constexpr char const* _literal_de_DialogBubbleGpuChanEmpty = "O nein, es\nist leer!";
 	constexpr char const* _literal_de_regionNameUnknown = "Hier seyen Drachen";
 	constexpr char const* _literal_de_regionNameScullery = "Spülküche";
 	constexpr char const* _literal_de_regionNameCity = "Stadt der urbanen Ansiedlung";

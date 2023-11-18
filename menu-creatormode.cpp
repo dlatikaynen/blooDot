@@ -8,6 +8,7 @@
 #include "constants.h"
 #include "sfx.h"
 #include "menu-common.h"
+#include "makersettings.h"
 
 extern bool mainRunning;
 
@@ -17,24 +18,18 @@ namespace blooDot::MenuCreatorMode
 	bool menuRunning = false;
 
 	SDL_Texture* backTexture = NULL;
-	SDL_Texture* screensizeTexture = NULL;
-	SDL_Texture* controlsTexture = NULL;
-	SDL_Texture* languageTexture = NULL;
-	SDL_Texture* helpTexture = NULL;
-	SDL_Texture* aboutTexture = NULL;
+	SDL_Texture* lastLocationTexture = NULL;
+	SDL_Texture* teleportTexture = NULL;
 
 	SDL_Rect backRect{ 0,0,0,0 };
-	SDL_Rect screensizeRect{ 0,0,0,0 };
-	SDL_Rect controlsRect{ 0,0,0,0 };
-	SDL_Rect languageRect{ 0,0,0,0 };
-	SDL_Rect helpRect{ 0,0,0,0 };
-	SDL_Rect aboutRect{ 0,0,0,0 };
+	SDL_Rect lastLocationRect{ 0,0,0,0 };
+	SDL_Rect teleportRect{ 0,0,0,0 };
 
 	bool MenuLoop(SDL_Renderer* renderer)
 	{
 		menuRunning = true;
-		menuState.itemCount = SettingsMenuItems::SMI_ABOUT + 1;
-		menuState.selectedItemIndex = SettingsMenuItems::SMI_BACK;
+		menuState.itemCount = CreatorModeMenuItems::CMMI_TELEPORT + 1;
+		menuState.selectedItemIndex = CreatorModeMenuItems::CMMI_BACK;
 
 		SDL_Rect outerMenuRect{ 150,45,340,390 };
 		SDL_Rect titleRect{ 0,0,0,0 };
@@ -44,7 +39,7 @@ namespace blooDot::MenuCreatorMode
 			&titleRect,
 			FONT_KEY_ALIEN,
 			26,
-			literalAlienSettingsMenuLabel,
+			literalAlienMakerMenuLabel,
 			AlienTextColor
 		);
 
@@ -60,7 +55,7 @@ namespace blooDot::MenuCreatorMode
 			}
 			else if (menuState.enterMenuItem)
 			{
-				menuRunning = _EnterAndHandleCreatorModeMenu(/*renderer*/);
+				menuRunning = _EnterAndHandleCreatorModeMenuItem(renderer);
 			}
 
 			if (menuState.leaveMain)
@@ -88,14 +83,15 @@ namespace blooDot::MenuCreatorMode
 			DrawLabel(renderer, 286, 51, titleTexture, &titleRect);
 
 			const auto drawingTexture = BeginRenderDrawing(renderer, GodsPreferredWidth, GodsPreferredHight);
-			if (drawingTexture) [[likely]]
+			if (drawingTexture)
 			{
 				const auto drawingSink = GetDrawingSink();
 				const int yStart = 94;
 				const int stride = 46;
 				const int backGap = stride / 2;
-				SettingsMenuItems itemToDraw = SMI_BACK;
-				for (auto y = 94; y < 411; y += stride)
+				const int yEnd = yStart + backGap + menuState.itemCount * stride;
+				CreatorModeMenuItems itemToDraw = CMMI_BACK;
+				for (auto y = 94; y < yEnd; y += stride)
 				{
 					const auto thisItem = itemToDraw == menuState.selectedItemIndex;
 					DrawButton(drawingSink, 195, y, 250, 42, thisItem);
@@ -105,22 +101,19 @@ namespace blooDot::MenuCreatorMode
 						DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
 					}
 
-					if (itemToDraw == SettingsMenuItems::SMI_BACK || itemToDraw == SettingsMenuItems::SMI_LANGUAGE)
+					if (itemToDraw == CreatorModeMenuItems::CMMI_BACK)
 					{
 						y += backGap;
 					}
 
-					itemToDraw = static_cast<SettingsMenuItems>(itemToDraw + 1);
+					itemToDraw = static_cast<CreatorModeMenuItems>(itemToDraw + 1);
 				}
 
 				EndRenderDrawing(renderer, drawingTexture, nullptr);
 
 				DrawLabel(renderer, 235, yStart + 0 * stride + 0 * backGap, backTexture, &backRect);
-				DrawLabel(renderer, 235, yStart + 1 * stride + 1 * backGap, screensizeTexture, &screensizeRect);
-				DrawLabel(renderer, 235, yStart + 2 * stride + 1 * backGap, controlsTexture, &controlsRect);
-				DrawLabel(renderer, 235, yStart + 3 * stride + 1 * backGap, languageTexture, &languageRect);
-				DrawLabel(renderer, 235, yStart + 4 * stride + 2 * backGap, helpTexture, &helpRect);
-				DrawLabel(renderer, 235, yStart + 5 * stride + 2 * backGap, aboutTexture, &aboutRect);
+				DrawLabel(renderer, 235, yStart + 1 * stride + 1 * backGap, lastLocationTexture, &lastLocationRect);
+				DrawLabel(renderer, 235, yStart + 2 * stride + 1 * backGap, teleportTexture, &teleportRect);
 			}
 
 			SDL_RenderPresent(renderer);
@@ -137,31 +130,49 @@ namespace blooDot::MenuCreatorMode
 	void _PrepareText(SDL_Renderer* renderer, bool destroy)
 	{
 		DestroyTexture(&backTexture);
-		DestroyTexture(&screensizeTexture);
-		DestroyTexture(&controlsTexture);
-		DestroyTexture(&languageTexture);
-		DestroyTexture(&helpTexture);
-		DestroyTexture(&aboutTexture);
+		DestroyTexture(&lastLocationTexture);
+		DestroyTexture(&teleportTexture);
 		if (!destroy)
 		{
+			auto& lastLocationLabel = blooDot::MakerSettings::HasLastLocation()
+				? literalMakerMenuLast
+				: literalMakerMenuInitial;
+
 			backTexture = RenderText(renderer, &backRect, FONT_KEY_DIALOG, 23, literalMenuBack, ButtonTextColor);
-			screensizeTexture = RenderText(renderer, &screensizeRect, FONT_KEY_DIALOG, 23, literalSettingsMenuScreensize, ButtonTextColor);
-			controlsTexture = RenderText(renderer, &controlsRect, FONT_KEY_DIALOG, 23, literalMenuControls, ButtonTextColor);
-			languageTexture = RenderText(renderer, &languageRect, FONT_KEY_DIALOG, 23, literalSettingsMenuLanguage, ButtonTextColor);
-			helpTexture = RenderText(renderer, &helpRect, FONT_KEY_DIALOG, 23, literalSettingsMenuHelp, ButtonTextColor);
-			aboutTexture = RenderText(renderer, &aboutRect, FONT_KEY_DIALOG, 23, literalSettingsMenuAbout, ButtonTextColor);
+			lastLocationTexture = RenderText(renderer, &lastLocationRect, FONT_KEY_DIALOG, 23, lastLocationLabel, ButtonTextColor);
+			teleportTexture = RenderText(renderer, &teleportRect, FONT_KEY_DIALOG, 23, literalMakerMenuTeleport, ButtonTextColor);
 		}
 	}
 
-	bool _EnterAndHandleCreatorModeMenu(/*SDL_Renderer* renderer*/)
+	bool _EnterAndHandleCreatorModeMenuItem(SDL_Renderer* renderer)
 	{
 		switch (menuState.selectedItemIndex)
 		{
-		case SettingsMenuItems::SMI_SCREENSIZE:
-			//_EnterAndHandleScreenSettings(renderer);
+		case CreatorModeMenuItems::CMMI_LAST_LOCATION:
+			break;
+
+		case CreatorModeMenuItems::CMMI_TELEPORT:
+			_AnyTeleportTargets(renderer);
 			break;
 
 		default:
+			return false;
+		}
+
+		return true;
+	}
+
+	bool _AnyTeleportTargets(SDL_Renderer* renderer)
+	{
+		if (blooDot::MakerSettings::GetNumberOfTeleportTargets() == 0)
+		{
+			GpuChanLoop(
+				renderer,
+				literalMessageMakerNoTeleportTargets,
+				literalDialogTitleGpuChan,
+				literalDialogBubbleGpuChanEmpty
+			);
+
 			return false;
 		}
 

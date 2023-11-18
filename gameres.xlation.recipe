@@ -22,13 +22,16 @@ AlienMainMenuLabel
 AlienLoadMenuLabel
 	[**]	lOd
 
+AlienMakerMenuLabel
+	[**]	Godmod
+
 AlienSettingsMenuLabel
 	[**]	SetiNz
 
-literalAlienAboutMenuLabel
+AlienAboutMenuLabel
 	[**]	Ebaut
 
-literalAlienHelpMenuLabel
+AlienHelpMenuLabel
 	[**]	Help
 
 AlienScreenSettingsMenuLabel
@@ -147,6 +150,18 @@ MenuInventory
 	[de]	Inventar
 	[ua]	інвентар
 
+MakerMenuInitial
+	[am]	Origin
+	[de]	Ursprung
+
+MakerMenuLast
+	[am]	Last location
+	[de]	Letzter Standort
+
+MakerMenuTeleport
+	[am]	Quantum move
+	[de]	Quantensprung
+
 SettingsMenuScreensize
 	[am]	Screen size
 	[de]	Grafikmodus
@@ -263,6 +278,10 @@ MultiMonitorMenuDisplayLabel
 
 MessageInsufficientScreenSize
 	[am]	You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.
+
+MessageMakerNoTeleportTargets
+	[am]	You cannot teleport to anywhere else on the map, because\nyou did not previously place a snail shell anywhere.
+	[de]	Man kann sich nicht auf die Map teleportieren,\nohne zuvor ein Schneckenhaus platziert zu haben.
 
 SettingsLanguageEN
 	[am]	[am]
@@ -606,6 +625,10 @@ DialogBubbleGpuChan
 	[am]	Oh no,\nit's too\nbig!
 	[de]	O nein, das\nist zu groß!
 
+DialogBubbleGpuChanEmpty
+	[am]	Oh no,\nit's too\nempty!
+	[de]	O nein, es\nist leer!
+
 regionNameUnknown
 	[am]	Here be dragons
 	[de]	Hier seyen Drachen
@@ -670,6 +693,8 @@ landmarkNameSoftlossnonminster
 teleportPointNameSingleDishNonArray
 	[am]	Single Dish Non-Array
 	[de]	Einschüsselobservatorium
+	[fi]	Yhdenantennin Eijoukko
+	[ua]	Одноантенні Немасив
 
 teleportPointNameMinusculeArray
 	[am]	Minuscule Array

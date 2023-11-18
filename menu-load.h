@@ -8,7 +8,6 @@
 #include "savegame.h"
 
 extern SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget, const int canvasWidth, const int canvasHeight);
-extern bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title, std::string bubble);
 
 namespace blooDot::MenuLoad
 {

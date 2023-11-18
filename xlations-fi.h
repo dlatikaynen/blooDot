@@ -7,9 +7,10 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_LanguageNameAmerican = "Finnish";
 	constexpr char const* _literal_fi_AlienMainMenuLabel = "mEnmenV";
 	constexpr char const* _literal_fi_AlienLoadMenuLabel = "lOd";
+	constexpr char const* _literal_fi_AlienMakerMenuLabel = "Godmod";
 	constexpr char const* _literal_fi_AlienSettingsMenuLabel = "SetiNz";
-	constexpr char const* _literal_fi_literalAlienAboutMenuLabel = "Ebaut";
-	constexpr char const* _literal_fi_literalAlienHelpMenuLabel = "Help";
+	constexpr char const* _literal_fi_AlienAboutMenuLabel = "Ebaut";
+	constexpr char const* _literal_fi_AlienHelpMenuLabel = "Help";
 	constexpr char const* _literal_fi_AlienScreenSettingsMenuLabel = "ScrinSaiz";
 	constexpr char const* _literal_fi_AlienMultiMonitorMenuLabel = "MaltiDisplej";
 	constexpr char const* _literal_fi_AlienInGameMenuLabel = "Gejm";
@@ -33,6 +34,9 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_MenuKnowledgebase = "Tietopohja";
 	constexpr char const* _literal_fi_MenuMap = "Kartta";
 	constexpr char const* _literal_fi_MenuInventory = "Inventaario";
+	constexpr char const* _literal_fi_MakerMenuInitial = "Origin";
+	constexpr char const* _literal_fi_MakerMenuLast = "Last location";
+	constexpr char const* _literal_fi_MakerMenuTeleport = "Quantum move";
 	constexpr char const* _literal_fi_SettingsMenuScreensize = "Grafiikkatila";
 	constexpr char const* _literal_fi_SettingsMenuLanguage = "Kieli";
 	constexpr char const* _literal_fi_SettingsMenuHelp = "Apua";
@@ -63,6 +67,7 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_SettingsScreenFullDetails = "I paid for the whole screen,\nI'mma use the whole screen";
 	constexpr char const* _literal_fi_MultiMonitorMenuDisplayLabel = "Näyttö #$n";
 	constexpr char const* _literal_fi_MessageInsufficientScreenSize = "You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.";
+	constexpr char const* _literal_fi_MessageMakerNoTeleportTargets = "You cannot teleport to anywhere else on the map, because\nyou did not previously place a snail shell anywhere.";
 	constexpr char const* _literal_fi_SettingsLanguageEN = "[am]";
 	constexpr char const* _literal_fi_SettingsLanguageENDetails = "American";
 	constexpr char const* _literal_fi_SettingsLanguageENName = "American";
@@ -149,6 +154,7 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_Created = "created";
 	constexpr char const* _literal_fi_DialogTitleGpuChan = "GPU-chan says,";
 	constexpr char const* _literal_fi_DialogBubbleGpuChan = "Oh no,\nit's too\nbig!";
+	constexpr char const* _literal_fi_DialogBubbleGpuChanEmpty = "Oh no,\nit's too\nempty!";
 	constexpr char const* _literal_fi_regionNameUnknown = "Here be dragons";
 	constexpr char const* _literal_fi_regionNameScullery = "Scullery";
 	constexpr char const* _literal_fi_regionNameCity = "City of Urban Settlement";
@@ -164,7 +170,7 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_landmarkNameSnathedral = "Snanctum of the Snathedral";
 	constexpr char const* _literal_fi_landmarkNameBlimpcombe = "Blimpcombe";
 	constexpr char const* _literal_fi_landmarkNameSoftlossnonminster = "Softlossnonminster";
-	constexpr char const* _literal_fi_teleportPointNameSingleDishNonArray = "Single Dish Non-Array";
+	constexpr char const* _literal_fi_teleportPointNameSingleDishNonArray = "Yhdenantennin Eijoukko";
 	constexpr char const* _literal_fi_teleportPointNameMinusculeArray = "Minuscule Array";
 	constexpr char const* _literal_fi_teleportPointNameAverageArray = "Average Array";
 	constexpr char const* _literal_fi_teleportPointNameGoldilocksArray = "Goldilocks Array";

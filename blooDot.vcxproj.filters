@@ -105,6 +105,12 @@
     <Filter Include="Resource Files\dings\unique">
       <UniqueIdentifier>{8f6064af-55e2-4f23-88c5-1c45d3712151}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_Headers\maker">
+      <UniqueIdentifier>{efdb7517-a1d2-488b-a5ba-d5ebeeed698e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\maker">
+      <UniqueIdentifier>{7ef47bbd-1de2-40da-80e9-b90b6f3ff8f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="menu-settings.h">
@@ -287,6 +293,9 @@
     <ClInclude Include="menu-creatormode.h">
       <Filter>_Headers\ui</Filter>
     </ClInclude>
+    <ClInclude Include="makersettings.h">
+      <Filter>_Headers\maker</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -441,6 +450,9 @@
     </ClCompile>
     <ClCompile Include="menu-creatormode.cpp">
       <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="makersettings.cpp">
+      <Filter>_Source Files\maker</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -38,7 +38,7 @@ namespace blooDot::MenuSettingsAbout
 			&titleRect,
 			FONT_KEY_ALIEN,
 			26,
-			literalliteralAlienAboutMenuLabel,
+			literalAlienAboutMenuLabel,
 			AlienTextColor
 		);
 

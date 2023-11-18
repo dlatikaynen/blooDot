@@ -273,6 +273,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="datetime.cpp" />
+    <ClCompile Include="makersettings.cpp" />
     <ClCompile Include="menu-common.cpp" />
     <ClCompile Include="menu-creatormode.cpp" />
     <ClCompile Include="menu-multimonitor.cpp" />
@@ -309,6 +310,7 @@
     <ClInclude Include="gpuchan.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="harvard.h" />
+    <ClInclude Include="makersettings.h" />
     <ClInclude Include="mapregion.h" />
     <ClInclude Include="menu-common.h" />
     <ClInclude Include="menu-continue-empty.h" />

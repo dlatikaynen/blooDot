@@ -59,6 +59,12 @@ enum InGameMenuItems {
 	IGMI_LEAVE
 };
 
+enum CreatorModeMenuItems {
+	CMMI_BACK,
+	CMMI_LAST_LOCATION,
+	CMMI_TELEPORT
+};
+
 enum SettingsMenuItems {
 	SMI_BACK,
 	SMI_SCREENSIZE,

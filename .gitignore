@@ -370,3 +370,4 @@ FodyWeavers.xsd
 blooDot.ligma
 vcpkg_installed/
 *.syp
+/blooDot.deez

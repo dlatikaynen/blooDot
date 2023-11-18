@@ -7,9 +7,10 @@ namespace blooDot::en
 	constexpr char const* _literal_en_LanguageNameAmerican = "American";
 	constexpr char const* _literal_en_AlienMainMenuLabel = "mEnmenV";
 	constexpr char const* _literal_en_AlienLoadMenuLabel = "lOd";
+	constexpr char const* _literal_en_AlienMakerMenuLabel = "Godmod";
 	constexpr char const* _literal_en_AlienSettingsMenuLabel = "SetiNz";
-	constexpr char const* _literal_en_literalAlienAboutMenuLabel = "Ebaut";
-	constexpr char const* _literal_en_literalAlienHelpMenuLabel = "Help";
+	constexpr char const* _literal_en_AlienAboutMenuLabel = "Ebaut";
+	constexpr char const* _literal_en_AlienHelpMenuLabel = "Help";
 	constexpr char const* _literal_en_AlienScreenSettingsMenuLabel = "ScrinSaiz";
 	constexpr char const* _literal_en_AlienMultiMonitorMenuLabel = "MaltiDisplej";
 	constexpr char const* _literal_en_AlienInGameMenuLabel = "Gejm";
@@ -33,6 +34,9 @@ namespace blooDot::en
 	constexpr char const* _literal_en_MenuKnowledgebase = "Knowledgebase";
 	constexpr char const* _literal_en_MenuMap = "Map";
 	constexpr char const* _literal_en_MenuInventory = "Hammerspace";
+	constexpr char const* _literal_en_MakerMenuInitial = "Origin";
+	constexpr char const* _literal_en_MakerMenuLast = "Last location";
+	constexpr char const* _literal_en_MakerMenuTeleport = "Quantum move";
 	constexpr char const* _literal_en_SettingsMenuScreensize = "Screen size";
 	constexpr char const* _literal_en_SettingsMenuLanguage = "Language";
 	constexpr char const* _literal_en_SettingsMenuHelp = "Help";
@@ -63,6 +67,7 @@ namespace blooDot::en
 	constexpr char const* _literal_en_SettingsScreenFullDetails = "I paid for the whole screen,\nI'mma use the whole screen";
 	constexpr char const* _literal_en_MultiMonitorMenuDisplayLabel = "Display # $n";
 	constexpr char const* _literal_en_MessageInsufficientScreenSize = "You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.";
+	constexpr char const* _literal_en_MessageMakerNoTeleportTargets = "You cannot teleport to anywhere else on the map, because\nyou did not previously place a snail shell anywhere.";
 	constexpr char const* _literal_en_SettingsLanguageEN = "[am]";
 	constexpr char const* _literal_en_SettingsLanguageENDetails = "American";
 	constexpr char const* _literal_en_SettingsLanguageENName = "American";
@@ -149,6 +154,7 @@ namespace blooDot::en
 	constexpr char const* _literal_en_Created = "created";
 	constexpr char const* _literal_en_DialogTitleGpuChan = "GPU-chan says,";
 	constexpr char const* _literal_en_DialogBubbleGpuChan = "Oh no,\nit's too\nbig!";
+	constexpr char const* _literal_en_DialogBubbleGpuChanEmpty = "Oh no,\nit's too\nempty!";
 	constexpr char const* _literal_en_regionNameUnknown = "Here be dragons";
 	constexpr char const* _literal_en_regionNameScullery = "Scullery";
 	constexpr char const* _literal_en_regionNameCity = "City of Urban Settlement";
