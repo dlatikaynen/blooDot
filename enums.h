@@ -94,6 +94,12 @@ enum LangSettingsMenuItems {
 	LSMI_USER_INTERFACE_LANGUAGE
 };
 
+enum DialogMenuResult {
+	DMR_NONE,
+	DMR_CANCEL,
+	DMR_LAUNCH_MAKER
+};
+
 enum DingProps : unsigned char
 {
 	Default = 0,

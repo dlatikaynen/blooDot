@@ -1,4 +1,5 @@
 #pragma once
+#include "enums.h"
 
 typedef struct MenuDialogInteractionStruct {
 	int selectedItemIndex = -1;
@@ -10,6 +11,7 @@ typedef struct MenuDialogInteractionStruct {
 	int carouselCount = 0;
 	int carouselSelectedIndex = 0;
 	int carouselMoveTo = 0;
+	DialogMenuResult dialogResult = DialogMenuResult::DMR_NONE;
 } MenuDialogInteraction;
 
 namespace blooDot::MenuCommon

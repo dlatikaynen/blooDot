@@ -438,7 +438,11 @@ namespace blooDot::Splash
 
 		case MMI_CREATORMODE:
 			isCreatorMode = true;
-			_EnterAndHandleCreatorMode(renderer);
+			if (!_EnterAndHandleCreatorMode(renderer))
+			{
+				splashRunning = false;
+			}
+
 			break;
 
 		case MMI_SETTINGS:
@@ -457,9 +461,17 @@ namespace blooDot::Splash
 		return true;
 	}
 
-	void _EnterAndHandleCreatorMode(SDL_Renderer* renderer)
+	bool _EnterAndHandleCreatorMode(SDL_Renderer* renderer)
 	{
-		blooDot::MenuCreatorMode::MenuLoop(renderer);
+		auto dialogResult = blooDot::MenuCreatorMode::MenuLoop(renderer);
+
+		if(dialogResult == DMR_LAUNCH_MAKER)
+		{
+			return _HandleLaunch(renderer, false);
+		}
+
+		// meaning: stay in the splash menu
+		return true;
 	}
 
 	void _EnterAndHandleSettings(SDL_Renderer* renderer)

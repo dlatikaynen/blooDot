@@ -20,6 +20,7 @@ Uint32 SDL_USEREVENT_AUTOSAVE = 0;
 Uint32 SDL_USEREVENT_LEAVE = 0; // [sic], they're only allocated later
 
 extern SettingsStruct Settings;
+extern bool isCreatorMode;
 extern SDL_Renderer* GameViewRenderer;
 extern char activePlayers;
 extern MobState* player[4];
@@ -43,6 +44,8 @@ namespace blooDot::Orchestrator
 
 	void MainLoop(SDL_Renderer* renderer)
 	{
+		toggleDebugView = isCreatorMode;
+
 		if (!InitializeDings())
 		{
 			mainRunning = false;

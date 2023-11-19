@@ -4,12 +4,13 @@
 #include <SDL2/SDL_ttf.h>
 #include <cairo/cairo.h>
 #include "splash.h"
+#include "enums.h"
 
 extern bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title, std::string bubble);
 
 namespace blooDot::MenuCreatorMode
 {
-	bool MenuLoop(SDL_Renderer*);
+	DialogMenuResult MenuLoop(SDL_Renderer*);
 
 	void _PrepareText(SDL_Renderer* renderer, bool destroy = false);
 	bool _EnterAndHandleCreatorModeMenuItem(SDL_Renderer* renderer);

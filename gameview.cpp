@@ -12,7 +12,7 @@
  * the renderstate takes care of the scroll flapping */
 
 extern FlappySituation constellation;
-
+extern bool isCreatorMode;
 SDL_Renderer* GameViewRenderer;
 
 // current absolute scroll distance from the world origin centerpoint, hwich
@@ -47,7 +47,7 @@ bool GameviewEnterWorld()
 	PopulateAllFlaps();
 	blooDot::Player::InitializePlayers(4);
 	gotHud = blooDot::Hud::Initialize();
-	gotRegionBanner = blooDot::RegionBanner::Initialize();
+	gotRegionBanner = isCreatorMode && blooDot::RegionBanner::Initialize();
 	DetermineCurrentRegion(0, 0);
 
 #ifndef NDEBUG

@@ -26,6 +26,6 @@ namespace blooDot::Splash
 	void _PrepareText(SDL_Renderer* renderer, bool destroy = false);
 	bool _HandleLaunch(SDL_Renderer* renderer, bool stayInMenu);
 	bool _EnterAndHandleMenu(SDL_Renderer* renderer);
-	void _EnterAndHandleCreatorMode(SDL_Renderer* renderer);
+	bool _EnterAndHandleCreatorMode(SDL_Renderer* renderer);
 	void _EnterAndHandleSettings(SDL_Renderer* renderer);
 }

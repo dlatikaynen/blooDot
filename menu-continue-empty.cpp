@@ -12,6 +12,12 @@
 
 extern bool mainRunning;
 
+/// <summary>
+/// This whole thing is not really properly
+/// designed yet. it looks like a copy of some older menu
+/// which was meant to be scuplted into some kind of
+/// "start new game" options step... remove or complete it
+/// </summary>
 namespace blooDot::MenuContinueEmpty
 {
 	SDL_Event continueEmptyEvent;

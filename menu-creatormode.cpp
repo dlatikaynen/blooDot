@@ -25,11 +25,12 @@ namespace blooDot::MenuCreatorMode
 	SDL_Rect lastLocationRect{ 0,0,0,0 };
 	SDL_Rect teleportRect{ 0,0,0,0 };
 
-	bool MenuLoop(SDL_Renderer* renderer)
+	DialogMenuResult MenuLoop(SDL_Renderer* renderer)
 	{
 		menuRunning = true;
 		menuState.itemCount = CreatorModeMenuItems::CMMI_TELEPORT + 1;
 		menuState.selectedItemIndex = CreatorModeMenuItems::CMMI_BACK;
+		menuState.dialogResult = DMR_NONE;
 
 		SDL_Rect outerMenuRect{ 150,45,340,390 };
 		SDL_Rect titleRect{ 0,0,0,0 };
@@ -124,7 +125,7 @@ namespace blooDot::MenuCreatorMode
 		SDL_DestroyTexture(titleTexture);
 		_PrepareText(renderer, true);
 
-		return menuRunning;
+		return menuRunning ? DMR_CANCEL : menuState.dialogResult;
 	}
 
 	void _PrepareText(SDL_Renderer* renderer, bool destroy)
@@ -149,7 +150,11 @@ namespace blooDot::MenuCreatorMode
 		switch (menuState.selectedItemIndex)
 		{
 		case CreatorModeMenuItems::CMMI_LAST_LOCATION:
-			break;
+			/* this is at the same time the "initial location",
+			 * when no maker location had been stored previously */ 
+			menuState.leaveDialog = true;
+			menuState.dialogResult = DMR_LAUNCH_MAKER;
+			return false;
 
 		case CreatorModeMenuItems::CMMI_TELEPORT:
 			_AnyTeleportTargets(renderer);
