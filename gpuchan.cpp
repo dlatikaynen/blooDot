@@ -6,6 +6,7 @@ constexpr const SDL_Color titleTextColor = { 11,8,8,222 };
 constexpr const SDL_Color bubbleTextColor = { 12, 8, 8, 255 };
 
 extern bool mainRunning;
+extern bool isCreatorMode;
 
 SDL_Texture* gpuChan = NULL;
 SDL_Rect chanDims = { 0 };
@@ -102,7 +103,7 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 				419,
 				120,
 				42,
-				true
+				isCreatorMode ? CH_CREATORMODE : CH_MAINMENU
 			);
 
 			DrawChevron(drawingSink, 28 - 7, 419 + 21, false, frame);

@@ -233,7 +233,7 @@ namespace blooDot::MenuLoad
 						y,
 						vignetteWidth,
 						itemToDraw > LMI_CANCEL ? vignetteHeight : 42,
-						itemToDraw == menuSelection
+						itemToDraw == menuSelection ? CH_MAINMENU : CH_NONE
 					);
 
 					if (itemToDraw == menuSelection)

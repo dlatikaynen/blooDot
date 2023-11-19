@@ -24,13 +24,29 @@ constexpr double ChevronNudge[] = {
 #define COLOR_CONTROL_BORDER cairo_set_source_rgb(context, 1.0, 1.0, 1.0)
 #define WIDTH_CONTROL_BORDER cairo_set_line_width(context, CONTROL_BORDER_WIDTH)
 
-cairo_pattern_t* selPattern = NULL;
+cairo_pattern_t* selPatternRed = NULL; // use in main menu
+cairo_pattern_t* selPatternBlue = NULL; // used in-game
+cairo_pattern_t* selPatternYellow = NULL; // used in creator mode
 
-cairo_t* DrawButton(cairo_t* context, double x, double y, double w, double h, bool highlighted)
+cairo_t* DrawButton(cairo_t* context, double x, double y, double w, double h, ControlHighlight highlight)
 {
-	if (highlighted)
+	if (highlight > CH_NONE)
 	{
-		_PrepareSelPattern();
+		_PrepareSelPatterns();
+		cairo_pattern_t* highlightPattern;
+		if (highlight == CH_INGAME)
+		{
+			highlightPattern = selPatternBlue;
+		}
+		else if (highlight == CH_CREATORMODE)
+		{
+			highlightPattern = selPatternYellow;
+		}
+		else
+		{
+			highlightPattern = selPatternRed;
+		}
+
 		cairo_rectangle(
 			context,
 			x - HIGHLIGHT_HALO_SIZE,
@@ -39,7 +55,7 @@ cairo_t* DrawButton(cairo_t* context, double x, double y, double w, double h, bo
 			h + 2 * HIGHLIGHT_HALO_SIZE
 		);
 
-		cairo_set_source(context, selPattern);
+		cairo_set_source(context, highlightPattern);
 		cairo_fill(context);
 
 		COLOR_CONTROL_BACKGROUND;
@@ -54,7 +70,7 @@ cairo_t* DrawButton(cairo_t* context, double x, double y, double w, double h, bo
 			h - BUTTON_INSET_TWICE
 		);
 
-		cairo_set_source(context, selPattern);
+		cairo_set_source(context, highlightPattern);
 		cairo_fill(context);
 
 		COLOR_CONTROL_BACKGROUND;
@@ -181,30 +197,46 @@ cairo_t* DrawChevron(cairo_t* context, double centerx, double centery, bool left
 
 void TeardownDialogControls()
 {
-	if (selPattern)
+	if (selPatternRed)
 	{
-		cairo_pattern_destroy(selPattern);
+		cairo_pattern_destroy(selPatternRed);
+	}
+
+	if (selPatternBlue)
+	{
+		cairo_pattern_destroy(selPatternBlue);
+	}
+
+	if (selPatternYellow)
+	{
+		cairo_pattern_destroy(selPatternYellow);
 	}
 }
 
-void _PrepareSelPattern()
+void _PrepareSelPatterns()
 {
-	if (!selPattern)
+	if (!selPatternRed)
 	{
 		double j;
 		int stride = 1;
 
-		selPattern = cairo_pattern_create_linear(0.0, 0.0, 350.0, 350.0);
+		selPatternRed = cairo_pattern_create_linear(0.0, 0.0, 350.0, 350.0);
+		selPatternBlue = cairo_pattern_create_linear(0.0, 0.0, 350.0, 350.0);
+		selPatternYellow = cairo_pattern_create_linear(0.0, 0.0, 350.0, 350.0);
 
 		for (j = 0.1; j < 1; j += 0.1)
 		{
 			if ((stride % 2))
 			{
-				cairo_pattern_add_color_stop_rgb(selPattern, j, 0.35, 0.1, 0.1);
+				cairo_pattern_add_color_stop_rgb(selPatternRed, j, 0.35, 0.1, 0.1);
+				cairo_pattern_add_color_stop_rgb(selPatternBlue, j, 0.1, 0.1, 0.35);
+				cairo_pattern_add_color_stop_rgb(selPatternYellow, j, 0.35, 0.35, 0.1);
 			}
 			else
 			{
-				cairo_pattern_add_color_stop_rgb(selPattern, j, 1, 0.3, 0.2);
+				cairo_pattern_add_color_stop_rgb(selPatternRed, j, 1, 0.3, 0.2);
+				cairo_pattern_add_color_stop_rgb(selPatternBlue, j, 0.2, 0.3, 1);
+				cairo_pattern_add_color_stop_rgb(selPatternYellow, j, 1, 1, 0.2);
 			}
 
 			++stride;

@@ -141,11 +141,11 @@ namespace blooDot::MenuContinueEmpty
 			DrawLabel(renderer, 286, 51, titleTexture, &titleRect);
 
 			const auto drawingTexture = BeginRenderDrawing(renderer, GodsPreferredWidth, GodsPreferredHight);
-			if (drawingTexture) [[likely]]
+			if (drawingTexture)
 			{
 				const auto drawingSink = GetDrawingSink();
 				const auto y = 94;
-				DrawButton(drawingSink, 195, y, 250, 42, true);
+				DrawButton(drawingSink, 195, y, 250, 42, CH_MAINMENU);
 				DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);
 				DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
 

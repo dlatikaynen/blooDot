@@ -254,7 +254,7 @@ namespace blooDot::MenuSettingsScreen
 						y,
 						vignetteWidth,
 						itemToDraw > SSMI_CANCEL ? vignetteHeight : 42,
-						itemToDraw == menuSelection
+						itemToDraw == menuSelection ? CH_MAINMENU : CH_NONE
 					);
 
 					if (itemToDraw == menuSelection)

@@ -100,6 +100,13 @@ enum DialogMenuResult {
 	DMR_LAUNCH_MAKER
 };
 
+enum ControlHighlight {
+	CH_NONE,
+	CH_MAINMENU,
+	CH_INGAME,
+	CH_CREATORMODE
+};
+
 enum DingProps : unsigned char
 {
 	Default = 0,

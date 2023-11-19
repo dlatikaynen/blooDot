@@ -214,7 +214,7 @@ namespace blooDot::MenuInGame
 			DrawLabel(renderer, outerMenuRect.x + 133, outerMenuRect.y + 9, titleTexture, &titleRect);
 
 			const auto drawingTexture = BeginRenderDrawing(renderer, physicalW, physicalH);
-			if (drawingTexture) [[likely]]
+			if (drawingTexture)
 			{
 				const auto drawingSink = GetDrawingSink();
 				const auto firstY = outerMenuRect.y + 49;
@@ -225,7 +225,7 @@ namespace blooDot::MenuInGame
 				InGameMenuItems itemToDraw = IGMI_DISMISS;
 				for (auto y = firstY; y < bottom; y += stride)
 				{
-					DrawButton(drawingSink, left, y, 250, 42, itemToDraw == menuSelection);
+					DrawButton(drawingSink, left, y, 250, 42, itemToDraw == menuSelection ? CH_INGAME : CH_NONE);
 					if (itemToDraw == menuSelection)
 					{
 						DrawChevron(drawingSink, left - 7, y + 21, false, frame);

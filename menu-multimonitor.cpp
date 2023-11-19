@@ -150,7 +150,7 @@ namespace blooDot::MultiMonitorMenuScreen
 						y,
 						vignetteWidth,
 						itemToDraw > MMMI_CANCEL ? vignetteHeight : 42,
-						thisItem
+						thisItem ? CH_MAINMENU : CH_NONE
 					);
 
 					if (thisItem)

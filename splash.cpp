@@ -179,7 +179,7 @@ namespace blooDot::Splash
 				for (auto y = yStart; y < 400; y += stride)
 				{
 					auto thisItem = itemToDraw == menuState.selectedItemIndex;
-					DrawButton(drawingSink, 195, y, 250, 42, thisItem);
+					DrawButton(drawingSink, 195, y, 250, 42, thisItem ? CH_MAINMENU : CH_NONE);
 					if (thisItem)
 					{
 						DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);
