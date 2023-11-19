@@ -31,6 +31,7 @@ namespace blooDot::Map
 		short pixOffsetX = 0;
 		short pixOffsetY = 0;
 		short rotationAngle = 0;
+		short zIndex = 0;
 	} DingPlacement;
 
 	typedef struct StaticMapRegionDescriptorStruct {
@@ -61,6 +62,7 @@ namespace blooDot::Map
 		short pixX = 0;
 		short pixY = 0;
 		short angle = 0;
+		short zIndex = 0;
 		DingProps props = DingProps::Default;
 	} DingOnMapPositioning;
 

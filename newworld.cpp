@@ -85,12 +85,13 @@ namespace blooDot::World
 				placement.pixOffsetX,
 				placement.pixOffsetY,
 				placement.rotationAngle,
+				placement.zIndex,
 				placement.props
 			);
 		}
 	}
 
-	void _Put(std::shared_ptr<WorldSheet> sheet, int x, int y, Ding ding, short pixX, short pixY, short angle, DingProps props)
+	void _Put(std::shared_ptr<WorldSheet> sheet, int x, int y, Ding ding, short pixX, short pixY, short angle, short zIndex, DingProps props)
 	{
 		const auto pieceIndex = (y + WORLD_SHEET_CENTERPOINT) * WORLD_SHEET_SIDELENGTH + x + WORLD_SHEET_CENTERPOINT;
 		const auto instancePtr = std::make_shared<DingInstance>();
@@ -103,6 +104,7 @@ namespace blooDot::World
 		instancePtr->pixOffsetX = pixX;
 		instancePtr->pixOffsetY = pixY;
 		instancePtr->rotationAngle = angle;
+		instancePtr->zIndex = zIndex;
 
 		/* 2. register the entity in the world sheet storage.
 		*     this step may become obsolete since they now live on the heap */

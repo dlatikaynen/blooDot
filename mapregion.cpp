@@ -314,6 +314,7 @@ namespace blooDot::Map
 		placement.pixOffsetX = positioning.pixX;
 		placement.pixOffsetY = positioning.pixY;
 		placement.rotationAngle = positioning.angle;
+		placement.zIndex = positioning.zIndex;
 		region->dingPlacement.push_back(placement);
 	}
 
