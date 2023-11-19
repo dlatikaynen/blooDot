@@ -63,120 +63,165 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 	cairo_fill(drawingSink);
 	cairo_set_operator(drawingSink, CAIRO_OPERATOR_SOURCE);
 	cairo_paint_with_alpha(drawingSink, 1);
-	bool isFirst = true;
+	bool isFirstCell = true;
 	int lastIterX = 0, lastIterY = 0;
 	int objectCount = 0;
 #endif
 
-	for (auto y = myAwareness->localDrawingOffsetY; y <= flapH; y += GRIDUNIT)
+	std::map<short, short> zPasses = { {(short)0, (short)0} }; // key = zIndex, value == const 0
+	auto zIndexIterator = std::begin(zPasses);
+	short zIndexCurrent = 0;
+	for (short zPass = 0; ; ++zPass)
 	{
-		for (auto x = myAwareness->localDrawingOffsetX; x <= flapW; x += GRIDUNIT)
+		/* in the first pass, we render only those with the lowest
+		 * (=bommommost) z-index. We also use the first pass to get
+		 * the range of distinct z-indices so that in each subsequent
+		 * pass, we know what to draw, and actually draw only that */
+		for (auto y = myAwareness->localDrawingOffsetY; y <= flapH; y += GRIDUNIT)
 		{
+			for (auto x = myAwareness->localDrawingOffsetX; x <= flapW; x += GRIDUNIT)
+			{
 #ifndef NDEBUG
-			if (isFirst)
-			{
-				cairo_set_source_rgb(drawingSink, 1, 1, 1);
-				cairo_move_to(drawingSink, x + GRIDUNIT + 3, y + GRIDUNIT + 13);
-				cairo_set_font_size(drawingSink, 16);
-				std::stringstream flapInWorldLabel;
-				flapInWorldLabel << "[" << myAwareness->myGridLeftX << "," << myAwareness->myGridToopY << "]";					
-				cairo_text_path(drawingSink, flapInWorldLabel.str().c_str());
-				cairo_fill(drawingSink);
-				cairo_set_source_rgb(drawingSink, 0, 1, 1);
-				isFirst = false;
-			}
-			else
-			{
-				cairo_set_source_rgb(drawingSink, 0, 0, 1);
-				lastIterX = x;
-				lastIterY = y;
-			}
-
-			cairo_move_to(drawingSink, x + 1, y);
-			cairo_line_to(drawingSink, x + 4, y);
-			cairo_move_to(drawingSink, x, y + 1);
-			cairo_line_to(drawingSink, x, y + 4);
-
-			cairo_move_to(drawingSink, x + GRIDUNIT - 1, y + GRIDUNIT);
-			cairo_line_to(drawingSink, x + GRIDUNIT - 4, y + GRIDUNIT);
-			cairo_move_to(drawingSink, x + GRIDUNIT, y + GRIDUNIT - 1);
-			cairo_line_to(drawingSink, x + GRIDUNIT, y + GRIDUNIT - 4);
-			cairo_stroke(drawingSink);
-#endif
-
-			const auto cellPieces = GetPiecesRelative(worldX, worldY);
-			if (!cellPieces->empty())
-			{
-				for (auto& ding : *cellPieces)
+				if (zPass == 0)
 				{
-					const auto dingLocator = GetDing(ding->ding);
-					if (dingLocator->onSheet) [[likely]]
+					if (isFirstCell)
 					{
-#ifndef NDEBUG
-						++objectCount;
+						cairo_set_source_rgb(drawingSink, 1, 1, 1);
+						cairo_move_to(drawingSink, x + GRIDUNIT + 3, y + GRIDUNIT + 13);
+						cairo_set_font_size(drawingSink, 16);
+						std::stringstream flapInWorldLabel;
+						flapInWorldLabel << "[" << myAwareness->myGridLeftX << "," << myAwareness->myGridToopY << "]";
+						cairo_text_path(drawingSink, flapInWorldLabel.str().c_str());
+						cairo_fill(drawingSink);
+						cairo_set_source_rgb(drawingSink, 0, 1, 1);
+						isFirstCell = false;
+					}
+					else
+					{
+						cairo_set_source_rgb(drawingSink, 0, 0, 1);
+						lastIterX = x;
+						lastIterY = y;
+					}
+
+					cairo_move_to(drawingSink, x + 1, y);
+					cairo_line_to(drawingSink, x + 4, y);
+					cairo_move_to(drawingSink, x, y + 1);
+					cairo_line_to(drawingSink, x, y + 4);
+
+					cairo_move_to(drawingSink, x + GRIDUNIT - 1, y + GRIDUNIT);
+					cairo_line_to(drawingSink, x + GRIDUNIT - 4, y + GRIDUNIT);
+					cairo_move_to(drawingSink, x + GRIDUNIT, y + GRIDUNIT - 1);
+					cairo_line_to(drawingSink, x + GRIDUNIT, y + GRIDUNIT - 4);
+					cairo_stroke(drawingSink);
+				}
 #endif
-						if (ding->props & DingProps::Walls)
-						{
-							if (SDL_SetRenderTarget(GameViewRenderer, walls) < 0)
-							{
-								const auto wallsError = SDL_GetError();
-								ReportError("Could not set render target to walls", wallsError);
-							}
-						}
-						else if (ding->props & DingProps::Rooof)
-						{
-							if (SDL_SetRenderTarget(GameViewRenderer, rooof) < 0)
-							{
-								const auto rooofError = SDL_GetError();
-								ReportError("Could not set render target to rooof", rooofError);
-							}
-						}
-						else
-						{
-							if (SDL_SetRenderTarget(GameViewRenderer, floor) < 0)
-							{
-								const auto floorError = SDL_GetError();
-								ReportError("Could not set render target to floor", floorError);
-							}
-						}
 
-						SDL_Rect dest = {
-							x + ding->pixOffsetX,
-							y + ding->pixOffsetY,
-							dingLocator->src.w,
-							dingLocator->src.h 
-						};
-
-						if (ding->rotationAngle == 0)
+				const auto cellPieces = GetPiecesRelative(worldX, worldY);
+				if (!cellPieces->empty())
+				{
+					for (auto& ding : *cellPieces)
+					{
+						const auto dingLocator = GetDing(ding->ding);
+						if (dingLocator->onSheet)
 						{
-							if (SDL_RenderCopy(GameViewRenderer, dingLocator->onSheet, &(dingLocator->src), &dest) < 0)
+#ifndef NDEBUG
+							if (zPass == 0)
 							{
-								const auto placeError = SDL_GetError();
-								ReportError("Could not place ding on flap", placeError);
+								++objectCount;
 							}
-						}
-						else if (SDL_RenderCopyEx(
-							GameViewRenderer,
-							dingLocator->onSheet,
-							&(dingLocator->src),
-							&dest,
-							ding->rotationAngle,
-							nullptr,
-							SDL_RendererFlip::SDL_FLIP_NONE
-						) < 0)
-						{
-							const auto placeError = SDL_GetError();
-							ReportError("Could not warp ding onto flap", placeError);
+
+#endif
+							short zIndexActual = 0;
+							if (ding->props & DingProps::Walls)
+							{
+								if (SDL_SetRenderTarget(GameViewRenderer, walls) < 0)
+								{
+									const auto wallsError = SDL_GetError();
+									ReportError("Could not set render target to walls", wallsError);
+								}
+
+								zIndexActual = ding->zIndex + 100;
+							}
+							else if (ding->props & DingProps::Rooof)
+							{
+								if (SDL_SetRenderTarget(GameViewRenderer, rooof) < 0)
+								{
+									const auto rooofError = SDL_GetError();
+									ReportError("Could not set render target to rooof", rooofError);
+								}
+
+								zIndexActual = ding->zIndex + 200;
+							}
+							else
+							{
+								if (SDL_SetRenderTarget(GameViewRenderer, floor) < 0)
+								{
+									const auto floorError = SDL_GetError();
+									ReportError("Could not set render target to floor", floorError);
+								}
+
+								zIndexActual = ding->zIndex;
+							}
+
+							if (zPass == 0)
+							{
+								auto zIndexMentioned = zPasses.find(zIndexActual);
+								if (zIndexMentioned == zPasses.end())
+								{
+									// we just use the fact that maps are sorted by key, by default
+									zPasses[zIndexActual] = zIndexActual;
+								}
+							}
+
+							if ((zPass == 0 && zIndexActual == 0) || (zPass > 0 && zIndexCurrent == zIndexActual))
+							{
+								SDL_Rect dest = {
+									x + ding->pixOffsetX,
+									y + ding->pixOffsetY,
+									dingLocator->src.w,
+									dingLocator->src.h
+								};
+
+								if (ding->rotationAngle == 0)
+								{
+									if (SDL_RenderCopy(GameViewRenderer, dingLocator->onSheet, &(dingLocator->src), &dest) < 0)
+									{
+										const auto placeError = SDL_GetError();
+										ReportError("Could not place ding on flap", placeError);
+									}
+								}
+								else if (SDL_RenderCopyEx(
+									GameViewRenderer,
+									dingLocator->onSheet,
+									&(dingLocator->src),
+									&dest,
+									ding->rotationAngle,
+									nullptr,
+									SDL_RendererFlip::SDL_FLIP_NONE
+								) < 0)
+								{
+									const auto placeError = SDL_GetError();
+									ReportError("Could not warp ding onto flap", placeError);
+								}
+							}
 						}
 					}
 				}
+
+				++worldX;
 			}
 
-			++worldX;
+			++worldY;
+			worldX = leftWorldX;
 		}
 
-		++worldY;
-		worldX = leftWorldX;
+		/* now do we need another pass? (all z-indices covered?) */
+		if ((zPasses.size() - 1) == zPass)
+		{
+			break;
+		}
+
+		zIndexCurrent = (++zIndexIterator)->first;
 	}
 
 #ifndef NDEBUG

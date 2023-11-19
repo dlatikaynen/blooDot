@@ -51,6 +51,17 @@ typedef struct DingInstanceStruct
 	/// for non-rectangular positioning on a worldsheet
 	/// </summary>
 	short rotationAngle = 0;
+
+	/// <summary>
+	/// Inside a layer, placements may require rendering them
+	/// in a particular order. Example: The snavior is encompassed
+	/// by a round "pedestal", which merges with the square flooring
+	/// around it. In order to preserve visibility of the round shape,
+	/// the floor tiles have to be below (0) the floor pedestal (1).
+	/// There are 100 z-indices in every layer; for wall objects, 100
+	/// is implied and for rooof objects, 200 is implied.
+	/// </summary>
+	short zIndex = 0;
 } DingInstance;
 
 /// <summary>

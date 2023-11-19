@@ -55,6 +55,10 @@ namespace blooDot::Map
 		_Define(descriptor, { 2, -4, Ding::WallClassic });
 		_Define(descriptor, { 2, -5, Ding::WallClassic });
 
+		// the snavior is placed "smack in the legumes"
+		// just so we can test collisions here, temporarily
+		_Define(descriptor, { 1, 4, Ding::SnaviorMonumentFloor });
+		_Define(descriptor, { 1, 4, Ding::SnaviorMonumentHead, 48, 147 });
 		_Define(descriptor, { 6, 4, Ding::Grass });
 		_Define(descriptor, { 7, 4, Ding::Grass });
 		_Define(descriptor, { 6, 5, Ding::Grass });
@@ -84,12 +88,6 @@ namespace blooDot::Map
 
 			_Define(descriptor, { i, y, Ding::Schaed });
 		}
-
-		// the snavior is placed "smack in the legumes"
-		// just so we can test collisions here, temporarily
-		_Define(descriptor, { 0, 0, Ding::SnaviorMonumentFloor });
-		_Define(descriptor, { 0, 0, Ding::SnaviorMonumentHead, 48, 147 });
-
 
 		_TeardownDesigntimeRepresentation(descriptor);
 
