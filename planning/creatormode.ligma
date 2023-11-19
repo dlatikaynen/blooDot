@@ -1,0 +1,47 @@
+﻿   1. How to start
+└─────────────────
+
+  [ ] Main menu in non-release builds contains an item "Creator mode"
+
+
+   2. In-maker menu
+└──────────────────
+
+  While inside the maker arena, the following menu is available:
+
+    1. Save --> writes changes to the current level file
+    2. Load --> loads another level file. also use to discard changes
+    3. Map  --> show the map of the region that is currently being edited
+    4. Controls
+    5. Knowledge base
+    6. Leave --> Save (if dirty) and exit to splash screen
+
+
+   3. Ding palette
+└─────────────────
+
+  As the maker mode is only ever available in the square screen format,
+  the two desktop landscape letterboxes are used to show the most frequently
+  used maker controls, the ding palette being one of these.
+
+  [ ] On the left side, the floor/walls/rooof explosion is shown,
+      and can be used to compose and configure a placement.
+
+  [ ] An item can be added to the ding palette by loading the images,
+      and a collision geometry csv if it is a non-orthogonal geometry
+
+   4. Positioning
+└────────────────
+
+  [ ] The editor can be rotated arbitrarily to create slanted and tapering
+      designs. The default rotation is NSEW-locked square.
+  
+  [ ] Players can shit a brick by pressing (A) on the controller. An instance
+      of the currently selected palette ding is added to the placements
+      list of the edited region.
+
+   5. Properties
+└───────────────
+
+  [ ] Property editor dialog pages are accessible using the controller,
+      and hotkeys.

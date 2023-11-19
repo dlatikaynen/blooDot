@@ -85,6 +85,12 @@ namespace blooDot::Map
 			_Define(descriptor, { i, y, Ding::Schaed });
 		}
 
+		// the snavior is placed "smack in the legumes"
+		// just so we can test collisions here, temporarily
+		_Define(descriptor, { 0, 0, Ding::SnaviorMonumentFloor });
+		_Define(descriptor, { 0, 0, Ding::SnaviorMonumentHead, 48, 147 });
+
+
 		_TeardownDesigntimeRepresentation(descriptor);
 
 		return true;

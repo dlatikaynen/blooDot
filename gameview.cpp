@@ -47,7 +47,7 @@ bool GameviewEnterWorld()
 	PopulateAllFlaps();
 	blooDot::Player::InitializePlayers(4);
 	gotHud = blooDot::Hud::Initialize();
-	gotRegionBanner = isCreatorMode && blooDot::RegionBanner::Initialize();
+	gotRegionBanner = !isCreatorMode && blooDot::RegionBanner::Initialize();
 	DetermineCurrentRegion(0, 0);
 
 #ifndef NDEBUG

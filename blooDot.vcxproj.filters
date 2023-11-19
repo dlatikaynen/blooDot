@@ -508,6 +508,9 @@
     <None Include="res\snurch-snavior-collision.csv">
       <Filter>Resource Files\dings\unique</Filter>
     </None>
+    <None Include="planning\creatormode.ligma">
+      <Filter>Planning</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\nn-splash-scene.png">

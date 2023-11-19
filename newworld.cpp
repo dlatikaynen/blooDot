@@ -67,8 +67,8 @@ namespace blooDot::World
 			return false;
 		}
 
-		//_InstantiateStaticRegionOnWorldsheet(centerSheet, sculleryStatic);
-		_InstantiateStaticRegionOnWorldsheet(centerSheet, snurchStatic);
+		_InstantiateStaticRegionOnWorldsheet(centerSheet, sculleryStatic);
+		//_InstantiateStaticRegionOnWorldsheet(centerSheet, snurchStatic);
 
 		return true;
 	}

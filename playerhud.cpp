@@ -8,6 +8,7 @@
 
 extern SDL_Renderer* GameViewRenderer;
 extern SettingsStruct Settings;
+extern bool isCreatorMode;
 extern int blooDot::Player::NumPlayers;
 
 namespace blooDot::Hud
@@ -313,10 +314,13 @@ namespace blooDot::Hud
 
 		if (useLetterboxesForHud)
 		{
-			// HP flowers
-			for (auto i = 0; i < blooDot::Player::NumPlayers; ++i)
+			if (!isCreatorMode)
 			{
-				SDL_RenderCopy(GameViewRenderer, Current[i], &Source, &Destination[i]);
+				// HP flowers
+				for (auto i = 0; i < blooDot::Player::NumPlayers; ++i)
+				{
+					SDL_RenderCopy(GameViewRenderer, Current[i], &Source, &Destination[i]);
+				}
 			}
 
 			// minimap
