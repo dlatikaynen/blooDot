@@ -119,6 +119,7 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 				const auto cellPieces = GetPiecesRelative(worldX, worldY);
 				if (!cellPieces->empty())
 				{
+					std::cout << "\n\nNOT-EMPTY! " << worldX << "," << worldY << "\n\n";
 					for (auto& ding : *cellPieces)
 					{
 						const auto dingLocator = GetDing(ding->ding);
@@ -205,6 +206,10 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 								}
 							}
 						}
+						else
+						{
+							std::cout << "dinglocator not on sheet\n";
+						}
 					}
 				}
 
@@ -222,6 +227,10 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 		}
 
 		zIndexCurrent = (++zIndexIterator)->first;
+
+		/* reset flap's offset (origin) in world for next pass */
+		worldX = leftWorldX;
+		worldY = myAwareness->myGridToopY;
 	}
 
 #ifndef NDEBUG
