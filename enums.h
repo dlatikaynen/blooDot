@@ -17,7 +17,10 @@ enum SoundEffect {
 	SFX_SELCONF,
 	SFX_ASTERISK,
 	SFX_CRICKET_FRITZ,
-	SFX_CRICKET_FRANZ
+	SFX_CRICKET_FRANZ,
+	SFX_FLOOR,
+	SFX_WALLS,
+	SFX_ROOOF
 };
 
 enum UserInterfaceLanguages : char {

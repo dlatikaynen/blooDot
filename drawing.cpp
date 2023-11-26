@@ -97,6 +97,20 @@ cairo_t* GetDrawingSink()
 	return drawingSink;
 }
 
+cairo_t* SetSourceColor(cairo_t* context, SDL_Color color)
+{
+	cairo_set_source_rgba
+	(
+		context,
+		color.r / 255.,
+		color.g / 255.,
+		color.b / 255.,
+		color.a / 255.
+	);
+
+	return context;
+}
+
 void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture, SDL_Rect* destRect)
 {
 	SDL_UnlockTexture(targetTexture);

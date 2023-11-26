@@ -162,6 +162,24 @@ MakerMenuTeleport
 	[am]	Quantum move
 	[de]	Quantensprung
 
+DesignLayerFloorLabel
+	[am]	floor
+	[de]	Boden
+	[fi]	pohja
+	[ua]	днооо
+
+DesignLayerWallsLabel
+	[am]	walls
+	[de]	Wände
+	[fi]	seinä
+	[ua]	стіни
+
+DesignLayerRooofLabel
+	[am]	rooof
+	[de]	Daach
+	[fi]	katto
+	[ua]	стеля
+
 SettingsMenuScreensize
 	[am]	Screen size
 	[de]	Grafikmodus

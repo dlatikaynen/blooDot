@@ -119,7 +119,6 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 				const auto cellPieces = GetPiecesRelative(worldX, worldY);
 				if (!cellPieces->empty())
 				{
-					std::cout << "\n\nNOT-EMPTY! " << worldX << "," << worldY << "\n\n";
 					for (auto& ding : *cellPieces)
 					{
 						const auto dingLocator = GetDing(ding->ding);

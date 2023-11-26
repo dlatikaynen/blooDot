@@ -682,6 +682,15 @@
     <Media Include="res\cricket-franz.wav">
       <Filter>Resource Files\sfx</Filter>
     </Media>
+    <Media Include="res\floor.wav">
+      <Filter>Resource Files\sfx</Filter>
+    </Media>
+    <Media Include="res\rooof.wav">
+      <Filter>Resource Files\sfx</Filter>
+    </Media>
+    <Media Include="res\walls.wav">
+      <Filter>Resource Files\sfx</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="blooDot.rc">

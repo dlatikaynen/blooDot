@@ -1,6 +1,14 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include <box2d/box2d.h>
+#include "playerhud.h"
+#include "geom2d.h"
+#include "newworld.h"
+#include "menu-ingame.h"
+#include "settings.h"
+#include "savegame.h"
+#include "constants.h"
+#include "sfx.h"
 
 extern bool GameviewEnterWorld();
 extern void EnsurePlayers();

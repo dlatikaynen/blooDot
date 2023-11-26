@@ -16,7 +16,6 @@ constexpr int const flapWorldOffsetsX[9] = { -1,0,1,-1,0,1,-1,0,1 };
 constexpr int const flapWorldOffsetsY[9] = { -1,-1,-1,0,0,0,1,1,1 };
 
 extern void ReportError(const char*, const char*);
-extern SDL_Texture* NewTexture(SDL_Renderer* renderer, int w, int h, bool transparentAble, bool forCairo = false);
 extern cairo_t* BeginTextureDrawing(SDL_Texture* targetTexture, const int canvasWidth, const int canvasHeight);
 extern void EndTextureDrawing(SDL_Texture*, cairo_t*);
 extern void PopulateFlap(int, int, int);

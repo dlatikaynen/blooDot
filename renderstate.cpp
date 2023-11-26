@@ -5,6 +5,8 @@
 #include "xlations.h"
 #include "geom2d.h"
 
+extern SDL_Texture* NewTexture(SDL_Renderer* renderer, int w, int h, bool transparentAble, bool forCairo = false);
+
 extern SDL_Renderer* GameViewRenderer;
 
 /* this is where the centerpoint of the nine flaps is in the world */

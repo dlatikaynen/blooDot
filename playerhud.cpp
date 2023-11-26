@@ -1,10 +1,5 @@
 #include "pch.h"
 #include "playerhud.h"
-#include "playerstate.h"
-#include "settings.h"
-#include "drawing.h"
-#include "resutil.h"
-#include "collision.h"
 
 extern SDL_Renderer* GameViewRenderer;
 extern SettingsStruct Settings;
@@ -29,6 +24,21 @@ namespace blooDot::Hud
 	SDL_Rect minimapDims = { 0 };
 	SDL_Rect minimapSurc = { 0 };
 	SDL_Rect minimapDest = { 0 };
+
+	// makermode stuff
+	SDL_Texture* DesignLayers = nullptr;
+	SDL_Rect designLayersDims = { 0 };
+	SDL_Rect designLayersDest = { 0 };
+	SDL_Rect designLayerFloorLabelRect{ 0,0,0,0 };
+	SDL_Texture* designLayerFloorLabel = nullptr;
+	SDL_Texture* designLayerFloorLabelSelected = nullptr;
+	SDL_Rect designLayerWallsLabelRect{ 0,0,0,0 };
+	SDL_Texture* designLayerWallsLabel = nullptr;
+	SDL_Texture* designLayerWallsLabelSelected = nullptr;
+	SDL_Rect designLayerRooofLabelRect{ 0,0,0,0 };
+	SDL_Texture* designLayerRooofLabel = nullptr;
+	SDL_Texture* designLayerRooofLabelSelected = nullptr;
+	DingProps selectedDesignLayer = DingProps::Floor;
 
 	/// <summary>
 	/// Layout depends on number of players and resolution
@@ -150,7 +160,25 @@ namespace blooDot::Hud
 			minimapSurc.h = minimapDest.h;
 		}
 
+		if (isCreatorMode)
+		{
+			_InitializeCreatorModeTools();
+		}
+
 		return true;
+	}
+
+	bool SetDesignLayer(DingProps layer)
+	{
+		if (selectedDesignLayer != layer)
+		{
+			selectedDesignLayer = layer;
+			_RedrawDesignLayersTool();
+
+			return true;
+		}
+
+		return false;
 	}
 
 	bool Redraw(int ofPlayerIndex)
@@ -314,7 +342,13 @@ namespace blooDot::Hud
 
 		if (useLetterboxesForHud)
 		{
-			if (!isCreatorMode)
+			if (isCreatorMode)
+			{
+				/* draw the extra stuff that is only there when
+				 * we are operating in creator (maker) mode */
+				SDL_RenderCopy(GameViewRenderer, DesignLayers, &designLayersDims, &designLayersDest);
+			}
+			else
 			{
 				// HP flowers
 				for (auto i = 0; i < blooDot::Player::NumPlayers; ++i)
@@ -344,6 +378,211 @@ namespace blooDot::Hud
 		DestroyTexture(&LetterboxBackdropL);
 		DestroyTexture(&LetterboxBackdropR);
 		DestroyTexture(&Minimap);
+		DestroyTexture(&designLayerRooofLabel);
+		DestroyTexture(&designLayerRooofLabelSelected);
+		DestroyTexture(&designLayerWallsLabel);
+		DestroyTexture(&designLayerWallsLabelSelected);
+		DestroyTexture(&designLayerFloorLabel);
+		DestroyTexture(&designLayerFloorLabelSelected);
+		DestroyTexture(&DesignLayers);
+	}
+
+	bool _InitializeCreatorModeTools()
+	{
+		designLayersDims.w = 170;
+		designLayersDims.h = 260;
+		designLayersDest.x = letterboxWidth / 2 - designLayersDims.w / 2;
+		designLayersDest.y = 100;
+		designLayersDest.w = designLayersDims.w;
+		designLayersDest.h = designLayersDims.h;
+
+		const auto& layersTexture = SDL_CreateTexture(
+			GameViewRenderer,
+			SDL_PIXELFORMAT_ARGB8888,
+			SDL_TEXTUREACCESS_TARGET,
+			designLayersDims.w,
+			designLayersDims.h
+		);
+
+		if (!layersTexture)
+		{
+			const auto createError = SDL_GetError();
+			ReportError("Failed to create the layers design tool texture", createError);
+
+			return false;
+		}
+
+		DesignLayers = layersTexture;
+		designLayerFloorLabelSelected = RenderText(
+			GameViewRenderer,
+			&designLayerFloorLabelRect,
+			FONT_KEY_DIALOG_FAT,
+			18,
+			literalDesignLayerFloorLabel,
+			DialogTextColor
+		);
+
+		designLayerFloorLabel = RenderText(
+			GameViewRenderer,
+			&designLayerFloorLabelRect,
+			FONT_KEY_DIALOG_FAT,
+			18,
+			literalDesignLayerFloorLabel,
+			DialogTextDisabledColor
+		);
+
+		designLayerWallsLabelSelected = RenderText(
+			GameViewRenderer,
+			&designLayerWallsLabelRect,
+			FONT_KEY_DIALOG_FAT,
+			18,
+			literalDesignLayerWallsLabel,
+			DialogTextColor
+		);
+
+		designLayerWallsLabel = RenderText(
+			GameViewRenderer,
+			&designLayerWallsLabelRect,
+			FONT_KEY_DIALOG_FAT,
+			18,
+			literalDesignLayerWallsLabel,
+			DialogTextDisabledColor
+		);
+
+		designLayerRooofLabelSelected = RenderText(
+			GameViewRenderer,
+			&designLayerRooofLabelRect,
+			FONT_KEY_DIALOG_FAT,
+			18,
+			literalDesignLayerRooofLabel,
+			DialogTextColor
+		);
+
+		designLayerRooofLabel = RenderText(
+			GameViewRenderer,
+			&designLayerRooofLabelRect,
+			FONT_KEY_DIALOG_FAT,
+			18,
+			literalDesignLayerRooofLabel,
+			DialogTextDisabledColor
+		);
+
+		return _RedrawDesignLayersTool();
+	}
+
+	bool _RedrawDesignLayersTool()
+	{
+		if (SDL_SetRenderTarget(GameViewRenderer, DesignLayers) < 0)
+		{
+			const auto targetError = SDL_GetError();
+			ReportError("Failed to set the layers design tool texture as the render target", targetError);
+
+			return false;
+		}
+
+		SDL_SetTextureBlendMode(DesignLayers, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(GameViewRenderer, 0, 0, 0, SDL_ALPHA_TRANSPARENT);
+		SDL_RenderClear(GameViewRenderer);
+
+		auto canvasTexture = BeginRenderDrawing(GameViewRenderer, designLayersDims.w, designLayersDims.h);
+		auto const& canvas = GetDrawingSink();
+
+		cairo_set_line_width(canvas, 5.);
+		cairo_set_source_rgb(canvas, .4, .4, .1);
+		cairo_set_line_join(canvas, CAIRO_LINE_JOIN_ROUND);
+		//cairo_rectangle(canvas, designLayersDims.x + 3, designLayersDims.y + 3, designLayersDims.w - 6, designLayersDims.h - 6);
+		//cairo_stroke(canvas);
+
+		auto const& yStride = designLayersDims.w / 4.;
+		auto const& xExtent = designLayersDims.w / 3.;
+		auto const& xSlantExtent = designLayersDims.w / 4.;
+		auto const& yExtent = designLayersDims.w / 6;
+		double const& baseY = designLayersDims.y + designLayersDims.h;
+		auto const& dashWidth = 5.;
+
+		// dashed guides
+		cairo_set_line_width(canvas, 2.2);
+		cairo_set_source_rgb(canvas, .31, .31, .32);
+		cairo_set_dash(canvas, &dashWidth, 1, 0.);
+		cairo_move_to(canvas, designLayersDims.x, baseY - yStride * 0);
+		cairo_rel_line_to(canvas, 0, -yStride * 2);
+		cairo_move_to(canvas, designLayersDims.x + xSlantExtent, baseY - yExtent - yStride * 0);
+		cairo_rel_line_to(canvas, 0, -yStride * 2);
+		cairo_move_to(canvas, designLayersDims.x + xExtent, baseY - yStride * 0);
+		cairo_rel_line_to(canvas, 0, -yStride * 2);
+		cairo_move_to(canvas, designLayersDims.x + xExtent + xSlantExtent, baseY - yExtent - yStride * 0);
+		cairo_rel_line_to(canvas, 0, -yStride * 2);
+		cairo_stroke(canvas);
+		cairo_set_dash(canvas, nullptr, 0, 0.);
+
+		auto layer = [canvas, xExtent, dashWidth, yStride, baseY, yExtent, xSlantExtent](int etage, bool selected)
+		{
+			auto const& widthPadding = 2.2;
+
+			cairo_set_line_width(canvas, widthPadding);
+			SetSourceColor(canvas, selected ? DialogTextColor : DialogTextDisabledColor);
+			cairo_move_to(canvas, designLayersDims.x + xExtent + dashWidth, baseY - yStride * etage);
+			cairo_line_to(canvas, designLayersDims.x + designLayersDims.w, baseY - yStride * etage);
+			cairo_stroke(canvas);
+			cairo_set_line_width(canvas, 2.6);
+			cairo_set_source_rgb(canvas, .3, .2, .6);
+			cairo_set_line_join(canvas, CAIRO_LINE_JOIN_BEVEL);
+			cairo_move_to(canvas, designLayersDims.x, baseY - yStride * etage);
+			cairo_rel_line_to(canvas, xExtent, 0.);
+			cairo_rel_line_to(canvas, xSlantExtent, -yExtent);
+			cairo_rel_line_to(canvas, -xExtent, 0.);
+			cairo_rel_line_to(canvas, -xSlantExtent, yExtent);
+			cairo_stroke(canvas);
+
+			if (selected)
+			{
+				DrawSelectedLayerTool(canvas, designLayersDims.x, baseY, yStride, xExtent, xSlantExtent, yExtent, widthPadding * 2, etage);
+			}
+
+			auto const& designLayerLabelPos = SDL_Rect
+			{
+				designLayersDims.x + designLayersDims.w - designLayerFloorLabelRect.w,
+				static_cast<int>(baseY - designLayerFloorLabelRect.h - yStride * etage - widthPadding),
+				designLayerFloorLabelRect.w,
+				designLayerFloorLabelRect.h
+			};
+
+			SDL_Texture* labelTexture = nullptr;
+			switch (etage) {
+			case 0:
+				labelTexture = selected ? designLayerFloorLabelSelected : designLayerFloorLabel;
+				break;
+					
+			case 1:
+				labelTexture = selected ? designLayerWallsLabelSelected : designLayerWallsLabel;
+				break;
+
+			case 2:
+				labelTexture = selected ? designLayerRooofLabelSelected : designLayerRooofLabel;
+				break;
+			}
+
+			if (labelTexture != nullptr)
+			{
+				SDL_RenderCopy(GameViewRenderer, labelTexture, NULL, &designLayerLabelPos);
+			}
+		};
+
+		layer(0, selectedDesignLayer & DingProps::Floor);
+		layer(1, selectedDesignLayer & DingProps::Walls);
+		layer(2, selectedDesignLayer & DingProps::Rooof);
+
+		EndRenderDrawing(GameViewRenderer, canvasTexture, nullptr);
+
+		if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
+		{
+			const auto resetError = SDL_GetError();
+			ReportError("Failed to reset the render target after rendering to layers design tool texture", resetError);
+
+			return false;
+		}
+
+		return true;
 	}
 
 	bool _DrawLetterboxBackdrops(int height)
@@ -408,8 +647,8 @@ namespace blooDot::Hud
 			const auto& canvas = GetDrawingSink();
 			cairo_move_to(canvas, 5, minimapChrome.h - 5);
 			cairo_curve_to(canvas,
-				1, minimapChrome.h / 2,
-				1, minimapChrome.h / 2,
+				1, minimapChrome.h / static_cast<double>(2),
+				1, minimapChrome.h / static_cast<double>(2),
 				5, 5
 			);
 
@@ -420,19 +659,25 @@ namespace blooDot::Hud
 			);
 
 			cairo_curve_to(canvas,
-				minimapChrome.w - 1, minimapChrome.h / 2,
-				minimapChrome.w - 1, minimapChrome.h / 2,
+				minimapChrome.w - 1, minimapChrome.h / static_cast<double>(2),
+				minimapChrome.w - 1, minimapChrome.h / static_cast<double>(2),
 				minimapChrome.w - 5, minimapChrome.h - 5
 			);
 
 			cairo_curve_to(canvas,
-				minimapChrome.w / 2, minimapChrome.h - 1,
-				minimapChrome.w / 2, minimapChrome.h - 1,
+				minimapChrome.w / static_cast<double>(2), minimapChrome.h - 1,
+				minimapChrome.w / static_cast<double>(2), minimapChrome.h - 1,
 				5, minimapChrome.h - 5
 			);
 
 			cairo_set_line_width(canvas, 3);
-			cairo_set_source_rgb(canvas, (0x48 / 3) / 255., (0x3d / 3) / 255., (0x8b / 3) / 255.);
+			cairo_set_source_rgb(
+				canvas,
+			    (static_cast<double>(0x48) / 3) / 255.,
+				(static_cast<double>(0x3d) / 3) / 255.,
+				(static_cast<double>(0x8b) / 3) / 255.
+			);
+
 			cairo_stroke(canvas);
 
 			EndRenderDrawing(GameViewRenderer, chrome, &minimapChrome);

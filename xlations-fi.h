@@ -37,6 +37,9 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_MakerMenuInitial = "Origin";
 	constexpr char const* _literal_fi_MakerMenuLast = "Last location";
 	constexpr char const* _literal_fi_MakerMenuTeleport = "Quantum move";
+	constexpr char const* _literal_fi_DesignLayerFloorLabel = "pohja";
+	constexpr char const* _literal_fi_DesignLayerWallsLabel = "seinä";
+	constexpr char const* _literal_fi_DesignLayerRooofLabel = "katto";
 	constexpr char const* _literal_fi_SettingsMenuScreensize = "Grafiikkatila";
 	constexpr char const* _literal_fi_SettingsMenuLanguage = "Kieli";
 	constexpr char const* _literal_fi_SettingsMenuHelp = "Apua";

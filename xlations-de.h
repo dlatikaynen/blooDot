@@ -37,6 +37,9 @@ namespace blooDot::de
 	constexpr char const* _literal_de_MakerMenuInitial = "Ursprung";
 	constexpr char const* _literal_de_MakerMenuLast = "Letzter Standort";
 	constexpr char const* _literal_de_MakerMenuTeleport = "Quantensprung";
+	constexpr char const* _literal_de_DesignLayerFloorLabel = "Boden";
+	constexpr char const* _literal_de_DesignLayerWallsLabel = "Wände";
+	constexpr char const* _literal_de_DesignLayerRooofLabel = "Daach";
 	constexpr char const* _literal_de_SettingsMenuScreensize = "Grafikmodus";
 	constexpr char const* _literal_de_SettingsMenuLanguage = "Sprache";
 	constexpr char const* _literal_de_SettingsMenuHelp = "Hilfe";

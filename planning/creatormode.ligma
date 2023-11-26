@@ -30,18 +30,53 @@
   [ ] An item can be added to the ding palette by loading the images,
       and a collision geometry csv if it is a non-orthogonal geometry
 
-   4. Positioning
+   4. Placement
+└──────────────
+
+  [ ] There is a layer selection and a ding selection.
+  [ ] The layer is selected by moving a selection rectangle between
+      the floor-walls-rooof thingy on the left letterbox.
+  [ ] When a layer is selected, the ding palette reduces to
+      only the dings that are potentially placeable on that layer
+  [ ] In that context, a go-under wall is a wall-only component
+      that cannot be selected from the rooof palette, but which can be
+      placed on the wall layer and subsequently lifted up to become
+      a rooof tile. The capability to do this is a property of the
+      wall ding definition.
+  [ ] Tiles that are part of a clumsy pack get their packing evaluated
+      even if they are in different layers, so that the "go-under" wall
+      is not discernible from the "wall-walls" by simply looking at
+      them merge or not merge, respectively. Non-gridlocked walls don't merge
+      except when they are placed first and then rotated as a compound.
+
+
+   5. Positioning
 └────────────────
 
   [ ] The editor can be rotated arbitrarily to create slanted and tapering
       designs. The default rotation is NSEW-locked square.
+
+  [ ] Grid-lock can be switched on and off.
+      Placed elements can be taken and locked/unlocked from the grid:
+      - unlock by switching gridlock off and taking them and moving them
+      - unlock by nudging them with the pixelwise movement shift
+      - lock them by switching gridlock on and taking them and moving them
+
+  [ ] Coalesceing can be switched on and off.
+      - Coalescable elements will only coalesce when they are placed in gridllock
+      - Coalesced elements will rotate/lose gridlock as a compound
+      - Coalesced, no-longer-gridlocked compounds will move as a compound
+      - A single element taken away from a coalesced compound in gridlock will
+        decoalesce the element
   
   [ ] Players can shit a brick by pressing (A) on the controller. An instance
       of the currently selected palette ding is added to the placements
-      list of the edited region.
+      list of the edited region. Moving the player whilst shitting bricks
+      will make straight lines in gridlocked mode, and drop droppings if in non-
+      gridlocked mode
 
-   5. Properties
+   6. Properties
 └───────────────
 
   [ ] Property editor dialog pages are accessible using the controller,
-      and hotkeys.
+      and hotkeys and keyboard key combinations.

@@ -15,6 +15,9 @@ namespace blooDot::Sfx
 		_PreloadSingle(SoundEffect::SFX_ASTERISK);
 		_PreloadSingle(SoundEffect::SFX_CRICKET_FRITZ);
 		_PreloadSingle(SoundEffect::SFX_CRICKET_FRANZ);
+		_PreloadSingle(SoundEffect::SFX_FLOOR);
+		_PreloadSingle(SoundEffect::SFX_WALLS);
+		_PreloadSingle(SoundEffect::SFX_ROOOF);
 	}
 
 	void PreloadGameSfx()
@@ -116,6 +119,15 @@ namespace blooDot::Sfx
 
 		case SoundEffect::SFX_CRICKET_FRITZ:
 			return CHUNK_KEY_SFX_CRICKET_FRITZ;
+
+		case SoundEffect::SFX_FLOOR:
+			return CHUNK_KEY_SFX_FLOOR;
+
+		case SoundEffect::SFX_WALLS:
+			return CHUNK_KEY_SFX_WALLS;
+
+		case SoundEffect::SFX_ROOOF:
+			return CHUNK_KEY_SFX_ROOOF;
 
 		default:
 			throw;

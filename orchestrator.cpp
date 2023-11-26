@@ -1,16 +1,10 @@
 #include "pch.h"
 #include "orchestrator.h"
-#include "menu-ingame.h"
-#include "settings.h"
-#include "savegame.h"
-#include "constants.h"
 #include "physics-render-binding.h"
 
 #ifndef NDEBUG
 #include "physicsdebugdraw.h"
 #endif
-#include "geom2d.h"
-#include "newworld.h"
 
 using namespace blooDot::Dings;
 using namespace blooDot::World;
@@ -153,6 +147,34 @@ namespace blooDot::Orchestrator
 						if (mainEvent.key.keysym.scancode == SDL_SCANCODE_F6)
 						{
 							toggleDebugView = !toggleDebugView;
+						}
+
+						break;
+
+					case SDL_KEYDOWN:
+						if (isCreatorMode)
+						{
+							if (mainEvent.key.keysym.sym == SDL_KeyCode::SDLK_1)
+							{
+								if (Hud::SetDesignLayer(DingProps::Floor))
+								{
+									Sfx::Play(SFX_FLOOR);
+								}
+							}
+							else if (mainEvent.key.keysym.sym == SDL_KeyCode::SDLK_2)
+							{
+								if (Hud::SetDesignLayer(DingProps::Walls))
+								{
+									Sfx::Play(SFX_WALLS);
+								}
+							}
+							else if (mainEvent.key.keysym.sym == SDL_KeyCode::SDLK_3)
+							{
+								if (Hud::SetDesignLayer(DingProps::Rooof))
+								{
+									Sfx::Play(SFX_ROOOF);
+								}
+							}
 						}
 
 						break;
