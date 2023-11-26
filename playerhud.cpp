@@ -38,7 +38,17 @@ namespace blooDot::Hud
 	SDL_Rect designLayerRooofLabelRect{ 0,0,0,0 };
 	SDL_Texture* designLayerRooofLabel = nullptr;
 	SDL_Texture* designLayerRooofLabelSelected = nullptr;
+	SDL_Rect gridlockLabelRect{ 0,0,0,0 };
+	SDL_Texture* gridlockLabel = nullptr;
+	SDL_Texture* gridlockLabelOn = nullptr;
+	SDL_Rect coalesceLabelRect{ 0,0,0,0 };
+	SDL_Texture* coalesceLabel = nullptr;
+	SDL_Texture* coalesceLabelOn = nullptr;
+
+	// makermode ui state
 	DingProps selectedDesignLayer = DingProps::Floor;
+	bool isGridlockOn = true; // whether or not placements are locked to the arena grid
+	bool isCoalesceOn = true; // whether or not touching coalesceable items coalesce
 
 	/// <summary>
 	/// Layout depends on number of players and resolution
@@ -168,11 +178,90 @@ namespace blooDot::Hud
 		return true;
 	}
 
+	DingProps GetDesignLayer()
+	{
+		return selectedDesignLayer;
+	}
+
+	bool DesignLayerUp()
+	{
+		switch (selectedDesignLayer)
+		{
+		case DingProps::Floor:
+			return SetDesignLayer(DingProps::Floor);
+
+		case DingProps::Walls:
+			return SetDesignLayer(DingProps::Rooof);
+		}
+
+		return false;
+	}
+
+	bool DesignLayerDown()
+	{
+		switch (selectedDesignLayer)
+		{
+		case DingProps::Walls:
+			return SetDesignLayer(DingProps::Floor);
+
+		case DingProps::Rooof:
+			return SetDesignLayer(DingProps::Walls);
+		}
+
+		return false;
+	}
+
 	bool SetDesignLayer(DingProps layer)
 	{
 		if (selectedDesignLayer != layer)
 		{
 			selectedDesignLayer = layer;
+			_RedrawDesignLayersTool();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	bool GetGridLock()
+	{
+		return isGridlockOn;
+	}
+
+	bool ToggleGridLock()
+	{
+		return SetGridlock(!isGridlockOn);
+	}
+
+	bool SetGridlock(bool gridLock)
+	{
+		if (isGridlockOn != gridLock)
+		{
+			isGridlockOn = gridLock;
+			_RedrawDesignLayersTool();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	bool GetCoalesce()
+	{
+		return isCoalesceOn;
+	}
+
+	bool ToggleCoalesce()
+	{
+		return SetCoalesce(!isCoalesceOn);
+	}
+
+	bool SetCoalesce(bool coalesce)
+	{
+		if (isCoalesceOn != coalesce)
+		{
+			isCoalesceOn = coalesce;
 			_RedrawDesignLayersTool();
 
 			return true;
@@ -378,21 +467,29 @@ namespace blooDot::Hud
 		DestroyTexture(&LetterboxBackdropL);
 		DestroyTexture(&LetterboxBackdropR);
 		DestroyTexture(&Minimap);
-		DestroyTexture(&designLayerRooofLabel);
-		DestroyTexture(&designLayerRooofLabelSelected);
-		DestroyTexture(&designLayerWallsLabel);
-		DestroyTexture(&designLayerWallsLabelSelected);
-		DestroyTexture(&designLayerFloorLabel);
-		DestroyTexture(&designLayerFloorLabelSelected);
-		DestroyTexture(&DesignLayers);
+
+		if (isCreatorMode)
+		{
+			DestroyTexture(&gridlockLabel);
+			DestroyTexture(&gridlockLabelOn);
+			DestroyTexture(&coalesceLabel);
+			DestroyTexture(&coalesceLabelOn);
+			DestroyTexture(&designLayerRooofLabel);
+			DestroyTexture(&designLayerRooofLabelSelected);
+			DestroyTexture(&designLayerWallsLabel);
+			DestroyTexture(&designLayerWallsLabelSelected);
+			DestroyTexture(&designLayerFloorLabel);
+			DestroyTexture(&designLayerFloorLabelSelected);
+			DestroyTexture(&DesignLayers);
+		}
 	}
 
 	bool _InitializeCreatorModeTools()
 	{
-		designLayersDims.w = 170;
-		designLayersDims.h = 260;
+		designLayersDims.w = minimapDest.w; // 170;
+		designLayersDims.h = 280;
 		designLayersDest.x = letterboxWidth / 2 - designLayersDims.w / 2;
-		designLayersDest.y = 100;
+		designLayersDest.y = Letterboxes[0].h / 2 - designLayersDims.h / 2;
 		designLayersDest.w = designLayersDims.w;
 		designLayersDest.h = designLayersDims.h;
 
@@ -467,9 +564,49 @@ namespace blooDot::Hud
 			DialogTextDisabledColor
 		);
 
+		gridlockLabelOn = RenderText(
+			GameViewRenderer,
+			&gridlockLabelRect,
+			FONT_KEY_DIALOG_FAT,
+			18,
+			"gridlock",
+			DialogTextColor
+		);
+
+		gridlockLabel = RenderText(
+			GameViewRenderer,
+			&gridlockLabelRect,
+			FONT_KEY_DIALOG_FAT,
+			18,
+			"gridlock",
+			DialogTextDisabledColor
+		);
+
+		coalesceLabelOn = RenderText(
+			GameViewRenderer,
+			&coalesceLabelRect,
+			FONT_KEY_DIALOG_FAT,
+			18,
+			"coalesce",
+			DialogTextColor
+		);
+
+		coalesceLabel = RenderText(
+			GameViewRenderer,
+			&coalesceLabelRect,
+			FONT_KEY_DIALOG_FAT,
+			18,
+			"coalesce",
+			DialogTextDisabledColor
+		);
+
 		return _RedrawDesignLayersTool();
 	}
 
+	/// <summary>
+	/// The gridlock and coalesce mode switch controls
+	/// are also considered part of the design layers tool
+	/// </summary>
 	bool _RedrawDesignLayersTool()
 	{
 		if (SDL_SetRenderTarget(GameViewRenderer, DesignLayers) < 0)
@@ -488,16 +625,17 @@ namespace blooDot::Hud
 		auto const& canvas = GetDrawingSink();
 
 		cairo_set_line_width(canvas, 5.);
-		cairo_set_source_rgb(canvas, .4, .4, .1);
+		cairo_set_source_rgba(canvas, .4, .4, .1, .5);
 		cairo_set_line_join(canvas, CAIRO_LINE_JOIN_ROUND);
-		//cairo_rectangle(canvas, designLayersDims.x + 3, designLayersDims.y + 3, designLayersDims.w - 6, designLayersDims.h - 6);
-		//cairo_stroke(canvas);
+		cairo_rectangle(canvas, designLayersDims.x + 3, designLayersDims.y + 3, designLayersDims.w - 6, designLayersDims.h - 6);
+		cairo_stroke(canvas);
 
 		auto const& yStride = designLayersDims.w / 4.;
 		auto const& xExtent = designLayersDims.w / 3.;
 		auto const& xSlantExtent = designLayersDims.w / 4.;
 		auto const& yExtent = designLayersDims.w / 6;
-		double const& baseY = designLayersDims.y + designLayersDims.h;
+		auto const& modeHeight = 120;
+		double const& baseY = designLayersDims.y + designLayersDims.h - modeHeight;
 		auto const& dashWidth = 5.;
 
 		// dashed guides
@@ -572,6 +710,89 @@ namespace blooDot::Hud
 		layer(1, selectedDesignLayer & DingProps::Walls);
 		layer(2, selectedDesignLayer & DingProps::Rooof);
 
+		auto gridlock = [canvas, dashWidth](double angle, double x)
+		{
+			cairo_matrix_t matrix1, matrix2, matrix3, matrix4, matrix5, matrix6, matrix7;
+			
+			cairo_push_group(canvas);
+			cairo_matrix_init_translate(&matrix1, -GRIDUNIT / 2., -GRIDUNIT / 2.);
+			cairo_matrix_init_rotate(&matrix2, angle);
+			cairo_matrix_init_translate(&matrix3, 2.5 * (x + GRIDUNIT / 2. + dashWidth), 2.5 * (GRIDUNIT / 2. + designLayersDest.h - 2 * GRIDUNIT));
+			cairo_matrix_init_scale(&matrix4, .4, .4);
+			cairo_matrix_multiply(&matrix5, &matrix1, &matrix2);
+			cairo_matrix_multiply(&matrix6, &matrix5, &matrix3);
+			cairo_matrix_multiply(&matrix7, &matrix6, &matrix4);
+			cairo_set_matrix(canvas, &matrix7);
+			blooDot::Dings::DrawDing(Ding::WallClassic, canvas);
+			cairo_pop_group_to_source(canvas);
+			cairo_paint(canvas);
+		};
+
+		SDL_Texture* labelTexture = nullptr;
+		if (isGridlockOn)
+		{
+			gridlock(0, 0);
+			gridlock(0, GRIDUNIT * .4);
+			labelTexture = gridlockLabelOn;
+		}
+		else
+		{
+			gridlock(.9, 0);
+			gridlock(-.21, GRIDUNIT * .55);
+			labelTexture = gridlockLabel;
+		}
+
+		auto const& gridlockLabelPos = SDL_Rect
+		{
+			designLayersDims.x + designLayersDims.w - gridlockLabelRect.w,
+			static_cast<int>(designLayersDest.h - 1.3 * GRIDUNIT - gridlockLabelRect.h),
+			gridlockLabelRect.w,
+			gridlockLabelRect.h
+		};
+
+		SDL_RenderCopy(GameViewRenderer, labelTexture, NULL, &gridlockLabelPos);
+		auto coalesce = [canvas, dashWidth](bool isOn, double x, double y)
+		{
+			cairo_matrix_t matrix1, matrix2, matrix3, matrix4, matrix5;
+			isOn;
+			cairo_push_group(canvas);
+			cairo_matrix_init_translate(&matrix1, -GRIDUNIT / 2., -GRIDUNIT / 2.);
+			cairo_matrix_init_translate(&matrix2, 2.5 * (x + GRIDUNIT / 2. - dashWidth), 2.5 * (y + designLayersDest.h - .4 * GRIDUNIT));
+			cairo_matrix_init_scale(&matrix3, .4, .4);
+			cairo_matrix_multiply(&matrix4, &matrix1, &matrix2);
+			cairo_matrix_multiply(&matrix5, &matrix4, &matrix3);
+			cairo_set_matrix(canvas, &matrix5);
+			blooDot::Dings::DrawDing(Ding::WallClassic, canvas);
+			cairo_pop_group_to_source(canvas);
+			cairo_paint(canvas);
+		};
+
+		if (isCoalesceOn)
+		{
+			labelTexture = coalesceLabelOn;
+			coalesce(true, 0 + GRIDUNIT * .4 * 0, 0);
+			coalesce(true, 0 + GRIDUNIT * .4 * 1, 0);
+			coalesce(true, 0 + GRIDUNIT * .4 * 1, -GRIDUNIT * .4);
+			coalesce(true, 0 + GRIDUNIT * .4 * 2, 0);
+		}
+		else
+		{
+			labelTexture = coalesceLabel;
+			coalesce(false, 0 + GRIDUNIT * .4 * 0, 0);
+			coalesce(false, 0 + GRIDUNIT * .4 * 1, 0);
+			coalesce(false, 0 + GRIDUNIT * .4 * 1, -GRIDUNIT * .4);
+			coalesce(false, 0 + GRIDUNIT * .4 * 2, 0);
+		}
+
+		auto const& coalesceLabelPos = SDL_Rect
+		{
+			designLayersDims.x + designLayersDims.w - gridlockLabelRect.w,
+			static_cast<int>(designLayersDest.h - .4 * GRIDUNIT - gridlockLabelRect.h),
+			gridlockLabelRect.w,
+			gridlockLabelRect.h
+		};
+
+		SDL_RenderCopy(GameViewRenderer, labelTexture, NULL, &coalesceLabelPos);
 		EndRenderDrawing(GameViewRenderer, canvasTexture, nullptr);
 
 		if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
@@ -673,7 +894,7 @@ namespace blooDot::Hud
 			cairo_set_line_width(canvas, 3);
 			cairo_set_source_rgb(
 				canvas,
-			    (static_cast<double>(0x48) / 3) / 255.,
+				(static_cast<double>(0x48) / 3) / 255.,
 				(static_cast<double>(0x3d) / 3) / 255.,
 				(static_cast<double>(0x8b) / 3) / 255.
 			);

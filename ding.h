@@ -40,18 +40,17 @@ enum Ding : unsigned short
 
 typedef char const BloodotMarkup;
 
-DingProps GetDingDefaultProps(const Ding ding);
-bool IsOwnerDrawnDing(const Ding ding);
-int GetDingResourceKey(const Ding ding);
-int GetDingDescriptionsResourceKey(const Ding ding);
-char const* GetDingDescriptionIndexEntry(const Ding ding);
-char const* GetDingName(const Ding ding);
-BloodotMarkup* GetDingDescription(const Ding ding);
-void DrawDing(const Ding ding, cairo_t* canvas);
-
 namespace blooDot::Dings
 {
 	bool InitializeDings();
+	DingProps GetDingDefaultProps(const Ding ding);
+	bool IsOwnerDrawnDing(const Ding ding);
+	int GetDingResourceKey(const Ding ding);
+	int GetDingDescriptionsResourceKey(const Ding ding);
+	char const* GetDingDescriptionIndexEntry(const Ding ding);
+	char const* GetDingName(const Ding ding);
+	BloodotMarkup* GetDingDescription(const Ding ding);
+	void DrawDing(const Ding ding, cairo_t* canvas);
 	bool HasNontrivialCollisionPoly(const ::Ding ding);
 	std::vector<b2PolygonShape> GetNontrivialCollisionPoly(const ::Ding ding);
 	void TeardownDings();

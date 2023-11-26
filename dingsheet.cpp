@@ -21,13 +21,13 @@ DingLocator* GetDing(Ding ding)
 		SDL_Rect dingDimensions;
 		SDL_Texture* dingTexture = NULL;
 
-		if (IsOwnerDrawnDing(ding))
+		if (blooDot::Dings::IsOwnerDrawnDing(ding))
 		{
 			dingTexture = _OwnerDrawDing(ding, &dingDimensions);
 		}
 		else
 		{
-			const auto resourceKey = GetDingResourceKey(ding);
+			const auto resourceKey = blooDot::Dings::GetDingResourceKey(ding);
 			dingTexture = _LoadDingTexture(resourceKey, &dingDimensions);
 		}
 		
@@ -39,6 +39,7 @@ DingLocator* GetDing(Ding ding)
 		const auto newLocator = _PlaceOnDingSheet(&dingDimensions, dingTexture, ding);
 		SDL_DestroyTexture(dingTexture);
 		dingMap[ding] = newLocator;
+
 		return &dingMap[ding];
 	}
 	else
@@ -114,7 +115,7 @@ SDL_Texture* _OwnerDrawDing(Ding ding, __out SDL_Rect* dimensions)
 
 	auto canvasTexture = BeginRenderDrawing(GameViewRenderer, GRIDUNIT, GRIDUNIT);
 	auto const& canvas = GetDrawingSink();
-	DrawDing(ding, canvas);
+	blooDot::Dings::DrawDing(ding, canvas);
 	EndRenderDrawing(GameViewRenderer, canvasTexture, nullptr);
 	if (SDL_SetRenderTarget(GameViewRenderer, restoreTarget) < 0)
 	{
@@ -253,7 +254,7 @@ bool _FindRoomOnDingSheet(SDL_Texture* sheet, SDL_Rect* frame, Ding dingInfo)
 		<< " sheet's line number "
 		<< occupied.size()
 		<< " for "
-		<< GetDingName(dingInfo)
+		<< blooDot::Dings::GetDingName(dingInfo)
 		<< "\n";
 #endif
 

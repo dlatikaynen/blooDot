@@ -98,7 +98,7 @@ namespace blooDot::World
 
 		/* 1. assign the properties */
 		instancePtr->ding = ding;
-		instancePtr->props = props == DingProps::Default ? GetDingDefaultProps(ding) : props;
+		instancePtr->props = props == DingProps::Default ? Dings::GetDingDefaultProps(ding) : props;
 		instancePtr->gridAnchorX = x;
 		instancePtr->gridAnchorY = y;
 		instancePtr->pixOffsetX = pixX;

@@ -175,6 +175,22 @@ namespace blooDot::Orchestrator
 									Sfx::Play(SFX_ROOOF);
 								}
 							}
+
+							if (mainEvent.key.keysym.sym == SDL_KeyCode::SDLK_4)
+							{
+								if (Hud::ToggleGridLock())
+								{
+									Sfx::Play(SFX_SELCHG);
+								}
+							}
+
+							if (mainEvent.key.keysym.sym == SDL_KeyCode::SDLK_5)
+							{
+								if (Hud::ToggleCoalesce())
+								{
+									Sfx::Play(SFX_SELCHG);
+								}
+							}
 						}
 
 						break;
@@ -184,6 +200,8 @@ namespace blooDot::Orchestrator
 					{
 						std::cout << "DEVICEADDED\n";
 					}
+
+					break;
 
 					case SDL_CONTROLLERDEVICEREMOVED:
 					{
