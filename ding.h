@@ -5,6 +5,7 @@
 
 #include "enums.h"
 #include "dexassy.h"
+#include "clumsypack.h"
 #include "box2d/box2d.h"
 
 constexpr auto GRIDUNIT = 49;
@@ -50,7 +51,7 @@ namespace blooDot::Dings
 	char const* GetDingDescriptionIndexEntry(const Ding ding);
 	char const* GetDingName(const Ding ding);
 	BloodotMarkup* GetDingDescription(const Ding ding);
-	void DrawDing(const Ding ding, cairo_t* canvas);
+	void DrawDing(cairo_t* canvas, const Ding ding, ClumsyPack::BitwiseTileIndex facesEdges = ClumsyPack::BitwiseTileIndex::Bung);
 	bool HasNontrivialCollisionPoly(const ::Ding ding);
 	std::vector<b2PolygonShape> GetNontrivialCollisionPoly(const ::Ding ding);
 	void TeardownDings();

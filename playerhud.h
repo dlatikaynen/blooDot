@@ -27,7 +27,9 @@ namespace blooDot::Hud
 	void Render();
 	void Teardown();
 
+	bool _InitializeDingSelectorTool();
 	bool _InitializeCreatorModeTools();
 	bool _DrawLetterboxBackdrops(int height);
+	bool _RedrawDingSelectorTool();
 	bool _RedrawDesignLayersTool();
 }

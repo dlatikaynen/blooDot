@@ -40,6 +40,8 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_DesignLayerFloorLabel = "pohja";
 	constexpr char const* _literal_fi_DesignLayerWallsLabel = "seinä";
 	constexpr char const* _literal_fi_DesignLayerRooofLabel = "katto";
+	constexpr char const* _literal_fi_DesignGridlockLabel = "gridlock";
+	constexpr char const* _literal_fi_DesignCoalesceLabel = "packed";
 	constexpr char const* _literal_fi_SettingsMenuScreensize = "Grafiikkatila";
 	constexpr char const* _literal_fi_SettingsMenuLanguage = "Kieli";
 	constexpr char const* _literal_fi_SettingsMenuHelp = "Apua";

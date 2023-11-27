@@ -38,6 +38,8 @@ extern const char* literalMakerMenuTeleport;
 extern const char* literalDesignLayerFloorLabel;
 extern const char* literalDesignLayerWallsLabel;
 extern const char* literalDesignLayerRooofLabel;
+extern const char* literalDesignGridlockLabel;
+extern const char* literalDesignCoalesceLabel;
 extern const char* literalSettingsMenuScreensize;
 extern const char* literalSettingsMenuLanguage;
 extern const char* literalSettingsMenuHelp;

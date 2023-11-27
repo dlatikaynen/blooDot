@@ -24,8 +24,40 @@
   the two desktop landscape letterboxes are used to show the most frequently
   used maker controls, the ding palette being one of these.
 
-  [ ] On the left side, the floor/walls/rooof explosion is shown,
+  [ ] On the left side middle, the floor/walls/rooof explosion is shown,
       and can be used to compose and configure a placement.
+
+  [ ] On the left side top, the ding selector is shown. The currently
+      selected ding to paint is in a lightbox, under which the dingsheet
+      moves.
+  
+  [ ] The dingsheet is organized in horizontal stripes. Moving vertically
+      changes the stripe. Moving horizontally changes the ding selected
+      from the current stripe. Stripes can be of different length.
+
+  [ ] Dingsheet is switchable by biome. Some dings exist only in some biomes,
+      some others are the same everywhere, some have different colorings
+      or patterns depending on biome. Coalescability is a ding property.
+      Some dings are smaller or bigger than a grid unit, and are shown scaled
+      to the lightbox, which is bigger than the stripes' height.
+
+  [ ] Biomes are:
+      - garden
+      - profane
+      - sacral
+      - winter
+      - desert
+      - wetlands
+      - scabland
+
+  [ ] Ding stripes are:
+      - flooring/ground
+      - walls/boundary
+      - deco/shrubbery
+      - rooof/cover
+      - mobs npc
+      - mobs monster
+      - looot
 
   [ ] An item can be added to the ding palette by loading the images,
       and a collision geometry csv if it is a non-orthogonal geometry

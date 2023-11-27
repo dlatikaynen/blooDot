@@ -6,6 +6,8 @@
 
 namespace blooDot::Dings
 {
+	using namespace blooDot::ClumsyPack;
+
 	DingProps GetDingDefaultProps(const Ding ding)
 	{
 		switch (ding)
@@ -381,7 +383,7 @@ namespace blooDot::Dings
 		return true;
 	}
 
-	void DrawDing(const Ding ding, cairo_t* canvas)
+	void DrawDing(cairo_t* canvas, const Ding ding, ClumsyPack::BitwiseTileIndex facesEdges)
 	{
 		switch (ding)
 		{
@@ -391,8 +393,136 @@ namespace blooDot::Dings
 			cairo_fill(canvas);
 			cairo_set_source_rgb(canvas, .7, .7, .7);
 			cairo_set_line_width(canvas, 3.);
-			cairo_rectangle(canvas, 6, 6, GRIDUNIT - 12, GRIDUNIT - 12);
-			cairo_stroke(canvas);
+			if (facesEdges == BitwiseTileIndex::Bung)
+			{
+				cairo_rectangle(canvas, 6, 6, GRIDUNIT - 12, GRIDUNIT - 12);
+				cairo_stroke(canvas);
+			}
+
+			if (facesEdges & BitwiseTileIndex::NorthEdge)
+			{
+				if (facesEdges & WestEdge)
+				{
+					cairo_move_to(canvas, 6, 6);
+				}
+				else
+				{
+					cairo_move_to(canvas, 0, 6);
+				}
+
+				if (facesEdges & EastEdge)
+				{
+					cairo_line_to(canvas, GRIDUNIT - 6, 6);
+				}
+				else
+				{
+					cairo_line_to(canvas, GRIDUNIT, 6);
+				}
+
+				cairo_stroke(canvas);
+			}
+
+			if (facesEdges & BitwiseTileIndex::NorthEastCorner)
+			{
+				cairo_move_to(canvas, GRIDUNIT - 6, 0);
+				cairo_rel_line_to(canvas, 0, 6);
+				cairo_rel_line_to(canvas, 6, 0);
+				cairo_stroke(canvas);
+			}
+
+			if (facesEdges & BitwiseTileIndex::EastEdge)
+			{
+				if (facesEdges & NorthEdge)
+				{
+					cairo_move_to(canvas, GRIDUNIT - 6, 6);
+				}
+				else
+				{
+					cairo_move_to(canvas, GRIDUNIT - 6, 0);
+				}
+
+				if (facesEdges & SouthEdge)
+				{
+					cairo_line_to(canvas, GRIDUNIT - 6, GRIDUNIT - 6);
+				}
+				else
+				{
+					cairo_line_to(canvas, GRIDUNIT - 6, GRIDUNIT);
+				}
+
+				cairo_stroke(canvas);
+			}
+
+			if (facesEdges & BitwiseTileIndex::SouthEastCorner)
+			{
+				cairo_move_to(canvas, GRIDUNIT, GRIDUNIT - 6);
+				cairo_rel_line_to(canvas, -6, 0);
+				cairo_rel_line_to(canvas, 0, 6);
+				cairo_stroke(canvas);
+			}
+
+			if (facesEdges & BitwiseTileIndex::SouthEdge)
+			{
+				if (facesEdges & WestEdge) 
+				{
+					cairo_move_to(canvas, 6, GRIDUNIT - 6);
+				}
+				else
+				{
+					cairo_move_to(canvas, 0, GRIDUNIT - 6);
+				}
+
+				if (facesEdges & EastEdge)
+				{
+					cairo_line_to(canvas, GRIDUNIT - 6, GRIDUNIT - 6);
+				}
+				else
+				{
+					cairo_line_to(canvas, GRIDUNIT, GRIDUNIT - 6);
+				}
+
+				cairo_stroke(canvas);
+			}
+
+			if (facesEdges & BitwiseTileIndex::SouthWestCorner)
+			{
+				cairo_move_to(canvas, 0, GRIDUNIT - 6);
+				cairo_rel_line_to(canvas, 6, 0);
+				cairo_rel_line_to(canvas, 0, 6);
+				cairo_stroke(canvas);
+			}
+
+			if (facesEdges & BitwiseTileIndex::WestEdge)
+			{
+				if (facesEdges & NorthEdge)
+				{
+					cairo_move_to(canvas, 6, 6);
+				}
+				else
+				{
+					cairo_move_to(canvas, 6, 0);
+				}
+
+				if (facesEdges & SouthEdge)
+				{
+					cairo_line_to(canvas, 6, GRIDUNIT - 6);
+				}
+				else
+				{
+					cairo_line_to(canvas, 6, GRIDUNIT);
+				}
+
+				cairo_stroke(canvas);
+			}
+
+			if (facesEdges & BitwiseTileIndex::NorthWestCorner)
+			{
+				cairo_move_to(canvas, 0, 6);
+				cairo_rel_line_to(canvas, 6, 0);
+				cairo_rel_line_to(canvas, 0, -6);
+				cairo_stroke(canvas);
+			}
+
 			break;
 
 		default:

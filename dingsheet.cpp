@@ -115,7 +115,7 @@ SDL_Texture* _OwnerDrawDing(Ding ding, __out SDL_Rect* dimensions)
 
 	auto canvasTexture = BeginRenderDrawing(GameViewRenderer, GRIDUNIT, GRIDUNIT);
 	auto const& canvas = GetDrawingSink();
-	blooDot::Dings::DrawDing(ding, canvas);
+	blooDot::Dings::DrawDing(canvas, ding);
 	EndRenderDrawing(GameViewRenderer, canvasTexture, nullptr);
 	if (SDL_SetRenderTarget(GameViewRenderer, restoreTarget) < 0)
 	{

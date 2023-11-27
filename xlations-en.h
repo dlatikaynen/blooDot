@@ -40,6 +40,8 @@ namespace blooDot::en
 	constexpr char const* _literal_en_DesignLayerFloorLabel = "floor";
 	constexpr char const* _literal_en_DesignLayerWallsLabel = "walls";
 	constexpr char const* _literal_en_DesignLayerRooofLabel = "rooof";
+	constexpr char const* _literal_en_DesignGridlockLabel = "gridlock";
+	constexpr char const* _literal_en_DesignCoalesceLabel = "packed";
 	constexpr char const* _literal_en_SettingsMenuScreensize = "Screen size";
 	constexpr char const* _literal_en_SettingsMenuLanguage = "Language";
 	constexpr char const* _literal_en_SettingsMenuHelp = "Help";

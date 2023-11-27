@@ -6,6 +6,7 @@ namespace blooDot::ClumsyPack
 
 	enum BitwiseTileIndex
 	{
+		Bung = 0,
 		NorthEdge = 1,
 		NorthEastCorner = 2,
 		EastEdge = 4,
@@ -16,7 +17,12 @@ namespace blooDot::ClumsyPack
 		NorthWestCorner = 128
 	};
 
-	constexpr char const BlobTileRotMat[] = {
+	inline constexpr BitwiseTileIndex operator|(BitwiseTileIndex a, BitwiseTileIndex b)
+	{
+		return static_cast<BitwiseTileIndex>(static_cast<int>(a) | static_cast<int>(b));
+	}
+
+	constexpr unsigned char const BlobTileRotMat[] = {
 		0,0,0,0,
 		1,4,16,64,
 		5,20,80,65,
@@ -34,7 +40,7 @@ namespace blooDot::ClumsyPack
 		255,255,255,255
 	};
 
-	constexpr char const SevenBySevenIndex[] = {
+	constexpr unsigned char const SevenBySevenIndex[] = {
 		0,4,92,124,116,80,0,
 		16,20,87,223,241,21,64,
 		29,117,85,71,221,125,112,

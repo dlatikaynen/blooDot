@@ -37,9 +37,11 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_MakerMenuInitial = "Origin";
 	constexpr char const* _literal_ua_MakerMenuLast = "Last location";
 	constexpr char const* _literal_ua_MakerMenuTeleport = "Quantum move";
-	constexpr char const* _literal_ua_DesignLayerFloorLabel = "дно";
+	constexpr char const* _literal_ua_DesignLayerFloorLabel = "днооо";
 	constexpr char const* _literal_ua_DesignLayerWallsLabel = "стіни";
 	constexpr char const* _literal_ua_DesignLayerRooofLabel = "стеля";
+	constexpr char const* _literal_ua_DesignGridlockLabel = "gridlock";
+	constexpr char const* _literal_ua_DesignCoalesceLabel = "packed";
 	constexpr char const* _literal_ua_SettingsMenuScreensize = "режим відео";
 	constexpr char const* _literal_ua_SettingsMenuLanguage = "Мова";
 	constexpr char const* _literal_ua_SettingsMenuHelp = "Допомога";

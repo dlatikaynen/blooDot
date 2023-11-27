@@ -180,6 +180,14 @@ DesignLayerRooofLabel
 	[fi]	katto
 	[ua]	стеля
 
+DesignGridlockLabel
+	[am]	gridlock
+	[de]	gesperrt
+
+DesignCoalesceLabel
+	[am]	packed
+	[de]	gepackt
+
 SettingsMenuScreensize
 	[am]	Screen size
 	[de]	Grafikmodus

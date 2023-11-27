@@ -43,6 +43,8 @@ const char* literalMakerMenuTeleport = "";
 const char* literalDesignLayerFloorLabel = "";
 const char* literalDesignLayerWallsLabel = "";
 const char* literalDesignLayerRooofLabel = "";
+const char* literalDesignGridlockLabel = "";
+const char* literalDesignCoalesceLabel = "";
 const char* literalSettingsMenuScreensize = "";
 const char* literalSettingsMenuLanguage = "";
 const char* literalSettingsMenuHelp = "";
@@ -262,6 +264,8 @@ namespace blooDot::en
 		literalDesignLayerFloorLabel = _literal_en_DesignLayerFloorLabel;
 		literalDesignLayerWallsLabel = _literal_en_DesignLayerWallsLabel;
 		literalDesignLayerRooofLabel = _literal_en_DesignLayerRooofLabel;
+		literalDesignGridlockLabel = _literal_en_DesignGridlockLabel;
+		literalDesignCoalesceLabel = _literal_en_DesignCoalesceLabel;
 		literalSettingsMenuScreensize = _literal_en_SettingsMenuScreensize;
 		literalSettingsMenuLanguage = _literal_en_SettingsMenuLanguage;
 		literalSettingsMenuHelp = _literal_en_SettingsMenuHelp;
@@ -483,6 +487,8 @@ namespace blooDot::de
 		literalDesignLayerFloorLabel = _literal_de_DesignLayerFloorLabel;
 		literalDesignLayerWallsLabel = _literal_de_DesignLayerWallsLabel;
 		literalDesignLayerRooofLabel = _literal_de_DesignLayerRooofLabel;
+		literalDesignGridlockLabel = _literal_de_DesignGridlockLabel;
+		literalDesignCoalesceLabel = _literal_de_DesignCoalesceLabel;
 		literalSettingsMenuScreensize = _literal_de_SettingsMenuScreensize;
 		literalSettingsMenuLanguage = _literal_de_SettingsMenuLanguage;
 		literalSettingsMenuHelp = _literal_de_SettingsMenuHelp;
@@ -704,6 +710,8 @@ namespace blooDot::fi
 		literalDesignLayerFloorLabel = _literal_fi_DesignLayerFloorLabel;
 		literalDesignLayerWallsLabel = _literal_fi_DesignLayerWallsLabel;
 		literalDesignLayerRooofLabel = _literal_fi_DesignLayerRooofLabel;
+		literalDesignGridlockLabel = _literal_fi_DesignGridlockLabel;
+		literalDesignCoalesceLabel = _literal_fi_DesignCoalesceLabel;
 		literalSettingsMenuScreensize = _literal_fi_SettingsMenuScreensize;
 		literalSettingsMenuLanguage = _literal_fi_SettingsMenuLanguage;
 		literalSettingsMenuHelp = _literal_fi_SettingsMenuHelp;
@@ -925,6 +933,8 @@ namespace blooDot::ua
 		literalDesignLayerFloorLabel = _literal_ua_DesignLayerFloorLabel;
 		literalDesignLayerWallsLabel = _literal_ua_DesignLayerWallsLabel;
 		literalDesignLayerRooofLabel = _literal_ua_DesignLayerRooofLabel;
+		literalDesignGridlockLabel = _literal_ua_DesignGridlockLabel;
+		literalDesignCoalesceLabel = _literal_ua_DesignCoalesceLabel;
 		literalSettingsMenuScreensize = _literal_ua_SettingsMenuScreensize;
 		literalSettingsMenuLanguage = _literal_ua_SettingsMenuLanguage;
 		literalSettingsMenuHelp = _literal_ua_SettingsMenuHelp;
