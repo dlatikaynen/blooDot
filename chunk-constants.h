@@ -51,3 +51,5 @@ constexpr int const CHUNK_KEY_LANG_FLAG_UA_PNG = 47;
 constexpr int const CHUNK_KEY_DINGS_SNURCH_SNAVIOR_HEAD_ROOOF = 48;
 constexpr int const CHUNK_KEY_DINGS_SNURCH_SNAVIOR_FLOOR = 49;
 constexpr int const CHUNK_KEY_DINGS_SNURCH_SNAVIOR_COLLISION = 50;
+constexpr int const CHUNK_KEY_SHADER_VERTEX = 51;
+constexpr int const CHUNK_KEY_SHADER_FRAGMENT = 52;

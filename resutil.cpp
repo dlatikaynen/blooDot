@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "resutil.h"
+#include <iostream>
 
 namespace blooDot::Res
 {
@@ -42,6 +43,62 @@ namespace blooDot::Res
 		SDL_free(resMem);
 
 		return _LoadPicture(renderer, resPicture, dimensions);
+	}
+
+	bool LoadText(const int chunkKey, std::string& text)
+	{
+			SDL_RWops* resStream;
+			const auto resMem = Retrieve(chunkKey, &resStream);
+			if (!resMem)
+			{
+				std::cerr
+					<< "Could not load text #"
+					<< chunkKey
+					<< ", retrieve failed\n";
+
+				return false;
+			}
+
+			const auto numBytes = resStream->size(resStream);
+			const char* rawText = (const char*)SDL_malloc(numBytes);
+			if (rawText == nullptr)
+			{
+				const auto mallocError = SDL_GetError();
+				resStream->close(resStream);
+				SDL_free(resMem);
+				std::stringstream allocationMsg;
+				allocationMsg
+					<< "Could not load text #"
+					<< chunkKey
+					<< ", allocation failed\n";
+
+				ReportError(allocationMsg.str().c_str(), mallocError);
+
+				return false;
+			}
+
+			if (resStream->read(resStream, (void*)rawText, numBytes, 1) == 0)
+			{
+				const auto readError = SDL_GetError();
+				resStream->close(resStream);
+				SDL_free(resMem);
+				std::stringstream readMsg;
+				readMsg
+					<< "Could not load text #"
+					<< chunkKey
+					<< ", read failed\n";
+
+				ReportError(readMsg.str().c_str(), readError);
+
+				return false;
+			}
+
+			resStream->close(resStream);
+			SDL_free(resMem);
+			text.assign(rawText, numBytes);
+			SDL_free((void*)rawText);
+
+			return true;
 	}
 
 	SDL_Texture* _LoadPicture(SDL_Renderer* renderer, SDL_Surface* surface, SDL_Rect* dimensions)

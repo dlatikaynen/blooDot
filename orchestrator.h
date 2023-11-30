@@ -22,7 +22,7 @@ extern SDL_Texture* NewTexture(SDL_Renderer* renderer, int w, int h, bool transp
 
 namespace blooDot::Orchestrator
 {
-	void MainLoop(SDL_Renderer*);
+	void MainLoop(SDL_Renderer*, SDL_Window*);
 
 	void _InitiatePlayerMovement(b2Body* body, float impulseX, float impulseY);
 	void _HandleSave(bool isAutosave = false);

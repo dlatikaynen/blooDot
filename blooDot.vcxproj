@@ -139,7 +139,7 @@
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">version.lib;dinput8.lib;dxguid.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;shell32.lib;uuid.lib;iconv.lib;advapi32.lib;setupapi.lib</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">version.lib;dinput8.lib;dxguid.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;shell32.lib;uuid.lib;iconv.lib;advapi32.lib;setupapi.lib;opengl32.lib</AdditionalDependencies>
       <TurnOffAssemblyGeneration Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</TurnOffAssemblyGeneration>
       <EnableUAC Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</EnableUAC>
       <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -288,6 +288,7 @@
     <ClCompile Include="polypartition.cpp" />
     <ClCompile Include="procedurally-generate.cpp" />
     <ClCompile Include="region-banner.cpp" />
+    <ClCompile Include="shader-engine.cpp" />
     <ClCompile Include="xlations.cpp" />
     <ClInclude Include="boydsa.h" />
     <ClInclude Include="chunk-sizes.h" />
@@ -371,6 +372,7 @@
     <ClInclude Include="scripture.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="sfx.h" />
+    <ClInclude Include="shader-engine.h" />
     <ClInclude Include="splash.h" />
     <ClInclude Include="xlations-de.h" />
     <ClInclude Include="xlations-en.h" />

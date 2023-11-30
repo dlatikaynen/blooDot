@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "orchestrator.h"
 #include "physics-render-binding.h"
+#include "shader-engine.h"
 
 #ifndef NDEBUG
 #include "physicsdebugdraw.h"
@@ -8,6 +9,7 @@
 
 using namespace blooDot::Dings;
 using namespace blooDot::World;
+using namespace blooDot::ShaderEngine;
 
 Uint32 SDL_USEREVENT_SAVE = 0;
 Uint32 SDL_USEREVENT_AUTOSAVE = 0;
@@ -36,7 +38,7 @@ namespace blooDot::Orchestrator
 	int32 positionIterations = 2;
 	SDL_GameController* controller = nullptr;
 
-	void MainLoop(SDL_Renderer* renderer)
+	void MainLoop(SDL_Renderer* renderer, SDL_Window* mainWindow)
 	{
 		toggleDebugView = isCreatorMode;
 
@@ -51,6 +53,7 @@ namespace blooDot::Orchestrator
 		}
 
 		GameViewRenderer = renderer;
+		SDL_Texture* texTarget = nullptr;
 		if (mainRunning && !GameviewEnterWorld())
 		{
 			mainRunning = false;
@@ -135,6 +138,23 @@ namespace blooDot::Orchestrator
 				}
 			}
 
+			// shaders
+			auto programId = CompileProgram
+			(
+				CHUNK_KEY_SHADER_VERTEX,
+				CHUNK_KEY_SHADER_FRAGMENT
+			);
+
+			texTarget = SDL_CreateTexture
+			(
+				renderer,
+				SDL_PIXELFORMAT_RGBA8888,
+				SDL_TEXTUREACCESS_TARGET,
+				1024,
+				768
+			);
+
+			// go!
 			while (mainRunning)
 			{
 				frameStart = SDL_GetPerformanceCounter();
@@ -422,6 +442,7 @@ namespace blooDot::Orchestrator
 				}
 
 			NEXTFRAME:
+				SDL_SetRenderTarget(renderer, texTarget);
 				SDL_RenderClear(renderer);
 				GameViewRenderFrame();
 #ifndef NDEBUG
@@ -431,7 +452,9 @@ namespace blooDot::Orchestrator
 				}
 
 #endif
-				SDL_RenderPresent(renderer);
+				//SDL_RenderPresent(renderer);
+				PresentBackBuffer(renderer, mainWindow, texTarget, programId);
+
 				frameEnded = SDL_GetPerformanceCounter();
 				const auto& frameTime = (frameEnded - frameStart) / frequencyMill;
 				const auto& frameSlack = static_cast<int>(MillisecondsPerFrame - frameTime);
@@ -454,7 +477,8 @@ namespace blooDot::Orchestrator
 		{
 			SDL_GameControllerClose(controller);
 		}
-
+		
+		DestroyTexture(&texTarget);
 		TeardownDingSheets();
 		GameviewTeardown();
 		ClearWorldData();

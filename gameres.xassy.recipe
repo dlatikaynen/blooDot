@@ -49,3 +49,5 @@ langflag-ua.png	CHUNK_KEY_LANG_FLAG_UA_PNG
 snurch-snavior-head-rooof.png	CHUNK_KEY_DINGS_SNURCH_SNAVIOR_HEAD_ROOOF
 snurch-snavior-floor.png	CHUNK_KEY_DINGS_SNURCH_SNAVIOR_FLOOR
 snurch-snavior-collision.csv	CHUNK_KEY_DINGS_SNURCH_SNAVIOR_COLLISION
+vertex.glsl	CHUNK_KEY_SHADER_VERTEX
+fragment.glsl	CHUNK_KEY_SHADER_FRAGMENT

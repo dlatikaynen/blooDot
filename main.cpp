@@ -16,6 +16,8 @@
 #include "enxassy.h"
 #include "enxlate.h"
 #endif
+#include "shader-engine.h"
+using namespace blooDot::ShaderEngine;
 
 const int major = 3;
 const int minor = 1;
@@ -91,7 +93,7 @@ int main(int, char**)
 		<< unsigned(patch)
 		<< "\n";
 
-	const auto initResult = SDL_Init(SDL_INIT_EVERYTHING);
+	const auto initResult = SDL_Init(SDL_INIT_EVERYTHING | SDL_VIDEO_OPENGL);
 	if (initResult < 0)
 	{
 		const auto errorMessage = SDL_GetError();
@@ -409,6 +411,7 @@ void _Launch()
 		return;
 	}
 
+	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 	renderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
 	if (!renderer)
 	{
@@ -461,6 +464,12 @@ void _Launch()
 		return;
 	}
 
+	if (!InitGLExtensions())
+	{
+		std::cout << "Could not initialize OpenGL extensions" << std::endl;
+		return;
+	}
+
 	SDL_ShowWindow(mainWindow);
-	blooDot::Orchestrator::MainLoop(renderer);
+	blooDot::Orchestrator::MainLoop(renderer, mainWindow);
 }
