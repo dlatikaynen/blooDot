@@ -121,9 +121,9 @@ namespace blooDot::ShaderEngine
 		GLfloat minu, maxu, minv, maxv;
 
 		minx = 0.0f;
-		miny = 0.0f;
+		miny = 768.0f;
 		maxx = 1024;
-		maxy = 768;
+		maxy = 0.0f;
 		minu = 0.0f;
 		maxu = 1.0f;
 		minv = 0.0f;
