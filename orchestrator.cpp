@@ -150,8 +150,8 @@ namespace blooDot::Orchestrator
 				renderer,
 				SDL_PIXELFORMAT_RGBA8888,
 				SDL_TEXTUREACCESS_TARGET,
-				1024,
-				768
+				blooDot::Settings::GetPhysicalArenaWidth(),
+				blooDot::Settings::GetPhysicalArenaHeight()
 			);
 
 			// go!

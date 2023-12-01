@@ -4,6 +4,7 @@
 #include "chunk-constants.h"
 #include "dexassy.h"
 #include "resutil.h"
+#include "settings.h"
 
 using namespace blooDot::Res;
 
@@ -121,8 +122,8 @@ namespace blooDot::ShaderEngine
 		GLfloat minu, maxu, minv, maxv;
 
 		minx = 0.0f;
-		miny = 768.0f;
-		maxx = 1024;
+		miny = (float)blooDot::Settings::GetPhysicalArenaHeight();
+		maxx = (float)blooDot::Settings::GetPhysicalArenaWidth();
 		maxy = 0.0f;
 		minu = 0.0f;
 		maxu = 1.0f;
