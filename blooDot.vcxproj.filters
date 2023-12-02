@@ -520,6 +520,12 @@
     <None Include="planning\creatormode.ligma">
       <Filter>Planning</Filter>
     </None>
+    <None Include="res\fragment.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="res\vertex.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\nn-splash-scene.png">

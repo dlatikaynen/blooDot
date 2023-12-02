@@ -188,7 +188,7 @@
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">version.lib;dinput8.lib;dxguid.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;shell32.lib;uuid.lib;iconv.lib;advapi32.lib;setupapi.lib</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">version.lib;dinput8.lib;dxguid.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;shell32.lib;uuid.lib;iconv.lib;advapi32.lib;setupapi.lib;opengl32.lib</AdditionalDependencies>
       <TurnOffAssemblyGeneration Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</TurnOffAssemblyGeneration>
       <EnableUAC Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</EnableUAC>
       <DelayLoadDLLs Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">
@@ -240,7 +240,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
-      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">version.lib;dinput8.lib;dxguid.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;shell32.lib;uuid.lib;iconv.lib;advapi32.lib;setupapi.lib</AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">version.lib;dinput8.lib;dxguid.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;shell32.lib;uuid.lib;iconv.lib;advapi32.lib;setupapi.lib;opengl32.lib</AdditionalDependencies>
       <TurnOffAssemblyGeneration Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </TurnOffAssemblyGeneration>
       <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -492,6 +492,7 @@
     </None>
     <None Include="res\convo.1.bml" />
     <None Include="res\dingdescriptions.1.bml" />
+    <None Include="res\fragment.glsl" />
     <None Include="res\manufacturer.dlg">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Xassy|x64'">false</DeploymentContent>
@@ -500,6 +501,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DeploymentContent>
     </None>
+    <None Include="res\vertex.glsl" />
     <None Include="vcpkg.json" />
   </ItemGroup>
   <ItemGroup>

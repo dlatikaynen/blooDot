@@ -40,8 +40,10 @@ namespace blooDot::Orchestrator
 
 	void MainLoop(SDL_Renderer* renderer, SDL_Window* mainWindow)
 	{
+#ifndef NDEBUG
 		toggleDebugView = isCreatorMode;
 
+#endif
 		if (!InitializeDings())
 		{
 			mainRunning = false;

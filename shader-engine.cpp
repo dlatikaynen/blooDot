@@ -8,6 +8,10 @@
 
 using namespace blooDot::Res;
 
+/// <summary>
+/// Original inspiration for this part came from code by Augusto Ruiz
+/// https://github.com/AugustoRuiz/sdl2glsl (MIT Licence)
+/// </summary>
 namespace blooDot::ShaderEngine
 {
 	PFNGLCREATESHADERPROC glCreateShader;
@@ -87,7 +91,11 @@ namespace blooDot::ShaderEngine
 			{
 				char* log = (char*)malloc(logLen * sizeof(char));
 				glGetProgramInfoLog(programId, logLen, &logLen, log);
-				std::cout << "Prog Info Log: " << std::endl << log << std::endl;
+				std::cout 
+					<< "Shader linker output:\n"
+					<< log
+					<< "\n";
+
 				free(log);
 			}
 		}
@@ -159,14 +167,23 @@ namespace blooDot::ShaderEngine
 		glGetShaderiv(result, GL_COMPILE_STATUS, &shaderCompiled);
 		if (shaderCompiled != GL_TRUE)
 		{
-			std::cout << "Error en la compilación: " << result << "!" << std::endl;
+			std::cout
+				<< "Failed to compiler shader:\n"
+				<< result
+				<< "\n";
+
 			GLint logLength;
 			glGetShaderiv(result, GL_INFO_LOG_LENGTH, &logLength);
 			if (logLength > 0)
 			{
 				GLchar* log = (GLchar*)malloc(logLength);
+
 				glGetShaderInfoLog(result, logLength, &logLength, log);
-				std::cout << "Shader compile log:" << log << std::endl;
+				std::cout 
+					<< "Shader compiler output:\n"
+					<< log
+					<< "\n";
+
 				free(log);
 			}
 
@@ -175,7 +192,7 @@ namespace blooDot::ShaderEngine
 		}
 		else
 		{
-			std::cout << "Shader compilado correctamente. Id = " << result << std::endl;
+			std::cout << "Successfully compiled shader #" << result << "\n";
 		}
 
 		return result;
