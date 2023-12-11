@@ -302,6 +302,9 @@
     <ClInclude Include="shader-engine.h">
       <Filter>_Headers\core</Filter>
     </ClInclude>
+    <ClInclude Include="menu-settings-controls.h">
+      <Filter>_Headers\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -462,6 +465,9 @@
     </ClCompile>
     <ClCompile Include="shader-engine.cpp">
       <Filter>_Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="menu-settings-controls.cpp">
+      <Filter>_Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

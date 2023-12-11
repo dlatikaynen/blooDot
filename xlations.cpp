@@ -8,6 +8,7 @@
 const char* literalLCID = "";
 const char* literalLanguageName = "";
 const char* literalLanguageNameAmerican = "";
+const char* literalAll = "";
 const char* literalAlienMainMenuLabel = "";
 const char* literalAlienLoadMenuLabel = "";
 const char* literalAlienMakerMenuLabel = "";
@@ -18,6 +19,7 @@ const char* literalAlienScreenSettingsMenuLabel = "";
 const char* literalAlienMultiMonitorMenuLabel = "";
 const char* literalAlienInGameMenuLabel = "";
 const char* literalAlienLangSettingsMenuLabel = "";
+const char* literalAlienCtrlSettingsMenuLabel = "";
 const char* literalAlienContinueEmptyLabel = "";
 const char* literalManufacturer = "";
 const char* literalMenuContinue = "";
@@ -34,6 +36,9 @@ const char* literalMenuCancel = "";
 const char* literalMenuOk = "";
 const char* literalMenuLeave = "";
 const char* literalMenuControls = "";
+const char* literalControlsNeverConnected = "";
+const char* literalControlsKeyboard = "";
+const char* literalControlsController = "";
 const char* literalMenuKnowledgebase = "";
 const char* literalMenuMap = "";
 const char* literalMenuInventory = "";
@@ -165,6 +170,7 @@ const char* literalDialogBubbleGpuChan = "";
 const char* literalDialogBubbleGpuChanEmpty = "";
 const char* literalregionNameUnknown = "";
 const char* literalregionNameScullery = "";
+const char* literalsculleryWallSign = "";
 const char* literalregionNameCity = "";
 const char* literalregionNameLabyrinthOfUnreasonableSizeAndComplexity = "";
 const char* literalregionNameDesertOfCollossalTemperatureDifferences = "";
@@ -221,6 +227,10 @@ const char* literalplayerName2 = "";
 const char* literalplayerName3 = "";
 const char* literalplayerName4 = "";
 const char* literaldialogPlayer3Perennial = "";
+const char* literalcontrollerLabel1 = "";
+const char* literalcontrollerLabel2 = "";
+const char* literalcontrollerLabel3 = "";
+const char* literalcontrollerLabel4 = "";
 
 namespace blooDot::en
 {
@@ -229,6 +239,7 @@ namespace blooDot::en
 		literalLCID = _literal_en_LCID;
 		literalLanguageName = _literal_en_LanguageName;
 		literalLanguageNameAmerican = _literal_en_LanguageNameAmerican;
+		literalAll = _literal_en_All;
 		literalAlienMainMenuLabel = _literal_en_AlienMainMenuLabel;
 		literalAlienLoadMenuLabel = _literal_en_AlienLoadMenuLabel;
 		literalAlienMakerMenuLabel = _literal_en_AlienMakerMenuLabel;
@@ -239,6 +250,7 @@ namespace blooDot::en
 		literalAlienMultiMonitorMenuLabel = _literal_en_AlienMultiMonitorMenuLabel;
 		literalAlienInGameMenuLabel = _literal_en_AlienInGameMenuLabel;
 		literalAlienLangSettingsMenuLabel = _literal_en_AlienLangSettingsMenuLabel;
+		literalAlienCtrlSettingsMenuLabel = _literal_en_AlienCtrlSettingsMenuLabel;
 		literalAlienContinueEmptyLabel = _literal_en_AlienContinueEmptyLabel;
 		literalManufacturer = _literal_en_Manufacturer;
 		literalMenuContinue = _literal_en_MenuContinue;
@@ -255,6 +267,9 @@ namespace blooDot::en
 		literalMenuOk = _literal_en_MenuOk;
 		literalMenuLeave = _literal_en_MenuLeave;
 		literalMenuControls = _literal_en_MenuControls;
+		literalControlsNeverConnected = _literal_en_ControlsNeverConnected;
+		literalControlsKeyboard = _literal_en_ControlsKeyboard;
+		literalControlsController = _literal_en_ControlsController;
 		literalMenuKnowledgebase = _literal_en_MenuKnowledgebase;
 		literalMenuMap = _literal_en_MenuMap;
 		literalMenuInventory = _literal_en_MenuInventory;
@@ -386,6 +401,7 @@ namespace blooDot::en
 		literalDialogBubbleGpuChanEmpty = _literal_en_DialogBubbleGpuChanEmpty;
 		literalregionNameUnknown = _literal_en_regionNameUnknown;
 		literalregionNameScullery = _literal_en_regionNameScullery;
+		literalsculleryWallSign = _literal_en_sculleryWallSign;
 		literalregionNameCity = _literal_en_regionNameCity;
 		literalregionNameLabyrinthOfUnreasonableSizeAndComplexity = _literal_en_regionNameLabyrinthOfUnreasonableSizeAndComplexity;
 		literalregionNameDesertOfCollossalTemperatureDifferences = _literal_en_regionNameDesertOfCollossalTemperatureDifferences;
@@ -442,6 +458,10 @@ namespace blooDot::en
 		literalplayerName3 = _literal_en_playerName3;
 		literalplayerName4 = _literal_en_playerName4;
 		literaldialogPlayer3Perennial = _literal_en_dialogPlayer3Perennial;
+		literalcontrollerLabel1 = _literal_en_controllerLabel1;
+		literalcontrollerLabel2 = _literal_en_controllerLabel2;
+		literalcontrollerLabel3 = _literal_en_controllerLabel3;
+		literalcontrollerLabel4 = _literal_en_controllerLabel4;
 	}
 }
 
@@ -452,6 +472,7 @@ namespace blooDot::de
 		literalLCID = _literal_de_LCID;
 		literalLanguageName = _literal_de_LanguageName;
 		literalLanguageNameAmerican = _literal_de_LanguageNameAmerican;
+		literalAll = _literal_de_All;
 		literalAlienMainMenuLabel = _literal_de_AlienMainMenuLabel;
 		literalAlienLoadMenuLabel = _literal_de_AlienLoadMenuLabel;
 		literalAlienMakerMenuLabel = _literal_de_AlienMakerMenuLabel;
@@ -462,6 +483,7 @@ namespace blooDot::de
 		literalAlienMultiMonitorMenuLabel = _literal_de_AlienMultiMonitorMenuLabel;
 		literalAlienInGameMenuLabel = _literal_de_AlienInGameMenuLabel;
 		literalAlienLangSettingsMenuLabel = _literal_de_AlienLangSettingsMenuLabel;
+		literalAlienCtrlSettingsMenuLabel = _literal_de_AlienCtrlSettingsMenuLabel;
 		literalAlienContinueEmptyLabel = _literal_de_AlienContinueEmptyLabel;
 		literalManufacturer = _literal_de_Manufacturer;
 		literalMenuContinue = _literal_de_MenuContinue;
@@ -478,6 +500,9 @@ namespace blooDot::de
 		literalMenuOk = _literal_de_MenuOk;
 		literalMenuLeave = _literal_de_MenuLeave;
 		literalMenuControls = _literal_de_MenuControls;
+		literalControlsNeverConnected = _literal_de_ControlsNeverConnected;
+		literalControlsKeyboard = _literal_de_ControlsKeyboard;
+		literalControlsController = _literal_de_ControlsController;
 		literalMenuKnowledgebase = _literal_de_MenuKnowledgebase;
 		literalMenuMap = _literal_de_MenuMap;
 		literalMenuInventory = _literal_de_MenuInventory;
@@ -609,6 +634,7 @@ namespace blooDot::de
 		literalDialogBubbleGpuChanEmpty = _literal_de_DialogBubbleGpuChanEmpty;
 		literalregionNameUnknown = _literal_de_regionNameUnknown;
 		literalregionNameScullery = _literal_de_regionNameScullery;
+		literalsculleryWallSign = _literal_de_sculleryWallSign;
 		literalregionNameCity = _literal_de_regionNameCity;
 		literalregionNameLabyrinthOfUnreasonableSizeAndComplexity = _literal_de_regionNameLabyrinthOfUnreasonableSizeAndComplexity;
 		literalregionNameDesertOfCollossalTemperatureDifferences = _literal_de_regionNameDesertOfCollossalTemperatureDifferences;
@@ -665,6 +691,10 @@ namespace blooDot::de
 		literalplayerName3 = _literal_de_playerName3;
 		literalplayerName4 = _literal_de_playerName4;
 		literaldialogPlayer3Perennial = _literal_de_dialogPlayer3Perennial;
+		literalcontrollerLabel1 = _literal_de_controllerLabel1;
+		literalcontrollerLabel2 = _literal_de_controllerLabel2;
+		literalcontrollerLabel3 = _literal_de_controllerLabel3;
+		literalcontrollerLabel4 = _literal_de_controllerLabel4;
 	}
 }
 
@@ -675,6 +705,7 @@ namespace blooDot::fi
 		literalLCID = _literal_fi_LCID;
 		literalLanguageName = _literal_fi_LanguageName;
 		literalLanguageNameAmerican = _literal_fi_LanguageNameAmerican;
+		literalAll = _literal_fi_All;
 		literalAlienMainMenuLabel = _literal_fi_AlienMainMenuLabel;
 		literalAlienLoadMenuLabel = _literal_fi_AlienLoadMenuLabel;
 		literalAlienMakerMenuLabel = _literal_fi_AlienMakerMenuLabel;
@@ -685,6 +716,7 @@ namespace blooDot::fi
 		literalAlienMultiMonitorMenuLabel = _literal_fi_AlienMultiMonitorMenuLabel;
 		literalAlienInGameMenuLabel = _literal_fi_AlienInGameMenuLabel;
 		literalAlienLangSettingsMenuLabel = _literal_fi_AlienLangSettingsMenuLabel;
+		literalAlienCtrlSettingsMenuLabel = _literal_fi_AlienCtrlSettingsMenuLabel;
 		literalAlienContinueEmptyLabel = _literal_fi_AlienContinueEmptyLabel;
 		literalManufacturer = _literal_fi_Manufacturer;
 		literalMenuContinue = _literal_fi_MenuContinue;
@@ -701,6 +733,9 @@ namespace blooDot::fi
 		literalMenuOk = _literal_fi_MenuOk;
 		literalMenuLeave = _literal_fi_MenuLeave;
 		literalMenuControls = _literal_fi_MenuControls;
+		literalControlsNeverConnected = _literal_fi_ControlsNeverConnected;
+		literalControlsKeyboard = _literal_fi_ControlsKeyboard;
+		literalControlsController = _literal_fi_ControlsController;
 		literalMenuKnowledgebase = _literal_fi_MenuKnowledgebase;
 		literalMenuMap = _literal_fi_MenuMap;
 		literalMenuInventory = _literal_fi_MenuInventory;
@@ -832,6 +867,7 @@ namespace blooDot::fi
 		literalDialogBubbleGpuChanEmpty = _literal_fi_DialogBubbleGpuChanEmpty;
 		literalregionNameUnknown = _literal_fi_regionNameUnknown;
 		literalregionNameScullery = _literal_fi_regionNameScullery;
+		literalsculleryWallSign = _literal_fi_sculleryWallSign;
 		literalregionNameCity = _literal_fi_regionNameCity;
 		literalregionNameLabyrinthOfUnreasonableSizeAndComplexity = _literal_fi_regionNameLabyrinthOfUnreasonableSizeAndComplexity;
 		literalregionNameDesertOfCollossalTemperatureDifferences = _literal_fi_regionNameDesertOfCollossalTemperatureDifferences;
@@ -888,6 +924,10 @@ namespace blooDot::fi
 		literalplayerName3 = _literal_fi_playerName3;
 		literalplayerName4 = _literal_fi_playerName4;
 		literaldialogPlayer3Perennial = _literal_fi_dialogPlayer3Perennial;
+		literalcontrollerLabel1 = _literal_fi_controllerLabel1;
+		literalcontrollerLabel2 = _literal_fi_controllerLabel2;
+		literalcontrollerLabel3 = _literal_fi_controllerLabel3;
+		literalcontrollerLabel4 = _literal_fi_controllerLabel4;
 	}
 }
 
@@ -898,6 +938,7 @@ namespace blooDot::ua
 		literalLCID = _literal_ua_LCID;
 		literalLanguageName = _literal_ua_LanguageName;
 		literalLanguageNameAmerican = _literal_ua_LanguageNameAmerican;
+		literalAll = _literal_ua_All;
 		literalAlienMainMenuLabel = _literal_ua_AlienMainMenuLabel;
 		literalAlienLoadMenuLabel = _literal_ua_AlienLoadMenuLabel;
 		literalAlienMakerMenuLabel = _literal_ua_AlienMakerMenuLabel;
@@ -908,6 +949,7 @@ namespace blooDot::ua
 		literalAlienMultiMonitorMenuLabel = _literal_ua_AlienMultiMonitorMenuLabel;
 		literalAlienInGameMenuLabel = _literal_ua_AlienInGameMenuLabel;
 		literalAlienLangSettingsMenuLabel = _literal_ua_AlienLangSettingsMenuLabel;
+		literalAlienCtrlSettingsMenuLabel = _literal_ua_AlienCtrlSettingsMenuLabel;
 		literalAlienContinueEmptyLabel = _literal_ua_AlienContinueEmptyLabel;
 		literalManufacturer = _literal_ua_Manufacturer;
 		literalMenuContinue = _literal_ua_MenuContinue;
@@ -924,6 +966,9 @@ namespace blooDot::ua
 		literalMenuOk = _literal_ua_MenuOk;
 		literalMenuLeave = _literal_ua_MenuLeave;
 		literalMenuControls = _literal_ua_MenuControls;
+		literalControlsNeverConnected = _literal_ua_ControlsNeverConnected;
+		literalControlsKeyboard = _literal_ua_ControlsKeyboard;
+		literalControlsController = _literal_ua_ControlsController;
 		literalMenuKnowledgebase = _literal_ua_MenuKnowledgebase;
 		literalMenuMap = _literal_ua_MenuMap;
 		literalMenuInventory = _literal_ua_MenuInventory;
@@ -1055,6 +1100,7 @@ namespace blooDot::ua
 		literalDialogBubbleGpuChanEmpty = _literal_ua_DialogBubbleGpuChanEmpty;
 		literalregionNameUnknown = _literal_ua_regionNameUnknown;
 		literalregionNameScullery = _literal_ua_regionNameScullery;
+		literalsculleryWallSign = _literal_ua_sculleryWallSign;
 		literalregionNameCity = _literal_ua_regionNameCity;
 		literalregionNameLabyrinthOfUnreasonableSizeAndComplexity = _literal_ua_regionNameLabyrinthOfUnreasonableSizeAndComplexity;
 		literalregionNameDesertOfCollossalTemperatureDifferences = _literal_ua_regionNameDesertOfCollossalTemperatureDifferences;
@@ -1111,5 +1157,9 @@ namespace blooDot::ua
 		literalplayerName3 = _literal_ua_playerName3;
 		literalplayerName4 = _literal_ua_playerName4;
 		literaldialogPlayer3Perennial = _literal_ua_dialogPlayer3Perennial;
+		literalcontrollerLabel1 = _literal_ua_controllerLabel1;
+		literalcontrollerLabel2 = _literal_ua_controllerLabel2;
+		literalcontrollerLabel3 = _literal_ua_controllerLabel3;
+		literalcontrollerLabel4 = _literal_ua_controllerLabel4;
 	}
 }

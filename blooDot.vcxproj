@@ -275,6 +275,7 @@
     <ClCompile Include="datetime.cpp" />
     <ClCompile Include="makersettings.cpp" />
     <ClCompile Include="menu-common.cpp" />
+    <ClCompile Include="menu-settings-controls.cpp" />
     <ClCompile Include="menu-creatormode.cpp" />
     <ClCompile Include="menu-multimonitor.cpp" />
     <ClCompile Include="menu-settings-about.cpp" />
@@ -315,6 +316,7 @@
     <ClInclude Include="mapregion.h" />
     <ClInclude Include="menu-common.h" />
     <ClInclude Include="menu-continue-empty.h" />
+    <ClInclude Include="menu-settings-controls.h" />
     <ClInclude Include="menu-creatormode.h" />
     <ClInclude Include="menu-ingame.h" />
     <ClInclude Include="menu-load.h" />

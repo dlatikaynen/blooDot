@@ -3,6 +3,7 @@
 extern const char* literalLCID;
 extern const char* literalLanguageName;
 extern const char* literalLanguageNameAmerican;
+extern const char* literalAll;
 extern const char* literalAlienMainMenuLabel;
 extern const char* literalAlienLoadMenuLabel;
 extern const char* literalAlienMakerMenuLabel;
@@ -13,6 +14,7 @@ extern const char* literalAlienScreenSettingsMenuLabel;
 extern const char* literalAlienMultiMonitorMenuLabel;
 extern const char* literalAlienInGameMenuLabel;
 extern const char* literalAlienLangSettingsMenuLabel;
+extern const char* literalAlienCtrlSettingsMenuLabel;
 extern const char* literalAlienContinueEmptyLabel;
 extern const char* literalManufacturer;
 extern const char* literalMenuContinue;
@@ -29,6 +31,9 @@ extern const char* literalMenuCancel;
 extern const char* literalMenuOk;
 extern const char* literalMenuLeave;
 extern const char* literalMenuControls;
+extern const char* literalControlsNeverConnected;
+extern const char* literalControlsKeyboard;
+extern const char* literalControlsController;
 extern const char* literalMenuKnowledgebase;
 extern const char* literalMenuMap;
 extern const char* literalMenuInventory;
@@ -160,6 +165,7 @@ extern const char* literalDialogBubbleGpuChan;
 extern const char* literalDialogBubbleGpuChanEmpty;
 extern const char* literalregionNameUnknown;
 extern const char* literalregionNameScullery;
+extern const char* literalsculleryWallSign;
 extern const char* literalregionNameCity;
 extern const char* literalregionNameLabyrinthOfUnreasonableSizeAndComplexity;
 extern const char* literalregionNameDesertOfCollossalTemperatureDifferences;
@@ -216,6 +222,10 @@ extern const char* literalplayerName2;
 extern const char* literalplayerName3;
 extern const char* literalplayerName4;
 extern const char* literaldialogPlayer3Perennial;
+extern const char* literalcontrollerLabel1;
+extern const char* literalcontrollerLabel2;
+extern const char* literalcontrollerLabel3;
+extern const char* literalcontrollerLabel4;
 
 namespace blooDot::en
 {

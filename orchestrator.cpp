@@ -237,7 +237,7 @@ namespace blooDot::Orchestrator
 						const SDL_JoystickID joystickID = mainEvent.caxis.which;
 						const SDL_GameControllerAxis axis = (SDL_GameControllerAxis)mainEvent.caxis.axis;
 						const float value = mainEvent.caxis.value / (float)SDL_JOYSTICK_AXIS_MAX;
-						std::cout << "joystick " << joystickID << " on axis " << axis << " says " << value << "\n";						
+						std::cout << "joystick " << joystickID << " on axis " << axis << " says " << value << "\n";
 					}
 
 					break;

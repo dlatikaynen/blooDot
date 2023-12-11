@@ -138,7 +138,21 @@ int main(int, char**)
 			const auto controllerName = SDL_GameControllerNameForIndex(i);
 			if(controllerName) 
 			{
-				std::cout << "Controller \"" << controllerName << "\" present\n";
+				auto controller = SDL_GameControllerOpen(i);
+				auto joystick = SDL_GameControllerGetJoystick(controller);
+
+				if (SDL_GameControllerHasRumble(controller))
+				{
+					SDL_GameControllerRumble(controller, 0x0, 0xffff, 2500);
+				}
+
+				SDL_JoystickClose(joystick);
+				SDL_GameControllerClose(controller);
+
+				std::cout
+					<< "Controller \""
+					<< controllerName
+					<< " present\n";
 			}
 			else
 			{

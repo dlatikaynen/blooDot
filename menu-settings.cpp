@@ -9,6 +9,7 @@
 #include "constants.h"
 #include "sfx.h"
 #include "menu-common.h"
+#include "menu-settings-controls.h"
 #include "menu-settings-about.h"
 #include "menu-settings-help.h"
 
@@ -171,6 +172,10 @@ namespace blooDot::MenuSettings
 			_EnterAndHandleLanguageSettings(renderer);
 			break;
 
+		case SettingsMenuItems::SMI_CONTROLS:
+			_EnterAndHandleControlsSettings(renderer);
+			break;
+
 		case SettingsMenuItems::SMI_HELP:
 			_EnterAndHandleHelp(renderer);
 			break;
@@ -195,6 +200,11 @@ namespace blooDot::MenuSettings
 	{
 		blooDot::MenuSettingsLang::LanguageSettingsMenuLoop(renderer);
 		_PrepareText(renderer);
+	}
+
+	void _EnterAndHandleControlsSettings(SDL_Renderer* renderer)
+	{
+		blooDot::MenuSettingsControls::ControlsSettingsMenuLoop(renderer);
 	}
 
 	void _EnterAndHandleAbout(SDL_Renderer* renderer)

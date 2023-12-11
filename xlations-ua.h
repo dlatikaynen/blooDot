@@ -5,6 +5,7 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_LCID = "ua";
 	constexpr char const* _literal_ua_LanguageName = "українська";
 	constexpr char const* _literal_ua_LanguageNameAmerican = "Ukrainian";
+	constexpr char const* _literal_ua_All = "всі";
 	constexpr char const* _literal_ua_AlienMainMenuLabel = "mEnmenV";
 	constexpr char const* _literal_ua_AlienLoadMenuLabel = "lOd";
 	constexpr char const* _literal_ua_AlienMakerMenuLabel = "Godmod";
@@ -15,6 +16,7 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_AlienMultiMonitorMenuLabel = "MaltiDisplej";
 	constexpr char const* _literal_ua_AlienInGameMenuLabel = "Gejm";
 	constexpr char const* _literal_ua_AlienLangSettingsMenuLabel = "lenguij";
+	constexpr char const* _literal_ua_AlienCtrlSettingsMenuLabel = "kontrol";
 	constexpr char const* _literal_ua_AlienContinueEmptyLabel = "Empti";
 	constexpr char const* _literal_ua_Manufacturer = "Copyright zOzz FlaminginSarjakuvatOj";
 	constexpr char const* _literal_ua_MenuContinue = "Продовжити";
@@ -31,9 +33,12 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_MenuOk = "OK";
 	constexpr char const* _literal_ua_MenuLeave = "Залишати";
 	constexpr char const* _literal_ua_MenuControls = "Kерування";
+	constexpr char const* _literal_ua_ControlsNeverConnected = "No controllers connected, or so it seems. How did you even get here, by keyboard?";
+	constexpr char const* _literal_ua_ControlsKeyboard = "Клавіш клавіатури";
+	constexpr char const* _literal_ua_ControlsController = "Controller control, controls";
 	constexpr char const* _literal_ua_MenuKnowledgebase = "база знань";
 	constexpr char const* _literal_ua_MenuMap = "Карта";
-	constexpr char const* _literal_ua_MenuInventory = "інвентар";
+	constexpr char const* _literal_ua_MenuInventory = "Iнвентар";
 	constexpr char const* _literal_ua_MakerMenuInitial = "Origin";
 	constexpr char const* _literal_ua_MakerMenuLast = "Last location";
 	constexpr char const* _literal_ua_MakerMenuTeleport = "Quantum move";
@@ -162,6 +167,7 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_DialogBubbleGpuChanEmpty = "Oh no,\nit's too\nempty!";
 	constexpr char const* _literal_ua_regionNameUnknown = "Here be dragons";
 	constexpr char const* _literal_ua_regionNameScullery = "Кухня посуду";
+	constexpr char const* _literal_ua_sculleryWallSign = "No bubbers";
 	constexpr char const* _literal_ua_regionNameCity = "City of Urban Settlement";
 	constexpr char const* _literal_ua_regionNameLabyrinthOfUnreasonableSizeAndComplexity = "Labyrinth of Unreasonable Size and Complexity";
 	constexpr char const* _literal_ua_regionNameDesertOfCollossalTemperatureDifferences = "Desert of Considerable Temperature Differences";
@@ -214,8 +220,12 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_dingNameHoe = "Hoe";
 	constexpr char const* _literal_ua_dingNameHoePlural = "Hoes";
 	constexpr char const* _literal_ua_playerName1 = "sipWsibasWn";
-	constexpr char const* _literal_ua_playerName2 = "Ed";
-	constexpr char const* _literal_ua_playerName3 = "Cole Horn";
-	constexpr char const* _literal_ua_playerName4 = "Seven of None";
+	constexpr char const* _literal_ua_playerName2 = "Мiка";
+	constexpr char const* _literal_ua_playerName3 = "Синтія";
+	constexpr char const* _literal_ua_playerName4 = "Саша";
 	constexpr char const* _literal_ua_dialogPlayer3Perennial = "Are you threatening me?";
+	constexpr char const* _literal_ua_controllerLabel1 = "Контролер № 1";
+	constexpr char const* _literal_ua_controllerLabel2 = "Контролер № 2";
+	constexpr char const* _literal_ua_controllerLabel3 = "Контролер № 3";
+	constexpr char const* _literal_ua_controllerLabel4 = "Контролер № 4";
 }

@@ -5,6 +5,7 @@ namespace blooDot::de
 	constexpr char const* _literal_de_LCID = "de";
 	constexpr char const* _literal_de_LanguageName = "Deutsch";
 	constexpr char const* _literal_de_LanguageNameAmerican = "German";
+	constexpr char const* _literal_de_All = "Alle";
 	constexpr char const* _literal_de_AlienMainMenuLabel = "mEnmenV";
 	constexpr char const* _literal_de_AlienLoadMenuLabel = "lOd";
 	constexpr char const* _literal_de_AlienMakerMenuLabel = "Godmod";
@@ -15,6 +16,7 @@ namespace blooDot::de
 	constexpr char const* _literal_de_AlienMultiMonitorMenuLabel = "MaltiDisplej";
 	constexpr char const* _literal_de_AlienInGameMenuLabel = "Gejm";
 	constexpr char const* _literal_de_AlienLangSettingsMenuLabel = "lenguij";
+	constexpr char const* _literal_de_AlienCtrlSettingsMenuLabel = "kontrol";
 	constexpr char const* _literal_de_AlienContinueEmptyLabel = "Empti";
 	constexpr char const* _literal_de_Manufacturer = "Copyright zOzz FlaminginSarjakuvatOj";
 	constexpr char const* _literal_de_MenuContinue = "Fortsetzen";
@@ -31,6 +33,9 @@ namespace blooDot::de
 	constexpr char const* _literal_de_MenuOk = "Ok";
 	constexpr char const* _literal_de_MenuLeave = "Verlassen";
 	constexpr char const* _literal_de_MenuControls = "Steuerung";
+	constexpr char const* _literal_de_ControlsNeverConnected = "Keine Controller verbunden, so wie es aussieht. Wie bist du überhaupt hier reingekommen? Mit der Tastatur?";
+	constexpr char const* _literal_de_ControlsKeyboard = "Tastaturtastenbelegung";
+	constexpr char const* _literal_de_ControlsController = "Controllersteuerung, Steuerelemente";
 	constexpr char const* _literal_de_MenuKnowledgebase = "Enzyklopädie";
 	constexpr char const* _literal_de_MenuMap = "Karte";
 	constexpr char const* _literal_de_MenuInventory = "Inventar";
@@ -162,12 +167,13 @@ namespace blooDot::de
 	constexpr char const* _literal_de_DialogBubbleGpuChanEmpty = "O nein, es\nist leer!";
 	constexpr char const* _literal_de_regionNameUnknown = "Hier seyen Drachen";
 	constexpr char const* _literal_de_regionNameScullery = "Spülküche";
+	constexpr char const* _literal_de_sculleryWallSign = "Keine Tellerdiebe";
 	constexpr char const* _literal_de_regionNameCity = "Stadt der urbanen Ansiedlung";
 	constexpr char const* _literal_de_regionNameLabyrinthOfUnreasonableSizeAndComplexity = "Labyrinth der unnötigen Größe und Komplexität";
 	constexpr char const* _literal_de_regionNameDesertOfCollossalTemperatureDifferences = "Wüste der beträchtlichen Temperaturunterschiede";
 	constexpr char const* _literal_de_regionNameOceanOfImmeasurableDisappointment = "Meer der unermeßlichen Enttäuschung";
-	constexpr char const* _literal_de_regionNameNonMountainsOfTwoDimensionalFlatness = "Nichtberge der völligen Flachheit ohne jegliche Erhebung";
-	constexpr char const* _literal_de_regionNameMarshesOfDoubtfulDrowningHazard = "Sümpfe der eher zweifelhaften Ertrinkungsgefahr";
+	constexpr char const* _literal_de_regionNameNonMountainsOfTwoDimensionalFlatness = "Unberge der erhebungslosen Flachheit";
+	constexpr char const* _literal_de_regionNameMarshesOfDoubtfulDrowningHazard = "Sümpfe der zweifelhaften Ertrinkungsgefahr";
 	constexpr char const* _literal_de_landmarkNameUniversityOfScience = "Wissenschnaftsuniversität";
 	constexpr char const* _literal_de_landmarkNameLibraryOfTheUniversityOfScience = "Bibliothek der Wissenschnaftsuniversität";
 	constexpr char const* _literal_de_landmarkNameGardenOfRidiculouslyPoisonousPlants = "Garten der absurd giftigen Pflanzen";
@@ -214,8 +220,12 @@ namespace blooDot::de
 	constexpr char const* _literal_de_dingNameHoe = "Hacke";
 	constexpr char const* _literal_de_dingNameHoePlural = "Hacken";
 	constexpr char const* _literal_de_playerName1 = "sipWsibasWn";
-	constexpr char const* _literal_de_playerName2 = "Ed";
-	constexpr char const* _literal_de_playerName3 = "Cole Horn";
-	constexpr char const* _literal_de_playerName4 = "Seven of None";
+	constexpr char const* _literal_de_playerName2 = "Mika";
+	constexpr char const* _literal_de_playerName3 = "Cynthia";
+	constexpr char const* _literal_de_playerName4 = "Sascha";
 	constexpr char const* _literal_de_dialogPlayer3Perennial = "Willst du mir drohen?";
+	constexpr char const* _literal_de_controllerLabel1 = "Controller Nr. 1";
+	constexpr char const* _literal_de_controllerLabel2 = "Controller Nr. 2";
+	constexpr char const* _literal_de_controllerLabel3 = "Controller Nr. 3";
+	constexpr char const* _literal_de_controllerLabel4 = "Controller Nr. 4";
 }

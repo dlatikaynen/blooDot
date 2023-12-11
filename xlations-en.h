@@ -5,6 +5,7 @@ namespace blooDot::en
 	constexpr char const* _literal_en_LCID = "am";
 	constexpr char const* _literal_en_LanguageName = "American";
 	constexpr char const* _literal_en_LanguageNameAmerican = "American";
+	constexpr char const* _literal_en_All = "all";
 	constexpr char const* _literal_en_AlienMainMenuLabel = "mEnmenV";
 	constexpr char const* _literal_en_AlienLoadMenuLabel = "lOd";
 	constexpr char const* _literal_en_AlienMakerMenuLabel = "Godmod";
@@ -15,6 +16,7 @@ namespace blooDot::en
 	constexpr char const* _literal_en_AlienMultiMonitorMenuLabel = "MaltiDisplej";
 	constexpr char const* _literal_en_AlienInGameMenuLabel = "Gejm";
 	constexpr char const* _literal_en_AlienLangSettingsMenuLabel = "lenguij";
+	constexpr char const* _literal_en_AlienCtrlSettingsMenuLabel = "kontrol";
 	constexpr char const* _literal_en_AlienContinueEmptyLabel = "Empti";
 	constexpr char const* _literal_en_Manufacturer = "Copyright zOzz FlaminginSarjakuvatOj";
 	constexpr char const* _literal_en_MenuContinue = "Continue";
@@ -31,6 +33,9 @@ namespace blooDot::en
 	constexpr char const* _literal_en_MenuOk = "Ok";
 	constexpr char const* _literal_en_MenuLeave = "Leave";
 	constexpr char const* _literal_en_MenuControls = "Controls";
+	constexpr char const* _literal_en_ControlsNeverConnected = "No controllers connected, or so it seems. How did you even get here, by keyboard?";
+	constexpr char const* _literal_en_ControlsKeyboard = "Keyboard key keying";
+	constexpr char const* _literal_en_ControlsController = "Controller control, controls";
 	constexpr char const* _literal_en_MenuKnowledgebase = "Knowledgebase";
 	constexpr char const* _literal_en_MenuMap = "Map";
 	constexpr char const* _literal_en_MenuInventory = "Hammerspace";
@@ -162,6 +167,7 @@ namespace blooDot::en
 	constexpr char const* _literal_en_DialogBubbleGpuChanEmpty = "Oh no,\nit's too\nempty!";
 	constexpr char const* _literal_en_regionNameUnknown = "Here be dragons";
 	constexpr char const* _literal_en_regionNameScullery = "Scullery";
+	constexpr char const* _literal_en_sculleryWallSign = "No bubbers";
 	constexpr char const* _literal_en_regionNameCity = "City of Urban Settlement";
 	constexpr char const* _literal_en_regionNameLabyrinthOfUnreasonableSizeAndComplexity = "Labyrinth of Unreasonable Size and Complexity";
 	constexpr char const* _literal_en_regionNameDesertOfCollossalTemperatureDifferences = "Desert of Considerable Temperature Differences";
@@ -214,8 +220,12 @@ namespace blooDot::en
 	constexpr char const* _literal_en_dingNameHoe = "Hoe";
 	constexpr char const* _literal_en_dingNameHoePlural = "Hoes";
 	constexpr char const* _literal_en_playerName1 = "sipWsibasWn";
-	constexpr char const* _literal_en_playerName2 = "Ed";
-	constexpr char const* _literal_en_playerName3 = "Cole Horn";
-	constexpr char const* _literal_en_playerName4 = "Seven of None";
+	constexpr char const* _literal_en_playerName2 = "Mika";
+	constexpr char const* _literal_en_playerName3 = "Cynthia";
+	constexpr char const* _literal_en_playerName4 = "Sasha";
 	constexpr char const* _literal_en_dialogPlayer3Perennial = "Are you threatening me?";
+	constexpr char const* _literal_en_controllerLabel1 = "Controller #1";
+	constexpr char const* _literal_en_controllerLabel2 = "Controller #2";
+	constexpr char const* _literal_en_controllerLabel3 = "Controller #3";
+	constexpr char const* _literal_en_controllerLabel4 = "Controller #4";
 }

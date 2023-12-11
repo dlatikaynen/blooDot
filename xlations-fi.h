@@ -5,6 +5,7 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_LCID = "fi";
 	constexpr char const* _literal_fi_LanguageName = "Suomi";
 	constexpr char const* _literal_fi_LanguageNameAmerican = "Finnish";
+	constexpr char const* _literal_fi_All = "Kaikki";
 	constexpr char const* _literal_fi_AlienMainMenuLabel = "mEnmenV";
 	constexpr char const* _literal_fi_AlienLoadMenuLabel = "lOd";
 	constexpr char const* _literal_fi_AlienMakerMenuLabel = "Godmod";
@@ -15,6 +16,7 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_AlienMultiMonitorMenuLabel = "MaltiDisplej";
 	constexpr char const* _literal_fi_AlienInGameMenuLabel = "Gejm";
 	constexpr char const* _literal_fi_AlienLangSettingsMenuLabel = "lenguij";
+	constexpr char const* _literal_fi_AlienCtrlSettingsMenuLabel = "kontrol";
 	constexpr char const* _literal_fi_AlienContinueEmptyLabel = "Empti";
 	constexpr char const* _literal_fi_Manufacturer = "Copyright zOzz FlaminginSarjakuvatOj";
 	constexpr char const* _literal_fi_MenuContinue = "Jatkaa";
@@ -31,6 +33,9 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_MenuOk = "Joo";
 	constexpr char const* _literal_fi_MenuLeave = "Jättää";
 	constexpr char const* _literal_fi_MenuControls = "Ohjaus";
+	constexpr char const* _literal_fi_ControlsNeverConnected = "No controllers connected, or so it seems. How did you even get here, by keyboard?";
+	constexpr char const* _literal_fi_ControlsKeyboard = "Näppäimistön näppäinten näppäily";
+	constexpr char const* _literal_fi_ControlsController = "Controller control, controls";
 	constexpr char const* _literal_fi_MenuKnowledgebase = "Tietopohja";
 	constexpr char const* _literal_fi_MenuMap = "Kartta";
 	constexpr char const* _literal_fi_MenuInventory = "Inventaario";
@@ -162,6 +167,7 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_DialogBubbleGpuChanEmpty = "Oh no,\nit's too\nempty!";
 	constexpr char const* _literal_fi_regionNameUnknown = "Here be dragons";
 	constexpr char const* _literal_fi_regionNameScullery = "Scullery";
+	constexpr char const* _literal_fi_sculleryWallSign = "No bubbers";
 	constexpr char const* _literal_fi_regionNameCity = "City of Urban Settlement";
 	constexpr char const* _literal_fi_regionNameLabyrinthOfUnreasonableSizeAndComplexity = "Labyrinth of Unreasonable Size and Complexity";
 	constexpr char const* _literal_fi_regionNameDesertOfCollossalTemperatureDifferences = "Desert of Considerable Temperature Differences";
@@ -214,8 +220,12 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_dingNameHoe = "Kuokka";
 	constexpr char const* _literal_fi_dingNameHoePlural = "Kukot";
 	constexpr char const* _literal_fi_playerName1 = "sipWsibasWn";
-	constexpr char const* _literal_fi_playerName2 = "Ed";
-	constexpr char const* _literal_fi_playerName3 = "Cole Horn";
-	constexpr char const* _literal_fi_playerName4 = "Seven of None";
+	constexpr char const* _literal_fi_playerName2 = "Miika";
+	constexpr char const* _literal_fi_playerName3 = "Cynthia";
+	constexpr char const* _literal_fi_playerName4 = "Sasha";
 	constexpr char const* _literal_fi_dialogPlayer3Perennial = "Are you threatening me?";
+	constexpr char const* _literal_fi_controllerLabel1 = "Controller nro 1";
+	constexpr char const* _literal_fi_controllerLabel2 = "Controller nro 2";
+	constexpr char const* _literal_fi_controllerLabel3 = "Controller nro 3";
+	constexpr char const* _literal_fi_controllerLabel4 = "Controller nro 4";
 }

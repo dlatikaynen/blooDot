@@ -30,6 +30,14 @@ enum UserInterfaceLanguages : char {
 	UIL_UKRAINIAN
 };
 
+enum InputDeviceChoices : char {
+	IDC_KYBD,
+	IDC_CONTROLLER1,
+	IDC_CONTROLLER2,
+	IDC_CONTROLLER3,
+	IDC_CONTROLLER4
+};
+
 enum FlappySituation {
 	FS_BUNGHOLE,
 	FS_VERTICAL,
@@ -97,6 +105,11 @@ enum LangSettingsMenuItems {
 	LSMI_USER_INTERFACE_LANGUAGE
 };
 
+enum ControlsSettingsMenuItems {
+	CSMI_CANCEL,
+	CSMI_INPUT_DEVICES
+};
+
 enum DialogMenuResult {
 	DMR_NONE,
 	DMR_CANCEL,
@@ -143,4 +156,14 @@ inline UserInterfaceLanguages operator--(UserInterfaceLanguages& uil)
 inline UserInterfaceLanguages operator++(UserInterfaceLanguages& uil)
 {
 	return static_cast<UserInterfaceLanguages>(static_cast<int>(uil) + 1);
+}
+
+inline InputDeviceChoices operator--(InputDeviceChoices& uil)
+{
+	return static_cast<InputDeviceChoices>(static_cast<int>(uil) - 1);
+}
+
+inline InputDeviceChoices operator++(InputDeviceChoices& uil)
+{
+	return static_cast<InputDeviceChoices>(static_cast<int>(uil) + 1);
 }

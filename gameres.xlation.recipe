@@ -16,6 +16,12 @@ LanguageNameAmerican
 	[fi]	Finnish
 	[ua]	Ukrainian
 
+All
+	[am]	all
+	[de]	Alle
+	[fi]	Kaikki
+	[ua]	всі
+
 AlienMainMenuLabel
 	[**]	mEnmenV
 
@@ -45,6 +51,9 @@ AlienInGameMenuLabel
 
 AlienLangSettingsMenuLabel
 	[**]	lenguij
+
+AlienCtrlSettingsMenuLabel
+	[**]	kontrol
 
 AlienContinueEmptyLabel
 	[**]	Empti
@@ -132,6 +141,20 @@ MenuControls
 	[fi]	Ohjaus
 	[ua]	Kерування
 
+ControlsNeverConnected
+	[am]	No controllers connected, or so it seems. How did you even get here, by keyboard?
+	[de]	Keine Controller verbunden, so wie es aussieht. Wie bist du überhaupt hier reingekommen? Mit der Tastatur?
+
+ControlsKeyboard
+	[am]	Keyboard key keying
+	[de]	Tastaturtastenbelegung
+	[fi]	Näppäimistön näppäinten näppäily
+	[ua]	Клавіш клавіатури
+
+ControlsController
+	[am]	Controller control, controls
+	[de]	Controllersteuerung, Steuerelemente
+
 MenuKnowledgebase
 	[am]	Knowledgebase
 	[de]	Enzyklopädie
@@ -148,7 +171,7 @@ MenuInventory
 	[am]	Hammerspace
 	[fi]	Inventaario
 	[de]	Inventar
-	[ua]	інвентар
+	[ua]	Iнвентар
 
 MakerMenuInitial
 	[am]	Origin
@@ -664,6 +687,10 @@ regionNameScullery
 	[de]	Spülküche
 	[ua]	Кухня посуду
 
+sculleryWallSign
+	[am]	No bubbers
+	[de]	Keine Tellerdiebe
+
 regionNameCity
 	[am]	City of Urban Settlement
 	[de]	Stadt der urbanen Ansiedlung
@@ -682,11 +709,11 @@ regionNameOceanOfImmeasurableDisappointment
 
 regionNameNonMountainsOfTwoDimensionalFlatness
 	[am]	Mountain'ts of Sheer Flatness And Absolutely No Elevation
-	[de]	Nichtberge der völligen Flachheit ohne jegliche Erhebung
+	[de]	Unberge der erhebungslosen Flachheit
 
 regionNameMarshesOfDoubtfulDrowningHazard
 	[am]	Marshes of Rather Doubtful Drowning Hazard
-	[de]	Sümpfe der eher zweifelhaften Ertrinkungsgefahr
+	[de]	Sümpfe der zweifelhaften Ertrinkungsgefahr
 
 landmarkNameUniversityOfScience
 	[am]	University of Snience
@@ -878,16 +905,52 @@ dingNameHoePlural
 
 playerName1
 	[am]	sipWsibasWn
+	[de]	sipWsibasWn
+	[fi]	sipWsibasWn
+	[ua]	sipWsibasWn
 
 playerName2
-	[am]	Ed
+	[am]	Mika
+	[de]	Mika
+	[fi]	Miika
+	[ua]	Мiка
 
 playerName3
-	[am]	Cole Horn
+	[am]	Cynthia
+	[de]	Cynthia
+	[fi]	Cynthia
+	[ua]	Синтія
 
 playerName4
-	[am]	Seven of None
+	[am]	Sasha
+	[de]	Sascha
+	[fi]	Sasha
+	[ua]	Саша
 
 dialogPlayer3Perennial
 	[am]	Are you threatening me?
 	[de]	Willst du mir drohen?
+
+controllerLabel1
+	[am]	Controller #1
+	[de]	Controller Nr. 1
+	[fi]	Controller nro 1
+	[ua]	Контролер № 1
+
+controllerLabel2
+	[am]	Controller #2
+	[de]	Controller Nr. 2
+	[fi]	Controller nro 2
+	[ua]	Контролер № 2
+
+controllerLabel3
+	[am]	Controller #3
+	[de]	Controller Nr. 3
+	[fi]	Controller nro 3
+	[ua]	Контролер № 3
+
+controllerLabel4
+	[am]	Controller #4
+	[de]	Controller Nr. 4
+	[fi]	Controller nro 4
+	[ua]	Контролер № 4

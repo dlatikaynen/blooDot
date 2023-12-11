@@ -22,7 +22,7 @@ extern bool mainRunning;
 
 namespace blooDot::MenuSettingsLang
 {
-	SDL_Event langSettingsMenuEvent;
+	SDL_Event controlsSettingsMenuEvent;
 	bool langSettingsMenuRunning = false;
 	auto menuSelection = LangSettingsMenuItems::LSMI_CANCEL;
 	auto selectedLanguage = UserInterfaceLanguages::UIL_AMERICAN;
@@ -74,9 +74,9 @@ namespace blooDot::MenuSettingsLang
 		unsigned short frame = 0L;
 		while (langSettingsMenuRunning)
 		{
-			while (SDL_PollEvent(&langSettingsMenuEvent) != 0)
+			while (SDL_PollEvent(&controlsSettingsMenuEvent) != 0)
 			{
-				switch (langSettingsMenuEvent.type)
+				switch (controlsSettingsMenuEvent.type)
 				{
 				case SDL_QUIT:
 					mainRunning = false;
@@ -84,7 +84,7 @@ namespace blooDot::MenuSettingsLang
 					break;
 
 				case SDL_KEYDOWN:
-					switch (langSettingsMenuEvent.key.keysym.scancode)
+					switch (controlsSettingsMenuEvent.key.keysym.scancode)
 					{
 					case SDL_SCANCODE_DOWN:
 					case SDL_SCANCODE_KP_2:

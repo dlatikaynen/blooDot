@@ -52,6 +52,18 @@ cairo_t* DrawSelectedLayerTool(cairo_t* context, int x, double baseY, double ySt
 	return context;
 }
 
+/// <summary>
+/// Expects the patterns to be created
+/// </summary>
+cairo_t* DrawActiveControllerSquare(cairo_t* context, double x, double y, double w, double h)
+{
+	cairo_set_source(context, selPatternBlue);
+	cairo_rectangle(context, x, y, w, h);
+	cairo_fill(context);
+
+	return context;
+}
+
 cairo_t* DrawButton(cairo_t* context, double x, double y, double w, double h, ControlHighlight highlight)
 {
 	if (highlight > CH_NONE)
