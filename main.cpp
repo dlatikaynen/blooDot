@@ -125,42 +125,6 @@ int main(int, char**)
 	}
 
 	std::cout << "Current video driver is " << SDL_GetCurrentVideoDriver() << "\n";
-
-	const auto connectedControllers = SDL_NumJoysticks();
-	if (connectedControllers == 0)
-	{
-		std::cout << "No controllers detected\n";
-	}
-	else
-	{
-		for (int i = 0; i < connectedControllers; ++i)
-		{
-			const auto controllerName = SDL_GameControllerNameForIndex(i);
-			if(controllerName) 
-			{
-				auto controller = SDL_GameControllerOpen(i);
-				auto joystick = SDL_GameControllerGetJoystick(controller);
-
-				if (SDL_GameControllerHasRumble(controller))
-				{
-					SDL_GameControllerRumble(controller, 0x0, 0xffff, 2500);
-				}
-
-				SDL_JoystickClose(joystick);
-				SDL_GameControllerClose(controller);
-
-				std::cout
-					<< "Controller \""
-					<< controllerName
-					<< " present\n";
-			}
-			else
-			{
-				std::wcout << "Controller (no name) present\n";
-			}
-		}
-	}
-
 	while (true)
 	{
 		/* action */

@@ -33,6 +33,11 @@ namespace blooDot::MenuSettingsControls
 	int slideSpeed = 0;
 	int targetOffsetLeft = 0;
 
+	std::string controller1Name;
+	std::string controller2Name;
+	std::string controller3Name;
+	std::string controller4Name;
+
 	SDL_JoystickID controller1Connected = -1;
 	SDL_JoystickID controller2Connected = -1;
 	SDL_JoystickID controller3Connected = -1;
@@ -46,6 +51,8 @@ namespace blooDot::MenuSettingsControls
 		constexpr int const sliderY = startY + stride + backGap;
 		constexpr SDL_Rect const carouselDestRect = { 80,sliderY,vignetteWidth,vignetteHeight };
 
+		_StatusQuo();
+		slidingDevices = nullptr;
 		_PrepareControls(renderer);
 		ctrlsSettingsMenuRunning = true;
 		sliderOffsetLeft = static_cast<int>(selectedDevice) * vignetteWidth + bounceMargin;
@@ -74,18 +81,19 @@ namespace blooDot::MenuSettingsControls
 			ButtonTextColor
 		);
 
-		_StatusQuo();
-
 		unsigned short frame = 0L;
+		bool needRedraw;
 		while (ctrlsSettingsMenuRunning)
 		{
+			needRedraw = false;
 			while (SDL_PollEvent(&ctrlsSettingsMenuEvent) != 0)
 			{
 				switch (ctrlsSettingsMenuEvent.type)
 				{
 				case SDL_CONTROLLERDEVICEADDED:
 				{
-					auto instanceId = SDL_JoystickGetDeviceInstanceID(ctrlsSettingsMenuEvent.cdevice.which);
+					auto deviceIndex = ctrlsSettingsMenuEvent.cdevice.which;
+					auto instanceId = SDL_JoystickGetDeviceInstanceID(deviceIndex);
 
 					if (instanceId < 0)
 					{
@@ -99,35 +107,51 @@ namespace blooDot::MenuSettingsControls
 						if (controller1Connected == -1)
 						{
 							controller1Connected = instanceId;
+							controller1Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
+							needRedraw = true;
 						}
 						else if (controller2Connected == -1)
 						{
 							controller2Connected = instanceId;
+							controller2Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
+							needRedraw = true;
 						}
 						else if (controller3Connected == -1)
 						{
 							controller3Connected = instanceId;
+							controller3Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
+							needRedraw = true;
 						}
 						else if (controller4Connected == -1)
 						{
 							controller4Connected = instanceId;
+							controller4Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
+							needRedraw = true;
 						}
 					}
 					else if (playerIndex == 1)
 					{
 						controller1Connected = instanceId;
+						controller1Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
+						needRedraw = true;
 					}
 					else if (playerIndex == 2)
 					{
 						controller2Connected = instanceId;
+						controller2Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
+						needRedraw = true;
 					}
 					else if (playerIndex == 3)
 					{
 						controller3Connected = instanceId;
+						controller3Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
+						needRedraw = true;
 					}
 					else if (playerIndex == 4)
 					{
 						controller4Connected = instanceId;
+						controller4Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
+						needRedraw = true;
 					}
 
 					break;
@@ -140,21 +164,29 @@ namespace blooDot::MenuSettingsControls
 					if (controller1Connected == instanceId)
 					{
 						controller1Connected = -1;
+						controller1Name.clear();
+						needRedraw = true;
 					}
 
 					if (controller2Connected == instanceId)
 					{
 						controller2Connected = -1;
+						controller2Name.clear();
+						needRedraw = true;
 					}
 
 					if (controller3Connected == instanceId)
 					{
 						controller3Connected = -1;
+						controller3Name.clear();
+						needRedraw = true;
 					}
 
 					if (controller4Connected == instanceId)
 					{
 						controller4Connected = -1;
+						controller4Name.clear();
+						needRedraw = true;
 					}
 
 					break;
@@ -269,6 +301,12 @@ namespace blooDot::MenuSettingsControls
 
 					break;
 				}
+			}
+
+			if(needRedraw) 
+			{
+				_PrepareControls(renderer);
+				needRedraw = false;
 			}
 
 			if (SDL_RenderClear(renderer) < 0)
@@ -496,18 +534,22 @@ namespace blooDot::MenuSettingsControls
 				if (playerIndex == 1)
 				{
 					controller1Connected = instanceId;
+					controller1Name.assign(SDL_GameControllerNameForIndex(i));
 				}
 				else if (playerIndex == 2)
 				{
 					controller2Connected = instanceId;
+					controller2Name.assign(SDL_GameControllerNameForIndex(i));
 				}
 				else if (playerIndex == 3)
 				{
 					controller3Connected = instanceId;
+					controller3Name.assign(SDL_GameControllerNameForIndex(i));
 				}
 				else if (playerIndex == 4)
 				{
 					controller4Connected = instanceId;
+					controller4Name.assign(SDL_GameControllerNameForIndex(i));
 				}
 			}
 		}
@@ -521,23 +563,27 @@ namespace blooDot::MenuSettingsControls
 			{
 				auto playerIndex = SDL_JoystickGetDevicePlayerIndex(instanceId);
 
-				if (playerIndex == -1)
+				if (playerIndex <= 0)
 				{
-					if (!controller1Connected)
+					if (controller1Connected == -1)
 					{
 						controller1Connected = instanceId;
+						controller1Name.assign(SDL_GameControllerNameForIndex(i));
 					}
-					else if (!controller2Connected)
+					else if (controller2Connected == -1)
 					{
 						controller2Connected = instanceId;
+						controller2Name.assign(SDL_GameControllerNameForIndex(i));
 					}
-					else if (!controller3Connected)
+					else if (controller3Connected == -1)
 					{
 						controller3Connected = instanceId;
+						controller3Name.assign(SDL_GameControllerNameForIndex(i));
 					}
-					else if (!controller4Connected)
+					else if (controller4Connected == -1)
 					{
 						controller4Connected = instanceId;
+						controller4Name.assign(SDL_GameControllerNameForIndex(i));
 					}
 				}
 			}
@@ -547,6 +593,7 @@ namespace blooDot::MenuSettingsControls
 	void _PrepareControls(SDL_Renderer* renderer)
 	{
 		sliderTextureWidth = vignetteCount * vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * bounceMargin;
+		DestroyTexture(&slidingDevices);
 		slidingDevices = SDL_CreateTexture(
 			renderer,
 			SDL_PIXELFORMAT_ARGB8888,
@@ -580,16 +627,16 @@ namespace blooDot::MenuSettingsControls
 			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 0, 30, literalControlsKeyboard);
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 0, 190, literalAll);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 1, 30, literalcontrollerLabel1);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 1, 30, controller1Name.empty() ? literalcontrollerLabel1 : controller1Name.c_str());
 			_VignetteLabel(renderer, FONT_KEY_ALIEN, 25, 1, 189, literalplayerName1);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 2, 30, literalcontrollerLabel2);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 2, 30, controller2Name.empty() ? literalcontrollerLabel2 : controller2Name.c_str());
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 2, 190, literalplayerName2);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 3, 30, literalcontrollerLabel3);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 3, 30, controller3Name.empty() ? literalcontrollerLabel3 : controller3Name.c_str());
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 3, 190, literalplayerName3);
 
-			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 4, 30, literalcontrollerLabel4);
+			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 4, 30, controller4Name.empty() ? literalcontrollerLabel4 : controller4Name.c_str());
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 4, 190, literalplayerName4);
 
 			if (SDL_SetRenderTarget(renderer, NULL) < 0)
