@@ -309,6 +309,7 @@ namespace blooDot::MenuSettingsControls
 				needRedraw = false;
 			}
 
+			SDL_SetRenderDrawColor(renderer, 0xc5, 0xc5, 0xc5, 0xe9);
 			if (SDL_RenderClear(renderer) < 0)
 			{
 				const auto clearError = IMG_GetError();
@@ -639,6 +640,104 @@ namespace blooDot::MenuSettingsControls
 			_VignetteLabel(renderer, FONT_KEY_DIALOG_FAT, 28, 4, 30, controller4Name.empty() ? literalcontrollerLabel4 : controller4Name.c_str());
 			_VignetteLabel(renderer, FONT_KEY_DIALOG, 23, 4, 190, literalplayerName4);
 
+			const auto drawingTexture = BeginRenderDrawing(renderer, sliderTextureWidth, vignetteHeight);
+			if (drawingTexture)
+			{
+				auto const& drawingSink = GetDrawingSink();
+
+				cairo_set_line_width(drawingSink, 3.7);
+				cairo_set_line_cap(drawingSink, CAIRO_LINE_CAP_ROUND);
+				cairo_set_line_join(drawingSink, CAIRO_LINE_JOIN_ROUND);
+				cairo_set_miter_limit(drawingSink, 1.68);
+				cairo_set_source_rgb(drawingSink, .2, .2, 1.);
+
+				// cross
+				cairo_move_to(drawingSink, 160, 145);
+				cairo_rel_line_to(drawingSink, 15, 0);
+				cairo_rel_line_to(drawingSink, 0, 15);
+				cairo_rel_line_to(drawingSink, 15, 0);
+				cairo_rel_line_to(drawingSink, 0, -15);
+				cairo_rel_line_to(drawingSink, 15, 0);
+				cairo_rel_line_to(drawingSink, 0, -15);
+				cairo_rel_line_to(drawingSink, -15, 0);
+				cairo_rel_line_to(drawingSink, 0, -15);
+				cairo_rel_line_to(drawingSink, -15, 0);
+				cairo_rel_line_to(drawingSink, 0, 15);
+				cairo_rel_line_to(drawingSink, -15, 0);
+				cairo_close_path(drawingSink);
+				cairo_stroke(drawingSink);
+
+				// buttons
+				cairo_arc(drawingSink, vignetteWidth - 160 - 15, 145 - 7.5, 8.7, -M_PI * 2, 0);
+				cairo_stroke(drawingSink);
+				cairo_arc(drawingSink, vignetteWidth - 160 + 15, 145 - 7.5, 8.7, -M_PI * 2, 0);
+				cairo_stroke(drawingSink);
+				cairo_arc(drawingSink, vignetteWidth - 160, 145 - 15 - 7.5, 8.7, -M_PI * 2, 0);
+				cairo_stroke(drawingSink);
+				cairo_arc(drawingSink, vignetteWidth - 160, 145 + 15 - 7.5, 8.7, -M_PI * 2, 0);
+				cairo_stroke(drawingSink);
+
+				// left outer shoulder
+				cairo_move_to(drawingSink, 160 - 95, 145 - 55 - 25);
+				cairo_rel_curve_to(drawingSink, 0, 0, -11, 20, 0, 51);
+				cairo_rel_line_to(drawingSink, -17, 0);
+				cairo_rel_curve_to(drawingSink, 0, 0, -16, -7, 0, -49);
+				cairo_close_path(drawingSink);
+				cairo_stroke(drawingSink);
+
+				// left inner shoulder
+				cairo_move_to(drawingSink, 160 - 70, 145 - 55 - 21.1);
+				cairo_rel_curve_to(drawingSink, 0, 0, -10, 20, 0, 40);
+				cairo_rel_line_to(drawingSink, -15, 0);
+				cairo_rel_curve_to(drawingSink, 0, 0, -15, -5, 0, -40);
+				cairo_close_path(drawingSink);
+				cairo_stroke(drawingSink);
+
+				// left stick
+				cairo_arc(drawingSink, 160 - 45 + 7.5, 145 - 55, 21.1, -M_PI * 2, 0);
+				cairo_stroke(drawingSink);
+
+				// left minus
+				cairo_arc(drawingSink, vignetteWidth / 2. + 7.5, 145 - 55, 30, M_PI - 0.375, M_PI + 0.375);
+				cairo_rel_line_to(drawingSink, -17.2, 10.5);
+				cairo_close_path(drawingSink);
+				cairo_stroke(drawingSink);
+
+				// center home
+				cairo_arc(drawingSink, vignetteWidth / 2. + 7.5, 145 - 55, 12.7, -M_PI * 2, 0);
+				cairo_stroke(drawingSink);
+
+				// right plus
+				cairo_arc_negative(drawingSink, vignetteWidth / 2. + 7.5, 145 - 55, 30, 0.375, -0.375);
+				cairo_rel_line_to(drawingSink, 17.2, 10.5);
+				cairo_close_path(drawingSink);
+				cairo_stroke(drawingSink);
+
+				// right stick
+				cairo_arc(drawingSink, vignetteWidth - 160 + 45 + 7.5, 145 - 55, 21.1, -M_PI * 2, 0);
+				cairo_stroke(drawingSink);
+
+				// right inner shoulder
+				cairo_move_to(drawingSink, vignetteWidth - 160 + 70 + 15, 145 - 55 - 21.1);
+				cairo_rel_curve_to(drawingSink, 0, 0, 10, 20, 0, 40);
+				cairo_rel_line_to(drawingSink, 15, 0);
+				cairo_rel_curve_to(drawingSink, 0, 0, 15, -5, 0, -40);
+				cairo_close_path(drawingSink);
+				cairo_stroke(drawingSink);
+
+				// right outer shoulder
+				cairo_move_to(drawingSink, vignetteWidth - 160 + 95 + 15, 145 - 55 - 25);
+				cairo_rel_curve_to(drawingSink, 0, 0, 11, 20, 0, 51);
+				cairo_rel_line_to(drawingSink, 17, 0);
+				cairo_rel_curve_to(drawingSink, 0, 0, 16, -7, 0, -49);
+				cairo_close_path(drawingSink);
+				cairo_set_source_rgb(drawingSink, .8, .8, .9);
+				cairo_fill_preserve(drawingSink);
+				cairo_set_source_rgb(drawingSink, .2, .2, 1.);
+				cairo_stroke(drawingSink);
+			}
+
+			EndRenderDrawing(renderer, drawingTexture, nullptr);
 			if (SDL_SetRenderTarget(renderer, NULL) < 0)
 			{
 				const auto restoreError = SDL_GetError();
