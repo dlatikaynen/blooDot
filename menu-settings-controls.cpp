@@ -43,6 +43,13 @@ namespace blooDot::MenuSettingsControls
 	SDL_JoystickID controller3Connected = -1;
 	SDL_JoystickID controller4Connected = -1;
 
+	SDL_GameController* controller1 = nullptr;
+	SDL_GameController* controller2 = nullptr;
+	SDL_GameController* controller3 = nullptr;
+	SDL_GameController* controller4 = nullptr;
+
+	ControllerState controllerState[4] = { {0},{0},{0},{0} };
+
 	bool ControlsSettingsMenuLoop(SDL_Renderer* renderer)
 	{
 		constexpr int const startY = 94;
@@ -107,24 +114,28 @@ namespace blooDot::MenuSettingsControls
 						if (controller1Connected == -1)
 						{
 							controller1Connected = instanceId;
+							controller1 = SDL_GameControllerOpen(deviceIndex);
 							controller1Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
 							needRedraw = true;
 						}
 						else if (controller2Connected == -1)
 						{
 							controller2Connected = instanceId;
+							controller2 = SDL_GameControllerOpen(deviceIndex);
 							controller2Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
 							needRedraw = true;
 						}
 						else if (controller3Connected == -1)
 						{
 							controller3Connected = instanceId;
+							controller3 = SDL_GameControllerOpen(deviceIndex);
 							controller3Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
 							needRedraw = true;
 						}
 						else if (controller4Connected == -1)
 						{
 							controller4Connected = instanceId;
+							controller4 = SDL_GameControllerOpen(deviceIndex);
 							controller4Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
 							needRedraw = true;
 						}
@@ -132,24 +143,28 @@ namespace blooDot::MenuSettingsControls
 					else if (playerIndex == 1)
 					{
 						controller1Connected = instanceId;
+						controller1 = SDL_GameControllerOpen(deviceIndex);
 						controller1Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
 						needRedraw = true;
 					}
 					else if (playerIndex == 2)
 					{
 						controller2Connected = instanceId;
+						controller2 = SDL_GameControllerOpen(deviceIndex);
 						controller2Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
 						needRedraw = true;
 					}
 					else if (playerIndex == 3)
 					{
 						controller3Connected = instanceId;
+						controller3 = SDL_GameControllerOpen(deviceIndex);
 						controller3Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
 						needRedraw = true;
 					}
 					else if (playerIndex == 4)
 					{
 						controller4Connected = instanceId;
+						controller4 = SDL_GameControllerOpen(deviceIndex);
 						controller4Name.assign(SDL_GameControllerNameForIndex(deviceIndex));
 						needRedraw = true;
 					}
@@ -164,6 +179,11 @@ namespace blooDot::MenuSettingsControls
 					if (controller1Connected == instanceId)
 					{
 						controller1Connected = -1;
+						if (controller1 != nullptr)
+						{
+							SDL_GameControllerClose(controller1);
+						}
+
 						controller1Name.clear();
 						needRedraw = true;
 					}
@@ -171,6 +191,11 @@ namespace blooDot::MenuSettingsControls
 					if (controller2Connected == instanceId)
 					{
 						controller2Connected = -1;
+						if (controller2 != nullptr)
+						{
+							SDL_GameControllerClose(controller2);
+						}
+
 						controller2Name.clear();
 						needRedraw = true;
 					}
@@ -178,6 +203,11 @@ namespace blooDot::MenuSettingsControls
 					if (controller3Connected == instanceId)
 					{
 						controller3Connected = -1;
+						if (controller3 != nullptr)
+						{
+							SDL_GameControllerClose(controller3);
+						}
+						
 						controller3Name.clear();
 						needRedraw = true;
 					}
@@ -185,8 +215,33 @@ namespace blooDot::MenuSettingsControls
 					if (controller4Connected == instanceId)
 					{
 						controller4Connected = -1;
+						if (controller4 != nullptr)
+						{
+							SDL_GameControllerClose(controller4);
+						}
+
 						controller4Name.clear();
 						needRedraw = true;
+					}
+
+					break;
+				}
+
+				case SDL_CONTROLLERAXISMOTION:
+					break;
+
+				case SDL_CONTROLLERBUTTONDOWN:
+				case SDL_CONTROLLERBUTTONUP:
+				{
+					auto shouldRedraw = _RegisterButtonState(
+						ctrlsSettingsMenuEvent.cdevice.which,
+						static_cast<SDL_GameControllerButton>(ctrlsSettingsMenuEvent.cbutton.button),
+						ctrlsSettingsMenuEvent.cbutton.state == SDL_PRESSED
+					);
+
+					if (shouldRedraw && !needRedraw)
+					{
+						needRedraw = shouldRedraw;
 					}
 
 					break;
@@ -486,6 +541,196 @@ namespace blooDot::MenuSettingsControls
 		return ctrlsSettingsMenuRunning;
 	}
 
+	bool _RegisterButtonState(Sint32 instanceId, SDL_GameControllerButton which, bool state)
+	{
+		auto changed = false;
+		auto playerIndex = 0;
+
+		if (instanceId == controller1Connected)
+		{
+			playerIndex = 1;
+		}
+		else if (instanceId == controller2Connected)
+		{
+			playerIndex = 2;
+		}
+		else if (instanceId == controller3Connected)
+		{
+			playerIndex = 3;
+		}
+		else if (instanceId == controller4Connected)
+		{
+			playerIndex = 4;
+		}
+
+		if (playerIndex == 0)
+		{
+			return false;
+		}
+
+		auto stateIndex = playerIndex - 1;
+
+		switch (which)
+		{
+		case ::SDL_CONTROLLER_BUTTON_A:
+			if (controllerState[stateIndex].A != state)
+			{
+				controllerState[stateIndex].A = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_B:
+			if (controllerState[stateIndex].B != state)
+			{
+				controllerState[stateIndex].B = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_X:
+			if (controllerState[stateIndex].X != state)
+			{
+				controllerState[stateIndex].X = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_Y:
+			if (controllerState[stateIndex].Y != state)
+			{
+				controllerState[stateIndex].Y = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+			if (controllerState[stateIndex].DL != state)
+			{
+				controllerState[stateIndex].DL = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+			if (controllerState[stateIndex].DR != state)
+			{
+				controllerState[stateIndex].DR = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+			if (controllerState[stateIndex].DD != state)
+			{
+				controllerState[stateIndex].DD = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_DPAD_UP:
+			if (controllerState[stateIndex].DU != state)
+			{
+				controllerState[stateIndex].DU = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_PADDLE1:
+		case ::SDL_CONTROLLER_BUTTON_PADDLE4:
+			if (controllerState[stateIndex].P1 != state)
+			{
+				controllerState[stateIndex].P1 = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
+			if (controllerState[stateIndex].LSH != state)
+			{
+				controllerState[stateIndex].LSH = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_LEFTSTICK:
+			if (controllerState[stateIndex].LST != state)
+			{
+				controllerState[stateIndex].LST = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_BACK:
+			if (controllerState[stateIndex].Back != state)
+			{
+				controllerState[stateIndex].Back = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_GUIDE:
+			if (controllerState[stateIndex].Guide != state)
+			{
+				controllerState[stateIndex].Guide = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_START:
+			if (controllerState[stateIndex].Start != state)
+			{
+				controllerState[stateIndex].Start = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_RIGHTSTICK:
+			if (controllerState[stateIndex].RST != state)
+			{
+				controllerState[stateIndex].RST = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+			if (controllerState[stateIndex].RSH != state)
+			{
+				controllerState[stateIndex].RSH = state;
+				changed = true;
+			}
+
+			break;
+
+		case ::SDL_CONTROLLER_BUTTON_PADDLE2:
+		case ::SDL_CONTROLLER_BUTTON_PADDLE3:
+			if (controllerState[stateIndex].P2 != state)
+			{
+				controllerState[stateIndex].P2 = state;
+				changed = true;
+			}
+
+			break;
+		}
+
+		return changed;
+	}
+
 	void _AnimateCarousel()
 	{
 		if (movingToDevice == selectedDevice)
@@ -535,21 +780,25 @@ namespace blooDot::MenuSettingsControls
 				if (playerIndex == 1)
 				{
 					controller1Connected = instanceId;
+					controller1 = SDL_GameControllerOpen(i);
 					controller1Name.assign(SDL_GameControllerNameForIndex(i));
 				}
 				else if (playerIndex == 2)
 				{
 					controller2Connected = instanceId;
+					controller2 = SDL_GameControllerOpen(i);
 					controller2Name.assign(SDL_GameControllerNameForIndex(i));
 				}
 				else if (playerIndex == 3)
 				{
 					controller3Connected = instanceId;
+					controller3 = SDL_GameControllerOpen(i);
 					controller3Name.assign(SDL_GameControllerNameForIndex(i));
 				}
 				else if (playerIndex == 4)
 				{
 					controller4Connected = instanceId;
+					controller4 = SDL_GameControllerOpen(i);
 					controller4Name.assign(SDL_GameControllerNameForIndex(i));
 				}
 			}
@@ -569,21 +818,25 @@ namespace blooDot::MenuSettingsControls
 					if (controller1Connected == -1)
 					{
 						controller1Connected = instanceId;
+						controller1 = SDL_GameControllerOpen(i);
 						controller1Name.assign(SDL_GameControllerNameForIndex(i));
 					}
 					else if (controller2Connected == -1)
 					{
 						controller2Connected = instanceId;
+						controller2 = SDL_GameControllerOpen(i);
 						controller2Name.assign(SDL_GameControllerNameForIndex(i));
 					}
 					else if (controller3Connected == -1)
 					{
 						controller3Connected = instanceId;
+						controller3 = SDL_GameControllerOpen(i);
 						controller3Name.assign(SDL_GameControllerNameForIndex(i));
 					}
 					else if (controller4Connected == -1)
 					{
 						controller4Connected = instanceId;
+						controller4 = SDL_GameControllerOpen(i);
 						controller4Name.assign(SDL_GameControllerNameForIndex(i));
 					}
 				}
@@ -644,97 +897,11 @@ namespace blooDot::MenuSettingsControls
 			if (drawingTexture)
 			{
 				auto const& drawingSink = GetDrawingSink();
+				_DrawController(drawingSink, 1, Player1Color); // 0 is keyboard
+				_DrawController(drawingSink, 2, Player2Color);
+				_DrawController(drawingSink, 3, Player3Color);
+				_DrawController(drawingSink, 4, Player4Color);
 
-				cairo_set_line_width(drawingSink, 3.7);
-				cairo_set_line_cap(drawingSink, CAIRO_LINE_CAP_ROUND);
-				cairo_set_line_join(drawingSink, CAIRO_LINE_JOIN_ROUND);
-				cairo_set_miter_limit(drawingSink, 1.68);
-				cairo_set_source_rgb(drawingSink, .2, .2, 1.);
-
-				// cross
-				cairo_move_to(drawingSink, 160, 145);
-				cairo_rel_line_to(drawingSink, 15, 0);
-				cairo_rel_line_to(drawingSink, 0, 15);
-				cairo_rel_line_to(drawingSink, 15, 0);
-				cairo_rel_line_to(drawingSink, 0, -15);
-				cairo_rel_line_to(drawingSink, 15, 0);
-				cairo_rel_line_to(drawingSink, 0, -15);
-				cairo_rel_line_to(drawingSink, -15, 0);
-				cairo_rel_line_to(drawingSink, 0, -15);
-				cairo_rel_line_to(drawingSink, -15, 0);
-				cairo_rel_line_to(drawingSink, 0, 15);
-				cairo_rel_line_to(drawingSink, -15, 0);
-				cairo_close_path(drawingSink);
-				cairo_stroke(drawingSink);
-
-				// buttons
-				cairo_arc(drawingSink, vignetteWidth - 160 - 15, 145 - 7.5, 8.7, -M_PI * 2, 0);
-				cairo_stroke(drawingSink);
-				cairo_arc(drawingSink, vignetteWidth - 160 + 15, 145 - 7.5, 8.7, -M_PI * 2, 0);
-				cairo_stroke(drawingSink);
-				cairo_arc(drawingSink, vignetteWidth - 160, 145 - 15 - 7.5, 8.7, -M_PI * 2, 0);
-				cairo_stroke(drawingSink);
-				cairo_arc(drawingSink, vignetteWidth - 160, 145 + 15 - 7.5, 8.7, -M_PI * 2, 0);
-				cairo_stroke(drawingSink);
-
-				// left outer shoulder
-				cairo_move_to(drawingSink, 160 - 95, 145 - 55 - 25);
-				cairo_rel_curve_to(drawingSink, 0, 0, -11, 20, 0, 51);
-				cairo_rel_line_to(drawingSink, -17, 0);
-				cairo_rel_curve_to(drawingSink, 0, 0, -16, -7, 0, -49);
-				cairo_close_path(drawingSink);
-				cairo_stroke(drawingSink);
-
-				// left inner shoulder
-				cairo_move_to(drawingSink, 160 - 70, 145 - 55 - 21.1);
-				cairo_rel_curve_to(drawingSink, 0, 0, -10, 20, 0, 40);
-				cairo_rel_line_to(drawingSink, -15, 0);
-				cairo_rel_curve_to(drawingSink, 0, 0, -15, -5, 0, -40);
-				cairo_close_path(drawingSink);
-				cairo_stroke(drawingSink);
-
-				// left stick
-				cairo_arc(drawingSink, 160 - 45 + 7.5, 145 - 55, 21.1, -M_PI * 2, 0);
-				cairo_stroke(drawingSink);
-
-				// left minus
-				cairo_arc(drawingSink, vignetteWidth / 2. + 7.5, 145 - 55, 30, M_PI - 0.375, M_PI + 0.375);
-				cairo_rel_line_to(drawingSink, -17.2, 10.5);
-				cairo_close_path(drawingSink);
-				cairo_stroke(drawingSink);
-
-				// center home
-				cairo_arc(drawingSink, vignetteWidth / 2. + 7.5, 145 - 55, 12.7, -M_PI * 2, 0);
-				cairo_stroke(drawingSink);
-
-				// right plus
-				cairo_arc_negative(drawingSink, vignetteWidth / 2. + 7.5, 145 - 55, 30, 0.375, -0.375);
-				cairo_rel_line_to(drawingSink, 17.2, 10.5);
-				cairo_close_path(drawingSink);
-				cairo_stroke(drawingSink);
-
-				// right stick
-				cairo_arc(drawingSink, vignetteWidth - 160 + 45 + 7.5, 145 - 55, 21.1, -M_PI * 2, 0);
-				cairo_stroke(drawingSink);
-
-				// right inner shoulder
-				cairo_move_to(drawingSink, vignetteWidth - 160 + 70 + 15, 145 - 55 - 21.1);
-				cairo_rel_curve_to(drawingSink, 0, 0, 10, 20, 0, 40);
-				cairo_rel_line_to(drawingSink, 15, 0);
-				cairo_rel_curve_to(drawingSink, 0, 0, 15, -5, 0, -40);
-				cairo_close_path(drawingSink);
-				cairo_stroke(drawingSink);
-
-				// right outer shoulder
-				cairo_move_to(drawingSink, vignetteWidth - 160 + 95 + 15, 145 - 55 - 25);
-				cairo_rel_curve_to(drawingSink, 0, 0, 11, 20, 0, 51);
-				cairo_rel_line_to(drawingSink, 17, 0);
-				cairo_rel_curve_to(drawingSink, 0, 0, 16, -7, 0, -49);
-				cairo_close_path(drawingSink);
-				cairo_set_source_rgb(drawingSink, .8, .8, .9);
-				cairo_fill_preserve(drawingSink);
-				cairo_set_source_rgb(drawingSink, .2, .2, 1.);
-				cairo_stroke(drawingSink);
 			}
 
 			EndRenderDrawing(renderer, drawingTexture, nullptr);
@@ -750,6 +917,225 @@ namespace blooDot::MenuSettingsControls
 
 		const auto newCarouselError = SDL_GetError();
 		ReportError("Could not allocate sliding texture", newCarouselError);
+	}
+
+	void _DrawController(cairo_t* drawingSink, int xMult, SDL_Color color)
+	{
+		auto stateIndex = xMult - 1;
+
+		cairo_translate(drawingSink, xMult * vignetteWidth, 0);
+		cairo_set_line_width(drawingSink, 3.7);
+		cairo_set_line_cap(drawingSink, CAIRO_LINE_CAP_ROUND);
+		cairo_set_line_join(drawingSink, CAIRO_LINE_JOIN_ROUND);
+		cairo_set_miter_limit(drawingSink, 1.68);
+		SetSourceColor(drawingSink, color);
+
+		// cross
+		if (controllerState[stateIndex].DL)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_rectangle(drawingSink, 160, 145 - 15, 15, 15);
+			cairo_fill(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		if (controllerState[stateIndex].DR)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_rectangle(drawingSink, 160 + 2 * 15, 145 - 15, 15, 15);
+			cairo_fill(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		if (controllerState[stateIndex].DU)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_rectangle(drawingSink, 160 + 15, 145 - 2 * 15, 15, 15);
+			cairo_fill(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		if (controllerState[stateIndex].DD)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_rectangle(drawingSink, 160 + 15, 145, 15, 15);
+			cairo_fill(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		cairo_move_to(drawingSink, 160, 145);
+		cairo_rel_line_to(drawingSink, 15, 0);
+		cairo_rel_line_to(drawingSink, 0, 15);
+		cairo_rel_line_to(drawingSink, 15, 0);
+		cairo_rel_line_to(drawingSink, 0, -15);
+		cairo_rel_line_to(drawingSink, 15, 0);
+		cairo_rel_line_to(drawingSink, 0, -15);
+		cairo_rel_line_to(drawingSink, -15, 0);
+		cairo_rel_line_to(drawingSink, 0, -15);
+		cairo_rel_line_to(drawingSink, -15, 0);
+		cairo_rel_line_to(drawingSink, 0, 15);
+		cairo_rel_line_to(drawingSink, -15, 0);
+		cairo_close_path(drawingSink);
+		cairo_stroke(drawingSink);
+
+		// buttons
+		cairo_arc(drawingSink, vignetteWidth - 160 - 15, 145 - 7.5, 8.7, -M_PI * 2, 0);
+		if (controllerState[stateIndex].X)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_fill_preserve(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		cairo_stroke(drawingSink);
+		cairo_arc(drawingSink, vignetteWidth - 160 + 15, 145 - 7.5, 8.7, -M_PI * 2, 0);
+		if (controllerState[stateIndex].B)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_fill_preserve(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		cairo_stroke(drawingSink);
+		cairo_arc(drawingSink, vignetteWidth - 160, 145 - 15 - 7.5, 8.7, -M_PI * 2, 0);
+		if (controllerState[stateIndex].Y)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_fill_preserve(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		cairo_stroke(drawingSink);
+		cairo_arc(drawingSink, vignetteWidth - 160, 145 + 15 - 7.5, 8.7, -M_PI * 2, 0);
+		if (controllerState[stateIndex].A)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_fill_preserve(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+		
+		cairo_stroke(drawingSink);
+
+		// left outer shoulder
+		cairo_move_to(drawingSink, 160 - 95, 145 - 55 - 25);
+		cairo_rel_curve_to(drawingSink, 0, 0, -11, 20, 0, 51);
+		cairo_rel_line_to(drawingSink, -17, 0);
+		cairo_rel_curve_to(drawingSink, 0, 0, -16, -7, 0, -49);
+		cairo_close_path(drawingSink);
+		if (controllerState[stateIndex].P1)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_fill_preserve(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		cairo_stroke(drawingSink);
+
+		// left inner shoulder
+		cairo_move_to(drawingSink, 160 - 70, 145 - 55 - 21.1);
+		cairo_rel_curve_to(drawingSink, 0, 0, -10, 20, 0, 40);
+		cairo_rel_line_to(drawingSink, -15, 0);
+		cairo_rel_curve_to(drawingSink, 0, 0, -15, -5, 0, -40);
+		cairo_close_path(drawingSink);
+		if (controllerState[stateIndex].LSH)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_fill_preserve(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		cairo_stroke(drawingSink);
+
+		// left stick
+		cairo_arc(drawingSink, 160 - 45 + 7.5, 145 - 55, 21.1, -M_PI * 2, 0);
+		if (controllerState[stateIndex].LST)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_fill_preserve(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		cairo_stroke(drawingSink);
+
+		// left minus
+		cairo_arc(drawingSink, vignetteWidth / 2. + 7.5, 145 - 55, 30, M_PI - 0.375, M_PI + 0.375);
+		cairo_rel_line_to(drawingSink, -17.2, 10.5);
+		cairo_close_path(drawingSink);
+		if (controllerState[stateIndex].Back)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_fill_preserve(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		cairo_stroke(drawingSink);
+
+		// center home
+		cairo_arc(drawingSink, vignetteWidth / 2. + 7.5, 145 - 55, 12.7, -M_PI * 2, 0);
+		if (controllerState[stateIndex].Guide)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_fill_preserve(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		cairo_stroke(drawingSink);
+
+		// right plus
+		cairo_arc_negative(drawingSink, vignetteWidth / 2. + 7.5, 145 - 55, 30, 0.375, -0.375);
+		cairo_rel_line_to(drawingSink, 17.2, 10.5);
+		cairo_close_path(drawingSink);
+		if (controllerState[stateIndex].Start)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_fill_preserve(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		cairo_stroke(drawingSink);
+
+		// right stick
+		cairo_arc(drawingSink, vignetteWidth - 160 + 45 + 7.5, 145 - 55, 21.1, -M_PI * 2, 0);
+		if (controllerState[stateIndex].RST)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_fill_preserve(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		cairo_stroke(drawingSink);
+
+		// right inner shoulder
+		cairo_move_to(drawingSink, vignetteWidth - 160 + 70 + 15, 145 - 55 - 21.1);
+		cairo_rel_curve_to(drawingSink, 0, 0, 10, 20, 0, 40);
+		cairo_rel_line_to(drawingSink, 15, 0);
+		cairo_rel_curve_to(drawingSink, 0, 0, 15, -5, 0, -40);
+		cairo_close_path(drawingSink);
+		if (controllerState[stateIndex].RSH)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_fill_preserve(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		cairo_stroke(drawingSink);
+
+		// right outer shoulder
+		cairo_move_to(drawingSink, vignetteWidth - 160 + 95 + 15, 145 - 55 - 25);
+		cairo_rel_curve_to(drawingSink, 0, 0, 11, 20, 0, 51);
+		cairo_rel_line_to(drawingSink, 17, 0);
+		cairo_rel_curve_to(drawingSink, 0, 0, 16, -7, 0, -49);
+		cairo_close_path(drawingSink);
+		if (controllerState[stateIndex].P2)
+		{
+			cairo_set_source_rgb(drawingSink, .8, .8, .9);
+			cairo_fill_preserve(drawingSink);
+			SetSourceColor(drawingSink, color);
+		}
+
+		cairo_stroke(drawingSink);
+
+		cairo_translate(drawingSink, -xMult * vignetteWidth, 0);
 	}
 
 	void _VignetteLabel(SDL_Renderer* renderer, int font, int size, int vignetteIndex, int y, const char* text)
@@ -778,5 +1164,24 @@ namespace blooDot::MenuSettingsControls
 	void _Teardown()
 	{
 		DestroyTexture(&slidingDevices);
+		if (controller1 != nullptr)
+		{
+			SDL_GameControllerClose(controller1);
+		}
+
+		if (controller2 != nullptr)
+		{
+			SDL_GameControllerClose(controller2);
+		}
+
+		if (controller3 != nullptr)
+		{
+			SDL_GameControllerClose(controller3);
+		}
+
+		if (controller4 != nullptr)
+		{
+			SDL_GameControllerClose(controller4);
+		}
 	}
 }

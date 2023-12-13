@@ -16,6 +16,11 @@ constexpr SDL_Color const DialogTextColor = { 250, 250, 250, 255 };
 constexpr SDL_Color const DialogTextDisabledColor = { 80, 80, 81, 255 };
 constexpr SDL_Color const DialogTextShadowColor = { 65, 56, 56, 200 };
 
+constexpr SDL_Color const Player1Color = { 51, 51, 255, 255 };   // he has the color in his name
+constexpr SDL_Color const Player2Color = { 232, 207, 160, 255 }; // surreal beige
+constexpr SDL_Color const Player3Color = { 125, 82, 2, 255 };    // brown; color is weird
+constexpr SDL_Color const Player4Color = { 45, 135, 81, 255 };   // greenish
+
 constexpr char const* SettingsFileName = "blooDot.ligma";
 constexpr char const* MakerSettingsFileName = "blooDot.deez";
 constexpr char const* SavegameFileName = "blooDot.$i.bofa";
