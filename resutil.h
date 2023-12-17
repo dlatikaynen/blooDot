@@ -3,6 +3,12 @@
 #include <SDL2/SDL_image.h>
 #include "dexassy.h"
 
+#ifndef NDEBUG
+#include <fstream>
+#include <iostream>
+#include <filesystem>
+#endif
+
 namespace blooDot::Res
 {
 	SDL_Texture* LoadPicture(SDL_Renderer* renderer, const int chunkKey, SDL_Rect* dimensions);

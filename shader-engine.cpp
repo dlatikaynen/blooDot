@@ -27,6 +27,7 @@ namespace blooDot::ShaderEngine
 	PFNGLGETPROGRAMIVPROC glGetProgramiv;
 	PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog;
 	PFNGLUSEPROGRAMPROC glUseProgram;
+	PFNGLDELETEPROGRAMPROC glDeleteProgram;
 
 	bool InitGLExtensions()
 	{
@@ -43,21 +44,23 @@ namespace blooDot::ShaderEngine
 		glGetProgramiv = (PFNGLGETPROGRAMIVPROC)SDL_GL_GetProcAddress("glGetProgramiv");
 		glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC)SDL_GL_GetProcAddress("glGetProgramInfoLog");
 		glUseProgram = (PFNGLUSEPROGRAMPROC)SDL_GL_GetProcAddress("glUseProgram");
+		glDeleteProgram = (PFNGLDELETEPROGRAMPROC)SDL_GL_GetProcAddress("glDeleteProgram");
 
-		return
-			glCreateShader
-			&& glShaderSource
-			&& glCompileShader
-			&& glGetShaderiv
-			&& glGetShaderInfoLog
-			&& glDeleteShader
-			&& glAttachShader
-			&& glCreateProgram
-			&& glLinkProgram
-			&& glValidateProgram
-			&& glGetProgramiv
-			&& glGetProgramInfoLog
-			&& glUseProgram;
+		return true
+			&& _AssertValidpFnGl(glCreateShader, "glCreateShader")
+			&& _AssertValidpFnGl(glShaderSource, "glShaderSource")
+			&& _AssertValidpFnGl(glCompileShader, "glCompileShader")
+			&& _AssertValidpFnGl(glGetShaderiv, "glGetShaderiv")
+			&& _AssertValidpFnGl(glGetShaderInfoLog, "glGetShaderInfoLog")
+			&& _AssertValidpFnGl(glDeleteShader, "glDeleteShader")
+			&& _AssertValidpFnGl(glAttachShader, "glAttachShader")
+			&& _AssertValidpFnGl(glCreateProgram, "glCreateProgram")
+			&& _AssertValidpFnGl(glLinkProgram, "glLinkProgram")
+			&& _AssertValidpFnGl(glValidateProgram, "glValidateProgram")
+			&& _AssertValidpFnGl(glGetProgramiv, "glGetProgramiv")
+			&& _AssertValidpFnGl(glGetProgramInfoLog, "glGetProgramInfoLog")
+			&& _AssertValidpFnGl(glUseProgram, "glUseProgram")
+			&& _AssertValidpFnGl(glDeleteProgram, "glDeleteProgram");
 	}
 
 	GLuint CompileProgram(int chunkKeyVertex, int chunkKeyFragment)
@@ -156,6 +159,26 @@ namespace blooDot::ShaderEngine
 		{
 			glUseProgram(oldProgramId);
 		}
+	}
+
+	void DeleteGPUProgram(GLuint programId)
+	{
+		glDeleteProgram(programId);
+	}
+
+	bool _AssertValidpFnGl(void* pFn, std::string name)
+	{
+		if (pFn)
+		{
+			return true;
+		}
+
+		std::cerr
+			<< "Failed to bind GPU function \""
+			<< name
+			<< "\"\n";
+
+		return false;
 	}
 
 	GLuint _CompileShader(const char* source, GLuint shaderType)

@@ -28,6 +28,12 @@ bool toggleDebugView = false;
 
 namespace blooDot::Orchestrator
 {
+	constexpr UCHAR SHADER_PROGRAM_INDEX_NONE = 0;
+	constexpr UCHAR SHADER_PROGRAM_INDEX_RETRO = 1;
+	constexpr UCHAR SHADER_PROGRAM_INDEX_LIFECURTAIN = 2;
+	constexpr UCHAR SHADER_PROGRAM_INDEX_RAIN = 3;
+	constexpr UCHAR SHADER_PROGRAMS_COUNT = 4; // "none" is no shader program, but counts
+
 	SDL_Event mainEvent;
 	b2World world({ 0,0 });
 	b2BodyDef bodyDef;
@@ -37,6 +43,9 @@ namespace blooDot::Orchestrator
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
 	SDL_GameController* controller = nullptr;
+	GLuint shaderPrograms[SHADER_PROGRAMS_COUNT] = {0,0,0,0};
+	GLuint shaderProgramId = 0;
+	int currentShaderIndex = 0;
 
 	void MainLoop(SDL_Renderer* renderer, SDL_Window* mainWindow)
 	{
@@ -141,10 +150,22 @@ namespace blooDot::Orchestrator
 			}
 
 			// shaders
-			auto programId = CompileProgram
+			shaderPrograms[SHADER_PROGRAM_INDEX_RETRO] = CompileProgram
 			(
-				CHUNK_KEY_SHADER_VERTEX,
-				CHUNK_KEY_SHADER_FRAGMENT
+				CHUNK_KEY_SHADER_RETRO_VERTEX,
+				CHUNK_KEY_SHADER_RETRO_FRAGMENT
+			);
+
+			shaderPrograms[SHADER_PROGRAM_INDEX_LIFECURTAIN] = CompileProgram
+			(
+				CHUNK_KEY_SHADER_LIFECURTAIN_VERTEX,
+				CHUNK_KEY_SHADER_LIFECURTAIN_FRAGMENT
+			);
+
+			shaderPrograms[SHADER_PROGRAM_INDEX_RAIN] = CompileProgram
+			(
+				CHUNK_KEY_SHADER_RAIN_VERTEX,
+				CHUNK_KEY_SHADER_RAIN_FRAGMENT
 			);
 
 			texTarget = SDL_CreateTexture
@@ -212,6 +233,29 @@ namespace blooDot::Orchestrator
 								{
 									Sfx::Play(SFX_SELCHG);
 								}
+							}
+						}
+						else
+						{
+							if (mainEvent.key.keysym.sym == SDL_KeyCode::SDLK_0)
+							{
+								currentShaderIndex = SHADER_PROGRAM_INDEX_NONE;
+								shaderProgramId = 0;
+							}
+							else if (mainEvent.key.keysym.sym == SDL_KeyCode::SDLK_1)
+							{
+								currentShaderIndex = SHADER_PROGRAM_INDEX_RETRO;
+								shaderProgramId = shaderPrograms[currentShaderIndex];
+							}
+							else if (mainEvent.key.keysym.sym == SDL_KeyCode::SDLK_2)
+							{
+								currentShaderIndex = SHADER_PROGRAM_INDEX_LIFECURTAIN;
+								shaderProgramId = shaderPrograms[currentShaderIndex];
+							}
+							else if (mainEvent.key.keysym.sym == SDL_KeyCode::SDLK_3)
+							{
+								currentShaderIndex = SHADER_PROGRAM_INDEX_RAIN;
+								shaderProgramId = shaderPrograms[currentShaderIndex];
 							}
 						}
 
@@ -444,7 +488,11 @@ namespace blooDot::Orchestrator
 				}
 
 			NEXTFRAME:
-				SDL_SetRenderTarget(renderer, texTarget);
+				if (currentShaderIndex > SHADER_PROGRAM_INDEX_NONE)
+				{
+					SDL_SetRenderTarget(renderer, texTarget);
+				}
+
 				SDL_RenderClear(renderer);
 				GameViewRenderFrame();
 #ifndef NDEBUG
@@ -454,8 +502,14 @@ namespace blooDot::Orchestrator
 				}
 
 #endif
-				//SDL_RenderPresent(renderer);
-				PresentBackBuffer(renderer, mainWindow, texTarget, programId);
+				if (currentShaderIndex == SHADER_PROGRAM_INDEX_NONE)
+				{
+					SDL_RenderPresent(renderer);
+				}
+				else
+				{
+					PresentBackBuffer(renderer, mainWindow, texTarget, shaderProgramId);
+				}
 
 				frameEnded = SDL_GetPerformanceCounter();
 				const auto& frameTime = (frameEnded - frameStart) / frequencyMill;
@@ -480,11 +534,20 @@ namespace blooDot::Orchestrator
 			SDL_GameControllerClose(controller);
 		}
 		
+		_TeardownGPU();
 		DestroyTexture(&texTarget);
 		TeardownDingSheets();
 		GameviewTeardown();
 		ClearWorldData();
 		TeardownDings();
+	}
+
+	void _TeardownGPU()
+	{
+		for (auto i = SHADER_PROGRAM_INDEX_NONE + 1; i < SHADER_PROGRAMS_COUNT; ++i)
+		{
+			DeleteGPUProgram(shaderPrograms[i]);
+		}
 	}
 
 	void _InitiatePlayerMovement(b2Body* body, float impulseX, float impulseY)

@@ -26,4 +26,5 @@ namespace blooDot::Orchestrator
 
 	void _InitiatePlayerMovement(b2Body* body, float impulseX, float impulseY);
 	void _HandleSave(bool isAutosave = false);
+	void _TeardownGPU();
 }

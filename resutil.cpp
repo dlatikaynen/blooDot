@@ -47,58 +47,95 @@ namespace blooDot::Res
 
 	bool LoadText(const int chunkKey, std::string& text)
 	{
-			SDL_RWops* resStream;
-			const auto resMem = Retrieve(chunkKey, &resStream);
-			if (!resMem)
+#ifndef NDEBUG
+		auto const& relFile = GetUncookedRelPath(chunkKey);
+
+		if (relFile != nullptr)
+		{
+			auto const&& basePath = SDL_GetBasePath();
+			std::stringstream rawPath;
+			rawPath << basePath << "../../res/" << relFile;
+			std::ifstream rawFile(rawPath.str());
+
+			if (rawFile.is_open() && rawFile.good())
 			{
-				std::cerr
-					<< "Could not load text #"
+				std::string loadedLine;
+				std::stringstream loadedLines;
+
+				while (std::getline(rawFile, loadedLine))
+				{
+					loadedLines
+						<< loadedLine
+						<< "\n";
+				}
+
+				text.assign(loadedLines.str());
+				std::cout
+					<< "Debug-loaded text resource #"
 					<< chunkKey
-					<< ", retrieve failed\n";
+					<< " uncooked from \""
+					<< relFile
+					<< "\" ("
+					<< text.length()
+					<< " chars)\n";
 
-				return false;
+				return true;
 			}
+		}
+#endif
 
-			const auto numBytes = resStream->size(resStream);
-			const char* rawText = (const char*)SDL_malloc(numBytes);
-			if (rawText == nullptr)
-			{
-				const auto mallocError = SDL_GetError();
-				resStream->close(resStream);
-				SDL_free(resMem);
-				std::stringstream allocationMsg;
-				allocationMsg
-					<< "Could not load text #"
-					<< chunkKey
-					<< ", allocation failed\n";
+		SDL_RWops* resStream;
+		const auto resMem = Retrieve(chunkKey, &resStream);
+		if (!resMem)
+		{
+			std::cerr
+				<< "Could not load text #"
+				<< chunkKey
+				<< ", retrieve failed\n";
 
-				ReportError(allocationMsg.str().c_str(), mallocError);
+			return false;
+		}
 
-				return false;
-			}
-
-			if (resStream->read(resStream, (void*)rawText, numBytes, 1) == 0)
-			{
-				const auto readError = SDL_GetError();
-				resStream->close(resStream);
-				SDL_free(resMem);
-				std::stringstream readMsg;
-				readMsg
-					<< "Could not load text #"
-					<< chunkKey
-					<< ", read failed\n";
-
-				ReportError(readMsg.str().c_str(), readError);
-
-				return false;
-			}
-
+		const auto numBytes = resStream->size(resStream);
+		const char* rawText = (const char*)SDL_malloc(numBytes);
+		if (rawText == nullptr)
+		{
+			const auto mallocError = SDL_GetError();
 			resStream->close(resStream);
 			SDL_free(resMem);
-			text.assign(rawText, numBytes);
-			SDL_free((void*)rawText);
+			std::stringstream allocationMsg;
+			allocationMsg
+				<< "Could not load text #"
+				<< chunkKey
+				<< ", allocation failed\n";
 
-			return true;
+			ReportError(allocationMsg.str().c_str(), mallocError);
+
+			return false;
+		}
+
+		if (resStream->read(resStream, (void*)rawText, numBytes, 1) == 0)
+		{
+			const auto readError = SDL_GetError();
+			resStream->close(resStream);
+			SDL_free(resMem);
+			std::stringstream readMsg;
+			readMsg
+				<< "Could not load text #"
+				<< chunkKey
+				<< ", read failed\n";
+
+			ReportError(readMsg.str().c_str(), readError);
+
+			return false;
+		}
+
+		resStream->close(resStream);
+		SDL_free(resMem);
+		text.assign(rawText, numBytes);
+		SDL_free((void*)rawText);
+
+		return true;
 	}
 
 	SDL_Texture* _LoadPicture(SDL_Renderer* renderer, SDL_Surface* surface, SDL_Rect* dimensions)
@@ -109,6 +146,7 @@ namespace blooDot::Res
 			const auto textureError = SDL_GetError();
 			SDL_free(surface);
 			ReportError("Failed to create texture from picture", textureError);
+			
 			return nullptr;
 		}
 

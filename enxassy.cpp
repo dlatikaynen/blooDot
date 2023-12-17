@@ -6,6 +6,7 @@
 int Cook(XassyCookInfo *cookStats)
 {
 	std::stringstream chunkConstants;
+	std::stringstream debugLocations;
 	std::stringstream chunkSizes;
 	chunkConstants
 		<< "#pragma once"
@@ -57,8 +58,24 @@ int Cook(XassyCookInfo *cookStats)
 						<< "\n";
 
 					std::stringstream rawPath;
+					uintmax_t uncompressedSize;
 					rawPath << basePath << "..\\..\\res\\" << fileName;
-					auto const& uncompressedSize = std::filesystem::file_size(rawPath.str());
+					try
+					{
+						uncompressedSize = std::filesystem::file_size(rawPath.str());
+					}
+					catch(...)
+					{
+						std::cerr
+							<< "Failed to open \""
+							<< fileName
+							<< "\" for "
+							<< identifier
+							<< "\n";
+
+						return CookReturnCodeInputFileNotFound;
+					}
+
 					std::ifstream rawFile(rawPath.str(), std::ios::binary);
 					if (rawFile.is_open() && rawFile.good())
 					{
@@ -90,6 +107,17 @@ int Cook(XassyCookInfo *cookStats)
 							<< " = "
 							<< resNumber
 							<< ";\n";
+
+						// with this, we can access uncooked stuff
+						// while we're running in debug environment
+						debugLocations
+							<< "\tcase "
+							<< resNumber
+							<< ": return \""
+							<< fileName
+							<< "\"; // "
+							<< identifier
+							<< "\n";
 
 						std::cout
 							<< compressedSize
@@ -155,6 +183,19 @@ int Cook(XassyCookInfo *cookStats)
 
 			return CookReturnCodeCopyFail;
 		}
+
+		auto const&& debugLocationsStr = debugLocations.str();
+		chunkConstants
+			<< "\n"
+			<< "#ifndef NDEBUG\n"
+			<< "inline const char* GetUncookedRelPath(int chunkIndex)\n"
+			<< "{\n"
+			<< "\tswitch(chunkIndex)\n"
+			<< "\t{\n"
+			<< debugLocationsStr
+			<< "\t}\n\n\treturn nullptr;\n"
+			<< "}\n"
+			<< "#endif\n";
 
 		/* write the chunk constants header */
 		std::stringstream chunkConstantsPath;

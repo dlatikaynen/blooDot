@@ -529,10 +529,22 @@
     <None Include="planning\creatormode.ligma">
       <Filter>Planning</Filter>
     </None>
-    <None Include="res\fragment.glsl">
+    <None Include="res\shaders\lifecurtain-fragment.glsl">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="res\vertex.glsl">
+    <None Include="res\shaders\lifecurtain-vertex.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="res\shaders\rain-fragment.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="res\shaders\rain-vertex.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="res\shaders\retro-fragment.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="res\shaders\retro-vertex.glsl">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>
