@@ -11,6 +11,7 @@
 #include "xlations.h"
 #include "settings.h"
 #include "playerstate.h"
+#include "controller-stuff.h"
 
 #ifndef NDEBUG
 #include "enxassy.h"
@@ -248,6 +249,7 @@ int main(int, char**)
 	}
 
 	/* shitdown */
+	blooDot::ControllerStuff::Teardown();
 	::CloseCooked();
 	::CloseFonts();
 	::TeardownDialogControls();

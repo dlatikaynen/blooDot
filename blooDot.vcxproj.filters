@@ -8,18 +8,12 @@
     <Filter Include="Planning">
       <UniqueIdentifier>{bb8a392c-d034-4162-8457-3bbd0c1006f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="_Headers">
-      <UniqueIdentifier>{f0f01b33-0b62-4d20-b9ff-268a3c8b8c43}</UniqueIdentifier>
-    </Filter>
     <Filter Include="_Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="Resource Files\dings">
       <UniqueIdentifier>{991bd455-6340-420b-829c-7106346a443a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="_Headers\ui">
-      <UniqueIdentifier>{a3fa8ee6-ef1b-4a02-ad83-56f4c507ced6}</UniqueIdentifier>
     </Filter>
     <Filter Include="_Source Files\ui">
       <UniqueIdentifier>{98ccbfb1-caaf-4618-946b-1a05fda65f64}</UniqueIdentifier>
@@ -33,23 +27,11 @@
     <Filter Include="_Source Files\algo">
       <UniqueIdentifier>{aa3e6e70-3650-4f46-8114-9c66ffcb1d8f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="_Headers\util">
-      <UniqueIdentifier>{ca8bdaa7-9e0d-4548-a732-3e7f3a8d26c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="_Headers\algo">
-      <UniqueIdentifier>{7ba2c8a7-57f4-40e5-a384-60546a148dce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="_Headers\res">
-      <UniqueIdentifier>{e0afc3e2-1b05-4200-981b-6cb18437a153}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\ui">
       <UniqueIdentifier>{c6533e97-b045-43ef-aac4-b06402bd9d3f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\sfx">
       <UniqueIdentifier>{3ba7a2cb-ca59-4c4c-8e1b-1fb83dbf5bef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="_Headers\audio">
-      <UniqueIdentifier>{aa111597-9b3d-4872-966d-c5b420aa1afe}</UniqueIdentifier>
     </Filter>
     <Filter Include="_Source Files\audio">
       <UniqueIdentifier>{c8097a68-b789-45aa-add5-a50d87197559}</UniqueIdentifier>
@@ -63,12 +45,6 @@
     <Filter Include="Resource Files\dingdescr">
       <UniqueIdentifier>{aeadab9e-2d85-4b37-8b38-b7d3210c6c6e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="_Headers\core">
-      <UniqueIdentifier>{6c2f0e75-3967-4208-bc28-bb2c84451d65}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="_Headers\game">
-      <UniqueIdentifier>{24b42705-744c-4a2c-90ec-bbdcf305ee3e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="_Source Files\core">
       <UniqueIdentifier>{e1de3dc3-a8f0-4088-a701-a047f612f763}</UniqueIdentifier>
     </Filter>
@@ -80,9 +56,6 @@
     </Filter>
     <Filter Include="_Source Files\physics">
       <UniqueIdentifier>{55e47453-b47c-4a9e-8c19-cb2489cd9710}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="_Headers\physics">
-      <UniqueIdentifier>{296e0256-b8d1-40a2-9992-8e2a5ca08db1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\win">
       <UniqueIdentifier>{8d6e5c2f-3348-4a3f-abdf-d3d3c6740eaf}</UniqueIdentifier>
@@ -105,205 +78,232 @@
     <Filter Include="Resource Files\dings\unique">
       <UniqueIdentifier>{8f6064af-55e2-4f23-88c5-1c45d3712151}</UniqueIdentifier>
     </Filter>
-    <Filter Include="_Headers\maker">
-      <UniqueIdentifier>{efdb7517-a1d2-488b-a5ba-d5ebeeed698e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="_Source Files\maker">
       <UniqueIdentifier>{7ef47bbd-1de2-40da-80e9-b90b6f3ff8f4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\shaders">
       <UniqueIdentifier>{e251f7b8-66a4-4676-a581-53c32622d568}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_Source Files\ui\headers">
+      <UniqueIdentifier>{a3fa8ee6-ef1b-4a02-ad83-56f4c507ced6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\algo\headers">
+      <UniqueIdentifier>{7ba2c8a7-57f4-40e5-a384-60546a148dce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\audio\headers">
+      <UniqueIdentifier>{aa111597-9b3d-4872-966d-c5b420aa1afe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\core\headers">
+      <UniqueIdentifier>{6c2f0e75-3967-4208-bc28-bb2c84451d65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\game\headers">
+      <UniqueIdentifier>{24b42705-744c-4a2c-90ec-bbdcf305ee3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\maker\headers">
+      <UniqueIdentifier>{efdb7517-a1d2-488b-a5ba-d5ebeeed698e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\physics\headers">
+      <UniqueIdentifier>{296e0256-b8d1-40a2-9992-8e2a5ca08db1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\res\headers">
+      <UniqueIdentifier>{e0afc3e2-1b05-4200-981b-6cb18437a153}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\util\headers">
+      <UniqueIdentifier>{ca8bdaa7-9e0d-4548-a732-3e7f3a8d26c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="menu-settings.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-settings-screen.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="dialogcontrols.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="splash.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="dexassy.h">
-      <Filter>_Headers\res</Filter>
+      <Filter>_Source Files\res\headers</Filter>
     </ClInclude>
     <ClInclude Include="geom2d.h">
-      <Filter>_Headers\algo</Filter>
+      <Filter>_Source Files\algo\headers</Filter>
     </ClInclude>
     <ClInclude Include="huff-comp.h">
-      <Filter>_Headers\util</Filter>
+      <Filter>_Source Files\util\headers</Filter>
     </ClInclude>
     <ClInclude Include="huff-deco.h">
-      <Filter>_Headers\util</Filter>
+      <Filter>_Source Files\util\headers</Filter>
     </ClInclude>
     <ClInclude Include="enxassy.h">
-      <Filter>_Headers\res</Filter>
+      <Filter>_Source Files\res\headers</Filter>
     </ClInclude>
     <ClInclude Include="chunk-constants.h">
-      <Filter>_Headers\res</Filter>
+      <Filter>_Source Files\res\headers</Filter>
     </ClInclude>
     <ClInclude Include="chunk-sizes.h">
-      <Filter>_Headers\res</Filter>
+      <Filter>_Source Files\res\headers</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
-      <Filter>_Headers\util</Filter>
+      <Filter>_Source Files\util\headers</Filter>
     </ClInclude>
     <ClInclude Include="boydsa.h">
-      <Filter>_Headers\algo</Filter>
+      <Filter>_Source Files\algo\headers</Filter>
     </ClInclude>
     <ClInclude Include="collision.h">
-      <Filter>_Headers\algo</Filter>
+      <Filter>_Source Files\algo\headers</Filter>
     </ClInclude>
     <ClInclude Include="gpuchan.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-settings-lang.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="clumsypack.h">
-      <Filter>_Headers\algo</Filter>
+      <Filter>_Source Files\algo\headers</Filter>
     </ClInclude>
     <ClInclude Include="sfx.h">
-      <Filter>_Headers\audio</Filter>
+      <Filter>_Source Files\audio\headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-load.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="resutil.h">
-      <Filter>_Headers\res</Filter>
+      <Filter>_Source Files\res\headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-continue-empty.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="harvard.h">
-      <Filter>_Headers\algo</Filter>
+      <Filter>_Source Files\algo\headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-ingame.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="enxlate.h">
-      <Filter>_Headers\res</Filter>
+      <Filter>_Source Files\res\headers</Filter>
     </ClInclude>
     <ClInclude Include="xlations.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="xlations-en.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="xlations-de.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="xlations-fi.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="xlations-ua.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="datetime.h">
-      <Filter>_Headers\util</Filter>
+      <Filter>_Source Files\util\headers</Filter>
     </ClInclude>
     <ClInclude Include="playerhud.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="region-banner.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="constants.h">
-      <Filter>_Headers\core</Filter>
+      <Filter>_Source Files\core\headers</Filter>
     </ClInclude>
     <ClInclude Include="enums.h">
-      <Filter>_Headers\core</Filter>
+      <Filter>_Source Files\core\headers</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
-      <Filter>_Headers\core</Filter>
+      <Filter>_Source Files\core\headers</Filter>
     </ClInclude>
     <ClInclude Include="offscreen-rendering.h">
-      <Filter>_Headers\core</Filter>
+      <Filter>_Source Files\core\headers</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>_Headers\core</Filter>
+      <Filter>_Source Files\core\headers</Filter>
     </ClInclude>
     <ClInclude Include="scripture.h">
-      <Filter>_Headers\core</Filter>
+      <Filter>_Source Files\core\headers</Filter>
     </ClInclude>
     <ClInclude Include="settings.h">
-      <Filter>_Headers\core</Filter>
+      <Filter>_Source Files\core\headers</Filter>
     </ClInclude>
     <ClInclude Include="ding.h">
-      <Filter>_Headers\game</Filter>
+      <Filter>_Source Files\game\headers</Filter>
     </ClInclude>
     <ClInclude Include="dingsheet.h">
-      <Filter>_Headers\game</Filter>
+      <Filter>_Source Files\game\headers</Filter>
     </ClInclude>
     <ClInclude Include="flap.h">
-      <Filter>_Headers\game</Filter>
+      <Filter>_Source Files\game\headers</Filter>
     </ClInclude>
     <ClInclude Include="gamestate.h">
-      <Filter>_Headers\game</Filter>
+      <Filter>_Source Files\game\headers</Filter>
     </ClInclude>
     <ClInclude Include="gameview.h">
-      <Filter>_Headers\game</Filter>
+      <Filter>_Source Files\game\headers</Filter>
     </ClInclude>
     <ClInclude Include="newworld.h">
-      <Filter>_Headers\game</Filter>
+      <Filter>_Source Files\game\headers</Filter>
     </ClInclude>
     <ClInclude Include="orchestrator.h">
-      <Filter>_Headers\game</Filter>
+      <Filter>_Source Files\game\headers</Filter>
     </ClInclude>
     <ClInclude Include="playerstate.h">
-      <Filter>_Headers\game</Filter>
+      <Filter>_Source Files\game\headers</Filter>
     </ClInclude>
     <ClInclude Include="renderstate.h">
-      <Filter>_Headers\game</Filter>
+      <Filter>_Source Files\game\headers</Filter>
     </ClInclude>
     <ClInclude Include="savegame.h">
-      <Filter>_Headers\game</Filter>
+      <Filter>_Source Files\game\headers</Filter>
     </ClInclude>
     <ClInclude Include="drawing.h">
-      <Filter>_Headers\core</Filter>
+      <Filter>_Source Files\core\headers</Filter>
     </ClInclude>
     <ClInclude Include="physicsdebugdraw.h">
-      <Filter>_Headers\physics</Filter>
+      <Filter>_Source Files\physics\headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-multimonitor.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="physics-render-binding.h">
-      <Filter>_Headers\physics</Filter>
+      <Filter>_Source Files\physics\headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-common.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-settings-help.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-settings-about.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="mapregion.h">
-      <Filter>_Headers\res</Filter>
+      <Filter>_Source Files\res\headers</Filter>
     </ClInclude>
     <ClInclude Include="procedurally-generate.h">
-      <Filter>_Headers\res</Filter>
+      <Filter>_Source Files\res\headers</Filter>
     </ClInclude>
     <ClInclude Include="polypartition.h">
-      <Filter>_Headers\algo</Filter>
+      <Filter>_Source Files\algo\headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-creatormode.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
     <ClInclude Include="makersettings.h">
-      <Filter>_Headers\maker</Filter>
+      <Filter>_Source Files\maker\headers</Filter>
     </ClInclude>
     <ClInclude Include="shader-engine.h">
-      <Filter>_Headers\core</Filter>
+      <Filter>_Source Files\core\headers</Filter>
     </ClInclude>
     <ClInclude Include="menu-settings-controls.h">
-      <Filter>_Headers\ui</Filter>
+      <Filter>_Source Files\ui\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="controller-stuff.h">
+      <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -467,6 +467,9 @@
       <Filter>_Source Files\core</Filter>
     </ClCompile>
     <ClCompile Include="menu-settings-controls.cpp">
+      <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="controller-stuff.cpp">
       <Filter>_Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>

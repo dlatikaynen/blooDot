@@ -712,7 +712,7 @@ regionNameNonMountainsOfTwoDimensionalFlatness
 	[de]	Unberge der erhebungslosen Flachheit
 
 regionNameMarshesOfDoubtfulDrowningHazard
-	[am]	Marshes of Rather Doubtful Drowning Hazard
+	[am]	Marshes of Doubtful Drowning Hazard
 	[de]	Sümpfe der zweifelhaften Ertrinkungsgefahr
 
 landmarkNameUniversityOfScience
@@ -750,7 +750,7 @@ teleportPointNameSingleDishNonArray
 	[ua]	Одноантенні Немасив
 
 teleportPointNameMinusculeArray
-	[am]	Minuscule Array
+	[am]	Lesser Array
 	[de]	Miniobservatorium
 
 teleportPointNameAverageArray
@@ -758,8 +758,8 @@ teleportPointNameAverageArray
 	[de]	Durchschnittsobservatorium
 
 teleportPointNameGoldilocksArray
-	[am]	Goldilocks Array
-	[de]	Observatorium idealer Größe
+	[am]	Cromulent Array
+	[de]	Observatorium angenehmer Größe
 
 teleportPointNameLargeArray
 	[am]	Large Array
@@ -781,25 +781,13 @@ teleportPointNameGinormousArray
 	[am]	Ginormous Array
 	[de]	Gigantisches Observatorium
 
-teleportPointNameCollossallyLargeArray
-	[am]	Collossally Large Array
-	[de]	Kollossales Observatorium
-
 teleportPointNameSupercollossalArray
 	[am]	Supercollossal Array
 	[de]	Superkollossales Observatorium
 
-teleportPointNameJumboMamouthArray
-	[am]	Jumbo Mamouth Array
-	[de]	Jumbo Mammut Observatorium
-
 teleportPointNameStChungusArray
-	[am]	St. Chungus Hyperarray
-	[de]	St. Chungus Hyper-Observatorium
-
-teleportPointNameArrayOfIndeterminateSize
-	[am]	Array of Indeterminate Size
-	[de]	Observatorium der unbestimmten Größe
+	[am]	St. Graham Chungus Memorial Array
+	[de]	St. Graham Hyper-Observatorium
 
 regionSensorLabel
 	[am]	%s in your area

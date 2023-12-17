@@ -272,6 +272,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="controller-stuff.cpp" />
     <ClCompile Include="datetime.cpp" />
     <ClCompile Include="makersettings.cpp" />
     <ClCompile Include="menu-common.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="chunk-sizes.h" />
     <ClInclude Include="clumsypack.h" />
     <ClInclude Include="collision.h" />
+    <ClInclude Include="controller-stuff.h" />
     <ClInclude Include="datetime.h" />
     <ClInclude Include="dexassy.h" />
     <ClInclude Include="dialogcontrols.h" />
