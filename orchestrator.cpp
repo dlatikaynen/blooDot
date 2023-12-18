@@ -46,6 +46,8 @@ namespace blooDot::Orchestrator
 	GLuint shaderPrograms[SHADER_PROGRAMS_COUNT] = {0,0,0,0};
 	GLuint shaderProgramId = 0;
 	int currentShaderIndex = 0;
+	GLint uniformTime = 0;
+	float rainTime = 0;
 
 	void MainLoop(SDL_Renderer* renderer, SDL_Window* mainWindow)
 	{
@@ -168,6 +170,8 @@ namespace blooDot::Orchestrator
 				CHUNK_KEY_SHADER_RAIN_FRAGMENT
 			);
 
+			uniformTime = BindUniform(shaderPrograms[SHADER_PROGRAM_INDEX_RAIN], "iTime");
+
 			texTarget = SDL_CreateTexture
 			(
 				renderer,
@@ -256,6 +260,7 @@ namespace blooDot::Orchestrator
 							{
 								currentShaderIndex = SHADER_PROGRAM_INDEX_RAIN;
 								shaderProgramId = shaderPrograms[currentShaderIndex];
+								rainTime = 0;
 							}
 						}
 
@@ -508,7 +513,15 @@ namespace blooDot::Orchestrator
 				}
 				else
 				{
-					PresentBackBuffer(renderer, mainWindow, texTarget, shaderProgramId);
+					SDL_SetRenderTarget(renderer, NULL);
+					SDL_RenderClear(renderer);
+					SDL_GL_BindTexture(texTarget, NULL, NULL);
+					if (currentShaderIndex == SHADER_PROGRAM_INDEX_RAIN)
+					{
+						rainTime += 1 / 60.0;
+					}
+
+					PresentBackBuffer(mainWindow, shaderProgramId, uniformTime, rainTime);
 				}
 
 				frameEnded = SDL_GetPerformanceCounter();

@@ -28,6 +28,8 @@ namespace blooDot::ShaderEngine
 	PFNGLGETPROGRAMINFOLOGPROC glGetProgramInfoLog;
 	PFNGLUSEPROGRAMPROC glUseProgram;
 	PFNGLDELETEPROGRAMPROC glDeleteProgram;
+	PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation;
+	PFNGLUNIFORM1FPROC glUniform1f;
 
 	bool InitGLExtensions()
 	{
@@ -45,6 +47,8 @@ namespace blooDot::ShaderEngine
 		glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC)SDL_GL_GetProcAddress("glGetProgramInfoLog");
 		glUseProgram = (PFNGLUSEPROGRAMPROC)SDL_GL_GetProcAddress("glUseProgram");
 		glDeleteProgram = (PFNGLDELETEPROGRAMPROC)SDL_GL_GetProcAddress("glDeleteProgram");
+		glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC)SDL_GL_GetProcAddress("glGetUniformLocation");
+		glUniform1f = (PFNGLUNIFORM1FPROC)SDL_GL_GetProcAddress("glUniform1f");
 
 		return true
 			&& _AssertValidpFnGl(glCreateShader, "glCreateShader")
@@ -60,7 +64,19 @@ namespace blooDot::ShaderEngine
 			&& _AssertValidpFnGl(glGetProgramiv, "glGetProgramiv")
 			&& _AssertValidpFnGl(glGetProgramInfoLog, "glGetProgramInfoLog")
 			&& _AssertValidpFnGl(glUseProgram, "glUseProgram")
-			&& _AssertValidpFnGl(glDeleteProgram, "glDeleteProgram");
+			&& _AssertValidpFnGl(glDeleteProgram, "glDeleteProgram")
+			&& _AssertValidpFnGl(glGetUniformLocation, "glGetUniformLocation")
+			&& _AssertValidpFnGl(glUniform1f, "glUniform1f");
+	}
+
+	GLint BindUniform(GLuint programId, const char* uniformName)
+	{
+		return glGetUniformLocation(programId, uniformName);
+	}
+
+	void SetUniform(GLint uniformId, GLfloat value)
+	{
+		glUniform1f(uniformId, value);
 	}
 
 	GLuint CompileProgram(int chunkKeyVertex, int chunkKeyFragment)
@@ -116,17 +132,18 @@ namespace blooDot::ShaderEngine
 		return programId;
 	}
 
-	void PresentBackBuffer(SDL_Renderer* renderer, SDL_Window* win, SDL_Texture* backBuffer, GLuint programId)
+	void PresentBackBuffer(SDL_Window* win, GLuint programId, GLuint uniformId, GLfloat uniformsValue)
 	{
 		GLint oldProgramId = 0;
 
-		SDL_SetRenderTarget(renderer, NULL);
-		SDL_RenderClear(renderer);
-		SDL_GL_BindTexture(backBuffer, NULL, NULL);
 		if (programId != 0)
 		{
 			glGetIntegerv(GL_CURRENT_PROGRAM, &oldProgramId);
 			glUseProgram(programId);
+			if (uniformsValue > 0)
+			{
+				SetUniform(uniformId, uniformsValue);
+			}
 		}
 
 		GLfloat minx, miny, maxx, maxy;

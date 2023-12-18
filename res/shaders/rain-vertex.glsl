@@ -1,15 +1,9 @@
-#version 330
-
-layout(location = 0)in vec4 vert;
-
-uniform mat4 projection;
-uniform mat4 view;
-uniform mat4 model;
-
-out vec2 fragCoord;
+varying vec4 v_color;
+varying vec2 fragCoord;
 
 void main()
 {
-    gl_Position = projection * view * model * vert;
-    fragCoord = gl_Position.xy;
+	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+	v_color = gl_Color;
+	fragCoord = vec2(gl_MultiTexCoord0);
 }
