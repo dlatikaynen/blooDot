@@ -55,3 +55,5 @@ shaders/lifecurtain-vertex.glsl	CHUNK_KEY_SHADER_LIFECURTAIN_VERTEX
 shaders/lifecurtain-fragment.glsl	CHUNK_KEY_SHADER_LIFECURTAIN_FRAGMENT
 shaders/rain-vertex.glsl	CHUNK_KEY_SHADER_RAIN_VERTEX
 shaders/rain-fragment.glsl	CHUNK_KEY_SHADER_RAIN_FRAGMENT
+shaders/vortex-vertex.glsl	CHUNK_KEY_SHADER_VORTEX_VERTEX
+shaders/vortex-fragment.glsl	CHUNK_KEY_SHADER_VORTEX_FRAGMENT

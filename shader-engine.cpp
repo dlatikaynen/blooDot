@@ -132,7 +132,7 @@ namespace blooDot::ShaderEngine
 		return programId;
 	}
 
-	void PresentBackBuffer(SDL_Window* win, GLuint programId, GLuint uniformId, GLfloat uniformsValue)
+	void PresentBackBuffer(SDL_Window* win, SDL_Renderer* renderer, GLuint programId, GLuint uniformId, GLfloat uniformsValue)
 	{
 		GLint oldProgramId = 0;
 
@@ -170,6 +170,10 @@ namespace blooDot::ShaderEngine
 			glVertex2f(maxx, maxy);
 			glEnd();
 		}
+
+		SDL_Rect rect = { 100,100,300,270 };
+		SDL_SetRenderDrawColor(renderer, 0xff, 1, 1, 0xff);
+		SDL_RenderFillRect(renderer, &rect);
 
 		SDL_GL_SwapWindow(win);
 		if (programId != 0)

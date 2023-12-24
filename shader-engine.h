@@ -8,7 +8,7 @@ namespace blooDot::ShaderEngine
 	GLuint CompileProgram(int chunkKeyVertex, int chunkKeyFragment);
 	GLint BindUniform(GLuint programId, const char* uniformName);
 	void SetUniform(GLint uniformId, GLfloat value);
-	void PresentBackBuffer(SDL_Window* win, GLuint programId, GLuint uniformId, GLfloat uniformsValue);
+	void PresentBackBuffer(SDL_Window* win, SDL_Renderer* renderer, GLuint programId, GLuint uniformId, GLfloat uniformsValue);
 	void DeleteGPUProgram(GLuint programId);
 
 	bool _AssertValidpFnGl(void* pFn, std::string name);

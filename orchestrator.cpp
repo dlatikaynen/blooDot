@@ -32,7 +32,8 @@ namespace blooDot::Orchestrator
 	constexpr UCHAR SHADER_PROGRAM_INDEX_RETRO = 1;
 	constexpr UCHAR SHADER_PROGRAM_INDEX_LIFECURTAIN = 2;
 	constexpr UCHAR SHADER_PROGRAM_INDEX_RAIN = 3;
-	constexpr UCHAR SHADER_PROGRAMS_COUNT = 4; // "none" is no shader program, but counts
+	constexpr UCHAR SHADER_PROGRAM_INDEX_VORTEX = 4;
+	constexpr UCHAR SHADER_PROGRAMS_COUNT = 5; // "none" is no shader program, but counts
 
 	SDL_Event mainEvent;
 	b2World world({ 0,0 });
@@ -46,8 +47,8 @@ namespace blooDot::Orchestrator
 	GLuint shaderPrograms[SHADER_PROGRAMS_COUNT] = {0,0,0,0};
 	GLuint shaderProgramId = 0;
 	int currentShaderIndex = 0;
-	GLint uniformTime = 0;
-	float rainTime = 0;
+	GLint uniformTime1 = 0, uniformTime2 = 0;
+	float iTime = 0;
 
 	void MainLoop(SDL_Renderer* renderer, SDL_Window* mainWindow)
 	{
@@ -170,8 +171,14 @@ namespace blooDot::Orchestrator
 				CHUNK_KEY_SHADER_RAIN_FRAGMENT
 			);
 
-			uniformTime = BindUniform(shaderPrograms[SHADER_PROGRAM_INDEX_RAIN], "iTime");
+			uniformTime1 = BindUniform(shaderPrograms[SHADER_PROGRAM_INDEX_RAIN], "iTime");
+			shaderPrograms[SHADER_PROGRAM_INDEX_VORTEX] = CompileProgram
+			(
+				CHUNK_KEY_SHADER_VORTEX_VERTEX,
+				CHUNK_KEY_SHADER_VORTEX_FRAGMENT
+			);
 
+			uniformTime2 = BindUniform(shaderPrograms[SHADER_PROGRAM_INDEX_VORTEX], "iTime");
 			texTarget = SDL_CreateTexture
 			(
 				renderer,
@@ -198,6 +205,7 @@ namespace blooDot::Orchestrator
 
 						break;
 
+#endif
 					case SDL_KEYDOWN:
 						if (isCreatorMode)
 						{
@@ -260,13 +268,18 @@ namespace blooDot::Orchestrator
 							{
 								currentShaderIndex = SHADER_PROGRAM_INDEX_RAIN;
 								shaderProgramId = shaderPrograms[currentShaderIndex];
-								rainTime = 0;
+								iTime = 0;
+							}
+							else if (mainEvent.key.keysym.sym == SDL_KeyCode::SDLK_4)
+							{
+								currentShaderIndex = SHADER_PROGRAM_INDEX_VORTEX;
+								shaderProgramId = shaderPrograms[currentShaderIndex];
+								iTime = 0;
 							}
 						}
 
 						break;
 
-#endif
 					case SDL_CONTROLLERDEVICEADDED:
 					{
 						std::cout << "DEVICEADDED\n";
@@ -516,12 +529,23 @@ namespace blooDot::Orchestrator
 					SDL_SetRenderTarget(renderer, NULL);
 					SDL_RenderClear(renderer);
 					SDL_GL_BindTexture(texTarget, NULL, NULL);
+					GLint uniformTime;
 					if (currentShaderIndex == SHADER_PROGRAM_INDEX_RAIN)
 					{
-						rainTime += 1 / 60.0;
+						iTime += static_cast<float>(1. / 60.);
+						uniformTime = uniformTime1;
+					}
+					else if (currentShaderIndex == SHADER_PROGRAM_INDEX_VORTEX)
+					{
+						iTime += static_cast<float>(1. / 60.);
+						uniformTime = uniformTime2;
+					}
+					else 
+					{
+						uniformTime = 0;
 					}
 
-					PresentBackBuffer(mainWindow, shaderProgramId, uniformTime, rainTime);
+					PresentBackBuffer(mainWindow, renderer, shaderProgramId, uniformTime, iTime);
 				}
 
 				frameEnded = SDL_GetPerformanceCounter();

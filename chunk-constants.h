@@ -57,6 +57,8 @@ constexpr int const CHUNK_KEY_SHADER_LIFECURTAIN_VERTEX = 53;
 constexpr int const CHUNK_KEY_SHADER_LIFECURTAIN_FRAGMENT = 54;
 constexpr int const CHUNK_KEY_SHADER_RAIN_VERTEX = 55;
 constexpr int const CHUNK_KEY_SHADER_RAIN_FRAGMENT = 56;
+constexpr int const CHUNK_KEY_SHADER_VORTEX_VERTEX = 57;
+constexpr int const CHUNK_KEY_SHADER_VORTEX_FRAGMENT = 58;
 
 #ifndef NDEBUG
 inline const char* GetUncookedRelPath(int chunkIndex)
@@ -120,6 +122,8 @@ inline const char* GetUncookedRelPath(int chunkIndex)
 	case 54: return "shaders/lifecurtain-fragment.glsl"; // CHUNK_KEY_SHADER_LIFECURTAIN_FRAGMENT
 	case 55: return "shaders/rain-vertex.glsl"; // CHUNK_KEY_SHADER_RAIN_VERTEX
 	case 56: return "shaders/rain-fragment.glsl"; // CHUNK_KEY_SHADER_RAIN_FRAGMENT
+	case 57: return "shaders/vortex-vertex.glsl"; // CHUNK_KEY_SHADER_VORTEX_VERTEX
+	case 58: return "shaders/vortex-fragment.glsl"; // CHUNK_KEY_SHADER_VORTEX_FRAGMENT
 	}
 
 	return nullptr;

@@ -547,6 +547,12 @@
     <None Include="res\shaders\retro-vertex.glsl">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="res\shaders\vortex-fragment.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="res\shaders\vortex-vertex.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\nn-splash-scene.png">
