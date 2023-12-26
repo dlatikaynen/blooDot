@@ -42,25 +42,25 @@ namespace blooDot::ControllerStuff
 			{
 				auto playerIndex = SDL_JoystickGetDevicePlayerIndex(instanceId);
 
-				if (playerIndex == 1)
+				if (playerIndex == 1 && controller1 == nullptr)
 				{
 					controller1Connected = instanceId;
 					controller1 = SDL_GameControllerOpen(i);
 					controller1Name.assign(SDL_GameControllerNameForIndex(i));
 				}
-				else if (playerIndex == 2)
+				else if (playerIndex == 2 && controller2 == nullptr)
 				{
 					controller2Connected = instanceId;
 					controller2 = SDL_GameControllerOpen(i);
 					controller2Name.assign(SDL_GameControllerNameForIndex(i));
 				}
-				else if (playerIndex == 3)
+				else if (playerIndex == 3 && controller3 == nullptr)
 				{
 					controller3Connected = instanceId;
 					controller3 = SDL_GameControllerOpen(i);
 					controller3Name.assign(SDL_GameControllerNameForIndex(i));
 				}
-				else if (playerIndex == 4)
+				else if (playerIndex == 4 && controller4 == nullptr)
 				{
 					controller4Connected = instanceId;
 					controller4 = SDL_GameControllerOpen(i);

@@ -58,8 +58,8 @@ cairo_t* DrawControllerButtonTip(cairo_t* context, double x, double y, ControlHi
 		x + CONTROLLER_BUTTON_TIP_INSET,
 		y + CONTROLLER_BUTTON_TIP_INSET,
 		CONTROLLER_BUTTON_TIP_RADIUS,
-		-(M_PI + M_PI_2) + 0.1,
-		0 - 0.1
+		-(M_PI + M_PI_2) + 0.3,
+		-0.3
 	);
 
 	cairo_fill(context);
@@ -70,8 +70,8 @@ cairo_t* DrawControllerButtonTip(cairo_t* context, double x, double y, ControlHi
 		x + CONTROLLER_BUTTON_TIP_INSET,
 		y + CONTROLLER_BUTTON_TIP_INSET,
 		CONTROLLER_BUTTON_TIP_RADIUS - BUTTON_INSET,
-		-(M_PI + M_PI_2) + 0.1,
-		0 - 0.1
+		-(M_PI + M_PI_2) + 0.3,
+		-0.3
 	);
 
 	cairo_stroke(context);

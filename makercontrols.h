@@ -5,5 +5,6 @@
 
 namespace blooDot::MakerControls
 {
+	cairo_t* DrawDingSelectionTool(cairo_t* context, int x, int y);
 	cairo_t* DrawSelectedLayerTool(cairo_t* context, int x, double baseY, double yStride, double xExtent, double xSlantExtent, int yExtent, double padding, int etage);
 }

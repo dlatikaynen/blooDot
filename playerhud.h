@@ -12,6 +12,8 @@
 
 namespace blooDot::Hud
 {
+	constexpr int const Padding = 9;
+
 	bool Initialize();
 	DingProps GetDesignLayer();
 	bool SetDesignLayer(DingProps layer);

@@ -42,13 +42,13 @@
       to the lightbox, which is bigger than the stripes' height.
 
   [ ] Biomes are:
-      - garden
-      - profane
-      - sacral
-      - winter
-      - desert
-      - wetlands
-      - scabland
+      - garden   (where it is always late summer/autumn)
+      - profane  (towns)
+      - sacral   (with the cathedral and the cemetary)
+      - arctic   (where there is snow and ice)
+      - desert   (with the oracle)
+      - wetlands (featuring the marshes of doubtful drowning hazard)
+      - scabland (with volcanics)
 
   [ ] Ding stripes are:
       - flooring/ground

@@ -11,8 +11,8 @@ extern int blooDot::Player::NumPlayers;
 
 namespace blooDot::Hud
 {
-	constexpr SDL_Rect Source = { 0,0,49,49 };
-	constexpr int const Padding = 9;
+	constexpr const auto LESSER_GU = GRIDUNIT / 3 * 2;
+	constexpr SDL_Rect Source = { 0,0,GRIDUNIT,GRIDUNIT };
 
 	SDL_Texture* LetterboxBackdropL = nullptr;
 	SDL_Texture* LetterboxBackdropR = nullptr;
@@ -29,6 +29,9 @@ namespace blooDot::Hud
 	SDL_Rect minimapDest = { 0 };
 
 	// makermode stuff
+	SDL_Texture* DingSelector = nullptr;
+	SDL_Rect dingSelectorDims = { 0 };
+	SDL_Rect dingSelectorDest = { 0 };
 	SDL_Texture* DesignLayers = nullptr;
 	SDL_Rect designLayersDims = { 0 };
 	SDL_Rect designLayersDest = { 0 };
@@ -227,8 +230,15 @@ namespace blooDot::Hud
 		if (selectedDesignLayer != layer)
 		{
 			selectedDesignLayer = layer;
-			_RedrawDesignLayersTool();
-			_RedrawDingSelectorTool();
+			if (!_RedrawDesignLayersTool())
+			{
+				return false;
+			}
+
+			if (!_RedrawDingSelectorTool())
+			{
+				return false;
+			}
 
 			return true;
 		}
@@ -447,6 +457,7 @@ namespace blooDot::Hud
 			{
 				/* draw the extra stuff that is only there when
 				 * we are operating in creator (maker) mode */
+				SDL_RenderCopy(GameViewRenderer, DingSelector, &dingSelectorDims, &dingSelectorDest);
 				SDL_RenderCopy(GameViewRenderer, DesignLayers, &designLayersDims, &designLayersDest);
 			}
 			else
@@ -493,11 +504,36 @@ namespace blooDot::Hud
 			DestroyTexture(&designLayerFloorLabel);
 			DestroyTexture(&designLayerFloorLabelSelected);
 			DestroyTexture(&DesignLayers);
+			DestroyTexture(&DingSelector);
 		}
 	}
 
 	bool _InitializeDingSelectorTool()
 	{
+		dingSelectorDims.w = 2 + 7 * LESSER_GU + 6 * Padding + 2;
+		dingSelectorDims.h = dingSelectorDims.w;
+		dingSelectorDest.x = letterboxWidth / 2 - dingSelectorDims.w / 2;
+		dingSelectorDest.y = 49;
+		dingSelectorDest.w = dingSelectorDims.w;
+		dingSelectorDest.h = dingSelectorDims.h;
+
+		const auto& selectorTexture = SDL_CreateTexture(
+			GameViewRenderer,
+			SDL_PIXELFORMAT_ARGB8888,
+			SDL_TEXTUREACCESS_TARGET,
+			dingSelectorDims.w,
+			dingSelectorDims.h
+		);
+
+		if (!selectorTexture)
+		{
+			const auto createError = SDL_GetError();
+			ReportError("Failed to create the ding selector tool texture", createError);
+
+			return false;
+		}
+
+		DingSelector = selectorTexture;
 
 		return _RedrawDingSelectorTool();
 	}
@@ -623,6 +659,76 @@ namespace blooDot::Hud
 
 	bool _RedrawDingSelectorTool()
 	{
+		if (SDL_SetRenderTarget(GameViewRenderer, DingSelector) < 0)
+		{
+			const auto targetError = SDL_GetError();
+			ReportError("Failed to set the ding selector tool texture as the render target", targetError);
+
+			return false;
+		}
+
+		SDL_SetTextureBlendMode(DingSelector, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(GameViewRenderer, 0, 0, 0, SDL_ALPHA_TRANSPARENT);
+		SDL_RenderClear(GameViewRenderer);
+
+		auto canvasTexture = BeginRenderDrawing(GameViewRenderer, dingSelectorDims.w, dingSelectorDims.h);
+		auto const& canvas = GetDrawingSink();
+
+		cairo_set_line_width(canvas, 2.6);
+		cairo_set_source_rgb(canvas, .3, .2, .6);
+		cairo_set_line_join(canvas, CAIRO_LINE_JOIN_BEVEL);
+
+		SDL_Rect biome1 = { dingSelectorDims.x + 2, dingSelectorDims.y + 2 + 0 * (LESSER_GU + Padding), LESSER_GU, LESSER_GU };
+		SDL_Rect biome2 = { dingSelectorDims.x + 2, dingSelectorDims.y + 2 + 1 * (LESSER_GU + Padding), LESSER_GU, LESSER_GU };
+		SDL_Rect biome3 = { dingSelectorDims.x + 2, dingSelectorDims.y + 2 + 2 * (LESSER_GU + Padding), LESSER_GU, LESSER_GU };
+		SDL_Rect biome4 = { dingSelectorDims.x + 2, dingSelectorDims.y + 2 + 3 * (LESSER_GU + Padding), LESSER_GU, LESSER_GU };
+		SDL_Rect biome5 = { dingSelectorDims.x + 2, dingSelectorDims.y + 2 + 4 * (LESSER_GU + Padding), LESSER_GU, LESSER_GU };
+		SDL_Rect biome6 = { dingSelectorDims.x + 2, dingSelectorDims.y + 2 + 5 * (LESSER_GU + Padding), LESSER_GU, LESSER_GU };
+		SDL_Rect biome7 = { dingSelectorDims.x + 2, dingSelectorDims.y + 2 + 6 * (LESSER_GU + Padding), LESSER_GU, LESSER_GU };
+		SDL_Rect dingbx = { dingSelectorDims.x + 2 + LESSER_GU + Padding, dingSelectorDims.y + 2, 6 * LESSER_GU + 5 * Padding, 5 * LESSER_GU + 4 * Padding };
+		SDL_Rect moving = { dingSelectorDims.x + dingSelectorDims.w - 2 - 1 * (2 * LESSER_GU + Padding), dingSelectorDims.y + dingSelectorDims.h - 2 - 2 * LESSER_GU - Padding, 2 * LESSER_GU + Padding, 2 * LESSER_GU + Padding};
+		SDL_Rect roting = { dingSelectorDims.x + dingSelectorDims.w - 2 - 2 * (2 * LESSER_GU + Padding) - Padding, dingSelectorDims.y + dingSelectorDims.h - 2 - 2 * LESSER_GU - Padding, 2 * LESSER_GU + Padding, 2 * LESSER_GU + Padding};
+		SDL_Rect splode = { dingSelectorDims.x + dingSelectorDims.w - 2 - 3 * (2 * LESSER_GU + Padding) - 2 * Padding, dingSelectorDims.y + dingSelectorDims.h - 2 - 2 * LESSER_GU - Padding, 2 * LESSER_GU + Padding, 2 * LESSER_GU + Padding };
+
+		cairo_rectangle(canvas, biome1.x, biome1.y, biome1.w, biome1.h);
+		cairo_rectangle(canvas, biome2.x, biome2.y, biome2.w, biome2.h);
+		cairo_rectangle(canvas, biome3.x, biome3.y, biome3.w, biome3.h);
+		cairo_rectangle(canvas, biome4.x, biome4.y, biome4.w, biome4.h);
+		cairo_rectangle(canvas, biome5.x, biome5.y, biome5.w, biome5.h);
+		cairo_rectangle(canvas, biome6.x, biome6.y, biome6.w, biome6.h);
+		cairo_rectangle(canvas, biome7.x, biome7.y, biome7.w, biome7.h);
+		cairo_rectangle(canvas, dingbx.x, dingbx.y, dingbx.w, dingbx.h);
+		cairo_rectangle(canvas, moving.x, moving.y, moving.w, moving.h);
+		cairo_rectangle(canvas, roting.x, roting.y, roting.w, roting.h);
+		cairo_rectangle(canvas, splode.x, splode.y, splode.w, splode.h);
+		cairo_stroke(canvas);
+		
+		// X  XXXXXXXXXXXXXXXXXXXXXXX
+		//    X                     X
+		// X  X                     X
+		//    X                     X
+		// X  X                     X
+		//    X                     X
+		// X  X                     X
+		//    X                     X
+		// X  X                     X
+		//    X                     X
+		// X  XXXXXXXXXXXXXXXXXXXXXXX
+		//
+		// X  X          X          X
+		//
+		// left column = biome preset
+		// bottom row = move/rotate/remove tool
+
+		EndRenderDrawing(GameViewRenderer, canvasTexture, nullptr);
+		if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
+		{
+			const auto resetError = SDL_GetError();
+			ReportError("Failed to reset the render target after rendering to ding selector tool texture", resetError);
+
+			return false;
+		}
+
 		return true;
 	}
 
@@ -646,13 +752,6 @@ namespace blooDot::Hud
 
 		auto canvasTexture = BeginRenderDrawing(GameViewRenderer, designLayersDims.w, designLayersDims.h);
 		auto const& canvas = GetDrawingSink();
-
-		//cairo_set_line_width(canvas, 5.);
-		//cairo_set_source_rgba(canvas, .4, .4, .1, .5);
-		//cairo_set_line_join(canvas, CAIRO_LINE_JOIN_ROUND);
-		//cairo_rectangle(canvas, designLayersDims.x + 3, designLayersDims.y + 3, designLayersDims.w - 6, designLayersDims.h - 6);
-		//cairo_stroke(canvas);
-
 		auto const& yStride = designLayersDims.w / 4.;
 		auto const& xExtent = designLayersDims.w / 3.;
 		auto const& xSlantExtent = designLayersDims.w / 4.;

@@ -3,6 +3,7 @@
 #include "physics-render-binding.h"
 #include "shader-engine.h"
 #include "ingame-prerendered.h"
+#include "controller-stuff.h"
 
 #ifndef NDEBUG
 #include "physicsdebugdraw.h"
@@ -57,6 +58,7 @@ namespace blooDot::Orchestrator
 		toggleDebugView = isCreatorMode;
 
 #endif
+		blooDot::ControllerStuff::StatusQuo();
 		blooDot::InGamePreRendered::PreRender(renderer);
 		if (!InitializeDings())
 		{
@@ -145,14 +147,6 @@ namespace blooDot::Orchestrator
 			int numKeys;
 			SDL_GetKeyboardState(&numKeys);
 			SDL_GameControllerEventState(SDL_ENABLE);
-			for (int i = 0; i < SDL_NumJoysticks(); ++i) 
-			{
-				if (SDL_IsGameController(i))
-				{
-					controller = SDL_GameControllerOpen(i);
-					break;
-				}
-			}
 
 			// shaders
 			shaderPrograms[SHADER_PROGRAM_INDEX_RETRO] = CompileProgram
@@ -568,11 +562,6 @@ namespace blooDot::Orchestrator
 		}
 
 	THAT_ESCALATED_QUICKLY:
-		if (controller != nullptr)
-		{
-			SDL_GameControllerClose(controller);
-		}
-		
 		_TeardownGPU();
 		DestroyTexture(&texTarget);
 		TeardownDingSheets();
