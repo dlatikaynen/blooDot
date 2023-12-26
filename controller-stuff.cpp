@@ -25,6 +25,11 @@ namespace blooDot::ControllerStuff
 		return true;
 	}
 
+	bool IsAnyControllerConnected()
+	{
+		return controller1 || controller2 || controller3 || controller4;
+	}
+
 	void StatusQuo()
 	{
 		auto numJoysticks = SDL_NumJoysticks();

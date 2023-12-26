@@ -41,6 +41,7 @@ namespace blooDot::ControllerStuff
 	ControllerState controllerState[];
 
 	bool Initialize(SDL_Renderer*);
+	bool IsAnyControllerConnected();
 	void StatusQuo();
 	bool OnControllerDeviceConnected(Sint32 deviceIndex);
 	bool OnControllerDeviceRemoved(Sint32 instanceId);

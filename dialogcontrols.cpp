@@ -3,14 +3,6 @@
 #include "constants.h"
 #include <math.h>
 
-constexpr auto HALFPI = M_PI / 2.0;
-constexpr auto BUTTON_INSET = 4.0;
-constexpr auto BUTTON_INSET_TWICE = BUTTON_INSET * 2;
-constexpr auto CHEVRON_RADIUS = BUTTON_INSET_TWICE * 3.68;
-constexpr auto CHEVRON_SLICE = 0.375;
-constexpr auto HIGHLIGHT_HALO_SIZE = 1;
-constexpr auto CONTROL_BORDER_WIDTH = 1.31;
-
 constexpr double ChevronNudge[] = {
 	0,
 	0.05,0.06,0.065,0.07,0.07,0.065,0.06,0.05,
@@ -63,6 +55,54 @@ cairo_t* DrawActiveControllerSquare(cairo_t* context, double x, double y, double
 
 	return context;
 }
+
+cairo_t* DrawControllerButtonTip(cairo_t* context, double x, double y, ControlHighlight highlight)
+{
+	if (highlight > CH_NONE)
+	{
+		_PrepareSelPatterns();
+		cairo_pattern_t* highlightPattern;
+		if (highlight == CH_INGAME)
+		{
+			highlightPattern = selPatternBlue;
+		}
+		else if (highlight == CH_CREATORMODE)
+		{
+			highlightPattern = selPatternYellow;
+		}
+		else
+		{
+			highlightPattern = selPatternRed;
+		}
+	}
+
+	COLOR_CONTROL_BACKGROUND;
+	cairo_arc(
+		context,
+		x + CONTROLLER_BUTTON_TIP_INSET,
+		y + CONTROLLER_BUTTON_TIP_INSET,
+		CONTROLLER_BUTTON_TIP_RADIUS,
+		-(M_PI + M_PI_2) + 0.1,
+		0 - 0.1
+	);
+
+	cairo_fill(context);
+	COLOR_CONTROL_BORDER;
+	WIDTH_CONTROL_BORDER;
+	cairo_arc(
+		context,
+		x + CONTROLLER_BUTTON_TIP_INSET,
+		y + CONTROLLER_BUTTON_TIP_INSET,
+		CONTROLLER_BUTTON_TIP_RADIUS - BUTTON_INSET,
+		-(M_PI + M_PI_2) + 0.1,
+		0 - 0.1
+	);
+
+	cairo_stroke(context);
+
+	return context;
+}
+
 
 cairo_t* DrawButton(cairo_t* context, double x, double y, double w, double h, ControlHighlight highlight)
 {

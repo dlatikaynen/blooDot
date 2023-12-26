@@ -14,4 +14,6 @@ namespace blooDot::InGamePreRendered
 
 	bool PreRender(SDL_Renderer*);
 	void Teardown();
+
+	bool _DrawSkipButton();
 }
