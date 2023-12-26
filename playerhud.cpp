@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "playerhud.h"
+#include "makercontrols.h"
+
 using namespace blooDot::ClumsyPack;
 
 extern SDL_Renderer* GameViewRenderer;
@@ -695,7 +697,7 @@ namespace blooDot::Hud
 
 			if (selected)
 			{
-				DrawSelectedLayerTool(canvas, designLayersDims.x, baseY, yStride, xExtent, xSlantExtent, yExtent, widthPadding * 2, etage);
+				blooDot::MakerControls::DrawSelectedLayerTool(canvas, designLayersDims.x, baseY, yStride, xExtent, xSlantExtent, yExtent, widthPadding * 2, etage);
 			}
 
 			auto const& designLayerLabelPos = SDL_Rect

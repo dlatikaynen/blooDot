@@ -16,7 +16,10 @@ constexpr auto const IN_GAME_BUTTON_LABEL_FONT_SIZE = 21;
 constexpr auto const CONTROLLER_BUTTON_TIP_FONT_SIZE = 13;
 constexpr const char* CONTROLLER_BUTTON_TIP_X = "X";
 
-cairo_t* DrawSelectedLayerTool(cairo_t* context, int x, double baseY, double yStride, double xExtent, double xSlantExtent, int yExtent, double padding, int etage);
+extern cairo_pattern_t* selPatternRed;
+extern cairo_pattern_t* selPatternBlue;
+extern cairo_pattern_t* selPatternYellow;
+
 cairo_t* DrawButton(cairo_t* context, double x, double y, double w, double h, ControlHighlight highlight);
 cairo_t* DrawControllerButtonTip(cairo_t* context, double x, double y, ControlHighlight highlight);
 cairo_t* DrawActiveControllerSquare(cairo_t* context, double x, double y, double w, double h);

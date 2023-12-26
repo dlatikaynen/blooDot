@@ -308,6 +308,9 @@
     <ClInclude Include="ingame-prerendered.h">
       <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
+    <ClInclude Include="makercontrols.h">
+      <Filter>_Source Files\maker\headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -477,6 +480,9 @@
     </ClCompile>
     <ClCompile Include="ingame-prerendered.cpp">
       <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="makercontrols.cpp">
+      <Filter>_Source Files\maker</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

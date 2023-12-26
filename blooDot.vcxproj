@@ -275,6 +275,7 @@
     <ClCompile Include="controller-stuff.cpp" />
     <ClCompile Include="datetime.cpp" />
     <ClCompile Include="ingame-prerendered.cpp" />
+    <ClCompile Include="makercontrols.cpp" />
     <ClCompile Include="makersettings.cpp" />
     <ClCompile Include="menu-common.cpp" />
     <ClCompile Include="menu-settings-controls.cpp" />
@@ -316,6 +317,7 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="harvard.h" />
     <ClInclude Include="ingame-prerendered.h" />
+    <ClInclude Include="makercontrols.h" />
     <ClInclude Include="makersettings.h" />
     <ClInclude Include="mapregion.h" />
     <ClInclude Include="menu-common.h" />
