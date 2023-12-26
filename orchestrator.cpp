@@ -2,6 +2,7 @@
 #include "orchestrator.h"
 #include "physics-render-binding.h"
 #include "shader-engine.h"
+#include "ingame-prerendered.h"
 
 #ifndef NDEBUG
 #include "physicsdebugdraw.h"
@@ -56,6 +57,7 @@ namespace blooDot::Orchestrator
 		toggleDebugView = isCreatorMode;
 
 #endif
+		blooDot::InGamePreRendered::PreRender(renderer);
 		if (!InitializeDings())
 		{
 			mainRunning = false;
@@ -577,6 +579,7 @@ namespace blooDot::Orchestrator
 		GameviewTeardown();
 		ClearWorldData();
 		TeardownDings();
+		blooDot::InGamePreRendered::Teardown();
 	}
 
 	void _TeardownGPU()

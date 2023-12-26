@@ -5,6 +5,8 @@
 #include "dexassy.h"
 #include "resutil.h"
 #include "settings.h"
+#include "ingame-prerendered.h"
+using namespace blooDot::InGamePreRendered;
 
 using namespace blooDot::Res;
 
@@ -146,6 +148,7 @@ namespace blooDot::ShaderEngine
 			}
 		}
 
+		/* mostly rectangular screen, so two triangles will do */
 		GLfloat minx, miny, maxx, maxy;
 		GLfloat minu, maxu, minv, maxv;
 
@@ -171,10 +174,21 @@ namespace blooDot::ShaderEngine
 			glEnd();
 		}
 
-		SDL_Rect rect = { 100,100,300,270 };
-		SDL_SetRenderDrawColor(renderer, 0xff, 1, 1, 0xff);
-		SDL_RenderFillRect(renderer, &rect);
-
+		/* overlay control(s):
+		 * empirically, the area where an overlay is drawn,
+		 * needs to be cleared with transparency first, to
+		 * properly draw "over" the shader output */
+		SDL_Rect src = { 0,0,static_cast<int>(InGameSkipButtonWidth) + 2 * static_cast<int>(InGameControlMargin),static_cast<int>(InGameButtonHeight) + 2 * static_cast<int>(InGameControlMargin)};
+		SDL_Rect dst = { static_cast<int>(maxx) - src.w - 33,33,src.w,src.h };
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0x00);
+		SDL_RenderFillRect(renderer, &dst);
+		SDL_RenderCopy(
+			renderer,
+			blooDot::InGamePreRendered::PreRendered,
+			&src,
+			&dst
+		);
+		
 		SDL_GL_SwapWindow(win);
 		if (programId != 0)
 		{

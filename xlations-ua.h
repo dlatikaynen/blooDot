@@ -31,6 +31,7 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_MenuDismiss = "Залишся";
 	constexpr char const* _literal_ua_MenuCancel = "Скасувати";
 	constexpr char const* _literal_ua_MenuOk = "OK";
+	constexpr char const* _literal_ua_MenuSkip = "Пропустити";
 	constexpr char const* _literal_ua_MenuLeave = "Залишати";
 	constexpr char const* _literal_ua_MenuControls = "Kерування";
 	constexpr char const* _literal_ua_ControlsNeverConnected = "No controllers connected, or so it seems. How did you even get here, by keyboard?";
@@ -176,7 +177,7 @@ namespace blooDot::ua
 	constexpr char const* _literal_ua_regionNameMarshesOfDoubtfulDrowningHazard = "Marshes of Doubtful Drowning Hazard";
 	constexpr char const* _literal_ua_landmarkNameUniversityOfScience = "University of Snience";
 	constexpr char const* _literal_ua_landmarkNameLibraryOfTheUniversityOfScience = "Library of the University of Snience";
-	constexpr char const* _literal_ua_landmarkNameGardenOfRidiculouslyPoisonousPlants = "Garden of Ridiculously Poisonous Plants";
+	constexpr char const* _literal_ua_landmarkNameGardenOfRidiculouslyPoisonousPlants = "Сад повний шалено отруйних рослин";
 	constexpr char const* _literal_ua_landmarkNameSnurch = "Snurch";
 	constexpr char const* _literal_ua_landmarkNameSnathedral = "Snanctum of the Snathedral";
 	constexpr char const* _literal_ua_landmarkNameBlimpcombe = "Blimpcombe";

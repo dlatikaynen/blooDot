@@ -80,7 +80,7 @@ bool LoadFonts()
 	return true;
 }
 
-void* LoadFontInternal(int chunkKey, __out TTF_Font** font, __out SDL_RWops **source)
+void* LoadFontInternal(int chunkKey, __out TTF_Font** font, __out SDL_RWops** source)
 {
 	SDL_RWops* chunkStream;
 	*font = NULL;
@@ -125,6 +125,74 @@ TTF_Font* GetFont(int fontKey)
 	return NULL;
 }
 
+/// <summary>
+/// Draws text on an existing texture using an intermediary surface
+/// Texture must be writable (streaming-enabled)
+/// Text is centered inside the rectange "frame" on the texture,
+/// where the co-ordinates given by "frame" must be fully inside texture.
+/// </summary>
+bool DrawText(SDL_Texture* streamingDestination, SDL_Rect* frame, int fontKey, int sizePt, const char* text, SDL_Color color, bool bold)
+{
+	SDL_Surface* writeThrough;
+	if (SDL_LockTextureToSurface(streamingDestination, frame, &writeThrough) != 0)
+	{
+		const auto retrieveError = SDL_GetError();
+		ReportError("Could not lock texture to surface to write on", retrieveError);
+
+		return false;
+	}
+
+	const auto font = GetFont(fontKey);
+	if (TTF_SetFontSize(font, sizePt) < 0)
+	{
+		const auto sizeError = TTF_GetError();
+		ReportError("Failed to set font size", sizeError);
+		SDL_UnlockTexture(streamingDestination);
+
+		return false;
+	}
+
+	TTF_SetFontStyle(font, bold ? TTF_STYLE_BOLD : TTF_STYLE_NORMAL);
+	const auto textSurface = TTF_RenderUTF8_Blended_Wrapped(font, text, color, 0);
+	if (textSurface == nullptr)
+	{
+		const auto textError = TTF_GetError();
+		ReportError("Failed to render text", textError);
+		SDL_UnlockTexture(streamingDestination);
+
+		return false;
+	}
+
+	const SDL_Rect src = { 0,0,textSurface->w,textSurface->h };
+	SDL_Rect dst = {
+		frame->w / 2 - textSurface->w / 2,
+		frame->h / 2 - textSurface->h / 2 - 2, // -2 empirically determined
+		textSurface->w,
+		textSurface->h 
+	};
+
+	if (SDL_BlitSurface(textSurface, &src, writeThrough, &dst) != 0)
+	{
+		const auto blitError = TTF_GetError();
+		ReportError("Failed to blit from text to write-through wurface", blitError);
+		SDL_free(textSurface);
+		SDL_UnlockTexture(streamingDestination);
+
+		return false;
+	}
+	
+	SDL_free(textSurface);
+	SDL_UnlockTexture(streamingDestination);
+
+	return true;
+}
+
+/// <summary>
+/// Creates a new texture with the text written on it.
+/// Can only be used to SDL_RenderCopy directly to a render target.
+/// Use the DrawText method instead, if you need to paint text on
+/// top of anything prior existing as (and on) a texture.
+/// </summary>
 SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_Rect* frame, int fontKey, int sizePt, const char* text, SDL_Color color, bool bold)
 {
 	SDL_Texture* textTexture = NULL;
@@ -135,7 +203,7 @@ SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_Rect* frame, int fontKey, in
 		const auto sizeError = TTF_GetError();
 		ReportError("Failed to set font size", sizeError);
 	}
-	
+
 	TTF_SetFontStyle(font, bold ? TTF_STYLE_BOLD : TTF_STYLE_NORMAL);
 	const auto textSurface = TTF_RenderUTF8_Blended_Wrapped(font, text, color, 0);
 
@@ -149,6 +217,8 @@ SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_Rect* frame, int fontKey, in
 			const auto textureError = SDL_GetError();
 			ReportError("Failed to create a text texture", textureError);
 		}
+
+		SDL_free(textSurface);
 	}
 	else
 	{
@@ -156,8 +226,6 @@ SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_Rect* frame, int fontKey, in
 		ReportError("Failed to render text", textError);
 		return NULL;
 	}
-
-	SDL_free(textSurface);
 
 	return textTexture;
 }

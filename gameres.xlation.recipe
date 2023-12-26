@@ -129,6 +129,12 @@ MenuOk
 	[fi]	Joo
 	[ua]	OK
 
+MenuSkip
+	[am]	Skip
+	[de]	Überspringen
+	[fi]	Ohita
+	[ua]	Пропустити
+
 MenuLeave
 	[am]	Leave
 	[de]	Verlassen
@@ -726,7 +732,7 @@ landmarkNameLibraryOfTheUniversityOfScience
 landmarkNameGardenOfRidiculouslyPoisonousPlants
 	[am]	Garden of Ridiculously Poisonous Plants
 	[de]	Garten der absurd giftigen Pflanzen
-	[fi]	Puutarha täynnä järjettömän myrkyllisiä kasveja
+	[fi]	Hullun myrkyllisten kasvien puutarha
 	[ua]	Сад повний шалено отруйних рослин
 
 landmarkNameSnurch

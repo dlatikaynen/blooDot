@@ -11,6 +11,7 @@ extern void* Retrieve(int chunkKey, __out SDL_RWops** const stream);
 
 bool LoadFonts();
 TTF_Font* GetFont(int fontKey);
+bool DrawText(SDL_Texture* streamingDestination, SDL_Rect* frame, int fontKey, int sizePt, const char* text, SDL_Color color, bool bold = false);
 SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_Rect *frame, int fontKey, int sizePt, const char* text, SDL_Color color, bool bold = false);
 void CloseFonts();
 

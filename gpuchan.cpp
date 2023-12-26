@@ -94,7 +94,7 @@ bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title,
 		}
 
 		const auto drawingTexture = BeginRenderDrawing(renderer, GodsPreferredWidth, GodsPreferredHight);
-		if (drawingTexture) [[likely]]
+		if (drawingTexture)
 		{
 			auto const& drawingSink = GetDrawingSink();
 			DrawButton(

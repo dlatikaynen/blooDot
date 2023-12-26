@@ -34,6 +34,7 @@ const char* literalMenuBack = "";
 const char* literalMenuDismiss = "";
 const char* literalMenuCancel = "";
 const char* literalMenuOk = "";
+const char* literalMenuSkip = "";
 const char* literalMenuLeave = "";
 const char* literalMenuControls = "";
 const char* literalControlsNeverConnected = "";
@@ -262,6 +263,7 @@ namespace blooDot::en
 		literalMenuDismiss = _literal_en_MenuDismiss;
 		literalMenuCancel = _literal_en_MenuCancel;
 		literalMenuOk = _literal_en_MenuOk;
+		literalMenuSkip = _literal_en_MenuSkip;
 		literalMenuLeave = _literal_en_MenuLeave;
 		literalMenuControls = _literal_en_MenuControls;
 		literalControlsNeverConnected = _literal_en_ControlsNeverConnected;
@@ -492,6 +494,7 @@ namespace blooDot::de
 		literalMenuDismiss = _literal_de_MenuDismiss;
 		literalMenuCancel = _literal_de_MenuCancel;
 		literalMenuOk = _literal_de_MenuOk;
+		literalMenuSkip = _literal_de_MenuSkip;
 		literalMenuLeave = _literal_de_MenuLeave;
 		literalMenuControls = _literal_de_MenuControls;
 		literalControlsNeverConnected = _literal_de_ControlsNeverConnected;
@@ -722,6 +725,7 @@ namespace blooDot::fi
 		literalMenuDismiss = _literal_fi_MenuDismiss;
 		literalMenuCancel = _literal_fi_MenuCancel;
 		literalMenuOk = _literal_fi_MenuOk;
+		literalMenuSkip = _literal_fi_MenuSkip;
 		literalMenuLeave = _literal_fi_MenuLeave;
 		literalMenuControls = _literal_fi_MenuControls;
 		literalControlsNeverConnected = _literal_fi_ControlsNeverConnected;
@@ -952,6 +956,7 @@ namespace blooDot::ua
 		literalMenuDismiss = _literal_ua_MenuDismiss;
 		literalMenuCancel = _literal_ua_MenuCancel;
 		literalMenuOk = _literal_ua_MenuOk;
+		literalMenuSkip = _literal_ua_MenuSkip;
 		literalMenuLeave = _literal_ua_MenuLeave;
 		literalMenuControls = _literal_ua_MenuControls;
 		literalControlsNeverConnected = _literal_ua_ControlsNeverConnected;

@@ -31,6 +31,7 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_MenuDismiss = "Sivuutta";
 	constexpr char const* _literal_fi_MenuCancel = "Peruutta";
 	constexpr char const* _literal_fi_MenuOk = "Joo";
+	constexpr char const* _literal_fi_MenuSkip = "Ohita";
 	constexpr char const* _literal_fi_MenuLeave = "Jättää";
 	constexpr char const* _literal_fi_MenuControls = "Ohjaus";
 	constexpr char const* _literal_fi_ControlsNeverConnected = "No controllers connected, or so it seems. How did you even get here, by keyboard?";
@@ -176,7 +177,7 @@ namespace blooDot::fi
 	constexpr char const* _literal_fi_regionNameMarshesOfDoubtfulDrowningHazard = "Marshes of Doubtful Drowning Hazard";
 	constexpr char const* _literal_fi_landmarkNameUniversityOfScience = "University of Snience";
 	constexpr char const* _literal_fi_landmarkNameLibraryOfTheUniversityOfScience = "Library of the University of Snience";
-	constexpr char const* _literal_fi_landmarkNameGardenOfRidiculouslyPoisonousPlants = "Garden of Ridiculously Poisonous Plants";
+	constexpr char const* _literal_fi_landmarkNameGardenOfRidiculouslyPoisonousPlants = "Hullun myrkyllisten kasvien puutarha";
 	constexpr char const* _literal_fi_landmarkNameSnurch = "Snurch";
 	constexpr char const* _literal_fi_landmarkNameSnathedral = "Snanctum of the Snathedral";
 	constexpr char const* _literal_fi_landmarkNameBlimpcombe = "Blimpcombe";

@@ -29,6 +29,7 @@ extern const char* literalMenuBack;
 extern const char* literalMenuDismiss;
 extern const char* literalMenuCancel;
 extern const char* literalMenuOk;
+extern const char* literalMenuSkip;
 extern const char* literalMenuLeave;
 extern const char* literalMenuControls;
 extern const char* literalControlsNeverConnected;

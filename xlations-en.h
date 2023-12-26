@@ -31,6 +31,7 @@ namespace blooDot::en
 	constexpr char const* _literal_en_MenuDismiss = "Dismiss";
 	constexpr char const* _literal_en_MenuCancel = "Cancel";
 	constexpr char const* _literal_en_MenuOk = "Ok";
+	constexpr char const* _literal_en_MenuSkip = "Skip";
 	constexpr char const* _literal_en_MenuLeave = "Leave";
 	constexpr char const* _literal_en_MenuControls = "Controls";
 	constexpr char const* _literal_en_ControlsNeverConnected = "No controllers connected, or so it seems. How did you even get here, by keyboard?";

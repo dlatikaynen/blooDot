@@ -305,6 +305,9 @@
     <ClInclude Include="controller-stuff.h">
       <Filter>_Source Files\ui\headers</Filter>
     </ClInclude>
+    <ClInclude Include="ingame-prerendered.h">
+      <Filter>_Source Files\ui\headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -470,6 +473,9 @@
       <Filter>_Source Files\ui</Filter>
     </ClCompile>
     <ClCompile Include="controller-stuff.cpp">
+      <Filter>_Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ingame-prerendered.cpp">
       <Filter>_Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>

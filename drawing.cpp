@@ -37,18 +37,18 @@ SDL_Texture* NewTexture(SDL_Renderer* renderer, int w, int h, bool transparentAb
 
 cairo_t* BeginTextureDrawing(SDL_Texture* targetTexture, const int canvasWidth, const int canvasHeight)
 {
-	int pitch;
+	int stride;
 	void* pixels;
 
 	if (targetTexture)
 	{
-		SDL_LockTexture(targetTexture, NULL, &pixels, &pitch);
+		SDL_LockTexture(targetTexture, NULL, &pixels, &stride);
 		const auto cairoSurface = cairo_image_surface_create_for_data(
 			static_cast<unsigned char*>(pixels),
 			CAIRO_FORMAT_ARGB32,
 			canvasWidth,
 			canvasHeight,
-			pitch
+			stride
 		);
 
 		const auto sink = cairo_create(cairoSurface);
@@ -111,6 +111,10 @@ cairo_t* SetSourceColor(cairo_t* context, SDL_Color color)
 	return context;
 }
 
+/// <summary>
+/// Draws immediately on the render target (usually the backbuffer
+/// of the main window) and cleans everything up
+/// </summary>
 void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture, SDL_Rect* destRect)
 {
 	SDL_UnlockTexture(targetTexture);
@@ -121,6 +125,9 @@ void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture, SD
 	cairo_destroy(drawingSink);
 }
 
+/// <summary>
+/// Only cleans up cairo, does not touch the finished texture
+/// </summary>
 void EndTextureDrawing(SDL_Texture* targetTexture, cairo_t* drawer)
 {
 	SDL_UnlockTexture(targetTexture);
