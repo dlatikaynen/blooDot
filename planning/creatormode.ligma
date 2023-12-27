@@ -1,7 +1,12 @@
 ﻿   1. How to start
 └─────────────────
 
-  [ ] Main menu in non-release builds contains an item "Creator mode"
+  [X] Main menu in non-release builds contains an item "Creator mode"
+  [ ] Players build the world themselves. In creator mode, they can
+      break the fourth wall by going into the letterboxes and messing
+      with the creator mode controls (for example, take the barrel from
+      the "delete" tool selector button, or bumping against one of
+      the tools to activate it)
 
 
    2. In-maker menu

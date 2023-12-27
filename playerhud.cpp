@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "playerhud.h"
 #include "makercontrols.h"
+#include "dingsheet.h"
 
 using namespace blooDot::ClumsyPack;
 
@@ -50,6 +51,8 @@ namespace blooDot::Hud
 	SDL_Rect coalesceLabelRect{ 0,0,0,0 };
 	SDL_Texture* coalesceLabel = nullptr;
 	SDL_Texture* coalesceLabelOn = nullptr;
+	SDL_Rect designerDingBox{ 0,0,0,0 };
+	Ding designerCurrentDing = Ding::FloorRockCracked;
 
 	// makermode ui state
 	DingProps selectedDesignLayer = DingProps::Floor;
@@ -459,6 +462,24 @@ namespace blooDot::Hud
 				 * we are operating in creator (maker) mode */
 				SDL_RenderCopy(GameViewRenderer, DingSelector, &dingSelectorDims, &dingSelectorDest);
 				SDL_RenderCopy(GameViewRenderer, DesignLayers, &designLayersDims, &designLayersDest);
+
+				const auto dingLocator = GetDing(designerCurrentDing);
+				if (dingLocator->onSheet)
+				{
+					SDL_Rect dst = {
+						dingSelectorDest.x + designerDingBox.x + designerDingBox.w / 2 - dingLocator->src.w / 2,
+						dingSelectorDest.y + designerDingBox.y + designerDingBox.h / 2 - dingLocator->src.h / 2,
+						dingLocator->src.w,
+						dingLocator->src.h
+					};
+
+					SDL_RenderCopy(
+						GameViewRenderer,
+						dingLocator->onSheet,
+						&dingLocator->src,
+						&dst
+					);
+				}
 			}
 			else
 			{
@@ -685,7 +706,7 @@ namespace blooDot::Hud
 		SDL_Rect biome5 = { dingSelectorDims.x + 2, dingSelectorDims.y + 2 + 4 * (LESSER_GU + Padding), LESSER_GU, LESSER_GU };
 		SDL_Rect biome6 = { dingSelectorDims.x + 2, dingSelectorDims.y + 2 + 5 * (LESSER_GU + Padding), LESSER_GU, LESSER_GU };
 		SDL_Rect biome7 = { dingSelectorDims.x + 2, dingSelectorDims.y + 2 + 6 * (LESSER_GU + Padding), LESSER_GU, LESSER_GU };
-		SDL_Rect dingbx = { dingSelectorDims.x + 2 + LESSER_GU + Padding, dingSelectorDims.y + 2, 6 * LESSER_GU + 5 * Padding, 5 * LESSER_GU + 4 * Padding };
+		designerDingBox = { dingSelectorDims.x + 2 + LESSER_GU + Padding, dingSelectorDims.y + 2, 6 * LESSER_GU + 5 * Padding, 5 * LESSER_GU + 4 * Padding };
 		SDL_Rect moving = { dingSelectorDims.x + dingSelectorDims.w - 2 - 1 * (2 * LESSER_GU + Padding), dingSelectorDims.y + dingSelectorDims.h - 2 - 2 * LESSER_GU - Padding, 2 * LESSER_GU + Padding, 2 * LESSER_GU + Padding};
 		SDL_Rect roting = { dingSelectorDims.x + dingSelectorDims.w - 2 - 2 * (2 * LESSER_GU + Padding) - Padding, dingSelectorDims.y + dingSelectorDims.h - 2 - 2 * LESSER_GU - Padding, 2 * LESSER_GU + Padding, 2 * LESSER_GU + Padding};
 		SDL_Rect splode = { dingSelectorDims.x + dingSelectorDims.w - 2 - 3 * (2 * LESSER_GU + Padding) - 2 * Padding, dingSelectorDims.y + dingSelectorDims.h - 2 - 2 * LESSER_GU - Padding, 2 * LESSER_GU + Padding, 2 * LESSER_GU + Padding };
@@ -697,12 +718,14 @@ namespace blooDot::Hud
 		cairo_rectangle(canvas, biome5.x, biome5.y, biome5.w, biome5.h);
 		cairo_rectangle(canvas, biome6.x, biome6.y, biome6.w, biome6.h);
 		cairo_rectangle(canvas, biome7.x, biome7.y, biome7.w, biome7.h);
-		cairo_rectangle(canvas, dingbx.x, dingbx.y, dingbx.w, dingbx.h);
+		cairo_rectangle(canvas, designerDingBox.x, designerDingBox.y, designerDingBox.w, designerDingBox.h);
 		cairo_rectangle(canvas, moving.x, moving.y, moving.w, moving.h);
 		cairo_rectangle(canvas, roting.x, roting.y, roting.w, roting.h);
 		cairo_rectangle(canvas, splode.x, splode.y, splode.w, splode.h);
 		cairo_stroke(canvas);
-		
+
+		EndRenderDrawing(GameViewRenderer, canvasTexture, nullptr);
+
 		// X  XXXXXXXXXXXXXXXXXXXXXXX
 		//    X                     X
 		// X  X                     X
@@ -720,7 +743,30 @@ namespace blooDot::Hud
 		// left column = biome preset
 		// bottom row = move/rotate/remove tool
 
-		EndRenderDrawing(GameViewRenderer, canvasTexture, nullptr);
+		const auto dingLocator = GetDing(Ding::BarrelLoaded);
+		if (dingLocator->onSheet)
+		{
+			SDL_Rect dst = {
+				splode.x + splode.w / 2 - dingLocator->src.w / 2,
+				splode.y + splode.h / 2 - dingLocator->src.h / 2,
+				dingLocator->src.w,
+				dingLocator->src.h
+			};
+
+			if (SDL_RenderCopy(
+				GameViewRenderer,
+				dingLocator->onSheet,
+				&dingLocator->src,
+				&dst
+			) != 0)
+			{
+				const auto barrelError = SDL_GetError();
+				ReportError("Failed to place the splode barrel on ding selector tool", barrelError);
+
+				return false;
+			};
+		}
+
 		if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
 		{
 			const auto resetError = SDL_GetError();

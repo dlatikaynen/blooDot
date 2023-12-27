@@ -163,6 +163,8 @@ DingLocator _PlaceOnDingSheet(SDL_Rect* dingDimensions, SDL_Texture* dingTexture
 		SDL_SetTextureBlendMode(placeOnSheet, SDL_BLENDMODE_BLEND);
 	}
 
+	auto previousTarget = SDL_GetRenderTarget(GameViewRenderer);
+
 	if (SDL_SetRenderTarget(GameViewRenderer, placeOnSheet) < 0)
 	{
 		const auto targetError = SDL_GetError();
@@ -177,7 +179,7 @@ DingLocator _PlaceOnDingSheet(SDL_Rect* dingDimensions, SDL_Texture* dingTexture
 		return {};
 	}
 
-	if (SDL_SetRenderTarget(GameViewRenderer, NULL) < 0)
+	if (SDL_SetRenderTarget(GameViewRenderer, previousTarget) < 0)
 	{
 		const auto restoreError = SDL_GetError();
 		ReportError("Could not restore render target after rendering to ding sheet", restoreError);
