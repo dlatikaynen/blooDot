@@ -283,6 +283,7 @@
     <ClCompile Include="menu-multimonitor.cpp" />
     <ClCompile Include="menu-settings-about.cpp" />
     <ClCompile Include="menu-settings-help.cpp" />
+    <ClCompile Include="music.cpp" />
     <ClCompile Include="offscreen-renderer-quest.cpp" />
     <ClCompile Include="offscreen-rendering.cpp" />
     <ClCompile Include="physics-render-binding.cpp" />
@@ -335,6 +336,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="menu-settings-screen.h" />
     <ClInclude Include="menu-settings.h" />
+    <ClInclude Include="music.h" />
     <ClInclude Include="newworld.h" />
     <ClInclude Include="offscreen-rendering.h" />
     <ClInclude Include="orchestrator.h" />

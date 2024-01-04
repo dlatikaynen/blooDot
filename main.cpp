@@ -18,6 +18,8 @@
 #include "enxlate.h"
 #endif
 #include "shader-engine.h"
+#include "music.h"
+
 using namespace blooDot::ShaderEngine;
 
 const int major = 3;
@@ -219,6 +221,7 @@ int main(int, char**)
 
 		blooDot::Sfx::PreloadMenuSfx();
 		blooDot::Settings::PreloadControllerMappings();
+		const auto musicStarted = blooDot::Music::StartMusic();
 
 		SDL_ShowWindow(mainWindow);
 		blooDot::Sfx::Play(SoundEffect::SFX_BULLET_DECAY);
@@ -229,6 +232,11 @@ int main(int, char**)
 			 * for the arena, even if the video mode matches */
 			blooDot::Player::NumPlayers = 4;
 			::_Launch();
+		}
+
+		if (musicStarted)
+		{
+			blooDot::Music::Teardown();
 		}
 
 		blooDot::Sfx::Teardown();

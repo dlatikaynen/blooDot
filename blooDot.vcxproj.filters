@@ -311,6 +311,9 @@
     <ClInclude Include="makercontrols.h">
       <Filter>_Source Files\maker\headers</Filter>
     </ClInclude>
+    <ClInclude Include="music.h">
+      <Filter>_Source Files\audio\headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -483,6 +486,9 @@
     </ClCompile>
     <ClCompile Include="makercontrols.cpp">
       <Filter>_Source Files\maker</Filter>
+    </ClCompile>
+    <ClCompile Include="music.cpp">
+      <Filter>_Source Files\audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
