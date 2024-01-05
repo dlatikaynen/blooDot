@@ -111,6 +111,12 @@
     <Filter Include="_Source Files\util\headers">
       <UniqueIdentifier>{ca8bdaa7-9e0d-4548-a732-3e7f3a8d26c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_Source Files\audio\synth">
+      <UniqueIdentifier>{c09014c7-b586-415b-a270-9025cfb4aea8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Source Files\audio\synth\headers">
+      <UniqueIdentifier>{06456f51-4bcb-4d33-8b3a-9e0675bf1889}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="menu-settings.h">
@@ -314,6 +320,54 @@
     <ClInclude Include="music.h">
       <Filter>_Source Files\audio\headers</Filter>
     </ClInclude>
+    <ClInclude Include="moosic\delay-filter.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\delay-line.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\derivative.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\envelope-source.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\flame-source.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\frame.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\nose-gate.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\oscillator.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\oscillator-base.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\oscillator-exception.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\pipe.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\rampen-sau.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\random-noise.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\string-shaper.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\synth.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="moosic\pch.h">
+      <Filter>_Source Files\audio\synth\headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogcontrols.cpp">
@@ -489,6 +543,45 @@
     </ClCompile>
     <ClCompile Include="music.cpp">
       <Filter>_Source Files\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="moosic\delay-filter.cpp">
+      <Filter>_Source Files\audio\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="moosic\delay-line.cpp">
+      <Filter>_Source Files\audio\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="moosic\derivative.cpp">
+      <Filter>_Source Files\audio\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="moosic\envelope-source.cpp">
+      <Filter>_Source Files\audio\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="moosic\flame-source.cpp">
+      <Filter>_Source Files\audio\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="moosic\frame.cpp">
+      <Filter>_Source Files\audio\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="moosic\nose-gate.cpp">
+      <Filter>_Source Files\audio\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="moosic\oscillator.cpp">
+      <Filter>_Source Files\audio\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="moosic\oscillator-base.cpp">
+      <Filter>_Source Files\audio\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="moosic\pipe.cpp">
+      <Filter>_Source Files\audio\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="moosic\rampen-sau.cpp">
+      <Filter>_Source Files\audio\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="moosic\random-noise.cpp">
+      <Filter>_Source Files\audio\synth</Filter>
+    </ClCompile>
+    <ClCompile Include="moosic\string-shaper.cpp">
+      <Filter>_Source Files\audio\synth</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

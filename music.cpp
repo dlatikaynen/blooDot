@@ -11,15 +11,15 @@ namespace blooDot::Music
 	AudioFrame currentFrame;
 	std::random_device seed;
 	std::mt19937 gen{ seed() };
-	std::uniform_int_distribution<> dist{ INT32_MIN, INT32_MAX };
+	std::uniform_int_distribution<> dist{ 40, 88 };
 
 	bool StartMusic()
 	{
 		SDL_AudioSpec desiro;
 		SDL_zero(desiro);
-		desiro.freq = 44100;
-		desiro.channels = 2;
-		desiro.samples = 4096;
+		desiro.freq = Frequency;
+		desiro.channels = SampleChannels;
+		desiro.samples = FrameSize / desiro.channels;
 		desiro.format = AUDIO_S32;
 		speaker = SDL_OpenAudioDevice(nullptr, 0, &desiro, &spec, 0);
 		if (speaker == 0)
@@ -40,18 +40,34 @@ namespace blooDot::Music
 
 	void _generator()
 	{
+		Oscillator::Oscillator oscillator;
+		Oscillator::StringShape instrument;
+		oscillator.AddSynthesizer(&instrument);
+
 		while (isProcessing)
 		{
+			const auto note = static_cast<double>(dist(gen));
+			oscillator.Start(note, 100.0);
 			for (size_t i = 0; i < currentFrame.size(); ++i)
 			{
-				currentFrame[i] = dist(gen);
+				const auto frame = oscillator.Render();
+
+				//std::cout << frame;
+				
+				currentFrame[i] = static_cast<int>(frame * INT_MAX); //dist(gen);
 			}
+
+			instrument.Clear();
+			oscillator.CutOut();
 
 			constexpr size_t twiceBuf = currentFrame.size() * sizeof(int) * 2;
 			constexpr auto frameSize = static_cast<Uint32>(currentFrame.size() * sizeof(int));
 
 			while (SDL_GetQueuedAudioSize(speaker) >= twiceBuf)
 			{
+				/* we enqueue no more than two buffers full of data,
+				 * so the reaction time for abrupt controlled music
+				 * change stays conveniently small */
 				SDL_Delay(10);
 			}
 
