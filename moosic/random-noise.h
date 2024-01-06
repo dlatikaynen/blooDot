@@ -7,9 +7,7 @@ namespace blooDot::Oscillator
 	class RandomSource : public FlameSource
 	{
 	public:
-		RandomSource(unsigned int randomizerSeed = 0);
-
-		void InitializeRandomizer(unsigned int randomSeed = 0);
+		RandomSource() {}
 
 		double Render(void);
 		AudioFrame& Render(AudioFrame& frames, unsigned int channel = 0);

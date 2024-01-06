@@ -12,6 +12,7 @@ namespace blooDot::Music
 	std::random_device seed;
 	std::mt19937 gen{ seed() };
 	std::uniform_int_distribution<> dist{ 40, 88 };
+	std::uniform_real_distribution<> noise{ -1., 1. };
 
 	bool StartMusic()
 	{
@@ -51,8 +52,6 @@ namespace blooDot::Music
 			for (size_t i = 0; i < currentFrame.size(); ++i)
 			{
 				const auto frame = oscillator.Render();
-
-				//std::cout << frame;
 				
 				currentFrame[i] = static_cast<int>(frame * INT_MAX); //dist(gen);
 			}

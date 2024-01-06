@@ -1,29 +1,21 @@
 #include "pch.h"
 #include "random-noise.h"
 #include <time.h>
+#include <random>
+
+namespace blooDot::Music 
+{
+	extern std::mt19937 gen;
+	extern std::uniform_real_distribution<> noise;
+}
 
 namespace blooDot::Oscillator
 {
-	RandomSource::RandomSource(unsigned int randomizerSeed)
-	{
-		this->InitializeRandomizer(randomizerSeed);
-	}
-
-	void RandomSource::InitializeRandomizer(unsigned int randomSeed)
-	{
-		if (randomSeed == 0)
-		{
-			::srand(static_cast<unsigned int>(::time(NULL)));
-		}
-		else
-		{
-			::srand(randomSeed);
-		}
-	}
+	using namespace blooDot::Music;
 
 	double RandomSource::Render(void)
 	{
-		return this->m_lastFrame[0] = static_cast<double>(2. * ::rand() / (RAND_MAX + 1.) - 1.);
+		return this->m_lastFrame[0] = noise(gen);
 	}
 
 	AudioFrame& RandomSource::Render(AudioFrame& frames, unsigned int channel)

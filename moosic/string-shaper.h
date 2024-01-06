@@ -30,18 +30,18 @@ namespace blooDot::Oscillator
 		AudioFrame& Render(AudioFrame& frames, unsigned int channel = 0);
 
 	private:
-		double				m_baseGain;
-		double				m_loopGain;
-		double				m_mrLen;
-		double				m_mrTension;
-		double				m_pickPosition;
-		double				m_pickExcitation;
-		double				m_mrFreq;
+		double			m_baseGain;
+		double			m_loopGain;
+		double			m_mrLen;
+		double			m_mrTension;
+		double			m_pickPosition;
+		double			m_pickExcitation;
+		double			m_mrFreq;
 
-		RandomSource		m_noiseSource;
-		NoseGate			m_noiseGate;
-		DelayLineFilter		m_delayLineFilter;
+		RandomSource	m_noiseSource;
+		NoseGate		m_noiseGate;
+		DelayLineFilter	m_delayLineFilter;
 		DelayLine		m_delayLineLinear;
-		Derivative			m_secondOrder[4];
+		Derivative		m_secondOrder[4];
 	};
 }

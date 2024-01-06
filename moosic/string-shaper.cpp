@@ -155,6 +155,7 @@ namespace blooDot::Oscillator
 		preProcessed = this->m_secondOrder[3].Render(preProcessed);
 		preProcessed = this->m_noiseGate.Render(preProcessed);
 		preProcessed = this->m_delayLineFilter.Render(preProcessed);
+		
 		return this->m_lastFrame[0] = preProcessed - this->m_delayLineLinear.Render(preProcessed);
 	}
 
