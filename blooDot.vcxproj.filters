@@ -448,7 +448,7 @@
     <ClCompile Include="region-banner.cpp">
       <Filter>_Source Files\ui</Filter>
     </ClCompile>
-    <ClCompile Include="ding.cpp">
+    <ClCompile Include="ding.hc">
       <Filter>_Source Files\game</Filter>
     </ClCompile>
     <ClCompile Include="dingsheet.cpp">

@@ -9,7 +9,7 @@
 void PhysicsDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
 	std::vector<SDL_FPoint> points;
-	points.reserve(vertexCount + 1);
+	points.reserve(static_cast<std::vector<SDL_FPoint, std::allocator<SDL_FPoint>>::size_type>(vertexCount) + 1);
 	for (int32 i = 0; i < vertexCount; ++i)
 	{
 		SDL_FPoint point
@@ -40,7 +40,7 @@ void PhysicsDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, co
 void PhysicsDebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
 	std::vector<SDL_FPoint> points;
-	points.reserve(vertexCount + 1);
+	points.reserve(static_cast<std::vector<SDL_FPoint, std::allocator<SDL_FPoint>>::size_type>(vertexCount) + 1);
 	for (int32 i = 0; i < vertexCount; ++i)
 	{
 		SDL_FPoint point
@@ -75,7 +75,7 @@ void PhysicsDebugDraw::DrawCircle(const b2Vec2& center, float radius, const b2Co
 	const int radiusR = static_cast<int>(radius * static_cast<float>(GRIDUNIT));
 	const int r2 = radiusR * 2;
 
-	SDL_Point octants[8];
+	SDL_Point octants[8]{};
 	int x = radiusR - 1;
 	int dX = 1;
 	int dev = (dX - r2);
@@ -133,7 +133,7 @@ void PhysicsDebugDraw::DrawSolidCircle(const b2Vec2& center, float radius, const
 	const int radiusR = static_cast<int>(radius * static_cast<float>(GRIDUNIT));
 	const int r2 = radiusR * 2;
 	
-	SDL_Point octants[8];
+	SDL_Point octants[8]{};
 	int x = radiusR - 1;
 	int dX = 1;
 	int dev = (dX - r2);

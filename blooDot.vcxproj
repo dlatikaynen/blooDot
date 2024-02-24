@@ -382,7 +382,7 @@
     <ClCompile Include="boydsa.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="dialogcontrols.cpp" />
-    <ClCompile Include="ding.cpp" />
+    <ClCompile Include="ding.hc" />
     <ClCompile Include="dingsheet.cpp" />
     <ClCompile Include="drawing.cpp" />
     <ClCompile Include="enxassy.cpp" />
