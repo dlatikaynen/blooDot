@@ -200,7 +200,8 @@ int Cook(XassyCookInfo *cookStats)
 		/* write the chunk constants header */
 		std::stringstream chunkConstantsPath;
 		chunkConstantsPath << basePath << "..\\..\\" << "chunk-constants.h";
-		auto const&& chunkConstantsFile = SDL_RWFromFile(chunkConstantsPath.str().c_str(), "wt");
+		const auto& strChunkConstantsPath = chunkConstantsPath.str();
+		auto const&& chunkConstantsFile = SDL_RWFromFile(strChunkConstantsPath.c_str(), "wt");
 		auto const&& chunkConstantsStr = chunkConstants.str();
 		auto const&& chunkConstantsCStr = chunkConstantsStr.c_str();
 		auto const&& chunkConstantsBlocksWritten = chunkConstantsFile->write(chunkConstantsFile, chunkConstantsCStr, chunkConstantsStr.length(), 1);
@@ -215,7 +216,8 @@ int Cook(XassyCookInfo *cookStats)
 		chunkSizes << "};\n";
 		std::stringstream chunkSizesPath;
 		chunkSizesPath << basePath << "..\\..\\" << "chunk-sizes.h";
-		auto const&& chunkSizesFile = SDL_RWFromFile(chunkSizesPath.str().c_str(), "wt");
+		const auto& strChunkSizesPath = chunkSizesPath.str();
+		auto const&& chunkSizesFile = SDL_RWFromFile(strChunkSizesPath.c_str(), "wt");
 		auto const&& chunkSizesStr = chunkSizes.str();
 		auto const&& chunkSizesCStr = chunkSizesStr.c_str();
 		auto const&& chunkSizesBlocksWritten = chunkSizesFile->write(chunkSizesFile, chunkSizesCStr, chunkSizesStr.length(), 1);

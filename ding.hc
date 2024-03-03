@@ -282,7 +282,9 @@ namespace blooDot::Dings
 				<< chunkKey
 				<< ", allocation failed\n";
 
-			ReportError(allocationMsg.str().c_str(), mallocError);
+			const auto& strAllocationMsg = allocationMsg.str();
+
+			ReportError(strAllocationMsg.c_str(), mallocError);
 
 			return false;
 		}
@@ -298,7 +300,8 @@ namespace blooDot::Dings
 				<< chunkKey
 				<< ", read failed\n";
 
-			ReportError(readMsg.str().c_str(), readError);
+			const auto& strReadError = readMsg.str();
+			ReportError(strReadError.c_str(), readError);
 
 			return false;
 		}

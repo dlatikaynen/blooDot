@@ -91,7 +91,8 @@ void PopulateFlap(int flapIndex, int flapInWorldX, int flapInWorldY)
 						cairo_set_font_size(drawingSink, 16);
 						std::stringstream flapInWorldLabel;
 						flapInWorldLabel << "[" << myAwareness->myGridLeftX << "," << myAwareness->myGridToopY << "]";
-						cairo_text_path(drawingSink, flapInWorldLabel.str().c_str());
+						const auto& strFlapInWorldLabel = flapInWorldLabel.str();
+						cairo_text_path(drawingSink, strFlapInWorldLabel.c_str());
 						cairo_fill(drawingSink);
 						cairo_set_source_rgb(drawingSink, 0, 1, 1);
 						isFirstCell = false;

@@ -86,7 +86,9 @@ namespace blooDot::Sfx
 			const auto loadError = SDL_GetError();
 			std::stringstream loadMessage;
 			loadMessage << "Failed to load the " << effect << " sound effect";
-			ReportError(loadMessage.str().c_str(), loadError);
+			const auto& strLoadMessage = loadMessage.str();
+
+			ReportError(strLoadMessage.c_str(), loadError);
 		}
 
 		//soundFile->close(soundFile);

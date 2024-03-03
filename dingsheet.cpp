@@ -205,7 +205,10 @@ bool _FindRoomOnDingSheet(SDL_Texture* sheet, SDL_Rect* frame, Ding dingInfo)
 		/* does not fit height-wise */
 		std::stringstream howBigIsTooBig;
 		howBigIsTooBig << "Been asked to allocate " << frame->h << " high for " << dingInfo << ", but the current line is " << curLine.h << " and maxes out at " << DING_SHEET_SIDE_LENGTH - curLine.y << " right now";
-		ReportError("Ding too high for sheet", howBigIsTooBig.str().c_str());
+		const auto& strHowBigIsTooBig = howBigIsTooBig.str();
+
+		ReportError("Ding too high for sheet", strHowBigIsTooBig.c_str());
+		
 		return false;
 	}
 
@@ -214,7 +217,9 @@ bool _FindRoomOnDingSheet(SDL_Texture* sheet, SDL_Rect* frame, Ding dingInfo)
 		/* does not fit at all, not even on a new line */
 		std::stringstream howBigIsTooBig;
 		howBigIsTooBig << "Been asked to allocate " << frame->w << " wide for " << dingInfo << ", but am only " << DING_SHEET_SIDE_LENGTH << " wide altogether";
-		ReportError("Ding too big for sheet", howBigIsTooBig.str().c_str());
+		const auto& strHowBigIsTooBig = howBigIsTooBig.str();
+		
+		ReportError("Ding too big for sheet", strHowBigIsTooBig.c_str());
 		return false;
 	}
 
@@ -226,7 +231,10 @@ bool _FindRoomOnDingSheet(SDL_Texture* sheet, SDL_Rect* frame, Ding dingInfo)
 		{
 			std::stringstream howBigIsTooBig;
 			howBigIsTooBig << "Been asked to allocate " << frame->h << " high for " << dingInfo << ", but the highest possible line at " << (newLine.y + newLine.h) << " would exceed the available " << DING_SHEET_SIDE_LENGTH << " of sheet height";
-			ReportError("Ding too high for remaining sheet", howBigIsTooBig.str().c_str());
+			const auto& strHowBigIsTooBig = howBigIsTooBig.str();
+			
+			ReportError("Ding too high for remaining sheet", strHowBigIsTooBig.c_str());
+			
 			return false;
 		}
 		

@@ -29,7 +29,8 @@ bool OpenCooked()
 	const auto basePath = SDL_GetBasePath();
 	std::stringstream sourcePath;
 	sourcePath << basePath << "\\" << XassyFile;
-	cooked = SDL_RWFromFile(sourcePath.str().c_str(), "rb");
+	const auto& strSourcePath = sourcePath.str();
+	cooked = SDL_RWFromFile(strSourcePath.c_str(), "rb");
 	if (!cooked)
 	{
 		const auto openError = SDL_GetError();
@@ -75,7 +76,10 @@ void* Retrieve(int chunkKey, __out SDL_RWops** const stream)
 		std::stringstream prepError;
 		const auto allocError = SDL_GetError();
 		prepError << "Chunk #" << chunkKey << " asks for " << compressedSize << " bytes, " << allocError;
-		ReportError("Failed to allocate memory for a chunk", prepError.str().c_str());
+		const auto& strPrepError = prepError.str();
+		
+		ReportError("Failed to allocate memory for a chunk", strPrepError.c_str());
+		
 		return NULL;
 	}
 
@@ -89,7 +93,10 @@ void* Retrieve(int chunkKey, __out SDL_RWops** const stream)
 	{
 		std::stringstream readError;
 		readError << originalSize << " bytes expected, " << actuallyExtracted << " bytes actually extracted";
-		ReportError("Principal wad chunk corrupted", readError.str().c_str());
+		const auto& strReadError = readError.str();
+		
+		ReportError("Principal wad chunk corrupted", strReadError.c_str());
+		
 		return NULL;
 	}
 
@@ -110,7 +117,10 @@ void* Retrieve(int chunkKey, __out SDL_RWops** const stream)
 		const auto streamError = SDL_GetError();
 		std::stringstream extractError;
 		extractError << "Chunk #" << chunkKey << ", " << streamError;
-		ReportError("Failed to extract from principal wad", extractError.str().c_str());
+		const auto& strExtractError = extractError.str();
+
+		ReportError("Failed to extract from principal wad", strExtractError.c_str());
+		
 		return NULL;
 	}
 

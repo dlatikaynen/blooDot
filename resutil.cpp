@@ -109,7 +109,9 @@ namespace blooDot::Res
 				<< chunkKey
 				<< ", allocation failed\n";
 
-			ReportError(allocationMsg.str().c_str(), mallocError);
+			const auto& strAllocationMsg = allocationMsg.str();
+
+			ReportError(strAllocationMsg.c_str(), mallocError);
 
 			return false;
 		}
@@ -125,7 +127,9 @@ namespace blooDot::Res
 				<< chunkKey
 				<< ", read failed\n";
 
-			ReportError(readMsg.str().c_str(), readError);
+			const auto& strReadMsg = readMsg.str();
+
+			ReportError(strReadMsg.c_str(), readError);
 
 			return false;
 		}
