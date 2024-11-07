@@ -1,12 +1,13 @@
 {
-    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
-    "dependencies": [
-        "cppwinrt",
-        "sdl2",
-        "sdl2-mixer",
-        "sdl2-ttf",
-        "sdl2-image",
-        "cairo",
-        "box2d"
-    ]
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "dependencies": [
+    "cppwinrt",
+    "sdl2",
+    "sdl2-mixer",
+    "sdl2-ttf",
+    "sdl2-image",
+    "cairo",
+    "box2d"
+  ],
+  "builtin-baseline": "146dc5495a2e0add6d3cd34cb0b53277a8e5144c"
 }

@@ -18,39 +18,42 @@ int HuffCompress(std::ifstream& inFile, long long const uncompressedSize, std::o
 
     inFile.clear();
     inFile.seekg(0);
-    auto tree = _HuffCompressEntry();
+    const auto& tree = new std::vector<std::shared_ptr<HuffDictionaryEntry>>();
+    auto root = _HuffCompressEntry(tree);
 
     char bufferRootFreq[sizeof(long long)] = {};
     char bufferUncompressed[sizeof(long long)] = {};
 
-    *(long long*)bufferRootFreq = tree->frequency;
+    *(long long*)bufferRootFreq = root->frequency;
     outFile.write(bufferRootFreq, sizeof(long long));
     *(long long*)bufferUncompressed = uncompressedSize;
     outFile.write(bufferUncompressed, sizeof(long long));
     
-    _HuffAddTree(outFile, tree);
+    _HuffAddTree(outFile, root);
     char codeStack[CodeStackSize];
-    _HuffAddCode(tree, codeStack, 0, codeDict);
+    _HuffAddCode(root, codeStack, 0, codeDict);
     _HuffCompressInternal(inFile, outFile, codeDict);
+    
+    delete tree;
 
     return 0;
 }
 
-void _HuffTreeFill(std::vector<HuffDictionaryEntry*>& entry, const signed long long i, const signed long long length)
+void _HuffTreeFill(std::vector<std::shared_ptr<HuffDictionaryEntry>>* entry, const signed long long i, const signed long long length)
 {
     auto minimum = i;
     const auto ix2p1 = i * 2 + 1;
     const auto ix2p2 = ix2p1 + 1;
 
-    if (ix2p1 <= length && entry[ix2p1]->frequency < entry[i]->frequency)
+    if (ix2p1 <= length && entry->at(ix2p1)->frequency < entry->at(i)->frequency)
     {
         minimum = ix2p1;
-        if (ix2p2 <= length && entry[ix2p2]->frequency < entry[ix2p1]->frequency)
+        if (ix2p2 <= length && entry->at(ix2p2)->frequency < entry->at(ix2p1)->frequency)
         {
             minimum = ix2p2;
         }
     }
-    else if (ix2p2 <= length && entry[ix2p2]->frequency < entry[i]->frequency)
+    else if (ix2p2 <= length && entry->at(ix2p2)->frequency < entry->at(i)->frequency)
     {
         minimum = ix2p2;
     }
@@ -62,33 +65,33 @@ void _HuffTreeFill(std::vector<HuffDictionaryEntry*>& entry, const signed long l
     }
 }
 
-HuffDictionaryEntry* _HuffDictionaryBuild(std::vector<HuffDictionaryEntry*>& entries)
+std::shared_ptr<HuffDictionaryEntry> _HuffDictionaryBuild(std::vector<std::shared_ptr<HuffDictionaryEntry>>* entries)
 {
-    if (entries.empty())
+    if (entries->empty())
     {
-        return NULL;
+        return nullptr;
     }
 
-    auto minimum = entries[0];
-    entries[0] = entries.back();
-    entries.pop_back();
-    _HuffTreeFill(entries, 0, entries.size() - 1);
+    auto minimum = entries->at(0);
+    entries->at(0) = entries->back();
+    entries->pop_back();
+    _HuffTreeFill(entries, 0, entries->size() - 1);
 
     return minimum;
 }
 
-void _HuffTreeInsert(std::vector<HuffDictionaryEntry*>& entries, HuffDictionaryEntry* entry)
+void _HuffTreeInsert(std::vector<std::shared_ptr<HuffDictionaryEntry>>* entries, std::shared_ptr<HuffDictionaryEntry>& entry)
 {
-    entries.push_back(entry);
-    auto i = entries.size() - 1;
-    while (i > 0 && entries[(i - 1) / 2]->frequency > entries[i]->frequency)
+    entries->push_back(entry);
+    auto i = entries->size() - 1;
+    while (i > 0 && entries->at((i - 1) / 2)->frequency > entries->at(i)->frequency)
     {
-        std::swap(entries[i], entries[(i - 1) / 2]);
+        std::swap(entries->at(i), entries->at((i - 1) / 2));
         i = (i - 1) / 2;
     }
 }
 
-void _HuffTreeBuild(std::vector<HuffDictionaryEntry*>& entries, signed long long length)
+void _HuffTreeBuild(std::vector<std::shared_ptr<HuffDictionaryEntry>>* entries, signed long long length)
 {
     for (auto i = (length - 1) / 2; i >= 0; i--)
     {
@@ -96,7 +99,7 @@ void _HuffTreeBuild(std::vector<HuffDictionaryEntry*>& entries, signed long long
     }
 }
 
-void _HuffAddCode(HuffDictionaryEntry* node, char codeStack[], int index, std::vector<long long int>& codeDict)
+void _HuffAddCode(std::shared_ptr<HuffDictionaryEntry>& node, char codeStack[], int index, std::vector<long long int>& codeDict)
 {
     if (node->left)
     {
@@ -121,7 +124,7 @@ void _HuffAddCode(HuffDictionaryEntry* node, char codeStack[], int index, std::v
     }
 }
 
-void _HuffAddTree(std::ofstream& output, HuffDictionaryEntry* node)
+void _HuffAddTree(std::ofstream& output, std::shared_ptr<HuffDictionaryEntry>& node)
 {
     if (!node->left && !node->right)
     {
@@ -137,24 +140,26 @@ void _HuffAddTree(std::ofstream& output, HuffDictionaryEntry* node)
     _HuffAddTree(output, node->right);
 }
 
-HuffDictionaryEntry* _HuffCompressEntry()
+std::shared_ptr<HuffDictionaryEntry>& _HuffCompressEntry(std::vector<std::shared_ptr<HuffDictionaryEntry>>* dictionary)
 {
-    std::vector<HuffDictionaryEntry*> dictionary;
+    dictionary->reserve(CharactersInByte);
     for (auto i = 0; i < CharactersInByte; i++)
     {
-        const auto index = static_cast<unsigned char>(i);
-        if (_histogram[index] != 0)
+        const auto& index = static_cast<unsigned char>(i);
+        const auto& freq = _histogram[index];
+        if (freq != 0)
         {
-            dictionary.push_back(new HuffDictionaryEntry(index, _histogram[index]));
+            const auto& entry = std::make_shared<HuffDictionaryEntry>(index, freq);
+            dictionary->push_back(entry);
         }
     }
 
-    _HuffTreeBuild(dictionary, dictionary.size() - 1);
-    while (dictionary.size() != 1)
+    _HuffTreeBuild(dictionary, dictionary->size() - 1);
+    while (dictionary->size() != 1)
     {
-        auto newEntry = new HuffDictionaryEntry(
-            0xff,
-            0,
+        auto newEntry = std::make_shared<HuffDictionaryEntry>(
+            (unsigned char)0xff,
+            (long long int)0,
             _HuffDictionaryBuild(dictionary),
             _HuffDictionaryBuild(dictionary)
         );
@@ -163,7 +168,7 @@ HuffDictionaryEntry* _HuffCompressEntry()
         _HuffTreeInsert(dictionary, newEntry);
     }
 
-    return(dictionary[0]);
+    return dictionary->at(0);
 }
 
 void _HuffCompressInternal(std::ifstream& input, std::ofstream& output, std::vector<long long int>& codeMap)

@@ -21,7 +21,8 @@ int Cook(XassyCookInfo *cookStats)
 	cookStats->numBytesBefore = 0;
 	cookStats->numBytesAfter = 0;
 
-	auto const&& basePath = SDL_GetBasePath();
+	//SDL_Init(0);
+	auto const& basePath = "C:\\lc\\blooDot\\x64\\Xassy\\"; // SDL_GetBasePath();
 	std::stringstream recipePath;
 	recipePath << basePath << "..\\..\\" << "gameres.xassy.recipe";
 	std::ifstream recipeFile(recipePath.str());

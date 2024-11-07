@@ -14,7 +14,8 @@ int Xlate(XassyXlatInfo* xlatInfo)
 	std::stringstream recipePath;
 	recipePath << basePath << "..\\..\\" << "gameres.xlation.recipe";
 	std::ifstream recipeFile;
-	recipeFile.imbue(std::locale("en_US.UTF8"));
+	auto const&& locale = std::locale("en_US.UTF8");
+	recipeFile.imbue(locale);
 	recipeFile.open(recipePath.str());
 	pathHeader << basePath << "..\\..\\xlations.h";
 	pathSource << basePath << "..\\..\\xlations.cpp";
