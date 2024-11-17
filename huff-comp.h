@@ -31,7 +31,7 @@ void _HuffTreeFill(std::vector<std::shared_ptr<HuffDictionaryEntry>>*, const sig
 std::shared_ptr<HuffDictionaryEntry> _HuffDictionaryBuild(std::vector<std::shared_ptr<HuffDictionaryEntry>>&);
 void _HuffTreeInsert(std::vector<std::shared_ptr<HuffDictionaryEntry>>&, HuffDictionaryEntry*);
 void _HuffTreeBuild(std::vector<std::shared_ptr<HuffDictionaryEntry>>*, signed long long);
-void _HuffAddCode(std::shared_ptr<HuffDictionaryEntry>&, char[], int, std::vector<long long int>&);
+void _HuffAddCode(std::shared_ptr<HuffDictionaryEntry>&, std::vector<char>*, int, std::vector<long long int>*);
 void _HuffAddTree(std::ofstream&, std::shared_ptr<HuffDictionaryEntry>&);
 std::shared_ptr<HuffDictionaryEntry>& _HuffCompressEntry(std::vector<std::shared_ptr<HuffDictionaryEntry>>* dictionary);
-void _HuffCompressInternal(std::ifstream&, std::ofstream&, std::vector<long long int>&);
+void _HuffCompressInternal(std::ifstream&, std::ofstream&, std::vector<long long int>*);
