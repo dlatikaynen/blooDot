@@ -1,0 +1,952 @@
+LCID
+	[am]	am
+	[de]	de
+	[fi]	fi
+	[ua]	ua
+
+LanguageName
+	[am]	American
+	[de]	Deutsch
+	[fi]	Suomi
+	[ua]	українська
+
+LanguageNameAmerican
+	[am]	American
+	[de]	German
+	[fi]	Finnish
+	[ua]	Ukrainian
+
+All
+	[am]	all
+	[de]	Alle
+	[fi]	Kaikki
+	[ua]	всі
+
+AlienMainMenuLabel
+	[**]	mEnmenV
+
+AlienLoadMenuLabel
+	[**]	lOd
+
+AlienMakerMenuLabel
+	[**]	Godmod
+
+AlienSettingsMenuLabel
+	[**]	SetiNz
+
+AlienAboutMenuLabel
+	[**]	Ebaut
+
+AlienHelpMenuLabel
+	[**]	Help
+
+AlienScreenSettingsMenuLabel
+	[**]	ScrinSaiz
+
+AlienMultiMonitorMenuLabel
+	[**]	MaltiDisplej
+
+AlienInGameMenuLabel
+	[**]	Gejm
+
+AlienLangSettingsMenuLabel
+	[**]	lenguij
+
+AlienCtrlSettingsMenuLabel
+	[**]	kontrol
+
+AlienContinueEmptyLabel
+	[**]	Empti
+
+Manufacturer
+	[**]	Copyright zOzz FlaminginSarjakuvatOj
+
+MenuContinue
+	[am]	Continue
+	[de]	Fortsetzen
+	[fi]	Jatkaa
+	[ua]	Продовжити
+
+MenuLoad
+	[am]	Load
+	[de]	Laden
+	[fi]	Lataa
+	[ua]	Завантажити
+
+MenuSingle
+	[am]	Single player
+	[de]	Einzelspieler
+	[ua]	Одиночний режим
+
+MenuLocalMulti
+	[am]	Local multiplayer
+	[de]	Lokal Mehrspieler
+	[ua]	Лок. мультиплеер
+
+MenuMaker
+	[am]	Creator mode
+	[de]	Schöpfermodus
+
+MenuSettings
+	[am]	Settings
+	[de]	Einstellungen
+	[fi]	Asetukset
+	[ua]	Налаштування
+
+MenuSave
+	[am]	Save
+	[de]	Speichern
+	[fi]	Tallenna
+	[ua]	Зберегти
+
+MenuExit
+	[am]	Exit
+	[de]	Beenden
+	[fi]	Poistu
+	[ua]	Вийти
+
+MenuBack
+	[am]	Back
+	[de]	Zurück
+	[fi]	Takaisin
+	[ua]	Назад
+
+MenuDismiss
+	[am]	Dismiss
+	[de]	Weiter
+	[fi]	Sivuutta
+	[ua]	Залишся
+
+MenuCancel
+	[am]	Cancel
+	[de]	Abbrechen
+	[fi]	Peruutta
+	[ua]	Скасувати
+
+MenuOk
+	[am]	Ok
+	[de]	Ok
+	[fi]	Joo
+	[ua]	OK
+
+MenuSkip
+	[am]	Skip
+	[de]	Überspringen
+	[fi]	Ohita
+	[ua]	Пропустити
+
+MenuLeave
+	[am]	Leave
+	[de]	Verlassen
+	[fi]	Jättää
+	[ua]	Залишати
+
+MenuControls
+	[am]	Controls
+	[de]	Steuerung
+	[fi]	Ohjaus
+	[ua]	Kерування
+
+ControlsNeverConnected
+	[am]	No controllers connected, or so it seems. How did you even get here, by keyboard?
+	[de]	Keine Controller verbunden, so wie es aussieht. Wie bist du überhaupt hier reingekommen? Mit der Tastatur?
+
+ControlsKeyboard
+	[am]	Keyboard key keying
+	[de]	Tastaturtastenbelegung
+	[fi]	Näppäimistön näppäinten näppäily
+	[ua]	Клавіш клавіатури
+
+ControlsController
+	[am]	Controller control, controls
+	[de]	Controllersteuerung, Steuerelemente
+
+MenuKnowledgebase
+	[am]	Knowledgebase
+	[de]	Enzyklopädie
+	[fi]	Tietopohja
+	[ua]	база знань
+
+MenuMap
+	[am]	Map
+	[fi]	Kartta
+	[de]	Karte
+	[ua]	Карта
+
+MenuInventory
+	[am]	Hammerspace
+	[fi]	Inventaario
+	[de]	Inventar
+	[ua]	Iнвентар
+
+MakerMenuInitial
+	[am]	Origin
+	[de]	Ursprung
+
+MakerMenuLast
+	[am]	Last location
+	[de]	Letzter Standort
+
+MakerMenuTeleport
+	[am]	Quantum move
+	[de]	Quantensprung
+
+DesignLayerFloorLabel
+	[am]	floor
+	[de]	Boden
+	[fi]	pohja
+	[ua]	днооо
+
+DesignLayerWallsLabel
+	[am]	walls
+	[de]	Wände
+	[fi]	seinä
+	[ua]	стіни
+
+DesignLayerRooofLabel
+	[am]	rooof
+	[de]	Daach
+	[fi]	katto
+	[ua]	стеля
+
+DesignGridlockLabel
+	[am]	gridlock
+	[de]	gesperrt
+
+DesignCoalesceLabel
+	[am]	packed
+	[de]	gepackt
+
+SettingsMenuScreensize
+	[am]	Screen size
+	[de]	Grafikmodus
+	[fi]	Grafiikkatila
+	[ua]	режим відео
+
+SettingsMenuLanguage
+	[am]	Language
+	[de]	Sprache
+	[fi]	Kieli
+	[ua]	Мова
+
+SettingsMenuHelp
+	[am]	Help
+	[de]	Hilfe
+	[fi]	Apua
+	[ua]	Допомога
+
+SettingsMenuAbout
+	[de]	Über...
+	[am]	About...
+	[fi]	Tietoja...
+	[ua]	Про...
+
+SettingsMenuScreensizeHint
+	[am]	This setting will only affect the game window.\r\nSetting does not apply to the launcher.
+	[de]	Diese Einstellung wirkt nur auf das Spielfeld.\r\nDas Startfenster ändert sich nicht.
+
+ContinueEmptyHint
+	[am]	This timeline has nothing to continue from.\r\nYou may want to start a new game first.
+	[de]	In dieser Zeitlinie ist nichts fortzusetzen.\r\nErst muss ein neues Spiel gestartet werden.
+
+LoadEmptyHint
+	[am]	This timeline contains no savegames to load.\r\nYou may want to start a new game first.
+	[de]	In dieser Zeitlinie gibt es keine Spielstände.\r\nErst muss ein neues Spiel gestartet werden.
+
+SettingsScreenTemple
+	[**]	VGA
+
+SettingsScreenTempleResolution
+	[**]	640 x 480
+
+SettingsScreenTempleDetails
+	[am]	A resolution that\npleases the Lord
+	[de]	Eine gottgefällige\nBildschirmauflösung
+
+SettingsScreenHercules
+	[**]	Hercules
+
+SettingsScreenHerculesResolution
+	[**]	720 x 348
+
+SettingsScreenHerculesDetails
+	[am]	Awesome amber\nabomination
+	[de]	Toller gelber\nAugenschaden
+
+SettingsScreenModeX
+	[**]	mode X
+
+SettingsScreenModeXResolution
+	[**]	320 x 240
+
+SettingsScreenModexDetails
+	[am]	Doomed pixelated\nretro goodness
+	[de]	Pixelig und\naltmodisch
+
+SettingsScreenSVGA
+	[**]	SVGA
+
+SettingsScreenSVGAResolution
+	[**]	800 x 600
+
+SettingsScreenSVGADetails
+	[am]	Reasonably recent\nrectangular ratio
+	[de]	Halbwegs moderne\nrechteckige Größe
+
+SettingsScreenNotebook
+	[**]	HD
+
+SettingsScreenNotebookResolution
+	[**]	1280 x 768
+
+SettingsScreenNotebookDetails
+	[am]	Seven twenty\npee
+	[de]	sieben zwanzig pe
+
+SettingsScreenSquare
+	[am]	Square
+	[de]	Praktisch
+
+SettingsScreenSquareResolution
+	[**]	$h x $h
+
+SettingsScreenSquareDetails
+	[am]	Fullscreen\nbut square
+	[de]	Vollbild\naber quadratisch
+
+SettingsScreenFull
+	[am]	Full
+	[de]	Voll
+
+SettingsScreenFullResolution
+	[**]	$w x $h
+
+SettingsScreenFullDetails
+	[am]	I paid for the whole screen,\nI'mma use the whole screen
+	[de]	Ich zahle den ganzen Schirm,\nich nütze den ganzen Schirm
+
+MultiMonitorMenuDisplayLabel
+	[am]	Display # $n
+	[de]	Bildschirm $n
+	[fi]	Näyttö #$n
+	[ua]	Екран № $n
+
+MessageInsufficientScreenSize
+	[am]	You cannot play the game using this video mode, because\nthe resolution is not supported on the current display.
+
+MessageMakerNoTeleportTargets
+	[am]	You cannot teleport to anywhere else on the map, because\nyou did not previously place a snail shell anywhere.
+	[de]	Man kann sich nicht auf die Map teleportieren,\nohne zuvor ein Schneckenhaus platziert zu haben.
+
+SettingsLanguageEN
+	[am]	[am]
+
+SettingsLanguageENDetails
+	[am]	American
+
+SettingsLanguageENName
+	[am]	American
+	[de]	Amerikanisch
+
+SettingsLanguageFI
+	[am]	[fi]
+
+SettingsLanguageFIDetails
+	[am]	Suomen kieli
+
+SettingsLanguageFIName
+	[am]	Finnish
+	[de]	Finnisch
+
+SettingsLanguageDE
+	[am]	[de]
+
+SettingsLanguageDEDetails
+	[am]	Deutsch
+
+SettingsLanguageDEName
+	[am]	German
+	[de]	Deutsch
+	[fi]	Saksa
+
+SettingsLanguageUA
+	[am]	[ua]
+
+SettingsLanguageUADetails
+	[**]	українська
+
+SettingsLanguageUAName
+	[am]	Ukrainian
+	[de]	Ukrainisch
+
+AboutClassificationProduction
+	[am]	Production
+	[de]	Produktion
+
+AboutClassificationProducer
+	[am]	Producer
+	[de]	Produzent
+
+AboutClassificationProducerJunior
+	[am]	Junior Producer
+	[de]	Junior Producer
+
+AboutClassificationSupervisor
+	[am]	Supervisor
+	[de]	Supervisor
+
+AboutClassificationDesign
+	[am]	Design
+	[de]	Design
+
+AboutClassificationDesignOriginal
+	[am]	Original Concept
+	[de]	Originalkonzept
+
+AboutClassificationDesignAdditionalMiniboss
+	[am]	Additional Minibosses
+	[de]	Zusätzliche Minibosse
+
+AboutClassificationDesignQuest
+	[am]	Quest Design
+	[de]	Quest Design
+
+AboutClassificationProgramming
+	[am]	Programming
+	[de]	Programmierung
+
+AboutClassificationProgrammingEngineering
+	[am]	Engineering
+	[de]	Entwicklung
+
+AboutClassificationProgrammingAdditional
+	[am]	Additional Coding
+	[de]	Zusätzliches Coding
+
+AboutClassificationProgrammingRendering
+	[am]	Rendering
+	[de]	Render
+
+AboutClassificationProgrammingPhysics
+	[am]	Physics
+	[de]	Physik
+
+AboutClassificationWriters
+	[am]	Writers
+	[de]	Skript
+
+AboutClassificationWritersStory
+	[am]	Story
+	[de]	Narrativ
+
+AboutClassificationWritersWorldbuilding
+	[am]	Worldbuilding
+	[de]	Worldbuilding
+
+AboutClassificationWritersDialogue
+	[am]	Dialogue
+	[de]	Dialog
+
+AboutClassificationArtGraphics
+	[am]	Art/Graphics
+	[de]	Kunst/Grafik
+
+AboutClassificationArtGraphicsCharacterDesign
+	[am]	Character Design
+	[de]	Character Design
+
+AboutClassificationArtGraphicsConceptArt
+	[am]	Concept Art
+	[de]	Concept Art
+
+AboutClassificationArtGraphicsIllustration
+	[am]	Illustration
+	[de]	Illustration
+
+AboutClassificationArtGraphicsStoryboard
+	[am]	Storyboard
+	[de]	Storyboard
+
+AboutClassificationArtGraphicsMenuHud
+	[am]	Menu/HUD
+	[de]	Dialogoberfläche
+
+AboutClassificationAudio
+	[am]	Audio
+	[de]	Ton
+
+AboutClassificationAudioComposer
+	[am]	Composer
+	[de]	Komponist
+
+AboutClassificationAudioSfx
+	[am]	Sound FX
+	[de]	Soundeffekte
+
+AboutClassificationQualityAssurance
+	[am]	Quality Assurance
+	[de]	Qualitätssicherung
+
+AboutClassificationQualityAssuranceTesters
+	[am]	Testers
+	[de]	Tester
+
+AboutClassificationQualityAssurancePlaytesting
+	[am]	Playtesting
+	[de]	Playtest
+
+AboutClassificationQualityAssuranceCompatibility
+	[am]	Compatibility
+	[de]	Kompatibilität
+
+AboutClassificationLocalization
+	[am]	Localization
+	[de]	Lokalisierung
+
+AboutClassificationLocalizationDe
+	[am]	German locale
+	[de]	Deutsche Fassung
+
+AboutClassificationLocalizationAm
+	[am]	American locale
+	[de]	Amerikanische Fassung
+
+AboutClassificationLocalizationFi
+	[am]	Finnish locale
+	[de]	Finnische Fassung
+
+AboutClassificationLocalizationUa
+	[am]	Ukrainian locale
+	[de]	Ukrainische Fassung
+
+AboutClassificationLocalizationSnailian
+	[am]	Snalian locale
+	[de]	Schnecklische Fassung
+
+AboutClassificationLocalizationTranslation
+	[am]	Translation
+	[de]	Übersetzung
+
+AboutClassificationCreativeServices
+	[am]	Creative Services
+	[de]	Kreatives
+
+AboutClassificationCreativeServicesCoverArt
+	[am]	Cover Art
+	[de]	Titelbild
+
+AboutClassificationThanks
+	[am]	Thanks
+	[de]	Dank
+
+AboutClassificationThanksDedicatedTo
+	[am]	Dedicated to
+	[de]	Gewidmet
+
+AboutClassificationThanksInMemoryOf
+	[am]	In Memory of
+	[de]	In Memoriam
+
+AboutClassificationThanksSpecial
+	[am]	Special Thanks
+	[de]	Besonderer Dank
+
+AboutClassificationOtherTech
+	[am]	Technologies
+	[de]	Technologien
+
+AboutClassificationOtherTechSDL
+	[am]	Engine
+	[de]	Engine
+
+AboutClassificationOtherTechSDLName
+	[am]	Simple DirectMedia Layer
+	[de]	Simple DirectMedia Layer
+
+AboutClassificationOtherTechSDLCopyr
+	[am]	(c) 1997-2022 Sam Lantinga
+	[de]	(c) 1997-2022 Sam Lantinga
+
+AboutClassificationOtherTechBox2D
+	[am]	Physics Engine
+	[de]	Physik-Engine
+
+AboutClassificationOtherTechBox2DName
+	[am]	Box2D, A 2D physics engine for games
+	[de]	Box2D, eine 2D Physik-Engine für Spiele
+
+AboutClassificationOtherTechBox2DCopyr
+	[am]	(c) 2019 Erin Catto
+	[de]	(c) 2019 Erin Catto
+
+AboutClassificationOtherTechClearSans
+	[am]	Dialog Font
+	[de]	Dialogschrift
+
+AboutClassificationOtherTechClearSansName
+	[am]	The Clear Sans font
+	[de]	Die Clear Sans Schrift
+
+AboutClassificationOtherTechClearSansCopyr
+	[am]	Intel
+	[de]	Intel
+
+AboutClassificationOtherTechFreckle
+	[am]	Fancy Font
+	[de]	Zierschrift
+
+AboutClassificationOtherTechFreckleName
+	[am]	Astigmatic, the Freckle Face font
+	[de]	Astigmatic, die Freckle Face Schrift
+
+AboutClassificationOtherTechFreckleCopyr
+	[am]	(c) 2012 Brian J. Bonislawsky
+	[de]	(c) 2012 Brian J. Bonislawsky
+
+AboutClassificationOtherTechYeseva
+	[am]	Title Font
+	[de]	Titelschrift
+
+AboutClassificationOtherTechYesevaName
+	[am]	The Yeseva font
+	[de]	DIe Yeseva Schrift
+
+AboutClassificationOtherTechYesevaCopyr
+	[am]	(c) 2011-2012 Jovanny Lemonad
+	[de]	(c) 2011-2012 Jovanny Lemonad
+
+AboutClassificationOtherTechShavian
+	[am]	Snailian Font
+	[de]	Schneckschnrift
+
+AboutClassificationOtherTechShavianName
+	[am]	The Shavian Gothic font
+	[de]	Die Shavian Gothic Schrift
+
+AboutClassificationOtherTechShavianCopyr
+	[am]	(c) 2003 Ethan Lamoreaux
+	[de]	(c) 2003 Ethan Lamoreaux
+
+AboutCreditsMentionDlatikay
+	[am]	Daniel "dlatikay" Latikaynen
+	[de]	Daniel "dlatikay" Latikaynen
+
+AboutCreditsMentionLlatikay
+	[am]	Lukas S. Latikaynen
+	[de]	Lukas S. Latikaynen
+
+AboutCreditsMentionJlatikay
+	[am]	Jonas M. Latikaynen
+	[de]	Jonas M. Latikaynen
+
+AboutCreditsMentionMlatikay
+	[am]	HCN Max I.
+	[de]	SKM Max I.
+
+AboutCreditsMentionNnebel
+	[am]	Nadine Nebel
+	[de]	Nadine Nebel
+
+Savegame
+	[am]	Savegame
+	[de]	Zeitlinie
+	[ua]	Зберегтигру
+
+SavegameBlank
+	[am]	Initial
+	[de]	Von Anfang
+	[ua]	Початковий
+
+SavepointSingular
+	[am]	1 savepoint
+	[de]	1 Spielstand
+	[ua]	1 збереження
+
+SavepointPlural
+	[am]	$n savepoints
+	[de]	$n Spielstände
+	[ua]	$n збереження
+
+Created
+	[am]	created
+	[de]	erstellt
+	[ua]	створено
+
+DialogTitleGpuChan
+	[am]	GPU-chan says,
+	[de]	GPU-chan sagt
+
+DialogBubbleGpuChan
+	[am]	Oh no,\nit's too\nbig!
+	[de]	O nein, das\nist zu groß!
+
+DialogBubbleGpuChanEmpty
+	[am]	Oh no,\nit's too\nempty!
+	[de]	O nein, es\nist leer!
+
+regionNameUnknown
+	[am]	Here be dragons
+	[de]	Hier seyen Drachen
+
+regionNameScullery
+	[am]	Scullery
+	[de]	Spülküche
+	[ua]	Кухня посуду
+
+sculleryWallSign
+	[am]	No bubbers
+	[de]	Keine Tellerdiebe
+
+regionNameCity
+	[am]	City of Urban Settlement
+	[de]	Stadt der urbanen Ansiedlung
+
+regionNameLabyrinthOfUnreasonableSizeAndComplexity
+	[am]	Labyrinth of Unreasonable Size and Complexity
+	[de]	Labyrinth der unnötigen Größe und Komplexität
+
+regionNameDesertOfCollossalTemperatureDifferences
+	[am]	Desert of Considerable Temperature Differences
+	[de]	Wüste der beträchtlichen Temperaturunterschiede
+
+regionNameOceanOfImmeasurableDisappointment
+	[am]	Ocean of Immeasurable Disappointment
+	[de]	Meer der unermeßlichen Enttäuschung
+
+regionNameNonMountainsOfTwoDimensionalFlatness
+	[am]	Mountain'ts of Sheer Flatness And Absolutely No Elevation
+	[de]	Unberge der erhebungslosen Flachheit
+
+regionNameMarshesOfDoubtfulDrowningHazard
+	[am]	Marshes of Doubtful Drowning Hazard
+	[de]	Sümpfe der zweifelhaften Ertrinkungsgefahr
+
+landmarkNameUniversityOfScience
+	[am]	University of Snience
+	[de]	Wissenschnaftsuniversität
+
+landmarkNameLibraryOfTheUniversityOfScience
+	[am]	Library of the University of Snience
+	[de]	Bibliothek der Wissenschnaftsuniversität
+
+landmarkNameGardenOfRidiculouslyPoisonousPlants
+	[am]	Garden of Ridiculously Poisonous Plants
+	[de]	Garten der absurd giftigen Pflanzen
+	[fi]	Hullun myrkyllisten kasvien puutarha
+	[ua]	Сад повний шалено отруйних рослин
+
+landmarkNameSnurch
+	[am]	Snurch
+	[de]	Schnirche
+
+landmarkNameSnathedral
+	[am]	Snanctum of the Snathedral
+	[de]	Snanktum der Schnathedrale
+
+landmarkNameBlimpcombe
+	[am]	Blimpcombe
+	[de]	Niederluftschiffingen
+
+landmarkNameSoftlossnonminster
+	[am]	Softlossnonminster
+	[de]	Verlierweichunkirchen
+
+teleportPointNameSingleDishNonArray
+	[am]	Single Dish Non-Array
+	[de]	Einschüsselobservatorium
+	[fi]	Yhdenantennin Eijoukko
+	[ua]	Одноантенні Немасив
+
+teleportPointNameMinusculeArray
+	[am]	Lesser Array
+	[de]	Miniobservatorium
+
+teleportPointNameAverageArray
+	[am]	Average Array
+	[de]	Durchschnittsobservatorium
+
+teleportPointNameGoldilocksArray
+	[am]	Cromulent Array
+	[de]	Observatorium angenehmer Größe
+
+teleportPointNameLargeArray
+	[am]	Large Array
+	[de]	Großes Observatorium
+
+teleportPointNameVeryLargeArray
+	[am]	Very Large Array
+	[de]	Sehr Großes Observatorium
+
+teleportPointNameEvenLargerArray
+	[am]	Even Larger Array
+	[de]	Noch Größeres Observatorium
+
+teleportPointNameUltraLargeArray
+	[am]	Ultra Large Array
+	[de]	Ultragroßes Observatorium
+
+teleportPointNameGinormousArray
+	[am]	Ginormous Array
+	[de]	Gigantisches Observatorium
+
+teleportPointNameSupercollossalArray
+	[am]	Supercollossal Array
+	[de]	Superkollossales Observatorium
+
+teleportPointNameStChungusArray
+	[am]	St. Graham Chungus Memorial Array
+	[de]	St. Graham Hyper-Observatorium
+
+regionSensorLabel
+	[am]	%s in your area
+	[de]	%s in deiner Nähe
+
+mainQuestTitleAwning
+	[am]	The Awning of the Sage of Asparagus
+	[de]	Die Spargelrentnermarkise
+
+mainQuestTitleDrawing
+	[am]	The Drawing of the Cage of a Platypus
+	[de]	Der Schnabeltierkäfiggrundriß
+	[fi]	Vesinokkaeläinhäkinsuunnitelma
+	[ua]	План клітки качкодзьоба
+
+mainQuestTitleDrowning
+	[am]	The Drowning of the Wage of an Octopus
+	[de]	Die Tintenfischgehaltsversenkung
+	[fi]	Kalmareiden palkanlasku
+	[ua]	Просідання зарплати спрута
+
+mainQuestTitleKermit
+	[am]	Get the Frog a Loan
+	[de]	Gib dem Frosch Kredit
+
+mainQuestWarning
+	[am]	It is dangerous to take a loan.
+	[de]	Es ist gefährlich, an Leine zu gehen.
+
+sideQuestServeAYouthfulPorpoise
+	[am]	Serve a Youthful Porpoise
+	[de]	Die Schweinswalbedienung
+
+dingNameWallClassic
+	[am]	Wall cube
+	[de]	Mauerwürfel
+
+dingNameBarrelIndigo
+	[am]	Premium cask
+	[de]	Premiumfaß
+
+dingNameBarrelWood
+	[am]	Wooden cask
+	[de]	Holzfaß
+
+dingNameBarrelLoaded
+	[am]	Loaded barrel
+	[de]	Geladenes Faß
+
+dingNameFloorSlate
+	[am]	Slate floor
+	[de]	Schieferboden
+
+dingNameFloorPurple
+	[am]	Purple floor
+	[de]	Purpurboden
+
+dingNameFloorOchre
+	[am]	Ochre floor
+	[de]	Ockerboden
+
+dingNameFloorRock
+	[am]	Stone floor
+	[de]	Steinboden
+
+dingNameFloorRockCracked
+	[am]	Cracked stone floor
+	[de]	Beschädigter Steinboden
+
+dingNameLettuce
+	[am]	Lettuce
+	[de]	Salat
+
+dingNameSchaed
+	[am]	Skull
+	[de]	Schädel
+
+dingNameSnow
+	[am]	Snow
+	[de]	Schnee
+
+dingNameChelF
+	[am]	Fluorine
+	[de]	Fluor
+
+dingNameGrass
+	[am]	Grass
+	[de]	Rasen
+
+dingNameRooofMesh
+	[am]	Mesh
+	[de]	Gitterrost
+
+dingNameHoe
+	[am]	Hoe
+	[de]	Hacke
+	[fi]	Kuokka
+
+dingNameHoePlural
+	[am]	Hoes
+	[de]	Hacken
+	[fi]	Kukot
+
+playerName1
+	[am]	sipWsibasWn
+	[de]	sipWsibasWn
+	[fi]	sipWsibasWn
+	[ua]	sipWsibasWn
+
+playerName2
+	[am]	Mika
+	[de]	Mika
+	[fi]	Miika
+	[ua]	Мiка
+
+playerName3
+	[am]	Cynthia
+	[de]	Cynthia
+	[fi]	Cynthia
+	[ua]	Синтія
+
+playerName4
+	[am]	Sasha
+	[de]	Sascha
+	[fi]	Sasha
+	[ua]	Саша
+
+dialogPlayer3Perennial
+	[am]	Are you threatening me?
+	[de]	Willst du mir drohen?
+
+controllerLabel1
+	[am]	Controller #1
+	[de]	Controller Nr. 1
+	[fi]	Controller nro 1
+	[ua]	Контролер № 1
+
+controllerLabel2
+	[am]	Controller #2
+	[de]	Controller Nr. 2
+	[fi]	Controller nro 2
+	[ua]	Контролер № 2
+
+controllerLabel3
+	[am]	Controller #3
+	[de]	Controller Nr. 3
+	[fi]	Controller nro 3
+	[ua]	Контролер № 3
+
+controllerLabel4
+	[am]	Controller #4
+	[de]	Controller Nr. 4
+	[fi]	Controller nro 4
+	[ua]	Контролер № 4
