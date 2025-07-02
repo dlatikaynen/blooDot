@@ -1,0 +1,47 @@
+
+  Ligma.
+└───────
+
+  We want to be attractive to speedrunners. Especially for themed speedruns,
+  maybe not for any-% in first place.
+
+
+  Effect 1.
+└──────────
+
+  Shaking ground is rotating the three layers (FWR) against each other
+  excentrically and in opposing rotational directionsw with a damped phase profile
+
+
+  Ligma.
+└───────
+
+  Lesson learned from carrying props so far that the quadrant with their spawnpoint
+  unloads: on unloading quadrants, fix origin pointers of then originless props
+
+
+  Lighting.
+└──────────
+
+  https://slembcke.github.io/2D-Lighting-Overview
+
+  By lighting just the floor, we get most of the occlusion for free.
+  Screen space lightmaps will work as long as we compute a trivial
+  shadowmask and remove impossible lights from behind nearby walls.
+
+
+  Animated walls.
+└────────────────
+
+  Get their own pass as we don't paint it on the flaps because nonstatics
+  would necessitate rendercopy twice on flap vertices, and four times on
+  flap corners.
+
+
+
+[·] Mobs
+[·] Clumsy packs
+[·] Player "HUD" indicator(s)
+[ ] Pinhole for covered structures
+[ ] Weather (fog, rain)
+[ ] Lighting (clipped transparent blobs?)

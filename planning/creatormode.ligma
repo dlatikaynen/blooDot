@@ -1,0 +1,119 @@
+﻿   1. How to start
+└─────────────────
+
+  [X] Main menu in non-release builds contains an item "Creator mode"
+  [ ] Players build the world themselves. In creator mode, they can
+      break the fourth wall by going into the letterboxes and messing
+      with the creator mode controls (for example, take the barrel from
+      the "delete" tool selector button, or bumping against one of
+      the tools to activate it)
+
+
+   2. In-maker menu
+└──────────────────
+
+  While inside the maker arena, the following menu is available:
+
+    1. Save --> writes changes to the current level file
+    2. Load --> loads another level file. also use to discard changes
+    3. Map  --> show the map of the region that is currently being edited
+    4. Controls
+    5. Knowledge base
+    6. Leave --> Save (if dirty) and exit to splash screen
+
+
+   3. Ding palette
+└─────────────────
+
+  As the maker mode is only ever available in the square screen format,
+  the two desktop landscape letterboxes are used to show the most frequently
+  used maker controls, the ding palette being one of these.
+
+  [ ] On the left side middle, the floor/walls/rooof explosion is shown,
+      and can be used to compose and configure a placement.
+
+  [ ] On the left side top, the ding selector is shown. The currently
+      selected ding to paint is in a lightbox, under which the dingsheet
+      moves.
+  
+  [ ] The dingsheet is organized in horizontal stripes. Moving vertically
+      changes the stripe. Moving horizontally changes the ding selected
+      from the current stripe. Stripes can be of different length.
+
+  [ ] Dingsheet is switchable by biome. Some dings exist only in some biomes,
+      some others are the same everywhere, some have different colorings
+      or patterns depending on biome. Coalescability is a ding property.
+      Some dings are smaller or bigger than a grid unit, and are shown scaled
+      to the lightbox, which is bigger than the stripes' height.
+
+  [ ] Biomes are:
+      - garden   (where it is always late summer/autumn)
+      - profane  (towns)
+      - sacral   (with the cathedral and the cemetary)
+      - arctic   (where there is snow and ice)
+      - desert   (with the oracle)
+      - wetlands (featuring the marshes of doubtful drowning hazard)
+      - scabland (with volcanics)
+
+  [ ] Ding stripes are:
+      - flooring/ground
+      - walls/boundary
+      - deco/shrubbery
+      - rooof/cover
+      - mobs npc
+      - mobs monster
+      - looot
+
+  [ ] An item can be added to the ding palette by loading the images,
+      and a collision geometry csv if it is a non-orthogonal geometry
+
+   4. Placement
+└──────────────
+
+  [ ] There is a layer selection and a ding selection.
+  [ ] The layer is selected by moving a selection rectangle between
+      the floor-walls-rooof thingy on the left letterbox.
+  [ ] When a layer is selected, the ding palette reduces to
+      only the dings that are potentially placeable on that layer
+  [ ] In that context, a go-under wall is a wall-only component
+      that cannot be selected from the rooof palette, but which can be
+      placed on the wall layer and subsequently lifted up to become
+      a rooof tile. The capability to do this is a property of the
+      wall ding definition.
+  [ ] Tiles that are part of a clumsy pack get their packing evaluated
+      even if they are in different layers, so that the "go-under" wall
+      is not discernible from the "wall-walls" by simply looking at
+      them merge or not merge, respectively. Non-gridlocked walls don't merge
+      except when they are placed first and then rotated as a compound.
+
+
+   5. Positioning
+└────────────────
+
+  [ ] The editor can be rotated arbitrarily to create slanted and tapering
+      designs. The default rotation is NSEW-locked square.
+
+  [ ] Grid-lock can be switched on and off.
+      Placed elements can be taken and locked/unlocked from the grid:
+      - unlock by switching gridlock off and taking them and moving them
+      - unlock by nudging them with the pixelwise movement shift
+      - lock them by switching gridlock on and taking them and moving them
+
+  [ ] Coalesceing can be switched on and off.
+      - Coalescable elements will only coalesce when they are placed in gridllock
+      - Coalesced elements will rotate/lose gridlock as a compound
+      - Coalesced, no-longer-gridlocked compounds will move as a compound
+      - A single element taken away from a coalesced compound in gridlock will
+        decoalesce the element
+  
+  [ ] Players can shit a brick by pressing (A) on the controller. An instance
+      of the currently selected palette ding is added to the placements
+      list of the edited region. Moving the player whilst shitting bricks
+      will make straight lines in gridlocked mode, and drop droppings if in non-
+      gridlocked mode
+
+   6. Properties
+└───────────────
+
+  [ ] Property editor dialog pages are accessible using the controller,
+      and hotkeys and keyboard key combinations.

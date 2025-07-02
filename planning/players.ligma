@@ -1,0 +1,70 @@
+
+  Paradigm 1.
+└────────────
+
+  Up to four players. One for each direction NE, NW, SW, SE
+  Their HUDs are shown in the respective direction
+
+
+  Paradigm 2.
+└────────────
+
+  There is HP for four different types of lifeforces/harmful environmental effects:
+
+    1. Physiological bodily injury, blood-red
+    2. High temperatures (fire, hot surfaces, hot fluids), lava-orange
+    3. Low temperatures (freezing cold environment, substances, fluids), blueish-white
+    4. Other physical/chemical effects (electricity, poison), greenish-yellow
+
+  Psychological extremes may affect 1 (HP1 may increase/decrease with joy/sorrow)
+
+
+  Paradigm 3.
+└────────────
+
+  The sum of slots for HP components is constant at a given point in time.
+  If a player has room for 10 HP total, filled completely to 2B4H3C1E,
+  and they gain +1E then 1 is lost from the partition they have most of,
+  resulting in 2B3H3C2E.
+  
+  If they instead lost 1E, one slot becomes available which can then be
+  replenished with +1 of any type.
+
+
+  Paradigm 4.
+└────────────
+
+  HP are divided in four fractions each, and are reduced in four steps .75 .5 .25 0
+  They are always replenished to the next integer though, so you do not get an entire
+  new HP when you got one at .75 and gain +1
+
+
+  Paradigm 5.
+└────────────
+
+  When a player loses all HP of one particular partition, it is GO.
+  So when you're on 1E, don't touch a live wire.
+
+
+  Paradigm 6.
+└────────────
+
+  GO restores back to the last savepoint. If the last savepoint is a checkmate
+  with .25B, you're screwed and need to go further back in autosaves/savepoints.
+
+
+  Paradigm 7.
+└────────────
+
+  Endurance/stamina is represented by the circumference of the HP wheel.
+  When a player extends the number of their overall HP slots, the HP wheel's
+  radius increases, so their endurance will increase π times radius increase.
+
+
+  Paradigm 8.
+└────────────
+
+  A stamina boost drains the endurance circle slower by some factor
+
+
+░▒▓█▄■▀█▓▒░

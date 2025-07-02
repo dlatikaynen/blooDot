@@ -8,7 +8,8 @@
 #include "dexassy.h"
 
 static BROTLI_BOOL WriteOutput(std::ofstream* fOut, const uint8_t* next_out, uint8_t* output) {
-	size_t out_size = static_cast<size_t>(next_out - output);
+	const auto out_size = next_out - output;
+
 	if (out_size == 0) {
 		return BROTLI_TRUE;
 	}
@@ -32,15 +33,14 @@ int Cook(XassyCookInfo *cookStats)
 	chunkSizes
 		<< "#pragma once"
 		<< "\n\n"
-		<< "size_t chunkSizes[] = {\n";
+		<< "size_t inline chunkSizes[] = {\n";
 
 	cookStats->numFiles = 0;
 	cookStats->numBytesBefore = 0;
 	cookStats->numBytesAfter = 0;
 
-	//SDL_Init(0);
 	auto const& basePath = SDL_GetBasePath();
-	//auto const& basePath = R"(C:\lc\blooDot\x64\Xassy\)"; // SDL_GetBasePath();
+
 	std::stringstream recipePath;
 	recipePath << basePath << R"(..\res\)" << "gameres.xassy.recipe";
 	std::ifstream recipeFile(recipePath.str());
@@ -58,17 +58,16 @@ int Cook(XassyCookInfo *cookStats)
 		{
 			std::stringstream recipeLine;
 			recipeLine << loadedLine;
-			std::string fileName;
-			std::string identifier;
-			if (std::getline(recipeLine, fileName, '\t'))
+			if (std::string fileName; std::getline(recipeLine, fileName, '\t'))
 			{
 				if (recipeLine.str()[0] == '#')
 				{
 					std::cout << "Skipping commented-out entry\n";
+
 					continue;
 				}
 
-				if (std::getline(recipeLine, identifier, '\t'))
+				if (std::string identifier; std::getline(recipeLine, identifier, '\t'))
 				{
 					std::cout
 						<< "About to add \""
@@ -121,55 +120,56 @@ int Cook(XassyCookInfo *cookStats)
 						size_t available_out = bufferSize;
 						uint8_t* next_out = output;
 
-						for (;;) {
-							if (available_in == 0 && !is_eof) {
+						while (!is_eof) {
+							if (available_in == 0) {
 								// provide_input
 								rawFile.read(reinterpret_cast<char*>(input), bufferSize);
 								available_in = rawFile.gcount();
 								next_in = input;
 								is_eof = rawFile.eof();
-								if (!BrotliEncoderCompressStream(
-									encoderState,
-									is_eof ? BROTLI_OPERATION_FINISH : BROTLI_OPERATION_PROCESS,
-									&available_in,
-									&next_in,
-									&available_out,
-									&next_out,
-									nullptr
-								)) {
+							}
+
+							if (!BrotliEncoderCompressStream(
+								encoderState,
+								is_eof ? BROTLI_OPERATION_FINISH : BROTLI_OPERATION_PROCESS,
+								&available_in,
+								&next_in,
+								&available_out,
+								&next_out,
+								nullptr
+							)) {
+								free(buffer);
+								rawFile.close();
+
+								return 1212;
+							}
+
+							if (available_out == 0) {
+								// provide output
+								if (!WriteOutput(&cookedFile, next_out, output)) {
 									free(buffer);
 									rawFile.close();
 
-									return 1212;
+									return CookReturnCodeRecipeFail;
 								}
 
-								if (available_out == 0) {
-									// provide output
-									if (!WriteOutput(&cookedFile, next_out, output)) {
-										free(buffer);
-										rawFile.close();
+								available_out = bufferSize;
+								next_out = output;
+							}
 
-										return CookReturnCodeRecipeFail;
-									}
+							if (BrotliEncoderIsFinished(encoderState)) {
+								// flush output
+								if (!WriteOutput(&cookedFile, next_out, output)) {
+									free(buffer);
+									rawFile.close();
 
-									available_out = bufferSize;
-									next_out = output;
+									return CookReturnCodeRecipeFail;
 								}
 
-								if (BrotliEncoderIsFinished(encoderState)) {
-									// flush output
-									if (!WriteOutput(&cookedFile, next_out, output)) {
-										free(buffer);
-										rawFile.close();
+								available_out = 0;
+								next_out = output;
 
-										return CookReturnCodeRecipeFail;
-									}
-
-									available_out = 0;
-									next_out = output;
-
-									break;
-								}
+								break;
 							}
 						}
 
@@ -195,7 +195,7 @@ int Cook(XassyCookInfo *cookStats)
 						}
 
 						chunkConstants
-							<< "constexpr int const "
+							<< "constexpr int "
 							<< identifier
 							<< " = "
 							<< resNumber
@@ -247,57 +247,29 @@ int Cook(XassyCookInfo *cookStats)
 		cookedFile.close();
 		recipeFile.close();
 
-		/* copy the cooked file two times into the other runtime folders */
-		std::stringstream debugPath;
-		debugPath << basePath << "..\\Debug\\" << XassyFile;
-		std::stringstream releasePath;
-		releasePath << basePath << "..\\Release\\" << XassyFile;
-		auto const& copiedToDebug = std::filesystem::copy_file(cookedPath.str(), debugPath.str(), std::filesystem::copy_options::overwrite_existing);
-		if (!copiedToDebug)
-		{
-			std::cerr
-				<< "Failed to copy "
-				<< cookedPath.str()
-				<< " to "
-				<< debugPath.str();
-
-			return CookReturnCodeCopyFail;
-		}
-
-		auto const& copiedToRelease = std::filesystem::copy_file(cookedPath.str(), releasePath.str(), std::filesystem::copy_options::overwrite_existing);
-		if (!copiedToRelease)
-		{
-			std::cerr
-				<< "Failed to copy "
-				<< cookedPath.str()
-				<< " to "
-				<< releasePath.str();
-
-			return CookReturnCodeCopyFail;
-		}
-
 		auto const&& debugLocationsStr = debugLocations.str();
 		chunkConstants
 			<< "\n"
 			<< "#ifndef NDEBUG\n"
 			<< "inline const char* GetUncookedRelPath(int chunkIndex)\n"
 			<< "{\n"
-			<< "\tswitch(chunkIndex)\n"
-			<< "\t{\n"
+			<< "\tswitch(chunkIndex) {\n"
 			<< debugLocationsStr
-			<< "\t}\n\n\treturn nullptr;\n"
+			<< "\tdefault: return \"~MISSING~\";\n"
+			<< "\t}\n"
 			<< "}\n"
 			<< "#endif\n";
 
 		/* write the chunk constants header */
 		std::stringstream chunkConstantsPath;
-		chunkConstantsPath << basePath << "..\\..\\" << "chunk-constants.h";
-		const auto& strChunkConstantsPath = chunkConstantsPath.str();
+		chunkConstantsPath << basePath << R"(..\res\)" << "chunk-constants.h";
 
+		const auto& strChunkConstantsPath = chunkConstantsPath.str();
 		auto const&& chunkConstantsFile = SDL_IOFromFile(strChunkConstantsPath.c_str(), "wt");
 		auto const&& chunkConstantsStr = chunkConstants.str();
 		auto const&& chunkConstantsCStr = chunkConstantsStr.c_str();
 		auto const&& chunkConstantsBlocksWritten = SDL_WriteIO(chunkConstantsFile, chunkConstantsCStr, chunkConstantsStr.length());
+
 		SDL_CloseIO(chunkConstantsFile);
 		std::cout
 			<< chunkConstantsBlocksWritten
@@ -308,7 +280,7 @@ int Cook(XassyCookInfo *cookStats)
 		/* write the chunk sizes header */
 		chunkSizes << "};\n";
 		std::stringstream chunkSizesPath;
-		chunkSizesPath << basePath << "..\\..\\" << "chunk-sizes.h";
+		chunkSizesPath << basePath << R"(..\res\)" << "chunk-sizes.h";
 		const auto& strChunkSizesPath = chunkSizesPath.str();
 		auto const&& chunkSizesFile = SDL_IOFromFile(strChunkSizesPath.c_str(), "wt");
 		auto const&& chunkSizesStr = chunkSizes.str();

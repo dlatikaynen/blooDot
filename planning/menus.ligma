@@ -1,0 +1,122 @@
+
+  Paradigm 1.
+└────────────
+
+  On startup, after the essential resources have been loaded,
+  in the main window the user is presented with the following choices:
+  
+    1. Continue --> loads the last savegame and starts
+       When there is none, tumbleweed
+    2. Load --> presents the choice of savepoints to choose from, and starts
+       When the list of savegames is empty, tumbleweed
+    3. New single-player
+    4. New local multiplayer
+    5. Creator Mode
+    6. Settings
+    7. Quit
+
+
+  Paradigm 2.
+└────────────
+
+  In an ongoing game session, another menu is accessible:
+
+    1. Save --> creates a manual savepoint
+    2. Inventory
+    3. Map
+    4. Controls (also add/remove players?)
+    5. Knowledge base
+    6. Leave --> Save and quit to title screen
+             --> Quit without saving
+
+
+  Paradigm 3.
+└────────────
+
+  Settings menu.
+  Change screen resolution
+
+    "This is a resolution that pleases the Lord.
+     Still want to change?"
+
+    --> Strayn't from the path
+
+    --> Right outta fucks,
+        Make it 800 x 600
+
+    --> 1280 x 768, this isn't
+        the eighties any more
+
+    --> Hercules mono 720 x 348
+
+    --> CGA 320 x 200 4-color
+
+    --> IBM VGA Mode X 320 x 240
+
+    --> Square Full Screen mode for 4-player
+
+    --> I payed for the whole screen,
+        I'm using the whole screen
+
+
+  Ligma.
+└───────
+
+  How does multiplayer and local/networking go together
+  with savegames?
+
+  [Continue]
+    --> if a savegame exists, load that savegame and launch immediately
+        (we need to remember which of the savegames was the last one played)
+    --> if no savegame exists, show "nothing to continue from" (tumbleweed)
+
+  Basically, any game can join others.
+  Locally, by connecting controllers
+  Network-wise, by sharing the game code with others
+  The initiator is the one in control of the save file.
+
+  [Load]
+    --> shows savegames to pick from
+        if there is none, tells the use that he can start a new game
+        and shows tumbleweed
+    --> inside a savegame, which may be huge,
+        there may be more than one savepoint. restoring to an older
+        savepoint will result in deletion of any subsequent savepoints
+        if the progress made from that savepoint is overwritten by an
+        autosave or explicit save (warning on load already)
+
+  [(New) Single Player]
+    --> starts a new game
+
+  [(New) Local Multiplayer]
+    --> visual controller connection aid, then starts a new game with that
+        and waits until all have sent input at least once. Inactive players
+        are bubble-dragged.
+
+  [(New) Net Multiplayer]
+    --> creates and shares a code to join, then starts a new game with that
+        and waits for others to join
+
+  Starting a new game...
+  if there is a continuable savefile, asks whether to create a new savegame in a blank slot,
+  or overwrite the continuable one.
+  on "blank" immediately creates a new, unnamed savefile from the initial gamestate stamped
+  with its creation time and location
+  (which is, basically, scullery with the number of players and their positions noted);
+  on "overwrite" does the same but reuses the savegame index of the continuable file.
+  if the continuable file has "significant progress", an extra "are you sure?" is shown.
+
+  While a game is running... 
+
+  - save-wise, autosave is done periodically and on checkpoints,
+    explicit save is possible at any time basically;
+  
+  - loading-wise, we can only revert to previous savepoints in the current savefile
+    with a confirmation prompt, since you're losing progress.
+
+  Allocation of savegame indexes:
+  - one bitmask in settings encodes 16 slots and whether they're occupied
+  - settings screen shows only those corresponding to occupied bit slots without gaps
+
+
+░▒▓█▄■▀█▓▒░
