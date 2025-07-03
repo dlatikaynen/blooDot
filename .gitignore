@@ -1,3 +1,6 @@
 SDL/
+SDL_ttf/
+SDL_image/
+SDL_mixer/
 brotli/
 .idea/
