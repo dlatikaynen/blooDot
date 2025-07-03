@@ -6,6 +6,7 @@
 #include "brotli/c/common/version.h"
 #include "xassy/enxassy.h"
 #include "src/util/bytefmt.h"
+#include "xassy/dexassy.h"
 
 constexpr int RETVAL_OK = 0;
 constexpr int RETVAL_SDL_INIT_FAIL = 0xacab01;
@@ -13,6 +14,7 @@ constexpr int RETVAL_SDL_INIT_FAIL = 0xacab01;
 int xassy();
 int main(const int argc, char *argv[]) {
     const auto NotG = "blooDot 4";
+    int retVal = RETVAL_OK;
 
     std::cout << "Hello there and welcome to " << NotG << "!\n";
     if (!SDL_InitSubSystem(SDL_INIT_VIDEO)) {
@@ -33,14 +35,34 @@ int main(const int argc, char *argv[]) {
     std::cout << "IMG version: " << SDL_IMAGE_MAJOR_VERSION << "." << SDL_IMAGE_MINOR_VERSION << "." << SDL_IMAGE_MICRO_VERSION << std::endl;
     std::cout << "Brotli version: " << BROTLI_VERSION_MAJOR << "." << BROTLI_VERSION_MINOR << "." << BROTLI_VERSION_PATCH << std::endl;
 
-    int retVal = RETVAL_OK;
-    if (argc > 1 && strnicmp(argv[1], "xassy", 0xff) == 0) {
-        retVal = xassy();
+    for (auto i = 0; i < 1; ++i) {
+        if (argc > 1 && strnicmp(argv[1], "xassy", 0xff) == 0) {
+            retVal = xassy();
+
+            break;
+        }
+
+        std::cout << "AHALLO.\n";
+
+        /* https://stackoverflow.com/a/31926842/1132334 */
+        ::PrepareIndex();
+        if (!OpenCooked()) {
+            break;
+        }
     }
 
     SDL_Quit();
 
     return retVal;
+}
+
+void ReportError(const char* message, const char* error)
+{
+    std::cerr
+        << message
+        << ", whatever that means, "
+        << error
+        << "\n";
 }
 
 int xassy() {

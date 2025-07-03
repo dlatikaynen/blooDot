@@ -2,15 +2,24 @@
 #define DEXASSY_H
 
 #include <SDL3/SDL.h>
-//#include "chunk-constants.h"
 
-constexpr char const* XassyFile = "xassy-cooked.1.ngld";
+constexpr auto XassyFile = "xassy-cooked.1.ngld";
+constexpr char bom[] = { static_cast<char>(0xEF), static_cast<char>(0xBB), static_cast<char>(0xBF) };
+constexpr auto signature = "\4LSL\6JML\5";
+constexpr auto lenBom = sizeof(bom);
+
+int constexpr length(const char* str)
+{
+    return *str ? 1 + length(str + 1) : 0;
+}
+
+constexpr auto lenSignature = length(signature);
 
 extern void ReportError(const char*, const char*);
-//extern void* HuffInflate(SDL_RWops* inFile, long long const sourceSize, long long* originalSize, long long* actuallyRead);
 
 void PrepareIndex();
 bool OpenCooked();
-//void* Retrieve(int chunkKey, __out SDL_RWops** const stream);
+void* Retrieve(int chunkKey, SDL_IOStream** stream);
 void CloseCooked();
+
 #endif //DEXASSY_H

@@ -15,6 +15,10 @@ static BROTLI_BOOL WriteOutput(std::ofstream* fOut, const uint8_t* next_out, uin
 		return BROTLI_TRUE;
 	}
 
+	for (auto i = 0; i < out_size; ++i) {
+		output[i] ^= 0b10000010;
+	}
+
 	fOut->write(reinterpret_cast<char*>(output), out_size);
 	if (fOut->bad()) {
 		return BROTLI_FALSE;
@@ -51,17 +55,12 @@ int Cook(XassyCookInfo *cookStats)
 	if (recipeFile.is_open() && recipeFile.good())
 	{
 		int resNumber = 0;
-		unsigned char bom[] = { 0xEF,0xBB,0xBF };
-		auto signature = "\4LSL\6JML\5";
 		std::stringstream debugLocations;
 		std::ofstream cookedFile(cookedPath.str(), std::ios::binary);
 		std::string loadedLine;
 		std::string previousIdentifier;
 
-		constexpr auto lenBom = sizeof(bom);
-		const auto lenSignature = static_cast<std::streamsize>(strnlen(signature, 0xff));
-
-		cookedFile.write(reinterpret_cast<char *>(bom), lenBom);
+		cookedFile.write(bom, lenBom);
 		cookedFile.write(signature, lenSignature);
 		while (std::getline(recipeFile, loadedLine))
 		{
