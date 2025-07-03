@@ -1,17 +1,12 @@
 #include <iostream>
 #include <SDL3/SDL.h>
-#include <brotli/encode.h>
-#include <brotli/decode.h>
-#include <brotli/types.h>
-#include <brotli/shared_dictionary.h>
-#include <brotli/port.h>
 
 #include "brotli/c/common/version.h"
 #include "xassy/enxassy.h"
-// TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
 int main() {
-    // TIP Press <shortcut actionId="RenameElement"/> when your caret is at the <b>lang</b> variable name to see how CLion can help you rename it.
     const auto lang = "C++";
+
     std::cout << "Hello and welcome to " << lang << "!\n";
 
     if (!SDL_InitSubSystem(SDL_INIT_VIDEO)) {
@@ -28,7 +23,7 @@ int main() {
     std::cout << "SDL version: " << sdlVersionMajor << "." << sdlVersionMinor << "." << sdlVersionMicro << std::endl;
     std::cout << "Brotli version: " << BROTLI_VERSION_MAJOR << "." << BROTLI_VERSION_MINOR << "." << BROTLI_VERSION_PATCH << std::endl;
 
-    XassyCookInfo cookStats;
+    XassyCookInfo cookStats{};
     Cook(&cookStats);
 
     return 0;
