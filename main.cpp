@@ -1,18 +1,26 @@
 #include <iostream>
 #include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 #include "brotli/c/common/version.h"
 #include "xassy/enxassy.h"
+#include "src/util/bytefmt.h"
 
-int main() {
-    const auto lang = "C++";
+constexpr int RETVAL_OK = 0;
+constexpr int RETVAL_SDL_INIT_FAIL = 0xacab01;
 
-    std::cout << "Hello and welcome to " << lang << "!\n";
+int xassy();
+int main(const int argc, char *argv[]) {
+    const auto NotG = "blooDot 4";
 
+    std::cout << "Hello there and welcome to " << NotG << "!\n";
     if (!SDL_InitSubSystem(SDL_INIT_VIDEO)) {
         const auto initError = SDL_GetError();
 
-        std::cout << "Failed to initialize video subsystem: " << initError << std::endl;
+        std::cerr << "Failed to initialize video subsystem, KTHXBYE: " << initError << std::endl;
+
+        return RETVAL_SDL_INIT_FAIL;
     }
 
     const auto sdlVersion = SDL_GetVersion();
@@ -21,10 +29,35 @@ int main() {
     const auto sdlVersionMicro = SDL_VERSIONNUM_MICRO(sdlVersion);
 
     std::cout << "SDL version: " << sdlVersionMajor << "." << sdlVersionMinor << "." << sdlVersionMicro << std::endl;
+    std::cout << "TTF version: " << SDL_TTF_MAJOR_VERSION << "." << SDL_TTF_MINOR_VERSION << "." << SDL_TTF_MICRO_VERSION << std::endl;
+    std::cout << "IMG version: " << SDL_IMAGE_MAJOR_VERSION << "." << SDL_IMAGE_MINOR_VERSION << "." << SDL_IMAGE_MICRO_VERSION << std::endl;
     std::cout << "Brotli version: " << BROTLI_VERSION_MAJOR << "." << BROTLI_VERSION_MINOR << "." << BROTLI_VERSION_PATCH << std::endl;
 
+    int retVal = RETVAL_OK;
+    if (argc > 1 && strnicmp(argv[1], "xassy", 0xff) == 0) {
+        retVal = xassy();
+    }
+
+    SDL_Quit();
+
+    return retVal;
+}
+
+int xassy() {
     XassyCookInfo cookStats{};
     Cook(&cookStats);
 
-    return 0;
+    const auto sizeRaw = blooDot::bytesize(cookStats.numBytesBefore);
+    const auto sizeCooked = blooDot::bytesize(cookStats.numBytesAfter);
+
+    std::cout
+        << "Assembled "
+        << cookStats.numFiles
+        << " chunks from "
+        << sizeRaw
+        << " down to "
+        << sizeCooked
+        << "\n";
+
+    return RETVAL_OK;
 }

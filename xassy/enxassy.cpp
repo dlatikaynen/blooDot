@@ -6,6 +6,7 @@
 
 #include "enxassy.h"
 #include "dexassy.h"
+#include "../src/util/bytefmt.h"
 
 static BROTLI_BOOL WriteOutput(std::ofstream* fOut, const uint8_t* next_out, uint8_t* output) {
 	const auto out_size = next_out - output;
@@ -50,10 +51,18 @@ int Cook(XassyCookInfo *cookStats)
 	if (recipeFile.is_open() && recipeFile.good())
 	{
 		int resNumber = 0;
+		unsigned char bom[] = { 0xEF,0xBB,0xBF };
+		auto signature = "\4LSL\6JML\5";
 		std::stringstream debugLocations;
 		std::ofstream cookedFile(cookedPath.str(), std::ios::binary);
 		std::string loadedLine;
 		std::string previousIdentifier;
+
+		constexpr auto lenBom = sizeof(bom);
+		const auto lenSignature = static_cast<std::streamsize>(strnlen(signature, 0xff));
+
+		cookedFile.write(reinterpret_cast<char *>(bom), lenBom);
+		cookedFile.write(signature, lenSignature);
 		while (std::getline(recipeFile, loadedLine))
 		{
 			std::stringstream recipeLine;
@@ -97,10 +106,7 @@ int Cook(XassyCookInfo *cookStats)
 
 					if (std::ifstream rawFile(rawPath.str(), std::ios::binary); rawFile.is_open() && rawFile.good())
 					{
-						const long long&& chunkStart = resNumber == 0
-							? static_cast<std::streampos>(0)
-							: cookedFile.tellp();
-
+						const long long&& chunkStart = cookedFile.tellp();
 						auto const& encoderState = BrotliEncoderCreateInstance(nullptr,nullptr,nullptr);
 
 						if (!encoderState) {
@@ -213,10 +219,10 @@ int Cook(XassyCookInfo *cookStats)
 							<< "\n";
 
 						std::cout
-							<< compressedSize
-							<< " bytes written, original was "
-							<< uncompressedSize
-							<< " bytes\n";
+							<< blooDot::bytesize(compressedSize)
+							<< " written, original was "
+							<< blooDot::bytesize(uncompressedSize)
+							<< "\n";
 
 						++resNumber;
 						++cookStats->numFiles;
@@ -268,12 +274,10 @@ int Cook(XassyCookInfo *cookStats)
 		auto const&& chunkConstantsFile = SDL_IOFromFile(strChunkConstantsPath.c_str(), "wt");
 		auto const&& chunkConstantsStr = chunkConstants.str();
 		auto const&& chunkConstantsCStr = chunkConstantsStr.c_str();
-		auto const&& chunkConstantsBlocksWritten = SDL_WriteIO(chunkConstantsFile, chunkConstantsCStr, chunkConstantsStr.length());
 
+		SDL_WriteIO(chunkConstantsFile, chunkConstantsCStr, chunkConstantsStr.length());
 		SDL_CloseIO(chunkConstantsFile);
 		std::cout
-			<< chunkConstantsBlocksWritten
-			<< " block of "
 			<< chunkConstantsStr.length()
 			<< " chars written to chunk constants header file\n";
 
@@ -281,15 +285,15 @@ int Cook(XassyCookInfo *cookStats)
 		chunkSizes << "};\n";
 		std::stringstream chunkSizesPath;
 		chunkSizesPath << basePath << R"(..\res\)" << "chunk-sizes.h";
+
 		const auto& strChunkSizesPath = chunkSizesPath.str();
 		auto const&& chunkSizesFile = SDL_IOFromFile(strChunkSizesPath.c_str(), "wt");
 		auto const&& chunkSizesStr = chunkSizes.str();
 		auto const&& chunkSizesCStr = chunkSizesStr.c_str();
-		auto const&& chunkSizesBlocksWritten = SDL_WriteIO(chunkSizesFile, chunkSizesCStr, chunkSizesStr.length());
+
+		SDL_WriteIO(chunkSizesFile, chunkSizesCStr, chunkSizesStr.length());
 		SDL_CloseIO(chunkSizesFile);
 		std::cout
-			<< chunkSizesBlocksWritten
-			<< " block of "
 			<< chunkSizesStr.length()
 			<< " chars written to chunk sizes header file\n";
 

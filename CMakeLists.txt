@@ -25,7 +25,8 @@ add_executable(blooDot main.cpp
         xassy/enxassy.cpp
         xassy/enxassy.h
         xassy/dexassy.cpp
-        xassy/dexassy.h)
+        xassy/dexassy.h
+        src/util/bytefmt.h)
 
 set_target_properties(blooDot PROPERTIES LINK_FLAGS "-static")
 
