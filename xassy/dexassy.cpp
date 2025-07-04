@@ -7,7 +7,6 @@
 #include "brotli/decode.h"
 #include "../res/chunk-sizes.h"
 #include "../res/chunk-constants.h"
-#include "../SDL_ttf/external/freetype/src/gzip/zlib.h"
 #include "../src/util/bytefmt.h"
 
 std::vector<size_t> chunkOffsets;
@@ -71,7 +70,7 @@ bool OpenCooked()
 	{
 		if (ch == '*') {
 			// because we can, and we know how
-			fprintf(stdout, "\x1b[38;2;50;50;255mo\x1b[0m");
+			std::cout << "\x1b[38;2;50;50;255mo\x1b[0m";
 		} else if (ch != '\r') {
 			std::cout << ch;
 		}
@@ -79,17 +78,19 @@ bool OpenCooked()
 		readResult = SDL_ReadIO(dlgStream, &ch, sizeof(ch));
 	}
 
+	auto result = true;
+
 	if (!SDL_CloseIO(dlgStream)) {
 		const auto closeError = SDL_GetError();
 
 		ReportError("Could not close principal wad stream", closeError);
 
-		return false;
+		result = false;
 	}
 
 	SDL_free(resMem);
 
-	return true;
+	return result;
 }
 
 static BROTLI_BOOL WriteOutput(uint8_t** outBuffer, size_t* outBufferSize, const uint8_t* next_out, const uint8_t* output, size_t* total_out) {
@@ -103,7 +104,7 @@ static BROTLI_BOOL WriteOutput(uint8_t** outBuffer, size_t* outBufferSize, const
 	}
 
 	if (out_size > bufferSize) {
-		ReportError("Attempt to flush more than one buffer's worth of bytes per chunk", "");
+		ReportError("Attempt to flush more than one buffer's worth of bytes per chunk", "Inflator");
 
 		return BROTLI_FALSE;
 	}
@@ -128,7 +129,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 
 	*stream = nullptr;
 	if (SDL_SeekIO(cooked, static_cast<Sint64>(chunkOffset), SDL_IO_SEEK_SET) == -1) {
-		ReportError("Inflator failed to seek", "");
+		ReportError("Failed to seek", "Inflator");
 
 		return nullptr;
 	}
@@ -158,7 +159,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 	const auto decoderState = BrotliDecoderCreateInstance(nullptr, nullptr, nullptr);
 
 	if (decoderState == nullptr) {
-		ReportError("Failed to allocate memory for inflater", "");
+		ReportError("Failed to allocate memory", "Inflator");
 
 		return nullptr;
 	}
@@ -179,7 +180,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 	for (;;) {
 		if (result == BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT) {
 			if (alreadyReadFromCompressedSource >= compressedSize) {
-				fprintf(stderr, "corrupt input\n");
+				ReportError("Extra input", "Inflator");
 
 				return nullptr;
 			}
@@ -187,7 +188,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 			const auto remainingIn = compressedSize - alreadyReadFromCompressedSource;
 
 			if (remainingIn <= 0) {
-				ReportError("Compressed source underflow whilst inflating", "");
+				ReportError("Compressed source underflow", "Inflator");
 
 				return nullptr;
 			}
@@ -199,7 +200,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 			}
 
 			if (available_in == 0) {
-				ReportError("Compressed source exhausted prematurely", "");
+				ReportError("Compressed source exhausted prematurely", "Inflator");
 
 				return nullptr;
 			}
@@ -230,7 +231,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 			break;
 		} else {
 			/* result == BROTLI_DECODER_RESULT_ERROR */
-			fprintf(stderr, "corrupt input\n");
+			ReportError("Corrupted input", "Inflator");
 
 			return nullptr;
 		}

@@ -18,7 +18,7 @@ int main(const int argc, char *argv[]) {
     int retVal = RETVAL_OK;
 
     std::cout << "Hello there and welcome to " << NotG << " " << version << "!\n";
-    if (!SDL_InitSubSystem(SDL_INIT_VIDEO)) {
+    if (!SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO)) {
         const auto initError = SDL_GetError();
 
         std::cerr << "Failed to initialize video subsystem, KTHXBYE: " << initError << std::endl;
@@ -36,6 +36,7 @@ int main(const int argc, char *argv[]) {
     std::cout << "IMG version: " << SDL_IMAGE_MAJOR_VERSION << "." << SDL_IMAGE_MINOR_VERSION << "." << SDL_IMAGE_MICRO_VERSION << std::endl;
     std::cout << "Brotli version: " << BROTLI_VERSION_MAJOR << "." << BROTLI_VERSION_MINOR << "." << BROTLI_VERSION_PATCH << std::endl;
 
+    auto cookedOpen = false;
     for (auto i = 0; i < 1; ++i) {
         if (argc > 1 && strnicmp(argv[1], "xassy", 0xff) == 0) {
             retVal = xassy();
@@ -47,9 +48,14 @@ int main(const int argc, char *argv[]) {
 
         /* https://stackoverflow.com/a/31926842/1132334 */
         ::PrepareIndex();
-        if (!OpenCooked()) {
+        cookedOpen = OpenCooked();
+        if (!cookedOpen) {
             break;
         }
+    }
+
+    if (cookedOpen) {
+        CloseCooked();
     }
 
     SDL_Quit();
