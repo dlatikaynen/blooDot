@@ -39,4 +39,5 @@ target_link_libraries(blooDot PUBLIC SDL3_image-static)
 # for xassy
 target_link_libraries(blooDot PUBLIC brotlicommon)
 target_link_libraries(blooDot PUBLIC brotlienc)
+target_link_libraries(blooDot PUBLIC brotlidec)
 include_directories(./brotli/c/include)

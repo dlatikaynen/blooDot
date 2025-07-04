@@ -8,7 +8,7 @@ constexpr char bom[] = { static_cast<char>(0xEF), static_cast<char>(0xBB), stati
 constexpr auto signature = "\4LSL\6JML\5";
 constexpr auto lenBom = sizeof(bom);
 
-int constexpr length(const char* str)
+int constexpr length(const char* str) // NOLINT(*-no-recursion)
 {
     return *str ? 1 + length(str + 1) : 0;
 }

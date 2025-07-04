@@ -85,7 +85,7 @@ int Cook(XassyCookInfo *cookStats)
 						<< "\n";
 
 					std::stringstream rawPath;
-					uintmax_t uncompressedSize;
+					size_t uncompressedSize;
 					rawPath << basePath << R"(..\res\)" << fileName;
 					try
 					{
@@ -106,6 +106,9 @@ int Cook(XassyCookInfo *cookStats)
 					if (std::ifstream rawFile(rawPath.str(), std::ios::binary); rawFile.is_open() && rawFile.good())
 					{
 						const long long&& chunkStart = cookedFile.tellp();
+
+						cookedFile.write (reinterpret_cast<const char *>(&uncompressedSize), sizeof (uncompressedSize));
+
 						auto const& encoderState = BrotliEncoderCreateInstance(nullptr,nullptr,nullptr);
 
 						if (!encoderState) {
@@ -117,7 +120,7 @@ int Cook(XassyCookInfo *cookStats)
 
 						BROTLI_BOOL is_eof = BROTLI_FALSE;
 						static constexpr size_t bufferSize = 1 << 19;
-						auto buffer = static_cast<uint8_t *>(malloc(bufferSize * 8));
+						auto buffer = static_cast<uint8_t *>(malloc(bufferSize * 2));
 						uint8_t* input = buffer;
 						uint8_t* output = buffer + bufferSize;
 						size_t available_in = 0;

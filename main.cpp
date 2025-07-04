@@ -13,10 +13,11 @@ constexpr int RETVAL_SDL_INIT_FAIL = 0xacab01;
 
 int xassy();
 int main(const int argc, char *argv[]) {
-    const auto NotG = "blooDot 4";
+    const auto NotG = "blooDot";
+    const auto version = "4.0.0";
     int retVal = RETVAL_OK;
 
-    std::cout << "Hello there and welcome to " << NotG << "!\n";
+    std::cout << "Hello there and welcome to " << NotG << " " << version << "!\n";
     if (!SDL_InitSubSystem(SDL_INIT_VIDEO)) {
         const auto initError = SDL_GetError();
 

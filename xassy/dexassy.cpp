@@ -3,12 +3,16 @@
 #include <vector>
 
 #include "dexassy.h"
+#include "brotli/types.h"
+#include "brotli/decode.h"
 #include "../res/chunk-sizes.h"
 #include "../res/chunk-constants.h"
+#include "../SDL_ttf/external/freetype/src/gzip/zlib.h"
 #include "../src/util/bytefmt.h"
 
 std::vector<size_t> chunkOffsets;
 SDL_IOStream* cooked = nullptr;
+static constexpr size_t bufferSize = 1 << 19;
 
 void PrepareIndex()
 {
@@ -65,14 +69,53 @@ bool OpenCooked()
 
 	while(readResult != 0)
 	{
-		std::cout << ch;
+		if (ch == '*') {
+			// because we can, and we know how
+			fprintf(stdout, "\x1b[38;2;50;50;255mo\x1b[0m");
+		} else if (ch != '\r') {
+			std::cout << ch;
+		}
+
 		readResult = SDL_ReadIO(dlgStream, &ch, sizeof(ch));
 	}
 
-	SDL_CloseIO(dlgStream);
+	if (!SDL_CloseIO(dlgStream)) {
+		const auto closeError = SDL_GetError();
+
+		ReportError("Could not close principal wad stream", closeError);
+
+		return false;
+	}
+
 	SDL_free(resMem);
 
 	return true;
+}
+
+static BROTLI_BOOL WriteOutput(uint8_t** outBuffer, size_t* outBufferSize, const uint8_t* next_out, const uint8_t* output, size_t* total_out) {
+	const auto out_size = static_cast<size_t>(next_out - output);
+	const size_t offset = (*total_out);
+
+	(*total_out) += out_size;
+	if (out_size == 0) {
+		// nothing to write, cool
+		return BROTLI_TRUE;
+	}
+
+	if (out_size > bufferSize) {
+		ReportError("Attempt to flush more than one buffer's worth of bytes per chunk", "");
+
+		return BROTLI_FALSE;
+	}
+
+	if ((*total_out) > (*outBufferSize)) {
+		(*outBufferSize) += bufferSize;
+		(*outBuffer) = static_cast<uint8_t *>(SDL_realloc(*outBuffer, *outBufferSize));
+	}
+
+	memcpy((*outBuffer) + offset, output, out_size);
+
+	return BROTLI_TRUE;
 }
 
 /// <summary>
@@ -82,30 +125,126 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 {
 	size_t compressedSize = chunkSizes[chunkKey];
 	size_t chunkOffset = chunkOffsets[chunkKey];
+
 	*stream = nullptr;
-
-	void* compressedMem = SDL_malloc(compressedSize);
-	if (!compressedMem)
-	{
-		std::stringstream prepError;
-		const auto allocError = SDL_GetError();
-
-		prepError << "Chunk #" << chunkKey << " asks for " << compressedSize << " bytes, " << allocError;
-
-		const auto& strPrepError = prepError.str();
-
-		ReportError("Failed to allocate memory for a chunk", strPrepError.c_str());
+	if (SDL_SeekIO(cooked, static_cast<Sint64>(chunkOffset), SDL_IO_SEEK_SET) == -1) {
+		ReportError("Inflator failed to seek", "");
 
 		return nullptr;
 	}
 
-	SDL_SeekIO(cooked, static_cast<Sint64>(chunkOffset), SDL_IO_SEEK_SET);
+	size_t originalSize = 0;
 
-	long long originalSize = 0;
-	long long actuallyExtracted = 0;
-	const auto extractedRaw = (void *)(static_cast<const char *>("0")); // HuffInflate(cooked, compressedSize, &originalSize, &actuallyExtracted);
+	const auto preambleRead = SDL_ReadIO(cooked, &originalSize, sizeof(size_t));
 
-	SDL_free(compressedMem);
+	if (preambleRead <= 0) {
+		const auto preambleError = SDL_GetError();
+
+		ReportError("Wad preamble is corrupted", preambleError);
+
+		return nullptr;
+	} else if (originalSize <= 0) {
+		const auto preambleError = SDL_GetError();
+
+		ReportError("Wad layout is corrupted", preambleError);
+
+		return nullptr;
+	}
+
+	compressedSize -= preambleRead;
+
+	unsigned long long alreadyReadFromCompressedSource = 0;
+	size_t actuallyExtracted = 0;
+	const auto decoderState = BrotliDecoderCreateInstance(nullptr, nullptr, nullptr);
+
+	if (decoderState == nullptr) {
+		ReportError("Failed to allocate memory for inflater", "");
+
+		return nullptr;
+	}
+
+	BrotliDecoderSetParameter(decoderState, BROTLI_DECODER_PARAM_LARGE_WINDOW, 1u);
+	BrotliDecoderResult result = BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT;
+
+	const uint8_t* next_in = nullptr;
+	auto extractedRaw = static_cast<uint8_t *>(SDL_malloc(bufferSize));
+	size_t extractedRawSize = bufferSize;
+	auto buffer = static_cast<uint8_t *>(malloc(bufferSize * 2));
+	uint8_t* input = buffer;
+	uint8_t* output = buffer + bufferSize;
+	size_t available_in = 0;
+	size_t available_out = bufferSize;
+	uint8_t* next_out = output;
+
+	for (;;) {
+		if (result == BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT) {
+			if (alreadyReadFromCompressedSource >= compressedSize) {
+				fprintf(stderr, "corrupt input\n");
+
+				return nullptr;
+			}
+
+			const auto remainingIn = compressedSize - alreadyReadFromCompressedSource;
+
+			if (remainingIn <= 0) {
+				ReportError("Compressed source underflow whilst inflating", "");
+
+				return nullptr;
+			}
+
+			if (remainingIn < bufferSize) {
+				available_in = SDL_ReadIO(cooked, input, remainingIn);
+			} else {
+				available_in = SDL_ReadIO(cooked, input, bufferSize);
+			}
+
+			if (available_in == 0) {
+				ReportError("Compressed source exhausted prematurely", "");
+
+				return nullptr;
+			}
+
+			for (size_t i = 0; i < available_in; ++i) {
+				input[i] ^= 0b10000010;
+			}
+
+			alreadyReadFromCompressedSource += available_in;
+			next_in = input;
+		} else if (result == BROTLI_DECODER_RESULT_NEEDS_MORE_OUTPUT) {
+			// provide output
+			if (!WriteOutput(&extractedRaw, &extractedRawSize, next_out, output, &actuallyExtracted)) {
+				return BROTLI_FALSE;
+			}
+
+			available_out = bufferSize;
+			next_out = output;
+		} else if (result == BROTLI_DECODER_RESULT_SUCCESS) {
+			// flush output
+			if (!WriteOutput(&extractedRaw, &extractedRawSize, next_out, output, &actuallyExtracted)) {
+				return BROTLI_FALSE;
+			}
+
+			available_out = 0;
+			next_out = output;
+
+			break;
+		} else {
+			/* result == BROTLI_DECODER_RESULT_ERROR */
+			fprintf(stderr, "corrupt input\n");
+
+			return nullptr;
+		}
+
+		// advance
+		result = BrotliDecoderDecompressStream(
+			decoderState,
+			&available_in,
+			&next_in,
+			&available_out,
+			&next_out,
+			nullptr);
+	}
+
 	if (actuallyExtracted != originalSize)
 	{
 		std::stringstream readError;
@@ -143,6 +282,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 	}
 
 	*stream = extractedStream;
+
 	return extractedRaw;
 }
 
