@@ -8,14 +8,14 @@ set(SDL_SHARED OFF)
 set(BUILD_SHARED_LIBS OFF)
 add_subdirectory(SDL)
 
-set(SDLTTF_VENDORED ON)
-add_subdirectory(SDL_ttf EXCLUDE_FROM_ALL)
+    set(SDLTTF_VENDORED ON)
+    add_subdirectory(SDL_ttf EXCLUDE_FROM_ALL)
 
-set(SDLIMAGE_VENDORED ON)
-add_subdirectory(SDL_image EXCLUDE_FROM_ALL)
+    set(SDLIMAGE_VENDORED ON)
+    add_subdirectory(SDL_image EXCLUDE_FROM_ALL)
 
-#set(SDLMIXER_VENDORED ON)
-#add_subdirectory(SDL_mixer EXCLUDE_FROM_ALL)
+    #set(SDLMIXER_VENDORED ON)
+    #add_subdirectory(SDL_mixer EXCLUDE_FROM_ALL)
 
 set(BROTLI_BUNDLED_MODE ON)
 set(BROTLI_BUILD_TOOLS OFF)
@@ -26,7 +26,8 @@ add_executable(blooDot main.cpp
         xassy/enxassy.h
         xassy/dexassy.cpp
         xassy/dexassy.h
-        src/util/bytefmt.h)
+        src/util/bytefmt.h
+        main.h)
 
 set_target_properties(blooDot PROPERTIES LINK_FLAGS "-static")
 
