@@ -6,6 +6,7 @@
 #include <SDL3_ttf/SDL_ttf.h>
 
 #include "brotli/c/common/version.h"
+#include "SDL3_mixer/SDL_mixer.h"
 #include "xassy/enxassy.h"
 #include "src/util/bytefmt.h"
 #include "xassy/dexassy.h"
@@ -76,6 +77,39 @@ int main(const int argc, char *argv[]) {
         << SDL_VERSIONNUM_MICRO(imagingVersion)
         << "\n";
 
+    std::cout
+        << "Audio Library Version "
+        << SDL_MIXER_MAJOR_VERSION
+        << "."
+        << SDL_MIXER_MINOR_VERSION
+        << "."
+        << SDL_MIXER_MICRO_VERSION
+        << "\n";
+
+    const auto numAudioDrivers = SDL_GetNumAudioDrivers();
+    for (auto i = 0; i < numAudioDrivers; ++i)
+    {
+        const auto& audioDriver = SDL_GetAudioDriver(i);
+
+        if (strnicmp(audioDriver, "dummy", 0xff) != 0) {
+            std::cout << "Audio driver \"" << audioDriver << "\" present\n";
+        }
+    }
+
+    SDL_AudioSpec spec;
+    spec.channels = 8;
+    spec.format = SDL_AUDIO_UNKNOWN;
+    spec.freq = 22050;
+
+    if (Mix_OpenAudio(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec) < 0)
+    {
+        const auto mixerError = SDL_GetError();
+
+        ReportError("Failed to initialize audio", mixerError);
+
+        return RETVAL_AUDIO_INIT_FAIL;
+    }
+
     auto cookedOpen = false;
     for (auto i = 0; i < 1; ++i) {
         if (argc > 1 && strnicmp(argv[1], "xassy", 0xff) == 0) {
@@ -85,6 +119,7 @@ int main(const int argc, char *argv[]) {
         }
 
         std::cout << "AHALLO.\n";
+        std::flush(std::cout);
 
         /* https://stackoverflow.com/a/31926842/1132334 */
         ::PrepareIndex();
@@ -133,6 +168,7 @@ int main(const int argc, char *argv[]) {
         SDL_DestroyWindow(mainWindow);
     }
 
+    Mix_Quit();
     SDL_ClearError();
     SDL_Quit();
 
@@ -153,7 +189,8 @@ void ReportError(const char* message, const char* error)
         << message
         << ", whatever that means, "
         << error
-        << "\n";
+        << "\n"
+        << std::flush;
 }
 
 int xassy() {
@@ -246,7 +283,14 @@ bool CreateMainUiWindow() {
         return false;
     }
 
-    std::cout << "Renderer of window #" << windowId << " is " << SDL_GetStringProperty(rendererProperties, SDL_PROP_RENDERER_NAME_STRING, "(none)") << "\n";
+    std::cout
+        << "Renderer of window #"
+        << windowId
+        << " is "
+        << SDL_GetStringProperty(rendererProperties, SDL_PROP_RENDERER_NAME_STRING, "(none)")
+        << "\n"
+        << std::flush;
+
 
     if (!SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND)) {
         const auto modeError = SDL_GetError();
