@@ -7,6 +7,7 @@
 
 #include "brotli/c/common/version.h"
 #include "SDL3_mixer/SDL_mixer.h"
+#include "src/snd/sfx.h"
 #include "xassy/enxassy.h"
 #include "src/util/bytefmt.h"
 #include "xassy/dexassy.h"
@@ -129,6 +130,13 @@ int main(const int argc, char *argv[]) {
 
             break;
         }
+
+        blooDot::Sfx::PreloadMenuSfx();
+        //blooDot::Settings::PreloadControllerMappings();
+        //const auto musicStarted = blooDot::Music::StartMusic();
+
+        SDL_ShowWindow(mainWindow);
+        blooDot::Sfx::Play(blooDot::Sfx::SoundEffect::SFX_BULLET_DECAY);
 
         while (!Quit) {
             // one game session oscillates back and forth between
