@@ -1,5 +1,6 @@
 #include <iostream>
 #include "scripture.h"
+#include "../../main.h"
 #include "../../xassy/dexassy.h"
 #include "../../res/chunk-constants.h"
 
@@ -24,7 +25,7 @@ namespace blooDot::Scripture {
 	{
 		if (!TTF_WasInit())
 		{
-			if (TTF_Init() < 0)
+			if (!TTF_Init())
 			{
 				const auto ttfError = SDL_GetError();
 

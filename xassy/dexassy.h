@@ -15,8 +15,6 @@ int constexpr length(const char* str) // NOLINT(*-no-recursion)
 
 constexpr auto lenSignature = length(signature);
 
-extern void ReportError(const char*, const char*);
-
 void PrepareIndex();
 bool OpenCooked();
 void* Retrieve(int chunkKey, SDL_IOStream** stream);
