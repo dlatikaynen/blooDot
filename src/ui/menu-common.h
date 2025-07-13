@@ -12,6 +12,7 @@ namespace blooDot::MenuCommon
         bool enterMenuItem = false;
         bool leaveDialog = false;
         bool leaveMain = false;
+        bool abortMain = false;
         int carouselItemIndex = -1;
         int carouselCount = 0;
         int carouselSelectedIndex = 0;

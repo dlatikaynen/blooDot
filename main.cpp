@@ -9,6 +9,8 @@
 #include "SDL3_mixer/SDL_mixer.h"
 #include "src/shared-constants.h"
 #include "src/snd/sfx.h"
+#include "src/state/settings.h"
+#include "src/ui/scripture.h"
 #include "src/ui/splash.h"
 #include "xassy/enxassy.h"
 #include "src/util/bytefmt.h"
@@ -135,9 +137,18 @@ int main(const int argc, char *argv[]) {
         }
 
         blooDot::Sfx::PreloadMenuSfx();
-        //blooDot::Settings::PreloadControllerMappings();
+        blooDot::Settings::PreloadControllerMappings();
         //const auto musicStarted = blooDot::Music::StartMusic();
 
+        if (!blooDot::Scripture::LoadFonts())
+        {
+            retVal = blooDot::RETVAL_LOAD_FONTS_FAIL;
+
+            break;
+        }
+
+        blooDot::Settings::Load();
+        blooDot::Settings::ApplyLanguage();
         SDL_ShowWindow(blooDot::mainWindow);
         blooDot::Sfx::Play(blooDot::Sfx::SoundEffect::SFX_BULLET_DECAY);
 
@@ -153,8 +164,14 @@ int main(const int argc, char *argv[]) {
             }
 
             // process the "main menu" and clean it up
-            if (blooDot::Splash::SplashLoop(blooDot::renderer)) {
-                // noop
+            const auto splashResult = blooDot::Splash::SplashLoop(blooDot::renderer);
+
+            if (splashResult.abortMain) {
+                std::cout << "Aborting from main menu (uncommanded quit)" << std::endl;
+                blooDot::Quit = true;
+            } else if (splashResult.leaveMain) {
+                std::cout << "Leaving from main menu (clean quit)" << std::endl;
+                blooDot::Quit = true;
             }
 
             blooDot::CleanupMainUiWindow();
@@ -163,6 +180,8 @@ int main(const int argc, char *argv[]) {
             // initialize and open the arena. if the outcome of the main menu
             // is to quit, we quit now
             if (blooDot::Quit) {
+                std::cout << "Quitting" << std::endl;
+
                 break;
             }
 
@@ -170,6 +189,8 @@ int main(const int argc, char *argv[]) {
             SDL_Delay(16);
         }
     }
+
+    blooDot::Scripture::CloseFonts();
 
     if (cookedOpen) {
         CloseCooked();

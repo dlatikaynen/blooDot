@@ -2,25 +2,13 @@
 #define SPLASH_H
 
 #include <SDL3/SDL.h>
-#include <SDL3_ttf/SDL_ttf.h>
-#include <cairo.h>
-
-extern void ReportError(const char*, const char*);
-extern void* Retrieve(int chunkKey, SDL_IOStream** stream);
-extern bool LoadFonts();
-extern TTF_Font* GetFont(int fontKey);
-extern SDL_Texture* RenderText(SDL_Renderer*, SDL_Rect*, int, int, const char*, SDL_Color, bool bold);
-extern SDL_Texture* BeginRenderDrawing(SDL_Renderer* renderTarget, int canvasWidth, int canvasHeight);
-extern cairo_t* GetDrawingSink();
-extern void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture, SDL_Rect* destRect);
-extern void DrawLabel(SDL_Renderer*, int, int, SDL_Texture*, SDL_Rect*);
-extern cairo_t* DrawChevron(cairo_t*, double, double, bool, unsigned short);
-extern bool SettingsMenuLoop(SDL_Renderer*);
+#include "menu-common.h"
 
 namespace blooDot::Splash
 {
-    bool SplashLoop(SDL_Renderer*);
+    MenuCommon::MenuDialogInteraction SplashLoop(SDL_Renderer*);
 
+    bool LoadSplashInternal(SDL_Renderer* renderer);
     void BounceInternal(SDL_Rect* srcRect);
     void AssignNewSpeedInternal(int* speed);
     void DelayBackgroundAnimInternal();

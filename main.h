@@ -11,7 +11,8 @@ namespace blooDot {
     constexpr int RETVAL_DEXASSY_FAIL = 0xacab04;
     constexpr int RETVAL_CREATE_MAIN_UI_FAIL = 0xacab05;
     constexpr int RETVAL_AUDIO_INIT_FAIL = 0xacab06;
-    // next: 07
+    constexpr int RETVAL_LOAD_FONTS_FAIL = 0xacab07;
+    // next: 08
     constexpr int RETVAL_NO_CLEAN_SHUTDOWN = 0xacab03;
 
     inline SDL_Window* mainWindow = nullptr;

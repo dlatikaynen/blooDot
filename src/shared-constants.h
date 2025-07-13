@@ -1,6 +1,8 @@
 #ifndef SHARED_CONSTANTS_H
 #define SHARED_CONSTANTS_H
 
+#include "SDL3/SDL.h"
+
 namespace blooDot::Constants {
     constexpr int GodsPreferredWidth = 640;
     constexpr int GodsPreferredHight = 480;

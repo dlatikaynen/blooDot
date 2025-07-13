@@ -44,6 +44,12 @@ add_executable(blooDot main.cpp
         src/util/geom2d.cpp
         src/state/settings.h
         src/state/settings.cpp
+        src/ui/scripture.h
+        src/ui/scripture.cpp
+        src/ui/drawing.h
+        src/ui/drawing.cpp
+        src/ui/dialog-controls.h
+        src/ui/dialog-controls.cpp
 )
 
 set_target_properties(blooDot PROPERTIES LINK_FLAGS "-static")
