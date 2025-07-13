@@ -17,8 +17,6 @@ add_subdirectory(SDL_image EXCLUDE_FROM_ALL)
 #set(SDLMIXER_VENDORED ON) -- does not work with this 3.3.0 version of mixer
 add_subdirectory(SDL_mixer EXCLUDE_FROM_ALL)
 
-#add_subdirectory(cairo EXCLUDE_FROM_ALL)
-
 set(BROTLI_BUNDLED_MODE ON)
 set(BROTLI_BUILD_TOOLS OFF)
 add_subdirectory(brotli)
@@ -31,7 +29,9 @@ add_executable(blooDot main.cpp
         src/util/bytefmt.h
         main.h
         src/snd/sfx.h
-        src/snd/sfx.cpp)
+        src/snd/sfx.cpp
+        src/ui/splash.h
+        src/ui/splash.cpp)
 
 set_target_properties(blooDot PROPERTIES LINK_FLAGS "-static")
 
@@ -41,8 +41,12 @@ target_link_libraries(blooDot PUBLIC SDL3_ttf-static)
 target_link_libraries(blooDot PUBLIC SDL3_image-static)
 target_link_libraries(blooDot PUBLIC SDL3_mixer-static)
 
+# other open source components that we link to
+target_include_directories(blooDot PRIVATE ./cairo/include)
+target_link_libraries(blooDot PRIVATE /en/blooDot/cairo/lib/x64/cairo.lib)
+
 # for xassy
 target_link_libraries(blooDot PUBLIC brotlicommon)
 target_link_libraries(blooDot PUBLIC brotlienc)
 target_link_libraries(blooDot PUBLIC brotlidec)
-include_directories(./brotli/c/include)
+target_include_directories(blooDot PRIVATE ./brotli/c/include)

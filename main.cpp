@@ -102,11 +102,11 @@ int main(const int argc, char *argv[]) {
     spec.format = SDL_AUDIO_UNKNOWN;
     spec.freq = 22050;
 
-    if (Mix_OpenAudio(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec) < 0)
+    if (!Mix_OpenAudio(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec))
     {
         const auto mixerError = SDL_GetError();
 
-        ReportError("Failed to initialize audio", mixerError);
+        ReportError("FAIL Could not initialize audio", mixerError);
 
         return RETVAL_AUDIO_INIT_FAIL;
     }
@@ -176,12 +176,13 @@ int main(const int argc, char *argv[]) {
         SDL_DestroyWindow(mainWindow);
     }
 
+    blooDot::Sfx::Teardown();
     Mix_Quit();
     SDL_ClearError();
     SDL_Quit();
 
     if (const auto shutdownError = SDL_GetError(); strnlen(shutdownError, 1) > 0) {
-        ReportError("Could not quit cleanly", shutdownError);
+        ReportError("WARN Could not quit cleanly", shutdownError);
 
         if (retVal == RETVAL_OK) {
             retVal = RETVAL_NO_CLEAN_SHUTDOWN;
@@ -222,13 +223,13 @@ int xassy() {
 
 bool CreateMainUiWindow() {
     if (mainWindow) {
-        ReportError("There is already a main window. Clean up the previous one, before you create another", "Window Manager");
+        ReportError("FAIL There is already a main window. Clean up the previous one, before you create another", "Window Manager");
 
         return false;
     }
 
     if (renderer) {
-        ReportError("There is already a UI renderer. Clean up the previous one, before you create another", "Window Manager");
+        ReportError("FAIL There is already a UI renderer. Clean up the previous one, before you create another", "Window Manager");
         return false;
     }
 
@@ -246,7 +247,7 @@ bool CreateMainUiWindow() {
     {
         const auto windowError = SDL_GetError();
 
-        ReportError("Failed to create the main UI window", windowError);
+        ReportError("FAIL Failed to create the main UI window", windowError);
 
         return false;
     }
@@ -256,7 +257,7 @@ bool CreateMainUiWindow() {
     if (windowId == 0) {
         const auto winIdError = SDL_GetError();
 
-        ReportError("Failed to obtain window Id of main UI window", winIdError);
+        ReportError("FAIL Failed to obtain window Id of main UI window", winIdError);
 
         return false;
     }
@@ -266,7 +267,7 @@ bool CreateMainUiWindow() {
 	if (!SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl")) {
 	    const auto hintError = SDL_GetError();
 
-	    ReportError("Failed to set GPU renderer hint", hintError);
+	    ReportError("FAIL Failed to set GPU renderer hint", hintError);
 
 	    return false;
 	}
@@ -276,7 +277,7 @@ bool CreateMainUiWindow() {
     {
         const auto rendererError = SDL_GetError();
 
-        ReportError("Failed to create a GPU renderer", rendererError);
+        ReportError("FAIL Failed to create a GPU renderer", rendererError);
 
         return false;
     }
@@ -286,7 +287,7 @@ bool CreateMainUiWindow() {
     if(rendererProperties == 0) {
         const auto infoError = SDL_GetError();
 
-        ReportError("Failed to obtain renderer info", infoError);
+        ReportError("FAIL Failed to obtain renderer info", infoError);
 
         return false;
     }
@@ -303,7 +304,7 @@ bool CreateMainUiWindow() {
     if (!SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND)) {
         const auto modeError = SDL_GetError();
 
-        ReportError("Failed to set blend mode", modeError);
+        ReportError("FAIL Failed to set blend mode", modeError);
 
         return false;
     }
@@ -311,7 +312,7 @@ bool CreateMainUiWindow() {
     if (!SDL_SetWindowPosition(mainWindow,SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED)) {
         const auto posError = SDL_GetError();
 
-        ReportError("Failed to set the position of the main UI window", posError);
+        ReportError("WARN Failed to set the position of the main UI window", posError);
 
         // this is not fatal; we do not exit
     }
@@ -319,7 +320,7 @@ bool CreateMainUiWindow() {
     if (!SDL_ShowWindow(mainWindow)) {
         const auto showError = SDL_GetError();
 
-        ReportError("Failed to bring up the main UI window", showError);
+        ReportError("FAIL Failed to bring up the main UI window", showError);
 
         return false;
     }
@@ -327,7 +328,7 @@ bool CreateMainUiWindow() {
     if (!SDL_SyncWindow(mainWindow)) {
         const auto syncError = SDL_GetError();
 
-        ReportError("Failed to await the synchronization of the main UI window", syncError);
+        ReportError("WARN Failed to await the synchronization of the main UI window", syncError);
 
         // this is not fatal; we do not exit
     }

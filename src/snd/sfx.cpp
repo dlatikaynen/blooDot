@@ -45,13 +45,13 @@ namespace blooDot::Sfx
 			{
 				const auto& playError = SDL_GetError();
 
-				ReportError("Failed to play sound effect", playError);
+				ReportError("FAIL Could not play sound effect", playError);
 
 				return;
 			}
 
 			std::stringstream whichEffect;
-			whichEffect << "Played " << effect << " on channel #" << result << "\n";
+			whichEffect << "INFO Played " << effect << " on channel #" << result << "\n";
 			std::cout << whichEffect.str();
 #else
 			Mix_PlayChannel(-1, cacheEntry, 0);
@@ -85,21 +85,33 @@ namespace blooDot::Sfx
 		const auto& chunkKey = GetResourceKeyInternal(effect);
 		SDL_IOStream* soundFile;
 		const auto soundMem = Retrieve(chunkKey, &soundFile);
-		const auto& soundEffect = Mix_LoadWAV_IO(soundFile, true);
+		const auto& soundEffect = Mix_LoadWAV_IO(soundFile, false);
 
 		if (!soundEffect)
 		{
 			const auto loadError = SDL_GetError();
 
 			std::stringstream loadMessage;
-			loadMessage << "Failed to load the " << effect << " sound effect";
+			loadMessage << "FAIL Could not load the " << effect << " sound effect";
 
 			const auto& strLoadMessage = loadMessage.str();
 
 			ReportError(strLoadMessage.c_str(), loadError);
+
+			return nullptr;
 		}
 
-		//soundFile->close(soundFile);
+		if (!SDL_CloseIO(soundFile)) {
+			const auto closeError = SDL_GetError();
+
+			std::stringstream closeMessage;
+			closeMessage << "WARN Failed to close the stream after loading the " << effect << " sound effect";
+
+			const auto& strCloseMessage = closeMessage.str();
+
+			ReportError(strCloseMessage.c_str(), closeError);
+		}
+
 		SDL_free(soundMem);
 
 		return soundEffect;
