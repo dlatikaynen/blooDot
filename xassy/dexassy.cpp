@@ -2,6 +2,7 @@
 #include <sstream>
 #include <vector>
 
+#include "../main.h"
 #include "dexassy.h"
 #include "brotli/types.h"
 #include "brotli/decode.h"
@@ -29,7 +30,7 @@ bool OpenCooked()
 {
 	if (cooked)
 	{
-		ReportError("FAIL Could not open wad", "already open");
+		blooDot::ReportError("FAIL Could not open wad", "already open");
 
 		return false;
 	}
@@ -46,7 +47,7 @@ bool OpenCooked()
 	{
 		const auto openError = SDL_GetError();
 
-		ReportError("FAIL Could not read wad", openError);
+		blooDot::ReportError("FAIL Could not read wad", openError);
 
 		return false;
 	}
@@ -58,7 +59,7 @@ bool OpenCooked()
 	{
 		const auto retrieveError = SDL_GetError();
 
-		ReportError("FAIL Could not retrieve from wad", retrieveError);
+		blooDot::ReportError("FAIL Could not retrieve from wad", retrieveError);
 
 		return false;
 	}
@@ -83,7 +84,7 @@ bool OpenCooked()
 	if (!SDL_CloseIO(dlgStream)) {
 		const auto closeError = SDL_GetError();
 
-		ReportError("FAIL Could not close principal wad stream", closeError);
+		blooDot::ReportError("FAIL Could not close principal wad stream", closeError);
 
 		result = false;
 	}
@@ -104,7 +105,7 @@ static BROTLI_BOOL WriteOutput(uint8_t** outBuffer, size_t* outBufferSize, const
 	}
 
 	if (out_size > bufferSize) {
-		ReportError("FAIL Attempt to flush more than one buffer's worth of bytes per chunk", "Inflator");
+		blooDot::ReportError("FAIL Attempt to flush more than one buffer's worth of bytes per chunk", "Inflator");
 
 		return BROTLI_FALSE;
 	}
@@ -129,7 +130,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 
 	*stream = nullptr;
 	if (SDL_SeekIO(cooked, static_cast<Sint64>(chunkOffset), SDL_IO_SEEK_SET) == -1) {
-		ReportError("FAIL Failed to seek", "Inflator");
+		blooDot::ReportError("FAIL Failed to seek", "Inflator");
 
 		return nullptr;
 	}
@@ -141,13 +142,15 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 	if (preambleRead <= 0) {
 		const auto preambleError = SDL_GetError();
 
-		ReportError("FAIL Wad preamble is corrupted", preambleError);
+		blooDot::ReportError("FAIL Wad preamble is corrupted", preambleError);
 
 		return nullptr;
-	} else if (originalSize <= 0) {
+	}
+
+	if (originalSize <= 0) {
 		const auto preambleError = SDL_GetError();
 
-		ReportError("FAIL Wad layout is corrupted", preambleError);
+		blooDot::ReportError("FAIL Wad layout is corrupted", preambleError);
 
 		return nullptr;
 	}
@@ -159,7 +162,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 	const auto decoderState = BrotliDecoderCreateInstance(nullptr, nullptr, nullptr);
 
 	if (decoderState == nullptr) {
-		ReportError("FAIL Failed to allocate memory", "Inflator");
+		blooDot::ReportError("FAIL Failed to allocate memory", "Inflator");
 
 		return nullptr;
 	}
@@ -180,7 +183,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 	for (;;) {
 		if (result == BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT) {
 			if (alreadyReadFromCompressedSource >= compressedSize) {
-				ReportError("FAIL Extra input", "Inflator");
+				blooDot::ReportError("FAIL Extra input", "Inflator");
 
 				return nullptr;
 			}
@@ -188,7 +191,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 			const auto remainingIn = compressedSize - alreadyReadFromCompressedSource;
 
 			if (remainingIn <= 0) {
-				ReportError("FAIL Compressed source underflow", "Inflator");
+				blooDot::ReportError("FAIL Compressed source underflow", "Inflator");
 
 				return nullptr;
 			}
@@ -200,7 +203,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 			}
 
 			if (available_in == 0) {
-				ReportError("FAIL Compressed source exhausted prematurely", "Inflator");
+				blooDot::ReportError("FAIL Compressed source exhausted prematurely", "Inflator");
 
 				return nullptr;
 			}
@@ -231,7 +234,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 			break;
 		} else {
 			/* result == BROTLI_DECODER_RESULT_ERROR */
-			ReportError("FAIL Corrupted input", "Inflator");
+			blooDot::ReportError("FAIL Corrupted input", "Inflator");
 
 			return nullptr;
 		}
@@ -252,7 +255,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 		readError << originalSize << " bytes expected, " << actuallyExtracted << " bytes actually extracted";
 		const auto& strReadError = readError.str();
 
-		ReportError("FAIL Principal wad chunk corrupted", strReadError.c_str());
+		blooDot::ReportError("FAIL Principal wad chunk corrupted", strReadError.c_str());
 
 		return nullptr;
 	}
@@ -277,7 +280,7 @@ void* Retrieve(int chunkKey, SDL_IOStream** const stream)
 		extractError << "Chunk #" << chunkKey << ", " << streamError;
 		const auto& strExtractError = extractError.str();
 
-		ReportError("FAIL Failed to extract from principal wad", strExtractError.c_str());
+		blooDot::ReportError("FAIL Failed to extract from principal wad", strExtractError.c_str());
 
 		return nullptr;
 	}

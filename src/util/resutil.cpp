@@ -1,4 +1,5 @@
 #include "resutil.h"
+#include "../../main.h"
 #include "SDL3_image/SDL_image.h"
 #include "../../xassy/dexassy.h"
 #include "../../res/chunk-constants.h"
@@ -13,7 +14,7 @@ namespace blooDot::Res
 	/// <summary>
 	/// Leaves the stream open
 	/// </summary>
-	SDL_Texture* LoadPicture(SDL_Renderer* renderer, SDL_IOStream* reader, SDL_Rect* dimensions)
+	SDL_Texture* LoadPicture(SDL_Renderer* renderer, SDL_IOStream* reader, SDL_FRect* dimensions)
 	{
 		const auto& surface = IMG_LoadPNG_IO(reader);
 		if (!surface)
@@ -28,7 +29,7 @@ namespace blooDot::Res
 		return LoadPictureInternal(renderer, surface, dimensions);
 	}
 
-	SDL_Texture* LoadPicture(SDL_Renderer* renderer, const int chunkKey, SDL_Rect* dimensions)
+	SDL_Texture* LoadPicture(SDL_Renderer* renderer, const int chunkKey, SDL_FRect* dimensions)
 	{
 		SDL_IOStream* resStream;
 		const auto resMem = Retrieve(chunkKey, &resStream);
@@ -157,7 +158,7 @@ namespace blooDot::Res
 		return true;
 	}
 
-	SDL_Texture* LoadPictureInternal(SDL_Renderer* renderer, SDL_Surface* surface, SDL_Rect* dimensions)
+	SDL_Texture* LoadPictureInternal(SDL_Renderer* renderer, SDL_Surface* surface, SDL_FRect* dimensions)
 	{
 		const auto& resTexture = SDL_CreateTextureFromSurface(renderer, surface);
 
@@ -175,8 +176,8 @@ namespace blooDot::Res
 
 		layoutRect.x = 0;
 		layoutRect.y = 0;
-		layoutRect.w = surface->w;
-		layoutRect.h = surface->h;
+		layoutRect.w = static_cast<float>(surface->w);
+		layoutRect.h = static_cast<float>(surface->h);
 		SDL_free(surface);
 
 		return resTexture;

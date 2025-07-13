@@ -7,23 +7,25 @@
 
 #include "brotli/c/common/version.h"
 #include "SDL3_mixer/SDL_mixer.h"
+#include "src/shared-constants.h"
 #include "src/snd/sfx.h"
 #include "src/ui/splash.h"
 #include "xassy/enxassy.h"
 #include "src/util/bytefmt.h"
 #include "xassy/dexassy.h"
+#include "xassy/enxlate.h"
 
 int main(const int argc, char *argv[]) {
     const auto version = "4.0.0";
-    int retVal = RETVAL_OK;
+    int retVal = blooDot::RETVAL_OK;
 
-    std::cout << "Hello there and welcome to " << NotG << " " << version << "!\n";
+    std::cout << "Hello there and welcome to " << blooDot::NotG << " " << version << "!\n";
     if (!SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO)) {
         const auto initError = SDL_GetError();
 
         std::cerr << "Failed to initialize video subsystem, KTHXBYE: " << initError << std::endl;
 
-        return RETVAL_SDL_INIT_FAIL;
+        return blooDot::RETVAL_SDL_INIT_FAIL;
     }
 
     const auto sdlVersion = SDL_GetVersion();
@@ -63,7 +65,7 @@ int main(const int argc, char *argv[]) {
     if (numRenderDrivers == 0) {
         std::cerr << "No render drivers available";
 
-        return RETVAL_SDL_NO_RENDER_DRIVERS_FAIL;
+        return blooDot::RETVAL_SDL_NO_RENDER_DRIVERS_FAIL;
     }
 
     for (auto i = 0; i < numRenderDrivers; ++i) {
@@ -107,15 +109,15 @@ int main(const int argc, char *argv[]) {
     {
         const auto mixerError = SDL_GetError();
 
-        ReportError("FAIL Could not initialize audio", mixerError);
+        blooDot::ReportError("FAIL Could not initialize audio", mixerError);
 
-        return RETVAL_AUDIO_INIT_FAIL;
+        return blooDot::RETVAL_AUDIO_INIT_FAIL;
     }
 
     auto cookedOpen = false;
     for (auto i = 0; i < 1; ++i) {
         if (argc > 1 && strnicmp(argv[1], "xassy", 0xff) == 0) {
-            retVal = xassy();
+            retVal = blooDot::xassy();
 
             break;
         }
@@ -127,7 +129,7 @@ int main(const int argc, char *argv[]) {
         ::PrepareIndex();
         cookedOpen = OpenCooked();
         if (!cookedOpen) {
-            retVal = RETVAL_DEXASSY_FAIL;
+            retVal = blooDot::RETVAL_DEXASSY_FAIL;
 
             break;
         }
@@ -136,31 +138,31 @@ int main(const int argc, char *argv[]) {
         //blooDot::Settings::PreloadControllerMappings();
         //const auto musicStarted = blooDot::Music::StartMusic();
 
-        SDL_ShowWindow(mainWindow);
+        SDL_ShowWindow(blooDot::mainWindow);
         blooDot::Sfx::Play(blooDot::Sfx::SoundEffect::SFX_BULLET_DECAY);
 
-        while (!Quit) {
+        while (!blooDot::Quit) {
             // one game session oscillates back and forth between
             // the outer UI and the arena. the arena can only be reached
             // again via the outer UI (the "main menu"). the arena can
             // quit out to the operating system directly though
-            if (!CreateMainUiWindow()) {
-                retVal = RETVAL_CREATE_MAIN_UI_FAIL;
+            if (!blooDot::CreateMainUiWindow()) {
+                retVal = blooDot::RETVAL_CREATE_MAIN_UI_FAIL;
 
                 break;
             }
 
             // process the "main menu" and clean it up
-    		if (blooDot::Splash::SplashLoop(renderer)) {
+            if (blooDot::Splash::SplashLoop(blooDot::renderer)) {
                 // noop
-    		}
+            }
 
-            CleanupMainUiWindow();
+            blooDot::CleanupMainUiWindow();
 
             // if the outcome of the main menu is to start a game,
             // initialize and open the arena. if the outcome of the main menu
             // is to quit, we quit now
-            if (Quit) {
+            if (blooDot::Quit) {
                 break;
             }
 
@@ -173,12 +175,12 @@ int main(const int argc, char *argv[]) {
         CloseCooked();
     }
 
-    if (renderer) {
-        SDL_DestroyRenderer(renderer);
+    if (blooDot::renderer) {
+        SDL_DestroyRenderer(blooDot::renderer);
     }
 
-    if (mainWindow) {
-        SDL_DestroyWindow(mainWindow);
+    if (blooDot::mainWindow) {
+        SDL_DestroyWindow(blooDot::mainWindow);
     }
 
     blooDot::Sfx::Teardown();
@@ -187,163 +189,180 @@ int main(const int argc, char *argv[]) {
     SDL_Quit();
 
     if (const auto shutdownError = SDL_GetError(); strnlen(shutdownError, 1) > 0) {
-        ReportError("WARN Could not quit cleanly", shutdownError);
+        blooDot::ReportError("WARN Could not quit cleanly", shutdownError);
 
-        if (retVal == RETVAL_OK) {
-            retVal = RETVAL_NO_CLEAN_SHUTDOWN;
+        if (retVal == blooDot::RETVAL_OK) {
+            retVal = blooDot::RETVAL_NO_CLEAN_SHUTDOWN;
         }
     }
 
     return retVal;
 }
 
-void ReportError(const char* message, const char* error)
-{
-    std::cerr
-        << message
-        << ", whatever that means, "
-        << error
-        << "\n"
-        << std::flush;
-}
-
-int xassy() {
-    XassyCookInfo cookStats{};
-    Cook(&cookStats);
-
-    const auto sizeRaw = blooDot::bytesize(cookStats.numBytesBefore);
-    const auto sizeCooked = blooDot::bytesize(cookStats.numBytesAfter);
-
-    std::cout
-        << "Assembled "
-        << cookStats.numFiles
-        << " chunks from "
-        << sizeRaw
-        << " down to "
-        << sizeCooked
-        << "\n";
-
-    return RETVAL_OK;
-}
-
-bool CreateMainUiWindow() {
-    if (mainWindow) {
-        ReportError("FAIL There is already a main window. Clean up the previous one, before you create another", "Window Manager");
-
-        return false;
-    }
-
-    if (renderer) {
-        ReportError("FAIL There is already a UI renderer. Clean up the previous one, before you create another", "Window Manager");
-        return false;
-    }
-
-    mainWindow = SDL_CreateWindow(
-        NotG,
-        GodsPreferredWidth,
-        GodsPreferredHight,
-        0
-        | SDL_WINDOW_HIDDEN
-        | SDL_WINDOW_HIGH_PIXEL_DENSITY
-        | SDL_WINDOW_OPENGL
-    );
-
-    if (!mainWindow)
+namespace blooDot {
+    void ReportError(const char* message, const char* error)
     {
-        const auto windowError = SDL_GetError();
-
-        ReportError("FAIL Failed to create the main UI window", windowError);
-
-        return false;
+        std::cerr
+            << message
+            << ", whatever that means, "
+            << error
+            << "\n"
+            << std::flush;
     }
 
-    const auto& windowId = SDL_GetWindowID(mainWindow);
+    int xassy() {
+        XassyCookInfo cookStats{};
 
-    if (windowId == 0) {
-        const auto winIdError = SDL_GetError();
+        if (const auto cookResult = Cook(&cookStats); cookResult == CookReturnCodeSuccess) {
+            const auto sizeRaw = blooDot::bytesize(cookStats.numBytesBefore);
+            const auto sizeCooked = blooDot::bytesize(cookStats.numBytesAfter);
 
-        ReportError("FAIL Failed to obtain window Id of main UI window", winIdError);
+            std::cout
+                << "Assembled "
+                << cookStats.numFiles
+                << " chunks from "
+                << sizeRaw
+                << " down to "
+                << sizeCooked
+                << "\n";
+        } else {
+            return cookResult;
+        }
 
-        return false;
+        XassyXlatInfo xlatStats{};
+        if (const auto xlateResult = Xlate(&xlatStats); xlateResult == XlateReturnCodeSuccess) {
+            std::cout
+                << "Assembled "
+                << xlatStats.numLiterals
+                << " literals from "
+                << xlatStats.numFiles
+                << " file(s)\n";
+        } else {
+            return xlateResult;
+        }
+
+        return RETVAL_OK;
     }
 
-    std::cout << "Created main UI window #" << windowId << " with a resolution that pleases the Lord\n";
+    bool CreateMainUiWindow() {
+        if (mainWindow) {
+            ReportError("FAIL There is already a main window. Clean up the previous one, before you create another", "Window Manager");
 
-	if (!SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl")) {
-	    const auto hintError = SDL_GetError();
+            return false;
+        }
 
-	    ReportError("FAIL Failed to set GPU renderer hint", hintError);
+        if (renderer) {
+            ReportError("FAIL There is already a UI renderer. Clean up the previous one, before you create another", "Window Manager");
+            return false;
+        }
 
-	    return false;
-	}
+        mainWindow = SDL_CreateWindow(
+            NotG,
+            Constants::GodsPreferredWidth,
+            Constants::GodsPreferredHight,
+            0
+            | SDL_WINDOW_HIDDEN
+            | SDL_WINDOW_HIGH_PIXEL_DENSITY
+            | SDL_WINDOW_OPENGL
+        );
 
-    renderer = SDL_CreateRenderer(mainWindow, nullptr);
-    if (!renderer)
-    {
-        const auto rendererError = SDL_GetError();
+        if (!mainWindow)
+        {
+            const auto windowError = SDL_GetError();
 
-        ReportError("FAIL Failed to create a GPU renderer", rendererError);
+            ReportError("FAIL Failed to create the main UI window", windowError);
 
-        return false;
+            return false;
+        }
+
+        const auto& windowId = SDL_GetWindowID(mainWindow);
+
+        if (windowId == 0) {
+            const auto winIdError = SDL_GetError();
+
+            ReportError("FAIL Failed to obtain window Id of main UI window", winIdError);
+
+            return false;
+        }
+
+        std::cout << "Created main UI window #" << windowId << " with a resolution that pleases the Lord\n";
+
+        if (!SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl")) {
+            const auto hintError = SDL_GetError();
+
+            ReportError("FAIL Failed to set GPU renderer hint", hintError);
+
+            return false;
+        }
+
+        renderer = SDL_CreateRenderer(mainWindow, nullptr);
+        if (!renderer)
+        {
+            const auto rendererError = SDL_GetError();
+
+            ReportError("FAIL Failed to create a GPU renderer", rendererError);
+
+            return false;
+        }
+
+        const auto& rendererProperties = SDL_GetRendererProperties(renderer);
+
+        if(rendererProperties == 0) {
+            const auto infoError = SDL_GetError();
+
+            ReportError("FAIL Failed to obtain renderer info", infoError);
+
+            return false;
+        }
+
+        std::cout
+            << "Renderer of window #"
+            << windowId
+            << " is "
+            << SDL_GetStringProperty(rendererProperties, SDL_PROP_RENDERER_NAME_STRING, "(none)")
+            << "\n"
+            << std::flush;
+
+
+        if (!SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND)) {
+            const auto modeError = SDL_GetError();
+
+            ReportError("FAIL Failed to set blend mode", modeError);
+
+            return false;
+        }
+
+        if (!SDL_SetWindowPosition(mainWindow,SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED)) {
+            const auto posError = SDL_GetError();
+
+            ReportError("WARN Failed to set the position of the main UI window", posError);
+
+            // this is not fatal; we do not exit
+        }
+
+        if (!SDL_ShowWindow(mainWindow)) {
+            const auto showError = SDL_GetError();
+
+            ReportError("FAIL Failed to bring up the main UI window", showError);
+
+            return false;
+        }
+
+        if (!SDL_SyncWindow(mainWindow)) {
+            const auto syncError = SDL_GetError();
+
+            ReportError("WARN Failed to await the synchronization of the main UI window", syncError);
+
+            // this is not fatal; we do not exit
+        }
+
+        return true;
     }
 
-    const auto& rendererProperties = SDL_GetRendererProperties(renderer);
-
-    if(rendererProperties == 0) {
-        const auto infoError = SDL_GetError();
-
-        ReportError("FAIL Failed to obtain renderer info", infoError);
-
-        return false;
+    void CleanupMainUiWindow() {
+        SDL_DestroyRenderer(renderer);
+        renderer = nullptr;
+        SDL_DestroyWindow(mainWindow);
+        mainWindow = nullptr;
     }
-
-    std::cout
-        << "Renderer of window #"
-        << windowId
-        << " is "
-        << SDL_GetStringProperty(rendererProperties, SDL_PROP_RENDERER_NAME_STRING, "(none)")
-        << "\n"
-        << std::flush;
-
-
-    if (!SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND)) {
-        const auto modeError = SDL_GetError();
-
-        ReportError("FAIL Failed to set blend mode", modeError);
-
-        return false;
-    }
-
-    if (!SDL_SetWindowPosition(mainWindow,SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED)) {
-        const auto posError = SDL_GetError();
-
-        ReportError("WARN Failed to set the position of the main UI window", posError);
-
-        // this is not fatal; we do not exit
-    }
-
-    if (!SDL_ShowWindow(mainWindow)) {
-        const auto showError = SDL_GetError();
-
-        ReportError("FAIL Failed to bring up the main UI window", showError);
-
-        return false;
-    }
-
-    if (!SDL_SyncWindow(mainWindow)) {
-        const auto syncError = SDL_GetError();
-
-        ReportError("WARN Failed to await the synchronization of the main UI window", syncError);
-
-        // this is not fatal; we do not exit
-    }
-
-    return true;
-}
-
-void CleanupMainUiWindow() {
-    SDL_DestroyRenderer(renderer);
-    renderer = nullptr;
-    SDL_DestroyWindow(mainWindow);
-    mainWindow = nullptr;
 }

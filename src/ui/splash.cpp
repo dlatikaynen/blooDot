@@ -1,18 +1,24 @@
 #include "splash.h"
+
+#include "menu-common.h"
+#include "../../main.h"
 #include "../../res/chunk-constants.h"
 #include "../util/resutil.h"
+#include "../shared-constants.h"
 
 namespace blooDot::Splash {
     bool splashRunning = false;
     SDL_Texture* splashTexture = nullptr;
     double backgroundPosX = 0.0;
     double backgroundPosY = 0.0;
-    const int backdropHorz = 1280 - 640;
-    const int backdropVert = 720 - 480;
+    constexpr int backdropHorz = 1280 - Constants::GodsPreferredWidth;
+    constexpr int backdropVert = 720 - Constants::GodsPreferredHight;
+    MenuCommon::MenuDialogInteraction menuState;
 
     bool LoadSplash(SDL_Renderer* renderer) {
-        SDL_Rect splashRect;
+        SDL_FRect splashRect;
         splashTexture = Res::LoadPicture(renderer, CHUNK_KEY_SPLASH, &splashRect);
+
         if (!splashTexture)
         {
             return false;
@@ -32,6 +38,8 @@ namespace blooDot::Splash {
         }
 
         while (splashRunning) {
+            MenuCommon::HandleMenu(&menuState);
+
             if (!SDL_RenderClear(renderer))
             {
                 const auto clearError = SDL_GetError();

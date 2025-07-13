@@ -24,8 +24,11 @@ add_subdirectory(brotli)
 add_executable(blooDot main.cpp
         xassy/enxassy.cpp
         xassy/enxassy.h
+        xassy/enxlate.h
+        xassy/enxlate.cpp
         xassy/dexassy.cpp
         xassy/dexassy.h
+        res/xlations.cpp
         src/util/bytefmt.h
         src/util/resutil.h
         src/util/resutil.cpp
@@ -33,7 +36,15 @@ add_executable(blooDot main.cpp
         src/snd/sfx.h
         src/snd/sfx.cpp
         src/ui/splash.h
-        src/ui/splash.cpp)
+        src/ui/splash.cpp
+        src/shared-constants.h
+        src/ui/menu-common.h
+        src/ui/menu-common.cpp
+        src/util/geom2d.h
+        src/util/geom2d.cpp
+        src/state/settings.h
+        src/state/settings.cpp
+)
 
 set_target_properties(blooDot PROPERTIES LINK_FLAGS "-static")
 
