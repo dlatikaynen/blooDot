@@ -27,6 +27,8 @@ add_executable(blooDot main.cpp
         xassy/dexassy.cpp
         xassy/dexassy.h
         src/util/bytefmt.h
+        src/util/resutil.h
+        src/util/resutil.cpp
         main.h
         src/snd/sfx.h
         src/snd/sfx.cpp

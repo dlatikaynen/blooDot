@@ -8,6 +8,7 @@
 #include "brotli/c/common/version.h"
 #include "SDL3_mixer/SDL_mixer.h"
 #include "src/snd/sfx.h"
+#include "src/ui/splash.h"
 #include "xassy/enxassy.h"
 #include "src/util/bytefmt.h"
 #include "xassy/dexassy.h"
@@ -150,6 +151,10 @@ int main(const int argc, char *argv[]) {
             }
 
             // process the "main menu" and clean it up
+    		if (blooDot::Splash::SplashLoop(renderer)) {
+                // noop
+    		}
+
             CleanupMainUiWindow();
 
             // if the outcome of the main menu is to start a game,

@@ -128,8 +128,8 @@ int Cook(XassyCookInfo *cookStats)
 						size_t available_out = bufferSize;
 						uint8_t* next_out = output;
 
-						while (!is_eof) {
-							if (available_in == 0) {
+						for (;;) {
+							if (!is_eof) {
 								// provide_input
 								rawFile.read(reinterpret_cast<char*>(input), bufferSize);
 								available_in = rawFile.gcount();
@@ -149,7 +149,7 @@ int Cook(XassyCookInfo *cookStats)
 								free(buffer);
 								rawFile.close();
 
-								return 1212;
+								return CookCompressFail;
 							}
 
 							if (available_out == 0) {
@@ -158,7 +158,7 @@ int Cook(XassyCookInfo *cookStats)
 									free(buffer);
 									rawFile.close();
 
-									return CookReturnCodeRecipeFail;
+									return CookWriteOutputFail;
 								}
 
 								available_out = bufferSize;
@@ -171,7 +171,7 @@ int Cook(XassyCookInfo *cookStats)
 									free(buffer);
 									rawFile.close();
 
-									return CookReturnCodeRecipeFail;
+									return CookFlushOutputFail;
 								}
 
 								available_out = 0;
