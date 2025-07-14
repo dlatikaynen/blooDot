@@ -117,9 +117,7 @@ namespace blooDot::Splash {
             DialogControls::DrawLabel(renderer, 286, 51, titleTexture, &titleRect);
             DialogControls::DrawLabel(renderer, 346, 451, authorTexture, &authorRect);
 
-            const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, Constants::GodsPreferredWidth, Constants::GodsPreferredHight);
-
-            if (drawingTexture)
+            if (const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, Constants::GodsPreferredWidth, Constants::GodsPreferredHight))
             {
                 const auto drawingSink = Drawing::GetDrawingSink();
                 constexpr int yStart = 94;
@@ -140,8 +138,7 @@ namespace blooDot::Splash {
                     itemToDraw = static_cast<Constants::MainMenuItems>(itemToDraw + 1);
                 }
 
-                blooDot::Drawing::EndRenderDrawing(renderer, drawingTexture, nullptr);
-
+                Drawing::EndRenderDrawing(renderer, drawingTexture, nullptr);
                 DialogControls::DrawLabel(renderer, 235, yStart + 0 * stride, continueTexture, &continueRect);
                 DialogControls::DrawLabel(renderer, 235, yStart + 1 * stride, loadTexture, &loadRect);
                 DialogControls::DrawLabel(renderer, 235, yStart + 2 * stride, singleTexture, &singleRect);
