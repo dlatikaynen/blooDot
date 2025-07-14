@@ -1,9 +1,6 @@
 #pragma once
 #include "SDL3/SDL.h"
-
-#ifndef NDEBUG
 #include <filesystem>
-#endif
 
 namespace blooDot::Res
 {

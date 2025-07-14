@@ -12,9 +12,10 @@ set(SDLTTF_VENDORED ON)
 add_subdirectory(SDL_ttf EXCLUDE_FROM_ALL)
 
 set(SDLIMAGE_VENDORED ON)
+set(SDLIMAGE_AVIF OFF)
 add_subdirectory(SDL_image EXCLUDE_FROM_ALL)
 
-#set(SDLMIXER_VENDORED ON) -- does not work with this 3.3.0 version of mixer
+set(SDLMIXER_VENDORED ON)
 add_subdirectory(SDL_mixer EXCLUDE_FROM_ALL)
 
 set(BROTLI_BUNDLED_MODE ON)
@@ -61,7 +62,7 @@ target_link_libraries(blooDot PUBLIC SDL3_image-static)
 target_link_libraries(blooDot PUBLIC SDL3_mixer-static)
 
 # other open source components that we link to
-target_include_directories(blooDot PRIVATE ./cairo/include)
+target_include_directories(blooDot PRIVATE /en/blooDot/cairo/include)
 target_link_libraries(blooDot PRIVATE /en/blooDot/cairo/lib/x64/cairo.lib)
 
 # for xassy

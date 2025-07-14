@@ -2,7 +2,6 @@
 #include <iostream>
 #include <vector>
 #include "SDL3/SDL.h"
-#ifndef NDEBUG
 
 int Xlate(XassyXlatInfo* xlatInfo)
 {
@@ -262,5 +261,3 @@ int Xlate(XassyXlatInfo* xlatInfo)
 
 	return -1;
 }
-
-#endif

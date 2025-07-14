@@ -3,11 +3,8 @@
 #include "SDL3_image/SDL_image.h"
 #include "../../xassy/dexassy.h"
 #include "../../res/chunk-constants.h"
-
-#ifndef NDEBUG
 #include <fstream>
 #include <iostream>
-#endif
 
 namespace blooDot::Res
 {

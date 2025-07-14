@@ -1,6 +1,5 @@
 #ifndef ENXLATE_H
 #define ENXLATE_H
-#ifndef NDEBUG
 
 #include <fstream>
 #include <filesystem>
@@ -26,5 +25,4 @@ typedef struct XlatableIdentifierStruct
 } XlatableIdentifier;
 
 int Xlate(XassyXlatInfo*);
-#endif
 #endif //ENXLATE_H
