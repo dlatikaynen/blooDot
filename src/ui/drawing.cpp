@@ -1,5 +1,6 @@
-#include "drawing.h"
 #include "../../main.h"
+#include "drawing.h"
+#include "../../cairo/include/cairo.h"
 
 namespace blooDot::Drawing {
 	cairo_t* drawingSink = nullptr;
@@ -94,6 +95,20 @@ namespace blooDot::Drawing {
 		return targetTexture;
 	}
 
+	/// <summary>
+	/// Draws immediately on the render target (usually the backbuffer
+	/// of the main window) and cleans everything up
+	/// </summary>
+	void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture, const SDL_FRect* destRect)
+	{
+		SDL_UnlockTexture(targetTexture);
+		SDL_SetTextureBlendMode(targetTexture, SDL_BLENDMODE_BLEND);
+		SDL_RenderTexture(renderTarget, targetTexture, nullptr, destRect);
+
+		SDL_DestroyTexture(targetTexture);
+		cairo_destroy(drawingSink);
+	}
+
 	cairo_t* GetDrawingSink()
 	{
 		return drawingSink;
@@ -111,20 +126,6 @@ namespace blooDot::Drawing {
 		);
 
 		return context;
-	}
-
-	/// <summary>
-	/// Draws immediately on the render target (usually the backbuffer
-	/// of the main window) and cleans everything up
-	/// </summary>
-	void EndRenderDrawing(SDL_Renderer* renderTarget, SDL_Texture* targetTexture, const SDL_FRect* destRect)
-	{
-		SDL_UnlockTexture(targetTexture);
-		SDL_SetTextureBlendMode(targetTexture, SDL_BLENDMODE_BLEND);
-		SDL_RenderTexture(renderTarget, targetTexture, nullptr, destRect);
-
-		SDL_DestroyTexture(targetTexture);
-		cairo_destroy(drawingSink);
 	}
 
 	/// <summary>

@@ -78,6 +78,8 @@ namespace blooDot::Splash {
             { 250,200,200,222 }
         );
 
+        unsigned short frame = 0L;
+
         while (!menuState.leaveDialog) {
             MenuCommon::HandleMenu(&menuState);
 
@@ -115,9 +117,43 @@ namespace blooDot::Splash {
             DialogControls::DrawLabel(renderer, 286, 51, titleTexture, &titleRect);
             DialogControls::DrawLabel(renderer, 346, 451, authorTexture, &authorRect);
 
+            const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, Constants::GodsPreferredWidth, Constants::GodsPreferredHight);
+
+            if (drawingTexture)
+            {
+                const auto drawingSink = Drawing::GetDrawingSink();
+                constexpr int yStart = 94;
+                constexpr int stride = 46;
+                Constants::MainMenuItems itemToDraw = Constants::MMI_CUE;
+
+                for (auto y = yStart; y < 400; y += stride)
+                {
+                    auto thisItem = itemToDraw == menuState.selectedItemIndex;
+
+                    DialogControls::DrawButton(drawingSink, 195, y, 250, 42, thisItem ? Constants::CH_MAINMENU : Constants::CH_NONE);
+                    if (thisItem)
+                    {
+                        DialogControls::DrawChevron(drawingSink, 195 - 7, y + 21, false, frame);
+                        DialogControls::DrawChevron(drawingSink, 195 + 250 + 7, y + 21, true, frame);
+                    }
+
+                    itemToDraw = static_cast<Constants::MainMenuItems>(itemToDraw + 1);
+                }
+
+                blooDot::Drawing::EndRenderDrawing(renderer, drawingTexture, nullptr);
+
+                DialogControls::DrawLabel(renderer, 235, yStart + 0 * stride, continueTexture, &continueRect);
+                DialogControls::DrawLabel(renderer, 235, yStart + 1 * stride, loadTexture, &loadRect);
+                DialogControls::DrawLabel(renderer, 235, yStart + 2 * stride, singleTexture, &singleRect);
+                DialogControls::DrawLabel(renderer, 235, yStart + 3 * stride, localMultiTexture, &localMultiRect);
+                DialogControls::DrawLabel(renderer, 235, yStart + 4 * stride, creatorModeTexture, &creatorModeRect);
+                DialogControls::DrawLabel(renderer, 235, yStart + 5 * stride, settingsTexture, &settingsRect);
+                DialogControls::DrawLabel(renderer, 235, yStart + 6 * stride, quitTexture, &quitRect);
+            }
 
             SDL_RenderPresent(renderer);
             SDL_Delay(16);
+            ++frame;
         }
 
         return menuState;

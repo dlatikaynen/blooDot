@@ -36,6 +36,8 @@ add_executable(blooDot main.cpp
         main.h
         src/snd/sfx.h
         src/snd/sfx.cpp
+        src/ui/drawing.h
+        src/ui/drawing.cpp
         src/ui/splash.h
         src/ui/splash.cpp
         src/shared-constants.h
@@ -47,8 +49,6 @@ add_executable(blooDot main.cpp
         src/state/settings.cpp
         src/ui/scripture.h
         src/ui/scripture.cpp
-        src/ui/drawing.h
-        src/ui/drawing.cpp
         src/ui/dialog-controls.h
         src/ui/dialog-controls.cpp
 )
@@ -62,7 +62,7 @@ target_link_libraries(blooDot PUBLIC SDL3_image-static)
 target_link_libraries(blooDot PUBLIC SDL3_mixer-static)
 
 # other open source components that we link to
-target_include_directories(blooDot PRIVATE /en/blooDot/cairo/include)
+target_include_directories(blooDot PUBLIC /en/blooDot/cairo/include)
 target_link_libraries(blooDot PRIVATE /en/blooDot/cairo/lib/x64/cairo.lib)
 
 # for xassy
