@@ -79,6 +79,8 @@ bool OpenCooked()
 		readResult = SDL_ReadIO(dlgStream, &ch, sizeof(ch));
 	}
 
+	std::cout << std::endl;
+
 	auto result = true;
 
 	if (!SDL_CloseIO(dlgStream)) {
