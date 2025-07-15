@@ -82,6 +82,10 @@ namespace blooDot::Splash {
 
         while (!menuState.leaveDialog) {
             MenuCommon::HandleMenu(&menuState);
+            if (menuState.enterMenuItem)
+            {
+                EnterAndHandleMenuInternal(renderer);
+            }
 
             if (!SDL_RenderClear(renderer))
             {
@@ -101,8 +105,10 @@ namespace blooDot::Splash {
                 break;
             }
 
+            constexpr SDL_Color panelFill = {0x40, 0x40, 0x40, 0xcf};
+
             SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-            SDL_SetRenderDrawColor(renderer, 0x40, 0x40, 0x40, 0xcf);
+            SDL_SetRenderDrawColor(renderer, panelFill.r, panelFill.g, panelFill.b, panelFill.a);
             SDL_RenderFillRect(renderer, &outerMenuRect);
             SDL_SetRenderDrawColor(renderer, 0xc5, 0xc5, 0xc5, 0xe9);
             if (!SDL_RenderRect(renderer, &outerMenuRect))
@@ -182,6 +188,59 @@ namespace blooDot::Splash {
             creatorModeTexture = Scripture::RenderText(renderer, &creatorModeRect, Scripture::FONT_KEY_DIALOG, 23, literalMenuMaker, { 250, 230, 230, 245 });
             settingsTexture = Scripture::RenderText(renderer, &settingsRect, Scripture::FONT_KEY_DIALOG, 23, literalMenuSettings, { 250, 230, 230, 245 });
             quitTexture = Scripture::RenderText(renderer, &quitRect, Scripture::FONT_KEY_DIALOG, 23, literalMenuExit, { 250, 230, 230, 245 });
+        }
+    }
+
+    void EnterAndHandleMenuInternal(SDL_Renderer* renderer)
+    {
+        switch (menuState.selectedItemIndex)
+        {
+            case Constants::MMI_CUE:
+//                if (!_HandleContinue(renderer))
+//                {
+                    menuState.leaveDialog = true;
+                    menuState.dialogResult = Constants::DMR_LAUNCH_MAKER;
+//               }
+
+                break;
+
+            // case MMI_LOAD:
+            //     if (!_HandleLoad(renderer))
+            //     {
+            //         splashRunning = false;
+            //     }
+            //
+            //     break;
+            //
+            // case MMI_NEWSINGLE:
+            // case MMI_NEWMULTI:
+            //     if (!_HandleNew(renderer))
+            //     {
+            //         splashRunning = false;
+            //     }
+            //
+            //     break;
+            //
+            // case MMI_CREATORMODE:
+            //     isCreatorMode = true;
+            //     if (!_EnterAndHandleCreatorMode(renderer))
+            //     {
+            //         splashRunning = false;
+            //     }
+            //
+            //     break;
+            //
+            // case MMI_SETTINGS:
+            //     _EnterAndHandleSettings(renderer);
+            //     break;
+
+            case Constants::MMI_EXIT:
+                menuState.leaveMain = true;
+                menuState.leaveDialog = true;
+                break;
+
+            default:
+                break;
         }
     }
 }
