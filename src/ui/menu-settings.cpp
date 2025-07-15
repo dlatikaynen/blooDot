@@ -9,6 +9,7 @@
 #include "../../res/xlations.h"
 #include "../state/settings.h"
 #include "layout-constants.h"
+#include "menu-settings-about.h"
 
 namespace blooDot::MenuSettings
 {
@@ -169,11 +170,11 @@ namespace blooDot::MenuSettings
 		case SettingsMenuItems::SMI_HELP:
 			_EnterAndHandleHelp(renderer);
 			break;
-
-		case SettingsMenuItems::SMI_ABOUT:
-			_EnterAndHandleAbout(renderer);
-			break;
 		*/
+		case Constants::SettingsMenuItems::SMI_ABOUT:
+			EnterAndHandleAboutInternal(renderer);
+			break;
+
 		default:
 			return false;
 		}
@@ -197,10 +198,10 @@ namespace blooDot::MenuSettings
 	// 	blooDot::MenuSettingsControls::ControlsSettingsMenuLoop(renderer);
 	// }
 	//
-	// void _EnterAndHandleAbout(SDL_Renderer* renderer)
-	// {
-	// 	blooDot::MenuSettingsAbout::MenuLoop(renderer);
-	// }
+	void EnterAndHandleAboutInternal(SDL_Renderer* renderer)
+	{
+		blooDot::MenuSettingsAbout::MenuLoop(renderer);
+	}
 	//
 	// void _EnterAndHandleHelp(SDL_Renderer* renderer)
 	// {

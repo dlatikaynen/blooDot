@@ -56,6 +56,8 @@ add_executable(blooDot blooDot.rc
         src/ui/layout-constants.h
         src/ui/menu-settings.h
         src/ui/menu-settings.cpp
+        src/ui/menu-settings-about.h
+        src/ui/menu-settings-about.cpp
 )
 
 set_target_properties(blooDot PROPERTIES LINK_FLAGS "-static")
