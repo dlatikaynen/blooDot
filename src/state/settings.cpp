@@ -102,7 +102,7 @@ namespace blooDot::Settings
 			sizeof(SettingsStruct)
 		);
 
-		if (numWritten != 1)
+		if (numWritten < sizeof(SettingsStruct))
 		{
 			const auto writeError = SDL_GetError();
 

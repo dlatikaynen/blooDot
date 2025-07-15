@@ -42,6 +42,18 @@ namespace blooDot::Scripture {
 				<< "."
 				<< SDL_TTF_MICRO_VERSION
 				<< "\n";
+
+			int barfMaj, barfMin, barfRev;
+			TTF_GetHarfBuzzVersion(&barfMaj, &barfMin, &barfRev);
+
+			std::cout
+				<< "Harfbuzz Version "
+				<< barfMaj
+				<< "."
+				<< barfMin
+				<< "."
+				<< barfRev
+				<< std::endl;
 		}
 
 		if (!fancyFont)

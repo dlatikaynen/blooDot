@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.31)
 project(blooDot VERSION 4.0.0.0)
 
 set(CMAKE_CXX_STANDARD 20)
+enable_language(RC) # Enable RC language for resource files
 
 set(SDL_STATIC ON)
 set(SDL_SHARED OFF)
@@ -22,7 +23,8 @@ set(BROTLI_BUNDLED_MODE ON)
 set(BROTLI_BUILD_TOOLS OFF)
 add_subdirectory(brotli)
 
-add_executable(blooDot main.cpp
+add_executable(blooDot blooDot.rc
+        main.cpp
         xassy/enxassy.cpp
         xassy/enxassy.h
         xassy/enxlate.h
