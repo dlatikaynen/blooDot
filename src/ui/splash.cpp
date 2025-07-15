@@ -6,6 +6,7 @@
 #include "drawing.h"
 #include "layout-constants.h"
 #include "menu-common.h"
+#include "menu-settings.h"
 #include "scripture.h"
 #include "../../main.h"
 #include "../../res/chunk-constants.h"
@@ -324,10 +325,10 @@ namespace blooDot::Splash {
             //     }
             //
             //     break;
-            //
-            // case MMI_SETTINGS:
-            //     _EnterAndHandleSettings(renderer);
-            //     break;
+
+            case Constants::MMI_SETTINGS:
+                 EnterAndHandleSettingsInternal(renderer);
+                 break;
 
             case Constants::MMI_EXIT:
                 menuState.leaveMain = true;
@@ -336,6 +337,19 @@ namespace blooDot::Splash {
 
             default:
                 break;
+        }
+    }
+
+    void EnterAndHandleSettingsInternal(SDL_Renderer* renderer)
+    {
+        const auto& lcidBefore = std::string(literalLCID);
+
+        MenuSettings::MenuLoop(renderer);
+
+        // because language might have changed
+        if (const auto& lcidAfter = std::string(literalLCID); lcidAfter != lcidBefore)
+        {
+            PrepareTextInternal(renderer);
         }
     }
 }

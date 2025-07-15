@@ -10,6 +10,7 @@ namespace blooDot::Constants {
 
 	constexpr float MillisecondsPerFrame = 16.666f;
 
+	// TODO: consolidate with Ui::Colors
 	constexpr SDL_Color AlienTextColor = { 250,200,200,222 };
 	constexpr SDL_Color ButtonTextColor = { 250, 230, 230, 245 };
 	constexpr SDL_Color ChapterTextColor = { 25, 23, 23, 245 };
