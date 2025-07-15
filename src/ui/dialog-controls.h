@@ -2,8 +2,8 @@
 #define DIALOG_CONTROLS_H
 #include "../../src/shared-constants.h"
 #include <SDL3/SDL.h>
-#include <cairo.h>
-#include <math.h>
+#include "../../cairo/include/cairo.h"
+#include <cmath>
 
 namespace blooDot::DialogControls {
     constexpr auto HALFPI = M_PI / 2.0;

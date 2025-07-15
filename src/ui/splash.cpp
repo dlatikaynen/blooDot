@@ -1,7 +1,10 @@
 #include "splash.h"
 
+#include <random>
+
 #include "dialog-controls.h"
 #include "drawing.h"
+#include "layout-constants.h"
 #include "menu-common.h"
 #include "scripture.h"
 #include "../../main.h"
@@ -15,8 +18,13 @@ namespace blooDot::Splash {
     SDL_Texture* splashTexture = nullptr;
     double backgroundPosX = 0.0;
     double backgroundPosY = 0.0;
+    int backgroundSpeedX = 0;
+    int backgroundSpeedY = 0;
     constexpr int backdropHorz = 1280 - Constants::GodsPreferredWidth;
     constexpr int backdropVert = 720 - Constants::GodsPreferredHight;
+    auto backgroundAnimDelay = Ui::BackgroundAnimInitialDelay;
+    std::default_random_engine generator; // NOLINT(*-msc51-cpp)
+    std::uniform_int_distribution distribution(0, 3);
     MenuCommon::MenuDialogInteraction menuState{};
 
     SDL_FRect continueRect{ 0,0,0,0 };
@@ -54,9 +62,9 @@ namespace blooDot::Splash {
 
         PrepareTextInternal(renderer);
 
-        constexpr SDL_FRect srcRect{ 0,0, Constants::GodsPreferredWidth, Constants::GodsPreferredHight };
+        SDL_FRect srcRect{ 0,0, Constants::GodsPreferredWidth, Constants::GodsPreferredHight };
         constexpr SDL_FRect dstRect{ 0,0, Constants::GodsPreferredWidth, Constants::GodsPreferredHight };
-        SDL_FRect outerMenuRect{ 150,45,340,390 };
+        constexpr SDL_FRect outerMenuRect{ 150,45,340,390 };
         SDL_FRect titleRect{ 0,0,0,0 };
         SDL_FRect authorRect{ 0,0,0,0 };
 
@@ -64,18 +72,18 @@ namespace blooDot::Splash {
             renderer,
             &titleRect,
             Scripture::FONT_KEY_ALIEN,
-            26,
+            Ui::MenuPanelTitleFontSize,
             literalAlienMainMenuLabel,
-            { 250,200,200,222 }
+            Ui::CaptionColor
         );
 
         const auto authorTexture = Scripture::RenderText(
             renderer,
             &authorRect,
             Scripture::FONT_KEY_ALIEN,
-            26,
+            Ui::MenuPanelTitleFontSize,
             literalManufacturer,
-            { 250,200,200,222 }
+            Ui::CaptionColor
         );
 
         unsigned short frame = 0L;
@@ -85,7 +93,13 @@ namespace blooDot::Splash {
             if (menuState.enterMenuItem)
             {
                 EnterAndHandleMenuInternal(renderer);
+            } else if (menuState.leaveDialog) {
+                /* escaping on the splash dialog is equivalent to quit
+                 * (there is no level of menu navigation above splash) */
+                menuState.leaveMain = true;
             }
+
+            BounceInternal(&srcRect);
 
             if (!SDL_RenderClear(renderer))
             {
@@ -105,22 +119,12 @@ namespace blooDot::Splash {
                 break;
             }
 
-            constexpr SDL_Color panelFill = {0x40, 0x40, 0x40, 0xcf};
-
             SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-            SDL_SetRenderDrawColor(renderer, panelFill.r, panelFill.g, panelFill.b, panelFill.a);
-            SDL_RenderFillRect(renderer, &outerMenuRect);
-            SDL_SetRenderDrawColor(renderer, 0xc5, 0xc5, 0xc5, 0xe9);
-            if (!SDL_RenderRect(renderer, &outerMenuRect))
-            {
-                const auto drawRectError = SDL_GetError();
-
-                ReportError("Failed to draw panel border", drawRectError);
+            if (!MenuCommon::DrawMenuPanel(renderer, &outerMenuRect, titleTexture, &titleRect)) {
                 menuState.abortMain = true;
                 menuState.leaveDialog = true;
-            };
+            }
 
-            DialogControls::DrawLabel(renderer, 286, 51, titleTexture, &titleRect);
             DialogControls::DrawLabel(renderer, 346, 451, authorTexture, &authorRect);
 
             if (const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, Constants::GodsPreferredWidth, Constants::GodsPreferredHight))
@@ -159,6 +163,20 @@ namespace blooDot::Splash {
             ++frame;
         }
 
+        // cleanup
+        Drawing::DestroyTexture(&splashTexture);
+        if (titleTexture != nullptr)
+        {
+            SDL_DestroyTexture(titleTexture);
+        }
+
+        if (authorTexture != nullptr)
+        {
+            SDL_DestroyTexture(authorTexture);
+        }
+
+        PrepareTextInternal(renderer, true);
+
         return menuState;
     }
 
@@ -181,14 +199,91 @@ namespace blooDot::Splash {
 
         if (!destroy)
         {
-            continueTexture = Scripture::RenderText(renderer, &continueRect, Scripture::FONT_KEY_DIALOG, 23, literalMenuContinue, { 250, 230, 230, 245 });
-            loadTexture = Scripture::RenderText(renderer, &loadRect, Scripture::FONT_KEY_DIALOG, 23, literalMenuLoad, { 250, 230, 230, 245 });
-            singleTexture = Scripture::RenderText(renderer, &singleRect, Scripture::FONT_KEY_DIALOG, 23, literalMenuSingle, { 250, 230, 230, 245 });
-            localMultiTexture = Scripture::RenderText(renderer, &localMultiRect, Scripture::FONT_KEY_DIALOG, 23, literalMenuLocalMulti, { 250, 230, 230, 245 });
-            creatorModeTexture = Scripture::RenderText(renderer, &creatorModeRect, Scripture::FONT_KEY_DIALOG, 23, literalMenuMaker, { 250, 230, 230, 245 });
-            settingsTexture = Scripture::RenderText(renderer, &settingsRect, Scripture::FONT_KEY_DIALOG, 23, literalMenuSettings, { 250, 230, 230, 245 });
-            quitTexture = Scripture::RenderText(renderer, &quitRect, Scripture::FONT_KEY_DIALOG, 23, literalMenuExit, { 250, 230, 230, 245 });
+            continueTexture = Scripture::RenderText(renderer, &continueRect, Scripture::FONT_KEY_DIALOG, Ui::MenuItemCaptionFontSize, literalMenuContinue, Ui::MenuItemCaptionColor);
+            loadTexture = Scripture::RenderText(renderer, &loadRect, Scripture::FONT_KEY_DIALOG, Ui::MenuItemCaptionFontSize, literalMenuLoad, Ui::MenuItemCaptionColor);
+            singleTexture = Scripture::RenderText(renderer, &singleRect, Scripture::FONT_KEY_DIALOG, Ui::MenuItemCaptionFontSize, literalMenuSingle, Ui::MenuItemCaptionColor);
+            localMultiTexture = Scripture::RenderText(renderer, &localMultiRect, Scripture::FONT_KEY_DIALOG, Ui::MenuItemCaptionFontSize, literalMenuLocalMulti, Ui::MenuItemCaptionColor);
+            creatorModeTexture = Scripture::RenderText(renderer, &creatorModeRect, Scripture::FONT_KEY_DIALOG, Ui::MenuItemCaptionFontSize, literalMenuMaker, Ui::MenuItemCaptionColor);
+            settingsTexture = Scripture::RenderText(renderer, &settingsRect, Scripture::FONT_KEY_DIALOG, Ui::MenuItemCaptionFontSize, literalMenuSettings, Ui::MenuItemCaptionColor);
+            quitTexture = Scripture::RenderText(renderer, &quitRect, Scripture::FONT_KEY_DIALOG, Ui::MenuItemCaptionFontSize, literalMenuExit, Ui::MenuItemCaptionColor);
         }
+    }
+
+    void BounceInternal(SDL_FRect* srcRect)
+    {
+        if (backgroundSpeedX == 0)
+        {
+            AssignNewSpeedInternal(&backgroundSpeedX);
+        }
+
+        if (backgroundSpeedY == 0)
+        {
+            AssignNewSpeedInternal(&backgroundSpeedY);
+        }
+
+        if (backgroundAnimDelay > 0)
+        {
+            --backgroundAnimDelay;
+
+            return;
+        }
+
+        backgroundPosX += static_cast<double>(backgroundSpeedX) * 0.5;
+        backgroundPosY += static_cast<double>(backgroundSpeedY) * 0.5;
+
+        if (backgroundPosX < 0)
+        {
+            backgroundPosX = 0;
+            AssignNewSpeedInternal(&backgroundSpeedX);
+            backgroundSpeedX = abs(backgroundSpeedX);
+            DelayBackgroundAnimInternal();
+        }
+        else if (backgroundPosX > backdropHorz)
+        {
+            backgroundPosX = backdropHorz;
+            AssignNewSpeedInternal(&backgroundSpeedX);
+            backgroundSpeedX = -abs(backgroundSpeedX);
+            DelayBackgroundAnimInternal();
+        }
+
+        if (backgroundPosY < 0)
+        {
+            backgroundPosY = 0;
+            AssignNewSpeedInternal(&backgroundSpeedY);
+            backgroundSpeedY = abs(backgroundSpeedY);
+            DelayBackgroundAnimInternal();
+        }
+        else if (backgroundPosY > backdropVert)
+        {
+            backgroundPosY = backdropVert;
+            AssignNewSpeedInternal(&backgroundSpeedY);
+            backgroundSpeedY = -abs(backgroundSpeedY);
+            DelayBackgroundAnimInternal();
+        }
+
+        srcRect->x = static_cast<float>(round(backgroundPosX));
+        srcRect->y = static_cast<float>(round(backgroundPosY));
+    }
+
+    void AssignNewSpeedInternal(int* speed)
+    {
+        if (const auto value = distribution(generator); value < 2)
+        {
+            /* -2, -1 */
+            (*speed) = value - 2;
+        }
+        else
+        {
+            /* 1, 2 */
+            (*speed) = value - 1;
+        }
+    }
+
+    void DelayBackgroundAnimInternal()
+    {
+        const auto random = distribution(generator);
+
+        backgroundAnimDelay = Ui::BackgroundAnimDelay * (random + 1);
     }
 
     void EnterAndHandleMenuInternal(SDL_Renderer* renderer)

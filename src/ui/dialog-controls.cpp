@@ -176,7 +176,7 @@ namespace blooDot::DialogControls {
 		SDL_RenderTexture(renderer, texture, nullptr, frame);
 	}
 
-	void CenterLabel(SDL_Renderer* renderer, int x, int y, SDL_Texture* texture, SDL_FRect* frame)
+	void CenterLabel(SDL_Renderer* renderer, int x, int y, SDL_Texture* texture, SDL_FRect* const frame)
 	{
 		auto& rect = (*frame);
 

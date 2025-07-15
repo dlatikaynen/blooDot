@@ -1,5 +1,9 @@
 #include <SDL3/SDL.h>
 #include "menu-common.h"
+
+#include "dialog-controls.h"
+#include "layout-constants.h"
+#include "../../main.h"
 #include "../../src/state/settings.h"
 #include "../../src/snd/sfx.h"
 #include "../../src/util/resutil.h"
@@ -229,6 +233,30 @@ namespace blooDot::MenuCommon
 				break;
 			}
 		}
+	}
+
+	bool DrawMenuPanel(SDL_Renderer* renderer, const SDL_FRect* rect, SDL_Texture* const caption, SDL_FRect* const captionRect) {
+		SDL_SetRenderDrawColor(renderer, Ui::PanelFill.r, Ui::PanelFill.g, Ui::PanelFill.b, Ui::PanelFill.a);
+		SDL_RenderFillRect(renderer, rect);
+		SDL_SetRenderDrawColor(renderer, Ui::PanelStroke.r, Ui::PanelStroke.g, Ui::PanelStroke.b, Ui::PanelStroke.a);
+		if (!SDL_RenderRect(renderer, rect))
+		{
+			const auto drawRectError = SDL_GetError();
+
+			ReportError("Failed to draw panel border", drawRectError);
+
+			return false;
+		};
+
+		DialogControls::CenterLabel(
+			renderer,
+			static_cast<int>(rect->x + rect->w / 2),
+			static_cast<int>(rect->y + 6 + captionRect->h / 2),
+			caption,
+			captionRect
+		);
+
+		return true;
 	}
 
 	void PrepareIconRect(SDL_FRect* rect, const int vignetteIndex, const int vignetteWidth, const int bounceMargin)

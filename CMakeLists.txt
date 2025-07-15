@@ -51,6 +51,7 @@ add_executable(blooDot main.cpp
         src/ui/scripture.cpp
         src/ui/dialog-controls.h
         src/ui/dialog-controls.cpp
+        src/ui/layout-constants.h
 )
 
 set_target_properties(blooDot PROPERTIES LINK_FLAGS "-static")

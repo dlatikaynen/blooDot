@@ -9,7 +9,7 @@ namespace blooDot::Splash
     MenuCommon::MenuDialogInteraction SplashLoop(SDL_Renderer*);
 
     bool LoadSplashInternal(SDL_Renderer* renderer);
-    void BounceInternal(SDL_Rect* srcRect);
+    void BounceInternal(SDL_FRect* srcRect);
     void AssignNewSpeedInternal(int* speed);
     void DelayBackgroundAnimInternal();
     void PrepareTextInternal(SDL_Renderer* renderer, bool destroy = false);
