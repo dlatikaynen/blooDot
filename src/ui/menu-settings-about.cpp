@@ -79,7 +79,8 @@ namespace blooDot::MenuSettingsAbout
 				constexpr int backGap = stride / 2;
 				Constants::AboutMenuItems itemToDraw = Constants::AboutMenuItems::HAM_BACK;
 
-				for (auto y = 94; y < 95; y += stride)
+				auto y = 94;
+				for (; y < 95; y += stride)
 				{
 					const auto thisItem = itemToDraw == menuState.selectedItemIndex;
 					DialogControls::DrawButton(drawingSink, 195, y, 250, 42, thisItem ? Constants::CH_MAINMENU : Constants::CH_NONE);
@@ -97,18 +98,28 @@ namespace blooDot::MenuSettingsAbout
 					itemToDraw = static_cast<Constants::AboutMenuItems>(itemToDraw + 1);
 				}
 
+				DialogControls::DrawButton(drawingSink, 162, y, 316, 258, Constants::CH_NONE);
 				Drawing::EndRenderDrawing(renderer, drawingTexture, nullptr);
 				DialogControls::DrawLabel(renderer, 235, yStart + 0 * stride + 0 * backGap, backTexture, &backRect);
 
 				/* the storyboarded rolling credits */
-				const auto& section = creditSections[0];
-				SDL_FRect rect = section.rect;
+				y = backGap;
 
-				DialogControls::DrawLabel(renderer, 195, yStart + 1 * stride + 1 * backGap, section.texture, &rect);
-				rect = section.chapters[0]->rect;
-				DialogControls::DrawLabel(renderer, 10, yStart + 2 * stride + 1 * backGap, section.chapters[0]->texture, &rect);
-				rect = section.chapters[0]->mentions[0]->rect;
-				DialogControls::DrawLabel(renderer, 195, yStart + 2 * stride + 1 * backGap, section.chapters[0]->mentions[0]->texture, &rect);
+				for (const auto& section: creditSections) {
+					SDL_FRect rect = section.rect;
+
+					DialogControls::DrawLabel(renderer, 195, y, section.texture, &rect);
+					y += static_cast<int>(rect.h);
+					for (const auto& chapter: section.chapters) {
+						rect = chapter->rect;
+						DialogControls::DrawLabel(renderer, 10, y, chapter->texture, &rect);
+						for (const auto& mention: chapter->mentions) {
+							rect = mention->rect;
+							DialogControls::DrawLabel(renderer, 195, y, mention->texture, &rect);
+							y += static_cast<int>(rect.h);
+						}
+					}
+				}
 			}
 
 			SDL_RenderPresent(renderer);
