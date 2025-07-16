@@ -187,6 +187,15 @@ namespace blooDot::MenuCommon
 					interactionState->enterMenuItem = true;
 					break;
 
+				case SDL_SCANCODE_BACKSPACE:
+				case SDL_SCANCODE_KP_BACKSPACE:
+					// backspace works to leave a menu only if it is not the main menu
+					if (!interactionState->isTopLevel) {
+						goto B;
+					}
+
+					break;
+
 				case SDL_SCANCODE_ESCAPE:
 				B:
 					interactionState->leaveDialog = true;

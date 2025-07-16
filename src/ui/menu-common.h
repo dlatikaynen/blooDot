@@ -7,6 +7,7 @@
 namespace blooDot::MenuCommon
 {
     typedef struct MenuDialogInteractionStruct {
+        bool isTopLevel = false;
         int selectedItemIndex = -1;
         int itemCount = 0;
         bool enterMenuItem = false;

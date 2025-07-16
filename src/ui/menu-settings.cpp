@@ -10,11 +10,11 @@
 #include "../state/settings.h"
 #include "layout-constants.h"
 #include "menu-settings-about.h"
+#include "menu-settings-lang.h"
 
 namespace blooDot::MenuSettings
 {
 	MenuCommon::MenuDialogInteraction menuState;
-	bool menuRunning = false;
 
 	SDL_Texture* backTexture = nullptr;
 	SDL_Texture* screensizeTexture = nullptr;
@@ -32,7 +32,7 @@ namespace blooDot::MenuSettings
 
 	bool MenuLoop(SDL_Renderer* renderer)
 	{
-		menuRunning = true;
+		menuState.leaveDialog = false;
 		menuState.itemCount = Constants::SettingsMenuItems::SMI_ABOUT + 1;
 		menuState.selectedItemIndex = Constants::SettingsMenuItems::SMI_BACK;
 
@@ -52,21 +52,23 @@ namespace blooDot::MenuSettings
 
 		unsigned short frame = 0;
 
-		while (menuRunning) // TODO: && mainRunning)
+		while (!menuState.leaveDialog)
 		{
 			blooDot::MenuCommon::HandleMenu(&menuState);
 			if (menuState.leaveDialog)
 			{
-				menuRunning = false;
-			}
-			else if (menuState.enterMenuItem)
-			{
-				menuRunning = EnterAndHandleSettingsMenuInternal(renderer);
+				return !menuState.leaveMain;
 			}
 
-			if (menuState.leaveMain)
+			if (menuState.enterMenuItem)
 			{
-				// TODO: mainRunning = false;
+				if (!EnterAndHandleSettingsMenuInternal(renderer)) {
+					return false;
+				}
+
+				if (menuState.selectedItemIndex == static_cast<int>(Constants::SettingsMenuItems::SMI_BACK)) {
+					return true;
+				}
 			}
 
 			if (SDL_RenderClear(renderer) < 0)
@@ -78,7 +80,8 @@ namespace blooDot::MenuSettings
 
 			if (!MenuCommon::DrawMenuPanel(renderer, &outerMenuRect, titleTexture, &titleRect))
 			{
-				menuRunning = false;
+				// succeed failing
+				return true;
 			};
 
 			if (const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, Constants::GodsPreferredWidth, Constants::GodsPreferredHight)) [[likely]]
@@ -127,7 +130,7 @@ namespace blooDot::MenuSettings
 		PrepareTextInternal(renderer, true);
 		Settings::Save();
 
-		return menuRunning;
+		return true;
 	}
 
 	void PrepareTextInternal(SDL_Renderer* renderer, bool destroy)
@@ -158,11 +161,10 @@ namespace blooDot::MenuSettings
 		case SettingsMenuItems::SMI_SCREENSIZE:
 			_EnterAndHandleScreenSettings(renderer);
 			break;
-
-		case SettingsMenuItems::SMI_LANGUAGE:
-			_EnterAndHandleLanguageSettings(renderer);
-			break;
-
+*/
+		case Constants::SettingsMenuItems::SMI_LANGUAGE:
+			return EnterAndHandleLanguageSettingsInternal(renderer);
+/*
 		case SettingsMenuItems::SMI_CONTROLS:
 			_EnterAndHandleControlsSettings(renderer);
 			break;
@@ -172,14 +174,11 @@ namespace blooDot::MenuSettings
 			break;
 		*/
 		case Constants::SettingsMenuItems::SMI_ABOUT:
-			EnterAndHandleAboutInternal(renderer);
-			break;
+			return EnterAndHandleAboutInternal(renderer);
 
 		default:
-			return false;
+			return true;
 		}
-
-		return true;
 	}
 
 	// void _EnterAndHandleScreenSettings(SDL_Renderer* renderer)
@@ -187,20 +186,24 @@ namespace blooDot::MenuSettings
 	// 	blooDot::MenuSettingsScreen::ScreenSettingsMenuLoop(renderer);
 	// }
 	//
-	// void _EnterAndHandleLanguageSettings(SDL_Renderer* renderer)
-	// {
-	// 	blooDot::MenuSettingsLang::LanguageSettingsMenuLoop(renderer);
-	// 	_PrepareText(renderer);
-	// }
+	bool EnterAndHandleLanguageSettingsInternal(SDL_Renderer* renderer)
+	{
+	 	if (MenuSettingsLang::LanguageSettingsMenuLoop(renderer)) {
+	 		PrepareTextInternal(renderer);
+	 		return true;
+	 	}
+
+	 	return false;
+	}
 	//
 	// void _EnterAndHandleControlsSettings(SDL_Renderer* renderer)
 	// {
 	// 	blooDot::MenuSettingsControls::ControlsSettingsMenuLoop(renderer);
 	// }
 	//
-	void EnterAndHandleAboutInternal(SDL_Renderer* renderer)
+	bool EnterAndHandleAboutInternal(SDL_Renderer* renderer)
 	{
-		blooDot::MenuSettingsAbout::MenuLoop(renderer);
+		return MenuSettingsAbout::MenuLoop(renderer);
 	}
 	//
 	// void _EnterAndHandleHelp(SDL_Renderer* renderer)

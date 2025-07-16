@@ -45,6 +45,7 @@ namespace blooDot::Splash {
     SDL_Texture* quitTexture = nullptr;
 
     MenuCommon::MenuDialogInteraction SplashLoop(SDL_Renderer* renderer) {
+        menuState.isTopLevel = true;
         menuState.leaveDialog = false;
         menuState.leaveMain = false;
         menuState.abortMain = false;
@@ -93,7 +94,10 @@ namespace blooDot::Splash {
             MenuCommon::HandleMenu(&menuState);
             if (menuState.enterMenuItem)
             {
-                EnterAndHandleMenuInternal(renderer);
+                if (!EnterAndHandleMenuInternal(renderer)) {
+                    menuState.leaveMain = true;
+                    menuState.leaveDialog = true;
+                }
             } else if (menuState.leaveDialog) {
                 /* escaping on the splash dialog is equivalent to quit
                  * (there is no level of menu navigation above splash) */
@@ -287,7 +291,7 @@ namespace blooDot::Splash {
         backgroundAnimDelay = Ui::BackgroundAnimDelay * (random + 1);
     }
 
-    void EnterAndHandleMenuInternal(SDL_Renderer* renderer)
+    bool EnterAndHandleMenuInternal(SDL_Renderer* renderer)
     {
         switch (menuState.selectedItemIndex)
         {
@@ -298,7 +302,7 @@ namespace blooDot::Splash {
                     menuState.dialogResult = Constants::DMR_LAUNCH_MAKER;
 //               }
 
-                break;
+                return true;
 
             // case MMI_LOAD:
             //     if (!_HandleLoad(renderer))
@@ -327,29 +331,34 @@ namespace blooDot::Splash {
             //     break;
 
             case Constants::MMI_SETTINGS:
-                 EnterAndHandleSettingsInternal(renderer);
-                 break;
+                 return EnterAndHandleSettingsInternal(renderer);
 
             case Constants::MMI_EXIT:
                 menuState.leaveMain = true;
                 menuState.leaveDialog = true;
-                break;
+                return false;
 
             default:
                 break;
         }
+
+        return true;
     }
 
-    void EnterAndHandleSettingsInternal(SDL_Renderer* renderer)
+    bool EnterAndHandleSettingsInternal(SDL_Renderer* renderer)
     {
         const auto& lcidBefore = std::string(literalLCID);
 
-        MenuSettings::MenuLoop(renderer);
+        if (!MenuSettings::MenuLoop(renderer)) {
+            return false;
+        }
 
         // because language might have changed
         if (const auto& lcidAfter = std::string(literalLCID); lcidAfter != lcidBefore)
         {
             PrepareTextInternal(renderer);
         }
+
+        return true;
     }
 }

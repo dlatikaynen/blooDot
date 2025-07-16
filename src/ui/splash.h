@@ -14,9 +14,9 @@ namespace blooDot::Splash
     void DelayBackgroundAnimInternal();
     void PrepareTextInternal(SDL_Renderer* renderer, bool destroy = false);
     bool HandleLaunchInternal(SDL_Renderer* renderer, bool stayInMenu);
-    void EnterAndHandleMenuInternal(SDL_Renderer* renderer);
+    bool EnterAndHandleMenuInternal(SDL_Renderer* renderer);
     bool EnterAndHandleCreatorModeInternal(SDL_Renderer* renderer);
-    void EnterAndHandleSettingsInternal(SDL_Renderer* renderer);
+    bool EnterAndHandleSettingsInternal(SDL_Renderer* renderer);
 }
 
 #endif //SPLASH_H

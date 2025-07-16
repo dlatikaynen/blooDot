@@ -11,7 +11,6 @@
 namespace blooDot::MenuSettingsAbout
 {
 	MenuCommon::MenuDialogInteraction menuState;
-	bool menuRunning = false;
 
 	SDL_Texture* backTexture = nullptr;
 	std::vector<std::shared_ptr<CreditsMention>> creditMentions;
@@ -23,9 +22,12 @@ namespace blooDot::MenuSettingsAbout
 	std::vector<SDL_FRect> chapterRects;
 	std::vector<SDL_FRect> creditsRects;
 
+	/**
+	 * will return false if the app should terminate
+	 */
 	bool MenuLoop(SDL_Renderer* renderer)
 	{
-		menuRunning = true;
+		menuState.leaveDialog = false;
 		menuState.itemCount = Constants::AboutMenuItems::HAM_BACK + 1;
 		menuState.selectedItemIndex = Constants::AboutMenuItems::HAM_BACK;
 
@@ -44,18 +46,13 @@ namespace blooDot::MenuSettingsAbout
 		PrepareTextInternal(renderer);
 
 		unsigned short frame = 0;
-		while (menuRunning) // TODO:  && mainRunning)
+		while (!menuState.leaveDialog)
 		{
 			blooDot::MenuCommon::HandleMenu(&menuState);
 			if (menuState.leaveDialog || menuState.enterMenuItem)
 			{
 				/* "back" is the only menu item */
-				menuRunning = false;
-			}
-
-			if (menuState.leaveMain)
-			{
-				// TODO: mainRunning = false;
+				return !menuState.leaveMain;
 			}
 
 			if (SDL_RenderClear(renderer) < 0)
@@ -68,7 +65,7 @@ namespace blooDot::MenuSettingsAbout
 			SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 			if (!MenuCommon::DrawMenuPanel(renderer, &outerMenuRect, titleTexture, &titleRect))
 			{
-				menuRunning = false;
+				return true;
 			};
 
 			if (const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, Constants::GodsPreferredWidth, Constants::GodsPreferredHight)) [[likely]]
@@ -130,7 +127,7 @@ namespace blooDot::MenuSettingsAbout
 		TeardownInternal();
 		SDL_DestroyTexture(titleTexture);
 
-		return menuRunning;
+		return true;
 	}
 
 	void PrepareTextInternal(SDL_Renderer* renderer)
