@@ -23,6 +23,7 @@ namespace blooDot::MenuCommon
 
     void HandleMenu(MenuDialogInteraction* interactionState);
     bool DrawMenuPanel(SDL_Renderer* renderer, const SDL_FRect* rect, SDL_Texture* caption, SDL_FRect* captionRect);
+    void VignetteLabelInternal(SDL_Renderer* renderer, int font, int vignetteWidth, int fontSize, int vignetteIndex, int y, const char* text);
     void PrepareIconRect(SDL_Rect* rect, int vignetteIndex, int vignetteWidth, int bounceMargin);
     void DrawIcon(SDL_Renderer* renderer, int chunkKey, int vignetteIndex, int vignetteWidth, int bounceMargin);
 }

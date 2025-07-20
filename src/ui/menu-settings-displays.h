@@ -12,7 +12,6 @@ namespace blooDot::MenuSettingsDisplays
     bool ScreenSettingsMenuLoop(SDL_Renderer*);
 
     void PrepareControlsInternal(SDL_Renderer* renderer);
-    void VignetteLabelInternal(SDL_Renderer* renderer, int font, int size, int vignetteIndex, int y, const char* text);
     void AnimateCarouselInternal();
     void TeardownInternal();
     bool CanSelectModeInternal(SDL_Renderer* renderer);

@@ -47,6 +47,8 @@ namespace blooDot::Ui {
      * The average delay in milliseconds of the splash background bounce
      */
     constexpr int BackgroundAnimDelay = 101;
+
+    constexpr int VignetteBounceMargin = 10;
 }
 
 #endif //LAYOUT_CONSTANTS_H

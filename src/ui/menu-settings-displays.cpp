@@ -19,7 +19,6 @@
 
 namespace blooDot::MenuSettingsDisplays
 {
-	constexpr int bounceMargin = 10;
 	constexpr int vignetteWidth = 250;
 	constexpr int vignetteHeight = 220;
 	constexpr int vignetteGap = 10;
@@ -32,7 +31,7 @@ namespace blooDot::MenuSettingsDisplays
 	auto movingToResolution = Constants::ViewportResolutions::VR_TEMPLE;
 	SDL_Texture* slidingModes;
 	int sliderTextureWidth;
-	float sliderOffsetLeft = bounceMargin;
+	float sliderOffsetLeft = Ui::VignetteBounceMargin;
 	int slideSpeed = 0;
 	int targetOffsetLeft = 0;
 
@@ -54,7 +53,7 @@ namespace blooDot::MenuSettingsDisplays
 		Algo::Boyds::InitializeBoydsa(Constants::GodsPreferredWidth, Constants::GodsPreferredHight, 50, 370);
 		selectedResolution = Settings::SettingsData.SettingViewportResolution;
 		movingToResolution = Settings::SettingsData.SettingViewportResolution;
-		sliderOffsetLeft = static_cast<float>(selectedResolution) * vignetteWidth + bounceMargin;
+		sliderOffsetLeft = static_cast<float>(selectedResolution) * vignetteWidth + Ui::VignetteBounceMargin;
 
 		SDL_FRect titleRect{ 0,0,0,0 };
 		SDL_FRect cancelRect{ 0,0,0,0 };
@@ -319,7 +318,7 @@ namespace blooDot::MenuSettingsDisplays
 
 		if (slideSpeed == 0)
 		{
-			targetOffsetLeft = bounceMargin + static_cast<int>(movingToResolution) * vignetteWidth;
+			targetOffsetLeft = Ui::VignetteBounceMargin + static_cast<int>(movingToResolution) * vignetteWidth;
 			slideSpeed = 40;
 		}
 
@@ -346,7 +345,7 @@ namespace blooDot::MenuSettingsDisplays
 
 	void PrepareControlsInternal(SDL_Renderer* renderer)
 	{
-		sliderTextureWidth = vignetteCount * vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * bounceMargin;
+		sliderTextureWidth = vignetteCount * vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * Ui::VignetteBounceMargin;
 		slidingModes = SDL_CreateTexture(
 			renderer,
 			SDL_PIXELFORMAT_ARGB8888,
@@ -379,31 +378,31 @@ namespace blooDot::MenuSettingsDisplays
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 			SDL_RenderClear(renderer);
 
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 28, 0, 30, literalSettingsScreenTemple);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, 13, 0, 70, literalSettingsScreenTempleDetails);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 23, 0, 190, literalSettingsScreenTempleResolution);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 28, 0, 30, literalSettingsScreenTemple);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, vignetteWidth, 13, 0, 70, literalSettingsScreenTempleDetails);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 23, 0, 190, literalSettingsScreenTempleResolution);
 
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 28, 1, 30, literalSettingsScreenHercules);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, 13, 1, 70, literalSettingsScreenHerculesDetails);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 23, 1, 190, literalSettingsScreenHerculesResolution);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 28, 1, 30, literalSettingsScreenHercules);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, vignetteWidth, 13, 1, 70, literalSettingsScreenHerculesDetails);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 23, 1, 190, literalSettingsScreenHerculesResolution);
 
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 28, 2, 30, literalSettingsScreenModeX);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, 13, 2, 70, literalSettingsScreenModexDetails);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 23, 2, 190, literalSettingsScreenModeXResolution);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 28, 2, 30, literalSettingsScreenModeX);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, vignetteWidth, 13, 2, 70, literalSettingsScreenModexDetails);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 23, 2, 190, literalSettingsScreenModeXResolution);
 
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 28, 3, 30, literalSettingsScreenSVGA);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, 13, 3, 70, literalSettingsScreenSVGADetails);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 23, 3, 190, literalSettingsScreenSVGAResolution);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 28, 3, 30, literalSettingsScreenSVGA);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, vignetteWidth, 13, 3, 70, literalSettingsScreenSVGADetails);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 23, 3, 190, literalSettingsScreenSVGAResolution);
 
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 28, 4, 30, literalSettingsScreenNotebook);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, 13, 4, 70, literalSettingsScreenNotebookDetails);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 23, 4, 190, literalSettingsScreenNotebookResolution);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 28, 4, 30, literalSettingsScreenNotebook);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, vignetteWidth, 13, 4, 70, literalSettingsScreenNotebookDetails);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 23, 4, 190, literalSettingsScreenNotebookResolution);
 
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 28, 5, 30, literalSettingsScreenSquare);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, 13, 5, 70, literalSettingsScreenSquareDetails);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 28, 5, 30, literalSettingsScreenSquare);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, vignetteWidth, 13, 5, 70, literalSettingsScreenSquareDetails);
 
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 28, 6, 30, literalSettingsScreenFull);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, 13, 6, 70, literalSettingsScreenFullDetails);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 28, 6, 30, literalSettingsScreenFull);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, vignetteWidth, 13, 6, 70, literalSettingsScreenFullDetails);
 
 			SDL_Rect screen;
 
@@ -422,15 +421,15 @@ namespace blooDot::MenuSettingsDisplays
 				auto fullScreenDims2 = std::regex_replace(fullScreenDims1, std::regex("\\$h"), screenHeight.str());
 				auto fullScreenDims3 = std::regex_replace(squareDimsTemplate, std::regex("\\$h"), screenHeight.str());
 
-				VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 23, 5, 190, fullScreenDims3.c_str());
-				VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 23, 6, 190, fullScreenDims2.c_str());
+				MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 23, 5, 190, fullScreenDims3.c_str());
+				MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth, 23, 6, 190, fullScreenDims2.c_str());
 			}
 
-			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_DIVINE, 0, vignetteWidth, bounceMargin);
-			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_HERC, 1, vignetteWidth, bounceMargin);
-			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_MODEX, 2, vignetteWidth, bounceMargin);
-			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_SVGA, 3, vignetteWidth, bounceMargin);
-			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_HD, 4, vignetteWidth, bounceMargin);
+			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_DIVINE, 0, vignetteWidth, Ui::VignetteBounceMargin);
+			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_HERC, 1, vignetteWidth, Ui::VignetteBounceMargin);
+			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_MODEX, 2, vignetteWidth, Ui::VignetteBounceMargin);
+			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_SVGA, 3, vignetteWidth, Ui::VignetteBounceMargin);
+			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_HD, 4, vignetteWidth, Ui::VignetteBounceMargin);
 			if (!SDL_SetRenderTarget(renderer, nullptr))
 			{
 				const auto restoreError = SDL_GetError();
@@ -446,29 +445,6 @@ namespace blooDot::MenuSettingsDisplays
 		const auto newCarouselError = SDL_GetError();
 
 		ReportError("Could not allocate sliding texture", newCarouselError);
-	}
-
-	void VignetteLabelInternal(SDL_Renderer* renderer, const int font, const int size, const int vignetteIndex, const int y, const char* text)
-	{
-		SDL_FRect rectLabel = { 0,0,0,0 };
-		const auto textureLabel = Scripture::RenderText(
-			renderer,
-			&rectLabel,
-			font,
-			size,
-			text,
-			{ 250, 230, 230, 245 }
-		);
-
-		DialogControls::CenterLabel(
-			renderer,
-			bounceMargin + vignetteIndex * vignetteWidth + vignetteWidth / 2,
-			y,
-			textureLabel,
-			&rectLabel
-		);
-
-		SDL_DestroyTexture(textureLabel);
 	}
 
 	void TeardownInternal()

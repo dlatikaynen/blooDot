@@ -3,6 +3,7 @@
 
 #include "dialog-controls.h"
 #include "layout-constants.h"
+#include "scripture.h"
 #include "../../main.h"
 #include "../../src/state/settings.h"
 #include "../../src/snd/sfx.h"
@@ -266,6 +267,29 @@ namespace blooDot::MenuCommon
 		);
 
 		return true;
+	}
+
+	void VignetteLabelInternal(SDL_Renderer* renderer, const int font, const int vignetteWidth, const int fontSize, const int vignetteIndex, const int y, const char* text)
+	{
+		SDL_FRect rectLabel = { 0,0,0,0 };
+		const auto textureLabel = Scripture::RenderText(
+			renderer,
+			&rectLabel,
+			font,
+			fontSize,
+			text,
+			{ 250, 230, 230, 245 }
+		);
+
+		DialogControls::CenterLabel(
+			renderer,
+			Ui::VignetteBounceMargin + vignetteIndex * vignetteWidth + vignetteWidth / 2,
+			y,
+			textureLabel,
+			&rectLabel
+		);
+
+		SDL_DestroyTexture(textureLabel);
 	}
 
 	void PrepareIconRect(SDL_FRect* rect, const int vignetteIndex, const int vignetteWidth, const int bounceMargin)

@@ -11,7 +11,6 @@
 #include "../../main.h"
 #include "../../src/snd/sfx.h"
 
-constexpr float bounceMargin = 10;
 constexpr float vignetteWidth = 250;
 constexpr int vignetteHeight = 220;
 constexpr int vignetteGap = 10;
@@ -26,7 +25,7 @@ namespace blooDot::MenuSettingsLang
 	auto movingToLanguage = Constants::UserInterfaceLanguages::UIL_AMERICAN;
 	SDL_Texture* slidingLangs;
 	int sliderTextureWidth;
-	float sliderOffsetLeft = bounceMargin;
+	float sliderOffsetLeft = Ui::VignetteBounceMargin;
 	float slideSpeed = 0;
 	float targetOffsetLeft = 0;
 
@@ -46,7 +45,7 @@ namespace blooDot::MenuSettingsLang
 		PrepareControlsInternal(renderer);
 		selectedLanguage = Settings::SettingsData.SettingUserInterfaceLanguage;
 		movingToLanguage = Settings::SettingsData.SettingUserInterfaceLanguage;
-		sliderOffsetLeft = static_cast<float>(selectedLanguage) * vignetteWidth + bounceMargin;
+		sliderOffsetLeft = static_cast<float>(selectedLanguage) * vignetteWidth + Ui::VignetteBounceMargin;
 
 		constexpr SDL_FRect outerMenuRect{ 150,45,340,390 };
 		SDL_FRect titleRect{ 0,0,0,0 };
@@ -290,7 +289,7 @@ namespace blooDot::MenuSettingsLang
 
 		if (slideSpeed == 0)
 		{
-			targetOffsetLeft = bounceMargin + static_cast<float>(movingToLanguage) * vignetteWidth;
+			targetOffsetLeft = Ui::VignetteBounceMargin + static_cast<float>(movingToLanguage) * vignetteWidth;
 			slideSpeed = 40;
 		}
 
@@ -317,7 +316,7 @@ namespace blooDot::MenuSettingsLang
 
 	void PrepareControlsInternal(SDL_Renderer* renderer)
 	{
-		sliderTextureWidth = vignetteCount * vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * bounceMargin;
+		sliderTextureWidth = vignetteCount * vignetteWidth + (vignetteCount - 1) * vignetteGap + 2 * Ui::VignetteBounceMargin;
 		slidingLangs = SDL_CreateTexture(
 			renderer,
 			SDL_PIXELFORMAT_ARGB8888,
@@ -330,9 +329,9 @@ namespace blooDot::MenuSettingsLang
 		{
 			if (SDL_SetTextureBlendMode(slidingLangs, SDL_BLENDMODE_BLEND) < 0)
 			{
-				const auto carouselBlendmodeError = SDL_GetError();
+				const auto carouselBlendModeError = SDL_GetError();
 
-				ReportError("Could not set blend mode of sliding texture", carouselBlendmodeError);
+				ReportError("Could not set blend mode of sliding texture", carouselBlendModeError);
 				SDL_DestroyTexture(slidingLangs);
 				slidingLangs = nullptr;
 
@@ -351,26 +350,26 @@ namespace blooDot::MenuSettingsLang
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 			SDL_RenderClear(renderer);
 
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, 28, 0, 30, literalSettingsLanguageEN);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 13, 0, 70, literalSettingsLanguageENDetails);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 23, 0, 190, literalSettingsLanguageENName);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, vignetteWidth, 28, 0, 30, literalSettingsLanguageEN);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth,13, 0, 70, literalSettingsLanguageENDetails);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth,23, 0, 190, literalSettingsLanguageENName);
 
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, 28, 1, 30, literalSettingsLanguageFI);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 13, 1, 70, literalSettingsLanguageFIDetails);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 23, 1, 190, literalSettingsLanguageFIName);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, vignetteWidth,28, 1, 30, literalSettingsLanguageFI);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth,13, 1, 70, literalSettingsLanguageFIDetails);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth,23, 1, 190, literalSettingsLanguageFIName);
 
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, 28, 2, 30, literalSettingsLanguageDE);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 13, 2, 70, literalSettingsLanguageDEDetails);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 23, 2, 190, literalSettingsLanguageDEName);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, vignetteWidth,28, 2, 30, literalSettingsLanguageDE);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth,13, 2, 70, literalSettingsLanguageDEDetails);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth,23, 2, 190, literalSettingsLanguageDEName);
 
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, 28, 3, 30, literalSettingsLanguageUA);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 13, 3, 70, literalSettingsLanguageUADetails);
-			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, 23, 3, 190, literalSettingsLanguageUAName);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, vignetteWidth,28, 3, 30, literalSettingsLanguageUA);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth,13, 3, 70, literalSettingsLanguageUADetails);
+			MenuCommon::VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG, vignetteWidth,23, 3, 190, literalSettingsLanguageUAName);
 
-			MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_AM_PNG, 0, vignetteWidth, bounceMargin);
-			MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_FI_PNG, 1, vignetteWidth, bounceMargin);
-			MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_DE_PNG, 2, vignetteWidth, bounceMargin);
-			MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_UA_PNG, 3, vignetteWidth, bounceMargin);
+			MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_AM_PNG, 0, vignetteWidth, Ui::VignetteBounceMargin);
+			MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_FI_PNG, 1, vignetteWidth, Ui::VignetteBounceMargin);
+			MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_DE_PNG, 2, vignetteWidth, Ui::VignetteBounceMargin);
+			MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_UA_PNG, 3, vignetteWidth, Ui::VignetteBounceMargin);
 
 			if (!SDL_SetRenderTarget(renderer, nullptr))
 			{
@@ -387,29 +386,6 @@ namespace blooDot::MenuSettingsLang
 		const auto newCarouselError = SDL_GetError();
 
 		ReportError("Could not allocate sliding texture", newCarouselError);
-	}
-
-	void VignetteLabelInternal(SDL_Renderer* renderer, const int font, const int size, const int vignetteIndex, const int y, const char* text)
-	{
-		SDL_FRect rectLabel = { 0,0,0,0 };
-		const auto textureLabel = Scripture::RenderText(
-			renderer,
-			&rectLabel,
-			font,
-			size,
-			text,
-			{ 250, 230, 230, 245 }
-		);
-
-		DialogControls::CenterLabel(
-			renderer,
-			static_cast<int>(bounceMargin + static_cast<float>(vignetteIndex) * vignetteWidth + vignetteWidth / 2),
-			y,
-			textureLabel,
-			&rectLabel
-		);
-
-		SDL_DestroyTexture(textureLabel);
 	}
 
 	void TeardownInternal()
