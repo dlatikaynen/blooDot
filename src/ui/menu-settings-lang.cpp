@@ -11,26 +11,26 @@
 #include "../../main.h"
 #include "../../src/snd/sfx.h"
 
-constexpr int bounceMargin = 10;
-constexpr int vignetteWidth = 250;
+constexpr float bounceMargin = 10;
+constexpr float vignetteWidth = 250;
 constexpr int vignetteHeight = 220;
 constexpr int vignetteGap = 10;
 constexpr int vignetteCount = 6;
 
 namespace blooDot::MenuSettingsLang
 {
+	MenuCommon::MenuDialogInteraction menuState;
 	SDL_Event controlsSettingsMenuEvent;
-	bool langSettingsMenuRunning = false;
 	auto menuSelection = Constants::LangSettingsMenuItems::LSMI_CANCEL;
 	auto selectedLanguage = Constants::UserInterfaceLanguages::UIL_AMERICAN;
 	auto movingToLanguage = Constants::UserInterfaceLanguages::UIL_AMERICAN;
 	SDL_Texture* slidingLangs;
 	int sliderTextureWidth;
 	float sliderOffsetLeft = bounceMargin;
-	int slideSpeed = 0;
-	int targetOffsetLeft = 0;
+	float slideSpeed = 0;
+	float targetOffsetLeft = 0;
 
-	bool LanguageSettingsMenuLoop(SDL_Renderer* renderer)
+	Constants::DialogMenuResult LanguageSettingsMenuLoop(SDL_Renderer* renderer)
 	{
 		constexpr int startY = 94;
 		constexpr int stride = 46;
@@ -38,8 +38,12 @@ namespace blooDot::MenuSettingsLang
 		constexpr int sliderY = startY + stride + backGap;
 		constexpr SDL_FRect carouselDestRect = { 195,sliderY,vignetteWidth,vignetteHeight };
 
+		menuState.leaveDialog = false;
+		menuState.dialogResult = Constants::DMR_CANCEL;
+		menuState.itemCount = Constants::LangSettingsMenuItems::LSMI_USER_INTERFACE_LANGUAGE + 1;
+		menuState.selectedItemIndex = Constants::LangSettingsMenuItems::LSMI_CANCEL;
+
 		PrepareControlsInternal(renderer);
-		langSettingsMenuRunning = true;
 		selectedLanguage = Settings::SettingsData.SettingUserInterfaceLanguage;
 		movingToLanguage = Settings::SettingsData.SettingUserInterfaceLanguage;
 		sliderOffsetLeft = static_cast<float>(selectedLanguage) * vignetteWidth + bounceMargin;
@@ -69,18 +73,22 @@ namespace blooDot::MenuSettingsLang
 		);
 
 		unsigned short frame = 0L;
-		while (langSettingsMenuRunning)
+		while (!menuState.leaveDialog)
 		{
 			while (SDL_PollEvent(&controlsSettingsMenuEvent) != 0)
 			{
+				// TODO: use shared carousel movement event handling from menu-common
 				switch (controlsSettingsMenuEvent.type)
 				{
 				case SDL_EVENT_QUIT:
-					langSettingsMenuRunning = false;
+					menuState.leaveDialog = true;
+					menuState.leaveMain = true;
+					menuState.dialogResult = Constants::DMR_QUIT_MAIN;
+
 					break;
 
 				case SDL_EVENT_KEY_DOWN:
-					switch (controlsSettingsMenuEvent.key.key)
+					switch (controlsSettingsMenuEvent.key.scancode)
 					{
 					case SDL_SCANCODE_DOWN:
 					case SDL_SCANCODE_KP_2:
@@ -172,11 +180,12 @@ namespace blooDot::MenuSettingsLang
 						{
 							Settings::SettingsData.SettingUserInterfaceLanguage = movingToLanguage;
 							Settings::ApplyLanguage();
-							langSettingsMenuRunning = false;
+							menuState.dialogResult = Constants::DMR_OK;
+							menuState.leaveDialog = true;
 						}
 						else if (menuSelection == Constants::LSMI_CANCEL)
 						{
-							langSettingsMenuRunning = false;
+							menuState.leaveDialog = true;
 						}
 
 						Sfx::Play(Sfx::SoundEffect::SFX_SELCONF);
@@ -184,15 +193,21 @@ namespace blooDot::MenuSettingsLang
 						break;
 
 					case SDL_SCANCODE_ESCAPE:
-						langSettingsMenuRunning = false;
+						menuState.leaveDialog = true;
 						break;
+
+					default:
+							break;
 					}
 
+					break;
+
+				default:
 					break;
 				}
 			}
 
-			if (SDL_RenderClear(renderer) < 0)
+			if (!SDL_RenderClear(renderer))
 			{
 				const auto clearError = SDL_GetError();
 
@@ -202,14 +217,12 @@ namespace blooDot::MenuSettingsLang
 			SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 			if (!MenuCommon::DrawMenuPanel(renderer, &outerMenuRect, titleTexture, &titleRect))
 			{
-				return false;
+				return Constants::DMR_CANCEL;
 			};
 
 			DialogControls::DrawLabel(renderer, 286, 51, titleTexture, &titleRect);
 
-			const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, 640, 480);
-
-			if (drawingTexture) [[likely]]
+			if (const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, 640, 480)) [[likely]]
 			{
 				auto const& drawingSink = Drawing::GetDrawingSink();
 
@@ -265,7 +278,7 @@ namespace blooDot::MenuSettingsLang
 		titleTexture&& [titleTexture] { SDL_DestroyTexture(titleTexture); return false; }();
 		cancelTexture&& [cancelTexture] { SDL_DestroyTexture(cancelTexture); return false; }();
 
-		return langSettingsMenuRunning;
+		return menuState.dialogResult;
 	}
 
 	void AnimateCarouselInternal()
@@ -279,13 +292,13 @@ namespace blooDot::MenuSettingsLang
 
 		if (slideSpeed == 0)
 		{
-			targetOffsetLeft = bounceMargin + static_cast<int>(movingToLanguage) * vignetteWidth;
+			targetOffsetLeft = bounceMargin + static_cast<float>(movingToLanguage) * vignetteWidth;
 			slideSpeed = 40;
 		}
 
 		auto direction = targetOffsetLeft < sliderOffsetLeft ? -1 : 1;
 
-		sliderOffsetLeft += direction * slideSpeed;
+		sliderOffsetLeft += static_cast<float>(direction) * slideSpeed;
 		if (direction == 1)
 		{
 			if (sliderOffsetLeft >= targetOffsetLeft)
@@ -388,7 +401,7 @@ namespace blooDot::MenuSettingsLang
 
 		DialogControls::CenterLabel(
 			renderer,
-			bounceMargin + vignetteIndex * vignetteWidth + vignetteWidth / 2,
+			static_cast<int>(bounceMargin + static_cast<float>(vignetteIndex) * vignetteWidth + vignetteWidth / 2),
 			y,
 			textureLabel,
 			&rectLabel

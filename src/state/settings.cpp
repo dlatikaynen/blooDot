@@ -1,5 +1,7 @@
 #include "settings.h"
 #include <algorithm>
+#include <iostream>
+#include <sstream>
 
 #include "../../main.h"
 #include "../../src/shared-constants.h"
@@ -42,6 +44,7 @@ namespace blooDot::Settings
 		}
 
 		SDL_CloseIO(settingsFile);
+		std::cout << "Loaded non-in-universe settings from disk" << std::endl;
 	}
 
 	void PreloadControllerMappings()
@@ -60,27 +63,35 @@ namespace blooDot::Settings
 		SDL_free(mappingsMem);
 	}
 
-	void ApplyLanguage()
-	{
+	void ApplyLanguage() {
 		switch (SettingsData.SettingUserInterfaceLanguage)
 		{
-		case Constants::UserInterfaceLanguages::UIL_GERMAN:
-			de::Set();
-			return;
+			case Constants::UserInterfaceLanguages::UIL_GERMAN:
+				de::Set();
+				break;
 
-		case Constants::UserInterfaceLanguages::UIL_FINNISH:
-			fi::Set();
-			return;
+			case Constants::UserInterfaceLanguages::UIL_FINNISH:
+				fi::Set();
+				break;
 
-		case Constants::UserInterfaceLanguages::UIL_UKRAINIAN:
-			ua::Set();
-			return;
+			case Constants::UserInterfaceLanguages::UIL_UKRAINIAN:
+				ua::Set();
+				break;
 
-		default:
-			break;
+			case Constants::UserInterfaceLanguages::UIL_AMERICAN:
+				en::Set();
+				break;
+
+			default:
+				std::stringstream languageVal;
+
+				languageVal << SettingsData.SettingUserInterfaceLanguage;
+				ReportError("User interface language not supported", languageVal.str().c_str());
+
+				return;
 		}
 
-		en::Set();
+		std::cout << "User interface language set to " << literalLanguageName << std::endl;
 	}
 
 	void Save()
@@ -110,6 +121,7 @@ namespace blooDot::Settings
 		}
 
 		SDL_CloseIO(settingsFile);
+		std::cout << "Non-in-universe settings have been written to disk" << std::endl;
 	}
 
 	void Default()
@@ -141,6 +153,10 @@ namespace blooDot::Settings
 		return cappedIndex;
 	}
 
+	/**
+	 * TODO: this violates NASA code review rules
+	 *       because the static analyzer found indirect recursion
+	 */
 	int GetLogicalArenaWidth()
 	{
 		switch (SettingsData.SettingViewportResolution)

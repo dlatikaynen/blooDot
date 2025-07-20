@@ -128,7 +128,9 @@ namespace blooDot::Constants {
 	enum DialogMenuResult {
 		DMR_NONE,
 		DMR_CANCEL,
-		DMR_LAUNCH_MAKER
+		DMR_LAUNCH_MAKER,
+		DMR_OK,
+		DMR_QUIT_MAIN
 	};
 
 	enum ControlHighlight {

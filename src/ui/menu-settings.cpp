@@ -57,21 +57,25 @@ namespace blooDot::MenuSettings
 			blooDot::MenuCommon::HandleMenu(&menuState);
 			if (menuState.leaveDialog)
 			{
-				return !menuState.leaveMain;
+				break;
 			}
 
 			if (menuState.enterMenuItem)
 			{
 				if (!EnterAndHandleSettingsMenuInternal(renderer)) {
-					return false;
+					menuState.leaveMain = true;
+					menuState.leaveDialog = true;
+
+					break;
 				}
 
 				if (menuState.selectedItemIndex == static_cast<int>(Constants::SettingsMenuItems::SMI_BACK)) {
-					return true;
+					menuState.leaveDialog = true;
+					break;
 				}
 			}
 
-			if (SDL_RenderClear(renderer) < 0)
+			if (!SDL_RenderClear(renderer))
 			{
 				const auto clearError = SDL_GetError();
 
@@ -130,7 +134,7 @@ namespace blooDot::MenuSettings
 		PrepareTextInternal(renderer, true);
 		Settings::Save();
 
-		return true;
+		return !menuState.leaveMain;
 	}
 
 	void PrepareTextInternal(SDL_Renderer* renderer, bool destroy)
@@ -153,6 +157,9 @@ namespace blooDot::MenuSettings
 		}
 	}
 
+	/**
+	 * @return false if we should leave main, true if we should remain in the menu
+	 */
 	bool EnterAndHandleSettingsMenuInternal(SDL_Renderer* renderer)
 	{
 		switch (menuState.selectedItemIndex)
@@ -188,12 +195,13 @@ namespace blooDot::MenuSettings
 	//
 	bool EnterAndHandleLanguageSettingsInternal(SDL_Renderer* renderer)
 	{
-	 	if (MenuSettingsLang::LanguageSettingsMenuLoop(renderer)) {
+		if (const auto& dialogResult = MenuSettingsLang::LanguageSettingsMenuLoop(renderer); dialogResult == Constants::DMR_OK) {
 	 		PrepareTextInternal(renderer);
-	 		return true;
+	 	} else if (dialogResult == Constants::DMR_QUIT_MAIN) {
+	 		return false;
 	 	}
 
-	 	return false;
+	 	return true;
 	}
 	//
 	// void _EnterAndHandleControlsSettings(SDL_Renderer* renderer)
