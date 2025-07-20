@@ -87,7 +87,7 @@ namespace blooDot::MenuSettings
 			{
 				// succeed failing
 				return true;
-			};
+			}
 
 			if (const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, Constants::GodsPreferredWidth, Constants::GodsPreferredHight)) [[likely]]
 			{
@@ -138,7 +138,7 @@ namespace blooDot::MenuSettings
 		return !menuState.leaveMain;
 	}
 
-	void PrepareTextInternal(SDL_Renderer* renderer, bool destroy)
+	void PrepareTextInternal(SDL_Renderer* renderer, const bool destroy)
 	{
 		Drawing::DestroyTexture(&backTexture);
 		Drawing::DestroyTexture(&screensizeTexture);

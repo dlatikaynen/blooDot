@@ -12,20 +12,20 @@ namespace blooDot::Sfx
 
 	void PreloadMenuSfx()
 	{
-		PreloadSingleInternal(SoundEffect::SFX_BUMP);
-		PreloadSingleInternal(SoundEffect::SFX_SELCHG);
-		PreloadSingleInternal(SoundEffect::SFX_SELCONF);
-		PreloadSingleInternal(SoundEffect::SFX_ASTERISK);
-		PreloadSingleInternal(SoundEffect::SFX_CRICKET_FRITZ);
-		PreloadSingleInternal(SoundEffect::SFX_CRICKET_FRANZ);
-		PreloadSingleInternal(SoundEffect::SFX_FLOOR);
-		PreloadSingleInternal(SoundEffect::SFX_WALLS);
-		PreloadSingleInternal(SoundEffect::SFX_ROOOF);
+		PreloadSingleInternal(SFX_BUMP);
+		PreloadSingleInternal(SFX_SELCHG);
+		PreloadSingleInternal(SFX_SELCONF);
+		PreloadSingleInternal(SFX_ASTERISK);
+		PreloadSingleInternal(SFX_CRICKET_FRITZ);
+		PreloadSingleInternal(SFX_CRICKET_FRANZ);
+		PreloadSingleInternal(SFX_FLOOR);
+		PreloadSingleInternal(SFX_WALLS);
+		PreloadSingleInternal(SFX_ROOOF);
 	}
 
 	void PreloadGameSfx()
 	{
-		PreloadSingleInternal(SoundEffect::SFX_BULLET_DECAY);
+		PreloadSingleInternal(SFX_BULLET_DECAY);
 	}
 
 	void Play(const SoundEffect effect)
@@ -121,34 +121,34 @@ namespace blooDot::Sfx
 	{
 		switch (effect)
 		{
-		case SoundEffect::SFX_BULLET_DECAY:
+		case SFX_BULLET_DECAY:
 			return CHUNK_KEY_SFX_PROJECTILEDECAY;
 
-		case SoundEffect::SFX_BUMP:
+		case SFX_BUMP:
 			return CHUNK_KEY_SFX_BUMP;
 
-		case SoundEffect::SFX_SELCHG:
+		case SFX_SELCHG:
 			return CHUNK_KEY_SFX_SELCHG;
 
-		case SoundEffect::SFX_SELCONF:
+		case SFX_SELCONF:
 			return CHUNK_KEY_SFX_SELCONF;
 
-		case SoundEffect::SFX_ASTERISK:
+		case SFX_ASTERISK:
 			return CHUNK_KEY_SFX_ASTERISK;
 
-		case SoundEffect::SFX_CRICKET_FRANZ:
+		case SFX_CRICKET_FRANZ:
 			return CHUNK_KEY_SFX_CRICKET_FRANZ;
 
-		case SoundEffect::SFX_CRICKET_FRITZ:
+		case SFX_CRICKET_FRITZ:
 			return CHUNK_KEY_SFX_CRICKET_FRITZ;
 
-		case SoundEffect::SFX_FLOOR:
+		case SFX_FLOOR:
 			return CHUNK_KEY_SFX_FLOOR;
 
-		case SoundEffect::SFX_WALLS:
+		case SFX_WALLS:
 			return CHUNK_KEY_SFX_WALLS;
 
-		case SoundEffect::SFX_ROOOF:
+		case SFX_ROOOF:
 			return CHUNK_KEY_SFX_ROOOF;
 
 		default:

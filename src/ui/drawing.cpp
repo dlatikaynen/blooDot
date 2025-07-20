@@ -114,7 +114,7 @@ namespace blooDot::Drawing {
 		return drawingSink;
 	}
 
-	cairo_t* SetSourceColor(cairo_t* context, SDL_Color color)
+	cairo_t* SetSourceColor(cairo_t* context, const SDL_Color color)
 	{
 		cairo_set_source_rgba
 		(
@@ -141,12 +141,12 @@ namespace blooDot::Drawing {
 	{
 		if (texture != nullptr)
 		{
-			if ((*texture) != nullptr)
+			if (*texture != nullptr)
 			{
 				SDL_DestroyTexture(*texture);
 			}
 
-			(*texture) = nullptr;
+			*texture = nullptr;
 		}
 	}
 }

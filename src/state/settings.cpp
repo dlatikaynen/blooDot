@@ -278,7 +278,7 @@ namespace blooDot::Settings
 
 	bool GetScreenDimensionsInternal(const int displayIndex, SDL_FRect* dimensions)
 	{
-		auto& rect = (*dimensions);
+		auto& rect = *dimensions;
 		const auto displayMode = SDL_GetDesktopDisplayMode(displayIndex);
 
 		if (displayMode == nullptr)

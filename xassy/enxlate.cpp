@@ -127,7 +127,7 @@ int Xlate(XassyXlatInfo* xlatInfo)
 				<< ";\n";
 
 			sourceFile
-				<< "const char* literal"
+				<< "const auto literal"
 				<< identifier.Identifier
 				<< " = \"\";\n";
 
@@ -187,7 +187,7 @@ int Xlate(XassyXlatInfo* xlatInfo)
 			for (auto& identifier : identifiers)
 			{
 				headerLangFile
-					<< "\tconstexpr char const* _literal_"
+					<< "\tconstexpr auto const* _literal_"
 					<< lcid
 					<< "_"
 					<< identifier.Identifier
@@ -197,19 +197,19 @@ int Xlate(XassyXlatInfo* xlatInfo)
 				switch(i)
 				{ 
 				case 1:
-					literal = (identifier.HasAm ? identifier.am : "");
+					literal = identifier.HasAm ? identifier.am : "";
 					break;
 
 				case 2:
-					literal = (identifier.HasDe ? identifier.de : identifier.am);
+					literal = identifier.HasDe ? identifier.de : identifier.am;
 					break;
 
 				case 3:
-					literal = (identifier.HasFi ? identifier.fi : identifier.am);
+					literal = identifier.HasFi ? identifier.fi : identifier.am;
 					break;
 
 				case 4:
-					literal = (identifier.HasUa ? identifier.ua : identifier.am);
+					literal = identifier.HasUa ? identifier.ua : identifier.am;
 					break;
 
 				default:

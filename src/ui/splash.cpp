@@ -275,12 +275,12 @@ namespace blooDot::Splash {
         if (const auto value = distribution(generator); value < 2)
         {
             /* -2, -1 */
-            (*speed) = value - 2;
+            *speed = value - 2;
         }
         else
         {
             /* 1, 2 */
-            (*speed) = value - 1;
+            *speed = value - 1;
         }
     }
 

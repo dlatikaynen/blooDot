@@ -505,9 +505,9 @@ namespace blooDot::MenuSettingsDisplays
 		return true;
 	}
 
-	bool GetResolutionInternal(Constants::ViewportResolutions videoMode, SDL_Rect* dimensions)
+	bool GetResolutionInternal(const Constants::ViewportResolutions videoMode, SDL_Rect* dimensions)
 	{
-		auto& rect = (*dimensions);
+		auto& rect = *dimensions;
 		const auto displayId = SDL_GetDisplayForWindow(mainWindow);
 
 		if (displayId == 0)

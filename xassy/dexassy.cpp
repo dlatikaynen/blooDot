@@ -98,9 +98,9 @@ bool OpenCooked()
 
 static BROTLI_BOOL WriteOutput(uint8_t** outBuffer, size_t* outBufferSize, const uint8_t* next_out, const uint8_t* output, size_t* total_out) {
 	const auto out_size = static_cast<size_t>(next_out - output);
-	const size_t offset = (*total_out);
+	const size_t offset = *total_out;
 
-	(*total_out) += out_size;
+	*total_out += out_size;
 	if (out_size == 0) {
 		// nothing to write, cool
 		return BROTLI_TRUE;
@@ -112,12 +112,12 @@ static BROTLI_BOOL WriteOutput(uint8_t** outBuffer, size_t* outBufferSize, const
 		return BROTLI_FALSE;
 	}
 
-	if ((*total_out) > (*outBufferSize)) {
-		(*outBufferSize) += bufferSize;
-		(*outBuffer) = static_cast<uint8_t *>(SDL_realloc(*outBuffer, *outBufferSize));
+	if (*total_out > (*outBufferSize)) {
+		*outBufferSize += bufferSize;
+		*outBuffer = static_cast<uint8_t *>(SDL_realloc(*outBuffer, *outBufferSize));
 	}
 
-	memcpy((*outBuffer) + offset, output, out_size);
+	memcpy(*outBuffer + offset, output, out_size);
 
 	return BROTLI_TRUE;
 }

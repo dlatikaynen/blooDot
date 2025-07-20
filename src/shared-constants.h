@@ -150,7 +150,7 @@ namespace blooDot::Constants {
 		Loot = 16
 	};
 
-	constexpr DingProps operator|(DingProps a, DingProps b)
+	constexpr DingProps operator|(const DingProps a, const DingProps b)
 	{
 		return static_cast<DingProps>(static_cast<int>(a) | static_cast<int>(b));
 	}

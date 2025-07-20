@@ -127,7 +127,7 @@ namespace blooDot::Res
 			return false;
 		}
 
-		if (SDL_ReadIO(resStream, static_cast<void *>(rawText), numBytes) == 0)
+		if (SDL_ReadIO(resStream, rawText, numBytes) == 0)
 		{
 			const auto readError = SDL_GetError();
 

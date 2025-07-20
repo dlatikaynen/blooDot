@@ -218,7 +218,7 @@ namespace blooDot::MenuSettingsLang
 			if (!MenuCommon::DrawMenuPanel(renderer, &outerMenuRect, titleTexture, &titleRect))
 			{
 				return Constants::DMR_CANCEL;
-			};
+			}
 
 			if (const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, 640, 480)) [[likely]]
 			{
@@ -389,7 +389,7 @@ namespace blooDot::MenuSettingsLang
 		ReportError("Could not allocate sliding texture", newCarouselError);
 	}
 
-	void VignetteLabelInternal(SDL_Renderer* renderer, int font, int size, int vignetteIndex, int y, const char* text)
+	void VignetteLabelInternal(SDL_Renderer* renderer, const int font, const int size, const int vignetteIndex, const int y, const char* text)
 	{
 		SDL_FRect rectLabel = { 0,0,0,0 };
 		const auto textureLabel = Scripture::RenderText(

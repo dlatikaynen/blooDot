@@ -178,7 +178,7 @@ namespace blooDot::DialogControls {
 
 	void CenterLabel(SDL_Renderer* renderer, const int x, const int y, SDL_Texture* texture, SDL_FRect* const frame)
 	{
-		auto& rect = (*frame);
+		auto& rect = *frame;
 
 		rect.x = static_cast<float>(x) - rect.w / 2;
 		rect.y = static_cast<float>(y) - rect.h / 2;
@@ -269,16 +269,15 @@ namespace blooDot::DialogControls {
 	{
 		if (!selPatternRed)
 		{
-			double j;
 			int stride = 1;
 
 			selPatternRed = cairo_pattern_create_linear(0.0, 0.0, 350.0, 350.0);
 			selPatternBlue = cairo_pattern_create_linear(0.0, 0.0, 350.0, 350.0);
 			selPatternYellow = cairo_pattern_create_linear(0.0, 0.0, 350.0, 350.0);
 
-			for (j = 0.1; j < 1; j += 0.1)
+			for (double j = 0.1; j < 1; j += 0.1)
 			{
-				if ((stride % 2))
+				if (stride % 2)
 				{
 					cairo_pattern_add_color_stop_rgb(selPatternRed, j, 0.35, 0.1, 0.1);
 					cairo_pattern_add_color_stop_rgb(selPatternBlue, j, 0.1, 0.1, 0.35);

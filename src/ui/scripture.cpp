@@ -126,7 +126,7 @@ namespace blooDot::Scripture {
 		return chunkMem;
 	}
 
-	TTF_Font* GetFont(int fontKey)
+	TTF_Font* GetFont(const int fontKey)
 	{
 		switch (fontKey)
 		{
@@ -155,7 +155,7 @@ namespace blooDot::Scripture {
 	/// Text is centered inside the rectange "frame" on the texture,
 	/// where the co-ordinates given by "frame" must be fully inside texture.
 	/// </summary>
-	bool DrawText(SDL_Texture* streamingDestination, const SDL_Rect* frame, const int fontKey, const int sizePt, const char* text, SDL_Color color, const bool bold)
+	bool DrawText(SDL_Texture* streamingDestination, const SDL_Rect* frame, const int fontKey, const int sizePt, const char* text, const SDL_Color color, const bool bold)
 	{
 		SDL_Surface* writeThrough;
 		if (SDL_LockTextureToSurface(streamingDestination, frame, &writeThrough) != 0)
@@ -229,7 +229,7 @@ namespace blooDot::Scripture {
 	/// Use the DrawText method instead, if you need to paint text on
 	/// top of anything prior existing as (and on) a texture.
 	/// </summary>
-	SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_FRect* frame, int fontKey, int sizePt, const char* text, SDL_Color color, bool bold)
+	SDL_Texture* RenderText(SDL_Renderer* renderer, SDL_FRect* frame, const int fontKey, const int sizePt, const char* text, const SDL_Color color, const bool bold)
 	{
 		SDL_Texture* textTexture = nullptr;
 

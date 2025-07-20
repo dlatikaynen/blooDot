@@ -14,10 +14,10 @@ struct XassyXlatInfo {
 typedef struct XlatableIdentifierStruct
 {
     std::string Identifier;
-    bool HasAm;
-    bool HasDe;
-    bool HasFi;
-    bool HasUa;
+    bool HasAm = false;
+    bool HasDe = false;
+    bool HasFi = false;
+    bool HasUa = false;
     std::string am;
     std::string de;
     std::string fi;

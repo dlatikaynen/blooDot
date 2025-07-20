@@ -66,7 +66,7 @@ namespace blooDot::MenuSettingsAbout
 			if (!MenuCommon::DrawMenuPanel(renderer, &outerMenuRect, titleTexture, &titleRect))
 			{
 				return true;
-			};
+			}
 
 			if (const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, Constants::GodsPreferredWidth, Constants::GodsPreferredHight)) [[likely]]
 			{
@@ -522,8 +522,7 @@ namespace blooDot::MenuSettingsAbout
 
 		for (auto& section : creditSections)
 		{
-			auto& chapters = section.chapters;
-			for (const auto& chapter : chapters)
+			for (auto& chapters = section.chapters; const auto& chapter : chapters)
 			{
 				if (chapter->texture)
 				{

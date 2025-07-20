@@ -95,9 +95,7 @@ int main(const int argc, char *argv[]) {
     const auto numAudioDrivers = SDL_GetNumAudioDrivers();
     for (auto i = 0; i < numAudioDrivers; ++i)
     {
-        const auto& audioDriver = SDL_GetAudioDriver(i);
-
-        if (strnicmp(audioDriver, "dummy", 0xff) != 0) {
+        if (const auto& audioDriver = SDL_GetAudioDriver(i); strnicmp(audioDriver, "dummy", 0xff) != 0) {
             std::cout << "Audio driver \"" << audioDriver << "\" present\n";
         }
     }
@@ -128,7 +126,7 @@ int main(const int argc, char *argv[]) {
         std::flush(std::cout);
 
         /* https://stackoverflow.com/a/31926842/1132334 */
-        ::PrepareIndex();
+        PrepareIndex();
         cookedOpen = OpenCooked();
         if (!cookedOpen) {
             retVal = blooDot::RETVAL_DEXASSY_FAIL;
@@ -164,9 +162,8 @@ int main(const int argc, char *argv[]) {
             }
 
             // process the "main menu" and clean it up
-            const auto splashResult = blooDot::Splash::SplashLoop(blooDot::renderer);
 
-            if (splashResult.abortMain) {
+            if (const auto splashResult = blooDot::Splash::SplashLoop(blooDot::renderer); splashResult.abortMain) {
                 std::cout << "Aborting from main menu (uncommanded quit)" << std::endl;
                 blooDot::Quit = true;
             } else if (splashResult.leaveMain) {
@@ -235,8 +232,8 @@ namespace blooDot {
         XassyCookInfo cookStats{};
 
         if (const auto cookResult = Cook(&cookStats); cookResult == CookReturnCodeSuccess) {
-            const auto sizeRaw = blooDot::bytesize(cookStats.numBytesBefore);
-            const auto sizeCooked = blooDot::bytesize(cookStats.numBytesAfter);
+            const auto sizeRaw = bytesize(cookStats.numBytesBefore);
+            const auto sizeCooked = bytesize(cookStats.numBytesAfter);
 
             std::cout
                 << "Assembled "

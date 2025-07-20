@@ -93,7 +93,7 @@ namespace blooDot::Ui::GpuChan {
 							break;
 
 						default:
-							break;;
+							break;
 						}
 
 					default:

@@ -38,17 +38,12 @@ namespace blooDot::Algo::Boyds {
                 {
                     const auto& boydB = boyds[j];
                     const auto& attraction = attractor[boydA.group * groupCount + boydB.group];
-                    const double& dX = boydA.positionX - boydB.positionX;
 
-                    if (dX != 0)
+                    if (const double& dX = boydA.positionX - boydB.positionX; dX != 0)
                     {
-                        const double& dY = boydA.positionY - boydB.positionY;
-
-                        if (dY != 0)
+                        if (const double& dY = boydA.positionY - boydB.positionY; dY != 0)
                         {
-                            const auto& distance = dX * dX + dY * dY;
-
-                            if (distance < radiusThresholdSquared)
+                            if (const auto& distance = dX * dX + dY * dY; distance < radiusThresholdSquared)
                             {
                                 /* classical newton */
                                 const auto& perceivedForce = attraction / std::sqrt(distance);
@@ -98,17 +93,17 @@ namespace blooDot::Algo::Boyds {
 
     void RenderBoydsa(cairo_t* const& drawingSink)
     {
-        for (auto& boyd : boyds)
+        for (auto&[positionX, positionY, group, velocityX, velocityY] : boyds)
         {
-            auto const& r = 1. - (1. / fabs(boyd.velocityX));
-            auto const& g = static_cast<double>(boyd.group) / 3.;
-            auto const& b = 1. / fabs(boyd.velocityY);
+            auto const& r = 1. - 1. / fabs(velocityX);
+            auto const& g = static_cast<double>(group) / 3.;
+            auto const& b = 1. / fabs(velocityY);
 
             cairo_set_source_rgb(drawingSink, r, g, b);
             cairo_rectangle(
                 drawingSink,
-                boyd.positionX - 1,
-                boyd.positionY - 1,
+                positionX - 1,
+                positionY - 1,
                 boydSize,
                 boydSize
             );
@@ -124,8 +119,8 @@ namespace blooDot::Algo::Boyds {
 
     double RandomInternal()
     {
-        return (static_cast<double>(std::rand()) / static_cast<double>(RAND_MAX)) * (canvasHeight - seedMargin * 2) + seedMargin; // NOLINT(*-msc50-cpp)
-    };
+        return static_cast<double>(std::rand()) / static_cast<double>(RAND_MAX) * (canvasHeight - seedMargin * 2) + seedMargin; // NOLINT(*-msc50-cpp)
+    }
 
     void CreateInternal(const int amount, const char group)
     {

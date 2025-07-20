@@ -62,7 +62,7 @@ namespace blooDot::MenuCommon
 				case SDL_SCANCODE_KP_2:
 				case SDL_SCANCODE_S:
 				DOWN:
-					if (interactionState->selectedItemIndex == (interactionState->itemCount - 1))
+					if (interactionState->selectedItemIndex == interactionState->itemCount - 1)
 					{
 						blooDot::Sfx::Play(Sfx::SoundEffect::SFX_ASTERISK);
 					}
@@ -76,7 +76,7 @@ namespace blooDot::MenuCommon
 
 				case SDL_SCANCODE_PAGEDOWN:
 				case SDL_SCANCODE_END:
-					if (interactionState->selectedItemIndex == (interactionState->itemCount - 1))
+					if (interactionState->selectedItemIndex == interactionState->itemCount - 1)
 					{
 						blooDot::Sfx::Play(Sfx::SoundEffect::SFX_ASTERISK);
 					}
@@ -255,7 +255,7 @@ namespace blooDot::MenuCommon
 			ReportError("Failed to draw panel border", drawRectError);
 
 			return false;
-		};
+		}
 
 		DialogControls::CenterLabel(
 			renderer,
