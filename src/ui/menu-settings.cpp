@@ -10,6 +10,7 @@
 #include "../state/settings.h"
 #include "layout-constants.h"
 #include "menu-settings-about.h"
+#include "menu-settings-displays.h"
 #include "menu-settings-lang.h"
 
 namespace blooDot::MenuSettings
@@ -162,13 +163,10 @@ namespace blooDot::MenuSettings
 	 */
 	bool EnterAndHandleSettingsMenuInternal(SDL_Renderer* renderer)
 	{
-		switch (menuState.selectedItemIndex)
-		{
-			/*
-		case SettingsMenuItems::SMI_SCREENSIZE:
-			_EnterAndHandleScreenSettings(renderer);
-			break;
-*/
+		switch (menuState.selectedItemIndex) {
+		case Constants::SettingsMenuItems::SMI_SCREENSIZE:
+			return EnterAndHandleDisplaySettingsInternal(renderer);
+
 		case Constants::SettingsMenuItems::SMI_LANGUAGE:
 			return EnterAndHandleLanguageSettingsInternal(renderer);
 /*
@@ -188,11 +186,11 @@ namespace blooDot::MenuSettings
 		}
 	}
 
-	// void _EnterAndHandleScreenSettings(SDL_Renderer* renderer)
-	// {
-	// 	blooDot::MenuSettingsScreen::ScreenSettingsMenuLoop(renderer);
-	// }
-	//
+	bool EnterAndHandleDisplaySettingsInternal(SDL_Renderer* renderer)
+	{
+		return MenuSettingsDisplays::ScreenSettingsMenuLoop(renderer);
+	}
+
 	bool EnterAndHandleLanguageSettingsInternal(SDL_Renderer* renderer)
 	{
 		if (const auto& dialogResult = MenuSettingsLang::LanguageSettingsMenuLoop(renderer); dialogResult == Constants::DMR_OK) {

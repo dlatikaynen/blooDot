@@ -2,6 +2,7 @@
 
 #include "dialog-controls.h"
 #include "drawing.h"
+#include "menu-common.h"
 #include "scripture.h"
 #include "../shared-constants.h"
 #include "../../res/xlations.h"
@@ -14,17 +15,19 @@ namespace blooDot::Ui::GpuChan {
 	constexpr SDL_Color titleTextColor = { 11,8,8,222 };
 	constexpr SDL_Color bubbleTextColor = { 12, 8, 8, 255 };
 
+	MenuCommon::MenuDialogInteraction menuState;
 	SDL_Texture* gpuChan = nullptr;
 	SDL_FRect chanDims = {};
-	bool chanRunning = false;
 	SDL_Event gpuChanEvent;
 
 	bool GpuChanLoop(SDL_Renderer* renderer, const char* message, const char* title, const std::string& bubble)
 	{
-		chanRunning = true;
+		menuState.leaveDialog = false;
+		menuState.dialogResult = Constants::DMR_CANCEL;
+
 		EnterInternal(renderer);
-		SDL_FRect screen = { 0,0,Constants::GodsPreferredWidth,Constants::GodsPreferredHight };
-		SDL_FRect center = { screen.w - chanDims.w, screen.h - chanDims.h, chanDims.w, chanDims.h};
+		constexpr SDL_FRect screen = { 0,0,Constants::GodsPreferredWidth,Constants::GodsPreferredHight };
+		const SDL_FRect center = { screen.w - chanDims.w, screen.h - chanDims.h, chanDims.w, chanDims.h};
 		SDL_FRect messageRect{ 0,0,0,0 };
 		SDL_FRect titleRect{ 0,0,0,0 };
 		SDL_FRect okRect{ 0,0,0,0 };
@@ -67,15 +70,15 @@ namespace blooDot::Ui::GpuChan {
 		);
 
 		unsigned short frame = 0;
-		while (chanRunning)
+		while (!menuState.leaveDialog)
 		{
 			while (SDL_PollEvent(&gpuChanEvent) != 0)
 			{
 				switch (gpuChanEvent.type)
 				{
 					case SDL_EVENT_QUIT:
-						mainRunning = false;
-						chanRunning = false;
+						menuState.dialogResult = Constants::DMR_QUIT_MAIN;
+						menuState.leaveDialog = true;
 						break;
 
 					case SDL_EVENT_KEY_DOWN:
@@ -86,7 +89,7 @@ namespace blooDot::Ui::GpuChan {
 						case SDL_SCANCODE_KP_ENTER:
 						case SDL_SCANCODE_SPACE:
 						case SDL_SCANCODE_ESCAPE:
-							chanRunning = false;
+							menuState.leaveDialog = true;
 							break;
 
 						default:
@@ -105,8 +108,7 @@ namespace blooDot::Ui::GpuChan {
 				ReportError("Failed to wipe Gpu-chan", clearError);
 			}
 
-			const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, Constants::GodsPreferredWidth, Constants::GodsPreferredHight);
-			if (drawingTexture)
+			if (const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, Constants::GodsPreferredWidth, Constants::GodsPreferredHight))
 			{
 				auto const& drawingSink = Drawing::GetDrawingSink();
 
@@ -116,7 +118,8 @@ namespace blooDot::Ui::GpuChan {
 					419,
 					120,
 					42,
-					isCreatorMode ? Constants::CH_CREATORMODE : Constants::CH_MAINMENU
+					//isCreatorMode ? Constants::CH_CREATORMODE : Constants::CH_MAINMENU
+					Constants::CH_MAINMENU
 				);
 
 				DialogControls::DrawChevron(drawingSink, 28 - 7, 419 + 21, false, frame);
@@ -142,7 +145,7 @@ namespace blooDot::Ui::GpuChan {
 		okTexture && [okTexture] { SDL_DestroyTexture(okTexture); return false; }();
 		bubbleTexture && [bubbleTexture] { SDL_DestroyTexture(bubbleTexture); return false; }();
 
-		return chanRunning;
+		return menuState.dialogResult != Constants::DMR_QUIT_MAIN;
 	}
 
 	void EnterInternal(SDL_Renderer* renderer)
@@ -150,7 +153,7 @@ namespace blooDot::Ui::GpuChan {
 		gpuChan = Res::LoadPicture(renderer, CHUNK_KEY_GPU_CHAN, &chanDims);
 		if (!gpuChan)
 		{
-			chanRunning = false;
+			menuState.leaveDialog = true;
 		}
 	}
 

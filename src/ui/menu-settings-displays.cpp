@@ -17,14 +17,14 @@
 #include "../state/settings.h"
 #include "../algo/boydsa.h"
 
-constexpr int bounceMargin = 10;
-constexpr int vignetteWidth = 250;
-constexpr int vignetteHeight = 220;
-constexpr int vignetteGap = 10;
-constexpr int vignetteCount = 7;
-
 namespace blooDot::MenuSettingsDisplays
 {
+	constexpr int bounceMargin = 10;
+	constexpr int vignetteWidth = 250;
+	constexpr int vignetteHeight = 220;
+	constexpr int vignetteGap = 10;
+	constexpr int vignetteCount = 7;
+
 	MenuCommon::MenuDialogInteraction menuState;
 	SDL_Event screenSettingsMenuEvent;
 	auto menuSelection = Constants::ScreenSettingsMenuItems::SSMI_CANCEL;
