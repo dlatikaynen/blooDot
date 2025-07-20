@@ -14,7 +14,7 @@ namespace blooDot {
 
 	public:
 		// construct from number
-		explicit bytesize(size_t bytes_): bytes(bytes_) {}
+		explicit bytesize(const size_t bytes_): bytes(bytes_) {}
 
 		// parse from string
 		static bytesize parse(const std::string &str) {
@@ -25,8 +25,8 @@ namespace blooDot {
 				throw std::runtime_error("Unable to parse '" + str + "' as size.");
 			}
 
-			unsigned long long d = std::stoull(m[1].str());
-			size_t mult = 1;
+			const unsigned long long d = std::stoull(m[1].str());
+			size_t mult;
 
 			if (m[3] == "") {
 				mult = 1;
@@ -106,28 +106,28 @@ namespace blooDot {
 		inline bytesize operator"" _PiB(const long double num) { return bytesize(static_cast<size_t>((1LL << 50) * num)); }
 		inline bytesize operator"" _kB(const long double num) { return bytesize(static_cast<size_t>(1'000LL * num)); }
 		inline bytesize operator"" _MB(const long double num) { return bytesize(static_cast<size_t>(1'000'000LL * num)); }
-		inline bytesize operator"" _GB(long double num) { return bytesize(static_cast<size_t>(1'000'000'000LL * num)); }
-		inline bytesize operator"" _TB(long double num) { return bytesize(static_cast<size_t>(1'000'000'000'000LL * num)); }
-		inline bytesize operator"" _PB(long double num) { return bytesize(static_cast<size_t>(1'000'000'000'000'000LL * num)); }
+		inline bytesize operator"" _GB(const long double num) { return bytesize(static_cast<size_t>(1'000'000'000LL * num)); }
+		inline bytesize operator"" _TB(const long double num) { return bytesize(static_cast<size_t>(1'000'000'000'000LL * num)); }
+		inline bytesize operator"" _PB(const long double num) { return bytesize(static_cast<size_t>(1'000'000'000'000'000LL * num)); }
 
 		// repeated for integer literals so that e.g. 5_kB works
-		inline bytesize operator"" _kiB(unsigned long long int num) { return bytesize((1LL << 10) * num); }
-		inline bytesize operator"" _MiB(unsigned long long int num) { return bytesize((1LL << 20) * num); }
-		inline bytesize operator"" _GiB(unsigned long long int num) { return bytesize((1LL << 30) * num); }
-		inline bytesize operator"" _TiB(unsigned long long int num) { return bytesize((1LL << 40) * num); }
-		inline bytesize operator"" _PiB(unsigned long long int num) { return bytesize((1LL << 50) * num); }
-		inline bytesize operator"" _kB(unsigned long long int num) { return bytesize(1'000LL * num); }
-		inline bytesize operator"" _MB(unsigned long long int num) { return bytesize(1'000'000LL * num); }
+		inline bytesize operator"" _kiB(const unsigned long long int num) { return bytesize((1LL << 10) * num); }
+		inline bytesize operator"" _MiB(const unsigned long long int num) { return bytesize((1LL << 20) * num); }
+		inline bytesize operator"" _GiB(const unsigned long long int num) { return bytesize((1LL << 30) * num); }
+		inline bytesize operator"" _TiB(const unsigned long long int num) { return bytesize((1LL << 40) * num); }
+		inline bytesize operator"" _PiB(const unsigned long long int num) { return bytesize((1LL << 50) * num); }
+		inline bytesize operator"" _kB(const unsigned long long int num) { return bytesize(1'000LL * num); }
+		inline bytesize operator"" _MB(const unsigned long long int num) { return bytesize(1'000'000LL * num); }
 
-		inline bytesize operator"" _GB(unsigned long long int num) {
+		inline bytesize operator"" _GB(const unsigned long long int num) {
 			return bytesize(1'000'000'000LL * num);
 		}
 
-		inline bytesize operator"" _TB(unsigned long long int num) {
+		inline bytesize operator"" _TB(const unsigned long long int num) {
 			return bytesize(1'000'000'000'000LL * num);
 		}
 
-		inline bytesize operator"" _PB(unsigned long long int num) {
+		inline bytesize operator"" _PB(const unsigned long long int num) {
 			return bytesize(1'000'000'000'000'000LL * num);
 		}
 	}

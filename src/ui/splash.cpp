@@ -141,7 +141,7 @@ namespace blooDot::Splash {
 
                 for (auto y = yStart; y < 400; y += stride)
                 {
-                    auto thisItem = itemToDraw == menuState.selectedItemIndex;
+                    const auto thisItem = itemToDraw == menuState.selectedItemIndex;
 
                     DialogControls::DrawButton(drawingSink, 195, y, 250, 42, thisItem ? Constants::CH_MAINMENU : Constants::CH_NONE);
                     if (thisItem)

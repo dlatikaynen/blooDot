@@ -237,19 +237,7 @@ namespace blooDot::MenuSettingsDisplays
 			}
 
 			SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-			SDL_SetRenderDrawColor(renderer, 0x40, 0x40, 0x40, 0xcf);
-			SDL_RenderFillRect(renderer, &outerMenuRect);
-			SDL_SetRenderDrawColor(renderer, 0xc5, 0xc5, 0xc5, 0xe9);
-			if (!SDL_RenderRect(renderer, &outerMenuRect))
-			{
-				const auto drawRectError = SDL_GetError();
-
-				ReportError("Failed to draw screen settings menu panel border", drawRectError);
-				menuState.leaveDialog = true;
-			};
-
-			DialogControls::DrawLabel(renderer, 286, 51, titleTexture, &titleRect);
-
+			MenuCommon::DrawMenuPanel(renderer, &outerMenuRect, titleTexture, &titleRect);
 			if (const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, 640, 480)) [[likely]]
 			{
 				auto const& drawingSink = Drawing::GetDrawingSink();
@@ -418,7 +406,8 @@ namespace blooDot::MenuSettingsDisplays
 			VignetteLabelInternal(renderer, Scripture::FONT_KEY_DIALOG_FAT, 13, 6, 70, literalSettingsScreenFullDetails);
 
 			SDL_Rect screen;
-			if (MenuSettingsDisplays::GetResolutionInternal(Constants::VR_MAXOUT, &screen))
+
+			if (GetResolutionInternal(Constants::VR_MAXOUT, &screen))
 			{
 				std::stringstream screenWidth;
 				std::stringstream screenHeight;
@@ -440,6 +429,7 @@ namespace blooDot::MenuSettingsDisplays
 			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_DIVINE, 0, vignetteWidth, bounceMargin);
 			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_HERC, 1, vignetteWidth, bounceMargin);
 			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_MODEX, 2, vignetteWidth, bounceMargin);
+			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_SVGA, 3, vignetteWidth, bounceMargin);
 			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_HD, 4, vignetteWidth, bounceMargin);
 			if (!SDL_SetRenderTarget(renderer, nullptr))
 			{
@@ -454,6 +444,7 @@ namespace blooDot::MenuSettingsDisplays
 		}
 
 		const auto newCarouselError = SDL_GetError();
+
 		ReportError("Could not allocate sliding texture", newCarouselError);
 	}
 
@@ -492,10 +483,10 @@ namespace blooDot::MenuSettingsDisplays
 			/* we won't precompute this as they could move
 			 * the launcher to a bigger screen, or change settings while we run */
 			SDL_Rect screen;
-			MenuSettingsDisplays::GetResolutionInternal(Constants::VR_MAXOUT, &screen);
+			GetResolutionInternal(Constants::VR_MAXOUT, &screen);
 
 			SDL_Rect desired;
-			MenuSettingsDisplays::GetResolutionInternal(selectedResolution, &desired);
+			GetResolutionInternal(selectedResolution, &desired);
 
 			if (desired.w > screen.w || desired.h > screen.h)
 			{
@@ -517,6 +508,27 @@ namespace blooDot::MenuSettingsDisplays
 	bool GetResolutionInternal(Constants::ViewportResolutions videoMode, SDL_Rect* dimensions)
 	{
 		auto& rect = (*dimensions);
+		const auto displayId = SDL_GetDisplayForWindow(mainWindow);
+
+		if (displayId == 0)
+		{
+			const auto& screenError = SDL_GetError();
+
+			ReportError("Could not query screen size", screenError);
+
+			return false;
+		}
+
+		const auto& displayMode = SDL_GetDesktopDisplayMode(displayId);
+
+		if (displayMode == nullptr)
+		{
+			const auto& screenError = SDL_GetError();
+
+			ReportError("Could not query screen size", screenError);
+
+			return false;
+		}
 
 		switch (videoMode)
 		{
@@ -546,17 +558,6 @@ namespace blooDot::MenuSettingsDisplays
 			break;
 
 		case Constants::ViewportResolutions::VR_SQUARE: {
-			const auto& displayMode = SDL_GetDesktopDisplayMode(0);
-
-			if (displayMode == nullptr)
-			{
-				const auto& screenError = SDL_GetError();
-
-				ReportError("Could not query screen size", screenError);
-
-				return false;
-			}
-
 			rect.w = std::min(displayMode->w, displayMode->h);
 			rect.h = std::min(displayMode->h, displayMode->w);
 
@@ -564,17 +565,6 @@ namespace blooDot::MenuSettingsDisplays
 		}
 
 		case Constants::ViewportResolutions::VR_MAXOUT: {
-			const auto& displayMode = SDL_GetDesktopDisplayMode(0);
-
-			if (displayMode == nullptr)
-			{
-				const auto& screenError = SDL_GetError();
-
-				ReportError("Could not query screen size", screenError);
-
-				return false;
-			}
-
 			rect.w = displayMode->w;
 			rect.h = displayMode->h;
 

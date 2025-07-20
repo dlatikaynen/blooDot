@@ -18,8 +18,8 @@ namespace blooDot::MenuSettingsAbout
     } CreditsChapter;
 
     typedef struct CreditsSectionStruct {
-        SDL_Texture* texture;
-        SDL_FRect rect;
+        SDL_Texture* texture = nullptr;
+        SDL_FRect rect = {};
         std::vector<std::shared_ptr<CreditsChapter>> chapters;
     } CreditsSection;
 

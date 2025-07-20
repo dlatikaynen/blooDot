@@ -22,7 +22,7 @@ namespace blooDot::DialogControls {
 	/// <summary>
 	/// Expects the patterns to be created
 	/// </summary>
-	cairo_t* DrawActiveControllerSquare(cairo_t* context, double x, double y, double w, double h)
+	cairo_t* DrawActiveControllerSquare(cairo_t* context, const double x, const double y, const double w, const double h)
 	{
 		cairo_set_source(context, selPatternBlue);
 		cairo_rectangle(context, x, y, w, h);
@@ -31,7 +31,7 @@ namespace blooDot::DialogControls {
 		return context;
 	}
 
-	cairo_t* DrawControllerButtonTip(cairo_t* context, double x, double y, Constants::ControlHighlight highlight)
+	cairo_t* DrawControllerButtonTip(cairo_t* context, const double x, const double y, const Constants::ControlHighlight highlight)
 	{
 		if (highlight > Constants::CH_NONE)
 		{
@@ -168,7 +168,7 @@ namespace blooDot::DialogControls {
 		return context;
 	}
 
-	void DrawLabel(SDL_Renderer* renderer, int x, int y, SDL_Texture* texture, SDL_FRect* frame)
+	void DrawLabel(SDL_Renderer* renderer, const int x, const int y, SDL_Texture* texture, SDL_FRect* frame)
 	{
 		frame->x = static_cast<float>(x);
 		frame->y = static_cast<float>(y + Constants::LayoutMetricButtonLabelOffsetY);
@@ -176,7 +176,7 @@ namespace blooDot::DialogControls {
 		SDL_RenderTexture(renderer, texture, nullptr, frame);
 	}
 
-	void CenterLabel(SDL_Renderer* renderer, int x, int y, SDL_Texture* texture, SDL_FRect* const frame)
+	void CenterLabel(SDL_Renderer* renderer, const int x, const int y, SDL_Texture* texture, SDL_FRect* const frame)
 	{
 		auto& rect = (*frame);
 

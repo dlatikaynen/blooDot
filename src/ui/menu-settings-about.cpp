@@ -31,7 +31,7 @@ namespace blooDot::MenuSettingsAbout
 		menuState.itemCount = Constants::AboutMenuItems::HAM_BACK + 1;
 		menuState.selectedItemIndex = Constants::AboutMenuItems::HAM_BACK;
 
-		SDL_FRect outerMenuRect{ 150,45,340,390 };
+		constexpr SDL_FRect outerMenuRect{ 150,45,340,390 };
 		SDL_FRect titleRect{ 0,0,0,0 };
 
 		const auto titleTexture = Scripture::RenderText(

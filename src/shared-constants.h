@@ -23,10 +23,10 @@ namespace blooDot::Constants {
 	constexpr SDL_Color Player3Color = { 125, 82, 2, 255 };    // brown; color is weird
 	constexpr SDL_Color Player4Color = { 45, 135, 81, 255 };   // greenish
 
-	constexpr char const* SettingsFileName = "blooDot.ligma";
-	constexpr char const* MakerSettingsFileName = "blooDot.deez";
-	constexpr char const* SavegameFileName = "blooDot.$i.bofa";
-	constexpr char const* StaticRegionFileName = "blooDot.$i.syp";
+	constexpr auto SettingsFileName = "blooDot.ligma";
+	constexpr auto MakerSettingsFileName = "blooDot.deez";
+	constexpr auto SavegameFileName = "blooDot.$i.bofa";
+	constexpr auto StaticRegionFileName = "blooDot.$i.syp";
 
 	enum ViewportResolutions : char {
 		VR_TEMPLE,   //  640 x 480
@@ -155,32 +155,32 @@ namespace blooDot::Constants {
 		return static_cast<DingProps>(static_cast<int>(a) | static_cast<int>(b));
 	}
 
-	inline ViewportResolutions operator--(ViewportResolutions& vpr)
+	inline ViewportResolutions operator--(const ViewportResolutions& vpr)
 	{
 		return static_cast<ViewportResolutions>(static_cast<int>(vpr) - 1);
 	}
 
-	inline ViewportResolutions operator++(ViewportResolutions& vpr)
+	inline ViewportResolutions operator++(const ViewportResolutions& vpr)
 	{
 		return static_cast<ViewportResolutions>(static_cast<int>(vpr) + 1);
 	}
 
-	inline UserInterfaceLanguages operator--(UserInterfaceLanguages& uil)
+	inline UserInterfaceLanguages operator--(const UserInterfaceLanguages& uil)
 	{
 		return static_cast<UserInterfaceLanguages>(static_cast<int>(uil) - 1);
 	}
 
-	inline UserInterfaceLanguages operator++(UserInterfaceLanguages& uil)
+	inline UserInterfaceLanguages operator++(const UserInterfaceLanguages& uil)
 	{
 		return static_cast<UserInterfaceLanguages>(static_cast<int>(uil) + 1);
 	}
 
-	inline InputDeviceChoices operator--(InputDeviceChoices& uil)
+	inline InputDeviceChoices operator--(const InputDeviceChoices& uil)
 	{
 		return static_cast<InputDeviceChoices>(static_cast<int>(uil) - 1);
 	}
 
-	inline InputDeviceChoices operator++(InputDeviceChoices& uil)
+	inline InputDeviceChoices operator++(const InputDeviceChoices& uil)
 	{
 		return static_cast<InputDeviceChoices>(static_cast<int>(uil) + 1);
 	}

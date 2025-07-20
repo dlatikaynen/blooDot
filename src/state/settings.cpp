@@ -27,7 +27,7 @@ namespace blooDot::Settings
 		}
 
 		SDL_ReadIO(settingsFile, &SettingsData, sizeof(SettingsStruct));
-		const SettingsStruct validator;
+		constexpr SettingsStruct validator;
 		const auto isValid = _memicmp(
 			&validator.Preamble0,
 			&SettingsData.Preamble0,

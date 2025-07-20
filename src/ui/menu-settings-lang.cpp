@@ -48,7 +48,7 @@ namespace blooDot::MenuSettingsLang
 		movingToLanguage = Settings::SettingsData.SettingUserInterfaceLanguage;
 		sliderOffsetLeft = static_cast<float>(selectedLanguage) * vignetteWidth + bounceMargin;
 
-		SDL_FRect outerMenuRect{ 150,45,340,390 };
+		constexpr SDL_FRect outerMenuRect{ 150,45,340,390 };
 		SDL_FRect titleRect{ 0,0,0,0 };
 		SDL_FRect cancelRect{ 0,0,0,0 };
 		SDL_FRect carouselSrcRect = { sliderOffsetLeft,0,vignetteWidth,vignetteHeight };
@@ -220,8 +220,6 @@ namespace blooDot::MenuSettingsLang
 				return Constants::DMR_CANCEL;
 			};
 
-			DialogControls::DrawLabel(renderer, 286, 51, titleTexture, &titleRect);
-
 			if (const auto drawingTexture = Drawing::BeginRenderDrawing(renderer, 640, 480)) [[likely]]
 			{
 				auto const& drawingSink = Drawing::GetDrawingSink();
@@ -296,7 +294,7 @@ namespace blooDot::MenuSettingsLang
 			slideSpeed = 40;
 		}
 
-		auto direction = targetOffsetLeft < sliderOffsetLeft ? -1 : 1;
+		const auto direction = targetOffsetLeft < sliderOffsetLeft ? -1 : 1;
 
 		sliderOffsetLeft += static_cast<float>(direction) * slideSpeed;
 		if (direction == 1)
@@ -341,9 +339,10 @@ namespace blooDot::MenuSettingsLang
 				return;
 			}
 
-			if (SDL_SetRenderTarget(renderer, slidingLangs) < 0)
+			if (!SDL_SetRenderTarget(renderer, slidingLangs))
 			{
 				const auto targetError = SDL_GetError();
+
 				ReportError("Could not set sliding texture as the render target", targetError);
 
 				return;
@@ -373,10 +372,12 @@ namespace blooDot::MenuSettingsLang
 			MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_DE_PNG, 2, vignetteWidth, bounceMargin);
 			MenuCommon::DrawIcon(renderer, CHUNK_KEY_LANG_FLAG_UA_PNG, 3, vignetteWidth, bounceMargin);
 
-			if (SDL_SetRenderTarget(renderer, nullptr) < 0)
+			if (!SDL_SetRenderTarget(renderer, nullptr))
 			{
 				const auto restoreError = SDL_GetError();
+
 				ReportError("Could not restore render target after rendering to sliding texture", restoreError);
+
 				return;
 			}
 
@@ -384,6 +385,7 @@ namespace blooDot::MenuSettingsLang
 		}
 
 		const auto newCarouselError = SDL_GetError();
+
 		ReportError("Could not allocate sliding texture", newCarouselError);
 	}
 

@@ -31,34 +31,35 @@ constexpr int CHUNK_KEY_SFX_ROOOF = 27;
 constexpr int CHUNK_KEY_UI_ICON_MODEX = 28;
 constexpr int CHUNK_KEY_UI_ICON_DIVINE = 29;
 constexpr int CHUNK_KEY_UI_ICON_HERC = 30;
-constexpr int CHUNK_KEY_UI_ICON_HD = 31;
-constexpr int CHUNK_KEY_UI_MENU_EMPTY = 32;
-constexpr int CHUNK_KEY_SFX_CRICKET_FRITZ = 33;
-constexpr int CHUNK_KEY_SFX_CRICKET_FRANZ = 34;
-constexpr int CHUNK_KEY_MOBS_PLAYER1 = 35;
-constexpr int CHUNK_KEY_MOBS_PLAYER2 = 36;
-constexpr int CHUNK_KEY_MOBS_PLAYER3 = 37;
-constexpr int CHUNK_KEY_MOBS_PLAYER4 = 38;
-constexpr int CHUNK_KEY_DLG_MANUFACTURER = 39;
-constexpr int CHUNK_KEY_DING_DESCRIPTIONS_1 = 40;
-constexpr int CHUNK_KEY_CONVO_1 = 41;
-constexpr int CHUNK_KEY_SAMPLE_MAP = 42;
-constexpr int CHUNK_KEY_GAME_CONTROLLER_DB_TXT = 43;
-constexpr int CHUNK_KEY_LANG_FLAG_AM_PNG = 44;
-constexpr int CHUNK_KEY_LANG_FLAG_DE_PNG = 45;
-constexpr int CHUNK_KEY_LANG_FLAG_FI_PNG = 46;
-constexpr int CHUNK_KEY_LANG_FLAG_UA_PNG = 47;
-constexpr int CHUNK_KEY_DINGS_SNURCH_SNAVIOR_HEAD_ROOOF = 48;
-constexpr int CHUNK_KEY_DINGS_SNURCH_SNAVIOR_FLOOR = 49;
-constexpr int CHUNK_KEY_DINGS_SNURCH_SNAVIOR_COLLISION = 50;
-constexpr int CHUNK_KEY_SHADER_RETRO_VERTEX = 51;
-constexpr int CHUNK_KEY_SHADER_RETRO_FRAGMENT = 52;
-constexpr int CHUNK_KEY_SHADER_LIFECURTAIN_VERTEX = 53;
-constexpr int CHUNK_KEY_SHADER_LIFECURTAIN_FRAGMENT = 54;
-constexpr int CHUNK_KEY_SHADER_RAIN_VERTEX = 55;
-constexpr int CHUNK_KEY_SHADER_RAIN_FRAGMENT = 56;
-constexpr int CHUNK_KEY_SHADER_VORTEX_VERTEX = 57;
-constexpr int CHUNK_KEY_SHADER_VORTEX_FRAGMENT = 58;
+constexpr int CHUNK_KEY_UI_ICON_SVGA = 31;
+constexpr int CHUNK_KEY_UI_ICON_HD = 32;
+constexpr int CHUNK_KEY_UI_MENU_EMPTY = 33;
+constexpr int CHUNK_KEY_SFX_CRICKET_FRITZ = 34;
+constexpr int CHUNK_KEY_SFX_CRICKET_FRANZ = 35;
+constexpr int CHUNK_KEY_MOBS_PLAYER1 = 36;
+constexpr int CHUNK_KEY_MOBS_PLAYER2 = 37;
+constexpr int CHUNK_KEY_MOBS_PLAYER3 = 38;
+constexpr int CHUNK_KEY_MOBS_PLAYER4 = 39;
+constexpr int CHUNK_KEY_DLG_MANUFACTURER = 40;
+constexpr int CHUNK_KEY_DING_DESCRIPTIONS_1 = 41;
+constexpr int CHUNK_KEY_CONVO_1 = 42;
+constexpr int CHUNK_KEY_SAMPLE_MAP = 43;
+constexpr int CHUNK_KEY_GAME_CONTROLLER_DB_TXT = 44;
+constexpr int CHUNK_KEY_LANG_FLAG_AM_PNG = 45;
+constexpr int CHUNK_KEY_LANG_FLAG_DE_PNG = 46;
+constexpr int CHUNK_KEY_LANG_FLAG_FI_PNG = 47;
+constexpr int CHUNK_KEY_LANG_FLAG_UA_PNG = 48;
+constexpr int CHUNK_KEY_DINGS_SNURCH_SNAVIOR_HEAD_ROOOF = 49;
+constexpr int CHUNK_KEY_DINGS_SNURCH_SNAVIOR_FLOOR = 50;
+constexpr int CHUNK_KEY_DINGS_SNURCH_SNAVIOR_COLLISION = 51;
+constexpr int CHUNK_KEY_SHADER_RETRO_VERTEX = 52;
+constexpr int CHUNK_KEY_SHADER_RETRO_FRAGMENT = 53;
+constexpr int CHUNK_KEY_SHADER_LIFECURTAIN_VERTEX = 54;
+constexpr int CHUNK_KEY_SHADER_LIFECURTAIN_FRAGMENT = 55;
+constexpr int CHUNK_KEY_SHADER_RAIN_VERTEX = 56;
+constexpr int CHUNK_KEY_SHADER_RAIN_FRAGMENT = 57;
+constexpr int CHUNK_KEY_SHADER_VORTEX_VERTEX = 58;
+constexpr int CHUNK_KEY_SHADER_VORTEX_FRAGMENT = 59;
 
 #ifndef NDEBUG
 inline const char* GetUncookedRelPath(int chunkIndex)
@@ -95,34 +96,35 @@ inline const char* GetUncookedRelPath(int chunkIndex)
 	case 28: return "ui/icon-modex.png"; // CHUNK_KEY_UI_ICON_MODEX
 	case 29: return "ui/icon-divine.png"; // CHUNK_KEY_UI_ICON_DIVINE
 	case 30: return "ui/icon-herc.png"; // CHUNK_KEY_UI_ICON_HERC
-	case 31: return "ui/icon-hd.png"; // CHUNK_KEY_UI_ICON_HD
-	case 32: return "ui/menu-emptyness.png"; // CHUNK_KEY_UI_MENU_EMPTY
-	case 33: return "sfx/cricket-fritz.wav"; // CHUNK_KEY_SFX_CRICKET_FRITZ
-	case 34: return "sfx/cricket-franz.wav"; // CHUNK_KEY_SFX_CRICKET_FRANZ
-	case 35: return "prefab/player1.png"; // CHUNK_KEY_MOBS_PLAYER1
-	case 36: return "prefab/player2.png"; // CHUNK_KEY_MOBS_PLAYER2
-	case 37: return "prefab/player3.png"; // CHUNK_KEY_MOBS_PLAYER3
-	case 38: return "prefab/player4.png"; // CHUNK_KEY_MOBS_PLAYER4
-	case 39: return "ui/manufacturer.dlg"; // CHUNK_KEY_DLG_MANUFACTURER
-	case 40: return "ding/dingdescriptions.1.bml"; // CHUNK_KEY_DING_DESCRIPTIONS_1
-	case 41: return "dialog/convo.1.bml"; // CHUNK_KEY_CONVO_1
-	case 42: return "ui/sample-map.png"; // CHUNK_KEY_SAMPLE_MAP
-	case 43: return "misc/gamecontrollerdb.txt"; // CHUNK_KEY_GAME_CONTROLLER_DB_TXT
-	case 44: return "ui/langflag-am.png"; // CHUNK_KEY_LANG_FLAG_AM_PNG
-	case 45: return "ui/langflag-de.png"; // CHUNK_KEY_LANG_FLAG_DE_PNG
-	case 46: return "ui/langflag-fi.png"; // CHUNK_KEY_LANG_FLAG_FI_PNG
-	case 47: return "ui/langflag-ua.png"; // CHUNK_KEY_LANG_FLAG_UA_PNG
-	case 48: return "prefab/snurch-snavior-head-rooof.png"; // CHUNK_KEY_DINGS_SNURCH_SNAVIOR_HEAD_ROOOF
-	case 49: return "prefab/snurch-snavior-floor.png"; // CHUNK_KEY_DINGS_SNURCH_SNAVIOR_FLOOR
-	case 50: return "ding/snurch-snavior-collision.csv"; // CHUNK_KEY_DINGS_SNURCH_SNAVIOR_COLLISION
-	case 51: return "shaders/retro-vertex.glsl"; // CHUNK_KEY_SHADER_RETRO_VERTEX
-	case 52: return "shaders/retro-fragment.glsl"; // CHUNK_KEY_SHADER_RETRO_FRAGMENT
-	case 53: return "shaders/lifecurtain-vertex.glsl"; // CHUNK_KEY_SHADER_LIFECURTAIN_VERTEX
-	case 54: return "shaders/lifecurtain-fragment.glsl"; // CHUNK_KEY_SHADER_LIFECURTAIN_FRAGMENT
-	case 55: return "shaders/rain-vertex.glsl"; // CHUNK_KEY_SHADER_RAIN_VERTEX
-	case 56: return "shaders/rain-fragment.glsl"; // CHUNK_KEY_SHADER_RAIN_FRAGMENT
-	case 57: return "shaders/vortex-vertex.glsl"; // CHUNK_KEY_SHADER_VORTEX_VERTEX
-	case 58: return "shaders/vortex-fragment.glsl"; // CHUNK_KEY_SHADER_VORTEX_FRAGMENT
+	case 31: return "ui/icon-svga.png"; // CHUNK_KEY_UI_ICON_SVGA
+	case 32: return "ui/icon-hd.png"; // CHUNK_KEY_UI_ICON_HD
+	case 33: return "ui/menu-emptyness.png"; // CHUNK_KEY_UI_MENU_EMPTY
+	case 34: return "sfx/cricket-fritz.wav"; // CHUNK_KEY_SFX_CRICKET_FRITZ
+	case 35: return "sfx/cricket-franz.wav"; // CHUNK_KEY_SFX_CRICKET_FRANZ
+	case 36: return "prefab/player1.png"; // CHUNK_KEY_MOBS_PLAYER1
+	case 37: return "prefab/player2.png"; // CHUNK_KEY_MOBS_PLAYER2
+	case 38: return "prefab/player3.png"; // CHUNK_KEY_MOBS_PLAYER3
+	case 39: return "prefab/player4.png"; // CHUNK_KEY_MOBS_PLAYER4
+	case 40: return "ui/manufacturer.dlg"; // CHUNK_KEY_DLG_MANUFACTURER
+	case 41: return "ding/dingdescriptions.1.bml"; // CHUNK_KEY_DING_DESCRIPTIONS_1
+	case 42: return "dialog/convo.1.bml"; // CHUNK_KEY_CONVO_1
+	case 43: return "ui/sample-map.png"; // CHUNK_KEY_SAMPLE_MAP
+	case 44: return "misc/gamecontrollerdb.txt"; // CHUNK_KEY_GAME_CONTROLLER_DB_TXT
+	case 45: return "ui/langflag-am.png"; // CHUNK_KEY_LANG_FLAG_AM_PNG
+	case 46: return "ui/langflag-de.png"; // CHUNK_KEY_LANG_FLAG_DE_PNG
+	case 47: return "ui/langflag-fi.png"; // CHUNK_KEY_LANG_FLAG_FI_PNG
+	case 48: return "ui/langflag-ua.png"; // CHUNK_KEY_LANG_FLAG_UA_PNG
+	case 49: return "prefab/snurch-snavior-head-rooof.png"; // CHUNK_KEY_DINGS_SNURCH_SNAVIOR_HEAD_ROOOF
+	case 50: return "prefab/snurch-snavior-floor.png"; // CHUNK_KEY_DINGS_SNURCH_SNAVIOR_FLOOR
+	case 51: return "ding/snurch-snavior-collision.csv"; // CHUNK_KEY_DINGS_SNURCH_SNAVIOR_COLLISION
+	case 52: return "shaders/retro-vertex.glsl"; // CHUNK_KEY_SHADER_RETRO_VERTEX
+	case 53: return "shaders/retro-fragment.glsl"; // CHUNK_KEY_SHADER_RETRO_FRAGMENT
+	case 54: return "shaders/lifecurtain-vertex.glsl"; // CHUNK_KEY_SHADER_LIFECURTAIN_VERTEX
+	case 55: return "shaders/lifecurtain-fragment.glsl"; // CHUNK_KEY_SHADER_LIFECURTAIN_FRAGMENT
+	case 56: return "shaders/rain-vertex.glsl"; // CHUNK_KEY_SHADER_RAIN_VERTEX
+	case 57: return "shaders/rain-fragment.glsl"; // CHUNK_KEY_SHADER_RAIN_FRAGMENT
+	case 58: return "shaders/vortex-vertex.glsl"; // CHUNK_KEY_SHADER_VORTEX_VERTEX
+	case 59: return "shaders/vortex-fragment.glsl"; // CHUNK_KEY_SHADER_VORTEX_FRAGMENT
 	default: return "~MISSING~";
 	}
 }

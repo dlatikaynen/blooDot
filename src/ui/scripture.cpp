@@ -199,7 +199,7 @@ namespace blooDot::Scripture {
 
 		const SDL_Rect src = { 0,0,textSurface->w,textSurface->h };
 
-		SDL_Rect dst = {
+		const SDL_Rect dst = {
 			frame->w / 2 - textSurface->w / 2,
 			frame->h / 2 - textSurface->h / 2 - 2, // -2 empirically determined
 			textSurface->w,

@@ -283,7 +283,7 @@ namespace blooDot::MenuCommon
 		SDL_FRect iconRect;
 		SDL_FRect centerRect;
 		SDL_FRect destRect;
-		auto icon = Res::LoadPicture(renderer, chunkKey, &iconRect);
+		const auto icon = Res::LoadPicture(renderer, chunkKey, &iconRect);
 
 		PrepareIconRect(&destRect, vignetteIndex, vignetteWidth, bounceMargin);
 		Geometry2d::CenterRectInRect(&destRect, &iconRect, &centerRect);

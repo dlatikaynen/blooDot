@@ -11,7 +11,7 @@ namespace blooDot::Algo::Boyds {
 
     std::vector<Boyda> boyds = {};
 
-    void InitializeBoydsa(const int width, const int height, const int averageMargin, int amountPerGroup)
+    void InitializeBoydsa(const int width, const int height, const int averageMargin, const int amountPerGroup)
     {
         canvasWidth = width;
         canvasHeight = height;

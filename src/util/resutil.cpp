@@ -2,7 +2,6 @@
 #include "../../main.h"
 #include "SDL3_image/SDL_image.h"
 #include "../../xassy/dexassy.h"
-#include "../../res/chunk-constants.h"
 #include <fstream>
 #include <iostream>
 
@@ -107,7 +106,7 @@ namespace blooDot::Res
 		}
 
 		const auto numBytes = SDL_GetIOSize(resStream);
-		auto rawText = static_cast<char *>(SDL_malloc(numBytes));
+		const auto rawText = static_cast<char *>(SDL_malloc(numBytes));
 
 		if (rawText == nullptr)
 		{
@@ -150,7 +149,7 @@ namespace blooDot::Res
 		SDL_CloseIO(resStream);
 		SDL_free(resMem);
 		text.assign(rawText, numBytes);
-		SDL_free((void*)rawText);
+		SDL_free(rawText);
 
 		return true;
 	}
