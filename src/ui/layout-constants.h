@@ -29,6 +29,11 @@ namespace blooDot::Ui {
     constexpr int MenuItemCaptionFontSize = 23;
 
     /**
+     * Font size for small static labels (tips, descriptions, annotations)
+     */
+    constexpr int AnnotationLabelFontSize = 13;
+
+    /**
      * Font size in points of a menu panel title caption
      */
     constexpr int MenuPanelTitleFontSize = 26;
