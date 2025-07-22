@@ -43,7 +43,7 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "flamingin sarjakuvat oy"
             VALUE "FileDescription", "The blooDot Game"
-            VALUE "FileVersion", "3.0.0.1"
+            VALUE "FileVersion", "4.0.0.1"
             VALUE "InternalName", "blooDot.exe"
             VALUE "LegalCopyright", "Copyright (C) 1997-2025 Daniel Latikaynen"
             VALUE "OriginalFilename", "blooDot.exe"
