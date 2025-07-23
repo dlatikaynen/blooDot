@@ -127,7 +127,7 @@ int Xlate(XassyXlatInfo* xlatInfo)
 				<< ";\n";
 
 			sourceFile
-				<< "const auto literal"
+				<< "const char* literal"
 				<< identifier.Identifier
 				<< " = \"\";\n";
 
