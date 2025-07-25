@@ -7,12 +7,19 @@
 #include "layout-constants.h"
 #include "../../main.h"
 #include "../../res/xlations.h"
+#include "../shared-constants.h"
+#include "../../res/xlations.h"
+#include "../../res/chunk-constants.h"
+#include "../../main.h"
+#include "../../src/util/resutil.h"
 
 namespace blooDot::MenuSettingsAbout
 {
 	MenuCommon::MenuDialogInteraction menuState;
 
 	SDL_Texture* backTexture = nullptr;
+	SDL_Texture* logo = nullptr;
+	SDL_FRect logoDims = {};
 	std::vector<std::shared_ptr<CreditsMention>> creditMentions;
 	std::vector<std::shared_ptr<CreditsChapter>> creditChapters;
 	std::vector<CreditsSection> creditSections;
@@ -43,7 +50,9 @@ namespace blooDot::MenuSettingsAbout
 			Constants::AlienTextColor
 		);
 
-		PrepareTextInternal(renderer);
+		if (!PrepareContentInternal(renderer)) {
+			menuState.leaveDialog = true;
+		}
 
 		unsigned short frame = 0;
 		while (!menuState.leaveDialog)
@@ -98,6 +107,7 @@ namespace blooDot::MenuSettingsAbout
 				DialogControls::DrawButton(drawingSink, 162, y, 316, 258, Constants::CH_NONE);
 				Drawing::EndRenderDrawing(renderer, drawingTexture, nullptr);
 				DialogControls::DrawLabel(renderer, 235, yStart + 0 * stride + 0 * backGap, backTexture, &backRect);
+				SDL_RenderTexture(renderer, logo, nullptr, &logoDims);
 
 				/* the storyboarded rolling credits */
 				y = backGap;
@@ -130,7 +140,7 @@ namespace blooDot::MenuSettingsAbout
 		return true;
 	}
 
-	void PrepareTextInternal(SDL_Renderer* renderer)
+	bool PrepareContentInternal(SDL_Renderer* renderer)
 	{
 		SDL_Texture* mentionTexture;
 		SDL_Texture* chapterTexture;
@@ -138,7 +148,12 @@ namespace blooDot::MenuSettingsAbout
 		SDL_FRect textureRect;
 
 		backTexture = Scripture::RenderText(renderer, &backRect, Scripture::FONT_KEY_DIALOG, 23, literalMenuBack, Constants::ButtonTextColor);
-		
+		logo = Res::LoadPicture(renderer, CHUNK_KEY_UI_LOGO_KI096, &logoDims);
+		if (!backTexture || !logo)
+		{
+			return false;
+		}
+
 		/* 1. build all the distinct mentions that there are */
 		mentionTexture = MentionTextureInternal(literalAboutCreditsMentionDlatikay, &textureRect, renderer);
 		const auto& dlatikay = AddMentionInternal(mentionTexture, &textureRect);
@@ -448,6 +463,8 @@ namespace blooDot::MenuSettingsAbout
 		techSnailian->mentions.push_back(snailName);
 		techSnailian->mentions.push_back(snailCopyr);
 		creditSections[10].chapters.push_back(techSnailian);
+
+		return true;
 	}
 
 	SDL_Texture* MentionTextureInternal(const char* literal, SDL_FRect* rect, SDL_Renderer* renderer)
@@ -518,6 +535,7 @@ namespace blooDot::MenuSettingsAbout
 
 	void TeardownInternal()
 	{
+		Drawing::DestroyTexture(&logo);
 		Drawing::DestroyTexture(&backTexture);
 
 		for (auto& section : creditSections)

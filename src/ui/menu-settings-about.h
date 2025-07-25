@@ -24,7 +24,7 @@ namespace blooDot::MenuSettingsAbout
     } CreditsSection;
 
     bool MenuLoop(SDL_Renderer*);
-    void PrepareTextInternal(SDL_Renderer* renderer);
+    bool PrepareContentInternal(SDL_Renderer* renderer);
     SDL_Texture* MentionTextureInternal(const char* literal, SDL_FRect* rect, SDL_Renderer* renderer);
     SDL_Texture* SectionTextureInternal(const char* literal, SDL_FRect* rect, SDL_Renderer* renderer);
     SDL_Texture* ChapterTextureInternal(const char* literal, SDL_FRect* rect, SDL_Renderer* renderer);

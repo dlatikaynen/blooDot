@@ -7,7 +7,7 @@
 #include "../shared-constants.h"
 #include "../../res/xlations.h"
 #include "../../res/chunk-constants.h"
-#include "SDL3/SDL_pixels.h"
+#include "SDL3/SDL.h"
 #include "../../main.h"
 #include "../../src/util/resutil.h"
 
