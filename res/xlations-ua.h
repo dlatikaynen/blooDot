@@ -226,4 +226,5 @@ namespace blooDot::ua
 	constexpr auto const* _literal_ua_controllerLabel2 = "Контролер № 2";
 	constexpr auto const* _literal_ua_controllerLabel3 = "Контролер № 3";
 	constexpr auto const* _literal_ua_controllerLabel4 = "Контролер № 4";
+	constexpr auto const* _literal_ua_slogan = "Нічого не бачу - відкрию це.";
 }

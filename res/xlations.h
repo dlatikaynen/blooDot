@@ -224,6 +224,7 @@ extern const char* literalcontrollerLabel1;
 extern const char* literalcontrollerLabel2;
 extern const char* literalcontrollerLabel3;
 extern const char* literalcontrollerLabel4;
+extern const char* literalslogan;
 
 namespace blooDot::en
 {

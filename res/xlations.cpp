@@ -228,6 +228,7 @@ const char* literalcontrollerLabel1 = "";
 const char* literalcontrollerLabel2 = "";
 const char* literalcontrollerLabel3 = "";
 const char* literalcontrollerLabel4 = "";
+const char* literalslogan = "";
 
 namespace blooDot::en
 {
@@ -457,6 +458,7 @@ namespace blooDot::en
 		literalcontrollerLabel2 = _literal_en_controllerLabel2;
 		literalcontrollerLabel3 = _literal_en_controllerLabel3;
 		literalcontrollerLabel4 = _literal_en_controllerLabel4;
+		literalslogan = _literal_en_slogan;
 	}
 }
 
@@ -688,6 +690,7 @@ namespace blooDot::de
 		literalcontrollerLabel2 = _literal_de_controllerLabel2;
 		literalcontrollerLabel3 = _literal_de_controllerLabel3;
 		literalcontrollerLabel4 = _literal_de_controllerLabel4;
+		literalslogan = _literal_de_slogan;
 	}
 }
 
@@ -919,6 +922,7 @@ namespace blooDot::fi
 		literalcontrollerLabel2 = _literal_fi_controllerLabel2;
 		literalcontrollerLabel3 = _literal_fi_controllerLabel3;
 		literalcontrollerLabel4 = _literal_fi_controllerLabel4;
+		literalslogan = _literal_fi_slogan;
 	}
 }
 
@@ -1150,5 +1154,6 @@ namespace blooDot::ua
 		literalcontrollerLabel2 = _literal_ua_controllerLabel2;
 		literalcontrollerLabel3 = _literal_ua_controllerLabel3;
 		literalcontrollerLabel4 = _literal_ua_controllerLabel4;
+		literalslogan = _literal_ua_slogan;
 	}
 }

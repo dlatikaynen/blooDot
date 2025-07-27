@@ -2,6 +2,8 @@
 #include "../../xassy/dexassy.h"
 #include "../../res/chunk-constants.h"
 #include "sfx.h"
+
+#include <iostream>
 #include <map>
 #include <ranges>
 #include <sstream>

@@ -226,4 +226,5 @@ namespace blooDot::de
 	constexpr auto const* _literal_de_controllerLabel2 = "Controller Nr. 2";
 	constexpr auto const* _literal_de_controllerLabel3 = "Controller Nr. 3";
 	constexpr auto const* _literal_de_controllerLabel4 = "Controller Nr. 4";
+	constexpr auto const* _literal_de_slogan = "Ich seh' gar nichts. Ich mach das da auf.";
 }

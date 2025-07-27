@@ -4,6 +4,9 @@
 #include "../../xassy/dexassy.h"
 #include <fstream>
 #include <iostream>
+#ifndef NDEBUG
+#include "../../res/chunk-constants.h"
+#endif
 
 namespace blooDot::Res
 {

@@ -226,4 +226,5 @@ namespace blooDot::en
 	constexpr auto const* _literal_en_controllerLabel2 = "Controller #2";
 	constexpr auto const* _literal_en_controllerLabel3 = "Controller #3";
 	constexpr auto const* _literal_en_controllerLabel4 = "Controller #4";
+	constexpr auto const* _literal_en_slogan = "I can't see a thing. I'll open this one.";
 }

@@ -430,6 +430,8 @@ namespace blooDot::MenuSettingsDisplays
 			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_MODEX, 2, vignetteWidth, Ui::VignetteBounceMargin);
 			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_SVGA, 3, vignetteWidth, Ui::VignetteBounceMargin);
 			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_HD, 4, vignetteWidth, Ui::VignetteBounceMargin);
+			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_SQUARE, 5, vignetteWidth, Ui::VignetteBounceMargin);
+			MenuCommon::DrawIcon(renderer, CHUNK_KEY_UI_ICON_MAXIMIZED, 6, vignetteWidth, Ui::VignetteBounceMargin);
 			if (!SDL_SetRenderTarget(renderer, nullptr))
 			{
 				const auto restoreError = SDL_GetError();

@@ -226,4 +226,5 @@ namespace blooDot::fi
 	constexpr auto const* _literal_fi_controllerLabel2 = "Controller nro 2";
 	constexpr auto const* _literal_fi_controllerLabel3 = "Controller nro 3";
 	constexpr auto const* _literal_fi_controllerLabel4 = "Controller nro 4";
+	constexpr auto const* _literal_fi_slogan = "Näe mitään. Avaan tämän.";
 }

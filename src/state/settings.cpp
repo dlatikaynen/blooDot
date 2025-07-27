@@ -91,7 +91,7 @@ namespace blooDot::Settings
 				return;
 		}
 
-		std::cout << "User interface language set to " << literalLanguageName << std::endl;
+		std::cout << "User interface language set to " << literalLanguageNameAmerican << std::endl;
 	}
 
 	void Save()
